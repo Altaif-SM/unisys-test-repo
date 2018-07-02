@@ -1,0 +1,118 @@
+{% extends "template_base_page.html" %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <style type="text/css">
+
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+
+    <script>
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="/">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+        </ul>
+    </div>
+
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light">
+
+        <div class="portlet-body">
+
+
+            <div class="tiles">
+
+
+                {% if 'accounts.can_view_year_master' in perms %}
+                    <div class="tile double selected bg-blue" style="height: 150px !important;width: 410px !important;">
+                        <a href="#" class="nav-link nav-toggle">
+                            <div class="tile-body">
+                                <i class="fa glyphicon glyphicon-education"></i>
+                            </div>
+                            <div class="tile-object">
+                                <div class="name">
+                                    <h4>Year Master</h4>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endif %}
+
+{#                    <div class="tile bg-yellow-lemon" style="height: 150px !important;width: 410px !important;">#}
+{#                        <a href="#" class="nav-link nav-toggle">#}
+{#                            <div class="tile-body">#}
+{#                                <i class="icon-credit-card"></i>#}
+{#                            </div>#}
+{#                            <div class="tile-object">#}
+{#                                <div class="name"><h4>ID Cards</h4></div>#}
+{#                            </div>#}
+{#                        </a>#}
+{#                    </div>#}
+{##}
+{#                    <div class="tile bg-blue-steel" style="height: 150px !important;width: 415px !important;">#}
+{#                        <a href="#">#}
+{#                            <div class="tile-body">#}
+{#                                <i class="icon-calendar"></i>#}
+{#                            </div>#}
+{#                            <div class="tile-object">#}
+{#                                <div class="name"><h4>Attendance</h4></div>#}
+{#                            </div>#}
+{#                        </a>#}
+{#                    </div>#}
+{##}
+{#                    <div class="tile bg-red" style="height: 150px !important;width: 50% !important;">#}
+{#                        <a href="#">#}
+{#                            <div class="tile-body">#}
+{#                                <i class="icon-book-open"></i>#}
+{#                            </div>#}
+{#                            <div class="tile-object">#}
+{#                                <div class="name">#}
+{#                                    <h4>Assessment Data & Reporting</h4>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </a>#}
+{#                    </div>#}
+{##}
+{#                    <div class="tile bg-red-sunglo" style="height: 150px !important;width: 415px !important;">#}
+{#                        <a href="#">#}
+{#                            <div class="tile-body">#}
+{#                                <i class="glyphicon glyphicon-refresh"></i>#}
+{#                            </div>#}
+{#                            <div class="tile-object">#}
+{#                                <div class="name">#}
+{#                                    <h4>Approve Student/Parent Update Request</h4>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </a>#}
+{#                    </div>#}
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- END VALIDATION STATES-->
+
+
+{% endblock %}
