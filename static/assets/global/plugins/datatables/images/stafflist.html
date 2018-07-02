@@ -1,0 +1,104 @@
+
+{% extends "index.html" %}
+{% load staticfiles %}
+       
+
+ {%block styleBlock%}
+<!-- BEGIN GLOBAL MANDATORY STYLES -->
+      
+        <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css" />
+        <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}" rel="stylesheet" type="text/css" />
+        
+       
+         </head>
+    <!-- END HEAD -->
+ 
+ {%endblock%}
+{%block ScriptBlock%} 
+
+
+{%endblock%}
+
+ {% block content %}
+  					<div class="page-bar" style="margin-bottom: 1px;">
+                        <ul class="page-breadcrumb">
+                            <li>
+                                <i class="icon-home"></i>
+                                <a href="{% url 'home' %}">Home</a>
+                                <i class="fa fa-angle-right"></i>
+                            </li>
+                            <li>
+                                <i class="glyphicon glyphicon-education"></i>
+                                <span class="title">Staff Management</span>
+                            </li>
+                        </ul>
+                        
+                    </div>
+ 
+
+{% for message in messages %}
+    <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;" >{{ message }}
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    </div>
+{% endfor %}
+                            <!-- BEGIN VALIDATION STATES-->
+                           
+                            <div class="portlet light">
+                                <div class="portlet-title">
+                                    <div class="caption font-dark">
+                                        <i class="icon-settings font-red"></i>
+                                        <span class="caption-subject font-red sbold uppercase">Staff Details</span>
+                                    </div>
+                                   
+                                </div>
+                                   <div class="portlet-body">
+                                    <div class="table-toolbar">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="btn-group">
+                                                   <a href=""> <button id="sample_editable_1_new" class="btn sbold green"> Add New
+                                                        <i class="fa fa-plus"></i>
+                                                    </button></a>
+                                                </div>
+                                            </div>
+                                           
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                   <!-- <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_1"> -->
+                                    <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_1" >
+                                        <thead>
+                                            <tr>
+                                                
+                                                <th> First Name </th>
+                                                <th> Middle Name </th>
+                                                <th> Last Name </th>
+                                                <th> Email </th>
+                                                <th> Contact </th>
+                                                
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                         {% for Staff in StaffList  %}
+                                            <tr class="odd gradeX" onclick="" style="cursor: hand;">
+                                                
+                                                <td>{{ Staff.first_name }}</td>
+                                                <td>
+                                                    {{ Staff.middle_name }} 
+                                                </td>
+                                                <td class="center"> {{ Staff.last_name }} </td>
+                                                <td class="center"> <a href="{{ Staff.email }}">  {{ Staff.email }}</a> </td>
+                                                <td class="center"> {{ Staff.contact_num }} </td>
+                                               {% endfor %}
+                                            </tr>
+                                            </tbody>
+                                      </table>
+                                </div>
+                            </div>
+                            <!-- END VALIDATION STATES-->
+                   
+             
+         {% endblock %}              
+                        
+     
