@@ -34,30 +34,28 @@
                 $(document).on("click", ".update", function (e) {
 
                     var parent_id = $(this).closest('tr').attr('id');
-                    var year_id = $('#' + parent_id + ' #year_id').val();
-                    var year_name = $('#' + parent_id + ' .year_name').val();
-                    var start_date = $('#' + parent_id + ' .start_date').val();
-                    var end_date = $('#' + parent_id + ' .end_date').val();
+                    var country_id = $('#' + parent_id + ' #country_id').val();
+                    var country_name = $('#' + parent_id + ' .country_name').val();
 
-                    var url = '/masters/update_year/';
-                    update_year_info(url, year_id, year_name, start_date, end_date)
+                    var url = '/masters/update_country/';
+                    update_country_info(url, country_id, country_name)
                 })
 
                 $(document).on("click", ".delete", function (e) {
 
                     var parent_id = $(this).closest('tr').attr('id');
-                    var year_id = $('#' + parent_id + ' #year_id').val();
+                    var country_id = $('#' + parent_id + ' #country_id').val();
 
-                    var url = '/masters/delete_year/';
-                    delete_year_info(url, year_id)
+                    var url = '/masters/delete_country/';
+                    delete_country_info(url, country_id)
                 })
 
-                function delete_year_info(url, year_id) {
+                function delete_country_info(url, country_id) {
                     $.ajax({
                         type: 'POST',
                         url: url,
                         data: {
-                            year_id: year_id,
+                            country_id: country_id,
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
@@ -69,15 +67,13 @@
                     });
                 }
 
-                function update_year_info(url, year_id, year_name, start_date, end_date) {
+                function update_country_info(url, country_id, country_name) {
                     $.ajax({
                         type: 'POST',
                         url: url,
                         data: {
-                            year_id: year_id,
-                            year_name: year_name,
-                            start_date: start_date,
-                            end_date: end_date,
+                            country_id: country_id,
+                            country_name: country_name,
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
@@ -101,9 +97,7 @@
 
                     $("#update" + i).show();
                     $("#edit" + i).hide();
-                    $("#year_name" + i).prop("disabled", false);
-                    $("#start_date" + i).prop("disabled", false);
-                    $("#end_date" + i).prop("disabled", false);
+                    $("#country_name" + i).prop("disabled", false);
                 });
             });
 
@@ -129,7 +123,7 @@
             </li>
 
             <li>
-                <span> Year </span>
+                <span> Country </span>
             </li>
         </ul>
     </div>
@@ -145,7 +139,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> Manage Year</span>
+                <span class="caption-subject font-red sbold uppercase"> Manage Country</span>
             </div>
         </div>
 
@@ -154,44 +148,24 @@
             <!-- BEGIN FORM-->
             <div class="form-body">
 
-                <form action="{% url 'masters:save_year' %}" id="form_sample_1" class="form-horizontal"
+                <form action="{% url 'masters:save_country' %}" id="form_sample_1" class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
                     <div class="form-body">
 
                         <div class="row">
-
                             <div class="">
-                                <label class="col-md-2 control-label">Year Name:
+                                <label class="col-md-2 control-label">Country Name:
 
                                 </label>
-                                <div class="col-md-4">
-                                    <input type="text" name="year_name" class="form-control" required>
+                                <div class="col-md-3">
+                                    <input type="text" name="country_name" class="form-control">
                                 </div>
                             </div>
                         </div>
                         <br><br>
 
-                        <div class="row">
-                            <div class="">
-                                <label class="col-md-2 control-label">Start Date:
-
-                                </label>
-                                <div class="col-md-4">
-                                    <input type="date" name="start_date" class="form-control" required>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-2 control-label">End Date:
-
-                                </label>
-                                <div class="col-md-4" id="EndDate">
-                                    <input type="date" name="end_date" class="form-control" required>
-                                </div>
-                            </div>
-                        </div>
                         <br><br>
 
                         <div class="row">
@@ -199,10 +173,8 @@
                                 <button type="submit" class="btn green" id="save">Add</button>
                             </div>
                         </div>
-
                     </div>
                 </form>
-
             </div>
 
             <br><br>
@@ -218,27 +190,19 @@
                     <thead>
                     <tr>
                         <th style="display: none">Id</th>
-                        <th>Year Name</th>
-                        <th> Start Date</th>
-                        <th> End Date</th>
-                        <th width="8%"></th>
+                        <th>Country Name</th>
+                        <th width="10%"></th>
                     </tr>
                     </thead>
 
                     <tbody id="tbody">
-                    {% for rec in year_recs %}
+                    {% for rec in country_recs %}
                         <tr id="item{{ forloop.counter }}" class="item">
-                            <td style="display: none"><input id="year_id" value="{{ rec.id }}"></td>
-                            <td><text hidden>{{ rec.year_name|title }}</text> <input class="form-control data year_name" name="year_name_saved" type="text"
-                                       id="year_name{{ forloop.counter }}" value="{{ rec.year_name|title }}"
+                            <td style="display: none"><input id="country_id" value="{{ rec.id }}"></td>
+                            <td><text hidden>{{ rec.country_name|title }}</text> <input class="form-control data country_name" name="country_name_saved" type="text"
+                                       id="country_name{{ forloop.counter }}" value="{{ rec.country_name|title }}"
                                        required="True" pattern='[A-Za-z+-]+'
-                                       title='Please enter year name' disabled></td>
-                            <td><input class="form-control data start_date" name="start_date_saved" type="date"
-                                       id="start_date{{ forloop.counter }}"
-                                       value="{{ rec.start_date|date:"Y-m-d" }}" required="True" disabled></td>
-                            <td><input class="form-control data end_date" name="end_date_saved" type="date"
-                                       id="end_date{{ forloop.counter }}"
-                                       value="{{ rec.end_date|date:"Y-m-d" }}" required="True" disabled></td>
+                                       title='Please enter country name' disabled></td>
                             <td>
                                 <span type="button" name="updt" id="update{{ forloop.counter }}"
                                         class=" update btn green glyphicon glyphicon-ok" style="display:none;">
