@@ -1,0 +1,240 @@
+{% extends "template_base_page.html" %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <style type="text/css">
+        .button_align {
+            width: max-content;
+        }
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+
+            $(document).ready(function () {
+                $('#DyanmicTable').SetEditable({
+                    $addButton: $('#addNewRow'),
+                });
+                var data_ength = Number({{ data_length }});
+                if (data_ength > 0) {
+                    $('#DyanmicTable').DataTable({});
+                }
+            });
+
+            $(document).on("click", ".save_year1", function (e) {
+                {% comment %}alert("Hello bye...")
+                alert($(this).parents('tr').children("td").length)
+                $(this).parents('tr').children("td").each(function () {
+                    alert(JSON.stringify($(this)))
+                }){% endcomment %}
+                {#var code_name = document.getElementById("id_year_code").value#}
+                var url1 = '/school/save_year/';
+                {#year_save(url1, code_name)#}
+                {#alert("D")#}
+            })
+
+            function year_save(url, yr_code) {
+
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        year_code: yr_code,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data) {
+
+                        if (data === true) {
+                            $('#id_year_code').val("")
+                            $('#id_year_code').css('border-color', 'red');
+                            alert("Year Code is Alredy Exist.")
+                            return false;
+                        }
+                        $('#id_year_code').css('border-color', '');
+                    },
+                    error: function (xhr, msg, err) {
+                        alert(xhr.responseJSON.error);
+                    }
+
+                });
+            }
+        }
+    </script>
+
+{% endblock %}
+
+{% block content %}
+
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'accounts:home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span> Scholarship </span>
+            </li>
+        </ul>
+
+    </div>
+
+    <!-- BEGIN EXAMPLE TABLE PORTLET-->
+    {#    <div class="portlet light portlet-fit ">#}
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">Scholarship</span>
+            </div>
+            <div class="actions">
+
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="table-toolbar">
+                <div class="row">
+
+
+                    <!-- BEGIN FORM-->
+                    {#                    <form {% comment %}action="{% url 'registration:save_academicyr' %}"{% endcomment %}#}
+                    {#                            id="form_sample_1" class="form-horizontal"#}
+                    {#                            method="POST">#}
+                    {##}
+                    {##}
+                    {#                        {% csrf_token %}#}
+                    {##}
+                    {#                        <div class="form-body">#}
+                    {##}
+                    {#                            <div class="row">#}
+                    {#                                <div class="">#}
+                    {#                                    <label class="col-md-2 control-label">Code:#}
+                    {##}
+                    {#                                    </label>#}
+                    {#                                    <div class="col-md-4">#}
+                    {#                                        <input type="text" class="form-control">#}
+                    {#                                    </div>#}
+                    {#                                </div>#}
+                    {#                                <div class="">#}
+                    {#                                    <label class="col-md-2 control-label">Name:#}
+                    {##}
+                    {#                                    </label>#}
+                    {#                                    <div class="col-md-4">#}
+                    {#                                        <input type="text" class="form-control">#}
+                    {#                                    </div>#}
+                    {#                                </div>#}
+                    {#                            </div>#}
+                    {#                            <br><br>#}
+                    {##}
+                    {#                            <div class="row">#}
+                    {#                                <div class="">#}
+                    {#                                    <label class="col-md-2 control-label">Start Date:#}
+                    {##}
+                    {#                                    </label>#}
+                    {#                                    <div class="col-md-4">#}
+                    {#                                        <input type="date" class="form-control">#}
+                    {#                                    </div>#}
+                    {#                                </div>#}
+                    {##}
+                    {#                                <div class="">#}
+                    {#                                    <label class="col-md-2 control-label">End Date:#}
+                    {##}
+                    {#                                    </label>#}
+                    {#                                    <div class="col-md-4" id="EndDate">#}
+                    {#                                        <input type="date" class="form-control">#}
+                    {#                                    </div>#}
+                    {#                                </div>#}
+                    {#                            </div>#}
+                    {#                            <br><br>#}
+                    {##}
+                    {#                            <div class="row">#}
+                    {#                                <div class="col-md-offset-5 col-md-7">#}
+                    {#                                    <button type="submit" class="btn green" id="save">Add</button>#}
+                    {#                                    {% comment %}<button onclick="window.location.href='{% url "registration:view_academicyr" %}'"#}
+                    {#                                            type="button" class="btn green">Cancel#}
+                    {#                                    </button>{% endcomment %}#}
+                    {#                                </div>#}
+                    {#                            </div>#}
+                    {##}
+                    {#                        </div>#}
+                    {#                        <br>#}
+                    {##}
+                    {#                    </form>#}
+                </div>
+            </div>
+            <!-- END FORM-->
+        </div>
+
+        <div class="portlet-body">
+            <div class="table-toolbar">
+                <div class="row">
+
+
+                    <div class="col-md-6">
+                        <div class="btn-group">
+                            <button id="addNewRow" class="btn green"> Add New
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="btn-group pull-right">
+                            <button class="btn green btn-outline dropdown-toggle" data-toggle="dropdown">Tools
+                                <i class="fa fa-angle-down"></i>
+                            </button>
+                            <ul class="dropdown-menu pull-right">
+                                <li>
+                                    <a href="javascript:;"> Print </a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;"> Save as PDF </a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;"> Export to Excel </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <table class="table table-bordered table-striped table-hover table-condensed  text-center"
+                   id="DyanmicTable">
+                <thead>
+                <tr>
+                    <th hidden class="text-center">
+
+                    </th>
+                    <th class="text-center">
+                        Scholarship
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for obj in data %}
+                    <tr>
+                    <td hidden>
+                            {{ obj.id }}
+                        </td>
+                        <td>
+                            {{ obj.first_name }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
