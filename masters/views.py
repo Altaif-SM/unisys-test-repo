@@ -172,12 +172,13 @@ def template_university_master(request):
 
 def save_university(request):
     university_name = request.POST.get('university_name')
+    country_id = request.POST.get('country')
     try:
-        if not UniversityDetails.objects.filter(university_name=university_name.lower()).exists():
-            UniversityDetails.objects.create(university_name=university_name.lower())
+        if not UniversityDetails.objects.filter(university_name=university_name.lower(),country_id=country_id).exists():
+            UniversityDetails.objects.create(university_name=university_name.lower(),country_id=country_id)
             messages.success(request, "Record saved.")
         else:
-            messages.warning(request, "University name already exists. Record not saved.")
+            messages.warning(request, "University and Country relation already exists. Record not saved.")
     except:
         messages.warning(request, "Record not saved.")
     return redirect('/masters/template_university_master/')
@@ -186,15 +187,17 @@ def save_university(request):
 def update_university(request):
     university_id = request.POST.get('university_id')
     university_name = request.POST.get('university_name')
+    country_id = request.POST.get('country_id')
     try:
-        if not UniversityDetails.objects.filter(university_name=university_name.lower()).exists():
-            UniversityDetails.objects.filter(id=university_id).update(university_name=university_name.lower())
+        if not UniversityDetails.objects.filter(university_name=university_name.lower(),country_id=country_id).exists():
+            UniversityDetails.objects.filter(id=university_id).update(university_name=university_name.lower(),country_id=country_id)
             messages.success(request, "Record updated.")
             return HttpResponse(json.dumps({'success': 'Record updated.'}), content_type="application/json")
         else:
-            messages.warning(request, "University name already exists. Record not updated.")
-            return HttpResponse(json.dumps({'success': "University name already exists. Record not updated."}),
-                                content_type="application/json")
+            messages.warning(request, "University and Country relation already exists. Record not updated.")
+            return HttpResponse(
+                json.dumps({'success': "University and Country relation already exists. Record not updated."}),
+                content_type="application/json")
 
     except:
         messages.warning(request, "University name already exists. Record not updated.")
@@ -207,6 +210,60 @@ def delete_university(request):
 
     try:
         UniversityDetails.objects.filter(id=university_id).delete()
+        messages.success(request, "Record deleted.")
+        return HttpResponse(json.dumps({'success': 'Record deleted.'}), content_type="application/json")
+    except:
+        messages.warning(request, "Record not deleted.")
+    return HttpResponse(json.dumps({'error': 'Record not deleted.'}), content_type="application/json")
+
+
+# *********------------ Semester Master ----------***************
+
+def template_semester_master(request):
+    semester_recs = SemesterDetails.objects.all()
+    return render(request, 'template_semester_master.html', {'semester_recs': semester_recs})
+
+
+def save_semester(request):
+    semester_name = request.POST.get('semester_name')
+    start_date = request.POST.get('start_date')
+    end_date = request.POST.get('end_date')
+    try:
+        if not SemesterDetails.objects.filter(semester_name=semester_name.lower()).exists():
+            SemesterDetails.objects.create(semester_name=semester_name.lower(), start_date=start_date, end_date=end_date)
+            messages.success(request, "Record saved.")
+        else:
+            messages.warning(request, "Semester name already exists. Record not saved.")
+    except:
+        messages.warning(request, "Record not saved.")
+    return redirect('/masters/template_semester_master/')
+
+
+def update_semester(request):
+    semester_id = request.POST.get('semester_id')
+    semester_name = request.POST.get('semester_name')
+    start_date = request.POST.get('start_date')
+    end_date = request.POST.get('end_date')
+    try:
+        if not SemesterDetails.objects.filter(semester_name=semester_name.lower()).exists():
+            SemesterDetails.objects.filter(id=semester_id).update(semester_name=semester_name.lower(), start_date=start_date, end_date=end_date)
+            messages.success(request, "Record updated.")
+            return HttpResponse(json.dumps({'success': 'Record updated.'}), content_type="application/json")
+        else:
+            messages.warning(request, "Record updated.")
+            return HttpResponse(json.dumps({'success': 'Record updated.'}), content_type="application/json")
+
+    except:
+        messages.warning(request, "Semester name already exists. Record not updated.")
+    return HttpResponse(json.dumps({'error': 'Semester name already exists. Record not updated.'}),
+                        content_type="application/json")
+
+
+def delete_semester(request):
+    semester_id = request.POST.get('semester_id')
+
+    try:
+        SemesterDetails.objects.filter(id=semester_id).delete()
         messages.success(request, "Record deleted.")
         return HttpResponse(json.dumps({'success': 'Record deleted.'}), content_type="application/json")
     except:

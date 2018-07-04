@@ -34,40 +34,36 @@
                 $(document).on("click", ".update", function (e) {
 
                     var parent_id = $(this).closest('tr').attr('id');
-                    var university_id = $('#' + parent_id + ' #university_id').val();
-                    var university_name = $('#' + parent_id + ' .university_name').val();
-                    var country_id = $('#' + parent_id + ' .country').val();
-                    if (university_name == '') {
-                        $('#' + parent_id + ' .university_name').focus();
-                        $('#' + parent_id + ' .university_name').css('border-color', 'red');
+                    var semester_id = $('#' + parent_id + ' #semester_id').val();
+                    var semester_name = $('#' + parent_id + ' .semester_name').val();
+                    var start_date = $('#' + parent_id + ' .start_date').val();
+                    var end_date = $('#' + parent_id + ' .end_date').val();
+
+                    if (semester_name == '') {
+                        $('#' + parent_id + ' .semester_name').focus();
+                        $('#' + parent_id + ' .semester_name').css('border-color', 'red');
                         return false;
                     }
 
-                    if (country_id == '') {
-                        $('#' + parent_id + ' .country').focus();
-                        $('#' + parent_id + ' .country').css('border-color', 'red');
-                        return false;
-                    }
-
-                    var url = '/masters/update_university/';
-                    update_university_info(url, university_id, university_name,country_id)
+                    var url = '/masters/update_semester/';
+                    update_semester_info(url, semester_id, semester_name, start_date, end_date)
                 })
 
                 $(document).on("click", ".delete", function (e) {
 
                     var parent_id = $(this).closest('tr').attr('id');
-                    var university_id = $('#' + parent_id + ' #university_id').val();
+                    var semester_id = $('#' + parent_id + ' #semester_id').val();
 
-                    var url = '/masters/delete_university/';
-                    delete_university_info(url, university_id)
+                    var url = '/masters/delete_semester/';
+                    delete_semester_info(url, semester_id)
                 })
 
-                function delete_university_info(url, university_id) {
+                function delete_semester_info(url, semester_id) {
                     $.ajax({
                         type: 'POST',
                         url: url,
                         data: {
-                            university_id: university_id,
+                            semester_id: semester_id,
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
@@ -79,14 +75,15 @@
                     });
                 }
 
-                function update_university_info(url, university_id, university_name,country_id) {
+                function update_semester_info(url, semester_id, semester_name, start_date, end_date) {
                     $.ajax({
                         type: 'POST',
                         url: url,
                         data: {
-                            university_id: university_id,
-                            university_name: university_name,
-                            country_id: country_id,
+                            semester_id: semester_id,
+                            semester_name: semester_name,
+                            start_date: start_date,
+                            end_date: end_date,
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
@@ -101,7 +98,7 @@
 
                 $(document).on("click", ".edit", function (e) {
                     var parent_id = $(this).closest('tr').attr('id');
-                    $('.university_name').css('border-color', '');
+                    $('.semester_name').css('border-color', '');
                     var id = $(this).attr('id');
                     var i = id.split("edit")[1]
 
@@ -111,8 +108,9 @@
 
                     $("#update" + i).show();
                     $("#edit" + i).hide();
-                    $("#university_name" + i).prop("disabled", false);
-                    $("#country" + i).prop("disabled", false);
+                    $("#semester_name" + i).prop("disabled", false);
+                    $("#start_date" + i).prop("disabled", false);
+                    $("#end_date" + i).prop("disabled", false);
                 });
             });
 
@@ -138,7 +136,7 @@
             </li>
 
             <li>
-                <span> University </span>
+                <span> Semester </span>
             </li>
         </ul>
     </div>
@@ -154,7 +152,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> Manage University</span>
+                <span class="caption-subject font-red sbold uppercase"> Manage Semester</span>
             </div>
         </div>
 
@@ -163,7 +161,7 @@
             <!-- BEGIN FORM-->
             <div class="form-body">
 
-                <form action="{% url 'masters:save_university' %}" id="form_sample_1" class="form-horizontal"
+                <form action="{% url 'masters:save_semester' %}" id="form_sample_1" class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
@@ -171,27 +169,33 @@
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">University Name:
+                                <label class="col-md-2 control-label">Semester Name:
 
                                 </label>
                                 <div class="col-md-3">
-                                    <input type="text" name="university_name" class="form-control" required>
+                                    <input type="text" name="semester_name" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br><br>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Start Date:
+
+                                </label>
+                                <div class="col-md-3">
+                                    <input type="date" name="start_date" class="form-control" required>
                                 </div>
                             </div>
 
                             <div class="">
-                                <label class="col-md-2 control-label">Country:
+                                <label class="col-md-2 control-label">End Date:
 
                                 </label>
-                                <div class="col-md-3">
-                                    <select id='country' name="country" class="form-control" required>
-                                        <option style="display:none" selected="selected" id=""
-                                                value="">Please Select </option>
-
-                                        {% for rec in country_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
-                                        {% endfor %}
-                                    </select>
+                                <div class="col-md-3" id="EndDate">
+                                    <input type="date" name="end_date" class="form-control" required>
                                 </div>
                             </div>
                         </div>
@@ -217,33 +221,29 @@
                     <thead>
                     <tr>
                         <th style="display: none">Id</th>
-                        <th>University</th>
-                        <th>Country</th>
+                        <th>Semester Name</th>
+                        <th> Start Date</th>
+                        <th> End Date</th>
                         <th width="10%"></th>
                     </tr>
                     </thead>
 
                     <tbody id="tbody">
-                    {% for rec in university_recs %}
+                    {% for rec in semester_recs %}
                         <tr id="item{{ forloop.counter }}" class="item">
-                            <td style="display: none"><input id="university_id" value="{{ rec.id }}"></td>
+                            <td style="display: none"><input id="semester_id" value="{{ rec.id }}"></td>
                             <td>
-                                <text hidden>{{ rec.university_name|title }}</text>
-                                <input class="form-control data university_name" name="university_name_saved"
-                                       type="text"
-                                       id="university_name{{ forloop.counter }}" value="{{ rec.university_name|title }}"
+                                <text hidden>{{ rec.semester_name|title }}</text>
+                                <input class="form-control data semester_name" name="semester_name_saved" type="text"
+                                       id="semester_name{{ forloop.counter }}" value="{{ rec.semester_name|title }}"
                                        required pattern='[A-Za-z+-]+'
-                                       title='Please enter university name' disabled></td>
-
-                            <td>
-                                <text hidden>{{ rec.country.country_name|title }}</text>
-                                <select id='country{{ forloop.counter }}' name="country_name{{ forloop.counter }}" class="form-control country" disabled required>
-                                        <option style="display:none" selected="selected" id=""
-                                                value="{{ rec.country.id }}">{{ rec.country.country_name|title }} </option>
-                                        {% for rec in country_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
-                                        {% endfor %}
-                                    </select></td>
+                                       title='Please enter semester name' disabled></td>
+                            <td><input class="form-control data start_date" name="start_date_saved" type="date"
+                                       id="start_date{{ forloop.counter }}"
+                                       value="{{ rec.start_date|date:"Y-m-d" }}" required="True" disabled></td>
+                            <td><input class="form-control data end_date" name="end_date_saved" type="date"
+                                       id="end_date{{ forloop.counter }}"
+                                       value="{{ rec.end_date|date:"Y-m-d" }}" required="True" disabled></td>
                             <td>
                                 <span type="button" name="updt" id="update{{ forloop.counter }}"
                                       class=" update btn green glyphicon glyphicon-ok" style="display:none;">
