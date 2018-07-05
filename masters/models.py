@@ -133,15 +133,26 @@ class SemesterDetails(BaseModel):
     end_date = models.DateField()
 
 
+class DegreeTypeDetails(BaseModel):
+    degree_name = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return self.degree_name
+
+
 class DegreeDetails(BaseModel):
     degree_name = models.CharField(max_length=255, blank=True, null=True)
-    degree_type = models.CharField(max_length=100, blank=True, null=True)
+    degree_type = models.ForeignKey(DegreeTypeDetails, null=True, related_name='degree_degree_type_rel',
+                                    on_delete=models.PROTECT)
+
+    def __str__(self):
+        return self.degree_name
 
 
 class ProgramDetails(BaseModel):
     program_name = models.CharField(max_length=255, blank=True, null=True)
-    degree_type = models.CharField(max_length=255, blank=True, null=True)
-    country = models.ForeignKey(CountryDetails, null=True, related_name='program_country_rel', on_delete=models.PROTECT)
+    degree_type = models.ForeignKey(DegreeTypeDetails, null=True, related_name='program_degree_type_rel',
+                                    on_delete=models.PROTECT)
     university = models.ForeignKey(UniversityDetails, null=True, related_name='program_university_rel',
                                    on_delete=models.PROTECT)
 
@@ -210,6 +221,10 @@ class GuardianStudentMapping(BaseModel):
                                  on_delete=models.PROTECT)
     student = models.ForeignKey(StudentDetails, null=True, related_name='std_gurd_mapping_rel',
                                 on_delete=models.PROTECT)
+
+
+
+
 
 # class AddressDetails(models.Model):
 #     first_name = models.CharField(max_length=255)

@@ -34,66 +34,38 @@
                 $(document).on("click", ".update", function (e) {
 
                     var parent_id = $(this).closest('tr').attr('id');
-                    var degree_id = $('#' + parent_id + ' #degree_id').val();
-
+                    var master_and_phd_id = $('#' + parent_id + ' #master_and_phd_id').val();
                     var scholarship_id = $('#' + parent_id + ' .scholarship').val();
-                    var cgpa_min = $('#' + parent_id + ' .cgpa_min').val();
-                    var cgpa_max = $('#' + parent_id + ' .cgpa_max').val();
-
-                    var grade_min = $('#' + parent_id + ' .grade_min').val();
-                    var grade_max = $('#' + parent_id + ' .grade_max').val();
-
+                    var result = $('#' + parent_id + ' .result').val();
                     var repayment = $('#' + parent_id + ' .repayment').val();
-
                     if (repayment == '') {
                         $('#' + parent_id + ' .repayment').focus();
                         $('#' + parent_id + ' .repayment').css('border-color', 'red');
                         return false;
                     }
 
-                    if (cgpa_min == '') {
-                        $('#' + parent_id + ' .cgpa_min').focus();
-                        $('#' + parent_id + ' .cgpa_min').css('border-color', 'red');
-                        return false;
-                    }
+                    {#alert(result);#}
 
-                    if (cgpa_max == '') {
-                        $('#' + parent_id + ' .cgpa_max').focus();
-                        $('#' + parent_id + ' .cgpa_max').css('border-color', 'red');
-                        return false;
-                    }
 
-                    if (grade_min == '') {
-                        $('#' + parent_id + ' .grade_min').focus();
-                        $('#' + parent_id + ' .grade_min').css('border-color', 'red');
-                        return false;
-                    }
-
-                    if (grade_max == '') {
-                        $('#' + parent_id + ' .grade_max').focus();
-                        $('#' + parent_id + ' .grade_max').css('border-color', 'red');
-                        return false;
-                    }
-
-                    var url = '/masters/update_degree_formula_master/';
-                    update_degree_formula_info(url, degree_id, scholarship_id, grade_max, grade_min, cgpa_max, cgpa_min, repayment)
+                    var url = '/masters/update_master_and_phd/';
+                    update_master_and_phd_info(url, master_and_phd_id,scholarship_id, result,repayment)
                 })
 
                 $(document).on("click", ".delete", function (e) {
 
                     var parent_id = $(this).closest('tr').attr('id');
-                    var degree_id = $('#' + parent_id + ' #degree_id').val();
+                    var master_and_phd_id = $('#' + parent_id + ' #master_and_phd_id').val();
 
-                    var url = '/masters/delete_degree_formula_master/';
-                    delete_degree_formula_info(url, degree_id)
+                    var url = '/masters/delete_master_and_phd/';
+                    delete_master_and_phd_info(url, master_and_phd_id)
                 })
 
-                function delete_degree_formula_info(url, degree_id) {
+                function delete_master_and_phd_info(url, master_and_phd_id) {
                     $.ajax({
                         type: 'POST',
                         url: url,
                         data: {
-                            degree_id: degree_id,
+                            master_and_phd_id: master_and_phd_id,
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
@@ -105,17 +77,14 @@
                     });
                 }
 
-                function update_degree_formula_info(url, degree_id, scholarship_id, grade_max, grade_min, cgpa_max, cgpa_min, repayment) {
+                function update_master_and_phd_info(url, master_and_phd_id,scholarship_id, result,repayment) {
                     $.ajax({
                         type: 'POST',
                         url: url,
                         data: {
-                            degree_id: degree_id,
+                            master_and_phd_id: master_and_phd_id,
                             scholarship_id: scholarship_id,
-                            grade_min: grade_min,
-                            grade_max: grade_max,
-                            cgpa_min: cgpa_min,
-                            cgpa_max: cgpa_max,
+                            result: result,
                             repayment: repayment,
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
@@ -143,10 +112,7 @@
                     $("#edit" + i).hide();
                     $("#repayment" + i).prop("disabled", false);
                     $("#scholarship" + i).prop("disabled", false);
-                    $("#grade_min" + i).prop("disabled", false);
-                    $("#grade_max" + i).prop("disabled", false);
-                    $("#cgpa_min" + i).prop("disabled", false);
-                    $("#cgpa_max" + i).prop("disabled", false);
+                    $("#result" + i).prop("disabled", false);
                 });
             });
 
@@ -172,7 +138,7 @@
             </li>
 
             <li>
-                <span> Degree formula </span>
+                <span> Master and PhD formula </span>
             </li>
         </ul>
     </div>
@@ -188,7 +154,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> Manage Degree formula</span>
+                <span class="caption-subject font-red sbold uppercase"> Manage Master and PhD formula</span>
             </div>
         </div>
 
@@ -197,7 +163,7 @@
             <!-- BEGIN FORM-->
             <div class="form-body">
 
-                <form action="{% url 'masters:save_degree_formula_master' %}" id="form_sample_1" class="form-horizontal"
+                <form action="{% url 'masters:save_master_and_phd' %}" id="form_sample_1" class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
@@ -222,62 +188,20 @@
                             </div>
                         </div>
 
-                        <br><br>
-
-                        <div class="row">
-                            <div class="">
-                                <label class="col-md-2 control-label">CGPA between:
-
-                                </label>
-                                <div class="col-md-1">
-                                    <input class="form-control cgpa_min" name="cgpa_min"
-                                           type="number" step="any" min="0" max="100"
-                                           id="cgpa_min"
-                                           required
-                                           title='Please enter cgpa minimum'>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">And:
-
-                                </label>
-                                <div class="col-md-1">
-                                    <input class="form-control cgpa_max" name="cgpa_max"
-                                           type="number" step="any" min="0" max="100"
-                                           id="cgpa_max"
-                                           required
-                                           title='Please enter cgpa mark'>
-                                </div>
-                            </div>
-                        </div>
-
                     <br><br>
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">Or Grade between:
+                                <label class="col-md-2 control-label">Result:
 
                                 </label>
-                                <div class="col-md-1">
-                                    <input class="form-control grade_min" name="grade_min"
-                                           type="text"
-                                           id="grade_min"
-                                           required
-                                           title='Please enter minimum mark'>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">And:
-
-                                </label>
-                                <div class="col-md-1">
-                                    <input class="form-control grade_max" name="grade_max"
-                                           type="text"
-                                           id="grade_max"
-                                           required
-                                           title='Please enter maximum mark'>
+                                <div class="col-md-2">
+                                    <select id='result' name="result" class="form-control" required>
+                                        <option style="display:none" selected="selected" id="" value="">Please Select
+                                        </option>
+                                        <option id="" value="pass">Pass</option>
+                                        <option id="" value="fail">Fail</option>
+                                    </select>
                                 </div>
                             </div>
 
@@ -285,8 +209,8 @@
                                 <label class="col-md-1 control-label">Repayment:
 
                                 </label>
-                                <div class="col-md-1">
-                                    <input type="number" step="any" min="0" max="100" id="repayment" name="repayment" class="form-control" required>
+                                <div class="col-md-2">
+                                    <input type="text" id="repayment" name="repayment" class="form-control" required>
                                 </div>
                             </div>
                         </div>
@@ -313,24 +237,20 @@
                     <tr>
                         <th style="display: none">Id</th>
                         <th>Scholarship</th>
-                        <th>CGPA Minimum</th>
-                        <th>CGPA Maximum</th>
-                        <th>Grade Minimum</th>
-                        <th>Grade Maximum</th>
+                        <th>Result</th>
                         <th>Repayment</th>
                         <th width="10%"></th>
                     </tr>
                     </thead>
 
                     <tbody id="tbody">
-                    {% for rec in degree_recs %}
+                    {% for rec in master_and_phd_recs %}
                         <tr id="item{{ forloop.counter }}" class="item">
-                            <td style="display: none"><input id="degree_id" value="{{ rec.id }}"></td>
+                            <td style="display: none"><input id="master_and_phd_id" value="{{ rec.id }}"></td>
                             <td>
                                 <text hidden>{{ rec.scholarship.scholarship_name|title }}</text>
                                 <select id='scholarship{{ forloop.counter }}'
-                                        name="scholarship_name{{ forloop.counter }}"
-                                        class="form-control data scholarship"
+                                        name="scholarship_name{{ forloop.counter }}" class="form-control data scholarship"
                                         disabled required>
                                     <option style="display:none" selected="selected" id=""
                                             value="{{ rec.scholarship.id }}">{{ rec.scholarship.scholarship_name|title }} </option>
@@ -338,44 +258,21 @@
                                         <option value='{{ rec.id }}'>{{ rec.scholarship_name|title }}</option>
                                     {% endfor %}
                                 </select></td>
-                            <td>
-                                <text hidden>{{ rec.cgpa_min }}</text>
-                                <input class="form-control data cgpa_min" name="cgpa_min_saved"
-                                       type="number" step="any" min="0" max="100"
-                                       id="cgpa_min{{ forloop.counter }}" value="{{ rec.cgpa_min|title }}"
-                                       required
-                                       title='Please enter minimum cgpa' disabled></td>
-
 
                             <td>
-                                <text hidden>{{ rec.cgpa_max }}</text>
-                                <input class="form-control data cgpa_max" name="cgpa_max_saved"
-                                      type="number" step="any" min="0" max="100"
-                                       id="cgpa_max{{ forloop.counter }}" value="{{ rec.cgpa_max|title }}"
-                                       required
-                                       title='Please enter max cgpa' disabled></td>
-
-                            <td>
-                                <text hidden>{{ rec.grade_min }}</text>
-                                <input class="form-control data grade_min" name="grade_min_saved"
-                                       type="text"
-                                       id="grade_min{{ forloop.counter }}" value="{{ rec.grade_min|title }}"
-                                       required
-                                       title='Please enter minimum grade' disabled></td>
-
-
-                            <td>
-                                <text hidden>{{ rec.grade_max }}</text>
-                                <input class="form-control data grade_max" name="grade_max_saved"
-                                       type="text"
-                                       id="grade_max{{ forloop.counter }}" value="{{ rec.grade_max|title }}"
-                                       required pattern='[A-Za-z+-]+'
-                                       title='Please enter max grade' disabled></td>
+                                <text hidden>{{ rec.result|title }}</text>
+                                <select id="result{{ forloop.counter }}" name="result{{ forloop.counter }}"
+                                        class="form-control data result" required disabled>
+                                    <option style="display:none" selected="selected" id=""
+                                            value="{{ rec.result }}">{{ rec.result|title }} </option>
+                                    <option id="" value="pass">Pass</option>
+                                    <option id="" value="fail">Fail</option>
+                                </select></td>
 
                             <td>
                                 <text hidden>{{ rec.repayment|title }}</text>
                                 <input class="form-control data repayment" name="repayment_name_saved"
-                                       type="text"
+                                       type="number" step="any" min="0" max="100"
                                        id="repayment{{ forloop.counter }}" value="{{ rec.repayment|title }}"
                                        required pattern='[A-Za-z+-]+'
                                        title='Please enter repayment' disabled>

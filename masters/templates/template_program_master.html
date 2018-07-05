@@ -1,0 +1,297 @@
+{% extends "template_base_page.html" %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+            $(document).ready(function () {
+                $(document).on("click", ".update", function (e) {
+
+                    var parent_id = $(this).closest('tr').attr('id');
+                    var program_id = $('#' + parent_id + ' #program_id').val();
+                    var program_name = $('#' + parent_id + ' .program_name').val();
+                    var degree_type_id = $('#' + parent_id + ' .degree_type').val();
+                    var university_id = $('#' + parent_id + ' .university').val();
+                    if (program_name == '') {
+                        $('#' + parent_id + ' .program_name').focus();
+                        $('#' + parent_id + ' .program_name').css('border-color', 'red');
+                        return false;
+                    }
+
+                    if (degree_type_id == '') {
+                        $('#' + parent_id + ' .degree_type').focus();
+                        $('#' + parent_id + ' .degree_type').css('border-color', 'red');
+                        return false;
+                    }
+
+                    var url = '/masters/update_program/';
+                    update_program_info(url, program_id, program_name,degree_type_id,university_id)
+                })
+
+                $(document).on("click", ".delete", function (e) {
+
+                    var parent_id = $(this).closest('tr').attr('id');
+                    var program_id = $('#' + parent_id + ' #program_id').val();
+
+                    var url = '/masters/delete_program/';
+                    delete_program_info(url, program_id)
+                })
+
+                function delete_program_info(url, program_id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            program_id: program_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+                            location.reload(true)
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+                function update_program_info(url, program_id, program_name,degree_type_id,university_id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            program_id: program_id,
+                            program_name: program_name,
+                            degree_type_id: degree_type_id,
+                            university_id: university_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+                            location.reload(true)
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+
+                $(document).on("click", ".edit", function (e) {
+                    {#var parent_id = $(this).closest('tr').attr('id');#}
+                    $('.program_name').css('border-color', '');
+                    var id = $(this).attr('id');
+                    var i = id.split("edit")[1]
+
+                    $(".data").prop("disabled", true);
+                    $(".edit").show();
+                    $(".update").hide();
+
+                    $("#update" + i).show();
+                    $("#edit" + i).hide();
+                    $("#program_name" + i).prop("disabled", false);
+                    $("#degree_type" + i).prop("disabled", false);
+                    $("#university" + i).prop("disabled", false);
+                });
+            });
+
+
+            $('#sample_1').dataTable().fnDestroy();
+            $('#sample_1').dataTable({
+                "aoColumnDefs": [
+                    {'bSortable': false}
+                ]
+            });
+        }
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'accounts:home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span> Program </span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase"> Manage Program</span>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+
+            <!-- BEGIN FORM-->
+            <div class="form-body">
+
+                <form action="{% url 'masters:save_program' %}" id="form_sample_1" class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-body">
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Program Name:
+
+                                </label>
+                                <div class="col-md-2">
+                                    <input type="text" name="program_name" class="form-control" required>
+                                </div>
+                            </div>
+
+                            <div style="margin-left: 5%" class="">
+                                <label class="col-md-1 control-label">Degree Type:
+
+                                </label>
+                                <div class="col-md-2">
+                                    <select id='degree_type' name="degree_type" class="form-control" required>
+                                        <option style="display:none" selected="selected" id=""
+                                                value="">Please Select </option>
+
+                                        {% for rec in degree_type_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.degree_name|title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">University:
+
+                                </label>
+                                <div class="col-md-2">
+                                    <select id='university' name="university" class="form-control" required>
+                                        <option style="display:none" selected="selected" id=""
+                                                value="">Please Select </option>
+
+                                        {% for rec in university_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.university_name|title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <br><br>
+
+                        <br><br>
+
+                        <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="submit" class="btn green" id="save">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <br><br>
+
+            <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <table class="table table-striped table-hover table-bordered" id="sample_1">
+                    <thead>
+                    <tr>
+                        <th style="display: none">Id</th>
+                        <th>Program</th>
+                        <th>Degree Type</th>
+                        <th>University</th>
+                        <th width="10%"></th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="tbody">
+                    {% for rec in program_recs %}
+                        <tr id="item{{ forloop.counter }}" class="item">
+                            <td style="display: none"><input id="program_id" value="{{ rec.id }}"></td>
+                            <td>
+                                <text hidden>{{ rec.program_name|title }}</text>
+                                <input class="form-control data program_name" name="program_name_saved"
+                                       type="text"
+                                       id="program_name{{ forloop.counter }}" value="{{ rec.program_name|title }}"
+                                       required pattern='[A-Za-z+-]+'
+                                       title='Please enter program name' disabled></td>
+
+                            <td>
+                                <text hidden>{{ rec.degree_type.degree_type_name|title }}</text>
+                                <select id='degree_type{{ forloop.counter }}' name="degree_type_name{{ forloop.counter }}" class="form-control degree_type" disabled required>
+                                        <option style="display:none" selected="selected" id=""
+                                                value="{{ rec.degree_type.id }}">{{ rec.degree_type.degree_name|title }} </option>
+                                        {% for rec in degree_type_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.degree_name|title }}</option>
+                                        {% endfor %}
+                                    </select></td>
+
+                            <td>
+                                <text hidden>{{ rec.university.university_name|title }}</text>
+                                <select id='university{{ forloop.counter }}'
+                                        name="university_name{{ forloop.counter }}" class="form-control university"
+                                        disabled required>
+                                    <option style="display:none" selected="selected" id=""
+                                            value="{{ rec.university.id }}">{{ rec.university.university_name|title }} </option>
+                                    {% for rec in university_recs %}
+                                        <option value='{{ rec.id }}'>{{ rec.university_name|title }}</option>
+                                    {% endfor %}
+                                </select></td>
+                            <td>
+                                <span type="button" name="updt" id="update{{ forloop.counter }}"
+                                      class=" update btn green glyphicon glyphicon-ok" style="display:none;">
+                                </span>
+                                <span type="button" name="edit" id="edit{{ forloop.counter }}"
+                                      class=" edit btn blue glyphicon glyphicon-pencil">
+                                </span>
+                                <span type="button" name="delete" id="delete{{ forloop.counter }}"
+                                      class=" delete btn red glyphicon glyphicon-trash">
+                                </span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+{% endblock %}
