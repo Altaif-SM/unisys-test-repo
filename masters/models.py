@@ -86,15 +86,20 @@ class MasterAndCourseFormula(BaseModel):
 class PartnerDetails(BaseModel):
     country = models.ForeignKey(CountryDetails, null=True, related_name='partner_country_rel', on_delete=models.PROTECT)
     office_name = models.CharField(max_length=255, blank=True, null=True)
-    office_contact_number = models.CharField(max_length=16, blank=True, null=True)
     person_one = models.CharField(max_length=100, blank=True, null=True)
     person_one_contact_number = models.CharField(max_length=16, blank=True, null=True)
     person_two = models.CharField(max_length=100, blank=True, null=True)
     person_two_contact_number = models.CharField(max_length=16, blank=True, null=True)
+    office_contact_number = models.CharField(max_length=16, blank=True, null=True)
     email = models.EmailField(max_length=255, blank=True, null=True)
     address = models.ForeignKey(AddressDetails, null=True, related_name='partner_address_rel', on_delete=models.PROTECT)
-    photo = models.FileField(upload_to=content_file_name_partner)
+    single_address = models.CharField(max_length=500, blank=True, null=True)
+    photo = models.FileField(upload_to=content_file_name_partner,blank=True, null=True)
     user = models.ForeignKey(User, null=True, related_name='partner_user_rel', on_delete=models.PROTECT)
+
+    def __str__(self):
+        details = str(self.country.country_name)+' and '+ str(self.office_name)
+        return details
 
 
 class DonorDetails(BaseModel):
@@ -102,6 +107,7 @@ class DonorDetails(BaseModel):
     country = models.ForeignKey(CountryDetails, null=True, related_name='donor_country_rel', on_delete=models.PROTECT)
     person = models.CharField(max_length=255, blank=True, null=True)
     person_contact_number = models.CharField(max_length=16, blank=True, null=True)
+    single_donor_address = models.CharField(max_length=255, blank=True, null=True)
     address = models.ForeignKey(AddressDetails, null=True, related_name='donor_address_rel', on_delete=models.PROTECT)
     email = models.EmailField(max_length=255, blank=True, null=True)
     reg_document = models.FileField(upload_to=content_file_name_donor)
@@ -111,6 +117,7 @@ class DonorDetails(BaseModel):
     bank_swift_code = models.CharField(max_length=50, blank=True, null=True)
     bank_address = models.ForeignKey(AddressDetails, null=True, related_name='donor_bank_address_rel',
                                      on_delete=models.PROTECT)
+    donor_bank_address = models.CharField(max_length=255, blank=True, null=True)
     user = models.ForeignKey(User, null=True, related_name='donor_user_rel', on_delete=models.PROTECT)
 
 
@@ -169,14 +176,14 @@ class DevelopmentProgram(BaseModel):
     module = models.ForeignKey(ModuleDetails, null=True, related_name='development_module_rel',
                                on_delete=models.PROTECT)
     code = models.CharField(max_length=100, blank=True, null=True)
-    activity = models.CharField(max_length=255, blank=True, null=True)
-    outecomes = models.CharField(max_length=1500, blank=True, null=True)
+    activity = models.CharField(max_length=2000, blank=True, null=True)
+    outcome = models.CharField(max_length=2000, blank=True, null=True)
     duration_day = models.IntegerField(blank=True, null=True)
     duration_night = models.IntegerField(blank=True, null=True)
     method = models.CharField(max_length=255, blank=True, null=True)
     marks = models.CharField(max_length=100, blank=True, null=True)
     date = models.DateField()
-    remark = models.DateField()
+    remark = models.CharField(max_length=2000, blank=True, null=True)
 
 
 class GuardianDetails(BaseModel):

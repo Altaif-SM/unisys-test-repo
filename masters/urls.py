@@ -75,6 +75,29 @@ urlpatterns = [
     path('update_degree_formula_master/', views.update_degree_formula_master, name='update_degree_formula_master'),
     path('delete_degree_formula_master/', views.delete_degree_formula_master, name='delete_degree_formula_master'),
 
+
+    # ********------ development program master Master --------****************************
+    path('template_development_program_master/', views.template_development_program_master,
+         name='template_development_program_master'),
+    path('save_development_program_master/', views.save_development_program_master, name='save_development_program_master'),
+    path('update_development_program_master/', views.update_development_program_master, name='update_development_program_master'),
+    path('delete_development_program_master/', views.delete_development_program_master, name='delete_development_program_master'),
+
+    # ********------ manage partner Master --------****************************
+    path('template_manage_partner_master/', views.template_manage_partner_master,
+         name='template_manage_partner_master'),
+    path('save_manage_partner_master/', views.save_manage_partner_master, name='save_manage_partner_master'),
+    path('update_manage_partner_master/', views.update_manage_partner_master, name='update_manage_partner_master'),
+    path('delete_manage_partner_master/', views.delete_manage_partner_master, name='delete_manage_partner_master'),
+
+    # ********------ manage donor Master --------****************************
+    path('template_manage_donor_master/', views.template_manage_donor_master,
+         name='template_manage_donor_master'),
+    path('save_manage_donor_master/', views.save_manage_donor_master, name='save_manage_donor_master'),
+    path('update_manage_donor_master/', views.update_manage_donor_master, name='update_manage_donor_master'),
+    path('delete_manage_donor_master/', views.delete_manage_donor_master, name='delete_manage_donor_master'),
+
+
     path('get_table_data/', views.get_table_data, name='get_table_data'),
 
 ]

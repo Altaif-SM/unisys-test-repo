@@ -83,7 +83,8 @@ License: You must have a valid license purchased only from themeforest(the above
         <!-- BEGIN LOGO -->
         <div class="page-logo">
 
-            <img src="{% static 'assets/layouts/layout2/img/logo-default.png' %}" alt="logo" class="logo-default"/>
+{#            <h4>SMS</h4>#}
+{#            <img src="{% static 'assets/layouts/layout2/img/logo-default.png' %}" alt="logo" class="logo-default"/>#}
             <div class="menu-toggler sidebar-toggler">
                 <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
             </div>
@@ -140,14 +141,14 @@ License: You must have a valid license purchased only from themeforest(the above
                             <i class="fa fa-angle-down"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-default">
-                            <li>
+                            {% comment %}<li>
                                 <a href="/school/my_profile/">
                                     <i class="fa fa-book" aria-hidden="true"></i> Profile </a>
                             </li>
                             <li>
                                 <a href="/school/change_password/">
                                     <i class="icon-key" aria-hidden="true"></i> Change Password </a>
-                            </li>
+                            </li>{% endcomment %}
                             <li>
                                 <a href="/accounts/user_signout/">
                                     <i class="fa fa-sign-out"></i> Log Out</a>
@@ -208,12 +209,12 @@ License: You must have a valid license purchased only from themeforest(the above
 
                     </li>
 
-                    <li class="nav-item " id="manageUsers">
+                    {% comment %}<li class="nav-item " id="manageUsers">
                         <a href="#" class="nav-link nav-toggle">
                             <i class="icon-users"></i>
                             <span class="title">Manage Users</span>
                         </a>
-                    </li>
+                    </li>{% endcomment %}
 
                     <li class="nav-item  " id="settings">
                         <a href="#" class="nav-link nav-toggle">
@@ -259,7 +260,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </a>
                             </li>
                             <li class="nav-item start ">
-                                <a href="#" class="nav-link ">
+                                <a href="{% url 'masters:template_manage_partner_master' %}" class="nav-link ">
                                     <i class="icon-graph"></i>
                                     <span class="title">Manage Partners</span>
                                 </a>
@@ -272,7 +273,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </a>
                                 <ul class="sub-menu">
                                     <li class="nav-item ">
-                                        <a href="#" class="nav-link "> Manage Donors </a>
+                                        <a href="{% url 'masters:template_manage_donor_master' %}" class="nav-link "> Manage Donors </a>
                                     </li>
                                     <li class="nav-item ">
                                         <a href="#" class="nav-link "> Link Student to Donor </a>
@@ -303,27 +304,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </li>
                                 </ul>
                             </li>
-                            {#                        <li class="nav-item start ">#}
-                            {#                            <a href="#" class="nav-link ">#}
-                            {#                                <i class="icon-graph"></i>#}
-                            {#                                <span class="title">Semesters</span>#}
-                            {#                                <span class="badge badge-danger">5</span>#}
-                            {#                            </a>#}
-                            {#                        </li>#}
-                            {#                        <li class="nav-item start ">#}
-                            {#                            <a href="#" class="nav-link ">#}
-                            {#                                <i class="icon-graph"></i>#}
-                            {#                                <span class="title">Degrees</span>#}
-                            {#                                <span class="badge badge-danger">5</span>#}
-                            {#                            </a>#}
-                            {#                        </li>#}
-                            {#                        <li class="nav-item start ">#}
-                            {#                            <a href="#" class="nav-link ">#}
-                            {#                                <i class="icon-graph"></i>#}
-                            {#                                <span class="title">Programs</span>#}
-                            {#                                <span class="badge badge-danger">5</span>#}
-                            {#                            </a>#}
-                            {#                        </li>#}
+
                             <li class="nav-item start ">
                                 <a href="javascript:;" class="nav-link nav-toggle">
                                     <i class="icon-graph"></i>
@@ -335,7 +316,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                         <a href="{% url 'masters:template_module_master' %}" class="nav-link "> Manage Modules </a>
                                     </li>
                                     <li class="nav-item ">
-                                        <a href="#" class="nav-link "> Dev Programs </a>
+                                        <a href="{% url 'masters:template_development_program_master' %}" class="nav-link "> Dev Programs </a>
                                     </li>
                                 </ul>
                             </li>

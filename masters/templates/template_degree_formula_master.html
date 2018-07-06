@@ -252,7 +252,7 @@
                             </div>
                         </div>
 
-                    <br><br>
+                        <br><br>
 
                         <div class="row">
                             <div class="">
@@ -286,7 +286,8 @@
 
                                 </label>
                                 <div class="col-md-1">
-                                    <input type="number" step="any" min="0" max="100" id="repayment" name="repayment" class="form-control" required>
+                                    <input type="number" step="any" min="0" max="100" id="repayment" name="repayment"
+                                           class="form-control" required>
                                 </div>
                             </div>
                         </div>
@@ -346,11 +347,10 @@
                                        required
                                        title='Please enter minimum cgpa' disabled></td>
 
-
                             <td>
                                 <text hidden>{{ rec.cgpa_max }}</text>
                                 <input class="form-control data cgpa_max" name="cgpa_max_saved"
-                                      type="number" step="any" min="0" max="100"
+                                       type="number" step="any" min="0" max="100"
                                        id="cgpa_max{{ forloop.counter }}" value="{{ rec.cgpa_max|title }}"
                                        required
                                        title='Please enter max cgpa' disabled></td>
@@ -362,8 +362,6 @@
                                        id="grade_min{{ forloop.counter }}" value="{{ rec.grade_min|title }}"
                                        required
                                        title='Please enter minimum grade' disabled></td>
-
-
                             <td>
                                 <text hidden>{{ rec.grade_max }}</text>
                                 <input class="form-control data grade_max" name="grade_max_saved"

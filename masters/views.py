@@ -614,7 +614,7 @@ def save_degree_formula_master(request):
     try:
         if not DegreeFormula.objects.filter(Q(cgpa_max=cgpa_max,
                                               cgpa_min=cgpa_min) or Q(grade_max=grade_max,
-                                                                    grade_min=grade_min),
+                                                                      grade_min=grade_min),
                                             scholarship_id=scholarship_id.lower()).exists():
             DegreeFormula.objects.create(scholarship_id=scholarship_id, cgpa_max=cgpa_max,
                                          cgpa_min=cgpa_min, grade_max=grade_max,
@@ -638,13 +638,13 @@ def update_degree_formula_master(request):
     repayment = request.POST.get('repayment')
     try:
         if not DegreeFormula.objects.filter(~Q(id=degree_id), Q(cgpa_max=cgpa_max,
-                                                                     cgpa_min=cgpa_min) or Q(grade_max=grade_max,
-                                                                                           grade_min=grade_min),
+                                                                cgpa_min=cgpa_min) or Q(grade_max=grade_max,
+                                                                                        grade_min=grade_min),
                                             scholarship_id=scholarship_id.lower()).exists():
 
             DegreeFormula.objects.filter(id=degree_id).update(scholarship_id=scholarship_id, cgpa_max=cgpa_max,
-                                                                   cgpa_min=cgpa_min, grade_max=grade_max,
-                                                                   grade_min=grade_min, repayment=repayment)
+                                                              cgpa_min=cgpa_min, grade_max=grade_max,
+                                                              grade_min=grade_min, repayment=repayment)
             messages.success(request, "Record updated.")
             return HttpResponse(json.dumps({'success': 'Record updated.'}), content_type="application/json")
         else:
@@ -671,7 +671,285 @@ def delete_degree_formula_master(request):
     return HttpResponse(json.dumps({'error': 'Record not deleted.'}), content_type="application/json")
 
 
+# *********------------ Development Program Master ----------***************
+
+def template_development_program_master(request):
+    year_recs = YearDetails.objects.all()
+    semester_recs = SemesterDetails.objects.all()
+    module_recs = ModuleDetails.objects.all()
+    development_program_recs = DevelopmentProgram.objects.all()
+    return render(request, 'template_development_program_master.html',
+                  {'year_recs': year_recs, 'semester_recs': semester_recs, 'module_recs': module_recs,
+                   'development_program_recs': development_program_recs})
+
+
+def save_development_program_master(request):
+    year_name = request.POST.get('year_name')
+    semester_name = request.POST.get('semester_name')
+    module_name = request.POST.get('module_name')
+    code_name = request.POST.get('code_name')
+
+    activities = request.POST.get('activities')
+    outcomes = request.POST.get('outcomes')
+
+    day_duration = request.POST.get('day_duration')
+    night_duration = request.POST.get('night_duration')
+    method_name = request.POST.get('method_name')
+
+    mark_name = request.POST.get('mark_name')
+    date_name = request.POST.get('date_name')
+    remark_name = request.POST.get('remark_name')
+    try:
+        if not DevelopmentProgram.objects.filter(year_id=year_name, semester_id=semester_name,
+                                                 module_id=module_name).exists():
+            DevelopmentProgram.objects.create(year_id=year_name, semester_id=semester_name, module_id=module_name,
+                                              code=code_name, date=date_name, marks=mark_name,
+                                              method=method_name, duration_night=night_duration,
+                                              duration_day=day_duration, outcome=outcomes, activity=activities,
+                                              remark=remark_name)
+            messages.success(request, "Record saved.")
+        else:
+            messages.warning(request,
+                             "Development program is already exist for this Year, semester and module. Record not saved.")
+    except:
+        messages.warning(request, "Record not saved.")
+    return redirect('/masters/template_development_program_master/')
+
+
+def update_development_program_master(request):
+    development_program_id = request.POST.get('development_program_id')
+
+    year_name = request.POST.get('year_name')
+    semester_name = request.POST.get('semester_name')
+    module_name = request.POST.get('module_name')
+    code_name = request.POST.get('code_name')
+
+    activities = request.POST.get('activities')
+    outcomes = request.POST.get('outcomes')
+
+    day_duration = request.POST.get('day_duration')
+    night_duration = request.POST.get('night_duration')
+    method_name = request.POST.get('method_name')
+
+    mark_name = request.POST.get('mark_name')
+    date_name = request.POST.get('date_name')
+    remark_name = request.POST.get('remark_name')
+    try:
+        if not DevelopmentProgram.objects.filter(~Q(id=development_program_id), year_id=year_name,
+                                                 semester_id=semester_name,
+                                                 module_id=module_name).exists():
+
+            DevelopmentProgram.objects.filter(id=development_program_id).update(year_id=year_name,
+                                                                                semester_id=semester_name,
+                                                                                module_id=module_name,
+                                                                                code=code_name, date=date_name,
+                                                                                marks=mark_name,
+                                                                                method=method_name,
+                                                                                duration_night=night_duration,
+                                                                                duration_day=day_duration,
+                                                                                outcome=outcomes,
+                                                                                activity=activities,
+                                                                                remark=remark_name)
+            messages.success(request, "Record updated.")
+            return HttpResponse(json.dumps({'success': 'Record updated.'}), content_type="application/json")
+        else:
+            messages.warning(request,
+                             "Development program is already exist for this Year, semester and module. Record not saved.")
+            return HttpResponse(
+                json.dumps({
+                    'success': "Development program is already exist for this Year, semester and module. Record not saved."}),
+                content_type="application/json")
+
+    except:
+        messages.warning(request, "Record not updated.")
+    return HttpResponse(json.dumps({'error': 'Record not updated.'}),
+                        content_type="application/json")
+
+
+def delete_development_program_master(request):
+    development_program_id = request.POST.get('development_program_id')
+
+    try:
+        DevelopmentProgram.objects.filter(id=development_program_id).delete()
+        messages.success(request, "Record deleted.")
+        return HttpResponse(json.dumps({'success': 'Record deleted.'}), content_type="application/json")
+    except:
+        messages.warning(request, "Record not deleted.")
+    return HttpResponse(json.dumps({'error': 'Record not deleted.'}), content_type="application/json")
+
+
+# *********------------ Manage Partner Master ----------***************
+
+def template_manage_partner_master(request):
+    country_recs = CountryDetails.objects.all()
+    partner_recs = PartnerDetails.objects.all()
+    return render(request, 'template_partner_master.html',
+                  {'country_recs': country_recs, 'partner_recs': partner_recs})
+
+
+def save_manage_partner_master(request):
+    country = request.POST.get('country_name')
+    office_name = request.POST.get('office_name')
+    person_one = request.POST.get('person_one')
+    person_one_contact = request.POST.get('person_one_contact')
+
+    person_two = request.POST.get('person_two')
+    person_two_contact = request.POST.get('person_two_contact')
+    office_contact = request.POST.get('office_contact')
+
+    email = request.POST.get('email')
+    address = request.POST.get('address')
+    photo = request.POST.get('photo')
+
+    try:
+        if not PartnerDetails.objects.filter(country_id=country, office_name=office_name).exists():
+            PartnerDetails.objects.create(country_id=country, office_name=office_name, person_one=person_one,
+                                          person_one_contact_number=person_one_contact,
+                                          person_two=person_two, person_two_contact_number=person_two_contact,
+                                          office_contact_number=office_contact,
+                                          email=email, single_address=address)
+            messages.success(request, "Record saved.")
+        else:
+            messages.warning(request, "Partner and country is already exist. Record not saved.")
+    except:
+        messages.warning(request, "Record not saved.")
+    return redirect('/masters/template_manage_partner_master/')
+
+
+def update_manage_partner_master(request):
+    partner_id = request.POST.get('partner_id')
+
+    country = request.POST.get('country_name')
+    office_name = request.POST.get('office_name')
+    person_one = request.POST.get('person_one')
+    person_one_contact = request.POST.get('person_one_contact')
+
+    office_contact = request.POST.get('office_contact')
+
+    email = request.POST.get('email')
+    address = request.POST.get('address')
+    try:
+        if not PartnerDetails.objects.filter(~Q(id=partner_id), country_id=country, office_name=office_name).exists():
+
+            PartnerDetails.objects.filter(id=partner_id).update(country_id=country, person_one=person_one,
+                                                                person_one_contact_number=person_one_contact,
+                                                                office_contact_number=office_contact,
+                                                                email=email, single_address=address)
+            messages.success(request, "Record updated.")
+            return HttpResponse(json.dumps({'success': 'Record updated.'}), content_type="application/json")
+        else:
+            messages.warning(request,
+                             "Partner and country is already exist. Record not updated.")
+            return HttpResponse(
+                json.dumps({
+                    'success': "Partner and country is already exist. Record not updated."}),
+                content_type="application/json")
+
+    except:
+        messages.warning(request, "Record not updated.")
+    return HttpResponse(json.dumps({'error': 'Record not updated.'}),
+                        content_type="application/json")
+
+
+def delete_manage_partner_master(request):
+    partner_id = request.POST.get('partner_id')
+
+    try:
+        PartnerDetails.objects.filter(id=partner_id).delete()
+        messages.success(request, "Record deleted.")
+        return HttpResponse(json.dumps({'success': 'Record deleted.'}), content_type="application/json")
+    except:
+        messages.warning(request, "Record not deleted.")
+    return HttpResponse(json.dumps({'error': 'Record not deleted.'}), content_type="application/json")
+
+
+# *********------------ Manage Donor Master ----------***************
+
+def template_manage_donor_master(request):
+    country_recs = CountryDetails.objects.all()
+    donor_recs = DonorDetails.objects.all()
+    return render(request, 'template_donor_master.html',
+                  {'country_recs': country_recs, 'donor_recs': donor_recs})
+
+
+def save_manage_donor_master(request):
+    organisation = request.POST.get('organisation')
+    country = request.POST.get('country')
+    person = request.POST.get('person')
+    person_contact = request.POST.get('person_contact')
+
+    donor_address = request.POST.get('donor_address')
+    email = request.POST.get('email')
+    reg_document = request.POST.get('reg_document')
+    due_amount = request.POST.get('due_amount')
+
+    bank_account_number = request.POST.get('bank_account_number')
+    bank_name = request.POST.get('bank_name')
+    bank_swift_code = request.POST.get('bank_swift_code')
+    donor_bank_address = request.POST.get('donor_bank_address')
+
+    try:
+        if not DonorDetails.objects.filter(country_id=country, organisation=organisation).exists():
+            DonorDetails.objects.create(country_id=country, organisation=organisation, person=person,
+                                        person_contact_number=person_contact, single_donor_address=donor_address,
+                                        due_amount=due_amount, bank_account_number=bank_account_number,
+                                        bank_name=bank_name, bank_swift_code=bank_swift_code, email=email,
+                                        donor_bank_address=donor_bank_address)
+            messages.success(request, "Record saved.")
+        else:
+            messages.warning(request, "Organisation and country is already exist. Record not saved.")
+    except:
+        messages.warning(request, "Record not saved.")
+    return redirect('/masters/template_manage_donor_master/')
+
+
+def update_manage_donor_master(request):
+    donor_id = request.POST.get('donor_id')
+
+    organisation = request.POST.get('organisation')
+    country = request.POST.get('country')
+    person = request.POST.get('person')
+    person_contact = request.POST.get('person_contact_number')
+
+    donor_address = request.POST.get('address')
+    email = request.POST.get('email')
+
+    try:
+        if not DonorDetails.objects.filter(~Q(id=donor_id), country_id=country, organisation=organisation).exists():
+
+            DonorDetails.objects.filter(id=donor_id).update(country_id=country, organisation=organisation,
+                                                            person=person, person_contact_number=person_contact,
+                                                            single_donor_address=donor_address,
+                                                            email=email)
+            messages.success(request, "Record updated.")
+            return HttpResponse(json.dumps({'success': 'Record updated.'}), content_type="application/json")
+        else:
+            messages.warning(request,
+                             "Organisation and country is already exist. Record not updated.")
+            return HttpResponse(
+                json.dumps({
+                    'success': "Organisation and country is already exist. Record not updated."}),
+                content_type="application/json")
+
+    except:
+        messages.warning(request, "Record not updated.")
+    return HttpResponse(json.dumps({'error': 'Record not updated.'}),
+                        content_type="application/json")
+
+
+def delete_manage_donor_master(request):
+    donor_id = request.POST.get('donor_id')
+
+    try:
+        DonorDetails.objects.filter(id=donor_id).delete()
+        messages.success(request, "Record deleted.")
+        return HttpResponse(json.dumps({'success': 'Record deleted.'}), content_type="application/json")
+    except:
+        messages.warning(request, "Record not deleted.")
+    return HttpResponse(json.dumps({'error': 'Record not deleted.'}), content_type="application/json")
+
+
 def get_table_data(request):
-    # data = {'id': 1, 'column_name': 'abc', 'value': 'ABCD'}
+    data = {'id': 1, 'column_name': 'abc', 'value': 'ABCD'}
 
     return HttpResponse(json.dumps(data), content_type="application/json")
