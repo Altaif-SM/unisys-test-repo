@@ -1,8 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, Group, Permission
 from common.models import BaseModel
-from django.contrib.auth.models import Group, Permission
 from django.db.models import Q
+
 
 # Create your models here.
 class UserRole(BaseModel):
@@ -12,8 +12,8 @@ class UserRole(BaseModel):
     def __str__(self):
         return self.name
 
-class User(AbstractUser):
 
+class User(AbstractUser):
     ID = 'id'
     USERNAME = 'username'
     PASSWORD = 'password'
@@ -31,7 +31,6 @@ class User(AbstractUser):
     middle_name = models.CharField(max_length=256, blank=True, null=True)
     last_name = models.CharField(max_length=256, blank=True, null=True)
     role = models.ManyToManyField(UserRole, related_name='user_role', null=True)
-
 
     class Meta:
         permissions = (
@@ -92,7 +91,6 @@ class User(AbstractUser):
             user.password = user_detail_form[User.PASSWORD]
 
         return user
-
 
     def is_system_admin(self):
         return True if self.role.all().filter(name__in=[self.SYSTEAM_ADMIN, self.ADMIN]).exists() else False

@@ -25,7 +25,7 @@ SECRET_KEY = 'gchy7$_ctk45##d%(p*+*v6ciju3&#h72dwfz2ugx%u11q1)c&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.1.174','192.168.43.184','127.0.0.1']
 
 
 # Application definition
@@ -84,7 +84,8 @@ AUTH_USER_MODEL = "accounts.User"
 DATABASES = {
      'default': {
           'ENGINE': 'django.db.backends.mysql',
-          'NAME': 'scholarship_mgmt',
+          # 'NAME': 'scholarship_mgmt',
+          'NAME': 'scholarship_test',
           'USER':'root',
           'PASSWORD':'',
           'HOST': '127.0.0.1',
