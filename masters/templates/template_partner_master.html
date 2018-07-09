@@ -30,6 +30,16 @@
 {% block ScriptBlock %}
     <script>
         window.onload = function () {
+
+            File.prototype.convertToBase64 = function (callback) {
+                var reader = new FileReader();
+                reader.onloadend = function (e) {
+                    callback(e.target.result, e.target.error);
+                };
+                reader.readAsDataURL(this);
+            };
+
+
             $(document).ready(function () {
 
                 $(document).on("click", ".update", function (e) {
@@ -115,6 +125,25 @@
 
                     $("#" + parent_id + " .data").prop("disabled", false);
 
+                });
+
+
+                $(document).on("change", "#partner_photo", function (e) {
+
+                    var selectedFile = this.files[0];
+                    selectedFile.convertToBase64(function (base64) {
+                        var converted_base64_image = (base64);
+                        $("#pic").val(converted_base64_image);
+                    })
+
+                    var files = !!this.files ? this.files : [];
+                    if (!files.length || !window.FileReader) return;
+                    var fileExtension = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
+                    if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                        alert("Only formats are allowed : " + fileExtension.join(', '));
+                        $(this).val('');
+                        return false;
+                    }
                 });
             });
 
@@ -285,9 +314,13 @@
                             <div class="">
                                 <label class="col-md-1 control-label">Photo:</label>
                                 <div class="col-md-2">
-                                    <input type="file" title="Enter photo"
-                                           id="photo" name="photo"
-                                           class="form-control">
+                                    <input type="text" id="pic" name="pic" hidden>
+                                    {#                                    <input name="photo" type="file"#}
+                                    {#                                           value="{{ path }}{{ student.photo }}" style="display: none">#}
+
+                                    <input name="photo" type="file" title="Select photo"
+                                           id="partner_photo"
+                                           class="">
                                 </div>
                             </div>
                         </div>

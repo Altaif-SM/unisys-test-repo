@@ -1,6 +1,7 @@
 import random
 import string
 
+
 def random_string_generator(size, include_lowercase=True, include_uppercase=True, include_number=True):
     s = ""
     if include_lowercase:
@@ -13,3 +14,9 @@ def random_string_generator(size, include_lowercase=True, include_uppercase=True
     if len(s) > 0:
         s = ''.join(random.sample(s, len(s)))
         return ''.join(random.choice(s) for _ in range(size))
+
+
+def handle_uploaded_file(url,file):
+    with open(str(url), 'wb+') as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)

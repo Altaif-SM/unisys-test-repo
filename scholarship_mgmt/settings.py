@@ -25,7 +25,7 @@ SECRET_KEY = 'gchy7$_ctk45##d%(p*+*v6ciju3&#h72dwfz2ugx%u11q1)c&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.174','192.168.43.184','127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -75,6 +75,10 @@ TEMPLATES = [
 WSGI_APPLICATION = 'scholarship_mgmt.wsgi.application'
 
 AUTH_USER_MODEL = "accounts.User"
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+MEDIA_URL = '/media/'
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases

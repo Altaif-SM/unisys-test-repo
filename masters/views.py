@@ -5,6 +5,9 @@ from masters.models import *
 from django.shortcuts import render, redirect, render_to_response
 from django.contrib import messages
 from django.db.models import Q
+import base64
+from django.conf import settings
+from common.utils import *
 
 
 # *********------------ Year Master ----------***************
@@ -800,14 +803,34 @@ def save_manage_partner_master(request):
     email = request.POST.get('email')
     address = request.POST.get('address')
     photo = request.POST.get('photo')
+    pic = request.POST.get('pic')
 
     try:
         if not PartnerDetails.objects.filter(country_id=country, office_name=office_name).exists():
-            PartnerDetails.objects.create(country_id=country, office_name=office_name, person_one=person_one,
-                                          person_one_contact_number=person_one_contact,
-                                          person_two=person_two, person_two_contact_number=person_two_contact,
-                                          office_contact_number=office_contact,
-                                          email=email, single_address=address)
+            parent_obj = PartnerDetails.objects.create(country_id=country, office_name=office_name,
+                                                       person_one=person_one,
+                                                       person_one_contact_number=person_one_contact,
+                                                       person_two=person_two,
+                                                       person_two_contact_number=person_two_contact,
+                                                       office_contact_number=office_contact,
+                                                       email=email, single_address=address)
+
+            try:
+                if pic:
+                    dirname = datetime.now().strftime('%Y.%m.%d.%H.%M.%S')
+                    filename = "%s_%s.%s" % (str(parent_obj.id), dirname, 'png')
+                    raw_file_path_and_name = os.path.join('images/' + filename)
+                    data = str(pic)
+                    temp_data = data.split('base64,')[1]
+                    raw_data = base64.b64decode(temp_data)
+                    f = open(settings.MEDIA_ROOT + raw_file_path_and_name, 'wb')
+                    f.write(raw_data)
+                    f.close()
+                    parent_obj.photo = raw_file_path_and_name
+                    parent_obj.save()
+            except Exception as e:
+                messages.warning(request, "Form have some error" + str(e))
+                return redirect('/masters/template_manage_partner_master/')
             messages.success(request, "Record saved.")
         else:
             messages.warning(request, "Partner and country is already exist. Record not saved.")
@@ -887,14 +910,22 @@ def save_manage_donor_master(request):
     bank_name = request.POST.get('bank_name')
     bank_swift_code = request.POST.get('bank_swift_code')
     donor_bank_address = request.POST.get('donor_bank_address')
+    abc_document = request.FILES['reg_document']
 
     try:
         if not DonorDetails.objects.filter(country_id=country, organisation=organisation).exists():
-            DonorDetails.objects.create(country_id=country, organisation=organisation, person=person,
-                                        person_contact_number=person_contact, single_donor_address=donor_address,
-                                        due_amount=due_amount, bank_account_number=bank_account_number,
-                                        bank_name=bank_name, bank_swift_code=bank_swift_code, email=email,
-                                        donor_bank_address=donor_bank_address)
+            donor_obj = DonorDetails.objects.create(country_id=country, organisation=organisation, person=person,
+                                                    person_contact_number=person_contact,
+                                                    single_donor_address=donor_address,
+                                                    due_amount=due_amount, bank_account_number=bank_account_number,
+                                                    bank_name=bank_name, bank_swift_code=bank_swift_code, email=email,
+                                                    donor_bank_address=donor_bank_address)
+
+            file_url = str(abc_document)
+
+            handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + file_url), abc_document)
+            donor_obj.reg_document = file_url
+            donor_obj.save()
             messages.success(request, "Record saved.")
         else:
             messages.warning(request, "Organisation and country is already exist. Record not saved.")
