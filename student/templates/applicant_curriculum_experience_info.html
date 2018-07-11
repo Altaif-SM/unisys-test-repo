@@ -1,0 +1,330 @@
+{% extends "template_base_page.html" %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+
+            {% comment %}File.prototype.convertToBase64 = function (callback) {
+                var reader = new FileReader();
+                reader.onloadend = function (e) {
+                    callback(e.target.result, e.target.error);
+                };
+                reader.readAsDataURL(this);
+            };{% endcomment %}
+
+
+            $(document).ready(function () {
+
+                {% comment %}$(document).on("change", "#partner_photo", function (e) {
+
+                    var selectedFile = this.files[0];
+                    selectedFile.convertToBase64(function (base64) {
+                        var converted_base64_image = (base64);
+                        $("#pic").val(converted_base64_image);
+                        {#alert($('#pic').val())#}
+                    })
+
+
+                    var files = !!this.files ? this.files : [];
+                    if (!files.length || !window.FileReader) return;
+                    var fileExtension = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
+                    if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                        alert("Only formats are allowed : " + fileExtension.join(', '));
+                        $(this).val('');
+                        return false;
+                    }
+                });
+            });{% endcomment %}
+
+
+                $('#sample_1').dataTable().fnDestroy();
+                $('#sample_1').dataTable({
+                    "aoColumnDefs": [
+                        {'bSortable': false}
+                    ]
+                });
+            }
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'accounts:home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span> Qualification Info </span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">Co-Curriculum Details </span>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form {% comment %}action="{% url 'masters:save_manage_partner_master' %}"{% endcomment %}
+                        id="form_sample_1"
+                        class="form-horizontal"
+                        method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Co-Curriculum-1</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Enter Co-Curriculum-1" id="cur_1" name="cur_1"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Year:</label>
+                                <div class="col-md-2">
+                                    <select id='cur_1_year' title="Select Year" name="cur_1_year"
+                                            class="form-control">
+                                        <option style="display:none" selected="selected" id=""
+                                                value="">Please Select
+                                        </option>
+
+                                        {% for rec in year_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.year_name|title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Result:</label>
+                                <div class="col-md-2">
+                                    <input type="file" title="Select Result document" id="cur_1_result_doc"
+                                           name="cur_1_result_doc" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Co-Curriculum-2</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Enter Co-Curriculum-2" id="cur_2" name="cur_2"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Year:</label>
+                                <div class="col-md-2">
+                                    <select id='cur_2_year' title="Select Year" name="cur_2_year"
+                                            class="form-control">
+                                        <option style="display:none" selected="selected" id=""
+                                                value="">Please Select
+                                        </option>
+
+                                        {% for rec in year_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.year_name|title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Result:</label>
+                                <div class="col-md-2">
+                                    <input type="file" title="Select Result document" id="cur_2_result_doc"
+                                           name="cur_2_result_doc" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Co-Curriculum-3</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Enter Co-Curriculum-3" id="cur_3" name="cur_3"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Year:</label>
+                                <div class="col-md-2">
+                                    <select id='cur_3_year' title="Select Year" name="cur_3_year"
+                                            class="form-control">
+                                        <option style="display:none" selected="selected" id=""
+                                                value="">Please Select
+                                        </option>
+
+                                        {% for rec in year_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.year_name|title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Result:</label>
+                                <div class="col-md-2">
+                                    <input type="file" title="Select Result document" id="cur_3_result_doc"
+                                           name="cur_3_result_doc" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+
+
+                        <br>
+                        <br>
+                        <hr>
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-settings font-red"></i>
+                                <span class="caption-subject font-red sbold uppercase"> Experience Details</span>
+                            </div>
+                        </div>
+                        <hr>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Work Experience 1 :</label>
+                                <div class="col-md-1">
+                                    <input type="text" title="Enter Work Experience 1" id="experience_1"
+                                           name="experience_1"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Start Date:</label>
+                                <div class="col-md-2">
+                                    <input type="date" id="experience_1_start" name="experience_1_start" class="form-control" >
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">End Date:
+
+                                </label>
+                                <div class="col-md-2" id="EndDate">
+                                    <input type="date" id="experience_1_end" name="experience_1_end" class="form-control" >
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Result Doc:</label>
+                                <div class="col-md-2">
+                                    <input type="file" title="Select Result document" id="english_test_1_result_doc"
+                                           name="english_test_1_result_doc" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <br>
+                        <br>
+                        <br>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Work Experience 2 :</label>
+                                <div class="col-md-1">
+                                    <input type="text" title="Enter Work Experience 2" id="experience_2"
+                                           name="experience_2"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Start Date:</label>
+                                <div class="col-md-2">
+                                    <input type="date" id="experience_2_start" name="experience_2_start" class="form-control" >
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">End Date:</label>
+                                <div class="col-md-2" id="EndDate">
+                                    <input type="date" id="experience_2_end" name="experience_2_end" class="form-control" >
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Result Doc:</label>
+                                <div class="col-md-2">
+                                    <input type="file" title="Select Result document" id="english_test_1_result_doc"
+                                           name="english_test_1_result_doc" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <br><br>
+                        <br><br>
+
+                        <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="save" style="margin-left: 70%"
+                                        onclick="window.location='{% url "student:applicant_academic_english_qualification" %}'">Back
+                                </button>
+                                <button type="submit" class="btn green" id="save" style="">Save</button>
+                                <button type="button" class="btn blue" id="next"
+                                        onclick="window.location='{% url "student:applicant_scholarship_about_yourself_info" %}'">
+                                    Next
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

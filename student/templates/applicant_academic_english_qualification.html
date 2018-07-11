@@ -1,0 +1,375 @@
+{% extends "template_base_page.html" %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+
+            {% comment %}File.prototype.convertToBase64 = function (callback) {
+                var reader = new FileReader();
+                reader.onloadend = function (e) {
+                    callback(e.target.result, e.target.error);
+                };
+                reader.readAsDataURL(this);
+            };{% endcomment %}
+
+
+            $(document).ready(function () {
+
+                {% comment %}$(document).on("change", "#partner_photo", function (e) {
+
+                    var selectedFile = this.files[0];
+                    selectedFile.convertToBase64(function (base64) {
+                        var converted_base64_image = (base64);
+                        $("#pic").val(converted_base64_image);
+                        {#alert($('#pic').val())#}
+                    })
+
+
+                    var files = !!this.files ? this.files : [];
+                    if (!files.length || !window.FileReader) return;
+                    var fileExtension = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
+                    if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                        alert("Only formats are allowed : " + fileExtension.join(', '));
+                        $(this).val('');
+                        return false;
+                    }
+                });
+            });{% endcomment %}
+
+
+                $('#sample_1').dataTable().fnDestroy();
+                $('#sample_1').dataTable({
+                    "aoColumnDefs": [
+                        {'bSortable': false}
+                    ]
+                });
+            }
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'accounts:home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span> Qualification Info </span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase"> Academic Qualification</span>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form {% comment %}action="{% url 'masters:save_manage_partner_master' %}"{% endcomment %}
+                        id="form_sample_1"
+                        class="form-horizontal"
+                        method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-1 control-label">'A' level :</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Enter 'A' Level" id="a_level" name="a_level"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Year:</label>
+                                <div class="col-md-1">
+                                    <select id='a_year' title="Select Year" name="a_year"
+                                            class="form-control">
+                                        <option style="display:none" selected="selected" id=""
+                                                value="">Please Select
+                                        </option>
+
+                                        {% for rec in year_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.year_name|title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label"> Result:</label>
+                                <div class="col-md-1">
+                                    <input type="text" title="Enter result" id="a_result" name="a_result"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Result Doc:</label>
+                                <div class="col-md-2">
+                                    <input type="file" title="Select Result document" id="a_result_doc"
+                                           name="a_result_doc" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-1 control-label">'O' level :</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Enter 'O' Level" id="o_level" name="o_level"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Year:</label>
+                                <div class="col-md-1">
+                                    <select id='o_year' title="Select Year" name="o_year"
+                                            class="form-control">
+                                        <option style="display:none" selected="selected" id=""
+                                                value="">Please Select
+                                        </option>
+
+                                        {% for rec in year_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.year_name|title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label"> Result:</label>
+                                <div class="col-md-1">
+                                    <input type="text" title="Enter result" id="o_result" name="o_result"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Result Doc:</label>
+                                <div class="col-md-2">
+                                    <input type="file" title="Select Result document" id="o_result_doc"
+                                           name="o_result_doc" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-1 control-label">High School :</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Enter high school" id="high_school" name="high_school"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Year:</label>
+                                <div class="col-md-1">
+                                    <select id='high_school_year' title="Select Year" name="high_school_year"
+                                            class="form-control">
+                                        <option style="display:none" selected="selected" id=""
+                                                value="">Please Select
+                                        </option>
+
+                                        {% for rec in year_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.year_name|title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label"> Result:</label>
+                                <div class="col-md-1">
+                                    <input type="text" title="Enter result" id="high_school_result"
+                                           name="high_school_result"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Result Doc:</label>
+                                <div class="col-md-2">
+                                    <input type="file" title="Select Result document" id="high_school_result_doc"
+                                           name="high_school_result_doc" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <br>
+                        <br>
+                        <hr>
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-settings font-red"></i>
+                                <span class="caption-subject font-red sbold uppercase"> English Qualification</span>
+                            </div>
+                        </div>
+                        <hr>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">English Competency Test 1 :</label>
+                                <div class="col-md-1">
+                                    <input type="text" title="Enter English Competency Test 1" id="english_test_1"
+                                           name="english_test_1"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Year:</label>
+                                <div class="col-md-1">
+                                    <select id='english_test_1_year' title="Select Year" name="english_test_1_year"
+                                            class="form-control">
+                                        <option style="display:none" selected="selected" id=""
+                                                value="">Please Select
+                                        </option>
+
+                                        {% for rec in year_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.year_name|title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label"> Result:</label>
+                                <div class="col-md-1">
+                                    <input type="text" title="Enter result" id="english_test_1_result"
+                                           name="english_test_1_result"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Result Doc:</label>
+                                <div class="col-md-2">
+                                    <input type="file" title="Select Result document" id="english_test_1_result_doc"
+                                           name="english_test_1_result_doc" class="form-control">
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <br>
+                        <br>
+                        <br>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">English Competency Test 2 :</label>
+                                <div class="col-md-1">
+                                    <input type="text" title="Enter English Competency Test 2" id="english_test_2"
+                                           name="english_test_2"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Year:</label>
+                                <div class="col-md-1">
+                                    <select id='english_test_2_year' title="Select Year" name="english_test_2_year"
+                                            class="form-control">
+                                        <option style="display:none" selected="selected" id=""
+                                                value="">Please Select
+                                        </option>
+
+                                        {% for rec in year_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.year_name|title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label"> Result:</label>
+                                <div class="col-md-1">
+                                    <input type="text" title="Enter result" id="english_test_2_result"
+                                           name="english_test_2_result"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Result Doc:</label>
+                                <div class="col-md-2">
+                                    <input type="file" title="Select Result document" id="english_test_2_result_doc"
+                                           name="english_test_2_result_doc" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+
+                        <br><br>
+                        <br><br>
+
+                        <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="save" style="margin-left: 70%"
+                                        onclick="window.location='{% url "student:applicant_family_mother_sibling_info" %}'">Back
+                                </button>
+                                <button type="submit" class="btn green" id="save" style="">Save</button>
+                                <button type="button" class="btn blue" id="next"
+                                        onclick="window.location='{% url "student:applicant_curriculum_experience_info" %}'">
+                                    Next
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

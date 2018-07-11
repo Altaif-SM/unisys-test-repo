@@ -5,6 +5,7 @@ import os
 from accounts.models import User
 from student.models import *
 
+
 def content_file_name_partner(instance, filename):
     dirname = datetime.now().strftime('%Y.%m.%d.%H.%M.%S')
     ext = filename.split('.')[-1]
@@ -30,6 +31,7 @@ class AddressDetails(BaseModel):
     post_code = models.CharField(max_length=10, blank=True, null=True)
     district = models.CharField(max_length=100, blank=True, null=True)
     state = models.CharField(max_length=80, blank=True, null=True)
+    street = models.CharField(max_length=80, blank=True, null=True)
     country = models.ForeignKey(CountryDetails, null=True, related_name='address_country_rel', on_delete=models.PROTECT)
 
     def to_dict(self):
@@ -41,6 +43,7 @@ class AddressDetails(BaseModel):
             'post_code': self.post_code,
             'district': self.district,
             'state': self.state,
+            'street': self.street,
             'country': self.country
         }
         return res
@@ -51,6 +54,13 @@ class YearDetails(BaseModel):
     start_date = models.DateField()
     end_date = models.DateField()
     active_year = models.BooleanField(default=False)
+
+
+class ReligionDetails(BaseModel):
+    religion_name = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return self.religion_name
 
 
 class ScholarshipDetails(BaseModel):
@@ -94,11 +104,11 @@ class PartnerDetails(BaseModel):
     email = models.EmailField(max_length=255, blank=True, null=True)
     address = models.ForeignKey(AddressDetails, null=True, related_name='partner_address_rel', on_delete=models.PROTECT)
     single_address = models.CharField(max_length=500, blank=True, null=True)
-    photo = models.FileField(upload_to=content_file_name_partner,blank=True, null=True)
+    photo = models.FileField(upload_to=content_file_name_partner, blank=True, null=True)
     user = models.ForeignKey(User, null=True, related_name='partner_user_rel', on_delete=models.PROTECT)
 
     def __str__(self):
-        details = str(self.country.country_name)+' and '+ str(self.office_name)
+        details = str(self.country.country_name) + ' and ' + str(self.office_name)
         return details
 
 
@@ -228,10 +238,6 @@ class GuardianStudentMapping(BaseModel):
                                  on_delete=models.PROTECT)
     student = models.ForeignKey(StudentDetails, null=True, related_name='std_gurd_mapping_rel',
                                 on_delete=models.PROTECT)
-
-
-
-
 
 # class AddressDetails(models.Model):
 #     first_name = models.CharField(max_length=255)

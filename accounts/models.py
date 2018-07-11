@@ -95,6 +95,9 @@ class User(AbstractUser):
     def is_system_admin(self):
         return True if self.role.all().filter(name__in=[self.SYSTEAM_ADMIN, self.ADMIN]).exists() else False
 
+    # def is_student(self):
+    #     return True if self.role.all().filter(name__in=[self.SYSTEAM_ADMIN, self.ADMIN]).exists() else False
+
     @property
     def get_user_permissions(self):
 

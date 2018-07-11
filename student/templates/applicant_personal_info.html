@@ -1,0 +1,405 @@
+{% extends "template_base_page.html" %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+
+        {% comment %} hr {
+     display: block;
+     margin-top: 0.5em;
+     margin-bottom: 0.5em;
+     margin-left: auto;
+     margin-right: auto;
+     border-style: inset;
+     border-width: 0.5px;
+ }{% endcomment %}
+
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+
+            File.prototype.convertToBase64 = function (callback) {
+                var reader = new FileReader();
+                reader.onloadend = function (e) {
+                    callback(e.target.result, e.target.error);
+                };
+                reader.readAsDataURL(this);
+            };
+
+
+            $(document).ready(function () {
+
+                $(document).on("change", "#partner_photo", function (e) {
+
+                    var selectedFile = this.files[0];
+                    selectedFile.convertToBase64(function (base64) {
+                        var converted_base64_image = (base64);
+                        $("#pic").val(converted_base64_image);
+                        {#alert($('#pic').val())#}
+                    })
+
+
+                    var files = !!this.files ? this.files : [];
+                    if (!files.length || !window.FileReader) return;
+                    var fileExtension = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
+                    if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                        alert("Only formats are allowed : " + fileExtension.join(', '));
+                        $(this).val('');
+                        return false;
+                    }
+                });
+            });
+
+
+            $('#sample_1').dataTable().fnDestroy();
+            $('#sample_1').dataTable({
+                "aoColumnDefs": [
+                    {'bSortable': false}
+                ]
+            });
+        }
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'accounts:home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span> Personal Info </span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase"> Personal Info</span>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form {% comment %}action="{% url 'masters:save_manage_partner_master' %}"{% endcomment %}
+                        id="form_sample_1"
+                        class="form-horizontal"
+                        method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">First Name:</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Enter First Name" id="first_name" name="first_name"
+                                           class="form-control" required>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Middle Name:</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Enter Middle Name" id="middle_name" name="middle_name"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Last Name:</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Enter Last Name" id="last_name" name="last_name"
+                                           class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">DOB:</label>
+                                <div class="col-md-2">
+                                    <input type="date" title="Enter DOB" id="dob" name="dob"
+                                           class="form-control" required>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Gender:</label>
+                                <div class="col-md-2">
+                                    <select id='gender' title="Select gender" name="gender_name"
+                                            class="form-control"
+                                            required>
+                                        <option style="display:none" selected="selected" id="" value="">Please Select
+                                        </option>
+                                        <option id="" value="Male">Male</option>
+                                        <option id="" value="Female">Female</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Nationality:</label>
+                                <div class="col-md-2">
+                                    <select id='nationality_name' title="Select nationality" name="nationality_name"
+                                            class="form-control"
+                                            required>
+                                        <option style="display:none" selected="selected" id=""
+                                                value="">Please Select
+                                        </option>
+
+                                        {% for rec in country_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">ID no:</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Enter ID number" id="id_number" name="id_number"
+                                           class="form-control" required>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Passport no:</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Enter Passport number" id="passport_number"
+                                           name="passport_number"
+                                           class="form-control" required>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Country of Issuer:</label>
+                                <div class="col-md-2">
+                                    <select id='issue_country' title="Select Country of Issuer" name="issue_country"
+                                            class="form-control">
+                                        <option style="display:none" selected="selected" id=""
+                                                value="">Please Select
+                                        </option>
+
+                                        {% for rec in country_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">E-mail:</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Enter E-mail ID" id="email" name="email"
+                                           class="form-control" required>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Telephone no (HP):</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Enter Telephone number (HP)" id="hp_number"
+                                           name="hp_number"
+                                           class="form-control" required>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Telephone no (Home):</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Enter Telephone number (Home)" id="home_number"
+                                           name="home_number"
+                                           class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+                        <hr>
+                        <br>
+
+                        <div class="row">
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Religion:</label>
+                                <div class="col-md-3">
+                                    <select id='issue_country' title="Select Religion" name="religion"
+                                            class="form-control">
+                                        <option style="display:none" selected="selected" id=""
+                                                value="">Please Select
+                                        </option>
+
+                                        {% for rec in religion_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.religion_name|title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Residential/Postal Address:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Residential/Postal Address" id="residential_add"
+                                           name="residential_add"
+                                           class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Premise/Sub-Locality-2:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Premise/Sub-Locality-2" id="premise_add"
+                                           name="premise_add"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Sub-Locality:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Sub-Locality " id="sub_locality"
+                                           name="sub_locality"
+                                           class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Postcode:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Postcode" id="postcode"
+                                           name="postcode"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-2 control-label">District:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter District " id="district"
+                                           name="district"
+                                           class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+
+                            <div class="">
+                                <label class="col-md-2 control-label">State/Province:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter State/Province" id="state"
+                                           name="state"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Country:</label>
+                                <div class="col-md-3">
+                                    <select id='country' title="Select Country" name="country"
+                                            class="form-control">
+                                        <option style="display:none" selected="selected" id=""
+                                                value="">Please Select
+                                        </option>
+
+                                        {% for rec in country_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Photo:</label>
+                                <div class="col-md-3">
+                                    <input type="text" id="pic" name="pic" hidden>
+                                    <input name="photo" type="file" title="Select photo"
+                                           id="partner_photo"
+                                           class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <br><br>
+
+
+                        <br><br>
+
+                        <div class="row">
+                            <div class="col-md-offset-10 col-md12">
+                                {#                                <button type="submit" class="btn green" id="save" style="float: left" >Save</button>#}
+                                <button type="button" class="btn green" id="next" style="float: left"
+                                        onclick="window.location='{% url "student:applicant_family_info" %}'">Save/Next
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

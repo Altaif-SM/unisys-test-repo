@@ -16,10 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from accounts import views
-
 urlpatterns = [
+    path('', views.template_signin, name='template_signin'),
     path('accounts/', include('accounts.urls', namespace='accounts')),
     path('masters/', include('masters.urls', namespace='masters')),
+    path('student/', include('student.urls', namespace='student')),
     path('admin/', admin.site.urls),
-    path('', views.template_signin, name='template_signin'),
 ]
+

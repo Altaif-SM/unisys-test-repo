@@ -1,0 +1,278 @@
+{% extends "template_base_page.html" %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+
+            $(document).ready(function () {
+                var count = 2;
+                $(".add_row").click(function () {
+                    var row = '<div class="row item" style="margin-top:15px"><div class=""><div class=""><div class="col-md-1"><a href="javascript:;" class="delete btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div><div class=""><label class="col-md-1 control-label">Sibling:</label><div class="col-md-2"><input type="text" title="Enter Sibling " id="sibling_' + count + '" name="sibling_' + count + '"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Age:</label><div class="col-md-2"><input type="text" title="Enter age" id="age_' + count + '"name="age_' + count + '"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Status:</label><div class="col-md-2"> <input type="text" title="Enter status" id="status_' + count + '" name="status_' + count + '" class="form-control"></div></div></div>'
+                    $(row).removeAttr().hide().insertAfter(".item:last").slideDown(300);
+                    count++;
+                });
+
+                $(document).on("click", ".delete", function () {
+                    $(this).parents('.item').remove();
+                    $(this).parents('.item').next('br').remove();
+                    ;
+                });
+            });
+
+
+            $('#sample_1').dataTable().fnDestroy();
+            $('#sample_1').dataTable({
+                "aoColumnDefs": [
+                    {'bSortable': false}
+                ]
+            });
+        }
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'accounts:home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span> Family Info </span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase"> Mother Info</span>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form {% comment %}action="{% url 'masters:save_manage_partner_master' %}"{% endcomment %}
+                        id="form_sample_1"
+                        class="form-horizontal"
+                        method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Mother Name:</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Enter First Name" id="mother_name" name="mother_name"
+                                           class="form-control" required>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-2 control-label">DOB:</label>
+                                <div class="col-md-2">
+                                    <input type="date" title="Enter DOB" id="dob" name="dob"
+                                           class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+
+
+                        <div class="row">
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Income($):</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Enter Income" id="mother_income"
+                                           name="mother_income" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Pay Slip:</label>
+                                <div class="col-md-2">
+                                    <input type="file" title="Select mother pay slip" id="mother_pay_slip"
+                                           name="mother_pay_slip" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">E-mail:</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Enter E-mail ID" id="mother_email" name="mother_email"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Telephone (Home):</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Enter Telephone number (Home)" id="mother_number"
+                                           name="mother_number"
+                                           class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Occupation:</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Enter Occupation" id="mother_occupation"
+                                           name="mother_occupation"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Country:</label>
+                                <div class="col-md-2">
+                                    <select id='country' title="Select Country" name="country"
+                                            class="form-control">
+                                        <option style="display:none" selected="selected" id=""
+                                                value="">Please Select
+                                        </option>
+
+                                        {% for rec in country_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <br>
+                        <br>
+                        <hr>
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-settings font-red"></i>
+                                <span class="caption-subject font-red sbold uppercase"> Siblings Info</span>
+                            </div>
+                        </div>
+                        <hr>
+
+                        <div class="row item">
+                            <div class="">
+                                <div class="col-md-1">
+                                    <a href="javascript:;" id="add" class="btn btn-icon-only green add_row"
+                                       style="">
+                                        <i class="fa fa-plus "></i>
+                                    </a>
+                                    {% comment %}<a href="javascript:;" class="delete permenent btn btn-icon-only purple" style="">
+                                        <i class="fa fa-times"></i>
+                                    </a>{% endcomment %}
+                                </div>
+                            </div>
+                            <div class="">
+                                <label class="col-md-1 control-label">Sibling:</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Enter Sibling "
+                                           id="sibling_1" name="sibling_1"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Age:</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Enter age" id="age_1"
+                                           name="age_1"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Status:</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Enter status" id="status_1"
+                                           name="status_{{ forloop.counter }}"
+                                           class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+
+
+                        <br><br>
+                        <br><br>
+
+                        <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                                        onclick="window.location='{% url "student:applicant_family_info" %}'">Back
+                                </button>
+                                <button type="submit" class="btn green" id="save">Save</button>
+                                <button type="button" class="btn blue" id="next"
+                                        onclick="window.location='{% url "student:applicant_academic_english_qualification" %}'">
+                                    Next
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+{#<div class="row"><div class=""><label class="col-md-2 control-label">Sibling:</label><div class="col-md-2"><input type="text" title="Enter Sibling " id="sibling_1" name="sibling_1"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Age:</label><div class="col-md-2"><input type="text" title="Enter age" id="age_1"name="age_1"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Status:</label><div class="col-md-2"> <input type="text" title="Enter status" id="status_1" name="status_{{ forloop.counter }}" class="form-control"></div></div></div>#}
