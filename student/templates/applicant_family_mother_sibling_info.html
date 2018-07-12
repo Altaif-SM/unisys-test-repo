@@ -31,12 +31,26 @@
     <script>
         window.onload = function () {
 
+
             $(document).ready(function () {
-                var count = 2;
+
+                $('#save').click(function () {
+                    var count = $('.item').length;
+                    $('#sibling_count').val(count);
+                })
+
+                {% if sibling_obj_rec %}
+                    var count = $('.item').length;
+                    {% else %}
+                    var count = 1;
+                {% endif %}
+
+
                 $(".add_row").click(function () {
-                    var row = '<div class="row item" style="margin-top:15px"><div class=""><div class=""><div class="col-md-1"><a href="javascript:;" class="delete btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div><div class=""><label class="col-md-1 control-label">Sibling:</label><div class="col-md-2"><input type="text" title="Enter Sibling " id="sibling_' + count + '" name="sibling_' + count + '"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Age:</label><div class="col-md-2"><input type="text" title="Enter age" id="age_' + count + '"name="age_' + count + '"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Status:</label><div class="col-md-2"> <input type="text" title="Enter status" id="status_' + count + '" name="status_' + count + '" class="form-control"></div></div></div>'
+                    count = count+1;
+                    var row = '<div class="row item" style="margin-top:15px"><div class=""><div class=""><div class="col-md-1"><a href="javascript:;" class="delete btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div><div class=""><label class="col-md-1 control-label">Sibling:</label><div class="col-md-2"><input type="text" title="Enter Sibling " id="sibling_' + count + '" name="sibling_' + count + '"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Age:</label><div class="col-md-2"><input type="text" title="Enter age" id="age_' + count + '"name="age_' + count + '"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Status:</label><div class="col-md-2"> <input type="text" title="Enter status" id="status_' + count + '" name="status_' + count + '" class="form-control"><input type="text" hidden id="sibling_id_' + count + '" name="sibling_id_' + count + '"></div></div></div>'
                     $(row).removeAttr().hide().insertAfter(".item:last").slideDown(300);
-                    count++;
+                    {#count++;#}
                 });
 
                 $(document).on("click", ".delete", function () {
@@ -90,10 +104,10 @@
 
         <div class="portlet-body">
             <div class="form-body">
-                <form {% comment %}action="{% url 'masters:save_manage_partner_master' %}"{% endcomment %}
-                        id="form_sample_1"
-                        class="form-horizontal"
-                        method="POST" enctype="multipart/form-data">
+                <form action="{% url 'student:save_update_applicant_family_mother_sibling_info' %}"
+                      id="form_sample_1"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
                     <div class="form-body">
@@ -102,15 +116,16 @@
                                 <label class="col-md-2 control-label">Mother Name:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter First Name" id="mother_name" name="mother_name"
-                                           class="form-control" required>
+                                           value="{{ application_obj.mother_name }}" class="form-control" required>
                                 </div>
                             </div>
 
                             <div class="">
                                 <label class="col-md-2 control-label">DOB:</label>
                                 <div class="col-md-2">
-                                    <input type="date" title="Enter DOB" id="dob" name="dob"
-                                           class="form-control" required>
+                                    <input type="date" title="Enter DOB" id="mother_dob" name="mother_dob"
+                                           value="{{ application_obj.mother_dob|date:"Y-m-d" }}" class="form-control"
+                                           required>
                                 </div>
                             </div>
                         </div>
@@ -124,7 +139,8 @@
                                 <label class="col-md-2 control-label">Income($):</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Income" id="mother_income"
-                                           name="mother_income" class="form-control">
+                                           value="{{ application_obj.mother_income }}" name="mother_income"
+                                           class="form-control">
                                 </div>
                             </div>
 
@@ -132,7 +148,8 @@
                                 <label class="col-md-2 control-label">Pay Slip:</label>
                                 <div class="col-md-2">
                                     <input type="file" title="Select mother pay slip" id="mother_pay_slip"
-                                           name="mother_pay_slip" class="form-control">
+                                           value="{{ application_obj.mother_pay_slip }}" name="mother_pay_slip"
+                                           class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -144,7 +161,7 @@
                                 <label class="col-md-2 control-label">E-mail:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter E-mail ID" id="mother_email" name="mother_email"
-                                           class="form-control">
+                                           value="{{ application_obj.mother_email }}" class="form-control">
                                 </div>
                             </div>
 
@@ -152,7 +169,8 @@
                                 <label class="col-md-2 control-label">Telephone (Home):</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Telephone number (Home)" id="mother_number"
-                                           name="mother_number"
+                                           value="{{ application_obj.mother_telephone_home }}"
+                                           name="mother_telephone_home"
                                            class="form-control">
                                 </div>
                             </div>
@@ -165,7 +183,7 @@
                                 <label class="col-md-2 control-label">Occupation:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Occupation" id="mother_occupation"
-                                           name="mother_occupation"
+                                           value="{{ application_obj.mother_occupation }}" name="mother_occupation"
                                            class="form-control">
                                 </div>
                             </div>
@@ -173,11 +191,17 @@
                             <div class="">
                                 <label class="col-md-2 control-label">Country:</label>
                                 <div class="col-md-2">
-                                    <select id='country' title="Select Country" name="country"
+                                    <select id='country' title="Select Country" name="mother_nationality"
                                             class="form-control">
-                                        <option style="display:none" selected="selected" id=""
-                                                value="">Please Select
-                                        </option>
+                                        {% if application_obj %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.mother_nationality.id }}"
+                                                    value="">{{ application_obj.mother_nationality.country_name|title }}</option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">Please
+                                                Select
+                                            </option>
+                                        {% endif %}
 
                                         {% for rec in country_recs %}
                                             <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
@@ -199,46 +223,104 @@
                         </div>
                         <hr>
 
-                        <div class="row item">
-                            <div class="">
-                                <div class="col-md-1">
-                                    <a href="javascript:;" id="add" class="btn btn-icon-only green add_row"
-                                       style="">
-                                        <i class="fa fa-plus "></i>
-                                    </a>
-                                    {% comment %}<a href="javascript:;" class="delete permenent btn btn-icon-only purple" style="">
+                    <input id="sibling_count" name="sibling_count" hidden>
+
+                        {% if sibling_obj_rec %}
+                            {% for sibling_obj in sibling_obj_rec %}
+                                <div class="row item">
+
+
+                                    <div class="">
+                                        <div class="col-md-1">
+                                            <a href="javascript:;" id="add" class="btn btn-icon-only green add_row"
+                                               style="">
+                                                <i class="fa fa-plus "></i>
+                                            </a>
+                                            {% comment %}<a href="javascript:;" class="delete permenent btn btn-icon-only purple" style="">
                                         <i class="fa fa-times"></i>
                                     </a>{% endcomment %}
-                                </div>
-                            </div>
-                            <div class="">
-                                <label class="col-md-1 control-label">Sibling:</label>
-                                <div class="col-md-2">
-                                    <input type="text" title="Enter Sibling "
-                                           id="sibling_1" name="sibling_1"
-                                           class="form-control">
-                                </div>
-                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="">
+                                        <label class="col-md-1 control-label">Sibling:</label>
+                                        <div class="col-md-2">
+                                            <input type="text" title="Enter Sibling "
+                                                   value="{{ sibling_obj.sibling_age }}" id="sibling_{{ forloop.counter }}" name="sibling_{{ forloop.counter }}"
+                                                   class="form-control">
+                                        </div>
+                                    </div>
 
-                            <div class="">
-                                <label class="col-md-1 control-label">Age:</label>
-                                <div class="col-md-2">
-                                    <input type="text" title="Enter age" id="age_1"
-                                           name="age_1"
-                                           class="form-control">
-                                </div>
-                            </div>
+                                    <div class="">
+                                        <label class="col-md-1 control-label">Age:</label>
+                                        <div class="col-md-2">
+                                            <input type="text" title="Enter age" id="age_{{ forloop.counter }}"
+                                                   value="{{ sibling_obj.sibling_name }}" name="age_{{ forloop.counter }}"
+                                                   class="form-control">
+                                        </div>
+                                    </div>
 
-                            <div class="">
-                                <label class="col-md-1 control-label">Status:</label>
-                                <div class="col-md-2">
-                                    <input type="text" title="Enter status" id="status_1"
-                                           name="status_{{ forloop.counter }}"
-                                           class="form-control">
+                                    <div class="">
+                                        <label class="col-md-1 control-label">Status:</label>
+                                        <div class="col-md-2">
+                                            <input type="text" title="Enter status" id="status_{{ forloop.counter }}"
+                                                   value="{{ sibling_obj.sibling_status }}" name="status_{{ forloop.counter }}"
+                                                   class="form-control">
+
+                                            <input type="text" hidden value="{{ sibling_obj.id }}" id="sibling_id_{{ forloop.counter }}"
+                                                   name="sibling_id_{{ forloop.counter }}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                            {% endfor %}
+                        {% else %}
+                            <div class="row item">
+
+                                <input id="sibling_count" name="sibling_count" hidden>
+                                <div class="">
+                                    <div class="col-md-1">
+                                        <a href="javascript:;" id="add" class="btn btn-icon-only green add_row"
+                                           style="">
+                                            <i class="fa fa-plus "></i>
+                                        </a>
+                                        {% comment %}<a href="javascript:;" class="delete permenent btn btn-icon-only purple" style="">
+                                        <i class="fa fa-times"></i>
+                                    </a>{% endcomment %}
+                                    </div>
+                                </div>
+                                <div class="">
+                                    <label class="col-md-1 control-label">Sibling:</label>
+                                    <div class="col-md-2">
+                                        <input type="text" title="Enter Sibling "
+                                               id="sibling_1" name="sibling_1"
+                                               class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <label class="col-md-1 control-label">Age:</label>
+                                    <div class="col-md-2">
+                                        <input type="text" title="Enter age" id="age_1"
+                                               name="age_1"
+                                               class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <label class="col-md-1 control-label">Status:</label>
+                                    <div class="col-md-2">
+                                        <input type="text" title="Enter status" id="status_1"
+                                               name="status_1"
+                                               class="form-control">
+
+                                        <input type="text" hidden id="sibling_id_1" name="sibling_id_1">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <br>
+                            <br>
+                        {% endif %}
+
+
 
 
                         <br><br>
@@ -249,11 +331,11 @@
                                 <button type="button" class="btn blue" id="back" style="margin-left: 70%"
                                         onclick="window.location='{% url "student:applicant_family_info" %}'">Back
                                 </button>
-                                <button type="submit" class="btn green" id="save">Save</button>
-                                <button type="button" class="btn blue" id="next"
+                                <button type="submit" class="btn green" id="save">Save/Next</button>
+                                {% comment %}<button type="button" class="btn blue" id="next"
                                         onclick="window.location='{% url "student:applicant_academic_english_qualification" %}'">
                                     Next
-                                </button>
+                                </button>{% endcomment %}
                             </div>
                         </div>
                     </div>
@@ -262,17 +344,3 @@
         </div>
     </div>
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-{#<div class="row"><div class=""><label class="col-md-2 control-label">Sibling:</label><div class="col-md-2"><input type="text" title="Enter Sibling " id="sibling_1" name="sibling_1"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Age:</label><div class="col-md-2"><input type="text" title="Enter age" id="age_1"name="age_1"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Status:</label><div class="col-md-2"> <input type="text" title="Enter status" id="status_1" name="status_{{ forloop.counter }}" class="form-control"></div></div></div>#}

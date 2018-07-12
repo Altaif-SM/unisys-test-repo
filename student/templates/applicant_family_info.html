@@ -107,10 +107,10 @@
 
         <div class="portlet-body">
             <div class="form-body">
-                <form {% comment %}action="{% url 'masters:save_manage_partner_master' %}"{% endcomment %}
-                        id="form_sample_1"
-                        class="form-horizontal"
-                        method="POST" enctype="multipart/form-data">
+                <form action="{% url 'student:save_update_applicant_family_info' %}"
+                      id="form_sample_1"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
                     <div class="form-body">
@@ -119,15 +119,16 @@
                                 <label class="col-md-2 control-label">Wife Name:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter First Name" id="wife_name" name="wife_name"
-                                           class="form-control" required>
+                                           value="{{ application_obj.wife_name }}" class="form-control" required>
                                 </div>
                             </div>
 
                             <div class="">
                                 <label class="col-md-2 control-label">DOB:</label>
                                 <div class="col-md-2">
-                                    <input type="date" title="Enter DOB" id="dob" name="dob"
-                                           class="form-control" required>
+                                    <input type="date" title="Enter DOB" id="wife_dob" name="wife_dob"
+                                           value="{{ application_obj.wife_dob|date:"Y-m-d" }}" class="form-control"
+                                           required>
                                 </div>
                             </div>
                         </div>
@@ -141,7 +142,8 @@
                                 <label class="col-md-2 control-label">Income($):</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Income" id="wife_income"
-                                           name="wife_income" class="form-control">
+                                           value="{{ application_obj.wife_income }}" name="wife_income"
+                                           class="form-control">
                                 </div>
                             </div>
 
@@ -149,7 +151,8 @@
                                 <label class="col-md-2 control-label">Pay Slip:</label>
                                 <div class="col-md-2">
                                     <input type="file" title="Select wife pay slip" id="wife_pay_slip"
-                                           name="wife_pay_slip" class="form-control">
+                                           value="{{ application_obj.wife_pay_slip }}" name="wife_pay_slip"
+                                           class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -161,7 +164,7 @@
                                 <label class="col-md-2 control-label">E-mail:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter E-mail ID" id="wife_email" name="wife_email"
-                                           class="form-control">
+                                           value="{{ application_obj.wife_email }}" class="form-control">
                                 </div>
                             </div>
 
@@ -169,7 +172,7 @@
                                 <label class="col-md-2 control-label">Telephone (Home):</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Telephone number (Home)" id="wife_number"
-                                           name="wife_number"
+                                           value="{{ application_obj.wife_telephone_home }}" name="wife_telephone_home"
                                            class="form-control">
                                 </div>
                             </div>
@@ -182,7 +185,7 @@
                                 <label class="col-md-2 control-label">Occupation:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Occupation" id="wife_occupation"
-                                           name="wife_occupation"
+                                           value="{{ application_obj.wife_occupation }}" name="wife_occupation"
                                            class="form-control">
                                 </div>
                             </div>
@@ -190,11 +193,17 @@
                             <div class="">
                                 <label class="col-md-2 control-label">Country:</label>
                                 <div class="col-md-2">
-                                    <select id='country' title="Select Country" name="country"
+                                    <select id='wife_nationality' title="Select Country" name="wife_nationality"
                                             class="form-control">
-                                        <option style="display:none" selected="selected" id=""
-                                                value="">Please Select
-                                        </option>
+                                        {% if application_obj %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.wife_nationality.id }}"
+                                                    value="">{{ application_obj.wife_nationality.country_name|title }}</option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">Please
+                                                Select
+                                            </option>
+                                        {% endif %}
 
                                         {% for rec in country_recs %}
                                             <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
@@ -220,16 +229,17 @@
                             <div class="">
                                 <label class="col-md-2 control-label">Father Name:</label>
                                 <div class="col-md-2">
-                                    <input type="text" title="Enter First Name" id="father_name" name="father_name"
-                                           class="form-control" required>
+                                    <input type="text" title="Enter father name" id="father_name" name="father_name"
+                                           value="{{ application_obj.father_name }}" class="form-control" required>
                                 </div>
                             </div>
 
                             <div class="">
                                 <label class="col-md-2 control-label">DOB:</label>
                                 <div class="col-md-2">
-                                    <input type="date" title="Enter DOB" id="dob" name="dob"
-                                           class="form-control" required>
+                                    <input type="date" title="Enter DOB" id="father_dob" name="father_dob"
+                                           value="{{ application_obj.father_dob|date:"Y-m-d" }}" class="form-control"
+                                           required>
                                 </div>
                             </div>
                         </div>
@@ -243,7 +253,8 @@
                                 <label class="col-md-2 control-label">Income($):</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Income" id="father_income"
-                                           name="father_income" class="form-control">
+                                           value="{{ application_obj.father_income }}" name="father_income"
+                                           class="form-control">
                                 </div>
                             </div>
 
@@ -251,7 +262,8 @@
                                 <label class="col-md-2 control-label">Pay Slip:</label>
                                 <div class="col-md-2">
                                     <input type="file" title="Select father pay slip" id="father_pay_slip"
-                                           name="father_pay_slip" class="form-control">
+                                           value="{{ application_obj.father_pay_slip }}" name="father_pay_slip"
+                                           class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -263,7 +275,7 @@
                                 <label class="col-md-2 control-label">E-mail:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter E-mail ID" id="father_email" name="father_email"
-                                           class="form-control">
+                                           value="{{ application_obj.father_email }}" class="form-control">
                                 </div>
                             </div>
 
@@ -271,7 +283,8 @@
                                 <label class="col-md-2 control-label">Telephone (Home):</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Telephone number (Home)" id="father_number"
-                                           name="father_number"
+                                           value="{{ application_obj.father_telephone_home }}"
+                                           name="father_telephone_home"
                                            class="form-control">
                                 </div>
                             </div>
@@ -284,7 +297,7 @@
                                 <label class="col-md-2 control-label">Occupation:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Occupation" id="father_occupation"
-                                           name="father_occupation"
+                                           value="{{ application_obj.father_occupation }}" name="father_occupation"
                                            class="form-control">
                                 </div>
                             </div>
@@ -292,11 +305,17 @@
                             <div class="">
                                 <label class="col-md-2 control-label">Country:</label>
                                 <div class="col-md-2">
-                                    <select id='country' title="Select Country" name="country"
+                                    <select id='father_nationality' title="Select Country" name="father_nationality"
                                             class="form-control">
-                                        <option style="display:none" selected="selected" id=""
-                                                value="">Please Select
-                                        </option>
+                                        {% if application_obj %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.father_nationality.id }}"
+                                                    value="">{{ application_obj.father_nationality.country_name|title }}</option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">Please
+                                                Select
+                                            </option>
+                                        {% endif %}
 
                                         {% for rec in country_recs %}
                                             <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
@@ -314,11 +333,11 @@
                                 <button type="button" class="btn blue" id="save" style="margin-left: 70%"
                                         onclick="window.location='{% url "student:applicant_personal_info" %}'">Back
                                 </button>
-                                <button type="submit" class="btn green" id="save" style="">Save</button>
-                                <button type="button" class="btn blue" id="next"
+                                <button type="submit" class="btn green" id="save" style="">Save/Next</button>
+                                {% comment %}<button type="button" class="btn blue" id="next"
                                         onclick="window.location='{% url "student:applicant_family_mother_sibling_info" %}'">
                                     Next
-                                </button>
+                                </button>{% endcomment %}
                             </div>
                         </div>
                     </div>

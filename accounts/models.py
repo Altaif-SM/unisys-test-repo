@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from common.models import BaseModel
 from django.db.models import Q
+# from student.models import StudentDetails, ApplicationDetails
 
 
 # Create your models here.
@@ -127,3 +128,10 @@ class User(AbstractUser):
         json_dict['last_name'] = self.last_name
 
         return json_dict
+
+    @property
+    def get_application_id(self):
+        try:
+            return self.student_user_rel.get().student_applicant_rel.get().application_id
+        except:
+            return ''

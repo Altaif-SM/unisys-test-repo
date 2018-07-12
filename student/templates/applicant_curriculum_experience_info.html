@@ -107,30 +107,37 @@
 
         <div class="portlet-body">
             <div class="form-body">
-                <form {% comment %}action="{% url 'masters:save_manage_partner_master' %}"{% endcomment %}
-                        id="form_sample_1"
-                        class="form-horizontal"
-                        method="POST" enctype="multipart/form-data">
+                <form action="{% url 'student:save_update_applicant_curriculum_experience_info' %}"
+                      id="form_sample_1"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
                     <div class="form-body">
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">Co-Curriculum-1</label>
+                                <label class="col-md-2 control-label">Co-Curriculum-1:</label>
                                 <div class="col-md-2">
-                                    <input type="text" title="Enter Co-Curriculum-1" id="cur_1" name="cur_1"
-                                           class="form-control">
+                                    <input type="text" title="Enter Co-Curriculum-1" id="curriculum_name_one"
+                                           name="curriculum_name_one"
+                                           value="{{ curriculum_obj.curriculum_name_one }}" class="form-control">
                                 </div>
                             </div>
 
                             <div class="">
                                 <label class="col-md-1 control-label">Year:</label>
                                 <div class="col-md-2">
-                                    <select id='cur_1_year' title="Select Year" name="cur_1_year"
+                                    <select id='curriculum_year_one' title="Select Year" name="curriculum_year_one"
                                             class="form-control">
-                                        <option style="display:none" selected="selected" id=""
-                                                value="">Please Select
-                                        </option>
+                                        {% if curriculum_obj %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ curriculum_obj.curriculum_year_one.id }}"
+                                                    value="">{{ curriculum_obj.curriculum_year_one.year_name|title }}</option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">Please
+                                                Select
+                                            </option>
+                                        {% endif %}
 
                                         {% for rec in year_recs %}
                                             <option value='{{ rec.id }}'>{{ rec.year_name|title }}</option>
@@ -142,8 +149,10 @@
                             <div class="">
                                 <label class="col-md-1 control-label">Result:</label>
                                 <div class="col-md-2">
-                                    <input type="file" title="Select Result document" id="cur_1_result_doc"
-                                           name="cur_1_result_doc" class="form-control">
+                                    <input type="file" title="Select Result document"
+                                           id="curriculum_result_document_one"
+                                           value="{{ curriculum_obj.curriculum_result_document_one }}"
+                                           name="curriculum_result_document_one" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -152,21 +161,28 @@
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">Co-Curriculum-2</label>
+                                <label class="col-md-2 control-label">Co-Curriculum-2:</label>
                                 <div class="col-md-2">
-                                    <input type="text" title="Enter Co-Curriculum-2" id="cur_2" name="cur_2"
-                                           class="form-control">
+                                    <input type="text" title="Enter Co-Curriculum-2" id="curriculum_name_two"
+                                           name="curriculum_name_two"
+                                           value="{{ curriculum_obj.curriculum_name_two }}" class="form-control">
                                 </div>
                             </div>
 
                             <div class="">
                                 <label class="col-md-1 control-label">Year:</label>
                                 <div class="col-md-2">
-                                    <select id='cur_2_year' title="Select Year" name="cur_2_year"
+                                    <select id='curriculum_year_two' title="Select Year" name="curriculum_year_two"
                                             class="form-control">
-                                        <option style="display:none" selected="selected" id=""
-                                                value="">Please Select
-                                        </option>
+                                        {% if curriculum_obj %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ curriculum_obj.curriculum_year_two.id }}"
+                                                    value="">{{ curriculum_obj.curriculum_year_two.year_name|title }}</option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">Please
+                                                Select
+                                            </option>
+                                        {% endif %}
 
                                         {% for rec in year_recs %}
                                             <option value='{{ rec.id }}'>{{ rec.year_name|title }}</option>
@@ -178,8 +194,10 @@
                             <div class="">
                                 <label class="col-md-1 control-label">Result:</label>
                                 <div class="col-md-2">
-                                    <input type="file" title="Select Result document" id="cur_2_result_doc"
-                                           name="cur_2_result_doc" class="form-control">
+                                    <input type="file" title="Select Result document"
+                                           id="curriculum_result_document_two"
+                                           value="{{ curriculum_obj.curriculum_result_document_two }}"
+                                           name="curriculum_result_document_two" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -188,21 +206,28 @@
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">Co-Curriculum-3</label>
+                                <label class="col-md-2 control-label">Co-Curriculum-3:</label>
                                 <div class="col-md-2">
-                                    <input type="text" title="Enter Co-Curriculum-3" id="cur_3" name="cur_3"
-                                           class="form-control">
+                                    <input type="text" title="Enter Co-Curriculum-3" id="curriculum_name_three"
+                                           name="curriculum_name_three"
+                                           value="{{ curriculum_obj.curriculum_name_three }}" class="form-control">
                                 </div>
                             </div>
 
                             <div class="">
                                 <label class="col-md-1 control-label">Year:</label>
                                 <div class="col-md-2">
-                                    <select id='cur_3_year' title="Select Year" name="cur_3_year"
+                                    <select id='curriculum_year_three' title="Select Year" name="curriculum_year_three"
                                             class="form-control">
-                                        <option style="display:none" selected="selected" id=""
-                                                value="">Please Select
-                                        </option>
+                                        {% if curriculum_obj %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ curriculum_obj.curriculum_year_three.id }}"
+                                                    value="">{{ curriculum_obj.curriculum_year_three.year_name|title }}</option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">Please
+                                                Select
+                                            </option>
+                                        {% endif %}
 
                                         {% for rec in year_recs %}
                                             <option value='{{ rec.id }}'>{{ rec.year_name|title }}</option>
@@ -214,8 +239,10 @@
                             <div class="">
                                 <label class="col-md-1 control-label">Result:</label>
                                 <div class="col-md-2">
-                                    <input type="file" title="Select Result document" id="cur_3_result_doc"
-                                           name="cur_3_result_doc" class="form-control">
+                                    <input type="file" title="Select Result document"
+                                           id="curriculum_result_document_three"
+                                           value="{{ curriculum_obj.curriculum_result_document_three }}"
+                                           name="curriculum_result_document_three" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -238,8 +265,8 @@
                             <div class="">
                                 <label class="col-md-2 control-label">Work Experience 1 :</label>
                                 <div class="col-md-1">
-                                    <input type="text" title="Enter Work Experience 1" id="experience_1"
-                                           name="experience_1"
+                                    <input type="text" title="Enter Work Experience 1" id="work_experience_one"
+                                           value="{{ experience_obj.work_experience_one }}" name="work_experience_one"
                                            class="form-control">
                                 </div>
                             </div>
@@ -247,7 +274,8 @@
                             <div class="">
                                 <label class="col-md-1 control-label">Start Date:</label>
                                 <div class="col-md-2">
-                                    <input type="date" id="experience_1_start" name="experience_1_start" class="form-control" >
+                                    <input type="date" id="from_date_one" name="from_date_one"
+                                           value="{{ experience_obj.from_date_one|date:"Y-m-d" }}" class="form-control">
                                 </div>
                             </div>
 
@@ -256,15 +284,16 @@
 
                                 </label>
                                 <div class="col-md-2" id="EndDate">
-                                    <input type="date" id="experience_1_end" name="experience_1_end" class="form-control" >
+                                    <input type="date" id="to_date_one" name="to_date_one"
+                                           value="{{ experience_obj.to_date_one|date:"Y-m-d" }}" class="form-control">
                                 </div>
                             </div>
 
                             <div class="">
                                 <label class="col-md-1 control-label">Result Doc:</label>
                                 <div class="col-md-2">
-                                    <input type="file" title="Select Result document" id="english_test_1_result_doc"
-                                           name="english_test_1_result_doc" class="form-control">
+                                    <input type="file" title="Select Result document" id="work_experience_document_one"
+                                           name="work_experience_document_one" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -278,8 +307,8 @@
                             <div class="">
                                 <label class="col-md-2 control-label">Work Experience 2 :</label>
                                 <div class="col-md-1">
-                                    <input type="text" title="Enter Work Experience 2" id="experience_2"
-                                           name="experience_2"
+                                    <input type="text" title="Enter Work Experience 2" id="work_experience_two"
+                                           name="work_experience_two" value="{{ experience_obj.work_experience_two }}"
                                            class="form-control">
                                 </div>
                             </div>
@@ -287,22 +316,25 @@
                             <div class="">
                                 <label class="col-md-1 control-label">Start Date:</label>
                                 <div class="col-md-2">
-                                    <input type="date" id="experience_2_start" name="experience_2_start" class="form-control" >
+                                    <input type="date" id="from_date_two" name="from_date_two"
+                                           value="{{ experience_obj.from_date_two|date:"Y-m-d" }}" class="form-control">
                                 </div>
                             </div>
 
                             <div class="">
                                 <label class="col-md-1 control-label">End Date:</label>
                                 <div class="col-md-2" id="EndDate">
-                                    <input type="date" id="experience_2_end" name="experience_2_end" class="form-control" >
+                                    <input type="date" id="to_date_two" name="to_date_two"
+                                           value="{{ experience_obj.to_date_two|date:"Y-m-d" }}" class="form-control">
                                 </div>
                             </div>
 
                             <div class="">
                                 <label class="col-md-1 control-label">Result Doc:</label>
                                 <div class="col-md-2">
-                                    <input type="file" title="Select Result document" id="english_test_1_result_doc"
-                                           name="english_test_1_result_doc" class="form-control">
+                                    <input type="file" title="Select Result document" id="work_experience_document_two"
+                                           value="{{ experience_obj.work_experience_document_two }}"
+                                           name="work_experience_document_two" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -313,13 +345,10 @@
                         <div class="row">
                             <div class="col-md-offset-5 col-md-7">
                                 <button type="button" class="btn blue" id="save" style="margin-left: 70%"
-                                        onclick="window.location='{% url "student:applicant_academic_english_qualification" %}'">Back
+                                        onclick="window.location='{% url "student:applicant_academic_english_qualification" %}'">
+                                    Back
                                 </button>
-                                <button type="submit" class="btn green" id="save" style="">Save</button>
-                                <button type="button" class="btn blue" id="next"
-                                        onclick="window.location='{% url "student:applicant_scholarship_about_yourself_info" %}'">
-                                    Next
-                                </button>
+                                <button type="submit" class="btn green" id="save" style="">Save/Next</button>
                             </div>
                         </div>
                     </div>

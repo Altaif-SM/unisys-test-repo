@@ -107,10 +107,10 @@
 
         <div class="portlet-body">
             <div class="form-body">
-                <form {% comment %}action="{% url 'masters:save_manage_partner_master' %}"{% endcomment %}
-                        id="form_sample_1"
-                        class="form-horizontal"
-                        method="POST" enctype="multipart/form-data">
+                <form action="{% url 'student:submit_application' %}"
+                      id="form_sample_1"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
                     <div class="form-body">
@@ -118,11 +118,17 @@
                             <div class="">
                                 <label class="col-md-2 control-label">Scholarship Applied:</label>
                                 <div class="col-md-3">
-                                    <select id='scholarship_type' title="Select Scholarship" name="scholarship_type"
+                                    <select id='scholarship' title="Select Scholarship" name="scholarship"
                                             class="form-control">
-                                        <option style="display:none" selected="selected" id=""
-                                                value="">Please Select
-                                        </option>
+                                        {% if scholarship_obj %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ scholarship_obj.scholarship.id }}"
+                                                    value="">{{ scholarship_obj.scholarship.scholarship_name|title }}</option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">Please
+                                                Select
+                                            </option>
+                                        {% endif %}
 
                                         {% for rec in scholarship_recs %}
                                             <option value='{{ rec.id }}'>{{ rec.scholarship_name|title }}</option>
@@ -137,8 +143,9 @@
                             <div class="">
                                 <label class="col-md-2 control-label">Course Applied:</label>
                                 <div class="col-md-3">
-                                    <input type="text" title="Enter Course Applied" id="course" name="course"
-                                           class="form-control">
+                                    <input type="text" title="Enter Course Applied" id="course_applied"
+                                           name="course_applied"
+                                          value="{{ scholarship_obj.course_applied }}" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -151,7 +158,7 @@
                                 <label class="col-md-2 control-label">University:</label>
                                 <div class="col-md-3">
                                     <input type="text" title="Enter University" id="university" name="university"
-                                           class="form-control">
+                                         value="{{ scholarship_obj.university }}"  class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -162,8 +169,8 @@
                             <div class="">
                                 <label class="col-md-2 control-label">Admission Letter:</label>
                                 <div class="col-md-3">
-                                    <input type="file" title="Select admission letter" id="admission_doc"
-                                           name="admission_doc" class="form-control">
+                                    <input type="file" title="Select admission letter" id="admission_letter_document"
+                                          value="{{ scholarship_obj.admission_letter_document }}" name="admission_letter_document" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -187,7 +194,7 @@
                                 <div class="col-md-6">
                                     <label>Write 600 word about yourself</label>
                                     <textarea id="about_yourself" style="height: 200px" name="about_yourself"
-                                              class="form-control"></textarea>
+                                              class="form-control"> {{ about_obj.about_yourself }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -201,11 +208,11 @@
                                         onclick="window.location='{% url "student:applicant_curriculum_experience_info" %}'">
                                     Back
                                 </button>
-                                <button type="submit" class="btn green" id="save" style="">Save</button>
-                                <button type="button" class="btn blue" id="next"
-                                        onclick="window.location='{% url "student:applicant_family_mother_sibling_info" %}'">
-                                    Next
-                                </button>
+                                <button type="submit" class="btn green" id="save" style="">Submit</button>
+                                {% comment %}<button type="button" class="btn blue" id="next"
+                                        onclick="window.location='{% url "student:generate_PDF" %}'">
+                                    View
+                                </button>{% endcomment %}
                             </div>
                         </div>
                     </div>

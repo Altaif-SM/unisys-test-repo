@@ -107,10 +107,10 @@
 
         <div class="portlet-body">
             <div class="form-body">
-                <form {% comment %}action="{% url 'masters:save_manage_partner_master' %}"{% endcomment %}
-                        id="form_sample_1"
-                        class="form-horizontal"
-                        method="POST" enctype="multipart/form-data">
+                <form action="{% url 'student:save_update_applicant_academic_english_qualification' %}"
+                      id="form_sample_1"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
                     <div class="form-body">
@@ -119,18 +119,24 @@
                                 <label class="col-md-1 control-label">'A' level :</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter 'A' Level" id="a_level" name="a_level"
-                                           class="form-control">
+                                           value="{{ qualification_obj.a_level }}" class="form-control">
                                 </div>
                             </div>
 
                             <div class="">
                                 <label class="col-md-1 control-label">Year:</label>
                                 <div class="col-md-1">
-                                    <select id='a_year' title="Select Year" name="a_year"
+                                    <select id='a_level_year' title="Select Year" name="a_level_year"
                                             class="form-control">
-                                        <option style="display:none" selected="selected" id=""
-                                                value="">Please Select
-                                        </option>
+                                        {% if qualification_obj %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ qualification_obj.a_level_year.id }}"
+                                                    value="">{{ qualification_obj.a_level_year.year_name|title }}</option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">Please
+                                                Select
+                                            </option>
+                                        {% endif %}
 
                                         {% for rec in year_recs %}
                                             <option value='{{ rec.id }}'>{{ rec.year_name|title }}</option>
@@ -142,16 +148,16 @@
                             <div class="">
                                 <label class="col-md-1 control-label"> Result:</label>
                                 <div class="col-md-1">
-                                    <input type="text" title="Enter result" id="a_result" name="a_result"
-                                           class="form-control">
+                                    <input type="text" title="Enter result" id="a_level_result" name="a_level_result"
+                                           value="{{ qualification_obj.a_level_result }}" class="form-control">
                                 </div>
                             </div>
 
                             <div class="">
                                 <label class="col-md-1 control-label">Result Doc:</label>
                                 <div class="col-md-2">
-                                    <input type="file" title="Select Result document" id="a_result_doc"
-                                           name="a_result_doc" class="form-control">
+                                    <input type="file" title="Select Result document" id="a_level_result_document"
+                                           name="a_level_result_document" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -163,18 +169,24 @@
                                 <label class="col-md-1 control-label">'O' level :</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter 'O' Level" id="o_level" name="o_level"
-                                           class="form-control">
+                                           value="{{ qualification_obj.o_level }}" class="form-control">
                                 </div>
                             </div>
 
                             <div class="">
                                 <label class="col-md-1 control-label">Year:</label>
                                 <div class="col-md-1">
-                                    <select id='o_year' title="Select Year" name="o_year"
+                                    <select id='o_level_year' title="Select Year" name="o_level_year"
                                             class="form-control">
-                                        <option style="display:none" selected="selected" id=""
-                                                value="">Please Select
-                                        </option>
+                                        {% if qualification_obj %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ qualification_obj.o_level_year.id }}"
+                                                    value="">{{ qualification_obj.o_level_year.year_name|title }}</option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">Please
+                                                Select
+                                            </option>
+                                        {% endif %}
 
                                         {% for rec in year_recs %}
                                             <option value='{{ rec.id }}'>{{ rec.year_name|title }}</option>
@@ -186,16 +198,16 @@
                             <div class="">
                                 <label class="col-md-1 control-label"> Result:</label>
                                 <div class="col-md-1">
-                                    <input type="text" title="Enter result" id="o_result" name="o_result"
-                                           class="form-control">
+                                    <input type="text" title="Enter result" id="o_level_result" name="o_level_result"
+                                           value="{{ qualification_obj.o_level_result }}" class="form-control">
                                 </div>
                             </div>
 
                             <div class="">
                                 <label class="col-md-1 control-label">Result Doc:</label>
                                 <div class="col-md-2">
-                                    <input type="file" title="Select Result document" id="o_result_doc"
-                                           name="o_result_doc" class="form-control">
+                                    <input type="file" title="Select Result document" id="o_level_result_document"
+                                           name="o_level_result_document" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -207,7 +219,7 @@
                                 <label class="col-md-1 control-label">High School :</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter high school" id="high_school" name="high_school"
-                                           class="form-control">
+                                           value="{{ qualification_obj.high_school }}" class="form-control">
                                 </div>
                             </div>
 
@@ -216,9 +228,15 @@
                                 <div class="col-md-1">
                                     <select id='high_school_year' title="Select Year" name="high_school_year"
                                             class="form-control">
-                                        <option style="display:none" selected="selected" id=""
-                                                value="">Please Select
-                                        </option>
+                                        {% if qualification_obj %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ qualification_obj.high_school_year.id }}"
+                                                    value="">{{ qualification_obj.high_school_year.year_name|title }}</option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">Please
+                                                Select
+                                            </option>
+                                        {% endif %}
 
                                         {% for rec in year_recs %}
                                             <option value='{{ rec.id }}'>{{ rec.year_name|title }}</option>
@@ -232,15 +250,15 @@
                                 <div class="col-md-1">
                                     <input type="text" title="Enter result" id="high_school_result"
                                            name="high_school_result"
-                                           class="form-control">
+                                           value="{{ qualification_obj.high_school_result }}" class="form-control">
                                 </div>
                             </div>
 
                             <div class="">
                                 <label class="col-md-1 control-label">Result Doc:</label>
                                 <div class="col-md-2">
-                                    <input type="file" title="Select Result document" id="high_school_result_doc"
-                                           name="high_school_result_doc" class="form-control">
+                                    <input type="file" title="Select Result document" id="high_school_result_document"
+                                           name="high_school_result_document" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -261,8 +279,8 @@
                             <div class="">
                                 <label class="col-md-2 control-label">English Competency Test 1 :</label>
                                 <div class="col-md-1">
-                                    <input type="text" title="Enter English Competency Test 1" id="english_test_1"
-                                           name="english_test_1"
+                                    <input type="text" title="Enter English Competency Test 1" id="english_test_one"
+                                           name="english_test_one" value="{{ english_obj.english_test_one }}"
                                            class="form-control">
                                 </div>
                             </div>
@@ -270,11 +288,17 @@
                             <div class="">
                                 <label class="col-md-1 control-label">Year:</label>
                                 <div class="col-md-1">
-                                    <select id='english_test_1_year' title="Select Year" name="english_test_1_year"
+                                    <select id='english_test_one_year' title="Select Year" name="english_test_one_year"
                                             class="form-control">
-                                        <option style="display:none" selected="selected" id=""
-                                                value="">Please Select
-                                        </option>
+                                        {% if english_obj %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ english_obj.english_test_one_year.id }}"
+                                                    value="">{{ english_obj.english_test_one_year.year_name|title }}</option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">Please
+                                                Select
+                                            </option>
+                                        {% endif %}
 
                                         {% for rec in year_recs %}
                                             <option value='{{ rec.id }}'>{{ rec.year_name|title }}</option>
@@ -286,8 +310,9 @@
                             <div class="">
                                 <label class="col-md-1 control-label"> Result:</label>
                                 <div class="col-md-1">
-                                    <input type="text" title="Enter result" id="english_test_1_result"
-                                           name="english_test_1_result"
+                                    <input type="text" title="Enter result" id="english_test_one_result"
+                                           name="english_test_one_result"
+                                           value="{{ english_obj.english_test_one_result }}"
                                            class="form-control">
                                 </div>
                             </div>
@@ -295,8 +320,10 @@
                             <div class="">
                                 <label class="col-md-1 control-label">Result Doc:</label>
                                 <div class="col-md-2">
-                                    <input type="file" title="Select Result document" id="english_test_1_result_doc"
-                                           name="english_test_1_result_doc" class="form-control">
+                                    <input type="file" title="Select Result document"
+                                           id="english_test_one_result_document"
+                                           value="{{ english_obj.english_test_one_result_document }}"
+                                           name="english_test_one_result_document" class="form-control">
                                 </div>
                             </div>
 
@@ -311,8 +338,8 @@
                             <div class="">
                                 <label class="col-md-2 control-label">English Competency Test 2 :</label>
                                 <div class="col-md-1">
-                                    <input type="text" title="Enter English Competency Test 2" id="english_test_2"
-                                           name="english_test_2"
+                                    <input type="text" title="Enter English Competency Test 2" id="english_test_two"
+                                           name="english_test_two" value="{{ english_obj.english_test_two }}"
                                            class="form-control">
                                 </div>
                             </div>
@@ -320,11 +347,17 @@
                             <div class="">
                                 <label class="col-md-1 control-label">Year:</label>
                                 <div class="col-md-1">
-                                    <select id='english_test_2_year' title="Select Year" name="english_test_2_year"
+                                    <select id='english_test_two_year' title="Select Year" name="english_test_two_year"
                                             class="form-control">
-                                        <option style="display:none" selected="selected" id=""
-                                                value="">Please Select
-                                        </option>
+                                        {% if english_obj %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ english_obj.english_test_two_year.id }}"
+                                                    value="">{{ english_obj.english_test_two_year.year_name|title }}</option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">Please
+                                                Select
+                                            </option>
+                                        {% endif %}
 
                                         {% for rec in year_recs %}
                                             <option value='{{ rec.id }}'>{{ rec.year_name|title }}</option>
@@ -336,8 +369,9 @@
                             <div class="">
                                 <label class="col-md-1 control-label"> Result:</label>
                                 <div class="col-md-1">
-                                    <input type="text" title="Enter result" id="english_test_2_result"
-                                           name="english_test_2_result"
+                                    <input type="text" title="Enter result" id="english_test_two_result"
+                                           name="english_test_two_result"
+                                           value="{{ english_obj.english_test_two_result }}"
                                            class="form-control">
                                 </div>
                             </div>
@@ -345,8 +379,10 @@
                             <div class="">
                                 <label class="col-md-1 control-label">Result Doc:</label>
                                 <div class="col-md-2">
-                                    <input type="file" title="Select Result document" id="english_test_2_result_doc"
-                                           name="english_test_2_result_doc" class="form-control">
+                                    <input type="file" title="Select Result document"
+                                           id="english_test_two_result_document"
+                                           value="{{ english_obj.english_test_two_result_document }}"
+                                           name="english_test_two_result_document" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -358,13 +394,14 @@
                         <div class="row">
                             <div class="col-md-offset-5 col-md-7">
                                 <button type="button" class="btn blue" id="save" style="margin-left: 70%"
-                                        onclick="window.location='{% url "student:applicant_family_mother_sibling_info" %}'">Back
+                                        onclick="window.location='{% url "student:applicant_family_mother_sibling_info" %}'">
+                                    Back
                                 </button>
-                                <button type="submit" class="btn green" id="save" style="">Save</button>
-                                <button type="button" class="btn blue" id="next"
+                                <button type="submit" class="btn green" id="save" style="">Save/Next</button>
+                                {% comment %}<button type="button" class="btn blue" id="next"
                                         onclick="window.location='{% url "student:applicant_curriculum_experience_info" %}'">
                                     Next
-                                </button>
+                                </button>{% endcomment %}
                             </div>
                         </div>
                     </div>
