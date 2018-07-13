@@ -59,12 +59,12 @@
 
     <!-- BEGIN VALIDATION STATES-->
     <div class="portlet light portlet-fit portlet-form ">
-        <div class="portlet-title">
+        {% comment %}<div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
                 <span class="caption-subject font-red sbold uppercase">My Application</span>
             </div>
-        </div>
+        </div>{% endcomment %}
 
         <div class="portlet-body">
             <div class="form-body">
@@ -74,7 +74,8 @@
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="form-body">
-                        <iframe src="{{ path }}" width="100%" height="300px">
+                        Welcome....
+                        {% comment %}<iframe src="{{ path }}" width="100%" height="300px">
                             This browser does not support PDFs. Please download the PDF to view it: <a
                                 href="{{ path }}">Download PDF</a>
                         </iframe>
@@ -86,7 +87,7 @@
                             <div class="col-md-offset-5 col-md-7">
                                 <button type="submit" class="btn green" id="save" style="">Submit</button>
                             </div>
-                        </div>
+                        </div>{% endcomment %}
                     </div>
                 </form>
                 <br>

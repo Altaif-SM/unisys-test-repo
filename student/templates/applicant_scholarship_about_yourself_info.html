@@ -107,7 +107,7 @@
 
         <div class="portlet-body">
             <div class="form-body">
-                <form action="{% url 'student:submit_application' %}"
+                <form action="{% url 'student:my_application' %}"
                       id="form_sample_1"
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
@@ -119,7 +119,7 @@
                                 <label class="col-md-2 control-label">Scholarship Applied:</label>
                                 <div class="col-md-3">
                                     <select id='scholarship' title="Select Scholarship" name="scholarship"
-                                            class="form-control">
+                                            class="form-control" required>
                                         {% if scholarship_obj %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ scholarship_obj.scholarship.id }}"
@@ -145,7 +145,7 @@
                                 <div class="col-md-3">
                                     <input type="text" title="Enter Course Applied" id="course_applied"
                                            name="course_applied"
-                                          value="{{ scholarship_obj.course_applied }}" class="form-control">
+                                          value="{{ scholarship_obj.course_applied }}" class="form-control" required>
                                 </div>
                             </div>
                         </div>
@@ -158,7 +158,7 @@
                                 <label class="col-md-2 control-label">University:</label>
                                 <div class="col-md-3">
                                     <input type="text" title="Enter University" id="university" name="university"
-                                         value="{{ scholarship_obj.university }}"  class="form-control">
+                                         value="{{ scholarship_obj.university }}"  class="form-control" required>
                                 </div>
                             </div>
                         </div>
@@ -169,7 +169,7 @@
                             <div class="">
                                 <label class="col-md-2 control-label">Admission Letter:</label>
                                 <div class="col-md-3">
-                                    <input type="file" title="Select admission letter" id="admission_letter_document"
+                                    <input type="file" title="Select admission letter" id="admission_letter_document" required
                                           value="{{ scholarship_obj.admission_letter_document }}" name="admission_letter_document" class="form-control">
                                 </div>
                             </div>
@@ -194,7 +194,7 @@
                                 <div class="col-md-6">
                                     <label>Write 600 word about yourself</label>
                                     <textarea id="about_yourself" style="height: 200px" name="about_yourself"
-                                              class="form-control"> {{ about_obj.about_yourself }}</textarea>
+                                              class="form-control" required> {{ about_obj.about_yourself }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -208,11 +208,7 @@
                                         onclick="window.location='{% url "student:applicant_curriculum_experience_info" %}'">
                                     Back
                                 </button>
-                                <button type="submit" class="btn green" id="save" style="">Submit</button>
-                                {% comment %}<button type="button" class="btn blue" id="next"
-                                        onclick="window.location='{% url "student:generate_PDF" %}'">
-                                    View
-                                </button>{% endcomment %}
+                                <button type="submit" class="btn green" id="save" style="">Save/Next</button>
                             </div>
                         </div>
                     </div>

@@ -29,9 +29,9 @@ def save_update_applicant_personal_info(request):
     if request.POST:
         if StudentDetails.objects.filter(user=request.user):
             student = StudentDetails.objects.filter(user=request.user)[0]
-            if ApplicationDetails.objects.filter(student=student).exists():
+            if ApplicationDetails.objects.filter(student=student, is_submitted=False).exists():
 
-                ApplicationDetails.objects.filter(student=student).update(first_name=request.POST['first_name'],
+                ApplicationDetails.objects.filter(student=student, is_submitted=False).update(first_name=request.POST['first_name'],
                                                                           middle_name=request.POST['middle_name'],
                                                                           last_name=request.POST['last_name'],
                                                                           birth_date=request.POST['birth_date'],
@@ -50,7 +50,7 @@ def save_update_applicant_personal_info(request):
                                                                               'telephone_home'],
                                                                           email=request.POST['email'])
 
-                application_obj = ApplicationDetails.objects.get(student=student)
+                application_obj = ApplicationDetails.objects.get(student=student, is_submitted=False)
 
                 AddressDetails.objects.filter(id=application_obj.address.id).update(
                     country_id=request.POST['country'],
@@ -155,9 +155,9 @@ def save_update_applicant_family_info(request):
 
             if StudentDetails.objects.filter(user=request.user):
                 student = StudentDetails.objects.filter(user=request.user)[0]
-                if ApplicationDetails.objects.filter(student=student).exists():
+                if ApplicationDetails.objects.filter(student=student, is_submitted=False).exists():
 
-                    ApplicationDetails.objects.filter(student=student).update(wife_name=request.POST['wife_name'],
+                    ApplicationDetails.objects.filter(student=student, is_submitted=False).update(wife_name=request.POST['wife_name'],
                                                                               wife_income=request.POST[
                                                                                   'wife_income'],
                                                                               wife_nationality_id=request.POST[
@@ -185,7 +185,7 @@ def save_update_applicant_family_info(request):
                                                                               father_email=request.POST[
                                                                                   'father_email'])
 
-                    application_obj = ApplicationDetails.objects.get(student=student)
+                    application_obj = ApplicationDetails.objects.get(student=student, is_submitted=False)
 
                     if wife_pay_slip:
                         wife_slip = str(wife_pay_slip)
@@ -239,9 +239,9 @@ def save_update_applicant_family_mother_sibling_info(request):
                 mother_pay_slip = ''
             if StudentDetails.objects.filter(user=request.user):
                 student = StudentDetails.objects.filter(user=request.user)[0]
-                if ApplicationDetails.objects.filter(student=student).exists():
+                if ApplicationDetails.objects.filter(student=student, is_submitted=False).exists():
 
-                    ApplicationDetails.objects.filter(student=student).update(mother_name=request.POST['mother_name'],
+                    ApplicationDetails.objects.filter(student=student, is_submitted=False).update(mother_name=request.POST['mother_name'],
                                                                               mother_income=request.POST[
                                                                                   'mother_income'],
                                                                               mother_nationality_id=request.POST[
@@ -254,7 +254,7 @@ def save_update_applicant_family_mother_sibling_info(request):
                                                                               mother_email=request.POST[
                                                                                   'mother_email'])
 
-                    application_obj = ApplicationDetails.objects.get(student=student)
+                    application_obj = ApplicationDetails.objects.get(student=student, is_submitted=False)
 
                     mother_slip = str(mother_pay_slip)
 
@@ -297,8 +297,8 @@ def applicant_academic_english_qualification(request):
     english_obj = ''
 
     student = StudentDetails.objects.filter(user=request.user)[0]
-    if ApplicationDetails.objects.filter(student=student).exists():
-        application_obj = ApplicationDetails.objects.get(student=student)
+    if ApplicationDetails.objects.filter(student=student, is_submitted=False).exists():
+        application_obj = ApplicationDetails.objects.get(student=student, is_submitted=False)
         if AcademicQualificationDetails.objects.filter(applicant_id=application_obj).exists():
             qualification_obj = AcademicQualificationDetails.objects.get(applicant_id=application_obj)
 
@@ -331,8 +331,8 @@ def save_update_applicant_academic_english_qualification(request):
         try:
             if StudentDetails.objects.filter(user=request.user):
                 student = StudentDetails.objects.filter(user=request.user)[0]
-                if ApplicationDetails.objects.filter(student=student).exists():
-                    application_obj = ApplicationDetails.objects.get(student=student)
+                if ApplicationDetails.objects.filter(student=student, is_submitted=False).exists():
+                    application_obj = ApplicationDetails.objects.get(student=student, is_submitted=False)
                     if AcademicQualificationDetails.objects.filter(applicant_id=application_obj).exists():
                         try:
                             AcademicQualificationDetails.objects.filter(applicant_id=application_obj).update(
@@ -490,8 +490,8 @@ def applicant_curriculum_experience_info(request):
     experience_obj = ''
 
     student = StudentDetails.objects.filter(user=request.user)[0]
-    if ApplicationDetails.objects.filter(student=student).exists():
-        application_obj = ApplicationDetails.objects.get(student=student)
+    if ApplicationDetails.objects.filter(student=student, is_submitted=False).exists():
+        application_obj = ApplicationDetails.objects.get(student=student, is_submitted=False)
         if CurriculumDetails.objects.filter(applicant_id=application_obj).exists():
             curriculum_obj = CurriculumDetails.objects.get(applicant_id=application_obj)
 
@@ -524,8 +524,8 @@ def save_update_applicant_curriculum_experience_info(request):
 
             if StudentDetails.objects.filter(user=request.user):
                 student = StudentDetails.objects.filter(user=request.user)[0]
-                if ApplicationDetails.objects.filter(student=student).exists():
-                    application_obj = ApplicationDetails.objects.get(student=student)
+                if ApplicationDetails.objects.filter(student=student, is_submitted=False).exists():
+                    application_obj = ApplicationDetails.objects.get(student=student, is_submitted=False)
                     if CurriculumDetails.objects.filter(applicant_id=application_obj).exists():
                         try:
                             CurriculumDetails.objects.filter(applicant_id=application_obj).update(
@@ -680,8 +680,8 @@ def applicant_scholarship_about_yourself_info(request):
     about_obj = ''
 
     student = StudentDetails.objects.filter(user=request.user)[0]
-    if ApplicationDetails.objects.filter(student=student).exists():
-        application_obj = ApplicationDetails.objects.get(student=student)
+    if ApplicationDetails.objects.filter(student=student, is_submitted=False).exists():
+        application_obj = ApplicationDetails.objects.get(student=student, is_submitted=False)
         if ScholarshipSelectionDetails.objects.filter(applicant_id=application_obj).exists():
             scholarship_obj = ScholarshipSelectionDetails.objects.get(applicant_id=application_obj)
 
@@ -703,8 +703,8 @@ def save_update_applicant_scholarship_about_yourself_info(request):
         try:
             if StudentDetails.objects.filter(user=request.user):
                 student = StudentDetails.objects.filter(user=request.user)[0]
-                if ApplicationDetails.objects.filter(student=student).exists():
-                    application_obj = ApplicationDetails.objects.get(student=student)
+                if ApplicationDetails.objects.filter(student=student, is_submitted=False).exists():
+                    application_obj = ApplicationDetails.objects.get(student=student, is_submitted=False)
                     if ScholarshipSelectionDetails.objects.filter(applicant_id=application_obj).exists():
                         try:
                             ScholarshipSelectionDetails.objects.filter(applicant_id=application_obj).update(
@@ -774,17 +774,20 @@ def my_application(request):
 
 
 def submit_application(request):
+    application_id = request.user.get_application_id
 
-    return render(request, 'my_application.html')
+    ApplicationDetails.objects.filter(application_id=application_id).update(is_submitted=True)
+
+    return render(request, 'student_home.html')
 
 
-import os
-from django.conf import settings
-from django.http import HttpResponse
-from django.template import Context
-from django.template.loader import get_template
-import datetime
-from xhtml2pdf import pisa
+# import os
+# from django.conf import settings
+# from django.http import HttpResponse
+# from django.template import Context
+# from django.template.loader import get_template
+# import datetime
+# from xhtml2pdf import pisa
 
 
 # def generate_PDF(request):
