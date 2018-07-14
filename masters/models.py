@@ -4,6 +4,7 @@ from common.models import BaseModel
 import os
 from accounts.models import User
 from student.models import *
+from student.models import StudentDetails
 
 
 def content_file_name_partner(instance, filename):
@@ -16,12 +17,18 @@ def content_file_name_partner(instance, filename):
 def content_file_name_donor(instance, filename):
     dirname = datetime.now().strftime('%Y.%m.%d.%H.%M.%S')
     ext = filename.split('.')[-1]
-    filename = "%s_%s.%s" % (instance.first_name, dirname, ext)
+    filename = "%s_%s.%s" % (instance.user.first_name, dirname, ext)
     return os.path.join('reports', filename)
 
 
 class CountryDetails(BaseModel):
     country_name = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        ordering = ('country_name',)
+
+    def __str__(self):
+        return self.country_name
 
 
 class AddressDetails(BaseModel):
@@ -33,6 +40,12 @@ class AddressDetails(BaseModel):
     state = models.CharField(max_length=80, blank=True, null=True)
     street = models.CharField(max_length=80, blank=True, null=True)
     country = models.ForeignKey(CountryDetails, null=True, related_name='address_country_rel', on_delete=models.PROTECT)
+
+    class Meta:
+        ordering = ('city',)
+
+    def __str__(self):
+        return self.city
 
     def to_dict(self):
         res = {
@@ -55,9 +68,18 @@ class YearDetails(BaseModel):
     end_date = models.DateField()
     active_year = models.BooleanField(default=False)
 
+    class Meta:
+        ordering = ('year_name',)
+
+    def __str__(self):
+        return self.year_name
+
 
 class ReligionDetails(BaseModel):
     religion_name = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        ordering = ('religion_name',)
 
     def __str__(self):
         return self.religion_name
@@ -65,6 +87,13 @@ class ReligionDetails(BaseModel):
 
 class ScholarshipDetails(BaseModel):
     scholarship_name = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        ordering = ('scholarship_name',)
+
+    def __str__(self):
+        return self.scholarship_name
+
 
 
 class DegreeFormula(BaseModel):
@@ -107,9 +136,13 @@ class PartnerDetails(BaseModel):
     photo = models.FileField(upload_to=content_file_name_partner, blank=True, null=True)
     user = models.ForeignKey(User, null=True, related_name='partner_user_rel', on_delete=models.PROTECT)
 
+    class Meta:
+        ordering = ('user__first_name',)
+
     def __str__(self):
         details = str(self.country.country_name) + ' and ' + str(self.office_name)
         return details
+
 
 
 class DonorDetails(BaseModel):
@@ -130,10 +163,23 @@ class DonorDetails(BaseModel):
     donor_bank_address = models.CharField(max_length=255, blank=True, null=True)
     user = models.ForeignKey(User, null=True, related_name='donor_user_rel', on_delete=models.PROTECT)
 
+    class Meta:
+        ordering = ('user__first_name',)
+
+    def __str__(self):
+        return self.user.first_name
+
 
 class StudentDonorMapping(BaseModel):
     student = models.ForeignKey(StudentDetails, null=True, related_name='student_donor_rel', on_delete=models.PROTECT)
     donor = models.ForeignKey(DonorDetails, null=True, related_name='donor_student_rel', on_delete=models.PROTECT)
+
+    class Meta:
+        ordering = ('student__user__first_name',)
+
+    def __str__(self):
+        details = str(self.student.user.first_name) + ' and ' + str(self.donor.user.first_name)
+        return details
 
 
 class UniversityDetails(BaseModel):
@@ -143,15 +189,31 @@ class UniversityDetails(BaseModel):
     address = models.ForeignKey(AddressDetails, null=True, related_name='university_address_rel',
                                 on_delete=models.PROTECT)
 
+    class Meta:
+        ordering = ('university_name',)
+
+    def __str__(self):
+        return self.university_name
+
+
 
 class SemesterDetails(BaseModel):
     semester_name = models.CharField(max_length=255, blank=True, null=True)
     start_date = models.DateField()
     end_date = models.DateField()
 
+    class Meta:
+        ordering = ('semester_name',)
+
+    def __str__(self):
+        return self.semester_name
+
 
 class DegreeTypeDetails(BaseModel):
     degree_name = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        ordering = ('degree_name',)
 
     def __str__(self):
         return self.degree_name
@@ -161,6 +223,9 @@ class DegreeDetails(BaseModel):
     degree_name = models.CharField(max_length=255, blank=True, null=True)
     degree_type = models.ForeignKey(DegreeTypeDetails, null=True, related_name='degree_degree_type_rel',
                                     on_delete=models.PROTECT)
+
+    class Meta:
+        ordering = ('degree_name',)
 
     def __str__(self):
         return self.degree_name
@@ -172,6 +237,12 @@ class ProgramDetails(BaseModel):
                                     on_delete=models.PROTECT)
     university = models.ForeignKey(UniversityDetails, null=True, related_name='program_university_rel',
                                    on_delete=models.PROTECT)
+
+    class Meta:
+        ordering = ('program_name',)
+
+    def __str__(self):
+        return self.program_name
 
 
 class ModuleDetails(BaseModel):
@@ -289,17 +360,17 @@ class GuardianStudentMapping(BaseModel):
 #     roll_no = models.CharField(max_length=255, blank=True, null=True)
 #     student_code = models.CharField(max_length=25, blank=True, null=True)
 #
-#     class Meta:
-#         permissions = (
-#             ('can_view_add_student', 'can view add student'),
-#             ('can_view_view_edit_student', 'can view view edit student'),
-#
-#             ('can_view_student_photos', 'can view student photos'),
-#             ('can_view_missing_student_profile', 'can view missing student profile'),
-#         )
-#
-#     def __unicode__(self):
-#         return self.first_name
+    # class Meta:
+    #     permissions = (
+    #         ('can_view_add_student', 'can view add student'),
+    #         ('can_view_view_edit_student', 'can view view edit student'),
+    #
+    #         ('can_view_student_photos', 'can view student photos'),
+    #         ('can_view_missing_student_profile', 'can view missing student profile'),
+    #     )
+    #
+    # def __unicode__(self):
+    #     return self.first_name
 #
 # def get_all_name(self):
 #     """

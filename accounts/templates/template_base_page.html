@@ -435,6 +435,46 @@ License: You must have a valid license purchased only from themeforest(the above
                             <span class="selected"></span>
                         </a>
                     </li>
+
+                    <li class="nav-item start ">
+                        <a href="javascript:;" class="nav-link nav-toggle">
+                            <i class="fa fa-briefcase"></i>
+                            <span class="title">Accounting</span>
+                            <span class="arrow"></span>
+                        </a>
+                        <ul class="sub-menu">
+                            <li class="nav-item ">
+                                <a href="{% url 'accounting:get_student_payment_voucher' %}" class="nav-link ">
+                                    Student Payment Voucher </a>
+                            </li>
+                            <li class="nav-item ">
+                                <a href="{% url 'accounting:get_student_receipt_voucher' %}" class="nav-link ">
+                                    Student Receipt Voucher </a>
+                            </li>
+                            <li class="nav-item ">
+                                <a href="{% url 'accounting:get_student_payment_and_receipt_report' %}" class="nav-link ">
+                                    Student Receipt & Payment Voucher </a>
+                            </li>
+                            <li class="nav-item ">
+                                <a href="{% url 'accounting:get_student_report' %}" class="nav-link ">
+                                    Student Report </a>
+                            </li>
+                            <li class="nav-item ">
+                                <a href="{% url 'accounting:get_approval_and_paid_total' %}" class="nav-link ">
+                                    Approval & Paid Total </a>
+                            </li>
+                            <li class="nav-item ">
+                                <a href="{% url 'accounting:get_donor_receipt_voucher' %}" class="nav-link ">
+                                    Donor Receipt Voucher </a>
+                            </li>
+                            <li class="nav-item ">
+                                <a href="{% url 'accounting:get_donor_report' %}" class="nav-link ">
+                                    Donor Report </a>
+                            </li>
+                        </ul>
+                    </li>
+
+
                 </ul>
                 <!-- END SIDEBAR MENU -->
             </div>
