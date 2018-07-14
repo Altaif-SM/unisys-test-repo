@@ -42,26 +42,16 @@
 
             $(document).ready(function () {
 
-                {% comment %}$(document).on("change", "#partner_photo", function (e) {
-
-                    var selectedFile = this.files[0];
-                    selectedFile.convertToBase64(function (base64) {
-                        var converted_base64_image = (base64);
-                        $("#pic").val(converted_base64_image);
-                        {#alert($('#pic').val())#}
-                    })
-
-
+                $(document).on("change", ".doc", function (e) {
                     var files = !!this.files ? this.files : [];
                     if (!files.length || !window.FileReader) return;
-                    var fileExtension = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
+                    var fileExtension = ['pdf'];
                     if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
                         alert("Only formats are allowed : " + fileExtension.join(', '));
                         $(this).val('');
                         return false;
                     }
                 });
-            });{% endcomment %}
 
 
                 $('#sample_1').dataTable().fnDestroy();
@@ -70,7 +60,8 @@
                         {'bSortable': false}
                     ]
                 });
-            }
+            });
+        }
     </script>
 
 {% endblock %}
@@ -157,7 +148,7 @@
                                 <label class="col-md-1 control-label">Result Doc:</label>
                                 <div class="col-md-2">
                                     <input type="file" title="Select Result document" id="a_level_result_document"
-                                           name="a_level_result_document" class="form-control" required>
+                                           name="a_level_result_document" class="form-control doc" required>
                                 </div>
                             </div>
                         </div>
@@ -207,7 +198,7 @@
                                 <label class="col-md-1 control-label">Result Doc:</label>
                                 <div class="col-md-2">
                                     <input type="file" title="Select Result document" id="o_level_result_document"
-                                           name="o_level_result_document" class="form-control" required>
+                                           name="o_level_result_document" class="form-control doc" required>
                                 </div>
                             </div>
                         </div>
@@ -258,7 +249,7 @@
                                 <label class="col-md-1 control-label">Result Doc:</label>
                                 <div class="col-md-2">
                                     <input type="file" title="Select Result document" id="high_school_result_document"
-                                           name="high_school_result_document" class="form-control" required>
+                                           name="high_school_result_document" class="form-control doc" required>
                                 </div>
                             </div>
                         </div>
@@ -323,7 +314,7 @@
                                     <input type="file" title="Select Result document"
                                            id="english_test_one_result_document"
                                            value="{{ english_obj.english_test_one_result_document }}"
-                                           name="english_test_one_result_document" class="form-control" required>
+                                           name="english_test_one_result_document" class="form-control doc" required>
                                 </div>
                             </div>
                         </div>
@@ -380,7 +371,7 @@
                                     <input type="file" title="Select Result document"
                                            id="english_test_two_result_document"
                                            value="{{ english_obj.english_test_two_result_document }}"
-                                           name="english_test_two_result_document" class="form-control" required>
+                                           name="english_test_two_result_document" class="form-control doc" required>
                                 </div>
                             </div>
                         </div>

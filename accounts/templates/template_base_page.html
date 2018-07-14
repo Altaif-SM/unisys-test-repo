@@ -104,14 +104,53 @@ License: You must have a valid license purchased only from themeforest(the above
         <!-- BEGIN PAGE TOP -->
 
         <div class="page-top">
-{#        <span style="margin-top: 5%">{{ user.get_application_id }}</span>#}
+            {#        <span style="margin-top: 5%">{{ user.get_application_id }}</span>#}
 
             <!-- BEGIN HEADER SEARCH BOX -->
             <!-- DOC: Apply "search-form-expanded" right after the "search-form" class to have half expanded search box -->
 
             <!-- END HEADER SEARCH BOX -->
             <!-- BEGIN TOP NAVIGATION MENU -->
+            <div class="top-menu" style="float: left">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown dropdown-user">
+                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"
+                           data-close-others="true">
+                            {% if not user.get_application.is_submitted %}<img alt="" class="img-circle" src="../../media/{{ user.get_application.image }}"/>
+                            <span class="username username-hide-on-mobile"> {{ user.get_application.first_name }} {{ user.get_application.last_name }} </span>
+                            <br>
+                            <span class="username username-hide-on-mobile"> {{ user.get_application_id }}
+                            </span> {% endif %}
+                            {#                            <i class="fa fa-angle-down"></i>#}
+                        </a>
+                        {% comment %}<ul class="dropdown-menu dropdown-menu-default">
+                            <li>
+                                <a href="/accounts/user_signout/">
+                                    <i class="fa fa-sign-out"></i> Log Out</a>
+                            </li>
+                        </ul>{% endcomment %}
+                    </li>
+                </ul>
+            </div>
             <div class="top-menu">
+                {% comment %} <ul class="nav navbar-nav" >
+                    <li class="dropdown dropdown-user">
+                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
+                           data-close-others="true">
+                            <img alt="" class="img-circle" src="../../media/{{ user.get_application.image }}"/>
+                            <span class="username username-hide-on-mobile"> {{ user.get_application.first_name }} {{ user.get_application.last_name }} </span>
+                            <br><span class="username username-hide-on-mobile"> {{ user.get_application_id }}</span>
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-default">
+                            <li>
+                                <a href="/accounts/user_signout/">
+                                    <i class="fa fa-sign-out"></i> Log Out</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>{% endcomment %}
+
                 <ul class="nav navbar-nav pull-right">
                     <!-- BEGIN NOTIFICATION DROPDOWN -->
                     <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
@@ -130,7 +169,7 @@ License: You must have a valid license purchased only from themeforest(the above
                     <li class="dropdown dropdown-user">
                         <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
                            data-close-others="true">
-                            {#                                    <img alt="" class="img-circle" src="{{ profile_pic }}" />#}
+                            {#                            <img alt="" class="img-circle" src="../../media/{{ user.get_application.image }}"/>#}
                             {#                            {% if user.staff_relation.all  and user.staff_relation.all.0.photo %}#}
                             {#                                <img alt="" class="img-circle"#}
                             {#                                     src="{{ MEDIA_URL }}{{ user.staff_relation.all.0.photo.url }}"/>#}
@@ -140,12 +179,16 @@ License: You must have a valid license purchased only from themeforest(the above
                             {#                            {% else %}#}
                             {#                                <img alt="" class="img-circle" src="{% static 'images/user.png' %}"/>#}
                             {#                            {% endif %}#}
-                            {#                            <span class="username username-hide-on-mobile"> {% if user.first_name %}#}
-                            {#                                {{ user.get_full_name }}{% else %}{{ user.username }}{% endif %} </span>#}
-                            <i class="fa fa-angle-down"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-default">
-                            {% comment %}<li>
+                            {% comment %}<span class="username username-hide-on-mobile"> {{ user.get_application.first_name }} {{ user.get_application.last_name }} </span>
+                            <br><span class="username username-hide-on-mobile"> {{ user.get_application_id }}</span>{% endcomment %}
+                    <li>
+                        <a href="/accounts/user_signout/">
+                            <i class="fa fa-sign-out"></i> Log Out</a>
+                    </li>
+                    {#                            <i class="fa fa-angle-down"></i>#}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-default">
+                        {% comment %}<li>
                                 <a href="/school/my_profile/">
                                     <i class="fa fa-book" aria-hidden="true"></i> Profile </a>
                             </li>
@@ -153,13 +196,13 @@ License: You must have a valid license purchased only from themeforest(the above
                                 <a href="/school/change_password/">
                                     <i class="icon-key" aria-hidden="true"></i> Change Password </a>
                             </li>{% endcomment %}
-                            <li>
+                        {% comment %}<li>
                                 <a href="/accounts/user_signout/">
                                     <i class="fa fa-sign-out"></i> Log Out</a>
-                            </li>
+                            </li>{% endcomment %}
 
 
-                        </ul>
+                    </ul>
                     </li>
                     <!-- END USER LOGIN DROPDOWN -->
                     <!-- BEGIN QUICK SIDEBAR TOGGLER -->
@@ -380,6 +423,15 @@ License: You must have a valid license purchased only from themeforest(the above
                            class="nav-link nav-toggle">
                             <i class="glyphicon glyphicon-education"></i>
                             <span class="title">Academic Qualification</span>
+                            <span class="selected"></span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item " id="acd_qli">
+                        <a href="{% url 'partner:template_registered_application' %}"
+                           class="nav-link nav-toggle">
+                            <i class="glyphicon glyphicon-education"></i>
+                            <span class="title">Applicant Details</span>
                             <span class="selected"></span>
                         </a>
                     </li>

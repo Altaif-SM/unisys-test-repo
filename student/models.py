@@ -62,6 +62,10 @@ class ApplicationDetails(BaseModel):
     middle_name = models.CharField(max_length=255, blank=True, null=True)
     last_name = models.CharField(max_length=255, blank=True, null=True)
 
+    year = models.ForeignKey('masters.YearDetails', blank=True, null=True,
+                             related_name='applicant_year_rel',
+                             on_delete=models.PROTECT)
+
     birth_date = models.DateField()
     gender = models.CharField(max_length=25)
     nationality = models.ForeignKey('masters.CountryDetails', blank=True, null=True,
@@ -189,19 +193,19 @@ class CurriculumDetails(BaseModel):
     curriculum_year_one = models.ForeignKey('masters.YearDetails', null=True, blank=True,
                                             related_name='curriculum_year_one_rel',
                                             on_delete=models.PROTECT)
-    curriculum_result_document_one = models.FileField(upload_to=content_file_name_report,blank=True, null=True)
+    curriculum_result_document_one = models.FileField(upload_to=content_file_name_report, blank=True, null=True)
 
     curriculum_name_two = models.CharField(max_length=255, blank=True, null=True)
     curriculum_year_two = models.ForeignKey('masters.YearDetails', null=True, blank=True,
                                             related_name='curriculum_year_two_rel',
                                             on_delete=models.PROTECT)
-    curriculum_result_document_two = models.FileField(upload_to=content_file_name_report,blank=True, null=True)
+    curriculum_result_document_two = models.FileField(upload_to=content_file_name_report, blank=True, null=True)
 
     curriculum_name_three = models.CharField(max_length=255, blank=True, null=True)
     curriculum_year_three = models.ForeignKey('masters.YearDetails', null=True, blank=True,
                                               related_name='curriculum_year_three_rel',
                                               on_delete=models.PROTECT)
-    curriculum_result_document_three = models.FileField(upload_to=content_file_name_report,blank=True, null=True)
+    curriculum_result_document_three = models.FileField(upload_to=content_file_name_report, blank=True, null=True)
 
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='curriculum_applicant_rel',
                                      on_delete=models.PROTECT)
@@ -225,10 +229,16 @@ class ExperienceDetails(BaseModel):
 class ScholarshipSelectionDetails(BaseModel):
     scholarship = models.ForeignKey('masters.ScholarshipDetails', null=True, related_name='scholarship_selection_rel',
                                     on_delete=models.PROTECT)
-    course_applied = models.CharField(max_length=255, blank=True, null=True)
-    university = models.CharField(max_length=255, blank=True, null=True)
-    # university = models.ForeignKey('masters.UniversityDetails', null=True, related_name='university_scholarship_rel',
-    #                                on_delete=models.PROTECT)
+    course_applied = models.ForeignKey('masters.DegreeDetails', blank=True, null=True,
+                                       related_name='degree_scholarship_rel',
+                                       on_delete=models.PROTECT)
+
+    # course_applied = models.CharField(max_length=255, blank=True, null=True)
+    # university = models.CharField(max_length=255, blank=True, null=True)
+
+    university = models.ForeignKey('masters.UniversityDetails',blank=True, null=True, related_name='university_scholarship_rel',
+                                   on_delete=models.PROTECT)
+
     admission_letter_document = models.FileField(upload_to=content_file_name_report)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_scholarship_rel',
                                      on_delete=models.PROTECT)

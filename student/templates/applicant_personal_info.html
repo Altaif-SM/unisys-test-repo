@@ -12,6 +12,13 @@
     <!-- END HEAD -->
     <style type="text/css">
 
+        .custom-file-upload {
+            border: 1px solid #ccc;
+            display: inline-block;
+            padding: 6px 12px;
+            cursor: pointer;
+        }
+
         div.dataTables_wrapper div.dataTables_filter label {
             font-weight: normal;
             white-space: nowrap;
@@ -52,6 +59,12 @@
 
 
             $(document).ready(function () {
+
+                {% comment %}$('#file-upload').change(function () {
+                    var i = $(this).prev('label').clone();
+                    var file = $('#file-upload')[0].files[0].name;
+                    $(this).prev('label').text(file);
+                });{% endcomment %}
 
 
                 $(document).on("change", "#applicant_photo", function (e) {
@@ -411,6 +424,15 @@
                                 <label class="col-md-2 control-label">Photo:</label>
                                 <div class="col-md-3">
                                     <input type="text" id="pic" name="pic" hidden>
+
+
+                                    {% comment %}<label for="file-upload" class="custom-file-upload">
+                                        <i class="fa fa-cloud-upload"></i> Upload Image
+                                    </label>
+
+                                    <input id="file-upload" name='upload_cont_img' type="file" style="display:none;">{% endcomment %}
+
+
                                     <input name="photo" type="file" title="Select photo"
                                            id="applicant_photo"
                                            class="form-control" required>

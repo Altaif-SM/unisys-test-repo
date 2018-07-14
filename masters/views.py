@@ -786,8 +786,10 @@ def delete_development_program_master(request):
 def template_manage_partner_master(request):
     country_recs = CountryDetails.objects.all()
     partner_recs = PartnerDetails.objects.all()
+
+    user_recs = User.objects.filter(~Q(id=1))
     return render(request, 'template_partner_master.html',
-                  {'country_recs': country_recs, 'partner_recs': partner_recs})
+                  {'country_recs': country_recs, 'partner_recs': partner_recs, 'user_recs': user_recs})
 
 
 def save_manage_partner_master(request):
@@ -801,6 +803,7 @@ def save_manage_partner_master(request):
     office_contact = request.POST.get('office_contact')
 
     email = request.POST.get('email')
+    user = request.POST.get('user')
     address = request.POST.get('address')
     photo = request.POST.get('photo')
     pic = request.POST.get('pic')
@@ -813,7 +816,7 @@ def save_manage_partner_master(request):
                                                        person_two=person_two,
                                                        person_two_contact_number=person_two_contact,
                                                        office_contact_number=office_contact,
-                                                       email=email, single_address=address)
+                                                       email=email, single_address=address, user_id=user)
 
             try:
                 if pic:

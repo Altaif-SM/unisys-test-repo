@@ -41,27 +41,17 @@
 
 
             $(document).ready(function () {
-
-                {% comment %}$(document).on("change", "#partner_photo", function (e) {
-
-                    var selectedFile = this.files[0];
-                    selectedFile.convertToBase64(function (base64) {
-                        var converted_base64_image = (base64);
-                        $("#pic").val(converted_base64_image);
-                        {#alert($('#pic').val())#}
-                    })
-
-
+                $(document).on("change", ".doc", function (e) {
                     var files = !!this.files ? this.files : [];
                     if (!files.length || !window.FileReader) return;
-                    var fileExtension = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
+                    var fileExtension = ['pdf'];
                     if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
                         alert("Only formats are allowed : " + fileExtension.join(', '));
                         $(this).val('');
                         return false;
                     }
                 });
-            });{% endcomment %}
+            });
 
 
                 $('#sample_1').dataTable().fnDestroy();
@@ -119,7 +109,7 @@
                                 <label class="col-md-2 control-label">Wife Name:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter First Name" id="wife_name" name="wife_name"
-                                           value="{{ application_obj.wife_name }}" class="form-control">
+                                           value="{{ application_obj.wife_name|default:"" }}" class="form-control">
                                 </div>
                             </div>
 
@@ -141,7 +131,7 @@
                                 <label class="col-md-2 control-label">Income($):</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Income" id="wife_income"
-                                           value="{{ application_obj.wife_income }}" name="wife_income"
+                                           value="{{ application_obj.wife_income|default:"" }}" name="wife_income"
                                            class="form-control">
                                 </div>
                             </div>
@@ -150,8 +140,8 @@
                                 <label class="col-md-2 control-label">Pay Slip:</label>
                                 <div class="col-md-2">
                                     <input type="file" title="Select wife pay slip" id="wife_pay_slip"
-                                           value="{{ application_obj.wife_pay_slip }}" name="wife_pay_slip"
-                                           class="form-control">
+                                           value="{{ application_obj.wife_pay_slip|default:"" }}" name="wife_pay_slip"
+                                           class="form-control doc" >
                                 </div>
                             </div>
                         </div>
@@ -163,7 +153,7 @@
                                 <label class="col-md-2 control-label">E-mail:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter E-mail ID" id="wife_email" name="wife_email"
-                                           value="{{ application_obj.wife_email }}" class="form-control">
+                                           value="{{ application_obj.wife_email|default:"" }}" class="form-control">
                                 </div>
                             </div>
 
@@ -171,7 +161,7 @@
                                 <label class="col-md-2 control-label">Telephone (Home):</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Telephone number (Home)" id="wife_number"
-                                           value="{{ application_obj.wife_telephone_home }}" name="wife_telephone_home"
+                                           value="{{ application_obj.wife_telephone_home|default:"" }}" name="wife_telephone_home"
                                            class="form-control">
                                 </div>
                             </div>
@@ -184,7 +174,7 @@
                                 <label class="col-md-2 control-label">Occupation:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Occupation" id="wife_occupation"
-                                           value="{{ application_obj.wife_occupation }}" name="wife_occupation"
+                                           value="{{ application_obj.wife_occupation|default:"" }}" name="wife_occupation"
                                            class="form-control">
                                 </div>
                             </div>
@@ -194,7 +184,7 @@
                                 <div class="col-md-2">
                                     <select id='wife_nationality' title="Select Country" name="wife_nationality"
                                             class="form-control">
-                                        {% if application_obj %}
+                                        {% if application_obj.wife_nationality %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ application_obj.wife_nationality.id }}"
                                                     value="">{{ application_obj.wife_nationality.country_name|title }}</option>
@@ -229,7 +219,7 @@
                                 <label class="col-md-2 control-label">Father Name:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter father name" id="father_name" name="father_name"
-                                           value="{{ application_obj.father_name }}" class="form-control" required>
+                                           value="{{ application_obj.father_name|default:"" }}" class="form-control" required>
                                 </div>
                             </div>
 
@@ -252,7 +242,7 @@
                                 <label class="col-md-2 control-label">Income($):</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Income" id="father_income"
-                                           value="{{ application_obj.father_income }}" name="father_income"
+                                           value="{{ application_obj.father_income|default:"" }}" name="father_income"
                                            class="form-control">
                                 </div>
                             </div>
@@ -262,7 +252,7 @@
                                 <div class="col-md-2">
                                     <input type="file" title="Select father pay slip" id="father_pay_slip"
                                            value="{{ application_obj.father_pay_slip }}" name="father_pay_slip"
-                                           class="form-control">
+                                           class="form-control doc">
                                 </div>
                             </div>
                         </div>
@@ -274,7 +264,7 @@
                                 <label class="col-md-2 control-label">E-mail:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter E-mail ID" id="father_email" name="father_email"
-                                           value="{{ application_obj.father_email }}" class="form-control">
+                                           value="{{ application_obj.father_email|default:"" }}" class="form-control">
                                 </div>
                             </div>
 
@@ -282,7 +272,7 @@
                                 <label class="col-md-2 control-label">Telephone (Home):</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Telephone number (Home)" id="father_number"
-                                           value="{{ application_obj.father_telephone_home }}"
+                                           value="{{ application_obj.father_telephone_home|default:"" }}"
                                            name="father_telephone_home"
                                            class="form-control">
                                 </div>
@@ -296,7 +286,7 @@
                                 <label class="col-md-2 control-label">Occupation:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Occupation" id="father_occupation"
-                                           value="{{ application_obj.father_occupation }}" name="father_occupation"
+                                           value="{{ application_obj.father_occupation|default:"" }}" name="father_occupation"
                                            class="form-control" required>
                                 </div>
                             </div>
@@ -306,7 +296,7 @@
                                 <div class="col-md-2">
                                     <select id='father_nationality' title="Select Country" name="father_nationality"
                                             class="form-control" required>
-                                        {% if application_obj %}
+                                        {% if application_obj.father_nationality %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ application_obj.father_nationality.id }}"
                                                     value="">{{ application_obj.father_nationality.country_name|title }}</option>

@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from common.models import BaseModel
 from django.db.models import Q
-# from student.models import StudentDetails, ApplicationDetails
 
 
 # Create your models here.
@@ -132,6 +131,13 @@ class User(AbstractUser):
     @property
     def get_application_id(self):
         try:
-            return self.student_user_rel.get().student_applicant_rel.get().application_id
+            return self.student_user_rel.get().student_applicant_rel.get(year__active_year=True).application_id
+        except:
+            return ''
+
+    @property
+    def get_application(self):
+        try:
+            return self.student_user_rel.get().student_applicant_rel.get(year__active_year=True)
         except:
             return ''

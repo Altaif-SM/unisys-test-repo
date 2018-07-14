@@ -34,9 +34,25 @@
 
             $(document).ready(function () {
 
+                $(document).on("change", ".doc", function (e) {
+                    var files = !!this.files ? this.files : [];
+                    if (!files.length || !window.FileReader) return;
+                    var fileExtension = ['pdf'];
+                    if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                        alert("Only formats are allowed : " + fileExtension.join(', '));
+                        $(this).val('');
+                        return false;
+                    }
+                });
+
+
                 $('#save').click(function () {
-                    var count = $('.item').length;
+                    {#var count = $('.item').length;#}
+                    var count = $(".item:last").attr('id').split('_')[1];
                     $('#sibling_count').val(count);
+
+                        {#alert($(".item:last").attr('id').split('_')[1])#}
+{#                    return false;#}
                 })
 
                 {% if sibling_obj_rec %}
@@ -48,7 +64,7 @@
 
                 $(".add_row").click(function () {
                     count = count+1;
-                    var row = '<div class="row item" style="margin-top:15px"><div class=""><div class=""><div class="col-md-1"><a href="javascript:;" class="delete btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div><div class=""><label class="col-md-1 control-label">Sibling:</label><div class="col-md-2"><input type="text" title="Enter Sibling " id="sibling_' + count + '" name="sibling_' + count + '"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Age:</label><div class="col-md-2"><input type="text" title="Enter age" id="age_' + count + '"name="age_' + count + '"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Status:</label><div class="col-md-2"> <input type="text" title="Enter status" id="status_' + count + '" name="status_' + count + '" class="form-control"><input type="text" hidden id="sibling_id_' + count + '" name="sibling_id_' + count + '"></div></div></div>'
+                    var row = '<div class="row item" id="item_' + count + '" style="margin-top:15px"><div class=""><div class=""><div class="col-md-1"><a href="javascript:;" class="delete btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div><div class=""><label class="col-md-1 control-label">Sibling:</label><div class="col-md-2"><input type="text" title="Enter Sibling " id="sibling_' + count + '" name="sibling_' + count + '"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Age:</label><div class="col-md-2"><input type="text" title="Enter age" id="age_' + count + '"name="age_' + count + '"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Status:</label><div class="col-md-2"> <input type="text" title="Enter status" id="status_' + count + '" name="status_' + count + '" class="form-control"><input type="text" hidden id="sibling_id_' + count + '" name="sibling_id_' + count + '"></div></div></div>'
                     $(row).removeAttr().hide().insertAfter(".item:last").slideDown(300);
                     {#count++;#}
                 });
@@ -116,15 +132,22 @@
                                 <label class="col-md-2 control-label">Mother Name:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter First Name" id="mother_name" name="mother_name"
-                                           value="{{ application_obj.mother_name }}" class="form-control">
+                                           value="{{ application_obj.mother_name|default:"" }}" class="form-control">
                                 </div>
                             </div>
 
                             <div class="">
                                 <label class="col-md-2 control-label">DOB:</label>
                                 <div class="col-md-2">
-                                    <input type="date" title="Enter DOB" id="mother_dob" name="mother_dob"
+                                    {% if application_obj.mother_dob %}
+                                        <input type="date" title="Enter DOB" id="mother_dob" name="mother_dob"
                                            value="{{ application_obj.mother_dob|date:"Y-m-d" }}" class="form-control">
+                                    {% else %}
+                                        <input type="date" title="Enter DOB" id="mother_dob" name="mother_dob"
+                                          class="form-control">
+                                    {% endif %}
+
+
                                 </div>
                             </div>
                         </div>
@@ -137,9 +160,15 @@
                             <div class="">
                                 <label class="col-md-2 control-label">Income($):</label>
                                 <div class="col-md-2">
-                                    <input type="text" title="Enter Income" id="mother_income"
+                                    {% if application_obj.mother_income %}
+                                        <input type="text" title="Enter Income" id="mother_income"
                                            value="{{ application_obj.mother_income }}" name="mother_income"
                                            class="form-control">
+                                    {% else %}
+                                        <input type="text" title="Enter Income" id="mother_income" name="mother_income"
+                                           class="form-control">
+                                    {% endif %}
+
                                 </div>
                             </div>
 
@@ -148,7 +177,7 @@
                                 <div class="col-md-2">
                                     <input type="file" title="Select mother pay slip" id="mother_pay_slip"
                                            value="{{ application_obj.mother_pay_slip }}" name="mother_pay_slip"
-                                           class="form-control">
+                                           class="form-control doc">
                                 </div>
                             </div>
                         </div>
@@ -160,7 +189,7 @@
                                 <label class="col-md-2 control-label">E-mail:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter E-mail ID" id="mother_email" name="mother_email"
-                                           value="{{ application_obj.mother_email }}" class="form-control">
+                                           value="{{ application_obj.mother_email|default:"" }}" class="form-control">
                                 </div>
                             </div>
 
@@ -168,7 +197,7 @@
                                 <label class="col-md-2 control-label">Telephone (Home):</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Telephone number (Home)" id="mother_number"
-                                           value="{{ application_obj.mother_telephone_home }}"
+                                           value="{{ application_obj.mother_telephone_home|default:"" }}"
                                            name="mother_telephone_home"
                                            class="form-control">
                                 </div>
@@ -182,7 +211,7 @@
                                 <label class="col-md-2 control-label">Occupation:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Occupation" id="mother_occupation"
-                                           value="{{ application_obj.mother_occupation }}" name="mother_occupation"
+                                           value="{{ application_obj.mother_occupation|default:"" }}" name="mother_occupation"
                                            class="form-control">
                                 </div>
                             </div>
@@ -192,7 +221,7 @@
                                 <div class="col-md-2">
                                     <select id='country' title="Select Country" name="mother_nationality"
                                             class="form-control">
-                                        {% if application_obj %}
+                                        {% if application_obj.mother_nationality %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ application_obj.mother_nationality.id }}"
                                                     value="">{{ application_obj.mother_nationality.country_name|title }}</option>
@@ -226,7 +255,7 @@
 
                         {% if sibling_obj_rec %}
                             {% for sibling_obj in sibling_obj_rec %}
-                                <div class="row item">
+                                <div class="row item" id="item_1">
 
 
                                     <div class="">
@@ -244,7 +273,7 @@
                                         <label class="col-md-1 control-label">Sibling:</label>
                                         <div class="col-md-2">
                                             <input type="text" title="Enter Sibling "
-                                                   value="{{ sibling_obj.sibling_age }}" id="sibling_{{ forloop.counter }}" name="sibling_{{ forloop.counter }}"
+                                                   value="{{ sibling_obj.sibling_name }}" id="sibling_{{ forloop.counter }}" name="sibling_{{ forloop.counter }}"
                                                    class="form-control">
                                         </div>
                                     </div>
@@ -253,7 +282,7 @@
                                         <label class="col-md-1 control-label">Age:</label>
                                         <div class="col-md-2">
                                             <input type="text" title="Enter age" id="age_{{ forloop.counter }}"
-                                                   value="{{ sibling_obj.sibling_name }}" name="age_{{ forloop.counter }}"
+                                                   value="{{ sibling_obj.sibling_age  }}" name="age_{{ forloop.counter }}"
                                                    class="form-control">
                                         </div>
                                     </div>
@@ -273,9 +302,9 @@
                                 <br>
                             {% endfor %}
                         {% else %}
-                            <div class="row item">
+                            <div class="row item" id="item_1">
 
-                                <input id="sibling_count" name="sibling_count" hidden>
+{#                                <input id="sibling_count" name="sibling_count" hidden>#}
                                 <div class="">
                                     <div class="col-md-1">
                                         <a href="javascript:;" id="add" class="btn btn-icon-only green add_row"
