@@ -39,74 +39,49 @@
         <div class="portlet-body">
 
 
-            <div class="tiles">
-
-
-                {% if 'accounts.can_view_year_master' in perms %}
-                    <div class="tile double selected bg-blue" style="height: 150px !important;width: 410px !important;">
-                        <a href="#" class="nav-link nav-toggle">
-                            <div class="tile-body">
-                                <i class="fa glyphicon glyphicon-education"></i>
+            <div class="row">
+                <div class="col-md-6 col-sm-6">
+                    <!-- BEGIN PORTLET-->
+                    <div class="portlet light ">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-bar-chart font-dark hide"></i>
+                                <span class="caption-subject font-dark bold uppercase">Statistics </span>
+                                <span class="caption-helper">weekly stats...</span>
                             </div>
-                            <div class="tile-object">
-                                <div class="name">
-                                    <h4>Year Master</h4>
-                                </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div id="site_statistics_loading">
+                                <img src="../assets/global/img/loading.gif" alt="loading"/></div>
+                            <div id="site_statistics_content" class="display-none">
+                                <div id="site_statistics" class="chart"></div>
                             </div>
-                        </a>
+                        </div>
                     </div>
-                {% endif %}
-
-{#                    <div class="tile bg-yellow-lemon" style="height: 150px !important;width: 410px !important;">#}
-{#                        <a href="#" class="nav-link nav-toggle">#}
-{#                            <div class="tile-body">#}
-{#                                <i class="icon-credit-card"></i>#}
-{#                            </div>#}
-{#                            <div class="tile-object">#}
-{#                                <div class="name"><h4>ID Cards</h4></div>#}
-{#                            </div>#}
-{#                        </a>#}
-{#                    </div>#}
-{##}
-{#                    <div class="tile bg-blue-steel" style="height: 150px !important;width: 415px !important;">#}
-{#                        <a href="#">#}
-{#                            <div class="tile-body">#}
-{#                                <i class="icon-calendar"></i>#}
-{#                            </div>#}
-{#                            <div class="tile-object">#}
-{#                                <div class="name"><h4>Attendance</h4></div>#}
-{#                            </div>#}
-{#                        </a>#}
-{#                    </div>#}
-{##}
-{#                    <div class="tile bg-red" style="height: 150px !important;width: 50% !important;">#}
-{#                        <a href="#">#}
-{#                            <div class="tile-body">#}
-{#                                <i class="icon-book-open"></i>#}
-{#                            </div>#}
-{#                            <div class="tile-object">#}
-{#                                <div class="name">#}
-{#                                    <h4>Assessment Data & Reporting</h4>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </a>#}
-{#                    </div>#}
-{##}
-{#                    <div class="tile bg-red-sunglo" style="height: 150px !important;width: 415px !important;">#}
-{#                        <a href="#">#}
-{#                            <div class="tile-body">#}
-{#                                <i class="glyphicon glyphicon-refresh"></i>#}
-{#                            </div>#}
-{#                            <div class="tile-object">#}
-{#                                <div class="name">#}
-{#                                    <h4>Approve Student/Parent Update Request</h4>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </a>#}
-{#                    </div>#}
-
+                    <!-- END PORTLET-->
+                </div>
 
             </div>
+
+
+            <div class="row">
+                <div class="col-md-6 col-sm-6">
+                    <div class="portlet light ">
+                        <div class="portlet-body">
+                            <div id="dashboard_amchart_4" class="CSSAnimationChart"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-sm-6">
+                    <div class="portlet light ">
+                        <div class="portlet-body">
+                            <div id="dashboard_amchart_5" class="CSSAnimationChart"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
         </div>
 
