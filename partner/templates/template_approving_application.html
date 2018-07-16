@@ -1,0 +1,230 @@
+{% extends "template_base_page.html" %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+
+
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+            $(document).ready(function () {
+
+                $('#save').click(function () {
+                    var array = []
+
+                    $('.item').each(function (e) {
+                        var id = $(this).attr('id');
+                        var flags = {}
+
+                        $('#' + id + ' .app').each(function () {
+                            flags[$(this).attr('id')] = $(this).is(':checked')
+                            {#alert($(this).is(':checked'));#}
+                        })
+                        {#alert($('#'+id+' .application_id').val())#}
+
+                        var payload = {
+                            'application_id': $('#' + id + ' .application_id').val(),
+                            'flags': flags
+                        }
+                        array.push(payload)
+                    })
+
+                    $('#data_value').val(JSON.stringify(array));
+
+                    {#console.log(JSON.stringify(array));#}
+                    {#return false;#}
+                })
+            });
+
+
+            $('#sample_1').dataTable().fnDestroy();
+            $('#sample_1').dataTable({
+                "aoColumnDefs": [
+                    {'bSortable': false}
+                ]
+            });
+        }
+
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'accounts:home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span> Approving Applications </span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-settings font-red"></i>
+            <span class="caption-subject font-red sbold uppercase"> Approving Applications</span>
+        </div>
+    </div>
+
+    <div class="portlet-body">
+        <div class="form-body">
+            <div class="row col-md-offset-3">
+                <form method="post" action="{% url 'partner:filter_application_status' %}" id="form_sample_1">
+                    {% csrf_token %}
+                    <div class="col-md-4">
+                        <div class="">
+                            <select autocomplete="off" class="form-control" data-live-search="true"
+                                    id="application_status" name="application_status" required="required">
+                                {% if application_status %}
+                                    <option  style="display: none"  value="{{ application_status }}" selected="selected">{{ application_status }}</option>
+                                    {% else %}
+                                    <option value="" style="display: none" selected="selected">Please Select</option>
+                                {% endif %}
+
+                                <option value="First Interview">First Interview</option>
+                                <option value="First Interview attended">First Interview attended</option>
+                                <option value="First Interview approval">First Interview approval</option>
+                                <option value="Psychometric Test">Psychometric Test</option>
+                                <option value="Second Interview attended">Second Interview attended</option>
+                                <option value="Second Interview approval">Second Interview approval</option>
+                                <option value="Admin approval">Admin approval</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <button type="submit" class="btn blue btn-block" id="go">Filter
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="form-body">
+                <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data"
+                      action="{% url 'partner:change_application_status' %}">
+                    {% csrf_token %}
+
+                    <div class="row">
+                        <input hidden id="data_value" name="data_value">
+                        <div class="">
+                            <table class="table table-striped table-hover table-bordered" id="sample_1">
+                                <thead>
+                                <tr>
+                                    <th style="display: none"></th>
+                                    <th>Student Name</th>
+                                    <th>1st</th>
+                                    <th>1st Interview</th>
+                                    <th>1st Interview Approval</th>
+                                    <th>Test</th>
+                                    <th>2nd Interview</th>
+                                    <th>2nd Interview approval</th>
+                                    <th>Admin</th>
+                                </tr>
+                                </thead>
+
+                                <tbody id="tbody">
+                                {% for rec in applicant_recs %}
+                                    <tr id="item{{ forloop.counter }}" class="item">
+                                        <td style="display: none"><input id="application_id" class="application_id"
+                                                                         value="{{ rec.id }}"></td>
+                                        <td>
+                                            <text>{{ rec.first_name|title }} {{ rec.last_name|title }}</text>
+                                        </td>
+
+                                        <td>
+                                            <input class="app" type="checkbox" name="first" id="id_first"
+                                                   {% if rec.first_interview == True %}checked{% endif %}>
+                                        </td>
+
+                                        <td>
+                                            <input class="app" type="checkbox" name="first_interview_attend"
+                                                   {% if rec.first_interview_attend == True %}checked{% endif %}
+                                                   id="id_first_interview_attend">
+                                        </td>
+
+                                        <td>
+                                            <input class="app" type="checkbox" name="first_interview_approval"
+                                                   {% if rec.first_interview_approval == True %}checked{% endif %}
+                                                   id="id_first_interview_approval">
+                                        </td>
+
+                                        <td>
+                                            <input class="app" type="checkbox" name="id_test" id="id_test"
+                                                   {% if rec.psychometric_test == True %}checked{% endif %}>
+                                        </td>
+
+                                        <td>
+                                            <input class="app" type="checkbox" name="second_interview_attend"
+                                                   {% if rec.second_interview_attend == True %}checked{% endif %}
+                                                   id="id_second_interview_attend">
+                                        </td>
+
+                                        <td>
+                                            <input class="app" type="checkbox" name="second_interview_approval"
+                                                   {% if rec.second_interview_approval == True %}checked{% endif %}
+                                                   id="id_second_interview_approval">
+                                        </td>
+
+                                        <td>
+                                            <input class="app" type="checkbox" name="admin" id="id_admin"
+                                                   {% if rec.admin_approval == True %}checked{% endif %}
+                                            {% if not user.is_super_admin%} disabled {% endif %}>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="">
+                            <div class="col-md-offset-8">
+                                <button type="submit" class="btn green" id="save" style="">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -124,6 +124,14 @@ class ApplicationDetails(BaseModel):
     student = models.ForeignKey(StudentDetails, blank=True, null=True, related_name='student_applicant_rel',
                                 on_delete=models.PROTECT)
 
+    first_interview = models.BooleanField(default=False)
+    first_interview_attend = models.BooleanField(default=False)
+    first_interview_approval = models.BooleanField(default=False)
+    psychometric_test = models.BooleanField(default=False)
+    second_interview_attend = models.BooleanField(default=False)
+    second_interview_approval = models.BooleanField(default=False)
+    admin_approval = models.BooleanField(default=False)
+
     def __str__(self):
         return self.first_name
 
@@ -236,7 +244,8 @@ class ScholarshipSelectionDetails(BaseModel):
     # course_applied = models.CharField(max_length=255, blank=True, null=True)
     # university = models.CharField(max_length=255, blank=True, null=True)
 
-    university = models.ForeignKey('masters.UniversityDetails',blank=True, null=True, related_name='university_scholarship_rel',
+    university = models.ForeignKey('masters.UniversityDetails', blank=True, null=True,
+                                   related_name='university_scholarship_rel',
                                    on_delete=models.PROTECT)
 
     admission_letter_document = models.FileField(upload_to=content_file_name_report)
