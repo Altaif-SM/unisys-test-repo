@@ -159,6 +159,7 @@ class PartnerDetails(BaseModel):
         permissions = (
             ('can_view_applicant_details', 'can view applicant details'),
             ('can_view_approving_application', 'can view approving application'),
+            ('can_view_progress_history', 'can view progress history'),
         )
 
     def __str__(self):

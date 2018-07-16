@@ -457,6 +457,18 @@ License: You must have a valid license purchased only from themeforest(the above
                         </li>
                     {% endif %}
 
+                    {% if 'masters.can_view_progress_history' in perms %}
+
+                    <li class="nav-item " id="acd_qli">
+                        <a href="{% url 'partner:template_student_progress_history' %}"
+                           class="nav-link nav-toggle">
+                            <i class="glyphicon glyphicon-list-alt"></i>
+                            <span class="title">Applications Progress History</span>
+                            <span class="selected"></span>
+                        </a>
+                    </li>
+                {% endif %}
+
 
                     {% if 'accounting.can_view_student_payment_voucher' in perms %}
                         <li class="nav-item start ">

@@ -27,6 +27,7 @@ class User(AbstractUser):
     SYSTEAM_ADMIN = 'System Admin'  # Group.objects.filter(Q(name__istartswith='System Admin') | Q(name__istartswith='system admin') | Q(name='System Admin'))[0]
     ADMIN = 'Admin'
     SUPER_ADMIN = 'Super Admin'
+    STUDENT = 'Student'
 
     first_name = models.CharField(max_length=256, blank=True, null=True)
     middle_name = models.CharField(max_length=256, blank=True, null=True)
@@ -99,8 +100,8 @@ class User(AbstractUser):
     def is_super_admin(self):
         return True if self.role.all().filter(name__in=[self.SUPER_ADMIN, self.ADMIN]).exists() else False
 
-    # def is_student(self):
-    #     return True if self.role.all().filter(name__in=[self.SYSTEAM_ADMIN, self.ADMIN]).exists() else False
+    def is_student(self):
+        return True if self.role.all().filter(name__in=[self.STUDENT]).exists() else False
 
     @property
     def get_user_permissions(self):

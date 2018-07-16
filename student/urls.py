@@ -7,6 +7,8 @@ from django.views.static import serve
 app_name = 'student'
 
 urlpatterns = [
+                  path('student_home/', views.student_home, name='student_home'),
+
                   path('applicant_personal_info/', views.applicant_personal_info, name='applicant_personal_info'),
                   path('save_update_applicant_personal_info/', views.save_update_applicant_personal_info,
                        name='save_update_applicant_personal_info'),

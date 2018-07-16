@@ -50,7 +50,7 @@
                     }
 
                     var url = '/masters/update_university/';
-                    update_university_info(url, university_id, university_name,country_id)
+                    update_university_info(url, university_id, university_name, country_id)
                 })
 
                 $(document).on("click", ".delete", function (e) {
@@ -79,7 +79,7 @@
                     });
                 }
 
-                function update_university_info(url, university_id, university_name,country_id) {
+                function update_university_info(url, university_id, university_name, country_id) {
                     $.ajax({
                         type: 'POST',
                         url: url,
@@ -171,27 +171,24 @@
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">University Name:
-
-                                </label>
-                                <div class="col-md-3">
-                                    <input type="text" name="university_name" class="form-control" required>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-2 control-label">Country:
-
-                                </label>
+                                <label class="col-md-2 control-label">Country:</label>
                                 <div class="col-md-3">
                                     <select id='country' name="country" class="form-control" required>
                                         <option style="display:none" selected="selected" id=""
-                                                value="">Please Select </option>
+                                                value="">Please Select
+                                        </option>
 
                                         {% for rec in country_recs %}
                                             <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
                                         {% endfor %}
                                     </select>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-2 control-label">University Name:</label>
+                                <div class="col-md-3">
+                                    <input type="text" name="university_name" class="form-control" required>
                                 </div>
                             </div>
                         </div>
@@ -237,13 +234,14 @@
 
                             <td>
                                 <text hidden>{{ rec.country.country_name|title }}</text>
-                                <select id='country{{ forloop.counter }}' name="country_name{{ forloop.counter }}" class="form-control country" disabled required>
-                                        <option style="display:none" selected="selected" id=""
-                                                value="{{ rec.country.id }}">{{ rec.country.country_name|title }} </option>
-                                        {% for rec in country_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
-                                        {% endfor %}
-                                    </select></td>
+                                <select id='country{{ forloop.counter }}' name="country_name{{ forloop.counter }}"
+                                        class="form-control country" disabled required>
+                                    <option style="display:none" selected="selected" id=""
+                                            value="{{ rec.country.id }}">{{ rec.country.country_name|title }} </option>
+                                    {% for rec in country_recs %}
+                                        <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
+                                    {% endfor %}
+                                </select></td>
                             <td>
                                 <span type="button" name="updt" id="update{{ forloop.counter }}"
                                       class=" update btn green glyphicon glyphicon-ok" style="display:none;">

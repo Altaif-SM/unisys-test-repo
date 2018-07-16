@@ -8,6 +8,21 @@ from common.utils import get_application_id
 
 # Create your views here.
 
+def student_home(request):
+    application_history_obj = ''
+
+    try:
+        if ApplicationDetails.objects.filter(application_id=request.user.get_application_id,
+                                             is_submitted=True).exists():
+            application_history_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id,
+                                                                     is_submitted=True).applicant_history_rel.all()
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+
+    return render(request, 'student_home.html',
+                  {'application_history_obj': application_history_obj})
+
+
 def applicant_personal_info(request):
     country_recs = CountryDetails.objects.all()
     religion_recs = ReligionDetails.objects.all()
@@ -308,14 +323,19 @@ def applicant_academic_english_qualification(request):
     qualification_obj = ''
     english_obj = ''
 
-    if not request.user.get_application.is_submitted:
-        # application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id,
-        #                                           is_submitted=False)
-        if AcademicQualificationDetails.objects.filter(applicant_id=request.user.get_application).exists():
-            qualification_obj = AcademicQualificationDetails.objects.get(applicant_id=request.user.get_application)
+    try:
+        if request.user.get_application:
+            if not request.user.get_application.is_submitted:
+                # application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id,
+                #                                           is_submitted=False)
+                if AcademicQualificationDetails.objects.filter(applicant_id=request.user.get_application).exists():
+                    qualification_obj = AcademicQualificationDetails.objects.get(applicant_id=request.user.get_application)
 
-        if EnglishQualificationDetails.objects.filter(applicant_id=request.user.get_application).exists():
-            english_obj = EnglishQualificationDetails.objects.get(applicant_id=request.user.get_application)
+                if EnglishQualificationDetails.objects.filter(applicant_id=request.user.get_application).exists():
+                    english_obj = EnglishQualificationDetails.objects.get(applicant_id=request.user.get_application)
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+        return redirect('/student/applicant_personal_info/')
 
     return render(request, 'applicant_academic_english_qualification.html',
                   {'year_recs': year_recs, 'qualification_obj': qualification_obj, 'english_obj': english_obj})
@@ -501,14 +521,19 @@ def applicant_curriculum_experience_info(request):
     year_recs = YearDetails.objects.all()
     curriculum_obj = ''
     experience_obj = ''
+    try:
+        if request.user.get_application:
+            if not request.user.get_application.is_submitted:
+                # application_obj = ApplicationDetails.objects.get(student=student, is_submitted=False)
+                if CurriculumDetails.objects.filter(applicant_id=request.user.get_application).exists():
+                    curriculum_obj = CurriculumDetails.objects.get(applicant_id=request.user.get_application)
 
-    if not request.user.get_application.is_submitted:
-        # application_obj = ApplicationDetails.objects.get(student=student, is_submitted=False)
-        if CurriculumDetails.objects.filter(applicant_id=request.user.get_application).exists():
-            curriculum_obj = CurriculumDetails.objects.get(applicant_id=request.user.get_application)
+                if ExperienceDetails.objects.filter(applicant_id=request.user.get_application).exists():
+                    experience_obj = ExperienceDetails.objects.get(applicant_id=request.user.get_application)
 
-        if ExperienceDetails.objects.filter(applicant_id=request.user.get_application).exists():
-            experience_obj = ExperienceDetails.objects.get(applicant_id=request.user.get_application)
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+        return redirect('/student/applicant_personal_info/')
     return render(request, 'applicant_curriculum_experience_info.html',
                   {'year_recs': year_recs, 'experience_obj': experience_obj, 'curriculum_obj': curriculum_obj})
 
@@ -693,14 +718,16 @@ def applicant_scholarship_about_yourself_info(request):
     scholarship_obj = ''
     about_obj = ''
 
-    # student = StudentDetails.objects.filter(user=request.user)[0]
-    if not request.user.get_application.is_submitted:
-        # application_obj = ApplicationDetails.objects.get(student=student, is_submitted=False)
-        if ScholarshipSelectionDetails.objects.filter(applicant_id=request.user.get_application).exists():
-            scholarship_obj = ScholarshipSelectionDetails.objects.get(applicant_id=request.user.get_application)
+    try:
+        if not request.user.get_application.is_submitted:
+            if request.user.get_application:
+                if ScholarshipSelectionDetails.objects.filter(applicant_id=request.user.get_application).exists():
+                    scholarship_obj = ScholarshipSelectionDetails.objects.get(applicant_id=request.user.get_application)
 
-        if ApplicantAboutDetails.objects.filter(applicant_id=request.user.get_application).exists():
-            about_obj = ApplicantAboutDetails.objects.get(applicant_id=request.user.get_application)
+                if ApplicantAboutDetails.objects.filter(applicant_id=request.user.get_application).exists():
+                    about_obj = ApplicantAboutDetails.objects.get(applicant_id=request.user.get_application)
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
     return render(request, 'applicant_scholarship_about_yourself_info.html',
                   {'scholarship_recs': scholarship_recs, 'scholarship_obj': scholarship_obj, 'about_obj': about_obj,
                    'university_obj': university_obj, 'degree_obj': degree_obj})
@@ -783,17 +810,22 @@ def save_update_applicant_scholarship_about_yourself_info(request):
 
 
 def my_application(request):
-    path = str(settings.MEDIA_URL) + str('reports/Donors.pdf')
+    # path = str(settings.MEDIA_URL) + str('reports/Donors.pdf')
     # path =str('/home/redbytes/scholarship_proj/scholarship_mgmt/media/reports/Donors.pdf')
-    return render(request, 'my_application.html', {'path': path})
+    return render(request, 'my_application.html')
 
 
 def submit_application(request):
-    ApplicationDetails.objects.filter(application_id=request.user.get_application_id).update(is_submitted=True)
-    ApplicationHistoryDetails.objects.create(application_id=request.user.get_application_id,
-                                             status='Application Submitted',
-                                             remark='Your is submitted and your institution will be notified on further updates regarding your applications.')
-    return render(request, 'student_home.html')
+
+    try:
+        ApplicationDetails.objects.filter(application_id=request.user.get_application_id).update(is_submitted=True)
+        ApplicationHistoryDetails.objects.create(applicant_id=request.user.get_application,
+                                                 status='Application Submitted',
+                                                 remark='Your application is submitted and your institution will be notified on further updates regarding your applications.')
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+    return redirect('/student/student_home/')
 
 # import os
 # from django.conf import settings

@@ -89,7 +89,7 @@
             </li>
 
             <li>
-                <span> Applications Progress History </span>
+                <span> Applicant Progress History </span>
             </li>
         </ul>
     </div>
@@ -105,45 +105,42 @@
     <div class="portlet-title">
         <div class="caption">
             <i class="icon-settings font-red"></i>
-            <span class="caption-subject font-red sbold uppercase">Applications Progress History</span>
+            <span class="caption-subject font-red sbold uppercase">Applicant Progress History</span>
         </div>
     </div>
 
     <div class="portlet-body">
         <div class="form-body">
             <div class="row col-md-offset-3">
-                {% comment %}<form method="post" action="{% url 'partner:filter_application_status' %}" id="form_sample_1">
+                <form method="post" action="{% url 'partner:filter_application_history' %}" id="form_sample_1">
                     {% csrf_token %}
                     <div class="col-md-4">
                         <div class="">
                             <select autocomplete="off" class="form-control" data-live-search="true"
-                                    id="application_status" name="application_status" required="required">
-                                {% if application_status %}
-                                    <option  style="display: none"  value="{{ application_status }}" selected="selected">{{ application_status }}</option>
-                                    {% else %}
+                                    id="id_application" name="application" required="required">
+                                {% if application_obj %}
+                                    <option style="display: none" value="{{ rec.id }}"
+                                            selected="selected">{{ application_obj.first_name }} {{ application_obj.last_name }}</option>
+                                {% else %}
                                     <option value="" style="display: none" selected="selected">Please Select</option>
                                 {% endif %}
 
-                                <option value="First Interview">First Interview</option>
-                                <option value="First Interview attended">First Interview attended</option>
-                                <option value="First Interview approval">First Interview approval</option>
-                                <option value="Psychometric Test">Psychometric Test</option>
-                                <option value="Second Interview attended">Second Interview attended</option>
-                                <option value="Second Interview approval">Second Interview approval</option>
-                                <option value="Admin approval">Admin approval</option>
+                                {% for rec in applicant_recs %}
+                                    <option value="{{ rec.id }}">{{ rec.first_name }} {{ rec.last_name }}</option>
+                                {% endfor %}
                             </select>
                         </div>
                     </div>
 
                     <div class="col-md-2">
-                        <button type="submit" class="btn blue btn-block" id="go">Filter
+                        <button type="submit" class="btn blue btn-block" id="go">Search
                         </button>
                     </div>
-                </form>{% endcomment %}
+                </form>
             </div>
             <div class="form-body">
                 <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data"
-                      {% comment %}action="{% url 'partner:change_application_status' %}"{% endcomment %}>
+                        {% comment %}action="{% url 'partner:change_application_status' %}"{% endcomment %}>
                     {% csrf_token %}
 
                     <div class="row">
@@ -160,20 +157,21 @@
                                 </thead>
 
                                 <tbody id="tbody">
-                                {% for rec in application_history_obj %}
+                                {% for rec in application_history_recs %}
                                     <tr id="item{{ forloop.counter }}" class="item">
-                                        <td style="display: none"><input id="application_id" class="application_id" value="{{ rec.id }}"></td>
+                                        <td style="display: none"><input id="application_id" class="application_id"
+                                                                         value="{{ rec.id }}"></td>
 
                                         <td>
                                             <text>{{ rec.last_updated|date:"d-m-Y" }}</text>
                                         </td>
 
                                         <td>
-                                            <text>{{ rec.status}}</text>
+                                            <text>{{ rec.status }}</text>
                                         </td>
 
                                         <td>
-                                            <text>{{ rec.remark}}</text>
+                                            <text>{{ rec.remark }}</text>
                                         </td>
                                     </tr>
                                 {% endfor %}

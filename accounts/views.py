@@ -63,6 +63,10 @@ def user_signin(request):
 
         if user:
             login(request, user)
+
+            if user.is_student():
+                return redirect('/student/student_home/')
+
             return redirect('/accounts/home/')
         else:
             messages.success(request, "Enter Valid User Name and Password.")
