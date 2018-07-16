@@ -147,6 +147,14 @@ class ApplicationDetails(BaseModel):
         return res
 
 
+
+
+class ApplicationHistoryDetails(BaseModel):
+    status = models.CharField(max_length=255, blank=True, null=True)
+    remark = models.CharField(max_length=1000, blank=True, null=True)
+    applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_history_rel',
+                                     on_delete=models.PROTECT)
+
 class SiblingDetails(BaseModel):
     sibling_name = models.CharField(max_length=255, blank=True, null=True)
     sibling_age = models.IntegerField(blank=True, null=True)

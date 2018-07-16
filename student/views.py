@@ -789,10 +789,10 @@ def my_application(request):
 
 
 def submit_application(request):
-    # application_id = request.user.get_application_id
-
     ApplicationDetails.objects.filter(application_id=request.user.get_application_id).update(is_submitted=True)
-
+    ApplicationHistoryDetails.objects.create(application_id=request.user.get_application_id,
+                                             status='Application Submitted',
+                                             remark='Your is submitted and your institution will be notified on further updates regarding your applications.')
     return render(request, 'student_home.html')
 
 # import os

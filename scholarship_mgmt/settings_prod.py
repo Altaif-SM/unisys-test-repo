@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'common.apps.CommonConfig',
     'masters.apps.MastersConfig',
     'student.apps.StudentConfig',
+    'partner.apps.PartnerConfig',
+    'accounting.apps.AccountingConfig',
 ]
 
 MIDDLEWARE = [

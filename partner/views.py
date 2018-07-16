@@ -92,12 +92,20 @@ def change_application_status(request):
             if application['flags']['id_first']:
                 application_obj.first_interview = True
                 application_obj.save()
+
+                ApplicationHistoryDetails.objects.create(application_id=application['application_id'],
+                                                         status='First Interview Call',
+                                                         remark='You are requested to come down for the first interview.')
             else:
                 continue
 
             if application['flags']['id_first'] and application['flags']['id_first_interview_attend']:
                 application_obj.first_interview_attend = True
                 application_obj.save()
+
+                ApplicationHistoryDetails.objects.create(application_id=application['application_id'],
+                                                         status='First Interview Attended',
+                                                         remark='You have attended first interview. Please wait for the further updates.')
             else:
                 continue
 
@@ -106,6 +114,10 @@ def change_application_status(request):
                         'id_first_interview_approval']:
                 application_obj.first_interview_approval = True
                 application_obj.save()
+
+                ApplicationHistoryDetails.objects.create(application_id=application['application_id'],
+                                                         status='First Interview Approval',
+                                                         remark='You have cleared your first interview. Please wait for the further updates.')
             else:
                 continue
 
@@ -114,6 +126,10 @@ def change_application_status(request):
                         'id_first_interview_approval'] and application['flags']['id_test']:
                 application_obj.psychometric_test = True
                 application_obj.save()
+
+                ApplicationHistoryDetails.objects.create(application_id=application['application_id'],
+                                                         status='Psychometric Test',
+                                                         remark='You have submitted Psychometric test result. Please wait for the further updates.')
             else:
                 continue
 
@@ -123,6 +139,10 @@ def change_application_status(request):
                 'id_second_interview_attend']:
                 application_obj.second_interview_attend = True
                 application_obj.save()
+
+                ApplicationHistoryDetails.objects.create(application_id=application['application_id'],
+                                                         status='Second Interview Attended',
+                                                         remark='You have attended second interview. Please wait for the further updates.')
             else:
                 continue
 
@@ -132,6 +152,10 @@ def change_application_status(request):
                 'id_second_interview_attend'] and application['flags']['id_second_interview_approval']:
                 application_obj.second_interview_approval = True
                 application_obj.save()
+
+                ApplicationHistoryDetails.objects.create(application_id=application['application_id'],
+                                                         status='Second Interview Approval',
+                                                         remark='You have cleared your second interview. Please wait for the further updates.')
             else:
                 continue
 
@@ -143,8 +167,14 @@ def change_application_status(request):
                         application['flags']['id_admin']:
                     application_obj.admin_approval = True
                     application_obj.save()
+
+                    ApplicationHistoryDetails.objects.create(application_id=application['application_id'],
+                                                             status='Admin Approval',
+                                                             remark='Your application have been approved by the admin. Please wait for the further updates.')
                 else:
                     continue
+
+
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
 
