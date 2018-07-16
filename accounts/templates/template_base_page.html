@@ -511,6 +511,64 @@ License: You must have a valid license purchased only from themeforest(the above
                     {% endif %}
 
 
+                    {% if 'donor.can_view_scholarship' in perms %}
+                        <li class="nav-item start ">
+                            <a href="javascript:;" class="nav-link nav-toggle">
+                                <i class="fa fa-briefcase"></i>
+                                <span class="title">Scholarship</span>
+                                <span class="arrow"></span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li class="nav-item ">
+                                    <a href="{% url 'donor:template_student_selection' %}" class="nav-link ">
+                                        Student Selection </a>
+                                </li>
+                            </ul>
+                        </li>
+                    {% endif %}
+
+                    {% if 'donor.can_view_reports' in perms %}
+                        <li class="nav-item start ">
+                            <a href="javascript:;" class="nav-link nav-toggle">
+                                <i class="fa fa-briefcase"></i>
+                                <span class="title">Report</span>
+                                <span class="arrow"></span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li class="nav-item ">
+                                    <a href="{% url 'donor:template_student_reports' %}" class="nav-link ">
+                                        Student Report </a>
+                                </li>
+                                <li class="nav-item ">
+                                    <a href="{% url 'donor:template_student_selection' %}" class="nav-link ">
+                                        App Progress History </a>
+                                </li>
+                            </ul>
+                        </li>
+                    {% endif %}
+
+                    {% if 'donor.can_view_payments_reports' in perms %}
+                        <li class="nav-item start ">
+                            <a href="javascript:;" class="nav-link nav-toggle">
+                                <i class="fa fa-briefcase"></i>
+                                <span class="title">Payment Report</span>
+                                <span class="arrow"></span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li class="nav-item ">
+                                    <a href="{% url 'donor:template_student_selection' %}" class="nav-link ">
+                                        My Payments </a>
+                                </li>
+                                <li class="nav-item ">
+                                    <a href="{% url 'donor:template_student_selection' %}" class="nav-link ">
+                                        Student Receipt </a>
+                                </li>
+                            </ul>
+                        </li>
+                    {% endif %}
+
+
+
                 </ul>
                 <!-- END SIDEBAR MENU -->
             </div>

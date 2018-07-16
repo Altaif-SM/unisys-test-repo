@@ -146,10 +146,10 @@ class ApplicationDetails(BaseModel):
         res = {
             'id': self.id,
             'first_name': self.first_name,
-            'birth_date': self.birth_date,
+            'birth_date': self.birth_date.isoformat(),
             'gender': self.gender,
-            'address': self.address,
-            'get_all_name': self.student.get_all_name(),
+            'address': self.address.to_dict(),
+            'get_all_name': self.student.user.get_all_name(),
         }
         return res
 

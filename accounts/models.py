@@ -28,6 +28,10 @@ class User(AbstractUser):
     ADMIN = 'Admin'
     SUPER_ADMIN = 'Super Admin'
     STUDENT = 'Student'
+    DONOR = 'Donor'
+    PARTNER = 'Partner'
+    ACCOUNTANT = 'Accountant'
+    PARENT = 'Parent'
 
     first_name = models.CharField(max_length=256, blank=True, null=True)
     middle_name = models.CharField(max_length=256, blank=True, null=True)
@@ -102,6 +106,9 @@ class User(AbstractUser):
 
     def is_student(self):
         return True if self.role.all().filter(name__in=[self.STUDENT]).exists() else False
+
+    def is_donor(self):
+        return True if self.role.all().filter(name__in=[self.DONOR]).exists() else False
 
     @property
     def get_user_permissions(self):

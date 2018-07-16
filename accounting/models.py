@@ -1,7 +1,8 @@
 from django.db import models
 from common.models import BaseModel
-from masters.models import SemesterDetails, DonorDetails
+from masters.models import SemesterDetails
 from student.models import StudentDetails
+from donor.models import DonorDetails
 
 # Create your models here.
 class StudentPaymentVoucher(BaseModel):

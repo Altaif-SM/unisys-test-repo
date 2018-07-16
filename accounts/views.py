@@ -67,6 +67,9 @@ def user_signin(request):
             if user.is_student():
                 return redirect('/student/student_home/')
 
+            if user.is_donor():
+                return redirect('/donor/template_donor_dashboard/')
+
             return redirect('/accounts/home/')
         else:
             messages.success(request, "Enter Valid User Name and Password.")
