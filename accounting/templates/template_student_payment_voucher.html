@@ -13,88 +13,64 @@
         window.onload = function () {
             $(document).ready(function () {
 
-                $(document).on("click", ".update", function (e) {
-                    var parent_id = $(this).closest('tr').attr('id');
-                    var donor_id = $('#' + parent_id + ' #donor_id').val();
-                    var organisation = $('#' + parent_id + ' .organisation').val();
-                    var country = $('#' + parent_id + ' .country').val();
-
-                    var person = $('#' + parent_id + ' .person').val();
-                    var person_contact_number = $('#' + parent_id + ' .person_contact_number').val();
-
-                    var address = $('#' + parent_id + ' .address').val();
-                    var email = $('#' + parent_id + ' .email').val();
-
-                    var url = '/masters/update_manage_donor_master/';
-                    update_manage_donor_info(url, donor_id, organisation, country, person, person_contact_number, email, address)
-                })
-
-                $(document).on("click", ".delete", function (e) {
-
-                    var parent_id = $(this).closest('tr').attr('id');
-                    var donor_id = $('#' + parent_id + ' #donor_id').val();
-
-                    var url = '/masters/delete_manage_donor_master/';
-                    delete_manage_donor_info(url, donor_id)
-                })
-
-                function delete_manage_donor_info(url, donor_id) {
-                    $.ajax({
-                        type: 'POST',
-                        url: url,
-                        data: {
-                            donor_id: donor_id,
-                            csrfmiddlewaretoken: '{{ csrf_token }}',
-                        },
-                        success: function (data) {
-                            location.reload(true)
-                        },
-                        error: function (xhr, msg, err) {
-                            alert(xhr.responseJSON.error);
-                        }
-                    });
-                }
-
-                function update_manage_donor_info(url, donor_id, organisation, country, person, person_contact_number, email, address) {
-                    $.ajax({
-                        type: 'POST',
-                        url: url,
-                        data: {
-                            donor_id: donor_id,
-                            organisation: organisation,
-                            country: country,
-                            person: person,
-                            person_contact_number: person_contact_number,
-                            email: email,
-                            address: address,
-                            csrfmiddlewaretoken: '{{ csrf_token }}',
-                        },
-                        success: function (data) {
-                            location.reload(true)
-                        },
-                        error: function (xhr, msg, err) {
-                            alert(xhr.responseJSON.error);
-                        }
-                    });
-                }
-
-
-                $(document).on("click", ".edit", function (e) {
-                    var parent_id = $(this).closest('tr').attr('id');
-                    var id = $(this).attr('id');
-                    var i = id.split("edit")[1]
-
-                    $(".data").prop("disabled", true);
-                    $(".edit").show();
-                    $(".update").hide();
-
-                    $("#update" + i).show();
-                    $("#edit" + i).hide();
-
-
-                    $("#" + parent_id + " .data").prop("disabled", false);
-
+                $(document).on("click", "#save", function (e) {
+                    $('#form_sample_1').submit();
                 });
+
+
+                $(document).on("change", "#id_student", function (e) {
+                    var student = $(this).val();
+                    var url = '/accounting/get_payment_voucher_data_by_student/';
+                    get_voucher_data(url, student);
+                });
+
+
+                function get_voucher_data(url, student) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            student: student,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+                            alert("data"+JSON.stringify(data));
+
+                            if (data['semester'] != null) {
+                                $('#id_semester').val(data['semester']['semester_name']);
+                                $('#id_semester_id').val(data['semester']['id']);
+                            }
+
+
+                            $('#id_scholarship_fee').val(data['scholarship_fee']);
+                            $('#id_balance').val(data['balance']);
+
+                            if (data['country'] != null) {
+                                $('#id_country').val(data['country']['country_name']);
+                                $('#id_country_id').val(data['country']['id']);
+                            }
+
+                            if (data['university'] != null) {
+                                $('#id_university').val(data['university']['university_name']);
+                                $('#id_university_id').val(data['university']['id']);
+                            }
+
+                            if (data['scholarship'] != null) {
+                                $('#id_scholarship').val(data['scholarship']['scholarship_name']);
+                                $('#id_scholarship_id').val(data['scholarship']['id']);
+                            }
+
+                            if (data['donor'] != null) {
+                                $('#id_donor').val(data['donor']['user']['first_name']);
+                                $('#id_donor_id').val(data['donor']['id']);
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
             });
 
 
@@ -158,7 +134,7 @@
 
         <div class="portlet-body">
             <div class="form-body">
-                <form action="{% url 'masters:save_manage_donor_master' %}" id="form_sample_1"
+                <form action="{% url 'accounting:save_payment_voucher_data_by_student' %}" id="form_sample_1"
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
@@ -169,7 +145,7 @@
                             <div class="">
                                 <label class="col-md-2 control-label">Student:</label>
                                 <div class="col-md-2">
-                                    <select id='country_name' title="Select country" name="student"
+                                    <select id='id_student' title="Select country" name="student"
                                             class="form-control"
                                             required>
                                         <option style="display:none" selected="selected" id=""
@@ -212,15 +188,17 @@
                                 <label class="col-md-2 control-label">Semister:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Semister" id="id_semester"
-                                           name="semester" placeholder="Semister"
+                                           name="semester" placeholder="Semester"
                                            class="form-control" required>
+
+                                    <input type="text" id="id_semester_id" name="semester" hidden>
                                 </div>
                             </div>
 
                             <div class="">
                                 <label class="col-md-2 control-label">Scholarship Fee:</label>
                                 <div class="col-md-2">
-                                    <input type="text" title="Scholarship Fee" id="id_scholarship_fee"
+                                    <input type="number" title="Scholarship Fee" id="id_scholarship_fee"
                                            name="scholarship_fee" placeholder="0.00"
                                            class="form-control" required>
                                 </div>
@@ -248,6 +226,8 @@
                                     <input type="text" title="Country" placeholder="Country"
                                            id="id_country" name="country"
                                            class="form-control" required>
+
+                                    <input type="text" id="id_country_id" name="country" hidden>
                                 </div>
                             </div>
 
@@ -257,6 +237,8 @@
                                     <input type="text" title="University" placeholder="University"
                                            id="id_university" name="university"
                                            class="form-control" required>
+
+                                    <input type="text" id="id_university_id" name="university" hidden>
                                 </div>
                             </div>
 
@@ -266,6 +248,8 @@
                                     <input type="text" title="Scholarship" placeholder="Scholarship"
                                            id="id_scholarship" name="scholarship"
                                            class="form-control" required>
+
+                                    <input type="text" id="id_scholarship_id" name="scholarship" hidden>
                                 </div>
                             </div>
                         </div>
@@ -280,6 +264,8 @@
                                     <input type="text" title="Program" placeholder="Program"
                                            id="id_program" name="program"
                                            class="form-control" required>
+
+                                     <input type="text" id="id_program_id" name="program" hidden>
                                 </div>
                             </div>
 
@@ -289,13 +275,15 @@
                                     <input type="text" title="Donor" placeholder="Donor"
                                            id="id_donor" name="donor"
                                            class="form-control" required>
+
+                                     <input type="text" id="id_donor_id" name="donor" hidden>
                                 </div>
                             </div>
 
                             <div class="">
                                 <label class="col-md-2 control-label">Amount:</label>
                                 <div class="col-md-2">
-                                    <input type="text" title="Amount" placeholder="0.00"
+                                    <input type="number" title="Amount" placeholder="0.00"
                                            id="id_payment_voucher_amount" name="payment_voucher_amount"
                                            class="form-control" required>
                                 </div>
@@ -365,7 +353,7 @@
                     {% for rec in voucher_record %}
                         <tr id="item{{ forloop.counter }}" class="item">
                             <td>
-                                <input id="id_payment_voucher_number" value="{{ rec.payment_voucher_number }}">
+                                <input id="id_payment_voucher_number" class="form-control data voucher_number"  value="{{ rec.payment_voucher_number }}">
                             </td>
 
                             <td>
@@ -375,31 +363,31 @@
                                        required="True" title='Student Name' disabled>
                             </td>
                             <td>
-                                <input class="form-control data start_date" name="country" type="date"
+                                <input class="form-control data start_date" name="country" type="text"
                                        id="start_date{{ forloop.counter }}"
-                                       value="{{ rec.start_date|date:"Y-m-d" }}" required="True" disabled>
+                                       value="{{ rec.country.address.all.0.country.country_name }}" required="True" disabled>
                             </td>
                             <td>
-                                <input class="form-control data end_date" name="university" type="date"
+                                <input class="form-control data end_date" name="university" type="text"
                                        id="end_date{{ forloop.counter }}"
-                                       value="{{ rec.end_date|date:"Y-m-d" }}" required="True" disabled>
+                                       value="{{ rec.applicant_scholarship_rel.all.0.scholarship.university_name }}" required="True" disabled>
                             </td>
                             <td>
-                                <input class="form-control data end_date" name="scholarship" type="date"
+                                <input class="form-control data end_date" name="scholarship" type="text"
                                        id="end_date{{ forloop.counter }}"
-                                       value="{{ rec.end_date|date:"Y-m-d" }}" required="True" disabled>
+                                       value="{{ rec.scholarship }}" required="True" disabled>
                             </td><td>
-                                <input class="form-control data end_date" name="program" type="date"
+                                <input class="form-control data end_date" name="program" type="text"
                                        id="end_date{{ forloop.counter }}"
-                                       value="{{ rec.end_date|date:"Y-m-d" }}" required="True" disabled>
+                                       value="{{ rec.program }}" required="True" disabled>
                             </td><td>
-                                <input class="form-control data end_date" name="donor" type="date"
+                                <input class="form-control data end_date" name="donor" type="text"
                                        id="end_date{{ forloop.counter }}"
-                                       value="{{ rec.end_date|date:"Y-m-d" }}" required="True" disabled>
+                                       value="{{ rec.donor }}" required="True" disabled>
                             </td><td>
-                                <input class="form-control data end_date" name="amount" type="date"
+                                <input class="form-control data end_date" name="amount" type="text"
                                        id="end_date{{ forloop.counter }}"
-                                       value="{{ rec.end_date|date:"Y-m-d" }}" required="True" disabled>
+                                       value="{{ rec.amount }}" required="True" disabled>
                             </td>
                             <td>
                                 <span type="button" name="updt" id="update{{ forloop.counter }}"

@@ -41,6 +41,13 @@ class StudentDetails(BaseModel):
                                 on_delete=models.PROTECT)
     user = models.ForeignKey(User, null=True, related_name='student_user_rel', on_delete=models.PROTECT)
 
+    class Meta:
+        permissions = (
+            ('can_view_student_personal_info', 'can view student personal info'),
+            ('can_view_student_family_info', 'can view student family info'),
+            ('can_view_student_academic_qualification', 'can view student academic qualification'),
+        )
+
     def __str__(self):
         return self.user.first_name
 
@@ -143,6 +150,20 @@ class ApplicationDetails(BaseModel):
             'gender': self.gender,
             'address': self.address,
             'get_all_name': self.student.get_all_name(),
+        }
+        return res
+
+    def to_application_dict(self):
+        res = {
+            'id': self.id,
+            'country': self.address.country.to_dict() if self.address else '',
+            'scholarship': self.applicant_scholarship_rel.all()[0].scholarship.to_dict() if self.applicant_scholarship_rel.all() else None,
+            'university': self.applicant_scholarship_rel.all()[0].university.to_dict() if self.applicant_scholarship_rel.all() else None,
+            'program': '',
+            'donor': self.student.student_donor_rel.all()[0].donor.to_dict() if self.student.student_donor_rel.all() else None,
+            'balance': 0,
+            'scholarship_fee': 0,
+            'semester': self.applicant_progress_rel.all()[0].semester.to_dict() if self.applicant_progress_rel.all() else None,
         }
         return res
 

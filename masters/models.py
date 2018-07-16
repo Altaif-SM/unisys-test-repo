@@ -10,7 +10,7 @@ from student.models import StudentDetails
 def content_file_name_partner(instance, filename):
     dirname = datetime.now().strftime('%Y.%m.%d.%H.%M.%S')
     ext = filename.split('.')[-1]
-    filename = "%s_%s.%s" % (instance.first_name, dirname, ext)
+    filename = "%s_%s.%s" % (instance.user.first_name, dirname, ext)
     return os.path.join('images', filename)
 
 
@@ -29,6 +29,15 @@ class CountryDetails(BaseModel):
 
     def __str__(self):
         return self.country_name
+
+    def to_dict(self):
+        res = {
+            'id': self.id if self.id else '',
+            'country_name': self.country_name if self.country_name else '',
+        }
+
+        return res
+
 
 
 class AddressDetails(BaseModel):
@@ -94,6 +103,14 @@ class ScholarshipDetails(BaseModel):
     def __str__(self):
         return self.scholarship_name
 
+    def to_dict(self):
+        res = {
+            'id': self.id if self.id else '',
+            'scholarship_name': self.scholarship_name if self.scholarship_name else '',
+        }
+
+        return res
+
 
 
 class DegreeFormula(BaseModel):
@@ -139,6 +156,11 @@ class PartnerDetails(BaseModel):
     class Meta:
         ordering = ('user__first_name',)
 
+        permissions = (
+            ('can_view_applicant_details', 'can view applicant details'),
+            ('can_view_approving_application', 'can view approving application'),
+        )
+
     def __str__(self):
         details = str(self.country.country_name) + ' and ' + str(self.office_name)
         return details
@@ -169,6 +191,14 @@ class DonorDetails(BaseModel):
     def __str__(self):
         return self.user.first_name
 
+    def to_dict(self):
+        res = {
+            'id': self.id if self.id else '',
+            'user': self.user.to_dict() if self.user else '',
+        }
+
+        return res
+
 
 class StudentDonorMapping(BaseModel):
     student = models.ForeignKey(StudentDetails, null=True, related_name='student_donor_rel', on_delete=models.PROTECT)
@@ -195,6 +225,14 @@ class UniversityDetails(BaseModel):
     def __str__(self):
         return self.university_name
 
+    def to_dict(self):
+        res = {
+            'id': self.id if self.id else '',
+            'university_name': self.university_name if self.university_name else '',
+        }
+
+        return res
+
 
 
 class SemesterDetails(BaseModel):
@@ -207,6 +245,14 @@ class SemesterDetails(BaseModel):
 
     def __str__(self):
         return self.semester_name
+
+    def to_dict(self):
+        res = {
+            'id': self.id if self.id else '',
+            'semester_name': self.semester_name if self.semester_name else '',
+        }
+
+        return res
 
 
 class DegreeTypeDetails(BaseModel):
@@ -230,6 +276,15 @@ class DegreeDetails(BaseModel):
     def __str__(self):
         return self.degree_name
 
+    def to_dict(self):
+        res = {
+            'id': self.id if self.id else '',
+            'degree_name': self.degree_name if self.degree_name else '',
+        }
+
+        return res
+
+
 
 class ProgramDetails(BaseModel):
     program_name = models.CharField(max_length=255, blank=True, null=True)
@@ -243,6 +298,16 @@ class ProgramDetails(BaseModel):
 
     def __str__(self):
         return self.program_name
+
+
+    def to_dict(self):
+        res = {
+            'id': self.id if self.id else '',
+            'program_name': self.program_name if self.program_name else '',
+        }
+
+        return res
+
 
 
 class ModuleDetails(BaseModel):

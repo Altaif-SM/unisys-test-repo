@@ -125,10 +125,10 @@ class User(AbstractUser):
 
     def to_dict(self):
         json_dict = {}
-        json_dict['id'] = self.id
-        json_dict['email'] = self.email
-        json_dict['first_name'] = self.first_name
-        json_dict['last_name'] = self.last_name
+        json_dict['id'] = self.id if self.id else ''
+        json_dict['email'] = self.email if self.email else ''
+        json_dict['first_name'] = self.first_name if self.first_name else ''
+        json_dict['last_name'] = self.last_name if self.last_name else ''
 
         return json_dict
 

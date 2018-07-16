@@ -262,7 +262,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             <span class="title">Manage Users</span>
                         </a>
                     </li>{% endcomment %}
-
+                    {% if user.is_super_admin %}
                     <li class="nav-item  " id="settings">
                         <a href="#" class="nav-link nav-toggle">
                             <i class="icon-wrench"></i>
@@ -399,89 +399,104 @@ License: You must have a valid license purchased only from themeforest(the above
                             </li>
                         </ul>
                     </li>
+                    {% endif %}
 
-                    <li class="nav-item " id="personal_info">
-                        <a href="{% url 'student:applicant_personal_info' %}" class="nav-link nav-toggle">
-                            <i class="fa fa-id-card"></i>
-                            <span class="title">Personal Info</span>
-                            <span class="selected"></span>
-                        </a>
+                    {% if 'student.can_view_student_personal_info' in perms %}
+                        <li class="nav-item " id="personal_info">
+                            <a href="{% url 'student:applicant_personal_info' %}" class="nav-link nav-toggle">
+                                <i class="fa fa-id-card"></i>
+                                <span class="title">Personal Info</span>
+                                <span class="selected"></span>
+                            </a>
 
-                    </li>
+                        </li>
+                    {% endif %}
 
-                    <li class="nav-item " id="family_info">
-                        <a href="{% url 'student:applicant_family_info' %}" class="nav-link nav-toggle">
-                            <i class="fa fa-users"></i>
-                            {#                            <i class="glyphicon glyphicon-user"></i>#}
-                            <span class="title">Family Info</span>
-                            <span class="selected"></span>
-                        </a>
-                    </li>
 
-                    <li class="nav-item " id="acd_qli">
-                        <a href="{% url 'student:applicant_academic_english_qualification' %}"
-                           class="nav-link nav-toggle">
-                            <i class="glyphicon glyphicon-education"></i>
-                            <span class="title">Academic Qualification</span>
-                            <span class="selected"></span>
-                        </a>
-                    </li>
+                    {% if 'student.can_view_student_family_info' in perms %}
+                        <li class="nav-item " id="family_info">
+                            <a href="{% url 'student:applicant_family_info' %}" class="nav-link nav-toggle">
+                                <i class="fa fa-users"></i>
+                                {#                            <i class="glyphicon glyphicon-user"></i>#}
+                                <span class="title">Family Info</span>
+                                <span class="selected"></span>
+                            </a>
+                        </li>
+                    {% endif %}
 
-                    <li class="nav-item " id="acd_qli">
-                        <a href="{% url 'partner:template_registered_application' %}"
-                           class="nav-link nav-toggle">
-                            <i class="glyphicon glyphicon-list-alt"></i>
-                            <span class="title">Applicant Details</span>
-                            <span class="selected"></span>
-                        </a>
-                    </li>
+                    {% if 'student.can_view_student_academic_qualification' in perms %}
+                        <li class="nav-item " id="acd_qli">
+                            <a href="{% url 'student:applicant_academic_english_qualification' %}"
+                               class="nav-link nav-toggle">
+                                <i class="glyphicon glyphicon-education"></i>
+                                <span class="title">Academic Qualification</span>
+                                <span class="selected"></span>
+                            </a>
+                        </li>
+                    {% endif %}
 
-                    <li class="nav-item " id="acd_qli">
-                        <a href="{% url 'partner:template_approving_application' %}"
-                           class="nav-link nav-toggle">
-                            <i class="glyphicon glyphicon-list-alt"></i>
-                            <span class="title">Applicant Details</span>
-                            <span class="selected"></span>
-                        </a>
-                    </li>
+                    {% if 'masters.can_view_applicant_details' in perms %}
+                        <li class="nav-item " id="acd_qli">
+                            <a href="{% url 'partner:template_registered_application' %}"
+                               class="nav-link nav-toggle">
+                                <i class="glyphicon glyphicon-list-alt"></i>
+                                <span class="title">Applicant Details</span>
+                                <span class="selected"></span>
+                            </a>
+                        </li>
+                    {% endif %}
 
-                    <li class="nav-item start ">
-                        <a href="javascript:;" class="nav-link nav-toggle">
-                            <i class="fa fa-briefcase"></i>
-                            <span class="title">Accounting</span>
-                            <span class="arrow"></span>
-                        </a>
-                        <ul class="sub-menu">
-                            <li class="nav-item ">
-                                <a href="{% url 'accounting:get_student_payment_voucher' %}" class="nav-link ">
-                                    Student Payment Voucher </a>
-                            </li>
-                            <li class="nav-item ">
-                                <a href="{% url 'accounting:get_student_receipt_voucher' %}" class="nav-link ">
-                                    Student Receipt Voucher </a>
-                            </li>
-                            <li class="nav-item ">
-                                <a href="{% url 'accounting:get_student_payment_and_receipt_report' %}" class="nav-link ">
-                                    Student Receipt & Payment Voucher </a>
-                            </li>
-                            <li class="nav-item ">
-                                <a href="{% url 'accounting:get_student_report' %}" class="nav-link ">
-                                    Student Report </a>
-                            </li>
-                            <li class="nav-item ">
-                                <a href="{% url 'accounting:get_approval_and_paid_total' %}" class="nav-link ">
-                                    Approval & Paid Total </a>
-                            </li>
-                            <li class="nav-item ">
-                                <a href="{% url 'accounting:get_donor_receipt_voucher' %}" class="nav-link ">
-                                    Donor Receipt Voucher </a>
-                            </li>
-                            <li class="nav-item ">
-                                <a href="{% url 'accounting:get_donor_report' %}" class="nav-link ">
-                                    Donor Report </a>
-                            </li>
-                        </ul>
-                    </li>
+                    {% if 'masters.can_view_approving_application' in perms %}
+                        <li class="nav-item " id="acd_qli">
+                            <a href="{% url 'partner:template_approving_application' %}"
+                               class="nav-link nav-toggle">
+                                <i class="glyphicon glyphicon-list-alt"></i>
+                                <span class="title">Approving Applicant Details</span>
+                                <span class="selected"></span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+
+                    {% if 'accounting.can_view_student_payment_voucher' in perms %}
+                        <li class="nav-item start ">
+                            <a href="javascript:;" class="nav-link nav-toggle">
+                                <i class="fa fa-briefcase"></i>
+                                <span class="title">Accounting</span>
+                                <span class="arrow"></span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li class="nav-item ">
+                                    <a href="{% url 'accounting:get_student_payment_voucher' %}" class="nav-link ">
+                                        Student Payment Voucher </a>
+                                </li>
+                                <li class="nav-item ">
+                                    <a href="{% url 'accounting:get_student_receipt_voucher' %}" class="nav-link ">
+                                        Student Receipt Voucher </a>
+                                </li>
+                                <li class="nav-item ">
+                                    <a href="{% url 'accounting:get_student_payment_and_receipt_report' %}" class="nav-link ">
+                                        Student Receipt & Payment Voucher </a>
+                                </li>
+                                <li class="nav-item ">
+                                    <a href="{% url 'accounting:get_student_report' %}" class="nav-link ">
+                                        Student Report </a>
+                                </li>
+                                <li class="nav-item ">
+                                    <a href="{% url 'accounting:get_approval_and_paid_total' %}" class="nav-link ">
+                                        Approval & Paid Total </a>
+                                </li>
+                                <li class="nav-item ">
+                                    <a href="{% url 'accounting:get_donor_receipt_voucher' %}" class="nav-link ">
+                                        Donor Receipt Voucher </a>
+                                </li>
+                                <li class="nav-item ">
+                                    <a href="{% url 'accounting:get_donor_report' %}" class="nav-link ">
+                                        Donor Report </a>
+                                </li>
+                            </ul>
+                        </li>
+                    {% endif %}
 
 
                 </ul>
