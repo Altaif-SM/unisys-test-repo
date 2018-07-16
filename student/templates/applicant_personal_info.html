@@ -105,7 +105,7 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{% url 'accounts:home' %}">Home</a>
+                 <a href="{% url 'student:student_home' %}">Home</a>
                 <i class="fa fa-angle-right"></i>
             </li>
 
@@ -435,7 +435,7 @@
 
                                     <input name="photo" type="file" title="Select photo"
                                            id="applicant_photo"
-                                           class="form-control"><img width="100px" height="120px" src="../../media/{{ application_obj.image }}">
+                                           class="form-control">{% if application_obj.image %}<img width="100px" height="120px" src="../../media/{{ application_obj.image }}">{% endif %}
                                 </div>
                             </div>
                         </div>

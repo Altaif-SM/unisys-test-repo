@@ -246,7 +246,7 @@ License: You must have a valid license purchased only from themeforest(the above
                 <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                     data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
 
-
+                     {% if user.is_super_admin %}
                     <li class="nav-item " id="dashboard">
                         <a href="/accounts/home/" class="nav-link nav-toggle">
                             <i class="glyphicon glyphicon-stats"></i>
@@ -262,7 +262,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             <span class="title">Manage Users</span>
                         </a>
                     </li>{% endcomment %}
-                    {% if user.is_super_admin %}
+
                     <li class="nav-item  " id="settings">
                         <a href="#" class="nav-link nav-toggle">
                             <i class="icon-wrench"></i>
