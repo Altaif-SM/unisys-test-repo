@@ -1,7 +1,7 @@
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from masters.models import StudentDonorMapping, CountryDetails, DegreeDetails, UniversityDetails
-from student.models import ApplicationDetails, ApplicationHistoryDetails
+from student.models import ApplicationDetails, ApplicationHistoryDetails, StudentDetails
 import json
 from django.contrib import messages
 
@@ -10,15 +10,16 @@ def template_donor_dashboard(request):
     return render(request, "template_donor_dashboard.html")
 
 def template_student_selection(request):
-    students = StudentDonorMapping.objects.filter(donor__user=request.user)
 
     country_recs = CountryDetails.objects.all()
     university_recs = UniversityDetails.objects.filter(country=request.user.donor_user_rel.get().country)
     degree_recs = DegreeDetails.objects.all()
 
+    stud = []
+    for obj in StudentDonorMapping.objects.filter(donor__user=request.user):
+        stud.append(StudentDetails.objects.get(id=obj.student.id))
 
-    for stud in students:
-        application_records = ApplicationDetails.objects.filter(student=stud.student, admin_approval=True)
+    application_records = ApplicationDetails.objects.filter(student__in=stud, admin_approval=True)
     return render(request, "template_student_selection.html", {"application_records": application_records, 'country_recs': country_recs, 'university_recs': university_recs,
                    'degree_recs': degree_recs})
 
@@ -60,15 +61,15 @@ def filter_student_selection(request):
 
     try:
 
-        students = StudentDonorMapping.objects.filter(donor__user=request.user)
+        stud = []
+        for obj in StudentDonorMapping.objects.filter(donor__user=request.user):
+            stud.append(StudentDetails.objects.get(id=obj.student.id))
 
-        for stud in students:
-
-            application_records = ApplicationDetails.objects.filter(Q(student=stud.student),
-                Q(address__country=request.user.donor_user_rel.get().country,
-                  admin_approval=False), filter_nationality(nationality),
-                filter_degree(degree),
-                filter_university(university))
+        application_records = ApplicationDetails.objects.filter(Q(student__in=stud),
+            Q(address__country=request.user.donor_user_rel.get().country,
+              admin_approval=True), filter_nationality(nationality),
+            filter_degree(degree),
+            filter_university(university))
 
         country_recs = CountryDetails.objects.all()
         university_recs = UniversityDetails.objects.filter(country=request.user.donor_user_rel.get().country)
@@ -79,7 +80,7 @@ def filter_student_selection(request):
         return redirect('/partner/template_registered_application/')
 
     return render(request, 'template_student_selection.html',
-                  {'application_rec': application_records, 'country_recs': country_recs, 'university_recs': university_recs,
+                  {'application_records': application_records, 'country_recs': country_recs, 'university_recs': university_recs,
                    'degree_recs': degree_recs})
 
 
@@ -89,15 +90,16 @@ def template_student_details(request, app_id):
 
 def template_student_reports(request):
 
-    students = StudentDonorMapping.objects.filter(donor__user=request.user)
-
     country_recs = CountryDetails.objects.all()
     university_recs = UniversityDetails.objects.filter(country=request.user.donor_user_rel.get().country)
     degree_recs = DegreeDetails.objects.all()
 
-    for stud in students:
-        application_records = ApplicationDetails.objects.filter(student=stud.student,
-                                                                is_sponsored=True)  # TODO make that flag True after admin approval workflow completed
+    stud = []
+    for obj in StudentDonorMapping.objects.filter(donor__user=request.user):
+        stud.append(StudentDetails.objects.get(id=obj.student.id))
+
+    application_records = ApplicationDetails.objects.filter(student__in=stud,
+                                                                is_sponsored=True)
 
     return render(request, "template_student_reports.html", {"application_records": application_records, 'country_recs': country_recs, 'university_recs': university_recs,
                    'degree_recs': degree_recs})
@@ -118,15 +120,15 @@ def filter_student_report(request):
 
     try:
 
-        students = StudentDonorMapping.objects.filter(donor__user=request.user)
+        stud = []
+        for obj in StudentDonorMapping.objects.filter(donor__user=request.user):
+            stud.append(StudentDetails.objects.get(id=obj.student.id))
 
-        for stud in students:
-
-            application_records = ApplicationDetails.objects.filter(Q(student=stud.student),
-                Q(address__country=request.user.donor_user_rel.get().country,
-                  is_sponsored=True), filter_nationality(country),
-                filter_degree(degree),
-                filter_university(university))
+        application_records = ApplicationDetails.objects.filter(Q(student__in=stud),
+            Q(address__country=request.user.donor_user_rel.get().country,
+              is_sponsored=True), filter_nationality(country),
+            filter_degree(degree),
+            filter_university(university))
 
         country_recs = CountryDetails.objects.all()
         university_recs = UniversityDetails.objects.filter(country=request.user.donor_user_rel.get().country)
@@ -147,10 +149,11 @@ def template_application_progress_history(request):
         if request.user.is_super_admin():
             applicant_recs = ApplicationDetails.objects.filter(is_sponsored=True)
         else:
-            students = StudentDonorMapping.objects.filter(donor__user=request.user)
+            stud = []
+            for obj in StudentDonorMapping.objects.filter(donor__user=request.user):
+                stud.append(StudentDetails.objects.get(id=obj.student.id))
 
-            for stud in students:
-                applicant_recs = ApplicationDetails.objects.filter(student=stud.student,
+            applicant_recs = ApplicationDetails.objects.filter(student__in=stud,
                     address__country=request.user.donor_user_rel.get().country,
                     is_sponsored=True)
     except Exception as e:
@@ -174,14 +177,15 @@ def filter_application_history(request):
             application_history_recs = ApplicationDetails.objects.get(id=application).applicant_history_rel.all()
             application_obj = ApplicationDetails.objects.get(id=application)
         else:
-            students = StudentDonorMapping.objects.filter(donor__user=request.user)
+            stud = []
+            for obj in StudentDonorMapping.objects.filter(donor__user=request.user):
+                stud.append(StudentDetails.objects.get(id=obj.student.id))
 
-            for stud in students:
-                applicant_recs = ApplicationDetails.objects.filter(student=stud.student,
-                    address__country=request.user.donor_user_rel.get().country, is_sponsored=True)
-                application_obj = ApplicationDetails.objects.get(id=application)
+            applicant_recs = ApplicationDetails.objects.filter(student__in=stud,
+                address__country=request.user.donor_user_rel.get().country, is_sponsored=True)
+            application_obj = ApplicationDetails.objects.get(id=application)
 
-                application_history_recs = ApplicationDetails.objects.get(id=application).applicant_history_rel.all()
+            application_history_recs = ApplicationDetails.objects.get(id=application).applicant_history_rel.all()
 
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
@@ -192,17 +196,23 @@ def filter_application_history(request):
                    'application_obj': application_obj})
 
 def template_my_payments(request):
-    students = StudentDonorMapping.objects.filter(donor__user=request.user)
-    for stud in students:
-        applicant_recs = ApplicationDetails.objects.filter(student=stud.student,
+
+    stud = []
+    for obj in StudentDonorMapping.objects.filter(donor__user=request.user):
+        stud.append(StudentDetails.objects.get(id=obj.student.id))
+
+    applicant_recs = ApplicationDetails.objects.filter(student__in=stud,
                                                            address__country=request.user.donor_user_rel.get().country,
                                                            is_sponsored=True)
     return render(request, "template_my_payments.html", {'applicant_recs':applicant_recs})
 
 def template_students_receipts(request):
-    students = StudentDonorMapping.objects.filter(donor__user=request.user)
-    for stud in students:
-        applicant_recs = ApplicationDetails.objects.filter(student=stud.student,
+
+    stud = []
+    for obj in StudentDonorMapping.objects.filter(donor__user=request.user):
+        stud.append(StudentDetails.objects.get(id=obj.student.id))
+
+    applicant_recs = ApplicationDetails.objects.filter(student__in=stud,
                                                            address__country=request.user.donor_user_rel.get().country,
                                                            is_sponsored=True)
     return render(request, "template_students_receipts.html", {'applicant_recs':applicant_recs})

@@ -126,13 +126,13 @@
                                     id="id_application" name="application" required="required">
                                 {% if application_obj %}
                                     <option style="display: none" value="{{ rec.id }}"
-                                            selected="selected">{{ application_obj.first_name }} {{ application_obj.last_name }}</option>
+                                            selected="selected">{{ application_obj.get_full_name }}</option>
                                 {% else %}
                                     <option value="" style="display: none" selected="selected">Please Select</option>
                                 {% endif %}
 
                                 {% for rec in applicant_recs %}
-                                    <option value="{{ rec.id }}">{{ rec.first_name }} {{ rec.last_name }}</option>
+                                    <option value="{{ rec.id }}">{{ rec.get_full_name }}</option>
                                 {% endfor %}
                             </select>
                         </div>
