@@ -34,8 +34,6 @@
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
-                            alert("data"+JSON.stringify(data));
-
                             if (data['semester'] != null) {
                                 $('#id_semester').val(data['semester']['semester_name']);
                                 $('#id_semester_id').val(data['semester']['id']);
