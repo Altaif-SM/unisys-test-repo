@@ -43,5 +43,7 @@ urlpatterns = [
 
                   path('my_application/', views.my_application, name='my_application'),
                   path('submit_application/', views.submit_application, name='submit_application'),
+                  path('applicant_psychometric_test/', views.applicant_psychometric_test,name='applicant_psychometric_test'),
+                  path('save_psychometric_test/', views.save_psychometric_test,name='save_psychometric_test'),
                   # path('generate_PDF/', views.generate_PDF, name='generate_PDF'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

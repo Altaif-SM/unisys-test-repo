@@ -116,10 +116,11 @@ License: You must have a valid license purchased only from themeforest(the above
                     <li class="dropdown dropdown-user">
                         <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"
                            data-close-others="true">
-                            {% if not user.get_application.is_submitted %}<img alt="" class="img-circle" src="../../media/{{ user.get_application.image }}"/>
-                            <span class="username username-hide-on-mobile"> {{ user.get_application.first_name }} {{ user.get_application.last_name }} </span>
-                            <br>
-                            <span class="username username-hide-on-mobile"> {{ user.get_application_id }}
+                            {% if not user.get_application.is_submitted %}
+                                <img alt="" class="img-circle" src="../../media/{{ user.get_application.image }}"/>
+                                <span class="username username-hide-on-mobile"> {{ user.get_application.first_name }} {{ user.get_application.last_name }} </span>
+                                <br>
+                                <span class="username username-hide-on-mobile"> {{ user.get_application_id }}
                             </span> {% endif %}
                             {#                            <i class="fa fa-angle-down"></i>#}
                         </a>
@@ -181,14 +182,14 @@ License: You must have a valid license purchased only from themeforest(the above
                             {#                            {% endif %}#}
                             {% comment %}<span class="username username-hide-on-mobile"> {{ user.get_application.first_name }} {{ user.get_application.last_name }} </span>
                             <br><span class="username username-hide-on-mobile"> {{ user.get_application_id }}</span>{% endcomment %}
-{#                    <li>#}
-{#                        <a href="/accounts/user_signout/">#}
-{#                            <i class="fa fa-sign-out"></i> Log Out</a>#}
-{#                    </li>#}
+                            {#                    <li>#}
+                            {#                        <a href="/accounts/user_signout/">#}
+                            {#                            <i class="fa fa-sign-out"></i> Log Out</a>#}
+                            {#                    </li>#}
                             <i class="fa fa-angle-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-default">
-                        {% comment %}<li>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-default">
+                            {% comment %}<li>
                                 <a href="/school/my_profile/">
                                     <i class="fa fa-book" aria-hidden="true"></i> Profile </a>
                             </li>
@@ -196,13 +197,13 @@ License: You must have a valid license purchased only from themeforest(the above
                                 <a href="/school/change_password/">
                                     <i class="icon-key" aria-hidden="true"></i> Change Password </a>
                             </li>{% endcomment %}
-                        <li>
+                            <li>
                                 <a href="/accounts/user_signout/">
                                     <i class="fa fa-sign-out"></i> Log Out</a>
                             </li>
 
 
-                    </ul>
+                        </ul>
                     </li>
                     <!-- END USER LOGIN DROPDOWN -->
                     <!-- BEGIN QUICK SIDEBAR TOGGLER -->
@@ -246,159 +247,166 @@ License: You must have a valid license purchased only from themeforest(the above
                 <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                     data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
 
-                     {% if user.is_super_admin %}
-                    <li class="nav-item " id="dashboard">
-                        <a href="/accounts/home/" class="nav-link nav-toggle">
-                            <i class="glyphicon glyphicon-stats"></i>
-                            <span class="title">Dashboard</span>
-                            <span class="selected"></span>
-                        </a>
+                    {% if user.is_super_admin %}
+                        <li class="nav-item " id="dashboard">
+                            <a href="/accounts/home/" class="nav-link nav-toggle">
+                                <i class="glyphicon glyphicon-stats"></i>
+                                <span class="title">Dashboard</span>
+                                <span class="selected"></span>
+                            </a>
 
-                    </li>
+                        </li>
 
-                    {% comment %}<li class="nav-item " id="manageUsers">
+                        {% comment %}<li class="nav-item " id="manageUsers">
                         <a href="#" class="nav-link nav-toggle">
                             <i class="icon-users"></i>
                             <span class="title">Manage Users</span>
                         </a>
                     </li>{% endcomment %}
 
-                    <li class="nav-item  " id="settings">
-                        <a href="#" class="nav-link nav-toggle">
-                            <i class="icon-wrench"></i>
-                            <span class="title">Settings</span>
-                        </a>
-                        <ul class="sub-menu">
-                            <li class="nav-item start ">
-                                <a href="/masters/template_year_master/" class="nav-link ">
-                                    <i class="icon-calendar"></i>
-                                    <span class="title">Manage Year</span>
-                                </a>
-                            </li>
-                            <li class="nav-item start ">
-                                <a href="/masters/template_scholarship_master/" class="nav-link ">
-                                    <i class="icon-bulb"></i>
-                                    <span class="title">Manage Scholarships</span>
-                                </a>
-                            </li>
-                            <li class="nav-item start ">
-                                <a href="javascript:;" class="nav-link nav-toggle">
-                                    <i class="icon-graph"></i>
-                                    <span class="title">Manage Formulas</span>
-                                    <span class="arrow"></span>
-                                </a>
-                                <ul class="sub-menu">
-                                    <li class="nav-item ">
-                                        <a href="{% url 'masters:template_degree_formula_master' %}" class="nav-link ">
-                                            Degree Formula </a>
-                                    </li>
-                                    <li class="nav-item ">
-                                        <a href="{% url 'masters:template_master_and_phd_master' %}" class="nav-link ">
-                                            Msr & Phd Formula </a>
-                                    </li>
-                                    <li class="nav-item ">
-                                        <a href="{% url 'masters:template_master_course_work_master' %}"
-                                           class="nav-link "> Msr crs work Formula </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="nav-item start ">
-                                <a href="{% url 'masters:template_country_master' %}" class="nav-link ">
-                                    <i class="icon-graph"></i>
-                                    <span class="title">Manage Countries</span>
-                                </a>
-                            </li>
-                            <li class="nav-item start ">
-                                <a href="{% url 'masters:template_manage_partner_master' %}" class="nav-link ">
-                                    <i class="icon-graph"></i>
-                                    <span class="title">Manage Partners</span>
-                                </a>
-                            </li>
-                            <li class="nav-item start ">
-                                <a href="javascript:;" class="nav-link nav-toggle">
-                                    <i class="fa fa-money"></i>
-                                    <span class="title">Manage Donors</span>
-                                    <span class="arrow"></span>
-                                </a>
-                                <ul class="sub-menu">
-                                    <li class="nav-item ">
-                                        <a href="{% url 'masters:template_manage_donor_master' %}" class="nav-link ">
-                                            Manage Donors </a>
-                                    </li>
-                                    <li class="nav-item ">
-                                        <a href="#" class="nav-link "> Link Student to Donor </a>
-                                    </li>
-                                    <li class="nav-item ">
-                                        <a href="#" class="nav-link "> Donors Student </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="nav-item start ">
-                                <a href="javascript:;" class="nav-link nav-toggle">
-                                    <i class="fa fa-university"></i>
-                                    <span class="title">Manage Universities</span>
-                                    <span class="arrow"></span>
-                                </a>
-                                <ul class="sub-menu">
-                                    <li class="nav-item ">
-                                        <a href="{% url 'masters:template_university_master' %}" class="nav-link ">
-                                            Manage Universities </a>
-                                    </li>
-                                    <li class="nav-item ">
-                                        <a href="{% url 'masters:template_semester_master' %}" class="nav-link "> Manage
-                                            Semesters </a>
-                                    </li>
-                                    <li class="nav-item ">
-                                        <a href="{% url 'masters:template_degree_master' %}" class="nav-link "> Manage
-                                            Degrees </a>
-                                    </li>
-                                    <li class="nav-item ">
-                                        <a href="{% url 'masters:template_program_master' %}" class="nav-link "> Manage
-                                            Programs </a>
-                                    </li>
-                                </ul>
-                            </li>
+                        <li class="nav-item  " id="settings">
+                            <a href="#" class="nav-link nav-toggle">
+                                <i class="icon-wrench"></i>
+                                <span class="title">Settings</span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li class="nav-item start ">
+                                    <a href="/masters/template_year_master/" class="nav-link ">
+                                        <i class="icon-calendar"></i>
+                                        <span class="title">Manage Year</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item start ">
+                                    <a href="/masters/template_scholarship_master/" class="nav-link ">
+                                        <i class="icon-bulb"></i>
+                                        <span class="title">Manage Scholarships</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item start ">
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+                                        <i class="icon-graph"></i>
+                                        <span class="title">Manage Formulas</span>
+                                        <span class="arrow"></span>
+                                    </a>
+                                    <ul class="sub-menu">
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:template_degree_formula_master' %}"
+                                               class="nav-link ">
+                                                Degree Formula </a>
+                                        </li>
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:template_master_and_phd_master' %}"
+                                               class="nav-link ">
+                                                Msr & Phd Formula </a>
+                                        </li>
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:template_master_course_work_master' %}"
+                                               class="nav-link "> Msr crs work Formula </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item start ">
+                                    <a href="{% url 'masters:template_country_master' %}" class="nav-link ">
+                                        <i class="icon-graph"></i>
+                                        <span class="title">Manage Countries</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item start ">
+                                    <a href="{% url 'masters:template_manage_partner_master' %}" class="nav-link ">
+                                        <i class="icon-graph"></i>
+                                        <span class="title">Manage Partners</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item start ">
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+                                        <i class="fa fa-money"></i>
+                                        <span class="title">Manage Donors</span>
+                                        <span class="arrow"></span>
+                                    </a>
+                                    <ul class="sub-menu">
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:template_manage_donor_master' %}"
+                                               class="nav-link ">
+                                                Manage Donors </a>
+                                        </li>
+                                        <li class="nav-item ">
+                                            <a href="#" class="nav-link "> Link Student to Donor </a>
+                                        </li>
+                                        <li class="nav-item ">
+                                            <a href="#" class="nav-link "> Donors Student </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item start ">
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+                                        <i class="fa fa-university"></i>
+                                        <span class="title">Manage Universities</span>
+                                        <span class="arrow"></span>
+                                    </a>
+                                    <ul class="sub-menu">
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:template_university_master' %}" class="nav-link ">
+                                                Manage Universities </a>
+                                        </li>
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:template_semester_master' %}" class="nav-link ">
+                                                Manage
+                                                Semesters </a>
+                                        </li>
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:template_degree_master' %}" class="nav-link ">
+                                                Manage
+                                                Degrees </a>
+                                        </li>
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:template_program_master' %}" class="nav-link ">
+                                                Manage
+                                                Programs </a>
+                                        </li>
+                                    </ul>
+                                </li>
 
-                            <li class="nav-item start ">
-                                <a href="javascript:;" class="nav-link nav-toggle">
-                                    <i class="icon-graph"></i>
-                                    <span class="title">Manage Dev Pro</span>
-                                    <span class="arrow"></span>
-                                </a>
-                                <ul class="sub-menu">
-                                    <li class="nav-item ">
-                                        <a href="{% url 'masters:template_module_master' %}" class="nav-link "> Manage
-                                            Modules </a>
-                                    </li>
-                                    <li class="nav-item ">
-                                        <a href="{% url 'masters:template_development_program_master' %}"
-                                           class="nav-link "> Dev Programs </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            {#                        </li><li class="nav-item start ">#}
-                            {#                            <a href="#" class="nav-link ">#}
-                            {#                                <i class="icon-graph"></i>#}
-                            {#                                <span class="title">Dev Pro Modules</span>#}
-                            {#                                <span class="badge badge-danger">5</span>#}
-                            {#                            </a>#}
-                            {#                        </li>#}
-                            </li>
-                            <li class="nav-item start ">
-                                <a href="#" class="nav-link ">
-                                    <i class="fa fa-users"></i>
-                                    <span class="title">Manage Users</span>
-                                </a>
-                            </li>
-                            </li>
-                            <li class="nav-item start ">
-                                <a href="#" class="nav-link ">
-                                    <i class="icon-graph"></i>
-                                    <span class="title">Manage Guardians</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+                                <li class="nav-item start ">
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+                                        <i class="icon-graph"></i>
+                                        <span class="title">Manage Dev Pro</span>
+                                        <span class="arrow"></span>
+                                    </a>
+                                    <ul class="sub-menu">
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:template_module_master' %}" class="nav-link ">
+                                                Manage
+                                                Modules </a>
+                                        </li>
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:template_development_program_master' %}"
+                                               class="nav-link "> Dev Programs </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                {#                        </li><li class="nav-item start ">#}
+                                {#                            <a href="#" class="nav-link ">#}
+                                {#                                <i class="icon-graph"></i>#}
+                                {#                                <span class="title">Dev Pro Modules</span>#}
+                                {#                                <span class="badge badge-danger">5</span>#}
+                                {#                            </a>#}
+                                {#                        </li>#}
+                                </li>
+                                <li class="nav-item start ">
+                                    <a href="#" class="nav-link ">
+                                        <i class="fa fa-users"></i>
+                                        <span class="title">Manage Users</span>
+                                    </a>
+                                </li>
+                                </li>
+                                <li class="nav-item start ">
+                                    <a href="#" class="nav-link ">
+                                        <i class="icon-graph"></i>
+                                        <span class="title">Manage Guardians</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                     {% endif %}
 
                     {% if 'student.can_view_student_personal_info' in perms %}
@@ -435,7 +443,18 @@ License: You must have a valid license purchased only from themeforest(the above
                         </li>
                     {% endif %}
 
-                    {% if 'masters.can_view_applicant_details' in perms %}
+                    {% if 'student.can_view_student_psychometric_test' in perms %}
+                        <li class="nav-item " id="acd_qli">
+                            <a href="{% url 'student:applicant_psychometric_test' %}"
+                               class="nav-link nav-toggle">
+                                <i class="glyphicon glyphicon-copy"></i>
+                                <span class="title">Psychometric Test</span>
+                                <span class="selected"></span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% if 'partner.can_view_applicant_details' in perms %}
                         <li class="nav-item " id="acd_qli">
                             <a href="{% url 'partner:template_registered_application' %}"
                                class="nav-link nav-toggle">
@@ -446,7 +465,7 @@ License: You must have a valid license purchased only from themeforest(the above
                         </li>
                     {% endif %}
 
-                    {% if 'masters.can_view_approving_application' in perms %}
+                    {% if 'partner.can_view_approving_application' in perms %}
                         <li class="nav-item " id="acd_qli">
                             <a href="{% url 'partner:template_approving_application' %}"
                                class="nav-link nav-toggle">
@@ -457,17 +476,27 @@ License: You must have a valid license purchased only from themeforest(the above
                         </li>
                     {% endif %}
 
-                    {% if 'masters.can_view_progress_history' in perms %}
+                    {% if 'partner.can_view_progress_history' in perms %}
+                        <li class="nav-item " id="acd_qli">
+                            <a href="{% url 'partner:template_student_progress_history' %}"
+                               class="nav-link nav-toggle">
+                                <i class="glyphicon glyphicon-list-alt"></i>
+                                <span class="title">Applications Progress History</span>
+                                <span class="selected"></span>
+                            </a>
+                        </li>
+                    {% endif %}
 
-                    <li class="nav-item " id="acd_qli">
-                        <a href="{% url 'partner:template_student_progress_history' %}"
-                           class="nav-link nav-toggle">
-                            <i class="glyphicon glyphicon-list-alt"></i>
-                            <span class="title">Applications Progress History</span>
-                            <span class="selected"></span>
-                        </a>
-                    </li>
-                {% endif %}
+                    {% if 'partner.can_view_psychometric_test_report' in perms %}
+                        <li class="nav-item " id="acd_qli">
+                            <a href="{% url 'partner:template_psychometric_test_report' %}"
+                               class="nav-link nav-toggle">
+                                <i class="glyphicon glyphicon-list-alt"></i>
+                                <span class="title">Psychometric Test Report</span>
+                                <span class="selected"></span>
+                            </a>
+                        </li>
+                    {% endif %}
 
 
                     {% if 'accounting.can_view_student_payment_voucher' in perms %}
@@ -487,7 +516,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                         Student Receipt Voucher </a>
                                 </li>
                                 <li class="nav-item ">
-                                    <a href="{% url 'accounting:get_student_payment_and_receipt_report' %}" class="nav-link ">
+                                    <a href="{% url 'accounting:get_student_payment_and_receipt_report' %}"
+                                       class="nav-link ">
                                         Student Receipt & Payment Voucher </a>
                                 </li>
                                 <li class="nav-item ">

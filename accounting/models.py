@@ -9,7 +9,7 @@ class StudentPaymentVoucher(BaseModel):
 
     PAYMENT_VOUCHER_NUMBER = 'payment_voucher_number'
     STUDENT = 'student'
-    SEMESTAR = 'semester'
+    SEMESTER = 'semester'
     PAYMENT_VOUCHER_DATE = 'payment_voucher_date'
     PAYMENT_VOUCHER_AMOUNT = 'payment_voucher_amount'
     PAYMENT_VOUCHER_TOTAL = 'payment_voucher_total'
@@ -47,8 +47,8 @@ class StudentPaymentVoucher(BaseModel):
         if StudentPaymentVoucher.STUDENT in val_dict and val_dict[StudentPaymentVoucher.STUDENT]:
             voucher.student = StudentDetails.objects.get(id=val_dict[StudentPaymentVoucher.STUDENT])
 
-        if StudentPaymentVoucher.SEMESTAR in val_dict and val_dict[StudentPaymentVoucher.SEMESTAR]:
-            voucher.semester = SemesterDetails.objects.get(id=val_dict[StudentPaymentVoucher.SEMESTAR])
+        if StudentPaymentVoucher.SEMESTER in val_dict and val_dict[StudentPaymentVoucher.SEMESTER]:
+            voucher.semester = SemesterDetails.objects.get(id=val_dict[StudentPaymentVoucher.SEMESTER])
 
         if StudentPaymentVoucher.PAYMENT_VOUCHER_DATE in val_dict and val_dict[StudentPaymentVoucher.PAYMENT_VOUCHER_DATE]:
             voucher.payment_voucher_date = val_dict[StudentPaymentVoucher.PAYMENT_VOUCHER_DATE]

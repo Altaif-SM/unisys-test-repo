@@ -329,7 +329,8 @@ def applicant_academic_english_qualification(request):
                 # application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id,
                 #                                           is_submitted=False)
                 if AcademicQualificationDetails.objects.filter(applicant_id=request.user.get_application).exists():
-                    qualification_obj = AcademicQualificationDetails.objects.get(applicant_id=request.user.get_application)
+                    qualification_obj = AcademicQualificationDetails.objects.get(
+                        applicant_id=request.user.get_application)
 
                 if EnglishQualificationDetails.objects.filter(applicant_id=request.user.get_application).exists():
                     english_obj = EnglishQualificationDetails.objects.get(applicant_id=request.user.get_application)
@@ -719,8 +720,8 @@ def applicant_scholarship_about_yourself_info(request):
     about_obj = ''
 
     try:
-        if not request.user.get_application.is_submitted:
-            if request.user.get_application:
+        if request.user.get_application:
+            if not request.user.get_application.is_submitted:
                 if ScholarshipSelectionDetails.objects.filter(applicant_id=request.user.get_application).exists():
                     scholarship_obj = ScholarshipSelectionDetails.objects.get(applicant_id=request.user.get_application)
 
@@ -744,7 +745,6 @@ def save_update_applicant_scholarship_about_yourself_info(request):
     if request.POST:
         try:
             if StudentDetails.objects.filter(user=request.user):
-                student = StudentDetails.objects.filter(user=request.user)[0]
                 if not request.user.get_application.is_submitted:
                     # application_obj = ApplicationDetails.objects.get(student=student, is_submitted=False)
                     if ScholarshipSelectionDetails.objects.filter(applicant_id=request.user.get_application).exists():
@@ -816,7 +816,6 @@ def my_application(request):
 
 
 def submit_application(request):
-
     try:
         ApplicationDetails.objects.filter(application_id=request.user.get_application_id).update(is_submitted=True)
         ApplicationHistoryDetails.objects.create(applicant_id=request.user.get_application,
@@ -826,6 +825,42 @@ def submit_application(request):
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
     return redirect('/student/student_home/')
+
+
+def applicant_psychometric_test(request):
+    try:
+        psychometric_test_obj = ''
+        if request.user.get_application:
+            if request.user.get_application.is_submitted:
+                if ApplicantPsychometricTestDetails.objects.filter(applicant_id=request.user.get_application).exists():
+                    psychometric_test_obj = ApplicantPsychometricTestDetails.objects.get(applicant_id=request.user.get_application)
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+    return render(request, 'applicant_psychometric_test.html',{'psychometric_test_obj':psychometric_test_obj})
+
+def save_psychometric_test(request):
+
+    try:
+        test_result_document = request.FILES['test_result_document']
+    except:
+        test_result_document = ''
+
+    try:
+        result = request.POST.get('result')
+        psychometric_test_obj = ApplicantPsychometricTestDetails.objects.create(applicant_id=request.user.get_application, result=result)
+
+        if test_result_document:
+            test_result = str(test_result_document)
+            handle_uploaded_file(
+                settings.MEDIA_ROOT + os.path.join('reports/' + test_result),
+                test_result_document)
+            psychometric_test_obj.test_result_document = test_result
+            psychometric_test_obj.save()
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+    return redirect('/student/applicant_psychometric_test/')
 
 # import os
 # from django.conf import settings

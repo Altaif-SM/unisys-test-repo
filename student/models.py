@@ -46,6 +46,7 @@ class StudentDetails(BaseModel):
             ('can_view_student_personal_info', 'can view student personal info'),
             ('can_view_student_family_info', 'can view student family info'),
             ('can_view_student_academic_qualification', 'can view student academic qualification'),
+            ('can_view_student_psychometric_test', 'can view student psychometric test'),
         )
 
     def __str__(self):
@@ -168,13 +169,14 @@ class ApplicationDetails(BaseModel):
         return res
 
 
-
-
 class ApplicationHistoryDetails(BaseModel):
     status = models.CharField(max_length=255, blank=True, null=True)
     remark = models.CharField(max_length=1000, blank=True, null=True)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_history_rel',
                                      on_delete=models.PROTECT)
+
+    class Meta:
+        ordering = ('-id',)
 
 class SiblingDetails(BaseModel):
     sibling_name = models.CharField(max_length=255, blank=True, null=True)
@@ -289,7 +291,7 @@ class ApplicantAboutDetails(BaseModel):
 
 
 class ApplicantPsychometricTestDetails(BaseModel):
-    application_id = models.CharField(max_length=255, blank=True, null=True)
+    # application_id = models.CharField(max_length=255, blank=True, null=True)
     result = models.CharField(max_length=255, blank=True, null=True)
     test_result_document = models.FileField(upload_to=content_file_name_report)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_psychometric_test_rel',

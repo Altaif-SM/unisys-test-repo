@@ -1,13 +1,17 @@
 from django.db import models
 from common.models import BaseModel
+
+
 # Create your models here.
 class DonorDetails(BaseModel):
     organisation = models.CharField(max_length=255, blank=True, null=True)
-    country = models.ForeignKey('masters.CountryDetails', null=True, related_name='donor_country_rel', on_delete=models.PROTECT)
+    country = models.ForeignKey('masters.CountryDetails', null=True, related_name='donor_country_rel',
+                                on_delete=models.PROTECT)
     person = models.CharField(max_length=255, blank=True, null=True)
     person_contact_number = models.CharField(max_length=16, blank=True, null=True)
     single_donor_address = models.CharField(max_length=255, blank=True, null=True)
-    address = models.ForeignKey('masters.AddressDetails', null=True, related_name='donor_address_rel', on_delete=models.PROTECT)
+    address = models.ForeignKey('masters.AddressDetails', null=True, related_name='donor_address_rel',
+                                on_delete=models.PROTECT)
     email = models.EmailField(max_length=255, blank=True, null=True)
     reg_document = models.FileField(upload_to='masters.content_file_name_donor')
     due_amount = models.IntegerField(blank=True, null=True)

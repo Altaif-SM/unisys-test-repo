@@ -18,4 +18,6 @@ urlpatterns = [
 
                   path('template_student_progress_history/', views.template_student_progress_history, name='template_student_progress_history'),
                   path('filter_application_history/', views.filter_application_history, name='filter_application_history'),
+
+                  path('template_psychometric_test_report/', views.template_psychometric_test_report, name='template_psychometric_test_report'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from masters.models import *
 from student.models import *
+from partner.models import *
 import json
 from django.contrib import messages
 
@@ -318,3 +319,18 @@ def filter_application_history(request):
     return render(request, 'template_student_progress_history.html',
                   {'applicant_recs': applicant_recs, 'application_history_recs': application_history_recs,
                    'application_obj': application_obj})
+
+
+def template_psychometric_test_report(request):
+    try:
+        appliaction_ids = ApplicationDetails.objects.filter(
+            address__country=request.user.partner_user_rel.get().country,
+            is_submitted=True).values_list('id')
+        psychometric_obj = ApplicantPsychometricTestDetails.objects.filter(applicant_id__in=appliaction_ids)
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+        return redirect('/partner/template_registered_application/')
+
+    return render(request, 'template_psychometric_test_report.html',
+                  {'psychometric_obj': psychometric_obj})

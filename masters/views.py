@@ -8,6 +8,7 @@ from django.db.models import Q
 import base64
 from django.conf import settings
 from common.utils import *
+from partner.models import *
 
 
 # *********------------ Year Master ----------***************

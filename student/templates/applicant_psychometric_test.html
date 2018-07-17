@@ -1,0 +1,146 @@
+{% extends "template_base_page.html" %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+            $(document).ready(function () {
+                $(document).on("change", ".doc", function (e) {
+                    var files = !!this.files ? this.files : [];
+                    if (!files.length || !window.FileReader) return;
+                    var fileExtension = ['pdf'];
+                    if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                        alert("Only formats are allowed : " + fileExtension.join(', '));
+                        $(this).val('');
+                        return false;
+                    }
+                });
+
+
+                $('#sample_1').dataTable().fnDestroy();
+                $('#sample_1').dataTable({
+                    "aoColumnDefs": [
+                        {'bSortable': false}
+                    ]
+                });
+            });
+        }
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'student:student_home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span> Psychometric Test </span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">Psychometric Test </span>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form action="{% url 'student:save_psychometric_test' %}"
+                      id="form_sample_1"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-3 control-label">Application Id:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Application id" id="id_application_id"
+                                           name="application_id"
+                                           value="{{ user.get_application_id }}" class="form-control" disabled required>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-3 control-label">Result:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Result" id="id_result"
+                                           name="result"
+                                           value="{{ psychometric_test_obj.result }}" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-3 control-label">Test Result:</label>
+                                <div class="col-md-3">
+                                    <input type="file" title="Select Test Result" id="id_test_result_document"
+                                           name="test_result_document" class="doc form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+                        <br>
+                        <br>
+
+                        <div class="row">
+                            <div class="col-md-offset-4 col-md-7">
+                                <button type="submit" class="btn green" id="save" style="">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
