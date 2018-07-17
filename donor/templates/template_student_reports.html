@@ -81,7 +81,7 @@
         <div class="portlet-body">
             <div class="form-body">
                 <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data"
-                      action="{% url 'partner:filter_registered_application' %}">
+                      action="{% url 'donor:filter_student_report' %}">
                     {% csrf_token %}
 
                     <div class="row">
@@ -98,25 +98,6 @@
                                     <th style="display: none"></th>
                                     <th>Student Name</th>
                                     <th>
-                                        <select id='id_nationality' title="Select Nationality"
-                                                name="nationality"
-                                                class="form-control">
-                                            {% if curriculum_obj %}
-                                                <option style="display:none" selected="selected"
-                                                        value="">
-                                                </option>
-                                            {% else %}
-                                                <option style="display:none" selected="selected" id="" value="">
-                                                    Nationality
-                                                </option>
-                                            {% endif %}
-
-                                            {% for rec in country_recs %}
-                                                <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </th>
-                                    <th>
                                         <select id='id_country' title="Select Country"
                                                 name="country"
                                                 class="form-control">
@@ -130,7 +111,10 @@
                                                 </option>
                                             {% endif %}
 
-                                            <option value='{{ rec.id }}'>{{ user.partner_user_rel.all.0.country.country_name|title }}</option>
+                                            {% for rec in country_recs %}
+                                                <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
+                                            {% endfor %}
+
                                         </select>
                                     </th>
                                     <th>
@@ -172,12 +156,16 @@
                                         </select>
                                     </th>
                                     <th>Program</th>
-                                    <th>Scholarship Fee</th>
+                                    <th>Semester</th>
+                                    <th>GPA</th>
+                                    <th>CGPA</th>
+                                    <th>Payments</th>
+                                    <th>PDF</th>
                                 </tr>
                                 </thead>
 
                                 <tbody id="tbody">
-                                {% for rec in applicant_recs %}
+                                {% for rec in application_records %}
                                     <tr id="item{{ forloop.counter }}" class="item">
                                         <td style="display: none"><input id="scholarship_id" value="{{ rec.id }}"></td>
                                         <td>
@@ -185,11 +173,7 @@
                                         </td>
 
                                         <td>
-                                            <text>{{ rec.nationality.country_name|title }}</text>
-                                        </td>
-
-                                        <td>
-                                            <text>{{ rec.nationality.country_name|title }}</text>
+                                            <text>{{ rec.address.country.country_name|title }}</text>
                                         </td>
 
                                         <td>
@@ -201,7 +185,19 @@
                                         </td>
 
                                         <td>
-                                            {#                                        <text>{{ rec.applicant_scholarship_rel.all.0.course_applied.degree_name|title }}</text>#}
+
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                        <td>
+
                                         </td>
                                         <td>
 

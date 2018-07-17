@@ -203,6 +203,14 @@ class DegreeTypeDetails(BaseModel):
     def __str__(self):
         return self.degree_name
 
+    def to_dict(self):
+        res = {
+            'id': self.id if self.id else '',
+            'degree_name': self.degree_name if self.degree_name else '',
+        }
+
+        return res
+
 
 class DegreeDetails(BaseModel):
     degree_name = models.CharField(max_length=255, blank=True, null=True)
@@ -219,6 +227,7 @@ class DegreeDetails(BaseModel):
         res = {
             'id': self.id if self.id else '',
             'degree_name': self.degree_name if self.degree_name else '',
+            'degree_type': self.degree_type.to_dict() if self.degree_type else '',
         }
 
         return res

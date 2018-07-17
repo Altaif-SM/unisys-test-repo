@@ -1,11 +1,214 @@
-from django.shortcuts import render
+from django.db.models import Q
+from django.shortcuts import render, redirect
+from masters.models import StudentDonorMapping, CountryDetails, DegreeDetails, UniversityDetails
+from student.models import ApplicationDetails, ApplicationHistoryDetails
+import json
+from django.contrib import messages
 
 # Create your views here.
 def template_donor_dashboard(request):
     return render(request, "template_donor_dashboard.html")
 
 def template_student_selection(request):
-    return render(request, "template_student_selection.html")
+    students = StudentDonorMapping.objects.filter(donor__user=request.user)
+
+    country_recs = CountryDetails.objects.all()
+    university_recs = UniversityDetails.objects.filter(country=request.user.donor_user_rel.get().country)
+    degree_recs = DegreeDetails.objects.all()
+
+
+    for stud in students:
+        application_records = ApplicationDetails.objects.filter(student=stud.student, admin_approval=True)
+    return render(request, "template_student_selection.html", {"application_records": application_records, 'country_recs': country_recs, 'university_recs': university_recs,
+                   'degree_recs': degree_recs})
+
+
+def filter_nationality(field):
+    if field != '':
+        return Q(nationality_id=field)
+    else:
+        return Q()  # Dummy filter
+
+
+def filter_degree(degree):
+    if degree != '':
+        return Q(applicant_scholarship_rel__course_applied_id=degree)
+    else:
+        return Q()  # Dummy filter
+
+
+def filter_university(university):
+    if university != '':
+        return Q(applicant_scholarship_rel__university_id=university)
+    else:
+        return Q()  # Dummy filter
+
+
+def filter_student_selection(request):
+    if request.POST:
+        request.session['form_data'] = request.POST
+        university = request.POST.get('university')
+        degree = request.POST.get('degree')
+        nationality = request.POST.get('nationality')
+    else:
+
+        form_data = request.session.get('form_data')
+
+        university = form_data.get('university')
+        degree = form_data.get('degree')
+        nationality = form_data.get('nationality')
+
+    try:
+
+        students = StudentDonorMapping.objects.filter(donor__user=request.user)
+
+        for stud in students:
+
+            application_records = ApplicationDetails.objects.filter(Q(student=stud.student),
+                Q(address__country=request.user.donor_user_rel.get().country,
+                  admin_approval=False), filter_nationality(nationality),
+                filter_degree(degree),
+                filter_university(university))
+
+        country_recs = CountryDetails.objects.all()
+        university_recs = UniversityDetails.objects.filter(country=request.user.donor_user_rel.get().country)
+        degree_recs = DegreeDetails.objects.all()
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+        return redirect('/partner/template_registered_application/')
+
+    return render(request, 'template_student_selection.html',
+                  {'application_rec': application_records, 'country_recs': country_recs, 'university_recs': university_recs,
+                   'degree_recs': degree_recs})
+
+
+def template_student_details(request, app_id):
+    application_rec = ApplicationDetails.objects.get(id=app_id)
+    return render(request, "template_student_details.html", {'application_rec': application_rec})
 
 def template_student_reports(request):
-    return render(request, "template_student_reports.html")
+
+    students = StudentDonorMapping.objects.filter(donor__user=request.user)
+
+    country_recs = CountryDetails.objects.all()
+    university_recs = UniversityDetails.objects.filter(country=request.user.donor_user_rel.get().country)
+    degree_recs = DegreeDetails.objects.all()
+
+    for stud in students:
+        application_records = ApplicationDetails.objects.filter(student=stud.student,
+                                                                is_sponsored=True)  # TODO make that flag True after admin approval workflow completed
+
+    return render(request, "template_student_reports.html", {"application_records": application_records, 'country_recs': country_recs, 'university_recs': university_recs,
+                   'degree_recs': degree_recs})
+
+def filter_student_report(request):
+    if request.POST:
+        request.session['form_data'] = request.POST
+        university = request.POST.get('university')
+        degree = request.POST.get('degree')
+        country = request.POST.get('country')
+    else:
+
+        form_data = request.session.get('form_data')
+
+        university = form_data.get('university')
+        degree = form_data.get('degree')
+        country = form_data.get('country')
+
+    try:
+
+        students = StudentDonorMapping.objects.filter(donor__user=request.user)
+
+        for stud in students:
+
+            application_records = ApplicationDetails.objects.filter(Q(student=stud.student),
+                Q(address__country=request.user.donor_user_rel.get().country,
+                  is_sponsored=True), filter_nationality(country),
+                filter_degree(degree),
+                filter_university(university))
+
+        country_recs = CountryDetails.objects.all()
+        university_recs = UniversityDetails.objects.filter(country=request.user.donor_user_rel.get().country)
+        degree_recs = DegreeDetails.objects.all()
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+        return redirect('/partner/template_registered_application/')
+
+    return render(request, 'template_student_reports.html',
+                  {'application_records': application_records, 'country_recs': country_recs, 'university_recs': university_recs,
+                   'degree_recs': degree_recs})
+
+
+def template_application_progress_history(request):
+    applicant_recs = ''
+    try:
+        if request.user.is_super_admin():
+            applicant_recs = ApplicationDetails.objects.filter(is_sponsored=True)
+        else:
+            students = StudentDonorMapping.objects.filter(donor__user=request.user)
+
+            for stud in students:
+                applicant_recs = ApplicationDetails.objects.filter(student=stud.student,
+                    address__country=request.user.donor_user_rel.get().country,
+                    is_sponsored=True)
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+
+    return render(request, 'template_student_progress_history.html',
+                  {'applicant_recs': applicant_recs})
+
+def filter_application_history(request):
+    if request.POST:
+        request.session['form_data'] = request.POST
+        application = request.POST.get('application')
+    else:
+        form_data = request.session.get('form_data')
+        application = form_data.get('application')
+
+    try:
+
+        if request.user.is_super_admin():
+            applicant_recs = ApplicationDetails.objects.filter(is_sponsored=True)
+            application_history_recs = ApplicationDetails.objects.get(id=application).applicant_history_rel.all()
+            application_obj = ApplicationDetails.objects.get(id=application)
+        else:
+            students = StudentDonorMapping.objects.filter(donor__user=request.user)
+
+            for stud in students:
+                applicant_recs = ApplicationDetails.objects.filter(student=stud.student,
+                    address__country=request.user.donor_user_rel.get().country, is_sponsored=True)
+                application_obj = ApplicationDetails.objects.get(id=application)
+
+                application_history_recs = ApplicationDetails.objects.get(id=application).applicant_history_rel.all()
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+        return redirect('/partner/template_registered_application/')
+
+    return render(request, 'template_student_progress_history.html',
+                  {'applicant_recs': applicant_recs, 'application_history_recs': application_history_recs,
+                   'application_obj': application_obj})
+
+def template_my_payments(request):
+    students = StudentDonorMapping.objects.filter(donor__user=request.user)
+    for stud in students:
+        applicant_recs = ApplicationDetails.objects.filter(student=stud.student,
+                                                           address__country=request.user.donor_user_rel.get().country,
+                                                           is_sponsored=True)
+    return render(request, "template_my_payments.html", {'applicant_recs':applicant_recs})
+
+def template_students_receipts(request):
+    students = StudentDonorMapping.objects.filter(donor__user=request.user)
+    for stud in students:
+        applicant_recs = ApplicationDetails.objects.filter(student=stud.student,
+                                                           address__country=request.user.donor_user_rel.get().country,
+                                                           is_sponsored=True)
+    return render(request, "template_students_receipts.html", {'applicant_recs':applicant_recs})
+
+def approve_sponsorship(request):
+    application_rec = ApplicationDetails.objects.get(id=request.POST['app_id'])
+    application_rec.is_sponsored = True
+    application_rec.save()
+    return render(request, "template_student_details.html", {'application_rec': application_rec})

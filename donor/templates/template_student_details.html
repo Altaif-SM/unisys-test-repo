@@ -1,0 +1,330 @@
+{% extends "template_base_page.html" %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        .custom-file-upload {
+            border: 1px solid #ccc;
+            display: inline-block;
+            padding: 6px 12px;
+            cursor: pointer;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+
+        {% comment %} hr {
+     display: block;
+     margin-top: 0.5em;
+     margin-bottom: 0.5em;
+     margin-left: auto;
+     margin-right: auto;
+     border-style: inset;
+     border-width: 0.5px;
+ }{% endcomment %}
+
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+
+            File.prototype.convertToBase64 = function (callback) {
+                var reader = new FileReader();
+                reader.onloadend = function (e) {
+                    callback(e.target.result, e.target.error);
+                };
+                reader.readAsDataURL(this);
+            };
+
+
+            $(document).ready(function () {
+
+                {% comment %}$('#file-upload').change(function () {
+                    var i = $(this).prev('label').clone();
+                    var file = $('#file-upload')[0].files[0].name;
+                    $(this).prev('label').text(file);
+                });{% endcomment %}
+
+
+                $(document).on("change", "#applicant_photo", function (e) {
+
+                    var selectedFile = this.files[0];
+                    selectedFile.convertToBase64(function (base64) {
+                        var converted_base64_image = (base64);
+                        $("#pic").val(converted_base64_image);
+                        {#alert(converted_base64_image)#}
+                    })
+
+
+                    var files = !!this.files ? this.files : [];
+                    if (!files.length || !window.FileReader) return;
+                    var fileExtension = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
+                    if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                        alert("Only formats are allowed : " + fileExtension.join(', '));
+                        $(this).val('');
+                        return false;
+                    }
+                });
+
+
+                $(document).on("change", "#id_accept_student", function (e) {
+
+                    if(e.target.checked){
+                         $('#id_accept_student_model').modal();
+                    }else{
+                        $('#id_accept_student').prop('checked', false);
+                    }
+
+                });
+
+                $(document).on("click", "#cancel_model", function (e) {
+
+                    $('#id_accept_student').prop('checked', false);
+
+                });
+
+            });
+
+
+            $('#sample_1').dataTable().fnDestroy();
+            $('#sample_1').dataTable({
+                "aoColumnDefs": [
+                    {'bSortable': false}
+                ]
+            });
+        }
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                 <a href="{% url 'student:student_home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span> Personal Info </span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase"> Personal Info</span>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form action="{% url 'student:save_update_applicant_personal_info' %}"
+                      id="form_sample_1"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-body">
+
+
+                        <h3 class="block">Student application</h3>
+                            <h4 class="form-section">Profile</h4>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3">First Name:</label>
+                                <div class="col-md-4">
+                                    <p class="form-control-static" data-display="{{ application_rec.first_name }}"> {{ application_rec.first_name }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Middle Name:</label>
+                                <div class="col-md-4">
+                                    <p class="form-control-static" data-display="{{ application_rec.middle_name }}"> {{ application_rec.middle_name }} </p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Last Name:</label>
+                                <div class="col-md-4">
+                                    <p class="form-control-static" data-display="{{ application_rec.last_name }}"> {{ application_rec.last_name }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">DOB:</label>
+                                <div class="col-md-4">
+                                    <p class="form-control-static" data-display="{{ application_rec.birth_date|date:"Y-m-d" }}"> {{ application_rec.birth_date|date:"Y-m-d" }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Gender:</label>
+                                <div class="col-md-4">
+                                    <p class="form-control-static" data-display="{{ application_rec.gender|title }}"> {{ application_rec.gender|title }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Religion:</label>
+                                <div class="col-md-4">
+                                    <p class="form-control-static" data-display="{{ application_rec.religion.religion_name|title }}"> {{ application_rec.religion.religion_name|title }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Nationality:</label>
+                                <div class="col-md-4">
+                                    <p class="form-control-static" data-display="{{ application_rec.nationality.country_name|title }}"> {{ application_rec.nationality.country_name|title }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">ID no:</label>
+                                <div class="col-md-4">
+                                    <p class="form-control-static" data-display="{{ application_rec.id_number }}"> {{ application_rec.id_number }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Passport no:</label>
+                                <div class="col-md-4">
+                                    <p class="form-control-static" data-display="{{ aapplication_rec.passport_number }}"> {{ aapplication_rec.passport_number }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Country of Issuer:</label>
+                                <div class="col-md-4">
+                                    <p class="form-control-static" data-display="{{ application_rec.passport_issue_country.country_name|title }}"> {{ application_rec.passport_issue_country.country_name|title }}</p>
+                                </div>
+                            </div>
+                            <h4 class="form-section">Contact Info</h4>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">E-mail:</label>
+                                <div class="col-md-4">
+                                    <p class="form-control-static" data-display="{{ application_rec.email }}"> {{ application_rec.email }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Telephone no (HP):</label>
+                                <div class="col-md-4">
+                                    <p class="form-control-static" data-display="{{ application_rec.telephone_hp }}"> {{ application_rec.telephone_hp }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Telephone no (Home):</label>
+                                <div class="col-md-4">
+                                    <p class="form-control-static" data-display="{{ application_rec.telephone_home }}"> {{ application_rec.telephone_home }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Residential/Postal Address:</label>
+                                <div class="col-md-4">
+                                    <p class="form-control-static" data-display="{{ application_rec.address.residential_address }}"> {{ application_rec.address.residential_address }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Premise/Sub-Locality-2:</label>
+                                <div class="col-md-4">
+                                    <p class="form-control-static" data-display="{{ application_rec.address.street }}"> {{ application_rec.address.street }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Sub-Locality:</label>
+                                <div class="col-md-4">
+                                    <p class="form-control-static" data-display="{{ application_rec.address.sub_locality }}"> {{ application_rec.address.sub_locality }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Postcode:</label>
+                                <div class="col-md-4">
+                                    <p class="form-control-static" data-display="{{ application_rec.address.post_code }}"> {{ application_rec.address.post_code }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">District:</label>
+                                <div class="col-md-4">
+                                    <p class="form-control-static" data-display="{{ application_rec.address.district|title }}"> {{ application_rec.address.district|title }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">State/Province:</label>
+                                <div class="col-md-4">
+                                    <p class="form-control-static" data-display="{{ application_rec.address.state|title }}"> {{ application_rec.address.state|title }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Country:</label>
+                                <div class="col-md-4">
+                                    <p class="form-control-static" data-display="{{ application_rec.address.country.country_name|title }}"> {{ application_rec.address.country.country_name|title }}</p>
+                                </div>
+                            </div>
+
+
+
+                        <br><br>
+
+                        <div class="row">
+                            <div class="col-md-3"></div>
+                            <div class=" col-md-3">
+                               {% if application_rec.is_sponsored %}<input type="checkbox" checked disabled>{% else %}<input type="checkbox" id="id_accept_student">{% endif %} accept student for Scholarship.
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+     <div id="id_accept_student_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{% url 'donor:approve_sponsorship' %}"
+                      id="form_sample_1"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h4 class="modal-title">Confirmation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p> Are you sure, you want to select this student to sponsor? </p>
+                        <input type="hidden" name="app_id" value="{{ application_rec.id }}">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancel_model" data-dismiss="modal" class="btn dark btn-outline">Cancel</button>
+                        <button type="submit"  class="btn green">Confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

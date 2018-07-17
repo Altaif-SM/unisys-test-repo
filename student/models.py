@@ -139,6 +139,7 @@ class ApplicationDetails(BaseModel):
     second_interview_attend = models.BooleanField(default=False)
     second_interview_approval = models.BooleanField(default=False)
     admin_approval = models.BooleanField(default=False)
+    is_sponsored = models.BooleanField(default=False)
 
     def __str__(self):
         return self.first_name
@@ -165,6 +166,7 @@ class ApplicationDetails(BaseModel):
             'balance': 0,
             'scholarship_fee': 0,
             'semester': self.applicant_progress_rel.all()[0].semester.to_dict() if self.applicant_progress_rel.all() else None,
+            'degree': self.applicant_scholarship_rel.all()[0].course_applied.to_dict() if self.applicant_scholarship_rel.all() else None,
         }
         return res
 

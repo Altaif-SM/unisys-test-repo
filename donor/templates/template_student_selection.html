@@ -81,7 +81,7 @@
         <div class="portlet-body">
             <div class="form-body">
                 <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data"
-                      action="{% url 'partner:filter_registered_application' %}">
+                      action="{% url 'donor:filter_student_selection' %}">
                     {% csrf_token %}
 
                     <div class="row">
@@ -129,8 +129,9 @@
                                                     Country
                                                 </option>
                                             {% endif %}
-
-                                            <option value='{{ rec.id }}'>{{ user.partner_user_rel.all.0.country.country_name|title }}</option>
+                                            {% for rec in country_recs %}
+                                                <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
+                                            {% endfor %}
                                         </select>
                                     </th>
                                     <th>
@@ -177,11 +178,11 @@
                                 </thead>
 
                                 <tbody id="tbody">
-                                {% for rec in applicant_recs %}
+                                {% for rec in application_records %}
                                     <tr id="item{{ forloop.counter }}" class="item">
                                         <td style="display: none"><input id="scholarship_id" value="{{ rec.id }}"></td>
                                         <td>
-                                            <text>{{ rec.first_name|title }} {{ rec.last_name|title }}</text>
+                                            <text><a href="/donor/template_student_details/{{ rec.id }}">{{ rec.student.user.get_full_name|title }} {{ rec.last_name|title }}</a></text>
                                         </td>
 
                                         <td>
@@ -189,7 +190,7 @@
                                         </td>
 
                                         <td>
-                                            <text>{{ rec.nationality.country_name|title }}</text>
+                                            <text>{{ rec.student.address.country.country_name|title }}</text>
                                         </td>
 
                                         <td>

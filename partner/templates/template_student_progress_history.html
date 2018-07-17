@@ -84,7 +84,13 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{% url 'accounts:home' %}">Home</a>
+                {% if user.is_student %}
+                    <a href="{% url 'student:student_home' %}">Home</a>
+                {% elif user.is_donor %}
+                    <a href="{% url 'donor:template_donor_dashboard' %}">Home</a>
+                {% else %}
+                    <a href="{% url 'accounts:home' %}">Home</a>
+                {% endif %}
                 <i class="fa fa-angle-right"></i>
             </li>
 
@@ -112,7 +118,7 @@
     <div class="portlet-body">
         <div class="form-body">
             <div class="row col-md-offset-3">
-                <form method="post" action="{% url 'partner:filter_application_history' %}" id="form_sample_1">
+                <form method="post" action="{% url 'donor:filter_application_history' %}" id="form_sample_1">
                     {% csrf_token %}
                     <div class="col-md-4">
                         <div class="">

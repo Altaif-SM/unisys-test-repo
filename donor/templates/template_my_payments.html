@@ -1,0 +1,284 @@
+{% extends "template_base_page.html" %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    <style type="text/css">
+
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+            $(document).ready(function () {
+
+                $(document).on("click", "#save", function (e) {
+                    $('#form_sample_1').submit();
+                });
+
+
+                $(document).on("change", "#id_student", function (e) {
+                    var student = $(this).val();
+                    var url = '/accounting/get_payment_voucher_data_by_student/';
+                    get_voucher_data(url, student);
+                });
+
+
+                function get_voucher_data(url, student) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            student: student,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+                            alert("data"+JSON.stringify(data));
+
+                            if (data['semester'] != null) {
+                                $('#id_semester').val(data['semester']['semester_name']);
+                                $('#id_semester_id').val(data['semester']['id']);
+                            }
+
+
+                            $('#id_scholarship_fee').val(data['scholarship_fee']);
+                            $('#id_balance').val(data['balance']);
+
+                            if (data['country'] != null) {
+                                $('#id_country').val(data['country']['country_name']);
+                                $('#id_country_id').val(data['country']['id']);
+                            }
+
+                            if (data['university'] != null) {
+                                $('#id_university').val(data['university']['university_name']);
+                                $('#id_university_id').val(data['university']['id']);
+                            }
+
+                            if (data['scholarship'] != null) {
+                                $('#id_scholarship').val(data['scholarship']['scholarship_name']);
+                                $('#id_scholarship_id').val(data['scholarship']['id']);
+                            }
+
+                            if (data['degree'] != null) {
+                                $('#id_degree').val(data['degree']['degree_name']);
+                                $('#id_degree_id').val(data['degree']['id']);
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+            });
+
+
+            $('#sample_1').dataTable().fnDestroy();
+            $('#sample_1').dataTable({
+                "aoColumnDefs": [
+                    {'bSortable': false}
+                ]
+            });
+        }
+    </script>
+
+{% endblock %}
+
+
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'donor:template_donor_dashboard' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span> Student Payment Report </span>
+            </li>
+        </ul>
+    </div>
+
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+
+    <!-- BEGIN EXAMPLE TABLE PORTLET-->
+    <div class="portlet light ">
+        <div class="portlet-title">
+            <div class="caption font-dark">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase"> Student Payment Report </span>
+            </div>
+
+            <div style="float: right;">
+
+                <div class="btn-group">
+                    <button type="submit" class="btn green" id="export">Export</button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form action="{% url 'accounting:save_payment_voucher_data_by_student' %}" id="form_sample_1"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-body">
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Student:</label>
+                                <div class="col-md-2">
+                                    <select id='id_student' title="Select country" name="student"
+                                            class="form-control"
+                                            required>
+                                        <option style="display:none" selected="selected" id=""
+                                                value="">Please Select
+                                        </option>
+
+                                        {% for rec in applicant_recs %}
+                                            <option value='{{ rec.student.id }}'>{{ rec.student.user.get_full_name|title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <br><br>
+
+                        <div class="row">
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Studnet:</label>
+                                <div class="col-md-2">
+                                    <input type="number" title="Studnet" id="id_studnet"
+                                           name="studnet" placeholder="0.00"
+                                           class="form-control" required>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Country:</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Country" placeholder="Country"
+                                           id="id_country" name="country"
+                                           class="form-control" required>
+
+                                    <input type="text" id="id_country_id" name="country" hidden>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-2 control-label">University:</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="University" placeholder="University"
+                                           id="id_university" name="university"
+                                           class="form-control" required>
+
+                                    <input type="text" id="id_university_id" name="university" hidden>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <br><br>
+
+                        <div class="row">
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Scholarship:</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Scholarship" placeholder="Scholarship"
+                                           id="id_scholarship" name="scholarship"
+                                           class="form-control" required>
+
+                                    <input type="text" id="id_scholarship_id" name="scholarship" hidden>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Degree:</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Degree" id="id_degree"
+                                           name="degree" placeholder="Degree"
+                                           class="form-control" required>
+
+                                    <input type="text" id="id_degree_id" name="semester" hidden>
+                                </div>
+                            </div>
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Program:</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Program" placeholder="Program"
+                                           id="id_program" name="program"
+                                           class="form-control" required>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="table-toolbar">
+            </div>
+
+            <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <table class="table table-striped table-hover table-bordered" id="sample_1">
+                    <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Description</th>
+                        <th>Debit</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="tbody">
+                    {% for rec in payments_record %}
+                        <tr id="item{{ forloop.counter }}" class="item">
+                            <td>
+                                <input id="id_payment_voucher_number" class="form-control data voucher_number"  value="{{ rec.payment_voucher_number }}">
+                            </td>
+
+                            <td>
+                                <input class="form-control data description" name="description" type="text"
+                                       id="description{{ forloop.counter }}"
+                                       value="{{ rec.description }}"
+                                       required="True" title='Description' disabled>
+                            </td>
+                            <td>
+                                <input class="form-control data debit" name="debit" type="text"
+                                       id="debit{{ forloop.counter }}"
+                                       value="{{ rec.debit }}" required="True" disabled>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
