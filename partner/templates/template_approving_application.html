@@ -45,6 +45,8 @@
                             flags[$(this).attr('id')] = $(this).is(':checked')
                             {#alert($(this).is(':checked'));#}
                         })
+
+                        flags['id_scholarship_fee'] = $('#' + id + ' #id_scholarship_fee').val()
                         {#alert($('#'+id+' .application_id').val())#}
 
                         var payload = {
@@ -59,6 +61,18 @@
                     {#console.log(JSON.stringify(array));#}
                     {#return false;#}
                 })
+
+                $(document).on("change", ".class_admin", function (e) {
+                    var parent_id = $(this).closest('tr').attr('id');
+
+                    if (e.target.checked) {
+                        $('#' + parent_id + ' #id_scholarship_fee').show();
+                    } else {
+                        $('#' + parent_id + ' #id_scholarship_fee').hide();
+                    }
+                    {#alert(parent_id)#}
+
+                });
             });
 
 
@@ -68,6 +82,25 @@
                     {'bSortable': false}
                 ]
             });
+
+            {% comment %}$(document).on("change", "#id_accept_student", function (e) {
+                    if(e.target.checked){
+                         $('#id_accept_student_model').modal();
+                    }else{
+                        $('#id_accept_student').prop('checked', false);
+                    }
+
+                });{% endcomment %}
+
+
+            {% comment %}$(document).on("change", ".class_admin", function (e) {
+                    if(e.target.checked){
+                         $('#id_accept_student_model').modal();
+                    }else{
+                        $('#id_accept_student').prop('checked', false);
+                    }
+
+                });{% endcomment %}
         }
 
         window.setTimeout(function () {
@@ -119,8 +152,9 @@
                             <select autocomplete="off" class="form-control" data-live-search="true"
                                     id="application_status" name="application_status" required="required">
                                 {% if application_status %}
-                                    <option  style="display: none"  value="{{ application_status }}" selected="selected">{{ application_status }}</option>
-                                    {% else %}
+                                    <option style="display: none" value="{{ application_status }}"
+                                            selected="selected">{{ application_status }}</option>
+                                {% else %}
                                     <option value="" style="display: none" selected="selected">Please Select</option>
                                 {% endif %}
 
@@ -167,8 +201,10 @@
                                 <tbody id="tbody">
                                 {% for rec in applicant_recs %}
                                     <tr id="item{{ forloop.counter }}" class="item">
-                                        <td style="display: none"><input id="application_id" class="application_id"
-                                                                         value="{{ rec.id }}"></td>
+                                        <td style="display: none">
+                                            <input id="application_id" class="application_id" value="{{ rec.id }}">
+                                        </td>
+
                                         <td>
                                             <text>{{ rec.first_name|title }} {{ rec.last_name|title }}</text>
                                         </td>
@@ -208,21 +244,60 @@
                                         </td>
 
                                         <td>
-                                            <input class="app" type="checkbox" name="admin" id="id_admin"
+                                            <input class="app class_admin" type="checkbox" name="admin" id="id_admin"
                                                    {% if rec.admin_approval == True %}checked{% endif %}
-                                            {% if not user.is_super_admin%} disabled {% endif %}>
+
+                                                    {% if not user.is_super_admin %} disabled {% else %} {% endif %}>
+
+                                            {% if user.is_super_admin %}
+                                                {% if rec.admin_approval == True %}
+                                                    <input type="number" title="Enter Scholarship Fee"
+                                                           style="width: 50%" id="id_scholarship_fee"
+                                                           name="scholarship_fee" class="id_scholarship_fee"
+                                                           value="{{ rec.scholarship_fee }}">
+                                                {% else %}
+                                                    <input type="number" hidden title="Enter Scholarship Fee"
+                                                           style="width: 50%" id="id_scholarship_fee"
+                                                           name="scholarship_fee" class="id_scholarship_fee">
+                                                {% endif %}
+                                            {% endif %}
                                         </td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
                             </table>
                         </div>
+
                         <div class="">
                             <div class="col-md-offset-8">
                                 <button type="submit" class="btn green" id="save" style="">Save</button>
                             </div>
                         </div>
                     </div>
+
+                    {% comment %}<div id="id_accept_student_model" class="modal fade" tabindex="-1" data-backdrop="static"
+                         data-keyboard="false">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"
+                                            aria-hidden="true"></button>
+                                    <h4 class="modal-title">Scholarship Fee</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p> Please Enter Scholarship Fee For This Student. </p>
+                                    <input id="scholarship_fee">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" id="cancel_model" data-dismiss="modal"
+                                            class="btn dark btn-outline">Cancel
+                                    </button>
+                                    <button type="button" class="btn green">Confirm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>{% endcomment %}
+
                 </form>
             </div>
         </div>

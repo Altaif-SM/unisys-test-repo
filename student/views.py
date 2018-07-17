@@ -611,7 +611,35 @@ def save_update_applicant_curriculum_experience_info(request):
                                 from_date_two=request.POST['from_date_two'],
                                 to_date_two=request.POST['to_date_two'])
 
-                            experience_object = ExperienceDetails.objects.get(applicant_id=request.user.get_application)
+                            try:
+
+                                experience_object = ExperienceDetails.objects.get(applicant_id=request.user.get_application)
+                            except:
+                                experience_object = ExperienceDetails.objects.create(
+                                    work_experience_one=request.POST['work_experience_one'],
+                                    from_date_one=request.POST['from_date_one'],
+                                    to_date_one=request.POST['to_date_one'],
+
+                                    work_experience_two=request.POST['work_experience_two'],
+                                    from_date_two=request.POST['from_date_two'],
+                                    to_date_two=request.POST['to_date_two'],
+                                    applicant_id=request.user.get_application)
+
+                                # if work_experience_document_one:
+                                #     work_experience_one = str(work_experience_document_one)
+                                #     handle_uploaded_file(
+                                #         settings.MEDIA_ROOT + os.path.join('reports/' + work_experience_one),
+                                #         work_experience_document_one)
+                                #     experience_object.work_experience_document_one = work_experience_one
+                                #
+                                # if work_experience_document_two:
+                                #     work_experience_two = str(work_experience_document_two)
+                                #     handle_uploaded_file(
+                                #         settings.MEDIA_ROOT + os.path.join('reports/' + work_experience_two),
+                                #         work_experience_document_two)
+                                #     experience_object.work_experience_document_two = work_experience_two
+                                #
+                                # experience_object.save()
 
                             if work_experience_document_one:
                                 work_experience_one = str(work_experience_document_one)

@@ -4,6 +4,7 @@ from student.models import *
 from partner.models import *
 import json
 from django.contrib import messages
+from django.http import JsonResponse
 
 
 # Create your views here.
@@ -96,6 +97,8 @@ def change_application_status(request):
     data_value = json.loads(request.POST.get('data_value'))
 
     try:
+
+        # messages_success = False
 
         for application in data_value:
 
@@ -191,14 +194,17 @@ def change_application_status(request):
                         application['flags'][
                             'id_second_interview_attend'] and application['flags']['id_second_interview_approval'] and \
                         application['flags']['id_admin']:
-                    application_obj.admin_approval = True
-                    application_obj.save()
 
-                    if not ApplicationHistoryDetails.objects.filter(applicant_id_id=application['application_id'],
-                                                                    status='Admin Approval').exists():
-                        ApplicationHistoryDetails.objects.create(applicant_id_id=application['application_id'],
-                                                                 status='Admin Approval',
-                                                                 remark='Your application have been approved by the admin. Please wait for the further updates.')
+                    if application['flags']['id_scholarship_fee'] != '':
+                        application_obj.admin_approval = True
+                        application_obj.scholarship_fee = application['flags']['id_scholarship_fee']
+                        application_obj.save()
+
+                        if not ApplicationHistoryDetails.objects.filter(applicant_id_id=application['application_id'],
+                                                                        status='Admin Approval').exists():
+                            ApplicationHistoryDetails.objects.create(applicant_id_id=application['application_id'],
+                                                                     status='Admin Approval',
+                                                                     remark='Your application have been approved by the admin. Please wait for the further updates.')
                 else:
                     continue
 
@@ -334,3 +340,71 @@ def template_psychometric_test_report(request):
 
     return render(request, 'template_psychometric_test_report.html',
                   {'psychometric_obj': psychometric_obj})
+
+
+def template_link_student_program(request):
+    applicant_recs = ApplicationDetails.objects.filter(address__country=request.user.partner_user_rel.get().country,
+                                                       is_submitted=True)
+
+    rec_list = []
+
+    semester_recs = SemesterDetails.objects.all()
+
+    for applicant_rec in applicant_recs:
+        temp_dict = {}
+        program_recs = ProgramDetails.objects.filter(
+            university=applicant_rec.applicant_scholarship_rel.get().university,
+            degree_type=applicant_rec.applicant_scholarship_rel.get().course_applied.degree_type)
+
+        temp_dict['program_recs'] = program_recs
+        temp_dict['applicant_rec'] = applicant_rec
+
+        # program_recs = ModuleDetails.objects.filter(country=applicant_rec.address.country).filter(
+        #     development_module_r1el__year=YearDetails.objects.get(active_year=1))
+        #
+        # for program_rec in program_recs:
+        #     module_recs = DevelopmentProgram.objects.filter(module=program_rec,
+        #                                                     year=YearDetails.objects.get(active_year=1))
+
+        rec_list.append(temp_dict)
+
+    country_recs = CountryDetails.objects.all()
+    university_recs = UniversityDetails.objects.filter(country=request.user.partner_user_rel.get().country)
+    degree_recs = DegreeDetails.objects.all()
+    program_recs = ProgramDetails.objects.all()
+
+    return render(request, 'template_link_student_program.html',
+                  {'applicant_recs': applicant_recs, 'country_recs': country_recs, 'university_recs': university_recs,
+                   'degree_recs': degree_recs, 'semester_recs': semester_recs, 'rec_list': rec_list,
+                   'program_recs': program_recs})
+
+
+def get_semester_modules(request):
+    finalDict = []
+    semester = request.POST.get('semester_id', None)
+
+    modules_recs = DevelopmentProgram.objects.filter(year=YearDetails.objects.get(active_year=1), semester_id=semester)
+    module_id = []
+
+    for rec in modules_recs:
+        if rec.id not in module_id:
+            module_id.append(rec.id)
+            module_data = {'id': rec.id, 'module_name': rec.module.module_name.title()}
+            finalDict.append(module_data)
+    return JsonResponse(finalDict, safe=False)
+
+
+def save_student_program(request):
+    data_value = json.loads(request.POST.get('data_value'))
+
+    try:
+        for application in data_value:
+            for module in application['applicant_module']:
+                StudentModuleMapping.objects.create(program_id=application['applicant_program'],
+                                                    degree_id=application['degree'],
+                                                    applicant_id_id=application['applicant_id'],
+                                                    module_id=module)
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+    return redirect('/partner/template_link_student_program/')

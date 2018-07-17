@@ -148,6 +148,8 @@ class ApplicationDetails(BaseModel):
         full_name = '%s %s' % (self.first_name, self.last_name)
         return full_name.strip()
 
+    scholarship_fee = models.CharField(max_length=15, blank=True, null=True)
+
     def __str__(self):
         return '%s %s' % (self.first_name, self.last_name)
 

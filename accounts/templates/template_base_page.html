@@ -498,6 +498,17 @@ License: You must have a valid license purchased only from themeforest(the above
                         </li>
                     {% endif %}
 
+                    {% if 'partner.can_view_link_student_program' in perms %}
+                        <li class="nav-item " id="acd_qli">
+                            <a href="{% url 'partner:template_link_student_program' %}"
+                               class="nav-link nav-toggle">
+                                <i class="glyphicon glyphicon-list-alt"></i>
+                                <span class="title">Link Students & Program</span>
+                                <span class="selected"></span>
+                            </a>
+                        </li>
+                    {% endif %}
+
 
                     {% if 'accounting.can_view_student_payment_voucher' in perms %}
                         <li class="nav-item start ">
