@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'student.apps.StudentConfig',
     'partner.apps.PartnerConfig',
     'accounting.apps.AccountingConfig',
+    'donor.apps.DonorConfig',
 ]
 
 MIDDLEWARE = [

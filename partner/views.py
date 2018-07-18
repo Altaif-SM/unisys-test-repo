@@ -119,6 +119,7 @@ def change_application_status(request):
 
                     if not ApplicationHistoryDetails.objects.filter(applicant_id_id=application['application_id'],
                                                                     status='First Interview Call').exists():
+
                         ApplicationHistoryDetails.objects.create(applicant_id_id=application['application_id'],
                                                                  status='First Interview Call',
                                                                  remark='You are requested to come down for the first interview.')
