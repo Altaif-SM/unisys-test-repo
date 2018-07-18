@@ -1,6 +1,9 @@
 import random
 import string
 from masters.models import YearDetails
+from django.template.loader import render_to_string, get_template
+from django.core.mail import send_mail
+from django.contrib import messages
 
 
 def random_string_generator(size, include_lowercase=True, include_uppercase=True, include_number=True):
@@ -29,3 +32,18 @@ def get_application_id(application_obj):
 
     application_id = year_name + str(application_obj.id)
     return application_id
+
+
+def send_email_to_applicant(from_email, to_mail, subject, message, first_name):
+
+    # from_email = settings.EMAIL_HOST_USER
+    to = [to_mail, from_email]
+
+    template = get_template('approving_student_application.html')
+    html_content = render_to_string('approving_student_application.html',{'first_name':first_name,'message':message})
+
+    try:
+        send_mail(subject, message, from_email, to, fail_silently=True , html_message=html_content)
+    except:
+        messages.warning('Network Error Occur Please Try Later')
+    return to_mail
