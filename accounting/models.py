@@ -1,14 +1,14 @@
 from django.db import models
 from common.models import BaseModel
-from masters.models import SemesterDetails
-from student.models import StudentDetails
+from masters.models import SemesterDetails, StudentDonorMapping
+from student.models import StudentDetails, ApplicationDetails
 from donor.models import DonorDetails
 
 # Create your models here.
 class StudentPaymentVoucher(BaseModel):
 
     PAYMENT_VOUCHER_NUMBER = 'payment_voucher_number'
-    STUDENT = 'student'
+    APP_ID = 'app_id'
     SEMESTER = 'semester'
     PAYMENT_VOUCHER_DATE = 'payment_voucher_date'
     PAYMENT_VOUCHER_AMOUNT = 'payment_voucher_amount'
@@ -17,8 +17,9 @@ class StudentPaymentVoucher(BaseModel):
     PAYMENT_VOUCHER_BEN = 'payment_voucher_beneficiary'
 
     payment_voucher_number = models.CharField(max_length=50, null=True)
-    student = models.ForeignKey(StudentDetails, related_name="rel_student_payment_voucher", on_delete=models.PROTECT)
-    semester = models.ForeignKey(SemesterDetails, related_name="rel_semester_payment_voucher", on_delete=models.PROTECT, null=True)
+    application = models.ForeignKey(ApplicationDetails, related_name="rel_student_payment_voucher", on_delete=models.PROTECT, null=True)
+    # student = models.ForeignKey(StudentDetails, related_name="rel_student_payment_voucher", on_delete=models.PROTECT)
+    # semester = models.ForeignKey(SemesterDetails, related_name="rel_semester_payment_voucher", on_delete=models.PROTECT, null=True)
     payment_voucher_date = models.DateField()
     payment_voucher_amount = models.FloatField(max_length=50, null=True)
     payment_voucher_total = models.FloatField(max_length=50, null=True)
@@ -29,6 +30,9 @@ class StudentPaymentVoucher(BaseModel):
         permissions = (
             ('can_view_student_payment_voucher', 'can view student payment voucher'),
         )
+
+    def validate(self):
+        self.payment_voucher_amount >= self.application.scholarship_fee
 
     def __str__(self):
         return self.payment_voucher_number
@@ -44,8 +48,8 @@ class StudentPaymentVoucher(BaseModel):
         if StudentPaymentVoucher.PAYMENT_VOUCHER_NUMBER in val_dict and val_dict[StudentPaymentVoucher.PAYMENT_VOUCHER_NUMBER]:
             voucher.payment_voucher_number = val_dict[StudentPaymentVoucher.PAYMENT_VOUCHER_NUMBER]
 
-        if StudentPaymentVoucher.STUDENT in val_dict and val_dict[StudentPaymentVoucher.STUDENT]:
-            voucher.student = StudentDetails.objects.get(id=val_dict[StudentPaymentVoucher.STUDENT])
+        if StudentPaymentVoucher.APP_ID in val_dict and val_dict[StudentPaymentVoucher.APP_ID]:
+            voucher.application.id = StudentDetails.objects.get(id=val_dict[StudentPaymentVoucher.APP_ID])
 
         if StudentPaymentVoucher.SEMESTER in val_dict and val_dict[StudentPaymentVoucher.SEMESTER]:
             voucher.semester = SemesterDetails.objects.get(id=val_dict[StudentPaymentVoucher.SEMESTER])
@@ -70,8 +74,10 @@ class StudentPaymentVoucher(BaseModel):
 
 class StudentReceiptVoucher(BaseModel):
     receipt_voucher_number = models.CharField(max_length=50, null=True)
-    student = models.ForeignKey(StudentDetails, related_name="rel_student_receipt_voucher", on_delete=models.PROTECT)
-    semester = models.ForeignKey(SemesterDetails, related_name="rel_semester_receipt_voucher", on_delete=models.PROTECT)
+    application = models.ForeignKey(ApplicationDetails, related_name="rel_student_receipt_voucher",
+                                    on_delete=models.PROTECT, null=True)
+    # student = models.ForeignKey(StudentDetails, related_name="rel_student_receipt_voucher", on_delete=models.PROTECT)
+    # semester = models.ForeignKey(SemesterDetails, related_name="rel_semester_receipt_voucher", on_delete=models.PROTECT)
     receipt_voucher_date = models.DateField()
     receipt_voucher_amount = models.FloatField(max_length=50, null=True)
     receipt_voucher_total = models.FloatField(max_length=50, null=True)
@@ -88,8 +94,9 @@ class StudentReceiptVoucher(BaseModel):
 
 class DonorReceiptVoucher(BaseModel):
     receipt_voucher_number = models.CharField(max_length=50, null=True)
-    student = models.ForeignKey(StudentDetails, related_name="rel_student_donor_receipt_voucher", on_delete=models.PROTECT)
-    donor = models.ForeignKey(DonorDetails, related_name="rel_donor_student_receipt_voucher", on_delete=models.PROTECT)
+    application = models.ForeignKey(ApplicationDetails, related_name="rel_donor_receipt_voucher",
+                                    on_delete=models.PROTECT, null=True)
+    donor_student = models.ForeignKey(StudentDonorMapping, related_name="rel_donor_student_receipt_voucher", on_delete=models.PROTECT, null=True)
     receipt_voucher_amount = models.FloatField(max_length=50, null=True)
     receipt_voucher_total = models.FloatField(max_length=50, null=True)
     receipt_voucher_description = models.CharField(max_length=50, null=True)

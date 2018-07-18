@@ -64,3 +64,10 @@ class StudentModuleMapping(BaseModel):
     def __str__(self):
         details = str(self.applicant_id.first_name) + ' and ' + str(self.module.module.module_name)
         return details
+
+    def to_dict(self):
+        res = {
+            'id': self.id,
+            'program': self.program.to_dict() if self.program else '',
+        }
+        return res

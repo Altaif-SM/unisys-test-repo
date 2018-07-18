@@ -141,6 +141,8 @@ class ApplicationDetails(BaseModel):
     admin_approval = models.BooleanField(default=False)
     is_sponsored = models.BooleanField(default=False)
 
+    scholarship_fee = models.CharField(max_length=15, blank=True, null=True)
+
     def get_full_name(self):
         """
         Return the first_name plus the last_name, with a space in between.
@@ -148,7 +150,6 @@ class ApplicationDetails(BaseModel):
         full_name = '%s %s' % (self.first_name, self.last_name)
         return full_name.strip()
 
-    scholarship_fee = models.CharField(max_length=15, blank=True, null=True)
 
     def __str__(self):
         return '%s %s' % (self.first_name, self.last_name)
@@ -168,14 +169,14 @@ class ApplicationDetails(BaseModel):
         res = {
             'id': self.id,
             'country': self.address.country.to_dict() if self.address else '',
-            'scholarship': self.applicant_scholarship_rel.all()[0].scholarship.to_dict() if self.applicant_scholarship_rel.all() else None,
-            'university': self.applicant_scholarship_rel.all()[0].university.to_dict() if self.applicant_scholarship_rel.all() else None,
-            'program': '',
-            'donor': self.student.student_donor_rel.all()[0].donor.to_dict() if self.student.student_donor_rel.all() else None,
+            'scholarship': self.applicant_scholarship_rel.all()[0].scholarship.to_dict() if self.applicant_scholarship_rel.all() else '',
+            'university': self.applicant_scholarship_rel.all()[0].university.to_dict() if self.applicant_scholarship_rel.all() else '',
+            'program':    self.applicant_module_rel.all()[0].program.to_dict() if self.applicant_module_rel.all() else '',
+            'donor': self.student.student_donor_rel.all()[0].donor.to_dict() if self.student.student_donor_rel.all() else '',
             'balance': 0,
-            'scholarship_fee': 0,
-            'semester': self.applicant_progress_rel.all()[0].semester.to_dict() if self.applicant_progress_rel.all() else None,
-            'degree': self.applicant_scholarship_rel.all()[0].course_applied.to_dict() if self.applicant_scholarship_rel.all() else None,
+            'scholarship_fee': self.scholarship_fee if self.scholarship_fee else 0,
+            'semester': self.applicant_progress_rel.all()[0].semester.to_dict() if self.applicant_progress_rel.all() else '',
+            'degree': self.applicant_scholarship_rel.all()[0].course_applied.to_dict() if self.applicant_scholarship_rel.all() else '',
         }
         return res
 

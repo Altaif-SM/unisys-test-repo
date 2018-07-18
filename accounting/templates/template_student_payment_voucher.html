@@ -14,7 +14,15 @@
             $(document).ready(function () {
 
                 $(document).on("click", "#save", function (e) {
-                    $('#form_sample_1').submit();
+
+                    if($("#id_payment_voucher_amount").val() <= $("#id_scholarship_fee").val()){
+                        $('#form_sample_1').submit();
+                        $("#error_msg").hide();
+                    }else{
+                        $("#error_msg").show();
+                        return false;
+                    }
+
                 });
 
 
@@ -34,6 +42,8 @@
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
+
+                            $('#id_app_id').val(data['id']);
 
                             if (data['semester'] != null) {
                                 $('#id_semester').val(data['semester']['semester_name']);
@@ -59,9 +69,18 @@
                                 $('#id_scholarship_id').val(data['scholarship']['id']);
                             }
 
+                            if (data['scholarship_fee'] != null) {
+                                $('#id_scholarship_fee').val(data['scholarship_fee']);
+                            }
+
                             if (data['donor'] != null) {
                                 $('#id_donor').val(data['donor']['user']['first_name']);
                                 $('#id_donor_id').val(data['donor']['id']);
+                            }
+
+                            if (data['program'] != null) {
+                                $('#id_program').val(data['program']['program_name']);
+                                $('#id_program_id').val(data['program']['id']);
                             }
                         },
                         error: function (xhr, msg, err) {
@@ -119,7 +138,7 @@
 
             <div style="float: right;">
                 <div class="btn-group">
-                    <button type="submit" class="btn green" id="save">Save</button>
+                    <button type="button" class="btn green" id="save">Save</button>
                 </div>
                 <div class="btn-group">
                     <button type="submit" class="btn green" id="save">Save & Print PDF</button>
@@ -137,7 +156,7 @@
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-
+                    <input type="hidden" id="id_app_id" name="app_id">
                     <div class="form-body">
 
                         <div class="row">
@@ -285,6 +304,7 @@
                                     <input type="number" title="Amount" placeholder="0.00"
                                            id="id_payment_voucher_amount" name="payment_voucher_amount"
                                            class="form-control" required>
+                                    <span id="error_msg" style="display: none;color: red;">Amount should not be greter tha Scholarshi Fee</span>
                                 </div>
                             </div>
                         </div>
