@@ -44,7 +44,7 @@ class PassingYear(BaseModel):
     year = models.CharField(max_length=10)
 
     def __str__(self):
-        return self.str(year)
+        return str(self.year)
 
     class Meta:
         ordering = ('-id',)
