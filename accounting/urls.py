@@ -17,5 +17,6 @@ urlpatterns = [
 
                   path('get_payment_voucher_data_by_student/', views.get_payment_voucher_data_by_student, name='get_payment_voucher_data_by_student'),
                   path('save_payment_voucher_data_by_student/', views.save_payment_voucher_data_by_student, name='save_payment_voucher_data_by_student'),
+                  path('save_student_receipt_voucher/', views.save_student_receipt_voucher, name='save_student_receipt_voucher'),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

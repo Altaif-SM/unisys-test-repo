@@ -13,9 +13,15 @@
         window.onload = function () {
             $(document).ready(function () {
 
-                $(document).on("click", "#save", function (e) {
+                //TODO when you want to save student payment voucher
+                //TODO this payment is from student side
+                /*$(document).on("click", "#save", function (e) {
 
-                    if($("#id_payment_voucher_amount").val() <= $("#id_scholarship_fee").val()){
+                    alert("hello");
+                    alert(Number($("#id_payment_voucher_amount").val()));
+                    alert(Number($("#id_scholarship_fee").val()));
+
+                    if( Number($("#id_payment_voucher_amount").val()) <= Number($("#id_scholarship_fee").val())){
                         $('#form_sample_1').submit();
                         $("#error_msg").hide();
                     }else{
@@ -23,10 +29,11 @@
                         return false;
                     }
 
-                });
+                });*/
 
 
                 $(document).on("change", "#id_student", function (e) {
+
                     var student = $(this).val();
                     var url = '/accounting/get_payment_voucher_data_by_student/';
                     get_voucher_data(url, student);
@@ -156,7 +163,7 @@
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <input type="hidden" id="id_app_id" name="app_id">
+                    <input type="hidden" id="id_app_id" name="application">
                     <div class="form-body">
 
                         <div class="row">
@@ -183,7 +190,7 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Voucher Number" placeholder="Voucher Number"
                                            id="id_payment_voucher_number" name="payment_voucher_number"
-                                           class="form-control" required>
+                                           class="form-control" required disabled>
                                 </div>
                             </div>
 
@@ -207,7 +214,7 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Semister" id="id_semester"
                                            name="semester" placeholder="Semester"
-                                           class="form-control" required>
+                                           class="form-control" required disabled>
 
                                     <input type="text" id="id_semester_id" name="semester" hidden>
                                 </div>
@@ -218,7 +225,7 @@
                                 <div class="col-md-2">
                                     <input type="number" title="Scholarship Fee" id="id_scholarship_fee"
                                            name="scholarship_fee" placeholder="0.00"
-                                           class="form-control" required>
+                                           class="form-control" required disabled>
                                 </div>
                             </div>
 
@@ -227,7 +234,7 @@
                                 <div class="col-md-2">
                                     <input type="number" title="Balance" placeholder="0.00"
                                            id="id_balance" name="balance"
-                                           class="form-control" required>
+                                           class="form-control" required disabled>
                                 </div>
                             </div>
 
@@ -243,7 +250,7 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Country" placeholder="Country"
                                            id="id_country" name="country"
-                                           class="form-control" required>
+                                           class="form-control" required disabled>
 
                                     <input type="text" id="id_country_id" name="country" hidden>
                                 </div>
@@ -254,7 +261,7 @@
                                 <div class="col-md-2">
                                     <input type="text" title="University" placeholder="University"
                                            id="id_university" name="university"
-                                           class="form-control" required>
+                                           class="form-control" required disabled>
 
                                     <input type="text" id="id_university_id" name="university" hidden>
                                 </div>
@@ -265,7 +272,7 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Scholarship" placeholder="Scholarship"
                                            id="id_scholarship" name="scholarship"
-                                           class="form-control" required>
+                                           class="form-control" required disabled>
 
                                     <input type="text" id="id_scholarship_id" name="scholarship" hidden>
                                 </div>
@@ -281,7 +288,7 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Program" placeholder="Program"
                                            id="id_program" name="program"
-                                           class="form-control" required>
+                                           class="form-control" required disabled>
 
                                      <input type="text" id="id_program_id" name="program" hidden>
                                 </div>
@@ -292,7 +299,7 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Donor" placeholder="Donor"
                                            id="id_donor" name="donor"
-                                           class="form-control" required>
+                                           class="form-control" required disabled>
 
                                      <input type="text" id="id_donor_id" name="donor" hidden>
                                 </div>
@@ -365,6 +372,7 @@
                         <th>Program</th>
                         <th>Donor</th>
                         <th>Amount</th>
+                        <th></th>
                     </tr>
                     </thead>
 
@@ -372,19 +380,19 @@
                     {% for rec in voucher_record %}
                         <tr id="item{{ forloop.counter }}" class="item">
                             <td>
-                                <input id="id_payment_voucher_number" class="form-control data voucher_number"  value="{{ rec.payment_voucher_number }}">
+                                <input id="id_payment_voucher_number" class="form-control data voucher_number"  value="{{ rec.id }}">
                             </td>
 
                             <td>
                                 <input class="form-control data voucher_number" name="student" type="text"
                                        id="student{{ forloop.counter }}"
-                                       value="{{ rec.student.user.get_full_name|title }}"
+                                       value="{{ rec.application.student.user.get_full_name|title }}"
                                        required="True" title='Student Name' disabled>
                             </td>
                             <td>
                                 <input class="form-control data start_date" name="country" type="text"
                                        id="start_date{{ forloop.counter }}"
-                                       value="{{ rec.country.address.all.0.country.country_name }}" required="True" disabled>
+                                       value="{{ rec.application.address.all.0.country.country_name }}" required="True" disabled>
                             </td>
                             <td>
                                 <input class="form-control data end_date" name="university" type="text"

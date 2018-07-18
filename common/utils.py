@@ -47,3 +47,12 @@ def send_email_to_applicant(from_email, to_mail, subject, message, first_name):
     except:
         messages.warning('Network Error Occur Please Try Later')
     return to_mail
+
+def create_voucher_number(voucher_type, voucher):
+    voucher_number = ""
+    if voucher:
+        current_year = YearDetails.objects.get(active_year=True)
+        year_name = ''.join(current_year.year_name.split(' '))
+        voucher_number = str(voucher_type)+ "-" + year_name +"-"+ str(voucher.id)
+
+    return voucher_number
