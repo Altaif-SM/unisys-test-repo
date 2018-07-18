@@ -60,8 +60,7 @@ class StudentDetails(BaseModel):
                                     on_delete=models.PROTECT)
     religion = models.CharField(max_length=255, blank=True, null=True)
     contact_number = models.CharField(max_length=16, blank=True, null=True)
-    address = models.ForeignKey('masters.AddressDetails', blank=True, null=True, related_name='student_address_rel',
-                                on_delete=models.PROTECT)
+    address = models.ForeignKey('masters.AddressDetails', blank=True, null=True, related_name='student_address_rel',on_delete=models.PROTECT)
     user = models.ForeignKey(User, null=True, related_name='student_user_rel', on_delete=models.PROTECT)
 
     class Meta:
