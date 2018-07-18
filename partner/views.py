@@ -352,12 +352,24 @@ def template_link_student_program(request):
 
     for applicant_rec in applicant_recs:
         temp_dict = {}
-        program_recs = ProgramDetails.objects.filter(
-            university=applicant_rec.applicant_scholarship_rel.get().university,
-            degree_type=applicant_rec.applicant_scholarship_rel.get().course_applied.degree_type)
 
-        temp_dict['program_recs'] = program_recs
-        temp_dict['applicant_rec'] = applicant_rec
+        if StudentModuleMapping.objects.filter(applicant_id=applicant_rec).exists():
+            module_obj = StudentModuleMapping.objects.filter(applicant_id=applicant_rec)
+
+            temp_dict['program'] = module_obj[0].program
+            temp_dict['module'] = module_obj
+            temp_dict['semester'] = module_obj[0].module.semester
+            temp_dict['applicant_rec'] = module_obj[0].applicant_id
+            temp_dict['flag'] = False
+
+        else:
+            program_recs = ProgramDetails.objects.filter(
+                university=applicant_rec.applicant_scholarship_rel.get().university,
+                degree_type=applicant_rec.applicant_scholarship_rel.get().course_applied.degree_type)
+
+            temp_dict['program_recs'] = program_recs
+            temp_dict['applicant_rec'] = applicant_rec
+            temp_dict['flag'] = True
 
         # program_recs = ModuleDetails.objects.filter(country=applicant_rec.address.country).filter(
         #     development_module_r1el__year=YearDetails.objects.get(active_year=1))
@@ -395,15 +407,20 @@ def get_semester_modules(request):
 
 
 def save_student_program(request):
-    data_value = json.loads(request.POST.get('data_value'))
+    try:
+        data_value = json.loads(request.POST.get('data_value'))
+    except Exception as e:
+        messages.warning(request, "Records is already saved")
+        return redirect('/partner/template_link_student_program/')
 
     try:
         for application in data_value:
-            for module in application['applicant_module']:
-                StudentModuleMapping.objects.create(program_id=application['applicant_program'],
-                                                    degree_id=application['degree'],
-                                                    applicant_id_id=application['applicant_id'],
-                                                    module_id=module)
+            if not StudentModuleMapping.objects.filter(applicant_id_id=application['applicant_id']).exists():
+                for module in application['applicant_module']:
+                    StudentModuleMapping.objects.create(program_id=application['applicant_program'],
+                                                        degree_id=application['degree'],
+                                                        applicant_id_id=application['applicant_id'],
+                                                        module_id=module)
 
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
