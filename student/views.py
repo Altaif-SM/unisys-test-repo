@@ -322,6 +322,7 @@ def applicant_academic_english_qualification(request):
     year_recs = YearDetails.objects.all()
     qualification_obj = ''
     english_obj = ''
+    passing_year_recs = PassingYear.objects.all()
 
     try:
         if request.user.get_application:
@@ -339,7 +340,7 @@ def applicant_academic_english_qualification(request):
         return redirect('/student/applicant_personal_info/')
 
     return render(request, 'applicant_academic_english_qualification.html',
-                  {'year_recs': year_recs, 'qualification_obj': qualification_obj, 'english_obj': english_obj})
+                  {'year_recs': year_recs, 'qualification_obj': qualification_obj, 'english_obj': english_obj,'passing_year_recs':passing_year_recs})
 
 
 def save_update_applicant_academic_english_qualification(request):
@@ -369,15 +370,15 @@ def save_update_applicant_academic_english_qualification(request):
                             AcademicQualificationDetails.objects.filter(
                                 applicant_id=request.user.get_application).update(
                                 a_level=request.POST['a_level'],
-                                a_level_year_id=request.POST['a_level_year'],
+                                a_level_year=request.POST['a_level_year'],
                                 a_level_result=request.POST['a_level_result'],
 
                                 o_level=request.POST['o_level'],
-                                o_level_year_id=request.POST['o_level_year'],
+                                o_level_year=request.POST['o_level_year'],
                                 o_level_result=request.POST['o_level_result'],
 
                                 high_school=request.POST['high_school'],
-                                high_school_year_id=request.POST['high_school_year'],
+                                high_school_year=request.POST['high_school_year'],
                                 high_school_result=request.POST['high_school_result'])
 
                             qualification_obj = AcademicQualificationDetails.objects.get(
@@ -407,11 +408,11 @@ def save_update_applicant_academic_english_qualification(request):
                             EnglishQualificationDetails.objects.filter(
                                 applicant_id=request.user.get_application).update(
                                 english_test_one=request.POST['english_test_one'],
-                                english_test_one_year_id=request.POST['english_test_one_year'],
+                                english_test_one_year=request.POST['english_test_one_year'],
                                 english_test_one_result=request.POST['english_test_one_result'],
 
                                 english_test_two=request.POST['english_test_two'],
-                                english_test_two_year_id=request.POST['english_test_two_year'],
+                                english_test_two_year=request.POST['english_test_two_year'],
                                 english_test_two_result=request.POST['english_test_two_result'])
 
                             english_object = EnglishQualificationDetails.objects.get(
@@ -441,15 +442,15 @@ def save_update_applicant_academic_english_qualification(request):
                         try:
                             qualification_obj = AcademicQualificationDetails.objects.create(
                                 a_level=request.POST['a_level'],
-                                a_level_year_id=request.POST['a_level_year'],
+                                a_level_year=request.POST['a_level_year'],
                                 a_level_result=request.POST['a_level_result'],
 
                                 o_level=request.POST['o_level'],
-                                o_level_year_id=request.POST['o_level_year'],
+                                o_level_year=request.POST['o_level_year'],
                                 o_level_result=request.POST['o_level_result'],
 
                                 high_school=request.POST['high_school'],
-                                high_school_year_id=request.POST['high_school_year'],
+                                high_school_year=request.POST['high_school_year'],
                                 high_school_result=request.POST['high_school_result'],
                                 applicant_id=request.user.get_application)
 
@@ -476,11 +477,11 @@ def save_update_applicant_academic_english_qualification(request):
 
                             english_object = EnglishQualificationDetails.objects.create(
                                 english_test_one=request.POST['english_test_one'],
-                                english_test_one_year_id=request.POST['english_test_one_year'],
+                                english_test_one_year=request.POST['english_test_one_year'],
                                 english_test_one_result=request.POST['english_test_one_result'],
 
                                 english_test_two=request.POST['english_test_two'],
-                                english_test_two_year_id=request.POST['english_test_two_year'],
+                                english_test_two_year=request.POST['english_test_two_year'],
                                 english_test_two_result=request.POST['english_test_two_result'],
                                 applicant_id=request.user.get_application,
                             )
@@ -522,6 +523,8 @@ def applicant_curriculum_experience_info(request):
     year_recs = YearDetails.objects.all()
     curriculum_obj = ''
     experience_obj = ''
+
+    passing_year_recs = PassingYear.objects.all()
     try:
         if request.user.get_application:
             if not request.user.get_application.is_submitted:
@@ -536,7 +539,7 @@ def applicant_curriculum_experience_info(request):
         messages.warning(request, "Form have some error" + str(e))
         return redirect('/student/applicant_personal_info/')
     return render(request, 'applicant_curriculum_experience_info.html',
-                  {'year_recs': year_recs, 'experience_obj': experience_obj, 'curriculum_obj': curriculum_obj})
+                  {'year_recs': year_recs, 'experience_obj': experience_obj, 'curriculum_obj': curriculum_obj,'passing_year_recs':passing_year_recs})
 
 
 def save_update_applicant_curriculum_experience_info(request):
@@ -568,13 +571,13 @@ def save_update_applicant_curriculum_experience_info(request):
                         try:
                             CurriculumDetails.objects.filter(applicant_id=request.user.get_application).update(
                                 curriculum_name_one=request.POST['curriculum_name_one'],
-                                curriculum_year_one_id=request.POST['curriculum_year_one'],
+                                curriculum_year_one=request.POST['curriculum_year_one'],
 
                                 curriculum_name_two=request.POST['curriculum_name_two'],
-                                curriculum_year_two_id=request.POST['curriculum_year_two'],
+                                curriculum_year_two=request.POST['curriculum_year_two'],
 
                                 curriculum_name_three=request.POST['curriculum_name_three'],
-                                curriculum_year_three_id=request.POST['curriculum_year_three'])
+                                curriculum_year_three=request.POST['curriculum_year_three'])
 
                             curriculum_obj = CurriculumDetails.objects.get(
                                 applicant_id=request.user.get_application)
@@ -664,13 +667,13 @@ def save_update_applicant_curriculum_experience_info(request):
                         try:
                             curriculum_obj = CurriculumDetails.objects.create(
                                 curriculum_name_one=request.POST['curriculum_name_one'],
-                                curriculum_year_one_id=request.POST['curriculum_year_one'],
+                                curriculum_year_one=request.POST['curriculum_year_one'],
 
                                 curriculum_name_two=request.POST['curriculum_name_two'],
-                                curriculum_year_two_id=request.POST['curriculum_year_two'],
+                                curriculum_year_two=request.POST['curriculum_year_two'],
 
                                 curriculum_name_three=request.POST['curriculum_name_three'],
-                                curriculum_year_three_id=request.POST['curriculum_year_three'],
+                                curriculum_year_three=request.POST['curriculum_year_three'],
                                 applicant_id=request.user.get_application)
 
                             if curriculum_result_document_one:
@@ -696,15 +699,15 @@ def save_update_applicant_curriculum_experience_info(request):
 
                                 curriculum_obj.save()
 
-                                experience_object = ExperienceDetails.objects.create(
-                                    work_experience_one=request.POST['work_experience_one'],
-                                    from_date_one=request.POST['from_date_one'],
-                                    to_date_one=request.POST['to_date_one'],
+                            experience_object = ExperienceDetails.objects.create(
+                                work_experience_one=request.POST['work_experience_one'],
+                                from_date_one=request.POST['from_date_one'],
+                                to_date_one=request.POST['to_date_one'],
 
-                                    work_experience_two=request.POST['work_experience_two'],
-                                    from_date_two=request.POST['from_date_two'],
-                                    to_date_two=request.POST['to_date_two'],
-                                    applicant_id=request.user.get_application)
+                                work_experience_two=request.POST['work_experience_two'],
+                                from_date_two=request.POST['from_date_two'],
+                                to_date_two=request.POST['to_date_two'],
+                                applicant_id=request.user.get_application)
 
                             if work_experience_document_one:
                                 work_experience_one = str(work_experience_document_one)

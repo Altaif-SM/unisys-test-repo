@@ -62,7 +62,7 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                 <a href="{% url 'student:student_home' %}">Home</a>
+                <a href="{% url 'student:student_home' %}">Home</a>
                 <i class="fa fa-angle-right"></i>
             </li>
 
@@ -102,7 +102,8 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Co-Curriculum-1" id="curriculum_name_one"
                                            name="curriculum_name_one"
-                                           value="{{ curriculum_obj.curriculum_name_one }}" class="form-control" required>
+                                           value="{{ curriculum_obj.curriculum_name_one }}" class="form-control"
+                                           required>
                                 </div>
                             </div>
 
@@ -113,16 +114,16 @@
                                             class="form-control" required>
                                         {% if curriculum_obj %}
                                             <option style="display:none" selected="selected"
-                                                    value="{{ curriculum_obj.curriculum_year_one.id }}"
-                                                    value="">{{ curriculum_obj.curriculum_year_one.year_name|title }}</option>
+                                                    value="{{ curriculum_obj.curriculum_year_one }}"
+                                                    value="">{{ curriculum_obj.curriculum_year_one }}</option>
                                         {% else %}
                                             <option style="display:none" selected="selected" id="" value="">Please
                                                 Select
                                             </option>
                                         {% endif %}
 
-                                        {% for rec in year_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.year_name|title }}</option>
+                                        {% for rec in passing_year_recs %}
+                                            <option value='{{ rec.year }}'>{{ rec.year }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -134,7 +135,7 @@
                                     <input type="file" title="Select Result document"
                                            id="curriculum_result_document_one"
                                            value="{{ curriculum_obj.curriculum_result_document_one }}"
-                                           name="curriculum_result_document_one" class="form-control doc" >
+                                           name="curriculum_result_document_one" class="form-control doc">
                                 </div>
                             </div>
                         </div>
@@ -147,7 +148,8 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Co-Curriculum-2" id="curriculum_name_two"
                                            name="curriculum_name_two"
-                                           value="{{ curriculum_obj.curriculum_name_two }}" class="form-control" required>
+                                           value="{{ curriculum_obj.curriculum_name_two }}" class="form-control"
+                                           required>
                                 </div>
                             </div>
 
@@ -158,16 +160,16 @@
                                             class="form-control" required>
                                         {% if curriculum_obj %}
                                             <option style="display:none" selected="selected"
-                                                    value="{{ curriculum_obj.curriculum_year_two.id }}"
-                                                    value="">{{ curriculum_obj.curriculum_year_two.year_name|title }}</option>
+                                                    value="{{ curriculum_obj.curriculum_year_two }}"
+                                                    value="">{{ curriculum_obj.curriculum_year_two }}</option>
                                         {% else %}
                                             <option style="display:none" selected="selected" id="" value="">Please
                                                 Select
                                             </option>
                                         {% endif %}
 
-                                        {% for rec in year_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.year_name|title }}</option>
+                                        {% for rec in passing_year_recs %}
+                                            <option value='{{ rec.year }}'>{{ rec.year }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -179,7 +181,7 @@
                                     <input type="file" title="Select Result document"
                                            id="curriculum_result_document_two"
                                            value="{{ curriculum_obj.curriculum_result_document_two }}"
-                                           name="curriculum_result_document_two" class="form-control doc" >
+                                           name="curriculum_result_document_two" class="form-control doc">
                                 </div>
                             </div>
                         </div>
@@ -192,7 +194,8 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Co-Curriculum-3" id="curriculum_name_three"
                                            name="curriculum_name_three"
-                                           value="{{ curriculum_obj.curriculum_name_three }}" class="form-control" required>
+                                           value="{{ curriculum_obj.curriculum_name_three }}" class="form-control"
+                                           required>
                                 </div>
                             </div>
 
@@ -203,16 +206,16 @@
                                             class="form-control" required>
                                         {% if curriculum_obj %}
                                             <option style="display:none" selected="selected"
-                                                    value="{{ curriculum_obj.curriculum_year_three.id }}"
-                                                    value="">{{ curriculum_obj.curriculum_year_three.year_name|title }}</option>
+                                                    value="{{ curriculum_obj.curriculum_year_three }}"
+                                                    value="">{{ curriculum_obj.curriculum_year_three }}</option>
                                         {% else %}
                                             <option style="display:none" selected="selected" id="" value="">Please
                                                 Select
                                             </option>
                                         {% endif %}
 
-                                        {% for rec in year_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.year_name|title }}</option>
+                                        {% for rec in passing_year_recs %}
+                                            <option value='{{ rec.year }}'>{{ rec.year }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -224,7 +227,7 @@
                                     <input type="file" title="Select Result document"
                                            id="curriculum_result_document_three"
                                            value="{{ curriculum_obj.curriculum_result_document_three }}"
-                                           name="curriculum_result_document_three" class="form-control doc" >
+                                           name="curriculum_result_document_three" class="form-control doc">
                                 </div>
                             </div>
                         </div>

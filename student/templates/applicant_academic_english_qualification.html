@@ -121,16 +121,16 @@
                                             class="form-control" required>
                                         {% if qualification_obj %}
                                             <option style="display:none" selected="selected"
-                                                    value="{{ qualification_obj.a_level_year.id }}"
-                                                    value="">{{ qualification_obj.a_level_year.year_name|title }}</option>
+                                                    value="{{ qualification_obj.a_level_year }}"
+                                                    value="">{{ qualification_obj.a_level_year }}</option>
                                         {% else %}
                                             <option style="display:none" selected="selected" id="" value="">Please
                                                 Select
                                             </option>
                                         {% endif %}
 
-                                        {% for rec in year_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.year_name|title }}</option>
+                                        {% for rec in passing_year_recs %}
+                                            <option value='{{ rec.year }}'>{{ rec.year}}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -171,16 +171,16 @@
                                             class="form-control" required>
                                         {% if qualification_obj %}
                                             <option style="display:none" selected="selected"
-                                                    value="{{ qualification_obj.o_level_year.id }}"
-                                                    value="">{{ qualification_obj.o_level_year.year_name|title }}</option>
+                                                    value="{{ qualification_obj.o_level_year }}"
+                                                    value="">{{ qualification_obj.o_level_year }}</option>
                                         {% else %}
                                             <option style="display:none" selected="selected" id="" value="">Please
                                                 Select
                                             </option>
                                         {% endif %}
 
-                                        {% for rec in year_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.year_name|title }}</option>
+                                        {% for rec in passing_year_recs %}
+                                            <option value='{{ rec.year }}'>{{ rec.year }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -221,16 +221,16 @@
                                             class="form-control" required>
                                         {% if qualification_obj %}
                                             <option style="display:none" selected="selected"
-                                                    value="{{ qualification_obj.high_school_year.id }}"
-                                                    value="">{{ qualification_obj.high_school_year.year_name|title }}</option>
+                                                    value="{{ qualification_obj.high_school_year }}"
+                                                    value="">{{ qualification_obj.high_school_year }}</option>
                                         {% else %}
                                             <option style="display:none" selected="selected" id="" value="">Please
                                                 Select
                                             </option>
                                         {% endif %}
 
-                                        {% for rec in year_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.year_name|title }}</option>
+                                        {% for rec in passing_year_recs %}
+                                            <option value='{{ rec.year }}'>{{ rec.year }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -283,16 +283,16 @@
                                             class="form-control" required>
                                         {% if english_obj %}
                                             <option style="display:none" selected="selected"
-                                                    value="{{ english_obj.english_test_one_year.id }}"
-                                                    value="">{{ english_obj.english_test_one_year.year_name|title }}</option>
+                                                    value="{{ english_obj.english_test_one_year }}"
+                                                    value="">{{ english_obj.english_test_one_year }}</option>
                                         {% else %}
                                             <option style="display:none" selected="selected" id="" value="">Please
                                                 Select
                                             </option>
                                         {% endif %}
 
-                                        {% for rec in year_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.year_name|title }}</option>
+                                        {% for rec in passing_year_recs %}
+                                            <option value='{{ rec.year }}'>{{ rec.year }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -340,16 +340,16 @@
                                             class="form-control" required>
                                         {% if english_obj %}
                                             <option style="display:none" selected="selected"
-                                                    value="{{ english_obj.english_test_two_year.id }}"
-                                                    value="">{{ english_obj.english_test_two_year.year_name|title }}</option>
+                                                    value="{{ english_obj.english_test_two_year }}"
+                                                    value="">{{ english_obj.english_test_two_year }}</option>
                                         {% else %}
                                             <option style="display:none" selected="selected" id="" value="">Please
                                                 Select
                                             </option>
                                         {% endif %}
 
-                                        {% for rec in year_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.year_name|title }}</option>
+                                        {% for rec in passing_year_recs %}
+                                            <option value='{{ rec.year }}'>{{ rec.year }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
