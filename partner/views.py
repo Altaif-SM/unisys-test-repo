@@ -11,12 +11,12 @@ from common.utils import send_email_to_applicant
 # Create your views here.
 
 def template_registered_application(request):
+
     if request.user.is_super_admin():
         applicant_recs = ApplicationDetails.objects.filter(is_submitted=True)
         university_recs = UniversityDetails.objects.all()
     else:
-        applicant_recs = ApplicationDetails.objects.filter(address__country=request.user.partner_user_rel.get().country,
-                                                           is_submitted=True)
+        applicant_recs = ApplicationDetails.objects.filter(address__country=request.user.partner_user_rel.get().country,is_submitted=True)
         university_recs = UniversityDetails.objects.filter(country=request.user.partner_user_rel.get().country)
     country_recs = CountryDetails.objects.all()
     degree_recs = DegreeDetails.objects.all()
@@ -46,6 +46,12 @@ def filter_university(university):
     else:
         return Q()  # Dummy filter
 
+def filter_country(country):
+    if country != '':
+        return Q(address__country_id=country)
+    else:
+        return Q()  # Dummy filter
+
 
 def filter_registered_application(request):
     if request.POST:
@@ -67,8 +73,7 @@ def filter_registered_application(request):
 
         if request.user.is_super_admin():
             applicant_recs = ApplicationDetails.objects.filter(
-                Q(address__country_id=country,
-                  is_submitted=True), filter_nationality(nationality),
+                Q(is_submitted=True),filter_country(country), filter_nationality(nationality),
                 filter_degree(degree),
                 filter_university(university))
 
@@ -135,6 +140,7 @@ def change_application_status(request):
 
                     if not ApplicationHistoryDetails.objects.filter(applicant_id_id=application['application_id'],
                                                                     status='First Interview Call').exists():
+
                         ApplicationHistoryDetails.objects.create(applicant_id_id=application['application_id'],
                                                                  status='First Interview Call',
                                                                  remark='You are requested to come down for the first interview.')
