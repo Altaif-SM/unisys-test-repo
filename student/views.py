@@ -189,7 +189,7 @@ def save_update_applicant_family_info(request):
                             'wife_occupation'],
                         wife_telephone_home=request.POST[
                             'wife_telephone_home'],
-                        wife_dob=request.POST['wife_dob'],
+                        wife_dob=request.POST['wife_dob'] if request.POST['wife_dob'] else None,
                         wife_email=request.POST[
                             'wife_email'],
 
@@ -204,7 +204,7 @@ def save_update_applicant_family_info(request):
                         father_telephone_home=request.POST[
                             'father_telephone_home'],
                         father_dob=request.POST[
-                            'father_dob'],
+                            'father_dob'] if request.POST['father_dob'] else None,
                         father_email=request.POST[
                             'father_email'])
 
@@ -276,9 +276,8 @@ def save_update_applicant_family_mother_sibling_info(request):
                             'mother_occupation'],
                         mother_telephone_home=request.POST[
                             'mother_telephone_home'],
-                        mother_dob=request.POST['mother_dob'],
-                        mother_email=request.POST[
-                            'mother_email'])
+                        mother_dob=request.POST['mother_dob'] if request.POST['mother_dob'] else None,
+                        mother_email=request.POST['mother_email'])
 
                     application_obj = request.user.get_application
 
@@ -340,7 +339,8 @@ def applicant_academic_english_qualification(request):
         return redirect('/student/applicant_personal_info/')
 
     return render(request, 'applicant_academic_english_qualification.html',
-                  {'year_recs': year_recs, 'qualification_obj': qualification_obj, 'english_obj': english_obj,'passing_year_recs':passing_year_recs})
+                  {'year_recs': year_recs, 'qualification_obj': qualification_obj, 'english_obj': english_obj,
+                   'passing_year_recs': passing_year_recs})
 
 
 def save_update_applicant_academic_english_qualification(request):
@@ -539,7 +539,8 @@ def applicant_curriculum_experience_info(request):
         messages.warning(request, "Form have some error" + str(e))
         return redirect('/student/applicant_personal_info/')
     return render(request, 'applicant_curriculum_experience_info.html',
-                  {'year_recs': year_recs, 'experience_obj': experience_obj, 'curriculum_obj': curriculum_obj,'passing_year_recs':passing_year_recs})
+                  {'year_recs': year_recs, 'experience_obj': experience_obj, 'curriculum_obj': curriculum_obj,
+                   'passing_year_recs': passing_year_recs})
 
 
 def save_update_applicant_curriculum_experience_info(request):
@@ -607,25 +608,28 @@ def save_update_applicant_curriculum_experience_info(request):
 
                             ExperienceDetails.objects.filter(applicant_id=request.user.get_application).update(
                                 work_experience_one=request.POST['work_experience_one'],
-                                from_date_one=request.POST['from_date_one'],
-                                to_date_one=request.POST['to_date_one'],
+                                from_date_one=request.POST['from_date_one'] if request.POST['from_date_one'] else None,
+                                to_date_one=request.POST['to_date_one'] if request.POST['to_date_one'] else None,
 
                                 work_experience_two=request.POST['work_experience_two'],
-                                from_date_two=request.POST['from_date_two'],
-                                to_date_two=request.POST['to_date_two'])
+                                from_date_two=request.POST['from_date_two'] if request.POST['from_date_two'] else None,
+                                to_date_two=request.POST['to_date_two'] if request.POST['to_date_two'] else None)
 
                             try:
 
-                                experience_object = ExperienceDetails.objects.get(applicant_id=request.user.get_application)
+                                experience_object = ExperienceDetails.objects.get(
+                                    applicant_id=request.user.get_application)
                             except:
                                 experience_object = ExperienceDetails.objects.create(
                                     work_experience_one=request.POST['work_experience_one'],
-                                    from_date_one=request.POST['from_date_one'],
-                                    to_date_one=request.POST['to_date_one'],
+                                    from_date_one=request.POST['from_date_one'] if request.POST[
+                                        'from_date_one'] else None,
+                                    to_date_one=request.POST['to_date_one'] if request.POST['to_date_one'] else None,
 
                                     work_experience_two=request.POST['work_experience_two'],
-                                    from_date_two=request.POST['from_date_two'],
-                                    to_date_two=request.POST['to_date_two'],
+                                    from_date_two=request.POST['from_date_two'] if request.POST[
+                                        'from_date_two'] else None,
+                                    to_date_two=request.POST['to_date_two'] if request.POST['to_date_two'] else None,
                                     applicant_id=request.user.get_application)
 
                                 # if work_experience_document_one:
@@ -701,12 +705,12 @@ def save_update_applicant_curriculum_experience_info(request):
 
                             experience_object = ExperienceDetails.objects.create(
                                 work_experience_one=request.POST['work_experience_one'],
-                                from_date_one=request.POST['from_date_one'],
-                                to_date_one=request.POST['to_date_one'],
+                                from_date_one=request.POST['from_date_one'] if request.POST['from_date_one'] else None,
+                                to_date_one=request.POST['to_date_one'] if request.POST['to_date_one'] else None,
 
                                 work_experience_two=request.POST['work_experience_two'],
-                                from_date_two=request.POST['from_date_two'],
-                                to_date_two=request.POST['to_date_two'],
+                                from_date_two=request.POST['from_date_two'] if request.POST['from_date_two'] else None,
+                                to_date_two=request.POST['to_date_two'] if request.POST['to_date_two'] else None,
                                 applicant_id=request.user.get_application)
 
                             if work_experience_document_one:
@@ -864,14 +868,16 @@ def applicant_psychometric_test(request):
         if request.user.get_application:
             if request.user.get_application.is_submitted:
                 if ApplicantPsychometricTestDetails.objects.filter(applicant_id=request.user.get_application).exists():
-                    psychometric_test_obj = ApplicantPsychometricTestDetails.objects.get(applicant_id=request.user.get_application)
+                    psychometric_test_obj = ApplicantPsychometricTestDetails.objects.get(
+                        applicant_id=request.user.get_application)
 
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
-    return render(request, 'applicant_psychometric_test.html',{'psychometric_test_obj':psychometric_test_obj})
+        return redirect('/student/student_home/')
+    return render(request, 'applicant_psychometric_test.html', {'psychometric_test_obj': psychometric_test_obj})
+
 
 def save_psychometric_test(request):
-
     try:
         test_result_document = request.FILES['test_result_document']
     except:
@@ -879,7 +885,8 @@ def save_psychometric_test(request):
 
     try:
         result = request.POST.get('result')
-        psychometric_test_obj = ApplicantPsychometricTestDetails.objects.create(applicant_id=request.user.get_application, result=result)
+        psychometric_test_obj = ApplicantPsychometricTestDetails.objects.create(
+            applicant_id=request.user.get_application, result=result)
 
         if test_result_document:
             test_result = str(test_result_document)

@@ -341,9 +341,13 @@ def template_application_approval_details(request, app_id):
             final_approval = False
             admin_flag = True
 
+            if not request.user.is_super_admin():
+                messages.warning(request, "Final approval can done only by admin")
+                return redirect('/partner/template_approving_application/')
+
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
-        return redirect('/partner/template_registered_application/')
+        return redirect('/partner/template_approving_application/')
 
     return render(request, "template_application_approval_details.html",
                   {'application_rec': application_rec, 'approval_messages': approval_messages,
