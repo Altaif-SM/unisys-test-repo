@@ -38,7 +38,7 @@ class DonorDetails(BaseModel):
         )
 
     def __str__(self):
-        return self.user.first_name
+        return self.user.first_name if self.user else ''
 
     def to_dict(self):
         res = {
