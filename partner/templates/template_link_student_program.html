@@ -103,6 +103,12 @@
                 });
             });
         }
+
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
     </script>
 
 {% endblock %}
@@ -241,7 +247,8 @@
 
                                             <select id='id_applicant_program' title="Select Program"
                                                     name="applicant_program"
-                                                    class="form-control" style="width: 80%" {% if rec.program %} disabled{% endif %}>
+                                                    class="form-control" style="width: 80%" {% if rec.program %}
+                                                    disabled{% endif %}>
                                                 {% if rec.program %}
                                                     <option style="display:none" selected="selected"
                                                             value="{{ rec.program.id }}"> {{ rec.program.program_name|title }}
@@ -261,7 +268,8 @@
                                         <td>
                                             <select id='id_applicant_semester' title="Select Semester"
                                                     name="applicant_semester"
-                                                    class="form-control id_applicant_semester" {% if rec.semester %} disabled{% endif %}>
+                                                    class="form-control id_applicant_semester" {% if rec.semester %}
+                                                    disabled{% endif %}>
                                                 {% if rec.semester %}
                                                     <option style="display:none" selected="selected"
                                                             value="{{ rec.semester.id }}">{{ rec.semester.semester_name|title }}
@@ -281,8 +289,9 @@
                                         <td>
                                             <select id='id_applicant_module' title="Select Module"
                                                     name="applicant_module"
-                                                    class="form-control module selectpicker" multiple {% if rec.module %} disabled{% endif %}>
-                                                {% if rec.module%}
+                                                    class="form-control module selectpicker" multiple
+                                                    {% if rec.module %} disabled{% endif %}>
+                                                {% if rec.module %}
                                                     {% for module in rec.module %}
                                                         <option value='{{ module.module.id }}'>{{ module.module.module.module_name|title }}</option>
                                                     {% endfor %}

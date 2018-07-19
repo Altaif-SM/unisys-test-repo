@@ -43,7 +43,18 @@ urlpatterns = [
 
                   path('my_application/', views.my_application, name='my_application'),
                   path('submit_application/', views.submit_application, name='submit_application'),
-                  path('applicant_psychometric_test/', views.applicant_psychometric_test,name='applicant_psychometric_test'),
-                  path('save_psychometric_test/', views.save_psychometric_test,name='save_psychometric_test'),
+
+                  path('applicant_psychometric_test/', views.applicant_psychometric_test,
+                       name='applicant_psychometric_test'),
+                  path('save_psychometric_test/', views.save_psychometric_test, name='save_psychometric_test'),
+                  path('applicant_agreement_submission/', views.applicant_agreement_submission,
+                       name='applicant_agreement_submission'),
+                  path('save_agreement_submission/', views.save_agreement_submission, name='save_agreement_submission'),
+
+                  path('applicant_program_certificate_submission/', views.applicant_program_certificate_submission,
+                       name='applicant_program_certificate_submission'),
+                  path('save_applicant_program_certificate_submission/',
+                       views.save_applicant_program_certificate_submission,
+                       name='save_applicant_program_certificate_submission'),
                   # path('generate_PDF/', views.generate_PDF, name='generate_PDF'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

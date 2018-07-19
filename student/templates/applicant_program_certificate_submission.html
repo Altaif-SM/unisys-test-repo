@@ -34,38 +34,28 @@
                 $(document).on("click", ".update", function (e) {
 
                     var parent_id = $(this).closest('tr').attr('id');
-                    var master_and_phd_id = $('#' + parent_id + ' #master_and_phd_id').val();
-                    var scholarship_id = $('#' + parent_id + ' .scholarship').val();
-                    var result = $('#' + parent_id + ' .result').val();
-                    var repayment = $('#' + parent_id + ' .repayment').val();
-                    if (repayment == '') {
-                        $('#' + parent_id + ' .repayment').focus();
-                        $('#' + parent_id + ' .repayment').css('border-color', 'red');
-                        return false;
-                    }
+                    var country_id = $('#' + parent_id + ' #country_id').val();
+                    var country_name = $('#' + parent_id + ' .country_name').val();
 
-                    {#alert(result);#}
-
-
-                    var url = '/masters/update_master_and_phd/';
-                    update_master_and_phd_info(url, master_and_phd_id,scholarship_id, result,repayment)
+                    var url = '/masters/update_country/';
+                    update_country_info(url, country_id, country_name)
                 })
 
                 $(document).on("click", ".delete", function (e) {
 
                     var parent_id = $(this).closest('tr').attr('id');
-                    var master_and_phd_id = $('#' + parent_id + ' #master_and_phd_id').val();
+                    var country_id = $('#' + parent_id + ' #country_id').val();
 
-                    var url = '/masters/delete_master_and_phd/';
-                    delete_master_and_phd_info(url, master_and_phd_id)
+                    var url = '/masters/delete_country/';
+                    delete_country_info(url, country_id)
                 })
 
-                function delete_master_and_phd_info(url, master_and_phd_id) {
+                function delete_country_info(url, country_id) {
                     $.ajax({
                         type: 'POST',
                         url: url,
                         data: {
-                            master_and_phd_id: master_and_phd_id,
+                            country_id: country_id,
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
@@ -77,15 +67,13 @@
                     });
                 }
 
-                function update_master_and_phd_info(url, master_and_phd_id,scholarship_id, result,repayment) {
+                function update_country_info(url, country_id, country_name) {
                     $.ajax({
                         type: 'POST',
                         url: url,
                         data: {
-                            master_and_phd_id: master_and_phd_id,
-                            scholarship_id: scholarship_id,
-                            result: result,
-                            repayment: repayment,
+                            country_id: country_id,
+                            country_name: country_name,
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
@@ -100,7 +88,6 @@
 
                 $(document).on("click", ".edit", function (e) {
                     var parent_id = $(this).closest('tr').attr('id');
-                    $('.repayment').css('border-color', '');
                     var id = $(this).attr('id');
                     var i = id.split("edit")[1]
 
@@ -110,9 +97,7 @@
 
                     $("#update" + i).show();
                     $("#edit" + i).hide();
-                    $("#repayment" + i).prop("disabled", false);
-                    $("#scholarship" + i).prop("disabled", false);
-                    $("#result" + i).prop("disabled", false);
+                    $("#country_name" + i).prop("disabled", false);
                 });
             });
 
@@ -144,7 +129,7 @@
             </li>
 
             <li>
-                <span> Master and PhD formula </span>
+                <span> Development Program Certificate Submission </span>
             </li>
         </ul>
     </div>
@@ -160,7 +145,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> Manage Master and PhD formula</span>
+                <span class="caption-subject font-red sbold uppercase"> Development Program Certificate Submission</span>
             </div>
         </div>
 
@@ -169,64 +154,47 @@
             <!-- BEGIN FORM-->
             <div class="form-body">
 
-                <form action="{% url 'masters:save_master_and_phd' %}" id="form_sample_1" class="form-horizontal"
+                <form action="{% url 'student:save_applicant_program_certificate_submission' %}" id="form_sample_1"
+                      class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
                     <div class="form-body">
-
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">Scholarship:
+                                <label class="col-md-2 control-label">Program:
 
                                 </label>
-                                <div class="col-md-2">
-                                    <select id='scholarship' name="scholarship" class="form-control" required>
-                                        <option style="display:none" selected="selected" id=""
-                                                value="">Please Select
+                                <div class="col-md-3">
+                                    <select id='program' title="Select Program" name="module"
+                                            class="form-control" required>
+                                        <option style="display:none" selected="selected" id="" value="">Please Select
                                         </option>
 
-                                        {% for rec in scholarship_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.scholarship_name|title }}</option>
+                                        {% for rec in module_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.module.module.module_name|title }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
                             </div>
                         </div>
-
-                    <br><br>
+                        <br><br>
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">Result:
-
-                                </label>
-                                <div class="col-md-2">
-                                    <select id='result' name="result" class="form-control" required>
-                                        <option style="display:none" selected="selected" id="" value="">Please Select
-                                        </option>
-                                        <option id="" value="pass">Pass</option>
-                                        <option id="" value="fail">Fail</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Repayment:
-
-                                </label>
-                                <div class="col-md-2">
-                                    <input type="text" id="repayment" name="repayment" class="form-control" required>
+                                <label class="col-md-2 control-label">Certificate:</label>
+                                <div class="col-md-3">
+                                    <input type="file" title="Select Certificate" id="id_certificate_document"
+                                           name="certificate_document" class="doc form-control">
                                 </div>
                             </div>
                         </div>
-                        <br><br>
 
                         <br><br>
 
                         <div class="row">
                             <div class="col-md-offset-5 col-md-7">
-                                <button type="submit" class="btn green" id="save">Add</button>
+                                <button type="submit" class="btn green" id="save">Submit</button>
                             </div>
                         </div>
                     </div>
@@ -238,52 +206,29 @@
             <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
 
+                {% comment %}<input class="form-control" id="year_id_edit" name="year_id_edit" type="hidden" value="">
+                <input class="form-control" id="start_date_edit" name="start_date_edit" type="hidden" value="">
+                <input class="form-control" id="end_date_edit" name="end_date_edit" type="hidden" value="">{% endcomment %}
+
                 <table class="table table-striped table-hover table-bordered" id="sample_1">
                     <thead>
                     <tr>
                         <th style="display: none">Id</th>
-                        <th>Scholarship</th>
-                        <th>Result</th>
-                        <th>Repayment</th>
+                        <th>Country Name</th>
                         <th width="10%"></th>
                     </tr>
                     </thead>
 
                     <tbody id="tbody">
-                    {% for rec in master_and_phd_recs %}
+                    {% for rec in country_recs %}
                         <tr id="item{{ forloop.counter }}" class="item">
-                            <td style="display: none"><input id="master_and_phd_id" value="{{ rec.id }}"></td>
+                            <td style="display: none"><input id="country_id" value="{{ rec.id }}"></td>
                             <td>
-                                <text hidden>{{ rec.scholarship.scholarship_name|title }}</text>
-                                <select id='scholarship{{ forloop.counter }}'
-                                        name="scholarship_name{{ forloop.counter }}" class="form-control data scholarship"
-                                        disabled required>
-                                    <option style="display:none" selected="selected" id=""
-                                            value="{{ rec.scholarship.id }}">{{ rec.scholarship.scholarship_name|title }} </option>
-                                    {% for rec in scholarship_recs %}
-                                        <option value='{{ rec.id }}'>{{ rec.scholarship_name|title }}</option>
-                                    {% endfor %}
-                                </select></td>
-
-                            <td>
-                                <text hidden>{{ rec.result|title }}</text>
-                                <select id="result{{ forloop.counter }}" name="result{{ forloop.counter }}"
-                                        class="form-control data result" required disabled>
-                                    <option style="display:none" selected="selected" id=""
-                                            value="{{ rec.result }}">{{ rec.result|title }} </option>
-                                    <option id="" value="pass">Pass</option>
-                                    <option id="" value="fail">Fail</option>
-                                </select></td>
-
-                            <td>
-                                <text hidden>{{ rec.repayment|title }}</text>
-                                <input class="form-control data repayment" name="repayment_name_saved"
-                                       type="number" step="any" min="0" max="100"
-                                       id="repayment{{ forloop.counter }}" value="{{ rec.repayment|title }}"
-                                       required pattern='[A-Za-z+-]+'
-                                       title='Please enter repayment' disabled>
-                            </td>
-
+                                <text hidden>{{ rec.country_name|title }}</text>
+                                <input class="form-control data country_name" name="country_name_saved" type="text"
+                                       id="country_name{{ forloop.counter }}" value="{{ rec.country_name|title }}"
+                                       required="True" pattern='[A-Za-z+-]+'
+                                       title='Please enter country name' disabled></td>
                             <td>
                                 <span type="button" name="updt" id="update{{ forloop.counter }}"
                                       class=" update btn green glyphicon glyphicon-ok" style="display:none;">

@@ -857,6 +857,8 @@ def submit_application(request):
                                                  status='Application Submitted',
                                                  remark='Your application is submitted and your institution will be notified on further updates regarding your applications.')
 
+        messages.success(request, "Application submitted successfully.")
+
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
     return redirect('/student/student_home/')
@@ -885,8 +887,16 @@ def save_psychometric_test(request):
 
     try:
         result = request.POST.get('result')
-        psychometric_test_obj = ApplicantPsychometricTestDetails.objects.create(
-            applicant_id=request.user.get_application, result=result)
+
+        if ApplicantPsychometricTestDetails.objects.filter(applicant_id=request.user.get_application).exists():
+            ApplicantPsychometricTestDetails.objects.filter(
+                applicant_id=request.user.get_application).update(result=result)
+
+            psychometric_test_obj = ApplicantPsychometricTestDetails.objects.get(
+                applicant_id=request.user.get_application)
+        else:
+            psychometric_test_obj = ApplicantPsychometricTestDetails.objects.create(
+                applicant_id=request.user.get_application, result=result)
 
         if test_result_document:
             test_result = str(test_result_document)
@@ -896,9 +906,108 @@ def save_psychometric_test(request):
             psychometric_test_obj.test_result_document = test_result
             psychometric_test_obj.save()
 
+        messages.success(request, "Test Result submitted successfully.")
+
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
     return redirect('/student/applicant_psychometric_test/')
+
+
+def applicant_agreement_submission(request):
+    try:
+        agreement_submission_obj = ''
+        if request.user.get_application:
+            if request.user.get_application.is_submitted:
+                if ApplicantAgreementDetails.objects.filter(applicant_id=request.user.get_application).exists():
+                    agreement_submission_obj = ApplicantAgreementDetails.objects.get(
+                        applicant_id=request.user.get_application)
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+        return redirect('/student/student_home/')
+    return render(request, 'applicant_agreement_submission.html',
+                  {'agreement_submission_obj': agreement_submission_obj})
+
+
+def save_agreement_submission(request):
+    try:
+        four_parties_agreements = request.FILES['four_parties_agreements']
+        education_loan_agreements = request.FILES['education_loan_agreements']
+    except:
+        four_parties_agreements = ''
+        education_loan_agreements = ''
+
+    try:
+
+        if ApplicantAgreementDetails.objects.filter(applicant_id=request.user.get_application).exists():
+            agreement_obj = ApplicantAgreementDetails.objects.get(
+                applicant_id=request.user.get_application)
+        else:
+            agreement_obj = ApplicantAgreementDetails.objects.create(
+                applicant_id=request.user.get_application)
+
+        if four_parties_agreements:
+            parties_agreements = str(four_parties_agreements)
+            handle_uploaded_file(
+                settings.MEDIA_ROOT + os.path.join('reports/' + parties_agreements),
+                four_parties_agreements)
+            agreement_obj.four_parties_agreement_document = parties_agreements
+            agreement_obj.save()
+
+        if education_loan_agreements:
+            education_agreements = str(education_loan_agreements)
+            handle_uploaded_file(
+                settings.MEDIA_ROOT + os.path.join('reports/' + education_agreements),
+                education_loan_agreements)
+            agreement_obj.education_loan_agreement_document = education_agreements
+            agreement_obj.save()
+
+        messages.success(request, "Agreement submitted successfully.")
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+    return redirect('/student/applicant_agreement_submission/')
+
+
+def applicant_program_certificate_submission(request):
+    try:
+        module_recs = ''
+        if request.user.get_application:
+            if request.user.get_application.is_submitted:
+                module_recs = StudentModuleMapping.objects.filter(applicant_id = request.user.get_application)
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+        return redirect('/student/student_home/')
+    return render(request, 'applicant_program_certificate_submission.html',
+                  {'module_recs': module_recs})
+
+
+def save_applicant_program_certificate_submission(request):
+    try:
+        certificate_document = request.FILES['certificate_document']
+    except:
+        certificate_document = ''
+
+    try:
+        module = request.POST.get('module')
+
+        agreement_obj = ApplicantDevelopmentProgramDetails.objects.create(
+            applicant_id=request.user.get_application,module_id=module)
+
+        if certificate_document:
+            certificate = str(certificate_document)
+            handle_uploaded_file(
+                settings.MEDIA_ROOT + os.path.join('reports/' + certificate),
+                certificate_document)
+            agreement_obj.certificate_document = certificate
+            agreement_obj.save()
+
+        messages.success(request, "Certificate submitted successfully.")
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+    return redirect('/student/applicant_program_certificate_submission/')
 
 # import os
 # from django.conf import settings

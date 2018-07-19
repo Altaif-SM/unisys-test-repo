@@ -71,7 +71,7 @@
             </li>
 
             <li>
-                <span> Psychometric Test </span>
+                <span> Agreement Submission </span>
             </li>
         </ul>
     </div>
@@ -87,50 +87,39 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase">Psychometric Test </span>
+                <span class="caption-subject font-red sbold uppercase">Agreement Submission</span>
             </div>
         </div>
 
         <div class="portlet-body">
             <div class="form-body">
-                <form action="{% url 'student:save_psychometric_test' %}"
+                <form action="{% url 'student:save_agreement_submission' %}"
                       id="form_sample_1"
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
                     <div class="form-body">
-                        <div class="row">
-                            <div class="">
-                                <label class="col-md-3 control-label">Application Id:</label>
-                                <div class="col-md-3">
-                                    <input type="text" title="Enter Application id" id="id_application_id"
-                                           name="application_id"
-                                           value="{{ user.get_application_id }}" class="form-control" disabled required>
-                                </div>
-                            </div>
-                        </div>
-                        <br>
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-3 control-label">Result:</label>
+                                <label class="col-md-3 control-label">Four Parties Agreement:</label>
                                 <div class="col-md-3">
-                                    <input type="text" title="Enter Result" id="id_result"
-                                           name="result"
-                                           value="{{ psychometric_test_obj.result }}" class="form-control" required>
+                                    <input type="file" title="Select Four Parties Agreement" id="id_four_parties_agreements"
+                                           name="four_parties_agreements" class="doc form-control">
                                 </div>
                             </div>
                         </div>
 
                         <br>
+                        <br>
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-3 control-label">Test Result:</label>
+                                <label class="col-md-3 control-label">Education Loan Agreement:</label>
                                 <div class="col-md-3">
-                                    <input type="file" title="Select Test Result" id="id_test_result_document"
-                                           name="test_result_document" class="doc form-control">
+                                    <input type="file" title="Select Education Loan Agreement" id="id_education_loan_agreements"
+                                           name="education_loan_agreements" class="doc form-control">
                                 </div>
                             </div>
                         </div>

@@ -456,6 +456,28 @@ License: You must have a valid license purchased only from themeforest(the above
                         </li>
                     {% endif %}
 
+                    {% if 'student.can_view_student_agreements' in perms %}
+                        <li class="nav-item " id="acd_qli">
+                            <a href="{% url 'student:applicant_agreement_submission' %}"
+                               class="nav-link nav-toggle">
+                                <i class="glyphicon glyphicon-copy"></i>
+                                <span class="title">Agreement Submission</span>
+                                <span class="selected"></span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% if 'student.can_view_student_development_program' in perms %}
+                        <li class="nav-item " id="acd_qli">
+                            <a href="{% url 'student:applicant_program_certificate_submission' %}"
+                               class="nav-link nav-toggle">
+                                <i class="glyphicon glyphicon-copy"></i>
+                                <span class="title">Program Certificate</span>
+                                <span class="selected"></span>
+                            </a>
+                        </li>
+                    {% endif %}
+
                     {% if 'partner.can_view_applicant_details' in perms %}
                         <li class="nav-item " id="acd_qli">
                             <a href="{% url 'partner:template_registered_application' %}"
