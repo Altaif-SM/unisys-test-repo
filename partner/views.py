@@ -11,10 +11,14 @@ from common.utils import send_email_to_applicant
 # Create your views here.
 
 def template_registered_application(request):
-    applicant_recs = ApplicationDetails.objects.filter(address__country=request.user.partner_user_rel.get().country,
-                                                       is_submitted=True)
+    if request.user.is_super_admin():
+        applicant_recs = ApplicationDetails.objects.filter(is_submitted=True)
+        university_recs = UniversityDetails.objects.all()
+    else:
+        applicant_recs = ApplicationDetails.objects.filter(address__country=request.user.partner_user_rel.get().country,
+                                                           is_submitted=True)
+        university_recs = UniversityDetails.objects.filter(country=request.user.partner_user_rel.get().country)
     country_recs = CountryDetails.objects.all()
-    university_recs = UniversityDetails.objects.filter(country=request.user.partner_user_rel.get().country)
     degree_recs = DegreeDetails.objects.all()
 
     return render(request, 'template_registered_application.html',
@@ -49,6 +53,7 @@ def filter_registered_application(request):
         university = request.POST.get('university')
         degree = request.POST.get('degree')
         nationality = request.POST.get('nationality')
+        country = request.POST.get('country')
     else:
 
         form_data = request.session.get('form_data')
@@ -56,17 +61,28 @@ def filter_registered_application(request):
         university = form_data.get('university')
         degree = form_data.get('degree')
         nationality = form_data.get('nationality')
+        country = form_data.get('country')
 
     try:
 
-        applicant_recs = ApplicationDetails.objects.filter(
-            Q(address__country=request.user.partner_user_rel.get().country,
-              is_submitted=True), filter_nationality(nationality),
-            filter_degree(degree),
-            filter_university(university))
+        if request.user.is_super_admin():
+            applicant_recs = ApplicationDetails.objects.filter(
+                Q(address__country_id=country,
+                  is_submitted=True), filter_nationality(nationality),
+                filter_degree(degree),
+                filter_university(university))
+
+            university_recs = UniversityDetails.objects.all()
+        else:
+            applicant_recs = ApplicationDetails.objects.filter(
+                Q(address__country=request.user.partner_user_rel.get().country,
+                  is_submitted=True), filter_nationality(nationality),
+                filter_degree(degree),
+                filter_university(university))
+
+            university_recs = UniversityDetails.objects.filter(country=request.user.partner_user_rel.get().country)
 
         country_recs = CountryDetails.objects.all()
-        university_recs = UniversityDetails.objects.filter(country=request.user.partner_user_rel.get().country)
         degree_recs = DegreeDetails.objects.all()
 
     except Exception as e:
@@ -119,7 +135,6 @@ def change_application_status(request):
 
                     if not ApplicationHistoryDetails.objects.filter(applicant_id_id=application['application_id'],
                                                                     status='First Interview Call').exists():
-
                         ApplicationHistoryDetails.objects.create(applicant_id_id=application['application_id'],
                                                                  status='First Interview Call',
                                                                  remark='You are requested to come down for the first interview.')
@@ -291,44 +306,71 @@ def filter_application_status(request):
     applicant_recs = ''
 
     try:
-        if application_status == 'First Interview':
-            applicant_recs = ApplicationDetails.objects.filter(
-                address__country=request.user.partner_user_rel.get().country,
-                is_submitted=True, first_interview=True)
+        if request.user.is_system_admin:
+            if application_status == 'First Interview':
+                applicant_recs = ApplicationDetails.objects.filter(
+                    is_submitted=True, first_interview=True)
 
-        elif application_status == 'First Interview attended':
-            applicant_recs = ApplicationDetails.objects.filter(
-                address__country=request.user.partner_user_rel.get().country,
-                is_submitted=True, first_interview_attend=True)
+            elif application_status == 'First Interview attended':
+                applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, first_interview_attend=True)
 
-        elif application_status == 'First Interview approval':
-            applicant_recs = ApplicationDetails.objects.filter(
-                address__country=request.user.partner_user_rel.get().country,
-                is_submitted=True, first_interview_approval=True)
+            elif application_status == 'First Interview approval':
+                applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True)
 
-        elif application_status == 'Psychometric Test':
-            applicant_recs = ApplicationDetails.objects.filter(
-                address__country=request.user.partner_user_rel.get().country,
-                is_submitted=True, psychometric_test=True)
+            elif application_status == 'Psychometric Test':
+                applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, psychometric_test=True)
 
-        elif application_status == 'Second Interview attended':
-            applicant_recs = ApplicationDetails.objects.filter(
-                address__country=request.user.partner_user_rel.get().country,
-                is_submitted=True, second_interview_attend=True)
+            elif application_status == 'Second Interview attended':
+                applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, second_interview_attend=True)
 
-        elif application_status == 'Second Interview approval':
-            applicant_recs = ApplicationDetails.objects.filter(
-                address__country=request.user.partner_user_rel.get().country,
-                is_submitted=True, second_interview_approval=True)
+            elif application_status == 'Second Interview approval':
+                applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, second_interview_approval=True)
 
-        elif application_status == 'Admin approval':
-            applicant_recs = ApplicationDetails.objects.filter(
-                address__country=request.user.partner_user_rel.get().country,
-                is_submitted=True, admin_approval=True)
+            elif application_status == 'Admin approval':
+                applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, admin_approval=True)
+            else:
+                applicant_recs = ApplicationDetails.objects.filter(is_submitted=True)
+
         else:
-            applicant_recs = ApplicationDetails.objects.filter(
-                address__country=request.user.partner_user_rel.get().country,
-                is_submitted=True)
+
+            if application_status == 'First Interview':
+                applicant_recs = ApplicationDetails.objects.filter(
+                    address__country=request.user.partner_user_rel.get().country,
+                    is_submitted=True, first_interview=True)
+
+            elif application_status == 'First Interview attended':
+                applicant_recs = ApplicationDetails.objects.filter(
+                    address__country=request.user.partner_user_rel.get().country,
+                    is_submitted=True, first_interview_attend=True)
+
+            elif application_status == 'First Interview approval':
+                applicant_recs = ApplicationDetails.objects.filter(
+                    address__country=request.user.partner_user_rel.get().country,
+                    is_submitted=True, first_interview_approval=True)
+
+            elif application_status == 'Psychometric Test':
+                applicant_recs = ApplicationDetails.objects.filter(
+                    address__country=request.user.partner_user_rel.get().country,
+                    is_submitted=True, psychometric_test=True)
+
+            elif application_status == 'Second Interview attended':
+                applicant_recs = ApplicationDetails.objects.filter(
+                    address__country=request.user.partner_user_rel.get().country,
+                    is_submitted=True, second_interview_attend=True)
+
+            elif application_status == 'Second Interview approval':
+                applicant_recs = ApplicationDetails.objects.filter(
+                    address__country=request.user.partner_user_rel.get().country,
+                    is_submitted=True, second_interview_approval=True)
+
+            elif application_status == 'Admin approval':
+                applicant_recs = ApplicationDetails.objects.filter(
+                    address__country=request.user.partner_user_rel.get().country,
+                    is_submitted=True, admin_approval=True)
+            else:
+                applicant_recs = ApplicationDetails.objects.filter(
+                    address__country=request.user.partner_user_rel.get().country,
+                    is_submitted=True)
 
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
@@ -385,9 +427,13 @@ def filter_application_history(request):
 
 def template_psychometric_test_report(request):
     try:
-        appliaction_ids = ApplicationDetails.objects.filter(
-            address__country=request.user.partner_user_rel.get().country,
-            is_submitted=True).values_list('id')
+
+        if request.user.is_super_admin():
+            appliaction_ids = ApplicationDetails.objects.filter(is_submitted=True).values_list('id')
+        else:
+            appliaction_ids = ApplicationDetails.objects.filter(
+                address__country=request.user.partner_user_rel.get().country,
+                is_submitted=True).values_list('id')
         psychometric_obj = ApplicantPsychometricTestDetails.objects.filter(applicant_id__in=appliaction_ids)
 
     except Exception as e:
@@ -399,8 +445,13 @@ def template_psychometric_test_report(request):
 
 
 def template_link_student_program(request):
-    applicant_recs = ApplicationDetails.objects.filter(address__country=request.user.partner_user_rel.get().country,
-                                                       is_submitted=True)
+    if request.user.is_super_admin():
+        applicant_recs = ApplicationDetails.objects.filter(is_submitted=True)
+        university_recs = UniversityDetails.objects.filter()
+    else:
+        applicant_recs = ApplicationDetails.objects.filter(address__country=request.user.partner_user_rel.get().country,
+                                                           is_submitted=True)
+        university_recs = UniversityDetails.objects.filter(country=request.user.partner_user_rel.get().country)
 
     rec_list = []
 
@@ -427,17 +478,9 @@ def template_link_student_program(request):
             temp_dict['applicant_rec'] = applicant_rec
             temp_dict['flag'] = True
 
-        # program_recs = ModuleDetails.objects.filter(country=applicant_rec.address.country).filter(
-        #     development_module_r1el__year=YearDetails.objects.get(active_year=1))
-        #
-        # for program_rec in program_recs:
-        #     module_recs = DevelopmentProgram.objects.filter(module=program_rec,
-        #                                                     year=YearDetails.objects.get(active_year=1))
-
         rec_list.append(temp_dict)
 
     country_recs = CountryDetails.objects.all()
-    university_recs = UniversityDetails.objects.filter(country=request.user.partner_user_rel.get().country)
     degree_recs = DegreeDetails.objects.all()
     program_recs = ProgramDetails.objects.all()
 

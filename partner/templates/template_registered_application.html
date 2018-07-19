@@ -130,7 +130,13 @@
                                                 </option>
                                             {% endif %}
 
-                                            <option value='{{ rec.id }}'>{{ user.partner_user_rel.all.0.country.country_name|title }}</option>
+                                            {% if user.is_super_admin %}
+                                                {% for rec in country_recs %}
+                                                    <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
+                                                {% endfor %}
+                                            {% else %}
+                                                <option value='{{ rec.id }}'>{{ user.partner_user_rel.all.0.country.country_name|title }}</option>
+                                            {% endif %}
                                         </select>
                                     </th>
                                     <th>
