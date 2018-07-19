@@ -34,7 +34,7 @@
         window.onload = function () {
             $(document).ready(function () {
 
-                $('#save').click(function () {
+                {% comment %}$('#save').click(function () {
                     var array = []
 
                     $('.item').each(function (e) {
@@ -60,9 +60,9 @@
 
                     {#console.log(JSON.stringify(array));#}
                     {#return false;#}
-                })
+                }){% endcomment %}
 
-                $(document).on("change", ".class_admin", function (e) {
+                {% comment %}$(document).on("change", ".class_admin", function (e) {
                     var parent_id = $(this).closest('tr').attr('id');
 
                     if (e.target.checked) {
@@ -72,7 +72,7 @@
                     }
                     {#alert(parent_id)#}
 
-                });
+                });{% endcomment %}
             });
 
 
@@ -83,24 +83,30 @@
                 ]
             });
 
-            {% comment %}$(document).on("change", "#id_accept_student", function (e) {
-                    if(e.target.checked){
-                         $('#id_accept_student_model').modal();
-                    }else{
-                        $('#id_accept_student').prop('checked', false);
-                    }
+            {% comment %}$(document).on("change", ".class_detail", function (e) {
+                var parent = $(this).closest('tr').attr('id');
+                {#var td_id = $(this).closest('td').attr('id');#}
 
-                });{% endcomment %}
+                if (e.target.checked) {
+                    $('#id_accept_student_model').modal();
+                } else {
+                    $('#id_accept_student').prop('checked', false);
+                }
+
+            });{% endcomment %}
 
 
-            {% comment %}$(document).on("change", ".class_admin", function (e) {
-                    if(e.target.checked){
-                         $('#id_accept_student_model').modal();
-                    }else{
-                        $('#id_accept_student').prop('checked', false);
-                    }
+            {% comment %}$(document).on("click", "#okay", function (e) {
+                var date = $('#id_accept_student_model #date').val();
+                var time = $('#id_accept_student_model #time').val();
+                var venue = $('#id_accept_student_model #venue').val();
 
-                });{% endcomment %}
+                var parent_id = $(this).closest('tr').attr('id');
+
+                $('#'+parent_id+' #id_time').val(time);
+                $('#'+parent_id+' #id_date').val(date);
+                $('#'+parent_id+' #id_venue').val(venue);
+            });{% endcomment %}
         }
 
         window.setTimeout(function () {
@@ -206,50 +212,64 @@
                                         </td>
 
                                         <td>
-                                            <text>{{ rec.first_name|title }} {{ rec.last_name|title }}</text>
+                                            <text><a href="/partner/template_application_approval_details/{{ rec.id }}">{{ rec.first_name|title }} {{ rec.last_name|title }}</a></text>
+{#                                            <text>{{ rec.first_name|title }} {{ rec.last_name|title }}</text>#}
                                         </td>
 
                                         <td>
-                                            <input class="app" type="checkbox" name="first" id="id_first"
-                                                   {% if rec.first_interview == True %}checked{% endif %}>
+                                            <input class="app class_detail" type="checkbox" name="first" id="id_first"
+                                                   {% if rec.first_interview == True %}checked{% endif %} disabled>
+                                            {% comment %}<input hidden id="id_time">
+                                            <input hidden id="id_date">
+                                            <input hidden id="id_venue">{% endcomment %}
                                         </td>
 
                                         <td>
-                                            <input class="app" type="checkbox" name="first_interview_attend"
+                                            <input class="app" type="checkbox"
+                                                   name="first_interview_attend"
                                                    {% if rec.first_interview_attend == True %}checked{% endif %}
-                                                   id="id_first_interview_attend">
+                                                   id="id_first_interview_attend" disabled>
+
+                                            {% comment %}<input hidden id="id_first_attend_time">
+                                            <input hidden id="id_first_attend_date">
+                                            <input hidden id="id_first_attend_venue">{% endcomment %}
                                         </td>
 
                                         <td>
                                             <input class="app" type="checkbox" name="first_interview_approval"
                                                    {% if rec.first_interview_approval == True %}checked{% endif %}
-                                                   id="id_first_interview_approval">
+                                                   id="id_first_interview_approval" disabled>
                                         </td>
 
                                         <td>
                                             <input class="app" type="checkbox" name="id_test" id="id_test"
-                                                   {% if rec.psychometric_test == True %}checked{% endif %}>
+                                                   {% if rec.psychometric_test == True %}checked{% endif %} disabled>
                                         </td>
 
                                         <td>
-                                            <input class="app" type="checkbox" name="second_interview_attend"
+                                            <input class="app" type="checkbox"
+                                                   name="second_interview_attend"
                                                    {% if rec.second_interview_attend == True %}checked{% endif %}
-                                                   id="id_second_interview_attend">
+                                                   id="id_second_interview_attend" disabled>
+
+                                            {% comment %}<input hidden id="id_second_attend_time">
+                                            <input hidden id="id_second_attend_date">
+                                            <input hidden id="id_second_attend_venue">{% endcomment %}
                                         </td>
 
                                         <td>
                                             <input class="app" type="checkbox" name="second_interview_approval"
                                                    {% if rec.second_interview_approval == True %}checked{% endif %}
-                                                   id="id_second_interview_approval">
+                                                   id="id_second_interview_approval" disabled>
                                         </td>
 
                                         <td>
                                             <input class="app class_admin" type="checkbox" name="admin" id="id_admin"
                                                    {% if rec.admin_approval == True %}checked{% endif %}
 
-                                                    {% if not user.is_super_admin %} disabled {% else %} {% endif %}>
+                                                    {% if not user.is_super_admin %} disabled {% else %} {% endif %} disabled>
 
-                                            {% if user.is_super_admin %}
+                                            {% comment %}{% if user.is_super_admin %}
                                                 {% if rec.admin_approval == True %}
                                                     <input type="number" title="Enter Scholarship Fee"
                                                            style="width: 50%" id="id_scholarship_fee"
@@ -260,7 +280,7 @@
                                                            style="width: 50%" id="id_scholarship_fee"
                                                            name="scholarship_fee" class="id_scholarship_fee">
                                                 {% endif %}
-                                            {% endif %}
+                                            {% endif %}{% endcomment %}
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -268,35 +288,67 @@
                             </table>
                         </div>
 
-                        <div class="">
+                        {% comment %}<div class="">
                             <div class="col-md-offset-8">
                                 <button type="submit" class="btn green" id="save" style="">Save</button>
                             </div>
-                        </div>
+                        </div>{% endcomment %}
                     </div>
 
-                    {% comment %}<div id="id_accept_student_model" class="modal fade" tabindex="-1" data-backdrop="static"
+                    <div id="id_accept_student_model" class="modal fade" tabindex="-1" data-backdrop="static"
                          data-keyboard="false">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal"
                                             aria-hidden="true"></button>
-                                    <h4 class="modal-title">Scholarship Fee</h4>
+                                    <h4 class="modal-title">Interview Details</h4>
                                 </div>
                                 <div class="modal-body">
-                                    <p> Please Enter Scholarship Fee For This Student. </p>
-                                    <input id="scholarship_fee">
+                                    <div class="row">
+                                        <div class="">
+                                            <label class="col-md-7 control-label">Please Enter The Interview Details.</label>
+                                        </div>
+{#                                        <p> Please Enter The Interview Details. </p>#}
+                                    </div>
+                                    <br>
+                                    <br>
+
+                                    <div class="row">
+                                        <div class="">
+                                            <label class="col-md-2 control-label">Time:</label>
+                                            <div class="col-md-3">
+                                                <input type="time" id="time"> <br> <br>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="">
+                                            <label class="col-md-2 control-label">Date:</label>
+                                            <div class="col-md-3">
+                                                <input type="date" id="date"> <br> <br>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="">
+                                            <label class="col-md-2 control-label">Venue:</label>
+                                            <div class="col-md-3">
+                                                <input type="text" id="venue"> <br> <br>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" id="cancel_model" data-dismiss="modal"
-                                            class="btn dark btn-outline">Cancel
-                                    </button>
-                                    <button type="button" class="btn green">Confirm</button>
+                                    <button type="button" id="cancel_model" data-dismiss="modal"class="btn dark btn-outline">Cancel</button>
+                                    <button type="button" id="okay" data-dismiss="modal"class="btn green btn-outline">Ok</button>
+{#                                    <button type="button" id="okay" class="btn green">Ok</button>#}
                                 </div>
                             </div>
                         </div>
-                    </div>{% endcomment %}
+                    </div>
 
                 </form>
             </div>

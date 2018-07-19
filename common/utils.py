@@ -30,29 +30,30 @@ def get_application_id(application_obj):
     current_year = YearDetails.objects.get(active_year=True)
     year_name = ''.join(current_year.year_name.split(' '))
 
-    application_id = year_name + str(application_obj.id)
+    application_id = year_name + '-' + str(application_obj.id)
     return application_id
 
 
 def send_email_to_applicant(from_email, to_mail, subject, message, first_name):
-
     # from_email = settings.EMAIL_HOST_USER
     to = [to_mail, from_email]
 
-    template = get_template('approving_student_application.html')
-    html_content = render_to_string('approving_student_application.html',{'first_name':first_name,'message':message})
+    template = get_template('mail_template_approving_student_application.html')
+    html_content = render_to_string('mail_template_approving_student_application.html',
+                                    {'first_name': first_name, 'message': message})
 
     try:
-        send_mail(subject, message, from_email, to, fail_silently=True , html_message=html_content)
+        send_mail(subject, message, from_email, to, fail_silently=True, html_message=html_content)
     except:
         messages.warning('Network Error Occur Please Try Later')
     return to_mail
+
 
 def create_voucher_number(voucher_type, voucher):
     voucher_number = ""
     if voucher:
         current_year = YearDetails.objects.get(active_year=True)
         year_name = ''.join(current_year.year_name.split(' '))
-        voucher_number = str(voucher_type)+ "-" + year_name +"-"+ str(voucher.id)
+        voucher_number = str(voucher_type) + "-" + year_name + "-" + str(voucher.id)
 
     return voucher_number

@@ -5,12 +5,13 @@ from student.models import ApplicationDetails, ApplicationHistoryDetails, Studen
 import json
 from django.contrib import messages
 
+
 # Create your views here.
 def template_donor_dashboard(request):
     return render(request, "template_donor_dashboard.html")
 
-def template_student_selection(request):
 
+def template_student_selection(request):
     country_recs = CountryDetails.objects.all()
     university_recs = UniversityDetails.objects.filter(country=request.user.donor_user_rel.get().country)
     degree_recs = DegreeDetails.objects.all()
@@ -20,7 +21,9 @@ def template_student_selection(request):
         stud.append(StudentDetails.objects.get(id=obj.student.id))
 
     application_records = ApplicationDetails.objects.filter(student__in=stud, admin_approval=True)
-    return render(request, "template_student_selection.html", {"application_records": application_records, 'country_recs': country_recs, 'university_recs': university_recs,
+    return render(request, "template_student_selection.html",
+                  {"application_records": application_records, 'country_recs': country_recs,
+                   'university_recs': university_recs,
                    'degree_recs': degree_recs})
 
 
@@ -66,10 +69,12 @@ def filter_student_selection(request):
             stud.append(StudentDetails.objects.get(id=obj.student.id))
 
         application_records = ApplicationDetails.objects.filter(Q(student__in=stud),
-            Q(address__country=request.user.donor_user_rel.get().country,
-              admin_approval=True), filter_nationality(nationality),
-            filter_degree(degree),
-            filter_university(university))
+                                                                Q(
+                                                                    address__country=request.user.donor_user_rel.get().country,
+                                                                    admin_approval=True),
+                                                                filter_nationality(nationality),
+                                                                filter_degree(degree),
+                                                                filter_university(university))
 
         country_recs = CountryDetails.objects.all()
         university_recs = UniversityDetails.objects.filter(country=request.user.donor_user_rel.get().country)
@@ -80,7 +85,8 @@ def filter_student_selection(request):
         return redirect('/partner/template_registered_application/')
 
     return render(request, 'template_student_selection.html',
-                  {'application_records': application_records, 'country_recs': country_recs, 'university_recs': university_recs,
+                  {'application_records': application_records, 'country_recs': country_recs,
+                   'university_recs': university_recs,
                    'degree_recs': degree_recs})
 
 
@@ -88,8 +94,8 @@ def template_student_details(request, app_id):
     application_rec = ApplicationDetails.objects.get(id=app_id)
     return render(request, "template_student_details.html", {'application_rec': application_rec})
 
-def template_student_reports(request):
 
+def template_student_reports(request):
     country_recs = CountryDetails.objects.all()
     university_recs = UniversityDetails.objects.filter(country=request.user.donor_user_rel.get().country)
     degree_recs = DegreeDetails.objects.all()
@@ -99,10 +105,13 @@ def template_student_reports(request):
         stud.append(StudentDetails.objects.get(id=obj.student.id))
 
     application_records = ApplicationDetails.objects.filter(student__in=stud,
-                                                                is_sponsored=True)
+                                                            is_sponsored=True)
 
-    return render(request, "template_student_reports.html", {"application_records": application_records, 'country_recs': country_recs, 'university_recs': university_recs,
+    return render(request, "template_student_reports.html",
+                  {"application_records": application_records, 'country_recs': country_recs,
+                   'university_recs': university_recs,
                    'degree_recs': degree_recs})
+
 
 def filter_student_report(request):
     if request.POST:
@@ -125,10 +134,11 @@ def filter_student_report(request):
             stud.append(StudentDetails.objects.get(id=obj.student.id))
 
         application_records = ApplicationDetails.objects.filter(Q(student__in=stud),
-            Q(address__country=request.user.donor_user_rel.get().country,
-              is_sponsored=True), filter_nationality(country),
-            filter_degree(degree),
-            filter_university(university))
+                                                                Q(
+                                                                    address__country=request.user.donor_user_rel.get().country,
+                                                                    is_sponsored=True), filter_nationality(country),
+                                                                filter_degree(degree),
+                                                                filter_university(university))
 
         country_recs = CountryDetails.objects.all()
         university_recs = UniversityDetails.objects.filter(country=request.user.donor_user_rel.get().country)
@@ -139,7 +149,8 @@ def filter_student_report(request):
         return redirect('/partner/template_registered_application/')
 
     return render(request, 'template_student_reports.html',
-                  {'application_records': application_records, 'country_recs': country_recs, 'university_recs': university_recs,
+                  {'application_records': application_records, 'country_recs': country_recs,
+                   'university_recs': university_recs,
                    'degree_recs': degree_recs})
 
 
@@ -154,13 +165,14 @@ def template_application_progress_history(request):
                 stud.append(StudentDetails.objects.get(id=obj.student.id))
 
             applicant_recs = ApplicationDetails.objects.filter(student__in=stud,
-                    address__country=request.user.donor_user_rel.get().country,
-                    is_sponsored=True)
+                                                               address__country=request.user.donor_user_rel.get().country,
+                                                               is_sponsored=True)
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
 
     return render(request, 'template_student_progress_history.html',
                   {'applicant_recs': applicant_recs})
+
 
 def filter_application_history(request):
     if request.POST:
@@ -182,7 +194,8 @@ def filter_application_history(request):
                 stud.append(StudentDetails.objects.get(id=obj.student.id))
 
             applicant_recs = ApplicationDetails.objects.filter(student__in=stud,
-                address__country=request.user.donor_user_rel.get().country, is_sponsored=True)
+                                                               address__country=request.user.donor_user_rel.get().country,
+                                                               is_sponsored=True)
             application_obj = ApplicationDetails.objects.get(id=application)
 
             application_history_recs = ApplicationDetails.objects.get(id=application).applicant_history_rel.all()
@@ -195,27 +208,28 @@ def filter_application_history(request):
                   {'applicant_recs': applicant_recs, 'application_history_recs': application_history_recs,
                    'application_obj': application_obj})
 
-def template_my_payments(request):
 
+def template_my_payments(request):
     stud = []
     for obj in StudentDonorMapping.objects.filter(donor__user=request.user):
         stud.append(StudentDetails.objects.get(id=obj.student.id))
 
     applicant_recs = ApplicationDetails.objects.filter(student__in=stud,
-                                                           address__country=request.user.donor_user_rel.get().country,
-                                                           is_sponsored=True)
-    return render(request, "template_my_payments.html", {'applicant_recs':applicant_recs})
+                                                       address__country=request.user.donor_user_rel.get().country,
+                                                       is_sponsored=True)
+    return render(request, "template_my_payments.html", {'applicant_recs': applicant_recs})
+
 
 def template_students_receipts(request):
-
     stud = []
     for obj in StudentDonorMapping.objects.filter(donor__user=request.user):
         stud.append(StudentDetails.objects.get(id=obj.student.id))
 
     applicant_recs = ApplicationDetails.objects.filter(student__in=stud,
-                                                           address__country=request.user.donor_user_rel.get().country,
-                                                           is_sponsored=True)
-    return render(request, "template_students_receipts.html", {'applicant_recs':applicant_recs})
+                                                       address__country=request.user.donor_user_rel.get().country,
+                                                       is_sponsored=True)
+    return render(request, "template_students_receipts.html", {'applicant_recs': applicant_recs})
+
 
 def approve_sponsorship(request):
     application_rec = ApplicationDetails.objects.get(id=request.POST['app_id'])

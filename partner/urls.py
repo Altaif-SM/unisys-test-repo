@@ -16,6 +16,9 @@ urlpatterns = [
                   path('filter_application_status/', views.filter_application_status, name='filter_application_status'),
                   path('change_application_status/', views.change_application_status, name='change_application_status'),
 
+                  path('template_application_approval_details/<int:app_id>/', views.template_application_approval_details,
+                       name='template_application_approval_details'),
+
                   path('template_student_progress_history/', views.template_student_progress_history,
                        name='template_student_progress_history'),
                   path('filter_application_history/', views.filter_application_history,
@@ -23,8 +26,9 @@ urlpatterns = [
 
                   path('template_psychometric_test_report/', views.template_psychometric_test_report,
                        name='template_psychometric_test_report'),
-                  path('template_link_student_program/', views.template_link_student_program,name='template_link_student_program'),
+                  path('template_link_student_program/', views.template_link_student_program,
+                       name='template_link_student_program'),
 
-                  path('get_semester_modules/', views.get_semester_modules,name='get_semester_modules'),
-                  path('save_student_program/', views.save_student_program,name='save_student_program'),
+                  path('get_semester_modules/', views.get_semester_modules, name='get_semester_modules'),
+                  path('save_student_program/', views.save_student_program, name='save_student_program'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

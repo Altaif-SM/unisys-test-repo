@@ -161,9 +161,14 @@ class ApplicationDetails(BaseModel):
     second_interview_attend = models.BooleanField(default=False)
     second_interview_approval = models.BooleanField(default=False)
     admin_approval = models.BooleanField(default=False)
+    application_rejection = models.BooleanField(default=False)
     is_sponsored = models.BooleanField(default=False)
 
     scholarship_fee = models.CharField(max_length=15, blank=True, null=True)
+
+    interview_time = models.CharField(max_length=30, blank=True, null=True)
+    interview_date = models.CharField(max_length=50, blank=True, null=True)
+    interview_venue = models.CharField(max_length=100, blank=True, null=True)
 
     def get_full_name(self):
         """
