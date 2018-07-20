@@ -56,5 +56,9 @@ urlpatterns = [
                   path('save_applicant_program_certificate_submission/',
                        views.save_applicant_program_certificate_submission,
                        name='save_applicant_program_certificate_submission'),
+
+                  path('delete_applicant_program_certificate_submission/',
+                       views.delete_applicant_program_certificate_submission,
+                       name='delete_applicant_program_certificate_submission'),
                   # path('generate_PDF/', views.generate_PDF, name='generate_PDF'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

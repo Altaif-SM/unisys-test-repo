@@ -974,13 +974,15 @@ def applicant_program_certificate_submission(request):
         module_recs = ''
         if request.user.get_application:
             if request.user.get_application.is_submitted:
-                module_recs = StudentModuleMapping.objects.filter(applicant_id = request.user.get_application)
+                module_recs = StudentModuleMapping.objects.filter(applicant_id=request.user.get_application)
+                certificate_recs = ApplicantDevelopmentProgramDetails.objects.filter(
+                    applicant_id=request.user.get_application)
 
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
         return redirect('/student/student_home/')
     return render(request, 'applicant_program_certificate_submission.html',
-                  {'module_recs': module_recs})
+                  {'module_recs': module_recs, 'certificate_recs': certificate_recs})
 
 
 def save_applicant_program_certificate_submission(request):
@@ -993,7 +995,7 @@ def save_applicant_program_certificate_submission(request):
         module = request.POST.get('module')
 
         agreement_obj = ApplicantDevelopmentProgramDetails.objects.create(
-            applicant_id=request.user.get_application,module_id=module)
+            applicant_id=request.user.get_application, module_id=module)
 
         if certificate_document:
             certificate = str(certificate_document)
@@ -1008,6 +1010,17 @@ def save_applicant_program_certificate_submission(request):
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
     return redirect('/student/applicant_program_certificate_submission/')
+
+
+def delete_applicant_program_certificate_submission(request):
+    program_id = request.POST.get('program_id')
+    try:
+        ApplicantDevelopmentProgramDetails.objects.filter(id=program_id).delete()
+        messages.success(request, "Record deleted.")
+        return HttpResponse(json.dumps({'success': 'Record deleted.'}), content_type="application/json")
+    except:
+        messages.warning(request, "Record not deleted.")
+    return HttpResponse(json.dumps({'error': 'Record not deleted.'}), content_type="application/json")
 
 # import os
 # from django.conf import settings

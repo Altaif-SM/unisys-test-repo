@@ -31,7 +31,7 @@
     <script>
         window.onload = function () {
             $(document).ready(function () {
-                $(document).on("click", ".update", function (e) {
+                {% comment %}$(document).on("click", ".update", function (e) {
 
                     var parent_id = $(this).closest('tr').attr('id');
                     var country_id = $('#' + parent_id + ' #country_id').val();
@@ -39,23 +39,22 @@
 
                     var url = '/masters/update_country/';
                     update_country_info(url, country_id, country_name)
-                })
+                }){% endcomment %}
 
                 $(document).on("click", ".delete", function (e) {
-
                     var parent_id = $(this).closest('tr').attr('id');
-                    var country_id = $('#' + parent_id + ' #country_id').val();
+                    var country_id = $('#' + parent_id + ' #program_id').val();
+                    var url = '/student/delete_applicant_program_certificate_submission/';
 
-                    var url = '/masters/delete_country/';
-                    delete_country_info(url, country_id)
+                    delete_applicant_program_certificate_submission(url, country_id)
                 })
 
-                function delete_country_info(url, country_id) {
+                function delete_applicant_program_certificate_submission(url, program_id) {
                     $.ajax({
                         type: 'POST',
                         url: url,
                         data: {
-                            country_id: country_id,
+                            program_id: program_id,
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
@@ -67,7 +66,7 @@
                     });
                 }
 
-                function update_country_info(url, country_id, country_name) {
+                {% comment %}function update_country_info(url, country_id, country_name) {
                     $.ajax({
                         type: 'POST',
                         url: url,
@@ -99,14 +98,15 @@
                     $("#edit" + i).hide();
                     $("#country_name" + i).prop("disabled", false);
                 });
-            });
+            });{% endcomment %}
 
 
-            $('#sample_1').dataTable().fnDestroy();
-            $('#sample_1').dataTable({
-                "aoColumnDefs": [
-                    {'bSortable': false}
-                ]
+                $('#sample_1').dataTable().fnDestroy();
+                $('#sample_1').dataTable({
+                    "aoColumnDefs": [
+                        {'bSortable': false}
+                    ]
+                });
             });
         }
 
@@ -206,38 +206,45 @@
             <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
 
-                {% comment %}<input class="form-control" id="year_id_edit" name="year_id_edit" type="hidden" value="">
-                <input class="form-control" id="start_date_edit" name="start_date_edit" type="hidden" value="">
-                <input class="form-control" id="end_date_edit" name="end_date_edit" type="hidden" value="">{% endcomment %}
-
                 <table class="table table-striped table-hover table-bordered" id="sample_1">
                     <thead>
                     <tr>
                         <th style="display: none">Id</th>
-                        <th>Country Name</th>
+                        <th>Module</th>
+                        <th>Certificate</th>
                         <th width="10%"></th>
                     </tr>
                     </thead>
 
                     <tbody id="tbody">
-                    {% for rec in country_recs %}
+                    {% for rec in certificate_recs %}
                         <tr id="item{{ forloop.counter }}" class="item">
-                            <td style="display: none"><input id="country_id" value="{{ rec.id }}"></td>
+                            <td style="display: none"><input id="program_id" value="{{ rec.id }}"></td>
                             <td>
-                                <text hidden>{{ rec.country_name|title }}</text>
-                                <input class="form-control data country_name" name="country_name_saved" type="text"
-                                       id="country_name{{ forloop.counter }}" value="{{ rec.country_name|title }}"
+                                <p>{{ rec.module.module_name|title }}</p>
+                                {% comment %}<input class="form-control data module_name" name="module_name_saved" type="text"
+                                       id="country_name{{ forloop.counter }}" value="{{ rec.module.module_name|title }}"
                                        required="True" pattern='[A-Za-z+-]+'
-                                       title='Please enter country name' disabled></td>
+                                       title='Please enter country name' disabled>{% endcomment %}
+                            </td>
+
                             <td>
-                                <span type="button" name="updt" id="update{{ forloop.counter }}"
+                                <p>{{ rec.certificate_document }}</p>
+                                {% comment %}<input class="form-control data certificate_document" name="country_name_saved" type="text"
+                                       id="country_name{{ forloop.counter }}" value="{{ rec.certificate_document }}"
+                                       required="True" pattern='[A-Za-z+-]+'
+                                       title='Please enter country name' disabled>{% endcomment %}
+                            </td>
+
+                            <td>
+                                {% comment %}<span type="button" name="updt" id="update{{ forloop.counter }}"
                                       class=" update btn green glyphicon glyphicon-ok" style="display:none;">
                                 </span>
                                 <span type="button" name="edit" id="edit{{ forloop.counter }}"
                                       class=" edit btn blue glyphicon glyphicon-pencil">
-                                </span>
+                                </span>{% endcomment %}
                                 <span type="button" name="delete" id="delete{{ forloop.counter }}"
-                                      class=" delete btn red glyphicon glyphicon-trash">
+                                      class="delete btn red glyphicon glyphicon-trash">
                                 </span>
                             </td>
                         </tr>
