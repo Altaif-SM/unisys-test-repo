@@ -71,6 +71,7 @@ class StudentDetails(BaseModel):
             ('can_view_student_psychometric_test', 'can view student psychometric test'),
             ('can_view_student_agreements', 'can view student agreements'),
             ('can_view_student_development_program', 'can view student development program certificate'),
+            ('can_view_student_academic_progress', 'can view student academic progress'),
         )
 
     def __str__(self):
@@ -293,7 +294,7 @@ class ExperienceDetails(BaseModel):
     work_experience_document_one = models.FileField(upload_to=content_file_name_report)
 
     work_experience_two = models.CharField(max_length=255, blank=True, null=True)
-    from_date_two = models.DateField(null=True, blank=True, )
+    from_date_two = models.DateField(null=True, blank=True)
     to_date_two = models.DateField(null=True, blank=True, )
     work_experience_document_two = models.FileField(upload_to=content_file_name_report)
 
@@ -344,7 +345,7 @@ class ApplicantAgreementDetails(BaseModel):
 class ApplicantAcademicProgressDetails(BaseModel):
     year = models.ForeignKey('masters.YearDetails', null=True, related_name='applicant_progress_year_rel',
                              on_delete=models.PROTECT)
-    date = models.DateField()
+    date = models.DateField(null=True, blank=True)
     semester = models.ForeignKey('masters.SemesterDetails', null=True, related_name='applicant_progress_semester_rel',
                                  on_delete=models.PROTECT)
     gpa_scored = models.CharField(max_length=255, blank=True, null=True)

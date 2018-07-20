@@ -351,7 +351,7 @@ def template_application_approval_details(request, app_id):
 
     return render(request, "template_application_approval_details.html",
                   {'application_rec': application_rec, 'approval_messages': approval_messages,
-                   'flag_schedule': flag_schedule,'admin_flag':admin_flag,'final_approval':final_approval})
+                   'flag_schedule': flag_schedule, 'admin_flag': admin_flag, 'final_approval': final_approval})
 
 
 def change_application_status(request):
@@ -390,10 +390,10 @@ def change_application_status(request):
                                                                  status='First Interview Call',
                                                                  remark='You are requested to come down for the first interview.')
                     messages.success(request, "Record Updated.")
-                    return redirect('/partner/template_registered_application/')
+                    return redirect('/partner/template_approving_application/')
                 else:
                     messages.warning(request, "Please Fill The First Interview Call Details.")
-                    return redirect('/partner/template_registered_application/')
+                    return redirect('/partner/template_approving_application/')
 
             elif not application_obj.first_interview_attend:
 

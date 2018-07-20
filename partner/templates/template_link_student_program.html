@@ -78,20 +78,18 @@
                         var payload = {}
                         var id = $(this).attr('id');
 
-                        payload['applicant_id'] = $('#' + id + ' #applicant_id').val();
-                        payload['degree'] = $('#' + id + ' #id_applicant_degree').val();
-                        payload['applicant_program'] = $('#' + id + ' #id_applicant_program').val();
-                        payload['applicant_module'] = $('#' + id + ' #id_applicant_module').val();
-                        array.push(payload);
-
-                        $('#data_value').val(JSON.stringify(array));
-
-                        {#console.log(JSON.stringify(array));#}
-                        {#return false;#}
+                        {#alert($('#' + id + ' #id_applicant_module').val())#}
+                        if ($('#' + id + ' #id_applicant_program').val() != '' && $('#' + id + ' #id_applicant_module').val() != null) {
+                            payload['applicant_id'] = $('#' + id + ' #applicant_id').val();
+                            payload['degree'] = $('#' + id + ' #id_applicant_degree').val();
+                            payload['applicant_program'] = $('#' + id + ' #id_applicant_program').val();
+                            payload['applicant_module'] = $('#' + id + ' #id_applicant_module').val();
+                            array.push(payload);
+                            $('#data_value').val(JSON.stringify(array));
+                        }
                     })
-
-                    {#alert(JSON.stringify(array));#}
-
+                    {#console.log(JSON.stringify(array));#}
+                    {#return false;#}
                 });
 
 
@@ -295,10 +293,6 @@
                                                     {% for module in rec.module %}
                                                         <option value='{{ module.module.id }}'>{{ module.module.module.module_name|title }}</option>
                                                     {% endfor %}
-                                                {% else %}
-                                                    <option style="display:none" selected="selected" id="" value="">
-                                                        Please Select
-                                                    </option>
                                                 {% endif %}
                                             </select>
                                         </td>

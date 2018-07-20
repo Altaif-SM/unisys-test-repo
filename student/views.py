@@ -972,6 +972,7 @@ def save_agreement_submission(request):
 def applicant_program_certificate_submission(request):
     try:
         module_recs = ''
+        certificate_recs = ''
         if request.user.get_application:
             if request.user.get_application.is_submitted:
                 module_recs = StudentModuleMapping.objects.filter(applicant_id=request.user.get_application)
@@ -1021,6 +1022,64 @@ def delete_applicant_program_certificate_submission(request):
     except:
         messages.warning(request, "Record not deleted.")
     return HttpResponse(json.dumps({'error': 'Record not deleted.'}), content_type="application/json")
+
+
+def applicant_academic_progress(request):
+    try:
+        semester_recs = ''
+        year_recs = ''
+        progress_recs = ''
+        if request.user.get_application:
+            if request.user.get_application.is_submitted:
+                year_recs = YearDetails.objects.all()
+                semester_recs = SemesterDetails.objects.all()
+
+                progress_recs = ApplicantAcademicProgressDetails.objects.filter(
+                    applicant_id=request.user.get_application)
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+        return redirect('/student/student_home/')
+    return render(request, 'applicant_academic_progress.html',
+                  {'semester_recs': semester_recs, 'year_recs': year_recs, 'progress_recs': progress_recs})
+
+
+def save_applicant_academic_progress(request):
+    try:
+        transcript_document = request.FILES['transcript_document']
+    except:
+        transcript_document = ''
+
+    year = request.POST.get('year')
+    date = request.POST.get('date')
+    semester = request.POST.get('semester')
+
+    gpa_scored = request.POST.get('gpa_scored')
+    gpa_from = request.POST.get('gpa_from')
+
+    cgpa_scored = request.POST.get('cgpa_scored')
+    cgpa_from = request.POST.get('cgpa_from')
+    try:
+        progress_obj = ApplicantAcademicProgressDetails.objects.create(year_id=year,
+                                                                       date=date if date else None,
+                                                                       semester_id=semester,
+                                                                       gpa_scored=gpa_scored,
+                                                                       gpa_from=gpa_from,
+                                                                       cgpa_scored=cgpa_scored,
+                                                                       cgpa_from=cgpa_from,
+                                                                       applicant_id=request.user.get_application)
+
+        if transcript_document:
+            transcript = str(transcript_document)
+            handle_uploaded_file(
+                settings.MEDIA_ROOT + os.path.join('reports/' + transcript),
+                transcript_document)
+            progress_obj.transcript_document = transcript
+            progress_obj.save()
+        messages.success(request, "Record saved.")
+    except:
+        messages.warning(request, "Record not saved.")
+    return redirect('/student/applicant_academic_progress/')
 
 # import os
 # from django.conf import settings
