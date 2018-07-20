@@ -153,3 +153,21 @@ class User(AbstractUser):
             return self.student_user_rel.get().student_applicant_rel.get(year__active_year=True)
         except:
             return ''
+
+    @property
+    def notifications(self):
+        payload = {'flag': False}
+        try:
+            payload = {'flag': False}
+            if self.role.all().filter(name__in=[self.STUDENT]).exists():
+                payload['notifications'] = self.student_user_rel.get().student_applicant_rel.get(year__active_year=True,
+                                                                                                 is_submitted=True).applicant_notification_rel.all()
+                payload['flag'] = True
+                payload['active_count'] = self.student_user_rel.get().student_applicant_rel.get(year__active_year=True,
+                                                                                         is_submitted=True).applicant_notification_rel.filter(
+                    is_read=False).count()
+                return payload
+            else:
+                return payload
+        except:
+            return payload

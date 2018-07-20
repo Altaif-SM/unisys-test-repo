@@ -5,7 +5,7 @@ from partner.models import *
 import json
 from django.contrib import messages
 from django.http import JsonResponse
-from common.utils import send_email_to_applicant
+from common.utils import send_email_to_applicant, application_notification
 
 
 # Create your views here.
@@ -305,6 +305,10 @@ def template_application_approval_details(request, app_id):
         application_rec = ApplicationDetails.objects.get(id=app_id)
         approval_messages = ''
 
+        if application_rec.application_rejection:
+            messages.warning(request, "This application has been rejected.")
+            # return redirect('/partner/template_approving_application/')
+
         flag_schedule = False
         admin_flag = False
 
@@ -363,6 +367,36 @@ def change_application_status(request):
     try:
         application_obj = ApplicationDetails.objects.get(id=application_id)
 
+        if accept_interview == None and reject_interview == None:
+            application_obj.application_rejection = False
+            application_obj.save()
+            messages.success(request, "This application rejection is canceled.")
+            return redirect('/partner/template_approving_application/')
+
+        if application_obj.application_rejection:
+            messages.success(request, "This Application Is Already Rejected.")
+            return redirect('/partner/template_approving_application/')
+
+        if reject_interview:
+            application_obj.application_rejection = True
+            application_obj.save()
+
+            subject = 'Application Rejected'
+            message = 'Your application has rejected.'
+
+            send_email_to_applicant(request.user.email, application_obj.email, subject, message,
+                                    application_obj.first_name)
+
+            application_notification(application_obj.id, 'Application Rejected')
+
+            # if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
+            #                                                 status='Application Rejected').exists():
+            ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
+                                                     status='Application Rejected',
+                                                     remark='Your application has rejected.')
+            messages.success(request, "Application Rejected.")
+            return redirect('/partner/template_approving_application/')
+
         if accept_interview:
             if not application_obj.first_interview:
                 time = request.POST.get('time')
@@ -383,12 +417,15 @@ def change_application_status(request):
 
                     send_email_to_applicant(request.user.email, application_obj.email, subject, message,
                                             application_obj.first_name)
+                    application_notification(application_obj.id,
+                                             'You are requested to come down for the first interview. Check your mail for more updates.')
 
                     if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
                                                                     status='First Interview Call').exists():
                         ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
                                                                  status='First Interview Call',
                                                                  remark='You are requested to come down for the first interview.')
+
                     messages.success(request, "Record Updated.")
                     return redirect('/partner/template_approving_application/')
                 else:
@@ -405,6 +442,7 @@ def change_application_status(request):
 
                 send_email_to_applicant(request.user.email, application_obj.email, subject, message,
                                         application_obj.first_name)
+                application_notification(application_obj.id, 'You have attended first interview.')
 
                 if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
                                                                 status='First Interview Attended').exists():
@@ -424,6 +462,8 @@ def change_application_status(request):
 
                 send_email_to_applicant(request.user.email, application_obj.email, subject, message,
                                         application_obj.first_name)
+                application_notification(application_obj.id,
+                                         'You have cleared your first interview. For more updates please check your mail.')
 
                 if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
                                                                 status='First Interview Approval').exists():
@@ -443,6 +483,8 @@ def change_application_status(request):
 
                 send_email_to_applicant(request.user.email, application_obj.email, subject, message,
                                         application_obj.first_name)
+                application_notification(application_obj.id,
+                                         'You have submitted Psychometric test result.')
 
                 if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
                                                                 status='Psychometric Test').exists():
@@ -461,6 +503,8 @@ def change_application_status(request):
 
                 send_email_to_applicant(request.user.email, application_obj.email, subject, message,
                                         application_obj.first_name)
+                application_notification(application_obj.id,
+                                         'You have attended second interview. We will update you about the result soon.')
 
                 if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
                                                                 status='Second Interview Attended').exists():
@@ -479,6 +523,8 @@ def change_application_status(request):
 
                 send_email_to_applicant(request.user.email, application_obj.email, subject, message,
                                         application_obj.first_name)
+                application_notification(application_obj.id,
+                                         'You have cleared the second round of interview.')
 
                 if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
                                                                 status='Second Interview Approval').exists():
@@ -500,6 +546,8 @@ def change_application_status(request):
 
                     send_email_to_applicant(request.user.email, application_obj.email, subject, message,
                                             application_obj.first_name)
+                    application_notification(application_obj.id,
+                                             'Congrats... Your application has got final approval by the admin.')
 
                     if not ApplicationHistoryDetails.objects.filter(
                             applicant_id=application_obj,
@@ -609,6 +657,7 @@ def template_student_progress_history(request):
             applicant_recs = ApplicationDetails.objects.filter(
                 address__country=request.user.partner_user_rel.get().country,
                 is_submitted=True)
+
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
 
@@ -625,7 +674,6 @@ def filter_application_history(request):
         application = form_data.get('application')
 
     try:
-
         if request.user.is_super_admin():
             applicant_recs = ApplicationDetails.objects.filter(is_submitted=True)
             application_history_recs = ApplicationDetails.objects.get(id=application).applicant_history_rel.all()
@@ -648,7 +696,6 @@ def filter_application_history(request):
 
 def template_psychometric_test_report(request):
     try:
-
         if request.user.is_super_admin():
             appliaction_ids = ApplicationDetails.objects.filter(is_submitted=True).values_list('id')
         else:
@@ -736,11 +783,16 @@ def save_student_program(request):
     try:
         for application in data_value:
             if not StudentModuleMapping.objects.filter(applicant_id_id=application['applicant_id']).exists():
+                flag_module_assigned = False
                 for module in application['applicant_module']:
                     StudentModuleMapping.objects.create(program_id=application['applicant_program'],
                                                         degree_id=application['degree'],
                                                         applicant_id_id=application['applicant_id'],
                                                         module_id=module)
+                    flag_module_assigned = True
+                if flag_module_assigned:
+                    application_notification(application['applicant_id'],
+                                             'Some modules have assigned to your.')
 
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))

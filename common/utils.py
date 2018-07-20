@@ -1,6 +1,7 @@
 import random
 import string
 from masters.models import YearDetails
+from student.models import StudentNotifications
 from django.template.loader import render_to_string, get_template
 from django.core.mail import send_mail
 from django.contrib import messages
@@ -57,3 +58,10 @@ def create_voucher_number(voucher_type, voucher):
         voucher_number = str(voucher_type) + "-" + year_name + "-" + str(voucher.id)
 
     return voucher_number
+
+
+def application_notification(applicant_id, message):
+    try:
+        StudentNotifications.objects.create(applicant_id_id=applicant_id, message=message)
+    except:
+        pass

@@ -60,7 +60,8 @@ class StudentDetails(BaseModel):
                                     on_delete=models.PROTECT)
     religion = models.CharField(max_length=255, blank=True, null=True)
     contact_number = models.CharField(max_length=16, blank=True, null=True)
-    address = models.ForeignKey('masters.AddressDetails', blank=True, null=True, related_name='student_address_rel',on_delete=models.PROTECT)
+    address = models.ForeignKey('masters.AddressDetails', blank=True, null=True, related_name='student_address_rel',
+                                on_delete=models.PROTECT)
     user = models.ForeignKey(User, null=True, related_name='student_user_rel', on_delete=models.PROTECT)
 
     class Meta:
@@ -198,15 +199,22 @@ class ApplicationDetails(BaseModel):
         res = {
             'id': self.id,
             'country': self.address.country.to_dict() if self.address else '',
-            'scholarship': self.applicant_scholarship_rel.all()[0].scholarship.to_dict() if self.applicant_scholarship_rel.all() else '',
-            'university': self.applicant_scholarship_rel.all()[0].university.to_dict() if self.applicant_scholarship_rel.all() else '',
-            'program':    self.applicant_module_rel.all()[0].program.to_dict() if self.applicant_module_rel.all() else '',
-            'donor': self.student.student_donor_rel.all()[0].donor.to_dict() if self.student.student_donor_rel.all() else '',
-            'balance': float(self.scholarship_fee) - float(self.rel_student_receipt_voucher.all()[0].receipt_voucher_amount) if self.rel_student_receipt_voucher.all() else  0,
+            'scholarship': self.applicant_scholarship_rel.all()[
+                0].scholarship.to_dict() if self.applicant_scholarship_rel.all() else '',
+            'university': self.applicant_scholarship_rel.all()[
+                0].university.to_dict() if self.applicant_scholarship_rel.all() else '',
+            'program': self.applicant_module_rel.all()[0].program.to_dict() if self.applicant_module_rel.all() else '',
+            'donor': self.student.student_donor_rel.all()[
+                0].donor.to_dict() if self.student.student_donor_rel.all() else '',
+            'balance': float(self.scholarship_fee) - float(self.rel_student_receipt_voucher.all()[
+                                                               0].receipt_voucher_amount) if self.rel_student_receipt_voucher.all() else 0,
             'scholarship_fee': self.scholarship_fee if self.scholarship_fee else 0,
-            'voucher_number': self.rel_student_receipt_voucher.all()[0].receipt_voucher_number  if self.rel_student_receipt_voucher.all() else  '',
-            'semester': self.applicant_progress_rel.all()[0].semester.to_dict() if self.applicant_progress_rel.all() else '',
-            'degree': self.applicant_scholarship_rel.all()[0].course_applied.to_dict() if self.applicant_scholarship_rel.all() else '',
+            'voucher_number': self.rel_student_receipt_voucher.all()[
+                0].receipt_voucher_number if self.rel_student_receipt_voucher.all() else '',
+            'semester': self.applicant_progress_rel.all()[
+                0].semester.to_dict() if self.applicant_progress_rel.all() else '',
+            'degree': self.applicant_scholarship_rel.all()[
+                0].course_applied.to_dict() if self.applicant_scholarship_rel.all() else '',
         }
         return res
 
@@ -363,3 +371,16 @@ class ApplicantDevelopmentProgramDetails(BaseModel):
     certificate_document = models.FileField(upload_to=content_file_name_report)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='development_program_applicant_rel',
                                      on_delete=models.PROTECT)
+
+
+class StudentNotifications(BaseModel):
+    is_read = models.BooleanField(default=False)
+    message = models.CharField(max_length=500, blank=True, null=True)
+    applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_notification_rel',
+                                     on_delete=models.PROTECT)
+
+    class Meta:
+        ordering = ('-id',)
+
+    def __str__(self):
+        return self.applicant_id.first_name

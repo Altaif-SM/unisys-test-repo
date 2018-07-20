@@ -212,7 +212,7 @@
                                         </td>
 
                                         <td>
-                                            <text><a href="/partner/template_application_approval_details/{{ rec.id }}">{{ rec.first_name|title }} {{ rec.last_name|title }}</a></text>
+                                            <text><a href="/partner/template_application_approval_details/{{ rec.id }}" {% if rec.application_rejection %} style="color: darkred" {% endif %}>{{ rec.first_name|title }} {{ rec.last_name|title }}</a></text>
 {#                                            <text>{{ rec.first_name|title }} {{ rec.last_name|title }}</text>#}
                                         </td>
 

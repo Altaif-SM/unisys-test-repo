@@ -857,6 +857,9 @@ def submit_application(request):
                                                  status='Application Submitted',
                                                  remark='Your application is submitted and your institution will be notified on further updates regarding your applications.')
 
+        application_notification(request.user.get_application.id,
+                                 'You have successfully submitted your application.')
+
         messages.success(request, "Application submitted successfully.")
 
     except Exception as e:

@@ -131,10 +131,24 @@
 
                 });
 
+                $(document).on("change", "#id_reject_interview", function (e) {
+                    if (e.target.checked) {
+                        $('#id_accept_interview').prop('checked', false);
+                    } else {
+                        $('#id_reject_interview').prop('checked', false);
+                    }
+                });
+
+                $(document).on("change", "#id_accept_interview", function (e) {
+                    if (e.target.checked) {
+                        $('#id_reject_interview').prop('checked', false);
+                    } else {
+                        $('#id_accept_interview').prop('checked', false);
+                    }
+                });
+
                 $(document).on("click", "#cancel_model", function (e) {
-
                     $('#id_accept_student').prop('checked', false);
-
                 });
 
             });
@@ -294,22 +308,27 @@
 
                         <br><br>
 
-                    {% if not final_approval %}
+                        {% if not final_approval %}
 
-                        <div class="row">
-                            <div class="col-md-3"></div>
-                            <div class=" col-md-3">
-                                <input type="checkbox" name="accept_interview" {% if flag_schedule %}
-                                       class="flag_schedule" {% endif %}
-                                       id="id_accept_interview"> {{ approval_messages }}
+                            <div class="row">
+                                <div class="col-md-3"></div>
+                                {% if not application_rec.application_rejection %}
+                                    <div class=" col-md-3">
+                                        <input type="checkbox" name="accept_interview" {% if flag_schedule %}
+                                               class="flag_schedule" {% endif %}
+                                               id="id_accept_interview"> {{ approval_messages }}
+                                    </div>
+                                {% endif %}
+
+                                <div class=" col-md-3">
+                                    <input type="checkbox" name="reject_interview" {% if application_rec.application_rejection %} checked{% endif %}
+                                           id="id_reject_interview"> Reject Application
+                                </div>
                             </div>
 
-                            <div class=" col-md-3" hidden>
-                                <input  type="checkbox" name="reject_interview"
-                                       id="id_reject_interview"> Reject Application
-                            </div>
-                        </div>
-                    {% endif %}
+
+
+                        {% endif %}
                         <br>
                         <br>
 
@@ -359,12 +378,23 @@
 
                         {% if not final_approval %}
 
-                        {% if admin_flag %}
-                            {% if user.is_super_admin %}
-                                <div class="col-md-offset-2">
-                                Scholarchip Fee: <input title="Please enter scholarship fee" name="scholarship_fee" id="scholarship_fee" required>
-                                </div>
-                                <br><br>
+                            {% if admin_flag %}
+                                {% if user.is_super_admin %}
+                                    <div class="col-md-offset-2">
+                                        Scholarchip Fee: <input title="Please enter scholarship fee"
+                                                                name="scholarship_fee" id="scholarship_fee" required>
+                                    </div>
+                                    <br><br>
+                                    <div class="">
+                                        <div class="col-md-offset-5">
+                                            <button {% if flag_schedule %}  id="id_save" type="button" {% else %}
+                                                                            type="submit" {% endif %} class="btn green"
+                                                                            style="">Save
+                                            </button>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% else %}
                                 <div class="">
                                     <div class="col-md-offset-5">
                                         <button {% if flag_schedule %}  id="id_save" type="button" {% else %}
@@ -374,17 +404,7 @@
                                     </div>
                                 </div>
                             {% endif %}
-                        {% else %}
-                            <div class="">
-                                <div class="col-md-offset-5">
-                                    <button {% if flag_schedule %}  id="id_save" type="button" {% else %}
-                                                                    type="submit" {% endif %} class="btn green"
-                                                                    style="">Save
-                                    </button>
-                                </div>
-                            </div>
                         {% endif %}
-                    {% endif %}
 
 
                     </div>
