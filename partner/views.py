@@ -5,7 +5,8 @@ from partner.models import *
 import json
 from django.contrib import messages
 from django.http import JsonResponse
-from common.utils import send_email_to_applicant, application_notification
+from common.utils import send_email_to_applicant, application_notification, export_pdf
+from django.db.models import Max, Q
 
 
 # Create your views here.
@@ -797,3 +798,68 @@ def save_student_program(request):
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
     return redirect('/partner/template_link_student_program/')
+
+
+def template_academic_progress(request):
+    try:
+        application_list = []
+        application_id = []
+        if request.user.is_super_admin():
+            application_recs = ApplicantAcademicProgressDetails.objects.all().order_by('-last_updated')
+            for application in application_recs:
+                if application.applicant_id.id not in application_id:
+                    application_list.append(application)
+                    application_id.append(application.applicant_id.id)
+        else:
+            application_recs = ApplicantAcademicProgressDetails.objects.filter(
+                applicant_id__address__country=request.user.partner_user_rel.get().country).order_by('-last_updated')
+            for application in application_recs:
+                if application.applicant_id.id not in application_id:
+                    application_list.append(application)
+                    application_id.append(application.applicant_id.id)
+
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+        return redirect('/partner/template_registered_application/')
+
+    return render(request, 'template_academic_progress.html',
+                  {'application_recs': application_list})
+
+
+def template_academic_progress_details(request, app_id):
+    try:
+        progress_rec = ApplicantAcademicProgressDetails.objects.filter(applicant_id=app_id)
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+        return redirect('/partner/template_academic_progress/')
+
+    return render(request, "template_academic_progress_details.html",
+                  {'progress_recs': progress_rec})
+
+
+def export_academic_progress_details(request):
+    try:
+        progress_list = []
+        column_names = ['Name', 'Session', 'Date', 'Semester', 'Transcript', 'GPA Minimum', 'GPA Maximum',
+                        'Grade Minimum', 'Grade Maximum']
+        progress_list.append(column_names)
+        app_id = request.POST.get('export')
+        progress_rec = ApplicantAcademicProgressDetails.objects.filter(applicant_id=app_id)
+        for rec in progress_rec:
+            temp_list=[]
+            temp_list.append(str(rec.applicant_id.first_name+' '+rec.applicant_id.last_name))
+            temp_list.append(str(rec.year.year_name))
+            temp_list.append(str(rec.date))
+            temp_list.append(str(rec.semester.semester_name))
+            temp_list.append(str(rec.transcript_document))
+            temp_list.append(str(rec.gpa_scored))
+            temp_list.append(str(rec.gpa_from))
+            temp_list.append(str(rec.cgpa_scored))
+            temp_list.append(str(rec.cgpa_from))
+            progress_list.append(temp_list)
+
+        return export_pdf('export_skill_entry', progress_list)
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+        return redirect('/partner/template_academic_progress/')

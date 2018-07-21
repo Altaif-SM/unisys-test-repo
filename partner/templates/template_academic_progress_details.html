@@ -1,0 +1,202 @@
+{% extends "template_base_page.html" %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+            $(document).ready(function () {
+            });
+
+
+            $('#sample_1').dataTable().fnDestroy();
+            $('#sample_1').dataTable({
+                "aoColumnDefs": [
+                    {'bSortable': false}
+                ]
+            });
+        }
+
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'accounts:home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span> Academic Progress </span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-body">
+            <div class="form-body">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-settings font-red"></i>
+                        <span class="caption-subject font-red sbold uppercase"> Academic Progress</span>
+                        <form method="POST" enctype="multipart/form-data"
+                              action="{% url 'partner:export_academic_progress_details' %}">
+                            {% csrf_token %}
+                            <input hidden value="{{ progress_recs.0.applicant_id.id }}" name="export">
+                            <button type="submit" style="margin-left: 75%" class="btn green" id="export">Export</button>
+                        </form>
+                    </div>
+                </div>
+                <br>
+                <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <table class="table table-striped table-hover table-bordered" id="sample_1">
+                        <thead>
+                        <tr>
+                            <th style="display: none">Id</th>
+                            <th>Name</th>
+                            <th>Session</th>
+                            <th>Date</th>
+                            <th>Semester</th>
+                            <th>Transcript</th>
+                            <th>GPA Minimum</th>
+                            <th>GPA Maximum</th>
+                            <th>Grade Minimum</th>
+                            <th>Grade Maximum</th>
+                            {#                        <th width="10%"></th>#}
+                        </tr>
+                        </thead>
+
+                        <tbody id="tbody">
+                        {% for rec in progress_recs %}
+                            <tr id="item{{ forloop.counter }}" class="item">
+                                <td style="display: none"><input id="progress_id" value="{{ rec.id }}"></td>
+
+                                <td><p>{{ rec.applicant_id.first_name }} {{ rec.applicant_id.last_name }}</p></td>
+
+                                <td>
+                                    <p>{{ rec.year.year_name|title }}</p>
+                                    <input style="display: none" class="form-control data year" name="year"
+                                           type="text" step="any" min="0" max="100"
+                                           id="year{{ forloop.counter }}" value="{{ rec.year.year_name|title }}"
+                                           title='Please select year' disabled></td>
+
+                                <td>
+                                    <p>{{ rec.date }}</p>
+                                    <input style="display: none" class="form-control data date" name="date_saved"
+                                           type="text"
+                                           id="date{{ forloop.counter }}" value="{{ rec.date|date:"Y-m-d" }}"
+                                           required
+                                           title='Please enter date' disabled></td>
+
+                                <td>
+                                    <p>{{ rec.semester.semester_name|title }}</p>
+                                    <input style="display: none" class="form-control data semester"
+                                           name="semester_name_saved"
+                                           type="text"
+                                           id="semester{{ forloop.counter }}"
+                                           value="{{ rec.semester.semester_name|title }}"
+                                           required pattern='[A-Za-z+-]+'
+                                           title='Please select semester' disabled>
+                                </td>
+
+                                <td>
+                                    <p>{{ rec.transcript_document }}</p>
+                                    <input style="display: none" class="form-control data transcript_document"
+                                           name="transcript_document_name_saved"
+                                           type="text"
+                                           id="transcript_document{{ forloop.counter }}"
+                                           value="{{ rec.transcript_document }}"
+                                           required pattern='[A-Za-z+-]+'
+                                           title='Please enter transcript document' disabled>
+                                </td>
+
+
+                                <td>
+                                    <p>{{ rec.gpa_scored }}</p>
+                                    <input style="display: none" class="form-control data gpa_scored"
+                                           name="gpa_scored_saved"
+                                           type="text"
+                                           id="gpa_scored{{ forloop.counter }}" value="{{ rec.gpa_scored }}"
+                                           required
+                                           title='Please enter minimum gpa' disabled></td>
+
+
+                                <td>
+                                    <p>{{ rec.gpa_from }}</p>
+                                    <input style="display: none" class="form-control data gpa_from"
+                                           name="gpa_from_saved"
+                                           type="text"
+                                           id="gpa_from{{ forloop.counter }}" value="{{ rec.gpa_from }}"
+                                           required pattern='[A-Za-z+-]+'
+                                           title='Please enter max gpa' disabled></td>
+
+
+                                <td>
+                                    <p>{{ rec.cgpa_scored }}</p>
+                                    <input style="display: none" class="form-control data cgpa_scored"
+                                           name="cgpa_scored_saved"
+                                           type="number" step="any" min="0" max="100"
+                                           id="cgpa_scored{{ forloop.counter }}" value="{{ rec.cgpa_scored }}"
+                                           required
+                                           title='Please enter minimum cgpa' disabled></td>
+
+                                <td>
+                                    <p>{{ rec.cgpa_from }}</p>
+                                    <input style="display: none" class="form-control data cgpa_from"
+                                           name="cgpa_from_saved"
+                                           type="number" step="any" min="0" max="100"
+                                           id="cgpa_from{{ forloop.counter }}" value="{{ rec.cgpa_from }}"
+                                           required
+                                           title='Please enter max cgpa' disabled></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

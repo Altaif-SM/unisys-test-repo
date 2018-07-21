@@ -39,6 +39,7 @@ class PartnerDetails(BaseModel):
             ('can_view_progress_history', 'can view progress history'),
             ('can_view_psychometric_test_report', 'can view psychometric test report'),
             ('can_view_link_student_program', 'can view link student program'),
+            ('can_view_academic_progress', 'can view academic progress'),
         )
         ordering = ('user__first_name',)
 

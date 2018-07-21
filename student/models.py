@@ -351,9 +351,6 @@ class ScholarshipSelectionDetails(BaseModel):
                                        related_name='degree_scholarship_rel',
                                        on_delete=models.PROTECT)
 
-    # course_applied = models.CharField(max_length=255, blank=True, null=True)
-    # university = models.CharField(max_length=255, blank=True, null=True)
-
     university = models.ForeignKey('masters.UniversityDetails', blank=True, null=True,
                                    related_name='university_scholarship_rel',
                                    on_delete=models.PROTECT)

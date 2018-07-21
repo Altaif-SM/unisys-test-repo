@@ -160,22 +160,27 @@ License: You must have a valid license purchased only from themeforest(the above
                             <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
                                data-close-others="true">
                                 <i class="icon-bell"></i>
-                                <span class="badge badge-default">{{ user.notifications.active_count }}</span>
+                                {% if user.notifications.active_count != 0 %}
+                                    <span class="badge badge-default">
+
+                                    {{ user.notifications.active_count }}
+                                        </span>
+                                {% endif %}
                             </a>
 
                             <ul class="dropdown-menu">
-                            <li>
-                                <a>View all notifications</a>
-                                {% for notification in user.notifications.notifications %}
-                                    {% if not notification.is_read %}
-                                        <a style=""><b>{{ notification.last_updated|date:'d/m' }} {{ notification.message|truncatechars:30 }}</b></a>
+                                <li>
+                                    <a>View all notifications</a>
+                                    {% for notification in user.notifications.notifications %}
+                                        {% if not notification.is_read %}
+                                            <a style=""><b>{{ notification.last_updated|date:'d/m' }} {{ notification.message|truncatechars:30 }}</b></a>
                                         {% else %}
-                                        <a>{{ notification.message|truncatechars:30 }}</a>
-                                    {% endif %}
+                                            <a>{{ notification.message|truncatechars:30 }}</a>
+                                        {% endif %}
 
-                                {% endfor %}
-                            </li>
-                        </ul>
+                                    {% endfor %}
+                                </li>
+                            </ul>
                         {% else %}
                             <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
                                data-close-others="true">
@@ -546,6 +551,17 @@ License: You must have a valid license purchased only from themeforest(the above
                                class="nav-link nav-toggle">
                                 <i class="glyphicon glyphicon-list-alt"></i>
                                 <span class="title">Applications Progress History</span>
+                                <span class="selected"></span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% if 'partner.can_view_academic_progress' in perms %}
+                        <li class="nav-item " id="acd_qli">
+                            <a href="{% url 'partner:template_academic_progress' %}"
+                               class="nav-link nav-toggle">
+                                <i class="glyphicon glyphicon-list-alt"></i>
+                                <span class="title">Academic Progress</span>
                                 <span class="selected"></span>
                             </a>
                         </li>
