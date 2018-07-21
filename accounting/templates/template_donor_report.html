@@ -13,88 +13,48 @@
         window.onload = function () {
             $(document).ready(function () {
 
-                $(document).on("click", ".update", function (e) {
-                    var parent_id = $(this).closest('tr').attr('id');
-                    var donor_id = $('#' + parent_id + ' #donor_id').val();
-                    var organisation = $('#' + parent_id + ' .organisation').val();
-                    var country = $('#' + parent_id + ' .country').val();
+                $("#id_donor_id").change(function () {
 
-                    var person = $('#' + parent_id + ' .person').val();
-                    var person_contact_number = $('#' + parent_id + ' .person_contact_number').val();
-
-                    var address = $('#' + parent_id + ' .address').val();
-                    var email = $('#' + parent_id + ' .email').val();
-
-                    var url = '/masters/update_manage_donor_master/';
-                    update_manage_donor_info(url, donor_id, organisation, country, person, person_contact_number, email, address)
-                })
-
-                $(document).on("click", ".delete", function (e) {
-
-                    var parent_id = $(this).closest('tr').attr('id');
-                    var donor_id = $('#' + parent_id + ' #donor_id').val();
-
-                    var url = '/masters/delete_manage_donor_master/';
-                    delete_manage_donor_info(url, donor_id)
-                })
-
-                function delete_manage_donor_info(url, donor_id) {
-                    $.ajax({
-                        type: 'POST',
-                        url: url,
-                        data: {
-                            donor_id: donor_id,
-                            csrfmiddlewaretoken: '{{ csrf_token }}',
-                        },
-                        success: function (data) {
-                            location.reload(true)
-                        },
-                        error: function (xhr, msg, err) {
-                            alert(xhr.responseJSON.error);
-                        }
-                    });
-                }
-
-                function update_manage_donor_info(url, donor_id, organisation, country, person, person_contact_number, email, address) {
-                    $.ajax({
-                        type: 'POST',
-                        url: url,
-                        data: {
-                            donor_id: donor_id,
-                            organisation: organisation,
-                            country: country,
-                            person: person,
-                            person_contact_number: person_contact_number,
-                            email: email,
-                            address: address,
-                            csrfmiddlewaretoken: '{{ csrf_token }}',
-                        },
-                        success: function (data) {
-                            location.reload(true)
-                        },
-                        error: function (xhr, msg, err) {
-                            alert(xhr.responseJSON.error);
-                        }
-                    });
-                }
-
-
-                $(document).on("click", ".edit", function (e) {
-                    var parent_id = $(this).closest('tr').attr('id');
-                    var id = $(this).attr('id');
-                    var i = id.split("edit")[1]
-
-                    $(".data").prop("disabled", true);
-                    $(".edit").show();
-                    $(".update").hide();
-
-                    $("#update" + i).show();
-                    $("#edit" + i).hide();
-
-
-                    $("#" + parent_id + " .data").prop("disabled", false);
+                    var donor = $(this).val();
+                    var url = '/accounting/get_voucher_data_by_donor/';
+                    get_voucher_data(url, donor);
 
                 });
+
+
+                function get_voucher_data(url, donor) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            donor: donor,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            var output_html = "";
+
+                            for(var i= 0; i< (data).length ; i++) {
+
+                                output_html += "" +
+                                "<tr id='item"+ i +"' class='item'>"
+                                + "<td style='width:150px;'><input id='id_voucher_number' class='form-control data voucher_number' value='"+ data[i]['voucher_rec']['voucher_number'] +"' disabled> </td>"
+                                + "<td><input id='id_student"+ i +"' class='form-control data voucher_number' value='"+ data[i]['voucher_rec']['student'] +"' disabled> </td>"
+                                + "<td><input id='id_country"+ i +"' class='form-control data voucher_number' value='" + data[i]['approval_amount'] + "' disabled> </td>"
+                                + "<td><input id='id_voucher_amount"+ i +"' class='form-control data voucher_number' value='" + data[i]['credit_total'] + "' disabled> </td>"
+                                + "<td><input id='id_voucher_amount"+ i +"' class='form-control data voucher_number' value='" + data[i]['outstanding_amount'] + "' disabled> </td>"
+
+                                output_html+= "</tr>"
+                            }
+
+                            $("#tbody").html(output_html);
+
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
             });
 
 
@@ -157,9 +117,17 @@
                             <div class="">
                                 <label class="col-md-3 control-label">Donor:</label>
                                 <div class="col-md-3">
-                                    <input type="text" title="Enter due amount"
-                                           id="due_amount" name="due_amount"
-                                           class="form-control" required>
+                                    <select id='id_donor_id' title="Select Donor" name="donor"
+                                            class="form-control"
+                                            required>
+                                        <option style="display:none" selected="selected" id=""
+                                                value="">Please Select
+                                        </option>
+
+                                        {% for rec in donor_list %}
+                                            <option value='{{ rec.id }}'>{{ rec.user.get_full_name|title }}</option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
                             </div>
 
@@ -179,83 +147,7 @@
                         </thead>
 
                         <tbody id="tbody">
-                        {% for rec in donor_recs %}
-                            <tr id="item{{ forloop.counter }}" class="item">
-                                <td style="display: none"><input id="donor_id" value="{{ rec.id }}"></td>
 
-                                <td>
-                                    <text hidden>{{ rec.organisation|title }}</text>
-                                    <input class="form-control data organisation" name="organisation"
-                                           type="text"
-                                           id="office{{ forloop.counter }}" value="{{ rec.organisation|title }}"
-                                           required
-                                           title='Please enter organisation name' disabled>
-                                </td>
-
-                                <td>
-                                    <text hidden>{{ rec.country.country_name|title }}</text>
-                                    <select id='country{{ forloop.counter }}' name="country_name{{ forloop.counter }}"
-                                            class="form-control data country" disabled required>
-                                        <option style="display:none" selected="selected" id=""
-                                                value="{{ rec.country.id }}">{{ rec.country.country_name|title }} </option>
-                                        {% for rec in country_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </td>
-
-
-                                <td>
-                                    <text hidden>{{ rec.person|title }}</text>
-                                    <input class="form-control data person" name="person_saved"
-                                           type="text"
-                                           id="person{{ forloop.counter }}" value="{{ rec.person|title }}"
-                                           required
-                                           title='Please enter person' disabled>
-                                </td>
-
-                                <td>
-                                    <text hidden>{{ rec.person_contact_number }}</text>
-                                    <input class="form-control data person_contact_number" name="person_contact_number"
-                                           type="text"
-                                           id="person_contact_number{{ forloop.counter }}"
-                                           value="{{ rec.person_contact_number }}"
-                                           required
-                                           title='Please enter person contact number' disabled>
-                                </td>
-
-                                <td>
-                                    <text hidden>{{ rec.single_donor_address }}</text>
-                                    <input class="form-control data address" name="single_donor_address"
-                                           type="text"
-                                           id="email{{ forloop.counter }}" value="{{ rec.single_donor_address }}"
-                                           required
-                                           title='Please enter donor address' disabled>
-                                </td>
-
-                                <td>
-                                    <text hidden>{{ rec.email }}</text>
-                                    <input class="form-control data email" name="email_saved"
-                                           type="text"
-                                           id="email{{ forloop.counter }}" value="{{ rec.email }}"
-                                           required
-                                           title='Please enter office email' disabled>
-                                </td>
-
-
-                                <td>
-                                    <span type="button" name="updt" id="update{{ forloop.counter }}"
-                                          class=" update btn green glyphicon glyphicon-ok" style="display:none;">
-                                    </span>
-                                    <span type="button" name="edit" id="edit{{ forloop.counter }}"
-                                          class=" edit btn blue glyphicon glyphicon-pencil">
-                                    </span>
-                                    <span type="button" name="delete" id="delete{{ forloop.counter }}"
-                                          class=" delete btn red glyphicon glyphicon-trash">
-                                    </span>
-                                </td>
-                            </tr>
-                        {% endfor %}
                         </tbody>
                     </table>
 

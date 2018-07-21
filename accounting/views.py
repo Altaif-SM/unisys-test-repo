@@ -135,7 +135,67 @@ def get_donors_student_list(request):
     return HttpResponse(json.dumps([ obj.to_dict() for obj in student_list]), content_type='application/json')
 
 def get_donor_report(request):
-    return render(request, "template_donor_report.html")
+    donor_list = DonorDetails.objects.all()
+    return render(request, "template_donor_report.html",{'donor_list': donor_list})
+
+def get_voucher_data_by_donor(request):
+    debit_total = 0
+    outstanding_total = 0
+
+    student_ids = StudentDonorMapping.objects.filter(donor_id=request.POST['donor']).values('student')
+
+    student_list = StudentDetails.objects.filter(id__in=student_ids).distinct()
+    student_list_rec = []
+
+    for obj in student_list:
+
+        raw_dict = {}
+        raw_dict_one = {}
+        approval_amount = 0
+        credit_total = 0
+        outstanding_amount = 0
+        application_list = []
+        for application_obj in obj.student_applicant_rel.all():
+            approval_amount = application_obj.scholarship_fee
+
+            # raw_dict['application_rec'] = application_obj.to_application_dict()
+            for voucher_obj in application_obj.rel_student_payment_receipt_voucher.all():
+
+                raw_dict['voucher_rec'] = voucher_obj.to_dict_short()
+                if voucher_obj.voucher_type == "credit":
+                    credit_total += float(voucher_obj.voucher_amount)
+
+            outstanding_amount = float(approval_amount) - float(credit_total)
+
+            raw_dict['approval_amount'] = float(approval_amount)
+            raw_dict['credit_total'] = float(credit_total)
+            raw_dict['outstanding_amount'] = float(outstanding_amount)
+            student_list_rec.append(raw_dict)
+
+        debit_total += float(credit_total)
+        outstanding_total += float(outstanding_amount)
+
+
+
+
+
+
+
+    # application_rec = ApplicationDetails.objects.filter(student__student_donor_rel__donor_id=request.POST['donor'])
+    #
+    # voucher_record = StudentPaymentReceiptVoucher.objects.filter(application__in=application_rec)
+    #
+    # raw_dict = {}
+    #
+    # balance_total = StudentPaymentReceiptVoucher.objects.filter(voucher_type="credit", application__in=application_rec).values("voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
+    #
+    # raw_dict['application_rec'] = application_rec.to_application_dict()
+    #
+    # raw_dict['outstanding_amount'] = float(application_rec.scholarship_fee) - float(balance_total['total_credit'])
+    #
+    # raw_dict['voucher_rec'] = [ obj.to_dict() for obj in voucher_record]
+
+    return HttpResponse(json.dumps(student_list_rec), content_type='application/json')
 
 def get_payment_voucher_data_by_student(request):
 

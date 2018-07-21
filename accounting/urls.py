@@ -20,6 +20,7 @@ urlpatterns = [
                   path('get_donors_student_list/', views.get_donors_student_list, name='get_donors_student_list'),
 
                   path('get_donor_report/', views.get_donor_report, name='get_donor_report'),
+                  path('get_voucher_data_by_donor/', views.get_voucher_data_by_donor, name='get_voucher_data_by_donor'),
 
                   path('get_payment_voucher_data_by_student/', views.get_payment_voucher_data_by_student, name='get_payment_voucher_data_by_student'),
                   path('get_receipt_voucher_data_by_student/', views.get_receipt_voucher_data_by_student, name='get_receipt_voucher_data_by_student'),

@@ -99,6 +99,14 @@ class StudentPaymentReceiptVoucher(BaseModel):
         }
         return resp
 
+    def to_dict_short(self):
+        resp = {
+            "id": self.id,
+            StudentPaymentReceiptVoucher.VOUCHER_NUMBER: self.voucher_number,
+            "student": self.application.student.user.get_full_name() if self.application.student else ''
+        }
+        return resp
+
 
 # class StudentReceiptVoucher(BaseModel):
 #

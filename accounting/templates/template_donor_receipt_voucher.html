@@ -95,9 +95,6 @@
                         success: function (data) {
 
 
-
-                            {#alert(JSON.stringify(data));#}
-
                             {#$('#id_donor').append(#}
                             {#        '<option value="' + data['application_rec']['donor']['user']['id'] + '">'#}
                             {#        + data['application_rec']['donor']['user']['first_name'] + '</option>')#}
@@ -136,11 +133,6 @@
                             if (data['application_rec']['scholarship_fee'] != null) {
                                 $('#id_scholarship_fee').val(data['application_rec']['scholarship_fee']);
                             }
-
-                            {#if (data['application_rec']['donor'] != null) {#}
-                            {#    $('#id_donor_list').val(data['application_rec']['donor']['user']['first_name']);#}
-                            {#    $('#id_donor_id').val(data['application_rec']['donor']['user']['first_name']);#}
-                            {#}#}
 
                             if (data['application_rec']['program'] != null) {
                                 $('#id_program').val(data['application_rec']['program']['program_name']);
