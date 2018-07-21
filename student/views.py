@@ -845,6 +845,10 @@ def save_update_applicant_scholarship_about_yourself_info(request):
 
 
 def my_application(request):
+    application_obj = request.user.get_application
+
+    siblings_obj = application_obj.sibling_applicant_rel.all()
+
     # path = str(settings.MEDIA_URL) + str('reports/Donors.pdf')
     # path =str('/home/redbytes/scholarship_proj/scholarship_mgmt/media/reports/Donors.pdf')
     return render(request, 'my_application.html')
