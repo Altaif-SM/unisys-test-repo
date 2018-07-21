@@ -19,13 +19,18 @@ urlpatterns = [
                   path('get_donor_receipt_voucher/', views.get_donor_receipt_voucher, name='get_donor_receipt_voucher'),
                   path('get_donors_student_list/', views.get_donors_student_list, name='get_donors_student_list'),
 
-                  path('get_donor_report/', views.get_donor_report, name='get_donor_report'),
-                  path('get_voucher_data_by_donor/', views.get_voucher_data_by_donor, name='get_voucher_data_by_donor'),
 
                   path('get_payment_voucher_data_by_student/', views.get_payment_voucher_data_by_student, name='get_payment_voucher_data_by_student'),
                   path('get_receipt_voucher_data_by_student/', views.get_receipt_voucher_data_by_student, name='get_receipt_voucher_data_by_student'),
 
+
                   path('save_payment_voucher_data_by_student/', views.save_payment_voucher_data_by_student, name='save_payment_voucher_data_by_student'),
                   path('save_student_receipt_voucher/', views.save_student_receipt_voucher, name='save_student_receipt_voucher'),
+
+                  path('get_donor_recipt_for_org_payment/', views.get_donor_recipt_for_org_payment, name='get_donor_recipt_for_org_payment'),
+                  path('save_donor_recipt_for_org_payment/', views.save_donor_recipt_for_org_payment, name='save_donor_recipt_for_org_payment'),
+
+                  path('get_donor_report/', views.get_donor_report, name='get_donor_report'),
+                  path('get_voucher_data_by_donor/', views.get_voucher_data_by_donor, name='get_voucher_data_by_donor'),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

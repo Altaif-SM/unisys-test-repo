@@ -13,28 +13,77 @@
         window.onload = function () {
             $(document).ready(function () {
 
+                function validate() {
+                    var flag = false;
+
+
+                     if( Number($("#id_voucher_amount").val()) == 0 ){
+
+                         flag = true;
+                         $("#id_voucher_amount").css("border-color","red");
+                         $("#id_voucher_amount_error_msg").text("Please enter Amount greater than 0");
+                         $("#id_voucher_amount_error_msg").show();
+                     }else{
+                         $("#id_voucher_amount").css("border-color","");
+                         $("#id_voucher_amount_error_msg").hide();
+                         $("#id_voucher_amount_error_msg").text("");
+
+                     }
+
+                     if($("#id_voucher_description").val() == '' ){
+                         flag = true;
+                         $("#id_voucher_description").css("border","solid 1px red");
+                         $("#id_voucher_description_error_msg").text("Please enter Voucher description.");
+                         $("#id_voucher_description_error_msg").show();
+                     }else {
+                         $("#id_voucher_description").css("border","");
+                         $("#id_voucher_description_error_msg").hide();
+                     }
+
+                     if( Number($("#id_voucher_amount").val()) > Number($("#id_scholarship_fee").val())){
+                         flag = true;
+                         $("#id_voucher_amount_error_msg").css("border","red");
+                         $("#id_voucher_amount_error_msg").text("Amount should not be greater tha Scholarship Fee");
+                         $("#id_voucher_amount_error_msg").show();
+                     }else{
+                         $("#id_voucher_amount_error_msg").hide();
+                         $("#id_voucher_amount_error_msg").css("border","");
+                          $("#id_voucher_amount_error_msg").text("");
+                     }
+
+                     if( $("#id_voucher_date").val() == "" ) {
+                         flag = true;
+                         $("#data_error_msg").css("border","red");
+                         $("#data_error_msg").text("Please Select Date.");
+                         $("#data_error_msg").show();
+                     }else {
+                         $("#data_error_msg").hide();
+                         $("#data_error_msg").css("border","");
+                     }
+
+                     return flag;
+
+                }
+
+
                 $(document).on("click", "#save", function (e) {
 
-                    if( Number($("#id_voucher_amount").val()) <= Number($("#id_scholarship_fee").val())){
-
-                        if( $("#id_voucher_date").val() != "" ) {
-                            $('#form_sample_1').submit();
-                            $("#data_error_msg").hide();
-                        }else{
-                            $("#data_error_msg").show();
-                            return false;
-                        }
-                    }else{
-                        $("#error_msg").show();
-                        return false;
+                    if(validate() == false) {
+                        $('#form_sample_1').submit();
                     }
 
                 });
 
 
                 $(document).on("change", "#id_student", function (e) {
-                     $("#error_msg").hide();
-                     $("#data_error_msg").hide();
+                    $("#id_voucher_description").css("border","");
+                    $("#id_voucher_description_error_msg").hide();
+                    $("#id_voucher_amount").css("border-color","");
+                    $("#id_voucher_amount_error_msg").hide();
+                    $("#data_error_msg").hide();
+                    $("#data_error_msg").css("border","");
+                    $("#id_voucher_amount_error_msg").hide();
+                    $("#id_voucher_amount_error_msg").css("border","");
                     var student = $(this).val();
                     var url = '/accounting/get_payment_voucher_data_by_student/';
                     get_voucher_data(url, student);
@@ -138,6 +187,7 @@
 
             $('#sample_1').dataTable().fnDestroy();
             $('#sample_1').dataTable({
+                "bFilter": false,
                 "aoColumnDefs": [
                     {'bSortable': false}
                 ]
@@ -201,7 +251,6 @@
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <input type="hidden" id="id_app_id" name="application">
-                    <input type="hidden" id="id_scholarship_fee">
                     <div class="form-body">
 
                         <div class="row">
@@ -239,7 +288,7 @@
                                     <input type="date" title="Date" placeholder="Date"
                                            id="id_voucher_date" name="voucher_date"
                                            class="form-control" required>
-                                    <span id="data_error_msg" style="display: none;color: red;">Please Select Date.</span>
+                                    <span id="data_error_msg" style="display: none;color: red;"></span>
                                 </div>
                             </div>
 
@@ -352,7 +401,7 @@
                                     <input type="number" title="Amount" placeholder="0.00"
                                            id="id_voucher_amount" name="voucher_amount"
                                            class="form-control" required>
-                                    <span id="error_msg" style="display: none;color: red;">Amount should not be greter tha Scholarshi Fee</span>
+                                    <span id="id_voucher_amount_error_msg" style="display: none;color: red;"></span>
                                 </div>
                             </div>
 
@@ -366,7 +415,8 @@
                                 <label class="col-md-2 control-label">Description:</label>
                                 <div class="col-md-10">
                                     <textarea rows="5" cols="95" name="voucher_description"
-                                              id="id_voucher_description"></textarea>
+                                              id="id_voucher_description"></textarea><br>
+                                    <span id="id_voucher_description_error_msg" style="display: none;color: red;"></span>
 
                                 </div>
                             </div>

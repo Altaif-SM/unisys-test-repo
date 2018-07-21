@@ -15,18 +15,23 @@
 
                 $(document).on("click", "#save", function (e) {
 
-                    if( Number($("#id_voucher_amount").val()) <= Number($("#id_scholarship_fee").val())){
+                    if ( Number($("#id_voucher_amount").val()) != 0){
 
-                        if( $("#id_voucher_date").val() != "" ) {
-                            $('#form_sample_1').submit();
-                            $("#data_error_msg").hide();
-                        }else{
-                            $("#data_error_msg").show();
+                        if (Number($("#id_voucher_amount").val()) <= Number($("#id_scholarship_fee").val())) {
+
+                            if ($("#id_voucher_date").val() != "") {
+                                $('#form_sample_1').submit();
+                                $("#data_error_msg").hide();
+                            } else {
+                                $("#data_error_msg").show();
+                                return false;
+                            }
+                        } else {
+                            $("#error_msg").show();
                             return false;
                         }
                     }else{
-                        $("#error_msg").show();
-                        return false;
+                        alert("Amount is greater than 0 and less than Scholarship Fee!");
                     }
 
                 });
@@ -79,7 +84,7 @@
                      $("#error_msg").hide();
                      $("#data_error_msg").hide();
                     var student = $(this).val();
-                    var url = '/accounting/get_receipt_voucher_data_by_student/';
+                    var url = '/accounting/get_donor_recipt_for_org_payment/';
                     get_voucher_data(url, student);
                 });
 
@@ -144,7 +149,7 @@
 
                             for(var i= 0; i< (data['voucher_rec']).length ; i++) {
 
-                                 if(data['voucher_rec'][i]['voucher_type'] == "credit") {
+                                 if(data['voucher_rec'][i]['voucher_type'] == "debit") {
                                     output_html += "" +
                                     "<tr id='item"+ i +"' class='item'>"
                                     + "<td style='width:150px;'><input id='id_voucher_number' class='form-control data voucher_number' value='"+ data['voucher_rec'][i]['voucher_number'] +"' disabled> </td>"
@@ -153,8 +158,8 @@
                                     + "<td><input id='id_voucher_amount"+ i +"' class='form-control data voucher_number' value='" + data['voucher_rec'][i]['voucher_amount'] + "' disabled> </td>"
                                     +"<td>"
                                         +"<span type='button' name='updt' id='update"+ i +"' class='update btn green glyphicon glyphicon-ok' style='display:none;'></span>"
-                                        +"<span type='button' name='edit' id='edit"+ i +"' class='edit btn blue glyphicon glyphicon-pencil'> </span>"
-                                        +"<span type='button' name='delete' id='delete"+ i +"' class='delete btn red glyphicon glyphicon-trash'> </span>"
+                                        +"<span type='button' name='edit' id='edit"+ i +"' class='edit btn blue glyphicon glyphicon-pencil' style='display:none;> </span>"
+                                        +"<span type='button' name='delete' id='delete"+ i +"' class='delete btn red glyphicon glyphicon-trash' style='display:none;> </span>"
                                     +"</td>"
 
 
@@ -177,6 +182,7 @@
 
             $('#sample_1').dataTable().fnDestroy();
             $('#sample_1').dataTable({
+                "bFilter": false,
                 "aoColumnDefs": [
                     {'bSortable': false}
                 ]
@@ -219,11 +225,22 @@
                 <span class="caption-subject font-red sbold uppercase"> Donor Receipt Voucher </span>
             </div>
 
+            <div style="float: right;">
+                <div class="btn-group">
+                    <button type="button" class="btn green" id="save">Save</button>
+                </div>
+                <div class="btn-group">
+                    <button type="submit" class="btn green" id="save_print">Save & Print PDF</button>
+                </div>
+                <div class="btn-group">
+                    <button type="submit" class="btn green" id="save_send">Save & Send</button>
+                </div>
+            </div>
         </div>
 
         <div class="portlet-body">
             <div class="form-body">
-                <form action="#" id="form_sample_1"
+                <form action="{% url 'accounting:save_donor_recipt_for_org_payment' %}" id="form_sample_1"
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
@@ -333,7 +350,7 @@
                                 <label class="col-md-2 control-label">Description:</label>
                                 <div class="col-md-10">
                                     <textarea rows="5" cols="95" name="voucher_description"
-                                              id="id_voucher_description"></textarea>
+                                              id="id_voucher_description" required></textarea>
 
                                 </div>
                             </div>

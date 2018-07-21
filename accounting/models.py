@@ -28,10 +28,6 @@ class StudentPaymentReceiptVoucher(BaseModel):
 
     voucher_type = models.CharField(max_length=50, null=True)
 
-
-    # debit = models.FloatField(max_length=50, null=True)
-    # credit = models.FloatField(max_length=50, null=True)
-
     class Meta:
         permissions = (
             ('can_view_student_payment_voucher', 'can view student payment voucher'),
@@ -189,21 +185,96 @@ class StudentPaymentReceiptVoucher(BaseModel):
 # #
 # #     def __str__(self):
 # #         return self.receipt_voucher_number
-#
-# class DonorReceiptVoucher(BaseModel):
-#     receipt_voucher_number = models.CharField(max_length=50, null=True)
-#     application = models.ForeignKey(ApplicationDetails, related_name="rel_donor_receipt_voucher",
-#                                     on_delete=models.PROTECT, null=True)
-#     donor_student = models.ForeignKey(StudentDonorMapping, related_name="rel_donor_student_receipt_voucher", on_delete=models.PROTECT, null=True)
-#     receipt_voucher_amount = models.FloatField(max_length=50, null=True)
-#     receipt_voucher_total = models.FloatField(max_length=50, null=True)
-#     receipt_voucher_description = models.CharField(max_length=50, null=True)
-#
-#     class Meta:
-#         permissions = (
-#             ('can_view_donor_payment_voucher', 'can view donor payment voucher'),
-#             ('can_view_donor_receipt_voucher', 'can view donor receipt voucher'),
-#         )
-#
-#     def __str__(self):
-#         return self.receipt_voucher_number
+
+class DonorReceiptVoucher(BaseModel):
+
+    VOUCHER_NUMBER = 'voucher_number'
+    APP_ID = 'application'
+    VOUCHER_AMOUNT = 'voucher_amount'
+    VOUCHER_TOTAL = 'voucher_total'
+    VOUCHER_DESC = 'voucher_description'
+    VOUCHER_TYPE = 'voucher_type'
+
+    voucher_number = models.CharField(max_length=50, null=True)
+    application = models.ForeignKey(ApplicationDetails, related_name="rel_donor_receipt_voucher",
+                                    on_delete=models.PROTECT, null=True)
+    donor_student = models.ForeignKey(StudentDonorMapping, related_name="rel_donor_student_receipt_voucher", on_delete=models.PROTECT, null=True)
+    voucher_amount = models.FloatField(max_length=50, null=True)
+    voucher_total = models.FloatField(max_length=50, null=True)
+    voucher_description = models.CharField(max_length=50, null=True)
+
+    voucher_type = models.CharField(max_length=50, null=True)
+
+    # class Meta:
+    #     permissions = (
+    #         ('can_view_donor_payment_voucher', 'can view donor payment voucher'),
+    #         ('can_view_donor_receipt_voucher', 'can view donor receipt voucher'),
+    #     )
+
+    def __str__(self):
+        return self.voucher_number if self.voucher_number else ''
+
+    @staticmethod
+    def get_instance(val_dict, voucher_id=None):
+
+        if voucher_id:
+            voucher = DonorReceiptVoucher.objects.get(id=DonorReceiptVoucher)
+        else:
+            voucher = DonorReceiptVoucher()
+
+        if DonorReceiptVoucher.VOUCHER_NUMBER in val_dict and val_dict[
+            DonorReceiptVoucher.VOUCHER_NUMBER]:
+            voucher.voucher_number = val_dict[DonorReceiptVoucher.VOUCHER_NUMBER]
+
+        if DonorReceiptVoucher.APP_ID in val_dict and val_dict[DonorReceiptVoucher.APP_ID]:
+            voucher.application = ApplicationDetails.objects.get(id=val_dict[DonorReceiptVoucher.APP_ID])
+
+        if DonorReceiptVoucher.VOUCHER_AMOUNT in val_dict and val_dict[
+            DonorReceiptVoucher.VOUCHER_AMOUNT]:
+            voucher.voucher_amount = float(val_dict[DonorReceiptVoucher.VOUCHER_AMOUNT])
+
+        if DonorReceiptVoucher.VOUCHER_TOTAL in val_dict and val_dict[
+            DonorReceiptVoucher.VOUCHER_TOTAL]:
+            voucher.voucher_total = float(val_dict[DonorReceiptVoucher.VOUCHER_TOTAL])
+
+        if DonorReceiptVoucher.VOUCHER_DESC in val_dict and val_dict[
+            DonorReceiptVoucher.VOUCHER_DESC]:
+            voucher.voucher_description = val_dict[DonorReceiptVoucher.VOUCHER_DESC]
+
+        return voucher
+
+    def to_dict(self):
+        resp = {
+            "id": self.id,
+            DonorReceiptVoucher.VOUCHER_NUMBER: self.voucher_number,
+            DonorReceiptVoucher.VOUCHER_DESC: self.voucher_description,
+            DonorReceiptVoucher.VOUCHER_AMOUNT: self.voucher_amount,
+            DonorReceiptVoucher.VOUCHER_TYPE: self.voucher_type,
+
+            'country': self.application.address.country.to_dict() if self.application.address else '',
+            'student': self.application.student.to_short_dict() if self.application.student else '',
+
+            'scholarship': self.application.applicant_scholarship_rel.all()[
+                0].scholarship.to_dict() if self.application.applicant_scholarship_rel.all() else '',
+            'university': self.application.applicant_scholarship_rel.all()[
+                0].university.to_dict() if self.application.applicant_scholarship_rel.all() else '',
+            'program': self.application.applicant_module_rel.all()[
+                0].program.to_dict() if self.application.applicant_module_rel.all() else '',
+            'donor': self.application.student.student_donor_rel.all()[
+                0].donor.to_dict() if self.application.student.student_donor_rel.all() else '',
+            'voucher_number': self.voucher_number if self.voucher_number else '',
+            'semester': self.application.applicant_progress_rel.all()[
+                0].semester.to_dict() if self.application.applicant_progress_rel.all() else '',
+            'degree': self.application.applicant_scholarship_rel.all()[
+                0].course_applied.to_dict() if self.application.applicant_scholarship_rel.all() else '',
+
+        }
+        return resp
+
+    def to_dict_short(self):
+        resp = {
+            "id": self.id,
+            DonorReceiptVoucher.VOUCHER_NUMBER: self.voucher_number,
+            "student": self.application.student.user.get_full_name() if self.application.student else ''
+        }
+        return resp

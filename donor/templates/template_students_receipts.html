@@ -168,41 +168,51 @@
                         </thead>
 
                         <tbody id="tbody">
-                        {% for rec in applicant_recs %}
+                        {% for rec in voucher_record %}
                             <tr id="item{{ forloop.counter }}" class="item">
                                 <td>
-                                    <input type="text" class="form-control" id="id_student_{{ forloop.counter }}"
-                                           value="{{ rec.student.id }}"
+                                    <input type="text" class="form-control" id="id_student{{ forloop.counter }}"
+                                           value="{{ rec.application_rec.student.id }}"
                                            disabled>
                                 </td>
 
                                 <td>
+                                    <text hidden>{{ rec.application_rec.student.user.get_full_name|title }}</text>
                                     <input class="form-control data student" name="student"
                                            type="text"
-                                           id="id_name_{{ forloop.counter }}" value="{{ rec.student.user.get_full_name|title }}"
-                                           title='Student name' disabled>
+                                           id="student{{ forloop.counter }}" value="{{ rec.application_rec.student.user.get_full_name|title }}"
+                                           required
+                                           disabled>
                                 </td>
 
                                 <td>
-                                    <input class="form-control data person" name="scholarship_fee"
+                                    <text hidden>{{ rec.approval_amount }}</text>
+                                    <input class="form-control data scholarship_fee" name="scholarship_fee"
                                            type="text"
-                                           id="id_scholarship_fee_{{ forloop.counter }}" value="{{ rec.scholarship_fee|title }}"
-                                           title='Scholarship Fee' disabled>
+                                           id="id_scholarship_fee_{{ forloop.counter }}"
+                                           value="{{ rec.approval_amount }}"
+                                           required
+                                           disabled>
+                                </td>
+
+                               <td>
+                                    <text hidden>{{ rec.credit_total }}</text>
+                                    <input class="form-control data credit_total" name="credit_total"
+                                           type="text"
+                                           id="credit_total{{ forloop.counter }}"
+                                           value="{{ rec.credit_total }}"
+                                           required
+                                           disabled>
                                 </td>
 
                                 <td>
-                                    <input class="form-control" name="debit"
+                                    <text hidden>{{ rec.outstanding_amount }}</text>
+                                    <input class="form-control data outstanding_amount" name="outstanding_amount"
                                            type="text"
-                                           id="id_debit_{{ forloop.counter }}"
-                                           value="{{ rec.debit }}"
-                                           title='Debit' disabled>
-                                </td>
-
-                                <td>
-                                    <input class="form-control" name="credit"
-                                           type="text"
-                                           id="id_credit_{{ forloop.counter }}" value="{{ rec.credit }}"
-                                           title='Credit' disabled>
+                                           id="outstanding_amount{{ forloop.counter }}"
+                                           value="{{ rec.outstanding_amount }}"
+                                           required
+                                           disabled>
                                 </td>
 
                             </tr>
