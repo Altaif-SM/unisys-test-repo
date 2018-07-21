@@ -66,7 +66,7 @@ class AddressDetails(BaseModel):
             'district': self.district,
             'state': self.state,
             'street': self.street,
-            'country': self.country
+            'country': self.country.to_dict(),
         }
         return res
 
@@ -149,6 +149,15 @@ class StudentDonorMapping(BaseModel):
     def __str__(self):
         details = str(self.student.user.first_name) + ' and ' + str(self.donor.user.first_name)
         return details
+
+    def to_dict(self):
+        res = {
+            'id': self.id if self.id else '',
+            'student': self.student.to_short_dict() if self.student else '',
+            'donor': self.donor.to_dict() if self.donor else '',
+        }
+
+        return res
 
 
 class UniversityDetails(BaseModel):

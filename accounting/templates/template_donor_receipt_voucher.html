@@ -13,88 +13,173 @@
         window.onload = function () {
             $(document).ready(function () {
 
-                $(document).on("click", ".update", function (e) {
-                    var parent_id = $(this).closest('tr').attr('id');
-                    var donor_id = $('#' + parent_id + ' #donor_id').val();
-                    var organisation = $('#' + parent_id + ' .organisation').val();
-                    var country = $('#' + parent_id + ' .country').val();
+                $(document).on("click", "#save", function (e) {
 
-                    var person = $('#' + parent_id + ' .person').val();
-                    var person_contact_number = $('#' + parent_id + ' .person_contact_number').val();
+                    if( Number($("#id_voucher_amount").val()) <= Number($("#id_scholarship_fee").val())){
 
-                    var address = $('#' + parent_id + ' .address').val();
-                    var email = $('#' + parent_id + ' .email').val();
-
-                    var url = '/masters/update_manage_donor_master/';
-                    update_manage_donor_info(url, donor_id, organisation, country, person, person_contact_number, email, address)
-                })
-
-                $(document).on("click", ".delete", function (e) {
-
-                    var parent_id = $(this).closest('tr').attr('id');
-                    var donor_id = $('#' + parent_id + ' #donor_id').val();
-
-                    var url = '/masters/delete_manage_donor_master/';
-                    delete_manage_donor_info(url, donor_id)
-                })
-
-                function delete_manage_donor_info(url, donor_id) {
-                    $.ajax({
-                        type: 'POST',
-                        url: url,
-                        data: {
-                            donor_id: donor_id,
-                            csrfmiddlewaretoken: '{{ csrf_token }}',
-                        },
-                        success: function (data) {
-                            location.reload(true)
-                        },
-                        error: function (xhr, msg, err) {
-                            alert(xhr.responseJSON.error);
+                        if( $("#id_voucher_date").val() != "" ) {
+                            $('#form_sample_1').submit();
+                            $("#data_error_msg").hide();
+                        }else{
+                            $("#data_error_msg").show();
+                            return false;
                         }
-                    });
-                }
-
-                function update_manage_donor_info(url, donor_id, organisation, country, person, person_contact_number, email, address) {
-                    $.ajax({
-                        type: 'POST',
-                        url: url,
-                        data: {
-                            donor_id: donor_id,
-                            organisation: organisation,
-                            country: country,
-                            person: person,
-                            person_contact_number: person_contact_number,
-                            email: email,
-                            address: address,
-                            csrfmiddlewaretoken: '{{ csrf_token }}',
-                        },
-                        success: function (data) {
-                            location.reload(true)
-                        },
-                        error: function (xhr, msg, err) {
-                            alert(xhr.responseJSON.error);
-                        }
-                    });
-                }
-
-
-                $(document).on("click", ".edit", function (e) {
-                    var parent_id = $(this).closest('tr').attr('id');
-                    var id = $(this).attr('id');
-                    var i = id.split("edit")[1]
-
-                    $(".data").prop("disabled", true);
-                    $(".edit").show();
-                    $(".update").hide();
-
-                    $("#update" + i).show();
-                    $("#edit" + i).hide();
-
-
-                    $("#" + parent_id + " .data").prop("disabled", false);
+                    }else{
+                        $("#error_msg").show();
+                        return false;
+                    }
 
                 });
+
+
+                $("#id_donor_list").change(function () {
+
+                    var donor = $(this).val();
+                    var url = '/accounting/get_donors_student_list/';
+                    get_student_for_donor(url, donor);
+
+                });
+
+
+                function get_student_for_donor(url, donor) {
+
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            donor: donor,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+
+                            {#alert(JSON.stringify(data));#}
+
+                            $('#id_student').empty();
+                            $('#id_student').append(
+                                '<option value="">Select Student</option>');
+
+                            for (var i = 0; i < data.length; i++) {
+                                $('#id_student').append(
+                                    '<option value="' + data[i]['student']['id'] + '">'
+                                    + data[i]['student']['get_all_name'] + '</option>')
+
+                            }
+
+
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+
+                $(document).on("change", "#id_student", function (e) {
+                     $("#error_msg").hide();
+                     $("#data_error_msg").hide();
+                    var student = $(this).val();
+                    var url = '/accounting/get_receipt_voucher_data_by_student/';
+                    get_voucher_data(url, student);
+                });
+
+
+                function get_voucher_data(url, student) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            student: student,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+
+
+                            {#alert(JSON.stringify(data));#}
+
+                            {#$('#id_donor').append(#}
+                            {#        '<option value="' + data['application_rec']['donor']['user']['id'] + '">'#}
+                            {#        + data['application_rec']['donor']['user']['first_name'] + '</option>')#}
+
+
+                            $('#id_app_id').val(data['application_rec']['id']);
+                            $('#id_voucher_number').val(data['application_rec']['voucher_number']);
+                            $('#id_voucher_number_id').val(data['application_rec']['voucher_number']);
+
+                            $('#id_outstanding').val(data['outstanding_amount']);
+
+                            if (data['application_rec']['semester'] != null) {
+                                $('#id_semester').val(data['application_rec']['semester']['semester_name']);
+                                $('#id_semester_id').val(data['application_rec']['semester']['semester_name']);
+                            }
+
+
+                            {#$('#id_scholarship_fee').val(data['application_rec']['scholarship_fee']);#}
+                            $('#id_balance').val(data['application_rec']['balance']);
+
+                            if (data['application_rec']['country'] != null) {
+                                $('#id_country').val(data['application_rec']['country']['country_name']);
+                                $('#id_country_id').val(data['application_rec']['country']['country_name']);
+                            }
+
+                            if (data['application_rec']['university'] != null) {
+                                $('#id_university').val(data['application_rec']['university']['university_name']);
+                                $('#id_university_id').val(data['application_rec']['university']['university_name']);
+                            }
+
+                            if (data['application_rec']['scholarship'] != null) {
+                                $('#id_scholarship').val(data['application_rec']['scholarship']['scholarship_name']);
+                                $('#id_scholarship_id').val(data['application_rec']['scholarship']['scholarship_name']);
+                            }
+
+                            if (data['application_rec']['scholarship_fee'] != null) {
+                                $('#id_scholarship_fee').val(data['application_rec']['scholarship_fee']);
+                            }
+
+                            {#if (data['application_rec']['donor'] != null) {#}
+                            {#    $('#id_donor_list').val(data['application_rec']['donor']['user']['first_name']);#}
+                            {#    $('#id_donor_id').val(data['application_rec']['donor']['user']['first_name']);#}
+                            {#}#}
+
+                            if (data['application_rec']['program'] != null) {
+                                $('#id_program').val(data['application_rec']['program']['program_name']);
+                                $('#id_program_id').val(data['application_rec']['program']['program_name']);
+                            }
+
+
+                            var output_html = "";
+
+                            for(var i= 0; i< (data['voucher_rec']).length ; i++) {
+
+                                 if(data['voucher_rec'][i]['voucher_type'] == "credit") {
+                                    output_html += "" +
+                                    "<tr id='item"+ i +"' class='item'>"
+                                    + "<td style='width:150px;'><input id='id_voucher_number' class='form-control data voucher_number' value='"+ data['voucher_rec'][i]['voucher_number'] +"' disabled> </td>"
+                                    + "<td><input id='id_student"+ i +"' class='form-control data voucher_number' value='"+ data['voucher_rec'][i]['donor']['user']['first_name'] +"' disabled> </td>"
+                                    + "<td><input id='id_country"+ i +"' class='form-control data voucher_number' value='" + data['voucher_rec'][i]['voucher_description'] + "' disabled> </td>"
+                                    + "<td><input id='id_voucher_amount"+ i +"' class='form-control data voucher_number' value='" + data['voucher_rec'][i]['voucher_amount'] + "' disabled> </td>"
+                                    +"<td>"
+                                        +"<span type='button' name='updt' id='update"+ i +"' class='update btn green glyphicon glyphicon-ok' style='display:none;'></span>"
+                                        +"<span type='button' name='edit' id='edit"+ i +"' class='edit btn blue glyphicon glyphicon-pencil'> </span>"
+                                        +"<span type='button' name='delete' id='delete"+ i +"' class='delete btn red glyphicon glyphicon-trash'> </span>"
+                                    +"</td>"
+
+
+                                    }
+
+                                    output_html+= "</tr>"
+                            }
+
+                            $("#tbody").html(output_html);
+
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
             });
 
 
@@ -142,56 +227,46 @@
                 <span class="caption-subject font-red sbold uppercase"> Donor Receipt Voucher </span>
             </div>
 
-            <div style="float: right;">
-                <div class="btn-group">
-                    <button type="submit" class="btn green" id="save">Save</button>
-                </div>
-                <div class="btn-group">
-                    <button type="submit" class="btn green" id="save">Save & Print PDF</button>
-                </div>
-                <div class="btn-group">
-                    <button type="submit" class="btn green" id="save">Save & Send</button>
-                </div>
-             </div>
-
         </div>
 
         <div class="portlet-body">
             <div class="form-body">
-                <form action="{% url 'masters:save_manage_donor_master' %}" id="form_sample_1"
+                <form action="#" id="form_sample_1"
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-
+                    <input type="hidden" id="id_app_id" name="application">
                     <div class="form-body">
 
                         <div class="row">
 
+
                             <div class="">
                                 <label class="col-md-2 control-label">Voucher Number:
-
                                 </label>
                                 <div class="col-md-2">
-                                    <select id='country_name' title="Select country" name="country"
+                                    <input type="text" title="Voucher Number" placeholder="Voucher Number"
+                                           id="id_voucher_number" name="voucher_number"
+                                           class="form-control" required disabled>
+                                    <input type="hidden" name="voucher_number" id="id_voucher_number_id">
+                                </div>
+                            </div>
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Donor:</label>
+                                <div class="col-md-2">
+                                    <select id='id_donor_list' title="Select Donor" name="donor"
                                             class="form-control"
                                             required>
                                         <option style="display:none" selected="selected" id=""
                                                 value="">Please Select
                                         </option>
 
-                                        {% for rec in country_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
+                                        {% for rec in donor_list %}
+                                            <option value='{{ rec.id }}'>{{ rec.user.get_full_name|title }}</option>
                                         {% endfor %}
                                     </select>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-2 control-label">Donor:</label>
-                                <div class="col-md-2">
-                                    <input type="text" title="Enter organisation name" id="organisation_name"
-                                           name="organisation"
-                                           class="form-control" required>
                                 </div>
                             </div>
 
@@ -204,18 +279,55 @@
                             <div class="">
                                 <label class="col-md-2 control-label">Amount:</label>
                                 <div class="col-md-2">
-                                    <input type="text" title="Enter due amount"
-                                           id="due_amount" name="due_amount"
+                                    <input type="number" title="Amount" placeholder="0.00"
+                                           id="id_voucher_amount" name="voucher_amount"
                                            class="form-control" required>
+                                    <span id="error_msg" style="display: none;color: red;">Amount should not be greter tha Scholarshi Fee</span>
                                 </div>
                             </div>
 
                             <div class="">
                                 <label class="col-md-2 control-label">Student:</label>
                                 <div class="col-md-2">
-                                    <input type="text" title="Enter organisation name" id="organisation_name"
-                                           name="organisation"
-                                           class="form-control" required>
+                                    <select id='id_student' title="Select country" name="student"
+                                            class="form-control"
+                                            required>
+                                        <option style="display:none" selected="selected" id=""
+                                                value="">Please Select
+                                        </option>
+
+                                        {% for rec in student_list %}
+                                            <option value='{{ rec.id }}'>{{ rec.user.get_full_name|title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <br><br>
+
+                        <div class="row">
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Scholarship Fee:</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Scholarship Fee" placeholder="Scholarship Fee"
+                                           id="id_scholarship_fee" name="scholarship_fee"
+                                           class="form-control" required disabled>
+
+                                    <input type="text" id="id_scholarship_fee_id" name="scholarship_fee" hidden>
+                                </div>
+                            </div>
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Outstanding:</label>
+                                <div class="col-md-2">
+                                    <input type="number" title="Outstanding" placeholder="0.00"
+                                           id="id_outstanding" name="outstanding"
+                                           class="form-control" required disabled>
                                 </div>
                             </div>
 
@@ -226,40 +338,17 @@
                         <div class="row">
 
                             <div class="">
-                                <label class="col-md-2 control-label">Scholarship Fee:</label>
-                                <div class="col-md-2">
-                                    <input type="text" title="Enter due amount"
-                                           id="due_amount" name="due_amount"
-                                           class="form-control" required>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-2 control-label">Outstanding Amount:</label>
-                                <div class="col-md-2">
-                                    <input type="text" title="Enter due amount"
-                                           id="due_amount" name="due_amount"
-                                           class="form-control" required>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <br><br>
-
-                         <div class="row">
-
-                            <div class="">
                                 <label class="col-md-2 control-label">Description:</label>
                                 <div class="col-md-10">
-                                    <textarea rows="5" cols="95"></textarea>
+                                    <textarea rows="5" cols="95" name="voucher_description"
+                                              id="id_voucher_description"></textarea>
 
                                 </div>
                             </div>
                         </div>
 
 
-                        <h3 class="form-section">Receipt List</h3>
+                        <h3 class="form-section">Receipt Vouchers</h3>
                         <hr>
 
 
@@ -271,101 +360,29 @@
         <div class="portlet-body">
             <div class="table-toolbar">
             </div>
+
+
             <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
+                {% csrf_token %}
+                <table class="table table-striped table-hover table-bordered" id="sample_1">
+                    <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Donor Name</th>
+                        <th>Description</th>
+                        <th>Amount</th>
+                        <th></th>
+                    </tr>
+                    </thead>
 
-                    <table class="table table-striped table-hover table-bordered" id="sample_1">
-                        <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Donor Name</th>
-                            <th>Description</th>
-                            <th>University</th>
-                            <th>Amount</th>
-                        </tr>
-                        </thead>
+                    <tbody id="tbody">
 
-                        <tbody id="tbody">
-                        {% for rec in donor_recs %}
-                            <tr id="item{{ forloop.counter }}" class="item">
-                                <td style="display: none"><input id="donor_id" value="{{ rec.id }}"></td>
-
-                                <td>
-                                    <text hidden>{{ rec.organisation|title }}</text>
-                                    <input class="form-control data organisation" name="organisation"
-                                           type="text"
-                                           id="office{{ forloop.counter }}" value="{{ rec.organisation|title }}"
-                                           required
-                                           title='Please enter organisation name' disabled>
-                                </td>
-
-                                <td>
-                                    <text hidden>{{ rec.country.country_name|title }}</text>
-                                    <select id='country{{ forloop.counter }}' name="country_name{{ forloop.counter }}"
-                                            class="form-control data country" disabled required>
-                                        <option style="display:none" selected="selected" id=""
-                                                value="{{ rec.country.id }}">{{ rec.country.country_name|title }} </option>
-                                        {% for rec in country_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </td>
+                    </tbody>
+                </table>
+            </form>
 
 
-                                <td>
-                                    <text hidden>{{ rec.person|title }}</text>
-                                    <input class="form-control data person" name="person_saved"
-                                           type="text"
-                                           id="person{{ forloop.counter }}" value="{{ rec.person|title }}"
-                                           required
-                                           title='Please enter person' disabled>
-                                </td>
 
-                                <td>
-                                    <text hidden>{{ rec.person_contact_number }}</text>
-                                    <input class="form-control data person_contact_number" name="person_contact_number"
-                                           type="text"
-                                           id="person_contact_number{{ forloop.counter }}"
-                                           value="{{ rec.person_contact_number }}"
-                                           required
-                                           title='Please enter person contact number' disabled>
-                                </td>
-
-                                <td>
-                                    <text hidden>{{ rec.single_donor_address }}</text>
-                                    <input class="form-control data address" name="single_donor_address"
-                                           type="text"
-                                           id="email{{ forloop.counter }}" value="{{ rec.single_donor_address }}"
-                                           required
-                                           title='Please enter donor address' disabled>
-                                </td>
-
-                                <td>
-                                    <text hidden>{{ rec.email }}</text>
-                                    <input class="form-control data email" name="email_saved"
-                                           type="text"
-                                           id="email{{ forloop.counter }}" value="{{ rec.email }}"
-                                           required
-                                           title='Please enter office email' disabled>
-                                </td>
-
-
-                                <td>
-                                    <span type="button" name="updt" id="update{{ forloop.counter }}"
-                                          class=" update btn green glyphicon glyphicon-ok" style="display:none;">
-                                    </span>
-                                    <span type="button" name="edit" id="edit{{ forloop.counter }}"
-                                          class=" edit btn blue glyphicon glyphicon-pencil">
-                                    </span>
-                                    <span type="button" name="delete" id="delete{{ forloop.counter }}"
-                                          class=" delete btn red glyphicon glyphicon-trash">
-                                    </span>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </form>
         </div>
     </div>
 

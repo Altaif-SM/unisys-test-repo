@@ -157,9 +157,24 @@
                             <div class="">
                                 <label class="col-md-3 control-label">Country:</label>
                                 <div class="col-md-3">
-                                    <input type="text" title="Enter due amount"
-                                           id="due_amount" name="due_amount"
-                                           class="form-control" required>
+                                     <select id='id_country' title="Select Country"
+                                                name="country"
+                                                class="form-control">
+                                        {% if curriculum_obj %}
+                                            <option style="display:none" selected="selected"
+                                                    value="">
+                                            </option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">
+                                                Country
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in country_list %}
+                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
+                                        {% endfor %}
+
+                                    </select>
                                 </div>
                             </div>
 
@@ -203,83 +218,97 @@
                         </thead>
 
                         <tbody id="tbody">
-                        {% for rec in donor_recs %}
+                        {% for rec in voucher_record.voucher_record %}
                             <tr id="item{{ forloop.counter }}" class="item">
-                                <td style="display: none"><input id="donor_id" value="{{ rec.id }}"></td>
+                                <td>
+                                    <text hidden>{{ rec.voucher_number }}</text>
+                                    <input id="id_voucher_number" class="form-control data organisation" value="{{ rec.voucher_number }}" disabled>
+                                </td>
 
                                 <td>
-                                    <text hidden>{{ rec.organisation|title }}</text>
-                                    <input class="form-control data organisation" name="organisation"
+                                    <text hidden>{{ rec.application.student.user.get_full_name|title }}</text>
+                                    <input class="form-control data student" name="student"
                                            type="text"
-                                           id="office{{ forloop.counter }}" value="{{ rec.organisation|title }}"
+                                           id="student{{ forloop.counter }}" value="{{ rec.application.student.user.get_full_name|title }}"
                                            required
-                                           title='Please enter organisation name' disabled>
+                                           disabled>
                                 </td>
 
                                 <td>
-                                    <text hidden>{{ rec.country.country_name|title }}</text>
-                                    <select id='country{{ forloop.counter }}' name="country_name{{ forloop.counter }}"
-                                            class="form-control data country" disabled required>
-                                        <option style="display:none" selected="selected" id=""
-                                                value="{{ rec.country.id }}">{{ rec.country.country_name|title }} </option>
-                                        {% for rec in country_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </td>
-
-
-                                <td>
-                                    <text hidden>{{ rec.person|title }}</text>
-                                    <input class="form-control data person" name="person_saved"
+                                    {% if rec.voucher_type == "debit" %}
+                                        <text hidden>{{ rec.voucher_amount }}</text>
+                                        <input class="form-control data voucher_amount" name="voucher_amount"
                                            type="text"
-                                           id="person{{ forloop.counter }}" value="{{ rec.person|title }}"
+                                           id="voucher_amount{{ forloop.counter }}" value="{{ rec.voucher_amount}}"
                                            required
-                                           title='Please enter person' disabled>
-                                </td>
-
-                                <td>
-                                    <text hidden>{{ rec.person_contact_number }}</text>
-                                    <input class="form-control data person_contact_number" name="person_contact_number"
+                                           disabled>
+                                    {% else %}
+                                        <input class="form-control data voucher_amount" name="voucher_amount"
                                            type="text"
-                                           id="person_contact_number{{ forloop.counter }}"
-                                           value="{{ rec.person_contact_number }}"
+                                           id="voucher_amount{{ forloop.counter }}" value=""
                                            required
-                                           title='Please enter person contact number' disabled>
+                                           disabled>
+                                    {% endif %}
                                 </td>
 
+
                                 <td>
-                                    <text hidden>{{ rec.single_donor_address }}</text>
-                                    <input class="form-control data address" name="single_donor_address"
+                                    {% if rec.voucher_type == "credit" %}
+                                        <text hidden>{{ rec.voucher_amount }}</text>
+                                        <input class="form-control data voucher_amount" name="voucher_amount"
                                            type="text"
-                                           id="email{{ forloop.counter }}" value="{{ rec.single_donor_address }}"
+                                           id="voucher_amount{{ forloop.counter }}" value="{{ rec.voucher_amount}}"
                                            required
-                                           title='Please enter donor address' disabled>
-                                </td>
-
-                                <td>
-                                    <text hidden>{{ rec.email }}</text>
-                                    <input class="form-control data email" name="email_saved"
+                                           disabled>
+                                    {% else %}
+                                        <input class="form-control data voucher_amount" name="voucher_amount"
                                            type="text"
-                                           id="email{{ forloop.counter }}" value="{{ rec.email }}"
+                                           id="voucher_amount{{ forloop.counter }}" value=""
                                            required
-                                           title='Please enter office email' disabled>
+                                           disabled>
+                                    {% endif %}
                                 </td>
-
 
                                 <td>
-                                    <span type="button" name="updt" id="update{{ forloop.counter }}"
-                                          class=" update btn green glyphicon glyphicon-ok" style="display:none;">
-                                    </span>
-                                    <span type="button" name="edit" id="edit{{ forloop.counter }}"
-                                          class=" edit btn blue glyphicon glyphicon-pencil">
-                                    </span>
-                                    <span type="button" name="delete" id="delete{{ forloop.counter }}"
-                                          class=" delete btn red glyphicon glyphicon-trash">
-                                    </span>
+                                    <text hidden>{{ rec.voucher_total }}</text>
+                                    <input class="form-control data voucher_total" name="voucher_total"
+                                           type="text"
+                                           id="voucher_total{{ forloop.counter }}"
+                                           value="{{ rec.voucher_total }}"
+                                           required
+                                           disabled>
                                 </td>
+
                             </tr>
                         {% endfor %}
+                            <tr>
+                                <td></td>
+                                <td><b>Total</b></td>
+                                <td>
+                                    <input class="form-control data debit_total" name="debit_total"
+                                           type="text"
+                                           id="debit_total"
+                                           value="{{ voucher_record.debit_total }}"
+                                           required
+                                           disabled>
+                                </td>
+                                <td>
+                                    <input class="form-control data credit_total" name="credit_total"
+                                           type="text"
+                                           id="credit_total"
+                                           value="{{ voucher_record.credit_total}}"
+                                           required
+                                           disabled>
+                                </td>
+                                <td>
+                                    <input class="form-control data balance_total" name="balance_total"
+                                           type="text"
+                                           id="balance_total"
+                                           value="{{ voucher_record.balance_total }}"
+                                           required
+                                           disabled>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
 
