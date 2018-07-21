@@ -53,7 +53,7 @@ def save_update_applicant_personal_info(request):
                     first_name=request.POST['first_name'],
                     middle_name=request.POST['middle_name'],
                     last_name=request.POST['last_name'],
-                    birth_date=request.POST['birth_date'],
+                    birth_date=request.POST['birth_date'] if request.POST['birth_date'] else None,
                     gender=request.POST['gender'],
                     nationality_id=request.POST[
                         'nationality'],
@@ -95,7 +95,7 @@ def save_update_applicant_personal_info(request):
                     application_obj = ApplicationDetails.objects.create(first_name=request.POST['first_name'],
                                                                         middle_name=request.POST['middle_name'],
                                                                         last_name=request.POST['last_name'],
-                                                                        birth_date=request.POST['birth_date'],
+                                                                        birth_date=request.POST['birth_date'] if request.POST['birth_date'] else None,
                                                                         gender=request.POST['gender'],
                                                                         nationality_id=request.POST['nationality'],
                                                                         religion_id=request.POST['religion'],

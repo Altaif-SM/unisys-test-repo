@@ -116,7 +116,7 @@
                                 <label class="col-md-1 control-label">'A' level :</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter 'A' Level" id="a_level" name="a_level"
-                                           value="{{ qualification_obj.a_level }}" class="form-control" required>
+                                           value="{{ qualification_obj.a_level }}" class="form-control">
                                 </div>
                             </div>
 
@@ -124,7 +124,7 @@
                                 <label class="col-md-1 control-label">Year:</label>
                                 <div class="col-md-1">
                                     <select id='a_level_year' title="Select Year" name="a_level_year"
-                                            class="form-control" required>
+                                            class="form-control" >
                                         {% if qualification_obj %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ qualification_obj.a_level_year }}"
@@ -146,7 +146,7 @@
                                 <label class="col-md-1 control-label"> Result:</label>
                                 <div class="col-md-1">
                                     <input type="text" title="Enter result" id="a_level_result" name="a_level_result"
-                                           value="{{ qualification_obj.a_level_result }}" class="form-control" required>
+                                           value="{{ qualification_obj.a_level_result }}" class="form-control" >
                                 </div>
                             </div>
 
@@ -166,7 +166,7 @@
                                 <label class="col-md-1 control-label">'O' level :</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter 'O' Level" id="o_level" name="o_level"
-                                           value="{{ qualification_obj.o_level }}" class="form-control" required>
+                                           value="{{ qualification_obj.o_level }}" class="form-control" >
                                 </div>
                             </div>
 
@@ -174,7 +174,7 @@
                                 <label class="col-md-1 control-label">Year:</label>
                                 <div class="col-md-1">
                                     <select id='o_level_year' title="Select Year" name="o_level_year"
-                                            class="form-control" required>
+                                            class="form-control" >
                                         {% if qualification_obj %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ qualification_obj.o_level_year }}"
@@ -196,7 +196,7 @@
                                 <label class="col-md-1 control-label"> Result:</label>
                                 <div class="col-md-1">
                                     <input type="text" title="Enter result" id="o_level_result" name="o_level_result"
-                                           value="{{ qualification_obj.o_level_result }}" class="form-control" required>
+                                           value="{{ qualification_obj.o_level_result }}" class="form-control" >
                                 </div>
                             </div>
 
@@ -216,7 +216,7 @@
                                 <label class="col-md-1 control-label">High School :</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter high school" id="high_school" name="high_school"
-                                           value="{{ qualification_obj.high_school }}" class="form-control" required>
+                                           value="{{ qualification_obj.high_school }}" class="form-control" >
                                 </div>
                             </div>
 
@@ -224,7 +224,7 @@
                                 <label class="col-md-1 control-label">Year:</label>
                                 <div class="col-md-1">
                                     <select id='high_school_year' title="Select Year" name="high_school_year"
-                                            class="form-control" required>
+                                            class="form-control" >
                                         {% if qualification_obj %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ qualification_obj.high_school_year }}"
@@ -247,7 +247,7 @@
                                 <div class="col-md-1">
                                     <input type="text" title="Enter result" id="high_school_result"
                                            name="high_school_result"
-                                           value="{{ qualification_obj.high_school_result }}" class="form-control" required>
+                                           value="{{ qualification_obj.high_school_result }}" class="form-control" >
                                 </div>
                             </div>
 
@@ -278,7 +278,7 @@
                                 <div class="col-md-1">
                                     <input type="text" title="Enter English Competency Test 1" id="english_test_one"
                                            name="english_test_one" value="{{ english_obj.english_test_one }}"
-                                           class="form-control" required>
+                                           class="form-control" >
                                 </div>
                             </div>
 
@@ -286,7 +286,7 @@
                                 <label class="col-md-1 control-label">Year:</label>
                                 <div class="col-md-1">
                                     <select id='english_test_one_year' title="Select Year" name="english_test_one_year"
-                                            class="form-control" required>
+                                            class="form-control" >
                                         {% if english_obj %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ english_obj.english_test_one_year }}"
@@ -310,7 +310,7 @@
                                     <input type="text" title="Enter result" id="english_test_one_result"
                                            name="english_test_one_result"
                                            value="{{ english_obj.english_test_one_result }}"
-                                           class="form-control" required>
+                                           class="form-control" >
                                 </div>
                             </div>
 
@@ -335,7 +335,7 @@
                                 <div class="col-md-1">
                                     <input type="text" title="Enter English Competency Test 2" id="english_test_two"
                                            name="english_test_two" value="{{ english_obj.english_test_two }}"
-                                           class="form-control" required>
+                                           class="form-control" >
                                 </div>
                             </div>
 
@@ -343,7 +343,7 @@
                                 <label class="col-md-1 control-label">Year:</label>
                                 <div class="col-md-1">
                                     <select id='english_test_two_year' title="Select Year" name="english_test_two_year"
-                                            class="form-control" required>
+                                            class="form-control" >
                                         {% if english_obj %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ english_obj.english_test_two_year }}"
@@ -367,7 +367,7 @@
                                     <input type="text" title="Enter result" id="english_test_two_result"
                                            name="english_test_two_result"
                                            value="{{ english_obj.english_test_two_result }}"
-                                           class="form-control" required>
+                                           class="form-control" >
                                 </div>
                             </div>
 

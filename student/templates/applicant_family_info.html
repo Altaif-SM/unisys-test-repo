@@ -225,7 +225,7 @@
                                 <label class="col-md-2 control-label">Father Name:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter father name" id="father_name" name="father_name"
-                                           value="{{ application_obj.father_name|default:"" }}" class="form-control" required>
+                                           value="{{ application_obj.father_name|default:"" }}" class="form-control" >
                                 </div>
                             </div>
 
@@ -234,7 +234,7 @@
                                 <div class="col-md-2">
                                     <input type="date" title="Enter DOB" id="father_dob" name="father_dob"
                                            value="{{ application_obj.father_dob|date:"Y-m-d" }}" class="form-control"
-                                           required>
+                                           >
                                 </div>
                             </div>
                         </div>
@@ -293,7 +293,7 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Occupation" id="father_occupation"
                                            value="{{ application_obj.father_occupation|default:"" }}" name="father_occupation"
-                                           class="form-control" required>
+                                           class="form-control" >
                                 </div>
                             </div>
 
@@ -301,7 +301,7 @@
                                 <label class="col-md-2 control-label">Country:</label>
                                 <div class="col-md-2">
                                     <select id='father_nationality' title="Select Country" name="father_nationality"
-                                            class="form-control" required>
+                                            class="form-control" >
                                         {% if application_obj.father_nationality %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ application_obj.father_nationality.id }}"

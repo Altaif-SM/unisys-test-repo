@@ -100,8 +100,8 @@ class ApplicationDetails(BaseModel):
                              related_name='applicant_year_rel',
                              on_delete=models.PROTECT)
 
-    birth_date = models.DateField()
-    gender = models.CharField(max_length=25)
+    birth_date = models.DateField(blank=True, null=True)
+    gender = models.CharField(max_length=25, blank=True, null=True, )
     nationality = models.ForeignKey('masters.CountryDetails', blank=True, null=True,
                                     related_name='applicant_nationality_rel',
                                     on_delete=models.PROTECT)
@@ -123,7 +123,7 @@ class ApplicationDetails(BaseModel):
     image = models.FileField(upload_to=content_file_name_image)
 
     wife_name = models.CharField(max_length=255, blank=True, null=True)
-    wife_income = models.IntegerField(blank=True, null=True)
+    wife_income = models.CharField(max_length=10, blank=True, null=True)
     wife_pay_slip = models.FileField(upload_to=content_file_name_report)
     wife_nationality = models.ForeignKey('masters.CountryDetails', null=True, related_name='wife_nationality_rel',
                                          on_delete=models.PROTECT)
@@ -133,7 +133,7 @@ class ApplicationDetails(BaseModel):
     wife_email = models.EmailField(max_length=255, blank=True, null=True)
 
     father_name = models.CharField(max_length=255, blank=True, null=True)
-    father_income = models.IntegerField(blank=True, null=True)
+    father_income = models.CharField(max_length=10, blank=True, null=True)
     father_pay_slip = models.FileField(upload_to=content_file_name_report)
     father_nationality = models.ForeignKey('masters.CountryDetails', blank=True, null=True,
                                            related_name='father_nationality_rel',
@@ -144,7 +144,7 @@ class ApplicationDetails(BaseModel):
     father_email = models.EmailField(max_length=255, blank=True, null=True)
 
     mother_name = models.CharField(max_length=255, blank=True, null=True)
-    mother_income = models.IntegerField(blank=True, null=True)
+    mother_income = models.CharField(max_length=10, blank=True, null=True)
     mother_pay_slip = models.FileField(upload_to=content_file_name_report)
     mother_nationality = models.ForeignKey('masters.CountryDetails', null=True, related_name='mother_nationality_rel',
                                            on_delete=models.PROTECT)
@@ -231,7 +231,7 @@ class ApplicationHistoryDetails(BaseModel):
 
 class SiblingDetails(BaseModel):
     sibling_name = models.CharField(max_length=255, blank=True, null=True)
-    sibling_age = models.IntegerField(blank=True, null=True)
+    sibling_age = models.CharField(max_length=5, blank=True, null=True)
     sibling_status = models.CharField(max_length=255, blank=True, null=True)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='sibling_applicant_rel',
                                      on_delete=models.PROTECT)
