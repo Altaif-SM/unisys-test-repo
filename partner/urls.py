@@ -36,6 +36,6 @@ urlpatterns = [
                        name='template_academic_progress'),
                   path('template_academic_progress_details/<int:app_id>/', views.template_academic_progress_details,
                        name='template_academic_progress_details'),
-                  path('export_academic_progress_details/', views.export_academic_progress_details,
-                       name='export_academic_progress_details'),
+                  path('export_academic_progress_details/', views.export_academic_progress_details,name='export_academic_progress_details'),
+                  path('template_attendance_report/', views.template_attendance_report,name='template_attendance_report'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

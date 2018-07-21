@@ -838,6 +838,59 @@ def template_academic_progress_details(request, app_id):
                   {'progress_recs': progress_rec})
 
 
+def template_attendance_report(request):
+    try:
+        if request.user.is_super_admin():
+            # attendance_rec = ApplicantDevelopmentProgramDetails.objects.filter(applicant_id__year=YearDetails.objects.get(active_year=True))
+            # attended_rec = ApplicantDevelopmentProgramDetails.objects.filter(applicant_id__year=YearDetails.objects.get(active_year=True)).values_list('applicant_id',flat=1)
+            # not_attended_recs = ApplicationDetails.objects.filter(~Q(id__in=attended_rec),year=YearDetails.objects.get(active_year=True))
+            # StudentModuleMapping.objects.filter(~Q(applicant_id__in=attended_rec),year=YearDetails.objects.get(active_year=True),module__module='')
+
+            all_modules = StudentModuleMapping.objects.filter(applicant_id__year=YearDetails.objects.get(active_year=True))
+        else:
+            # attendance_rec = ApplicantDevelopmentProgramDetails.objects.filter(applicant_id__year=YearDetails.objects.get(active_year=True),applicant_id__address__country=request.user.partner_user_rel.get().country)
+            # attended_rec = ApplicantDevelopmentProgramDetails.objects.filter(applicant_id__year=YearDetails.objects.get(active_year=True),applicant_id__address__country=request.user.partner_user_rel.get().country).values_list('applicant_id', flat=1)
+            # not_attended_recs = ApplicationDetails.objects.filter(~Q(id__in=attended_rec),year=YearDetails.objects.get(active_year=True))
+
+            all_modules = StudentModuleMapping.objects.filter(applicant_id__address__country=request.user.partner_user_rel.get().country,applicant_id__year=YearDetails.objects.get(active_year=True))
+
+        attended_list = []
+        not_attended_list = []
+
+        for rec in all_modules:
+            program_dict = {}
+            if ApplicantDevelopmentProgramDetails.objects.filter(applicant_id=rec.applicant_id,module=rec.module.module).exists():
+                certificate_rec = ApplicantDevelopmentProgramDetails.objects.get(applicant_id=rec.applicant_id,module=rec.module.module)
+                program_dict['name'] = rec.applicant_id.first_name + ' ' + rec.applicant_id.last_name if rec.applicant_id.last_name else ''
+                program_dict['country'] = rec.applicant_id.address.country.country_name
+                program_dict['degree'] = rec.degree.degree_name
+                program_dict['program'] =rec.program.program_name
+                program_dict['module'] =rec.module.module.module_name
+                program_dict['semester'] =rec.module.semester.semester_name
+                program_dict['certificate'] =certificate_rec.certificate_document
+
+                attended_list.append(program_dict)
+
+            else:
+                program_dict['name'] = rec.applicant_id.first_name + ' ' + rec.applicant_id.last_name if rec.applicant_id.last_name else ''
+                program_dict['country'] = rec.applicant_id.address.country.country_name
+                program_dict['degree'] = rec.degree.degree_name
+                program_dict['program'] = rec.program.program_name
+                program_dict['module'] = rec.module.module.module_name
+                program_dict['semester'] = rec.module.semester.semester_name
+                program_dict['certificate'] = ''
+
+                not_attended_list.append(program_dict)
+
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+        return redirect('/partner/template_attendance_report/')
+
+    return render(request, "template_attendance_report.html",
+                  {'attended_recs': attended_list,'not_attended_recs':not_attended_list})
+
+
 def export_academic_progress_details(request):
     try:
         progress_list = []
@@ -847,8 +900,8 @@ def export_academic_progress_details(request):
         app_id = request.POST.get('export')
         progress_rec = ApplicantAcademicProgressDetails.objects.filter(applicant_id=app_id)
         for rec in progress_rec:
-            temp_list=[]
-            temp_list.append(str(rec.applicant_id.first_name+' '+rec.applicant_id.last_name))
+            temp_list = []
+            temp_list.append(str(rec.applicant_id.first_name + ' ' + rec.applicant_id.last_name))
             temp_list.append(str(rec.year.year_name))
             temp_list.append(str(rec.date))
             temp_list.append(str(rec.semester.semester_name))
