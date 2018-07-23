@@ -51,7 +51,7 @@ class PassingYear(BaseModel):
 
 
 class StudentDetails(BaseModel):
-    student_name = computed_property.ComputedCharField(compute_from='student_full_name', null=True, max_length=250)
+    # student_name = computed_property.ComputedCharField(compute_from='student_full_name', null=True, max_length=250)
     birth_date = models.DateField()
     gender = models.CharField(max_length=25)
     father_name = models.CharField(max_length=255, blank=True, null=True)
@@ -100,7 +100,7 @@ class StudentDetails(BaseModel):
 
     @property
     def student_full_name(self):
-        return self.user.get_full_name()
+        return self.user.get_full_name() if self.user else ''
 
 
 class ApplicationDetails(BaseModel):
