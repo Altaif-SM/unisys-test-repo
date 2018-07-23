@@ -81,7 +81,7 @@
                                                 class="form-control">
                                         {% if selected_student %}
                                             <option style="display:none" selected="selected"
-                                                    value="{{ selected_student.0.id }}">{{ selected_student.0.student_name|title }}
+                                                    value="{{ selected_student.0.student.id }}">{{ selected_student.0.get_full_name|title }}
                                             </option>
                                         {% else %}
                                             <option style="display:none" selected="selected" id="" value="">
@@ -90,7 +90,7 @@
                                         {% endif %}
 
                                         {% for rec in student_list %}
-                                            <option value='{{ rec.id }}'>{{ rec.student_name|title }}</option>
+                                            <option value='{{ rec.student.id }}'>{{ rec.get_full_name|title }}</option>
                                         {% endfor %}
 
                                     </select>
@@ -184,10 +184,10 @@
                                 </td>
 
                                 <td>
-                                    <text hidden>{{ rec.application_list.student.user.get_full_name|title }}</text>
+                                    <text hidden>{{ rec.application_list.get_full_name|title }}</text>
                                     <input class="form-control data student" name="student"
                                            type="text"
-                                           id="student{{ forloop.counter }}" value="{{ rec.application_list.student.user.get_full_name|title }}"
+                                           id="student{{ forloop.counter }}" value="{{ rec.application_list.get_full_name|title }}"
                                            required
                                            disabled>
                                 </td>

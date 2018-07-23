@@ -220,7 +220,14 @@ class ApplicationDetails(BaseModel):
             'birth_date': self.birth_date.isoformat(),
             'gender': self.gender,
             'address': self.address.to_dict(),
-            'get_all_name': self.student.user.get_all_name(),
+            'get_all_name': self.get_full_name(),
+        }
+        return res
+
+    def to_dict_student_application(self):
+        res = {
+            'id': self.student.id,
+            'get_all_name': self.get_full_name(),
         }
         return res
 

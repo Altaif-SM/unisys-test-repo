@@ -11,17 +11,22 @@ from django.db.models import Q
 
 # Create your views here.
 def get_student_payment_voucher(request):
-    student_list = StudentDetails.objects.filter(student_applicant_rel__is_sponsored=True)
+    # student_list = StudentDetails.objects.filter(student_applicant_rel__is_sponsored=True)
+
+    student_list = ApplicationDetails.objects.filter(is_sponsored=True)
+
     voucher_record = StudentPaymentReceiptVoucher.objects.all()
     return render(request, "template_student_payment_voucher.html",{'student_list': student_list, 'voucher_record': voucher_record})
 
 def get_student_receipt_voucher(request):
-    student_list = StudentDetails.objects.filter(student_applicant_rel__is_sponsored=True)
+    # student_list = StudentDetails.objects.filter(student_applicant_rel__is_sponsored=True)
+    student_list = ApplicationDetails.objects.filter(is_sponsored=True)
     voucher_record = StudentPaymentReceiptVoucher.objects.all()
     return render(request, "template_student_receipt_voucher.html",{'student_list': student_list, 'voucher_record': voucher_record})
 
 def get_student_payment_and_receipt_report(request):
-    student_list = StudentDetails.objects.filter(student_applicant_rel__is_sponsored=True)
+    # student_list = StudentDetails.objects.filter(student_applicant_rel__is_sponsored=True)
+    student_list = ApplicationDetails.objects.filter(is_sponsored=True)
     return render(request, "template_student_payment_and_receipt_report.html",{'student_list': student_list})
 
 def get_student_report(request):
@@ -126,9 +131,9 @@ def get_approval_and_paid_total(request):
     for scho in ScholarshipDetails.objects.all():
         scholarship.append(scho)
 
-    all_student_obj = type('', (object,), {"id": "", "student_name": "All"})()
+    all_student_obj = type('', (object,), {"id": "", "get_full_name": "All"})()
     students = [all_student_obj]
-    for stud in StudentDetails.objects.all():
+    for stud in ApplicationDetails.objects.filter(is_sponsored=True):
         students.append(stud)
 
 
@@ -154,7 +159,7 @@ def get_approval_and_paid_total(request):
         credit_total = 0
         outstanding_amount = 0
         application_list = []
-        for application_obj in obj.student_applicant_rel.all():
+        for application_obj in obj.student_applicant_rel.filter(is_sponsored=True):
             if application_obj.rel_student_payment_receipt_voucher.all():
                 approval_amount = application_obj.scholarship_fee
 
@@ -175,7 +180,7 @@ def get_approval_and_paid_total(request):
         debit_total += float(credit_total)
         outstanding_total += float(outstanding_amount)
 
-    return render(request, "template_approval_and_paid_total.html",{'voucher_record': student_list_rec, 'debit_total': debit_total, 'outstanding_total': outstanding_total, 'country_list': country, 'scholarship_list': scholarship, 'selected_country':CountryDetails.objects.filter(id=query_country), 'selected_scholarship': ScholarshipDetails.objects.filter(id=query_scholarship),'student_list': students, 'selected_student': StudentDetails.objects.filter(id=query_student)})
+    return render(request, "template_approval_and_paid_total.html",{'voucher_record': student_list_rec, 'debit_total': debit_total, 'outstanding_total': outstanding_total, 'country_list': country, 'scholarship_list': scholarship, 'selected_country':CountryDetails.objects.filter(id=query_country), 'selected_scholarship': ScholarshipDetails.objects.filter(id=query_scholarship),'student_list': students, 'selected_student': ApplicationDetails.objects.filter(student_id=query_student)})
 
 def get_donor_receipt_voucher(request):
 

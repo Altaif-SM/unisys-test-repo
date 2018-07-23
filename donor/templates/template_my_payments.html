@@ -195,7 +195,7 @@
                                         </option>
 
                                         {% for rec in student_list %}
-                                            <option value='{{ rec.id }}'>{{ rec.user.get_full_name|title }}</option>
+                                            <option value='{{ rec.student.id }}'>{{ rec.get_full_name|title }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>

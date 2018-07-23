@@ -210,7 +210,8 @@ def filter_application_history(request):
 def template_my_payments(request):
 
     stud = StudentDonorMapping.objects.filter(donor__user=request.user).values("student")
-    student_list = StudentDetails.objects.filter(id__in=stud)
+    # student_list = StudentDetails.objects.filter(id__in=stud)
+    student_list = ApplicationDetails.objects.filter(student_id__in=stud, is_sponsored=True)
 
     return render(request, "template_my_payments.html", {'student_list': student_list})
 
@@ -222,12 +223,13 @@ def template_students_receipts(request):
 
 
     stud = StudentDonorMapping.objects.filter(donor__user=request.user).values("student")
-    student_list = StudentDetails.objects.filter(id__in=stud).distinct()
+    # student_list = StudentDetails.objects.filter(id__in=stud).distinct()
+    student_list = ApplicationDetails.objects.filter(student_id__in=stud, is_sponsored=True).distinct()
 
 
     student_list_rec = []
 
-    for obj in student_list:
+    for application_obj in student_list:
 
         raw_dict = {}
         raw_dict_one = {}
@@ -235,24 +237,24 @@ def template_students_receipts(request):
         credit_total = 0
         outstanding_amount = 0
         application_list = []
-        for application_obj in obj.student_applicant_rel.all():
+        # for application_obj in obj.student_applicant_rel.all():
 
-            if application_obj.rel_donor_receipt_voucher.all():
-                approval_amount = application_obj.scholarship_fee
+        if application_obj.rel_donor_receipt_voucher.all():
+            approval_amount = application_obj.scholarship_fee
 
-                raw_dict['application_rec'] = application_obj
-                for voucher_obj in application_obj.rel_student_payment_receipt_voucher.all():
+            raw_dict['application_rec'] = application_obj
+            for voucher_obj in application_obj.rel_student_payment_receipt_voucher.all():
 
-                    raw_dict['voucher_rec'] = voucher_obj
-                    if voucher_obj.voucher_type == "credit":
-                        credit_total += float(voucher_obj.voucher_amount)
+                raw_dict['voucher_rec'] = voucher_obj
+                if voucher_obj.voucher_type == "credit":
+                    credit_total += float(voucher_obj.voucher_amount)
 
-                outstanding_amount = float(approval_amount) - float(credit_total)
+            outstanding_amount = float(approval_amount) - float(credit_total)
 
-                raw_dict['approval_amount'] = float(approval_amount)
-                raw_dict['credit_total'] = float(credit_total)
-                raw_dict['outstanding_amount'] = float(outstanding_amount)
-                student_list_rec.append(raw_dict)
+            raw_dict['approval_amount'] = float(approval_amount)
+            raw_dict['credit_total'] = float(credit_total)
+            raw_dict['outstanding_amount'] = float(outstanding_amount)
+            student_list_rec.append(raw_dict)
 
         debit_total += float(credit_total)
         outstanding_total += float(outstanding_amount)

@@ -153,7 +153,7 @@ class StudentDonorMapping(BaseModel):
     def to_dict(self):
         res = {
             'id': self.id if self.id else '',
-            'student': self.student.to_short_dict() if self.student else '',
+            'student': self.student.student_applicant_rel.all()[0].to_dict_student_application() if self.student else '',
             'donor': self.donor.to_dict() if self.donor else '',
         }
 

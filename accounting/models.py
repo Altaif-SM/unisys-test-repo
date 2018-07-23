@@ -82,7 +82,7 @@ class StudentPaymentReceiptVoucher(BaseModel):
             StudentPaymentReceiptVoucher.VOUCHER_TYPE: self.voucher_type,
 
             'country': self.application.address.country.to_dict() if self.application.address else '',
-            'student': self.application.student.to_short_dict() if self.application.student else '',
+            'student': self.application.to_dict_student_application() if self.application else '',
 
             'scholarship': self.application.applicant_scholarship_rel.all()[0].scholarship.to_dict() if self.application.applicant_scholarship_rel.all() else '',
             'university': self.application.applicant_scholarship_rel.all()[0].university.to_dict() if self.application.applicant_scholarship_rel.all() else '',
@@ -275,6 +275,6 @@ class DonorReceiptVoucher(BaseModel):
         resp = {
             "id": self.id,
             DonorReceiptVoucher.VOUCHER_NUMBER: self.voucher_number,
-            "student": self.application.student.user.get_full_name() if self.application.student else ''
+            "student": self.application.to_dict_student_application() if self.application else ''
         }
         return resp

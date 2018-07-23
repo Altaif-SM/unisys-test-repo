@@ -39,7 +39,7 @@
                                 output_html += "" +
                                 "<tr id='item"+ i +"' class='item'>"
                                 + "<td style='width:150px;'><input id='id_voucher_number' class='form-control data voucher_number' value='"+ data[i]['voucher_rec']['voucher_number'] +"' disabled> </td>"
-                                + "<td><input id='id_student"+ i +"' class='form-control data voucher_number' value='"+ data[i]['voucher_rec']['student'] +"' disabled> </td>"
+                                + "<td><input id='id_student"+ i +"' class='form-control data voucher_number' value='"+ data[i]['voucher_rec']['student']['get_all_name'] +"' disabled> </td>"
                                 + "<td><input id='id_country"+ i +"' class='form-control data voucher_number' value='" + data[i]['approval_amount'] + "' disabled> </td>"
                                 + "<td><input id='id_voucher_amount"+ i +"' class='form-control data voucher_number' value='" + data[i]['credit_total'] + "' disabled> </td>"
                                 + "<td><input id='id_voucher_amount"+ i +"' class='form-control data voucher_number' value='" + data[i]['outstanding_amount'] + "' disabled> </td>"

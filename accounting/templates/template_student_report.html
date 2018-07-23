@@ -177,10 +177,10 @@
                                 </td>
 
                                 <td>
-                                    <text hidden>{{ rec.application.student.user.get_full_name|title }}</text>
+                                    <text hidden>{{ rec.application.get_full_name|title }}</text>
                                     <input class="form-control data student" name="student"
                                            type="text"
-                                           id="student{{ forloop.counter }}" value="{{ rec.application.student.user.get_full_name|title }}"
+                                           id="student{{ forloop.counter }}" value="{{ rec.application.get_full_name|title }}"
                                            required
                                            disabled>
                                 </td>
