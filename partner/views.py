@@ -689,6 +689,7 @@ def filter_application_history(request):
                                                                address__country=request.user.donor_user_rel.get().country,
                                                                is_sponsored=True)
             application_obj = ApplicationDetails.objects.get(id=application)
+            application_history_recs = ApplicationDetails.objects.get(id=application).applicant_history_rel.all()
 
         else:
             applicant_recs = ApplicationDetails.objects.filter(
