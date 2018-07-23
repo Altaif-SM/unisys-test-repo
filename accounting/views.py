@@ -7,6 +7,7 @@ import json
 from common.utils import create_voucher_number
 from django.db.models import Sum
 from donor.models import DonorDetails
+from django.db.models import Q
 
 # Create your views here.
 def get_student_payment_voucher(request):
@@ -25,32 +26,52 @@ def get_student_payment_and_receipt_report(request):
 
 def get_student_report(request):
 
-    country = CountryDetails.objects.all()
-    scholarship = ScholarshipDetails.objects.all()
+    query_country = request.GET.get("country") or None
+    query_scholarship = request.GET.get("scholarship") or None
 
-    voucher_record = {}
-    debit_total = 0
     credit_total = 0
     balance_total = 0
     voucher_rec_list = []
-    for obj in StudentPaymentReceiptVoucher.objects.all():
+
+
+    stud_pay_voucher_list = StudentPaymentReceiptVoucher.objects.all()
+
+    if query_country:
+        stud_pay_voucher_list = stud_pay_voucher_list.filter(application__address__country_id=query_country)
+    if query_scholarship:
+        stud_pay_voucher_list = stud_pay_voucher_list.filter(application__applicant_scholarship_rel__scholarship_id=query_scholarship)
+
+    voucher_record = {}
+    all_country_obj = type('', (object,), {"id": "", "country_name": "All"})()
+    country = [all_country_obj]
+    for co in CountryDetails.objects.all():
+        country.append(co)
+
+    all_scholarship_obj = type('', (object,), {"id": "", "scholarship_name": "All"})()
+    scholarship = [all_scholarship_obj]
+    for scho in ScholarshipDetails.objects.all():
+        scholarship.append(scho)
+
+
+    for obj in stud_pay_voucher_list:
         if obj.voucher_type == "debit":
             debit_total += float(obj.voucher_amount)
 
         if obj.voucher_type == "credit":
             credit_total += float(obj.voucher_amount)
 
+        debit_total = 0
         voucher_rec_list.append(obj)
 
     balance_total = StudentPaymentReceiptVoucher.objects.values("application__scholarship_fee").distinct().aggregate(total_price=Sum('application__scholarship_fee'))
 
-    if balance_total['total_price']:
+    if balance_total['total_price'] and stud_pay_voucher_list:
         voucher_record['debit_total'] = debit_total
         voucher_record['credit_total'] = credit_total
         voucher_record['balance_total'] = (float(balance_total['total_price']) - credit_total)
         voucher_record['voucher_record'] = voucher_rec_list
 
-    return render(request, "template_student_report.html",{'voucher_record': voucher_record, 'country_list': country, 'scholarship_list': scholarship})
+    return render(request, "template_student_report.html",{'voucher_record': voucher_record, 'country_list': country, 'scholarship_list': scholarship, 'selected_country':CountryDetails.objects.filter(id=query_country), 'selected_scholarship': ScholarshipDetails.objects.filter(id=query_scholarship)})
 
 def get_filtered_student_report(request):
 
@@ -88,7 +109,43 @@ def get_approval_and_paid_total(request):
     debit_total = 0
     outstanding_total = 0
 
+    query_country = request.GET.get("country") or None
+    query_scholarship = request.GET.get("scholarship") or None
+    query_student = request.GET.get("student") or None
+
+    all_country_obj = type('', (object,), {"id": "", "country_name": "All"})()
+    country = [all_country_obj]
+    for co in CountryDetails.objects.all():
+        country.append(co)
+
+    all_scholarship_obj = type('', (object,), {"id": "", "scholarship_name": "All"})()
+    scholarship = [all_scholarship_obj]
+    for scho in ScholarshipDetails.objects.all():
+        scholarship.append(scho)
+
+    all_student_obj = type('', (object,), {"id": "", "country_name": "All"})()
+    students = [all_student_obj]
+    for stud in StudentDetails.objects.all():
+        students.append(stud)
+
+    all_scholarship_obj = type('', (object,), {"id": "", "scholarship_name": "All"})()
+    scholarship = [all_scholarship_obj]
+    for scho in ScholarshipDetails.objects.all():
+        scholarship.append(scho)
+
+
+
     student_list = StudentDetails.objects.all().distinct()
+
+    if query_student:
+        student_list = student_list.filter(id=query_student)
+
+    if query_scholarship:
+        student_list = student_list.filter(id=query_scholarship)
+
+    if query_country:
+        student_list = student_list.filter(address__country_id=query_country)
+
     student_list_rec = []
 
     for obj in student_list:
@@ -120,7 +177,7 @@ def get_approval_and_paid_total(request):
         debit_total += float(credit_total)
         outstanding_total += float(outstanding_amount)
 
-    return render(request, "template_approval_and_paid_total.html",{'voucher_record': student_list_rec, 'debit_total': debit_total, 'outstanding_total': outstanding_total})
+    return render(request, "template_approval_and_paid_total.html",{'voucher_record': student_list_rec, 'debit_total': debit_total, 'outstanding_total': outstanding_total, 'country_list': country, 'scholarship_list': scholarship, 'selected_country':CountryDetails.objects.filter(id=query_country), 'selected_scholarship': ScholarshipDetails.objects.filter(id=query_scholarship),'student_list': students, 'selected_student': StudentDetails.objects.filter(id=query_student)})
 
 def get_donor_receipt_voucher(request):
 

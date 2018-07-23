@@ -64,9 +64,9 @@
 
         <div class="portlet-body">
             <div class="form-body">
-                <form action="{% url 'masters:save_manage_donor_master' %}" id="form_sample_1"
+                <form id="form_sample_1"
                       class="form-horizontal"
-                      method="POST" enctype="multipart/form-data">
+                      method="GET" enctype="multipart/form-data">
                     {% csrf_token %}
 
                     <div class="form-body">
@@ -76,9 +76,48 @@
                             <div class="">
                                 <label class="col-md-3 control-label">Student:</label>
                                 <div class="col-md-3">
-                                    <input type="text" title="Enter due amount"
-                                           id="due_amount" name="due_amount"
-                                           class="form-control" required>
+                                    <select id='id_country' title="Select Student"
+                                                name="student"
+                                                class="form-control">
+                                        {% if selected_student %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ selected_student.0.id }}">{{ selected_student.0.user.get_full_name|title }}
+                                            </option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">
+                                                All
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in student_list %}
+                                            <option value='{{ rec.id }}'>{{ rec.user.get_full_name|title }}</option>
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-3 control-label">Country:</label>
+                                <div class="col-md-3">
+                                    <select id='id_country' title="Select Country"
+                                                name="country"
+                                                class="form-control">
+                                        {% if selected_country %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ selected_country.0.id }}">{{ selected_country.0.country_name|title }}
+                                            </option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">
+                                                All
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in country_list %}
+                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
+                                        {% endfor %}
+
+                                    </select>
                                 </div>
                             </div>
 
@@ -91,18 +130,30 @@
                              <div class="">
                                 <label class="col-md-3 control-label">Scholarship Type</label>
                                 <div class="col-md-3">
-                                    <input type="text" title="Enter due amount"
-                                           id="due_amount" name="due_amount"
-                                           class="form-control" required>
+                                    <select id='id_scholarship' title="Select Scholarship"
+                                                name="scholarship"
+                                                class="form-control">
+                                        {% if selected_scholarship %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ selected_scholarship.0.id }}">{{ selected_scholarship.0.scholarship_name|title }}
+                                            </option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">
+                                                All
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in scholarship_list %}
+                                            <option value='{{ rec.id }}'>{{ rec.scholarship_name|title }}</option>
+                                        {% endfor %}
+
+                                    </select>
                                 </div>
                             </div>
 
                             <div class="">
-                                <label class="col-md-3 control-label">Country:</label>
                                 <div class="col-md-3">
-                                    <input type="text" title="Enter due amount"
-                                           id="due_amount" name="due_amount"
-                                           class="form-control" required>
+                                    <input type="submit" class="btn green" value="Filter">
                                 </div>
                             </div>
 

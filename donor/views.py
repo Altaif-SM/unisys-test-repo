@@ -239,7 +239,7 @@ def template_students_receipts(request):
         application_list = []
         for application_obj in obj.student_applicant_rel.all():
 
-            if application_obj.rel_student_payment_receipt_voucher.all():
+            if application_obj.rel_donor_receipt_voucher.all():
                 approval_amount = application_obj.scholarship_fee
 
                 raw_dict['application_rec'] = application_obj

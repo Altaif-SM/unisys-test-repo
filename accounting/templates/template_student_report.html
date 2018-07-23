@@ -64,9 +64,9 @@
 
         <div class="portlet-body">
             <div class="form-body">
-                <form action="{% url 'masters:save_manage_donor_master' %}" id="form_sample_1"
+                <form id="form_sample_1"
                       class="form-horizontal"
-                      method="POST" enctype="multipart/form-data">
+                      method="GET" enctype="multipart/form-data">
                     {% csrf_token %}
 
                     <div class="form-body">
@@ -79,13 +79,13 @@
                                      <select id='id_country' title="Select Country"
                                                 name="country"
                                                 class="form-control">
-                                        {% if curriculum_obj %}
+                                        {% if selected_country %}
                                             <option style="display:none" selected="selected"
-                                                    value="">
+                                                    value="{{ selected_country.0.id }}">{{ selected_country.0.country_name|title }}
                                             </option>
                                         {% else %}
                                             <option style="display:none" selected="selected" id="" value="">
-                                                Country
+                                                All
                                             </option>
                                         {% endif %}
 
@@ -102,7 +102,7 @@
                                 <div class="col-md-3">
                                     <input type="text" title="Enter due amount"
                                            id="due_amount" name="due_amount"
-                                           class="form-control" required>
+                                           class="form-control">
                                 </div>
                             </div>
 
@@ -115,9 +115,33 @@
                              <div class="">
                                 <label class="col-md-3 control-label">Scholarship Type</label>
                                 <div class="col-md-3">
-                                    <input type="text" title="Enter due amount"
-                                           id="due_amount" name="due_amount"
-                                           class="form-control" required>
+
+                                    <select id='id_scholarship' title="Select Scholarship"
+                                                name="scholarship"
+                                                class="form-control">
+                                        {% if selected_scholarship %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ selected_scholarship.0.id }}">{{ selected_scholarship.0.scholarship_name|title }}
+                                            </option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">
+                                                All
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in scholarship_list %}
+                                            <option value='{{ rec.id }}'>{{ rec.scholarship_name|title }}</option>
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <div class="col-md-6">
+                                    <div class="btn-group">
+                                        <button type="submit" class="btn green" id="save">Filter</button>
+                                    </div>
                                 </div>
                             </div>
 
