@@ -11,26 +11,28 @@ from django.db.models import Q
 
 # Create your views here.
 def get_student_payment_voucher(request):
-    student_list = StudentDetails.objects.all()
+    student_list = StudentDetails.objects.filter(student_applicant_rel__is_sponsored=True)
     voucher_record = StudentPaymentReceiptVoucher.objects.all()
     return render(request, "template_student_payment_voucher.html",{'student_list': student_list, 'voucher_record': voucher_record})
 
 def get_student_receipt_voucher(request):
-    student_list = StudentDetails.objects.all()
+    student_list = StudentDetails.objects.filter(student_applicant_rel__is_sponsored=True)
     voucher_record = StudentPaymentReceiptVoucher.objects.all()
     return render(request, "template_student_receipt_voucher.html",{'student_list': student_list, 'voucher_record': voucher_record})
 
 def get_student_payment_and_receipt_report(request):
-    student_list = StudentDetails.objects.all()
+    student_list = StudentDetails.objects.filter(student_applicant_rel__is_sponsored=True)
     return render(request, "template_student_payment_and_receipt_report.html",{'student_list': student_list})
 
 def get_student_report(request):
 
     query_country = request.GET.get("country") or None
     query_scholarship = request.GET.get("scholarship") or None
+    query_voucher_beneficiary = request.GET.get("voucher_beneficiary") or None
 
     credit_total = 0
     balance_total = 0
+    debit_total = 0
     voucher_rec_list = []
 
 
@@ -40,6 +42,8 @@ def get_student_report(request):
         stud_pay_voucher_list = stud_pay_voucher_list.filter(application__address__country_id=query_country)
     if query_scholarship:
         stud_pay_voucher_list = stud_pay_voucher_list.filter(application__applicant_scholarship_rel__scholarship_id=query_scholarship)
+    if query_voucher_beneficiary:
+        stud_pay_voucher_list = stud_pay_voucher_list.filter(voucher_beneficiary=query_voucher_beneficiary)
 
     voucher_record = {}
     all_country_obj = type('', (object,), {"id": "", "country_name": "All"})()
@@ -60,7 +64,6 @@ def get_student_report(request):
         if obj.voucher_type == "credit":
             credit_total += float(obj.voucher_amount)
 
-        debit_total = 0
         voucher_rec_list.append(obj)
 
     balance_total = StudentPaymentReceiptVoucher.objects.values("application__scholarship_fee").distinct().aggregate(total_price=Sum('application__scholarship_fee'))
@@ -183,7 +186,7 @@ def get_donor_receipt_voucher(request):
 from django.forms.models import model_to_dict
 def get_donors_student_list(request):
 
-    student_list = StudentDonorMapping.objects.filter(donor=request.POST['donor'])
+    student_list = StudentDonorMapping.objects.filter(donor=request.POST['donor'],student__student_applicant_rel__is_sponsored=True)
 
     return HttpResponse(json.dumps([ obj.to_dict() for obj in student_list]), content_type='application/json')
 
@@ -208,7 +211,7 @@ def get_voucher_data_by_donor(request):
         credit_total = 0
         outstanding_amount = 0
         application_list = []
-        for application_obj in obj.student_applicant_rel.all():
+        for application_obj in obj.student_applicant_rel.filter(is_sponsored=True):
             approval_amount = application_obj.scholarship_fee
 
             for voucher_obj in application_obj.rel_donor_receipt_voucher.all():

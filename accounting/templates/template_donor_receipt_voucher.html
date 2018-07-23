@@ -13,27 +13,81 @@
         window.onload = function () {
             $(document).ready(function () {
 
-                $(document).on("click", "#save", function (e) {
 
-                    if ( Number($("#id_voucher_amount").val()) != 0){
+                function validate() {
+                    var flag = false;
 
-                        if (Number($("#id_voucher_amount").val()) <= Number($("#id_scholarship_fee").val())) {
-
-                            if ($("#id_voucher_date").val() != "") {
-                                $('#form_sample_1').submit();
-                                $("#data_error_msg").hide();
-                            } else {
-                                $("#data_error_msg").show();
-                                return false;
-                            }
-                        } else {
-                            $("#error_msg").show();
-                            return false;
-                        }
-                    }else{
-                        alert("Amount is greater than 0 and less than Scholarship Fee!");
+                    if($("#id_donor_list").val() == '' ){
+                         flag = true;
+                         $("#id_donor_list").css("border","solid 1px red");
+                         $("#id_donor_error_msg").text("Please select Donor.");
+                         $("#id_donor_error_msg").show();
+                    }else {
+                         $("#id_donor_list").css("border","");
+                         $("#id_donor_error_msg").hide();
                     }
 
+                    if($("#id_student").val() == '' ){
+                         flag = true;
+                         $("#id_student").css("border","solid 1px red");
+                         $("#id_student_error_msg").text("Please select Student.");
+                         $("#id_student_error_msg").show();
+                    }else {
+                         $("#id_student").css("border","");
+                         $("#id_student_error_msg").hide();
+                    }
+
+                     if( $("#id_voucher_amount").val() != "") {
+
+                         if (Number($("#id_voucher_amount").val()) != 0) {
+
+                             if( Number($("#id_voucher_amount").val()) > Number($("#id_scholarship_fee").val())){
+                                 flag = true;
+                                 $("#id_voucher_amount").css("border", "1px solid red");
+                                 $("#id_voucher_amount_error_msg").text("Amount should not be greater tha Scholarship Fee");
+                                 $("#id_voucher_amount_error_msg").show();
+                             }else{
+                                 $("#id_voucher_amount_error_msg").hide();
+                                 $("#id_voucher_amount").css("border","");
+                                  $("#id_voucher_amount_error_msg").text("");
+                             }
+
+
+                         } else {
+                             flag = true;
+                             $("#id_voucher_amount").css("border", "1px solid red");
+                             $("#id_voucher_amount_error_msg").text("Please enter Amount greater than 0");
+                             $("#id_voucher_amount_error_msg").show();
+                         }
+                     }else{
+
+                         flag = true;
+                         $("#id_voucher_amount").css("border", "1px solid red");
+                         $("#id_voucher_amount_error_msg").text("Please enter Amount!");
+                         $("#id_voucher_amount_error_msg").show();
+                    }
+
+                     if($("#id_voucher_description").val() == '' ){
+                         flag = true;
+                         $("#id_voucher_description").css("border","solid 1px red");
+                         $("#id_voucher_description_error_msg").text("Please enter Voucher description.");
+                         $("#id_voucher_description_error_msg").show();
+                     }else {
+                         $("#id_voucher_description").css("border","");
+                         $("#id_voucher_description_error_msg").hide();
+                     }
+
+                     return flag;
+
+                }
+
+
+
+                $(document).on("click", "#save", function (e) {
+
+                   if(validate() == false) {
+                        $('#form_sample_1').submit();
+                   }
                 });
 
 
@@ -156,12 +210,6 @@
                                     + "<td><input id='id_student"+ i +"' class='form-control data voucher_number' value='"+ data['voucher_rec'][i]['donor']['user']['first_name'] +"' disabled> </td>"
                                     + "<td><input id='id_country"+ i +"' class='form-control data voucher_number' value='" + data['voucher_rec'][i]['voucher_description'] + "' disabled> </td>"
                                     + "<td><input id='id_voucher_amount"+ i +"' class='form-control data voucher_number' value='" + data['voucher_rec'][i]['voucher_amount'] + "' disabled> </td>"
-                                    +"<td>"
-                                        +"<span type='button' name='updt' id='update"+ i +"' class='update btn green glyphicon glyphicon-ok' style='display:none;'></span>"
-                                        +"<span type='button' name='edit' id='edit"+ i +"' class='edit btn blue glyphicon glyphicon-pencil' style='display:none;> </span>"
-                                        +"<span type='button' name='delete' id='delete"+ i +"' class='delete btn red glyphicon glyphicon-trash' style='display:none;> </span>"
-                                    +"</td>"
-
 
                                     }
 
@@ -276,6 +324,7 @@
                                             <option value='{{ rec.id }}'>{{ rec.user.get_full_name|title }}</option>
                                         {% endfor %}
                                     </select>
+                                    <span id="id_donor_error_msg" style="display: none;color: red;"></span>
                                 </div>
                             </div>
 
@@ -291,7 +340,7 @@
                                     <input type="number" title="Amount" placeholder="0.00"
                                            id="id_voucher_amount" name="voucher_amount"
                                            class="form-control" required>
-                                    <span id="error_msg" style="display: none;color: red;">Amount should not be greter tha Scholarshi Fee</span>
+                                    <span id="id_voucher_amount_error_msg" style="display: none;color: red;"></span>
                                 </div>
                             </div>
 
@@ -309,6 +358,7 @@
                                             <option value='{{ rec.id }}'>{{ rec.user.get_full_name|title }}</option>
                                         {% endfor %}
                                     </select>
+                                    <span id="id_student_error_msg" style="display: none;color: red;"></span>
                                 </div>
                             </div>
 
@@ -350,8 +400,8 @@
                                 <label class="col-md-2 control-label">Description:</label>
                                 <div class="col-md-10">
                                     <textarea rows="5" cols="95" name="voucher_description"
-                                              id="id_voucher_description" required></textarea>
-
+                                              id="id_voucher_description" required></textarea><br>
+                                    <span id="id_voucher_description_error_msg" style="display: none;color: red;"></span>
                                 </div>
                             </div>
                         </div>
@@ -380,7 +430,6 @@
                         <th>Donor Name</th>
                         <th>Description</th>
                         <th>Amount</th>
-                        <th></th>
                     </tr>
                     </thead>
 
