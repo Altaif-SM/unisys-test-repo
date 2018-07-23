@@ -1,3 +1,4 @@
+#-*- coding: utf-8 -*-
 import random
 import string
 from masters.models import YearDetails
@@ -12,6 +13,8 @@ from reportlab.lib.pagesizes import A4, inch, landscape
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_CENTER,TA_RIGHT
+import xlsxwriter
+from io import BytesIO
 
 
 def random_string_generator(size, include_lowercase=True, include_uppercase=True, include_number=True):
@@ -110,3 +113,28 @@ def export_pdf(output_file_name, records):
     elements.append(table_obj)
     doc.build(elements)
     return response
+
+
+def export_wraped_column_xls(output_file_name, column_names, rows):
+    output = BytesIO()
+    workbook = xlsxwriter.Workbook(output)
+    worksheet = workbook.add_worksheet(output_file_name)
+    unlocked = workbook.add_format({'locked': False, 'text_wrap': True})
+    locked = workbook.add_format({'locked': True, 'text_wrap': True})
+    worksheet.set_column('A:XDF', None, unlocked)
+    row_num = 0
+    for col_num in range(len(column_names)):
+        worksheet.set_column(col_num, col_num, 18)
+        worksheet.write(row_num, col_num, column_names[col_num], unlocked)
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+                worksheet.write(row_num, col_num, str(row[col_num]), unlocked)
+
+    workbook.close()
+    output.seek(0)
+    response = HttpResponse(output.read(), content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=' + output_file_name + ".xls"
+
+    return response
+
