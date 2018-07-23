@@ -113,6 +113,34 @@
     <div class="portlet-body">
         <div class="form-body">
             <div class="form-body">
+            <div class="row col-md-offset-3">
+                <form method="post" {% if user.is_donor %} action="{% url 'donor:filter_application_history' %}" {% else %} action="{% url 'partner:filter_application_history' %}" {% endif %}  id="form_sample_1">
+                    {% csrf_token %}
+                    <div class="col-md-4">
+                        <div class="">
+                            <select autocomplete="off" class="form-control" data-live-search="true"
+                                    id="id_application" name="application" required="required">
+                                {% if application_obj %}
+                                    <option style="display: none" value="{{ rec.id }}"
+                                            selected="selected">{{ application_obj.get_full_name }}</option>
+                                {% else %}
+                                    <option value="" style="display: none" selected="selected">Please Select</option>
+                                {% endif %}
+
+                                {% for rec in applicant_recs %}
+                                    <option value="{{ rec.id }}">{{ rec.get_full_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <button type="submit" class="btn blue btn-block" id="go">Search
+                        </button>
+                    </div>
+                </form>
+            </div>
+
                 <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data"
                         {% comment %}action="{% url 'partner:change_application_status' %}"{% endcomment %}>
                     {% csrf_token %}
