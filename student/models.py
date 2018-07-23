@@ -4,7 +4,7 @@ import os
 from datetime import datetime
 from masters.models import *
 from accounts.models import *
-
+import computed_property
 
 def content_file_name_image(instance, filename):
     dirname = datetime.now().strftime('%Y.%m.%d.%H.%M.%S')
@@ -51,6 +51,7 @@ class PassingYear(BaseModel):
 
 
 class StudentDetails(BaseModel):
+    student_name = computed_property.ComputedCharField(compute_from='student_full_name', null=True, max_length=250)
     birth_date = models.DateField()
     gender = models.CharField(max_length=25)
     father_name = models.CharField(max_length=255, blank=True, null=True)
@@ -96,6 +97,10 @@ class StudentDetails(BaseModel):
             'get_all_name': self.user.get_full_name() if self.user else "",
         }
         return res
+
+    @property
+    def student_full_name(self):
+        return self.user.get_full_name()
 
 
 class ApplicationDetails(BaseModel):

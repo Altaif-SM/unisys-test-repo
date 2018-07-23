@@ -158,14 +158,13 @@ def template_application_progress_history(request):
     applicant_recs = ''
     try:
         if request.user.is_super_admin():
-            applicant_recs = ApplicationDetails.objects.filter(is_sponsored=True)
+            applicant_recs = ApplicationDetails.objects.filter(is_submitted=True)
         else:
             stud = []
             for obj in StudentDonorMapping.objects.filter(donor__user=request.user):
                 stud.append(StudentDetails.objects.get(id=obj.student.id))
 
-            applicant_recs = ApplicationDetails.objects.filter(student__in=stud,
-                                                               address__country=request.user.donor_user_rel.get().country,
+            applicant_recs = ApplicationDetails.objects.filter(student__in=stud,is_submitted=True,
                                                                is_sponsored=True)
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
@@ -194,7 +193,6 @@ def filter_application_history(request):
                 stud.append(StudentDetails.objects.get(id=obj.student.id))
 
             applicant_recs = ApplicationDetails.objects.filter(student__in=stud,
-                                                               address__country=request.user.donor_user_rel.get().country,
                                                                is_sponsored=True)
             application_obj = ApplicationDetails.objects.get(id=application)
 

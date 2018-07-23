@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import StudentDetails,ApplicationDetails
+from django.apps import apps
 
-# Register your models here.
-admin.site.register(StudentDetails)
-admin.site.register(ApplicationDetails)
+for model in apps.get_app_config('student').models.values():
+    admin.site.register(model)

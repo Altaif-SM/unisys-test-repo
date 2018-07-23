@@ -123,15 +123,10 @@ def get_approval_and_paid_total(request):
     for scho in ScholarshipDetails.objects.all():
         scholarship.append(scho)
 
-    all_student_obj = type('', (object,), {"id": "", "country_name": "All"})()
+    all_student_obj = type('', (object,), {"id": "", "student_name": "All"})()
     students = [all_student_obj]
     for stud in StudentDetails.objects.all():
         students.append(stud)
-
-    all_scholarship_obj = type('', (object,), {"id": "", "scholarship_name": "All"})()
-    scholarship = [all_scholarship_obj]
-    for scho in ScholarshipDetails.objects.all():
-        scholarship.append(scho)
 
 
 
@@ -141,7 +136,7 @@ def get_approval_and_paid_total(request):
         student_list = student_list.filter(id=query_student)
 
     if query_scholarship:
-        student_list = student_list.filter(id=query_scholarship)
+        student_list = student_list.filter(student_applicant_rel__applicant_scholarship_rel__scholarship_id=query_scholarship)
 
     if query_country:
         student_list = student_list.filter(address__country_id=query_country)
