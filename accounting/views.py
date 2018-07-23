@@ -220,13 +220,13 @@ def get_voucher_data_by_donor(request):
             outstanding_amount = float(approval_amount) - float(credit_total)
 
             if application_obj.rel_donor_receipt_voucher.all():
-                raw_dict['approval_amount'] = float(approval_amount)
-                raw_dict['credit_total'] = float(credit_total)
-                raw_dict['outstanding_amount'] = float(outstanding_amount)
+                raw_dict['approval_amount'] = float(approval_amount) if approval_amount else 0
+                raw_dict['credit_total'] = float(credit_total) if credit_total else 0
+                raw_dict['outstanding_amount'] = float(outstanding_amount) if outstanding_amount else 0
                 student_list_rec.append(raw_dict)
 
-        debit_total += float(credit_total)
-        outstanding_total += float(outstanding_amount)
+        debit_total += float(credit_total) if credit_total else 0
+        outstanding_total += float(outstanding_amount) if outstanding_amount else 0
 
     return HttpResponse(json.dumps(student_list_rec), content_type='application/json')
 
