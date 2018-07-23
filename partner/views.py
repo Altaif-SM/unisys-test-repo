@@ -27,6 +27,46 @@ def template_registered_application(request):
                    'degree_recs': degree_recs})
 
 
+def export_registered_application(request):
+    if request.user.is_super_admin():
+        applicant_recs = ApplicationDetails.objects.filter(is_submitted=True)
+    else:
+        applicant_recs = ApplicationDetails.objects.filter(address__country=request.user.partner_user_rel.get().country,
+                                                           is_submitted=True)
+
+    rows = []
+    for application in applicant_recs:
+        temp_list = []
+        temp_list.append(application.get_full_name())
+        temp_list.append(application.nationality.country_name.title() if application.nationality else '')
+        temp_list.append(application.address.country.country_name.title())
+        temp_list.append(application.applicant_scholarship_rel.all()[0].university.university_name.title())
+        temp_list.append(application.applicant_scholarship_rel.all()[0].course_applied.degree_name.title())
+        temp_list.append('')
+        rows.append(temp_list)
+
+    cloumns = ['Student Name', 'Nationality', 'Country', 'University', 'Degree', 'Program']
+
+    return export_wraped_column_xls('registered_application', cloumns, rows)
+
+
+def template_applicant_all_details(request, app_id):
+    application_obj = ApplicationDetails.objects.get(id=app_id)
+    siblings_obj = application_obj.sibling_applicant_rel.all() if application_obj.sibling_applicant_rel.all() else ''
+    qualification_obj = application_obj.academic_applicant_rel.get() if application_obj.academic_applicant_rel.all() else ''
+    english_obj = application_obj.english_applicant_rel.get() if application_obj.english_applicant_rel.all() else ''
+    curriculum_obj = application_obj.curriculum_applicant_rel.get() if application_obj.curriculum_applicant_rel.all() else ''
+    applicant_experience_obj = application_obj.applicant_experience_rel.get() if application_obj.applicant_experience_rel.all() else ''
+    scholarship_obj = application_obj.applicant_scholarship_rel.get() if application_obj.applicant_scholarship_rel.all() else ''
+
+    return render(request, 'template_applicant_all_details.html',
+                  {'siblings_obj': siblings_obj, 'application_obj': application_obj,
+                   'qualification_obj': qualification_obj, 'english_obj': english_obj,
+                   'curriculum_obj': curriculum_obj,
+                   'applicant_experience_obj': applicant_experience_obj,
+                   'scholarship_obj': scholarship_obj})
+
+
 def filter_nationality(field):
     if field != '':
         return Q(nationality_id=field)
@@ -57,14 +97,14 @@ def filter_country(country):
 
 def filter_registered_application(request):
     if request.POST:
-        request.session['form_data'] = request.POST
+        request.session['registered_application_form_data'] = request.POST
         university = request.POST.get('university')
         degree = request.POST.get('degree')
         nationality = request.POST.get('nationality')
         country = request.POST.get('country')
     else:
 
-        form_data = request.session.get('form_data')
+        form_data = request.session.get('registered_application_form_data')
 
         university = form_data.get('university')
         degree = form_data.get('degree')
@@ -329,6 +369,10 @@ def template_application_approval_details(request, app_id):
             final_approval = False
 
         elif not application_rec.psychometric_test:
+            if not ApplicantPsychometricTestDetails.objects.filter(applicant_id=application_rec).exists():
+                messages.warning(request, "This applicant has not submitted psychometric test.")
+                return redirect('/partner/template_approving_application/')
+
             approval_messages = 'Psychometric Test'
             # flag_test = True
             final_approval = False
@@ -567,10 +611,10 @@ def change_application_status(request):
 
 def filter_application_status(request):
     if request.POST:
-        request.session['form_data'] = request.POST
+        request.session['application_status_form_data'] = request.POST
         application_status = request.POST.get('application_status')
     else:
-        form_data = request.session.get('form_data')
+        form_data = request.session.get('application_status_form_data')
         application_status = form_data.get('application_status')
 
     applicant_recs = ''
@@ -668,10 +712,10 @@ def template_student_progress_history(request):
 
 def filter_application_history(request):
     if request.POST:
-        request.session['form_data'] = request.POST
+        request.session['application_history_form_data'] = request.POST
         application = request.POST.get('application')
     else:
-        form_data = request.session.get('form_data')
+        form_data = request.session.get('application_history_form_data')
         application = form_data.get('application')
 
     try:
@@ -698,19 +742,116 @@ def filter_application_history(request):
 def template_psychometric_test_report(request):
     try:
         if request.user.is_super_admin():
-            appliaction_ids = ApplicationDetails.objects.filter(is_submitted=True).values_list('id')
+            appliaction_recs = ApplicationDetails.objects.filter(is_submitted=True, year=get_current_year(),
+                                                                 first_interview_approval=True)
         else:
-            appliaction_ids = ApplicationDetails.objects.filter(
-                address__country=request.user.partner_user_rel.get().country,
-                is_submitted=True).values_list('id')
-        psychometric_obj = ApplicantPsychometricTestDetails.objects.filter(applicant_id__in=appliaction_ids)
+            appliaction_recs = ApplicationDetails.objects.filter(year=get_current_year(), first_interview_approval=True,
+                                                                 address__country=request.user.partner_user_rel.get().country,
+                                                                 is_submitted=True)
+
+        # psychometric_obj = ApplicantPsychometricTestDetails.objects.filter(applicant_id__in=appliaction_ids)
+
+        attended_list = []
+        not_attended_list = []
+
+        for rec in appliaction_recs:
+            program_dict = {}
+            program_dict['name'] = rec.get_full_name()
+            program_dict['country'] = rec.address.country.country_name
+
+            if ApplicantPsychometricTestDetails.objects.filter(applicant_id=rec.id).exists():
+                psychometric_rec = ApplicantPsychometricTestDetails.objects.get(applicant_id=rec.id)
+
+                program_dict['result'] = psychometric_rec.result
+                program_dict['test_result_document'] = psychometric_rec.test_result_document
+
+            else:
+                program_dict['result'] = ''
+                program_dict['test_result_document'] = ''
+
+            attended_list.append(program_dict)
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+        return redirect('/partner/template_registered_application/')
+
+    return render(request, 'template_psychometric_test_report.html', {'attended_list': attended_list})
+
+
+def filter_psychometric_test_report(request):
+    try:
+        if request.POST:
+            request.session['psychometric_test'] = request.POST
+            filter = request.POST.get('filter')
+        else:
+            form_data = request.session.get('psychometric_test')
+            filter = form_data.get('filter')
+
+        if request.user.is_super_admin():
+            appliaction_recs = ApplicationDetails.objects.filter(is_submitted=True, year=get_current_year(),
+                                                                 first_interview_approval=True)
+        else:
+            appliaction_recs = ApplicationDetails.objects.filter(year=get_current_year(), first_interview_approval=True,
+                                                                 address__country=request.user.partner_user_rel.get().country,
+                                                                 is_submitted=True)
+
+        filter_rec = {}
+
+        attended_list = []
+
+        for rec in appliaction_recs:
+
+            if filter == 'examined':
+                if ApplicantPsychometricTestDetails.objects.filter(applicant_id=rec.id).exists():
+                    psychometric_rec = ApplicantPsychometricTestDetails.objects.get(applicant_id=rec.id)
+
+                    program_dict = {}
+                    program_dict['name'] = rec.get_full_name()
+                    program_dict['country'] = rec.address.country.country_name
+
+                    program_dict['result'] = psychometric_rec.result
+                    program_dict['test_result_document'] = psychometric_rec.test_result_document
+                    filter_rec['value'] = 'examined'
+                    filter_rec['name'] = 'Examined'
+                    attended_list.append(program_dict)
+
+            elif filter == 'not_examined':
+                if not ApplicantPsychometricTestDetails.objects.filter(applicant_id=rec.id).exists():
+                    program_dict = {}
+                    program_dict['name'] = rec.get_full_name()
+                    program_dict['country'] = rec.address.country.country_name
+
+                    program_dict['result'] = ''
+                    program_dict['test_result_document'] = ''
+                    filter_rec['value'] = 'not_examined'
+                    filter_rec['name'] = 'Not Examined'
+                    attended_list.append(program_dict)
+
+            else:
+                program_dict = {}
+                program_dict['name'] = rec.get_full_name()
+                program_dict['country'] = rec.address.country.country_name
+
+                if ApplicantPsychometricTestDetails.objects.filter(applicant_id=rec.id).exists():
+                    psychometric_rec = ApplicantPsychometricTestDetails.objects.get(applicant_id=rec.id)
+
+                    program_dict['result'] = psychometric_rec.result
+                    program_dict['test_result_document'] = psychometric_rec.test_result_document
+
+                else:
+                    program_dict['result'] = ''
+                    program_dict['test_result_document'] = ''
+                filter_rec['value'] = 'all'
+                filter_rec['name'] = 'All'
+
+                attended_list.append(program_dict)
 
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
         return redirect('/partner/template_registered_application/')
 
     return render(request, 'template_psychometric_test_report.html',
-                  {'psychometric_obj': psychometric_obj})
+                  {'attended_list': attended_list, 'filter_rec': filter_rec})
 
 
 def template_link_student_program(request):
@@ -721,6 +862,8 @@ def template_link_student_program(request):
         applicant_recs = ApplicationDetails.objects.filter(address__country=request.user.partner_user_rel.get().country,
                                                            is_submitted=True)
         university_recs = UniversityDetails.objects.filter(country=request.user.partner_user_rel.get().country)
+
+    module_recs = ModuleDetails.objects.all()
 
     rec_list = []
 
@@ -830,11 +973,11 @@ def template_academic_progress(request):
 
 def filter_academic_progress(request):
     if request.POST:
-        request.session['form_data'] = request.POST
+        request.session['academic_progress_form_data'] = request.POST
         scholarship = request.POST.get('scholarship')
         export = request.POST.get('export')
     else:
-        form_data = request.session.get('form_data')
+        form_data = request.session.get('academic_progress_form_data')
         scholarship = form_data.get('scholarship')
         export = form_data.get('export')
 
@@ -871,8 +1014,10 @@ def filter_academic_progress(request):
                 if application.applicant_id.id not in export_application_id:
                     temp_list.append(application.applicant_id.get_full_name())
                     temp_list.append(application.applicant_id.address.country.country_name.title())
-                    temp_list.append(application.applicant_id.applicant_scholarship_rel.all()[0].university.university_name.title())
-                    temp_list.append(application.applicant_id.applicant_scholarship_rel.all()[0].course_applied.degree_name.title())
+                    temp_list.append(
+                        application.applicant_id.applicant_scholarship_rel.all()[0].university.university_name.title())
+                    temp_list.append(
+                        application.applicant_id.applicant_scholarship_rel.all()[0].course_applied.degree_name.title())
                     temp_list.append('')
                     temp_list.append(application.semester.semester_name.title())
                     temp_list.append(application.gpa_scored)
@@ -898,6 +1043,33 @@ def filter_academic_progress(request):
                    'scholarship_obj': scholarship_obj})
 
 
+def export_academic_progress_details(request):
+    try:
+        progress_list = []
+        column_names = ['Name', 'Session', 'Date', 'Semester', 'Transcript', 'GPA Minimum', 'GPA Maximum',
+                        'Grade Minimum', 'Grade Maximum']
+        progress_list.append(column_names)
+        app_id = request.POST.get('export')
+        progress_rec = ApplicantAcademicProgressDetails.objects.filter(applicant_id=app_id)
+        for rec in progress_rec:
+            temp_list = []
+            temp_list.append(str(rec.applicant_id.first_name + ' ' + rec.applicant_id.last_name))
+            temp_list.append(str(rec.year.year_name))
+            temp_list.append(str(rec.date))
+            temp_list.append(str(rec.semester.semester_name))
+            temp_list.append(str(rec.transcript_document))
+            temp_list.append(str(rec.gpa_scored))
+            temp_list.append(str(rec.gpa_from))
+            temp_list.append(str(rec.cgpa_scored))
+            temp_list.append(str(rec.cgpa_from))
+            progress_list.append(temp_list)
+
+        return export_pdf('academic_progress_details', progress_list)
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+        return redirect('/partner/template_academic_progress/')
+
+
 def template_academic_progress_details(request, app_id):
     try:
         progress_rec = ApplicantAcademicProgressDetails.objects.filter(applicant_id=app_id)
@@ -911,6 +1083,7 @@ def template_academic_progress_details(request, app_id):
 
 def template_attendance_report(request):
     try:
+        modules_recs = ModuleDetails.objects.all()
         if request.user.is_super_admin():
             all_modules = StudentModuleMapping.objects.filter(
                 applicant_id__year=YearDetails.objects.get(active_year=True))
@@ -957,31 +1130,119 @@ def template_attendance_report(request):
         return redirect('/partner/template_attendance_report/')
 
     return render(request, "template_attendance_report.html",
-                  {'attended_recs': attended_list, 'not_attended_recs': not_attended_list})
+                  {'attended_recs': attended_list, 'not_attended_recs': not_attended_list,
+                   'modules_recs': modules_recs})
 
 
-def export_academic_progress_details(request):
+def filter_attendance_report(request):
+    if request.POST:
+        request.session['attendance_report'] = request.POST
+        modules = request.POST.get('modules')
+    else:
+        form_data = request.session.get('attendance_report')
+        modules = form_data.get('modules')
+
     try:
-        progress_list = []
-        column_names = ['Name', 'Session', 'Date', 'Semester', 'Transcript', 'GPA Minimum', 'GPA Maximum',
-                        'Grade Minimum', 'Grade Maximum']
-        progress_list.append(column_names)
-        app_id = request.POST.get('export')
-        progress_rec = ApplicantAcademicProgressDetails.objects.filter(applicant_id=app_id)
-        for rec in progress_rec:
-            temp_list = []
-            temp_list.append(str(rec.applicant_id.first_name + ' ' + rec.applicant_id.last_name))
-            temp_list.append(str(rec.year.year_name))
-            temp_list.append(str(rec.date))
-            temp_list.append(str(rec.semester.semester_name))
-            temp_list.append(str(rec.transcript_document))
-            temp_list.append(str(rec.gpa_scored))
-            temp_list.append(str(rec.gpa_from))
-            temp_list.append(str(rec.cgpa_scored))
-            temp_list.append(str(rec.cgpa_from))
-            progress_list.append(temp_list)
 
-        return export_pdf('export_skill_entry', progress_list)
+        if modules == 'All':
+            return redirect('/partner/template_attendance_report/')
+
+        modules_recs = ModuleDetails.objects.all()
+        module_obj = ModuleDetails.objects.get(id=modules)
+        if request.user.is_super_admin():
+            all_modules = StudentModuleMapping.objects.filter(module__module_id=modules,
+                                                              applicant_id__year=YearDetails.objects.get(
+                                                                  active_year=True))
+        else:
+            all_modules = StudentModuleMapping.objects.filter(module__module_id=modules,
+                                                              applicant_id__address__country=request.user.partner_user_rel.get().country,
+                                                              applicant_id__year=YearDetails.objects.get(
+                                                                  active_year=True))
+
+        attended_list = []
+        not_attended_list = []
+
+        for rec in all_modules:
+            program_dict = {}
+            if ApplicantDevelopmentProgramDetails.objects.filter(applicant_id=rec.applicant_id,
+                                                                 module=rec.module.module).exists():
+                certificate_rec = ApplicantDevelopmentProgramDetails.objects.get(applicant_id=rec.applicant_id,
+                                                                                 module=rec.module.module)
+                program_dict[
+                    'name'] = rec.applicant_id.first_name + ' ' + rec.applicant_id.last_name if rec.applicant_id.last_name else ''
+                program_dict['country'] = rec.applicant_id.address.country.country_name
+                program_dict['degree'] = rec.degree.degree_name
+                program_dict['program'] = rec.program.program_name
+                program_dict['module'] = rec.module.module.module_name
+                program_dict['semester'] = rec.module.semester.semester_name
+                program_dict['certificate'] = certificate_rec.certificate_document
+
+                attended_list.append(program_dict)
+
+            else:
+                program_dict[
+                    'name'] = rec.applicant_id.first_name + ' ' + rec.applicant_id.last_name if rec.applicant_id.last_name else ''
+                program_dict['country'] = rec.applicant_id.address.country.country_name
+                program_dict['degree'] = rec.degree.degree_name
+                program_dict['program'] = rec.program.program_name
+                program_dict['module'] = rec.module.module.module_name
+                program_dict['semester'] = rec.module.semester.semester_name
+                program_dict['certificate'] = ''
+
+                not_attended_list.append(program_dict)
+
+
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
-        return redirect('/partner/template_academic_progress/')
+        return redirect('/partner/template_attendance_report/')
+
+    return render(request, "template_attendance_report.html",
+                  {'attended_recs': attended_list, 'not_attended_recs': not_attended_list,
+                   'modules_recs': modules_recs, 'module_obj': module_obj})
+
+# import os
+# from django.conf import settings
+# from django.http import HttpResponse
+# from django.template import Context
+# from django.template.loader import get_template
+# import datetime
+# from xhtml2pdf import pisa
+#
+#
+# def generate_student_details_pdf(request,app_id):
+#     year_recs = YearDetails.objects.all()
+#     curriculum_obj = ''
+#     experience_obj = ''
+#
+#     application_obj = ApplicationDetails.objects.get(id=app_id)
+#     siblings_obj = application_obj.sibling_applicant_rel.all() if application_obj.sibling_applicant_rel.all() else ''
+#     qualification_obj = application_obj.academic_applicant_rel.get() if application_obj.academic_applicant_rel.all() else ''
+#     english_obj = application_obj.english_applicant_rel.get() if application_obj.english_applicant_rel.all() else ''
+#     curriculum_obj = application_obj.curriculum_applicant_rel.get() if application_obj.curriculum_applicant_rel.all() else ''
+#     applicant_experience_obj = application_obj.applicant_experience_rel.get() if application_obj.applicant_experience_rel.all() else ''
+#     scholarship_obj = application_obj.applicant_scholarship_rel.get() if application_obj.applicant_scholarship_rel.all() else ''
+#
+#     template = get_template('template_applicant_all_details.html')
+#     Context = ({'siblings_obj': siblings_obj, 'application_obj': application_obj,
+#                    'qualification_obj': qualification_obj, 'english_obj': english_obj,
+#                    'curriculum_obj': curriculum_obj,
+#                    'applicant_experience_obj': applicant_experience_obj,
+#                    'scholarship_obj': scholarship_obj})
+#     html = template.render(Context)
+#     response = HttpResponse(html)
+#     output_file_name= 'fffffffff'
+#
+#     response = HttpResponse(content_type='application/pdf')
+#     response['Content-Disposition'] = 'attachment; filename=' + str(output_file_name) + '.pdf'
+#
+#     return response
+
+
+# file = open('test.pdf', "w+b")
+# pisaStatus = pisa.CreatePDF(html.encode('utf-8'), dest=file,
+#         encoding='utf-8')
+#
+# file.seek(0)
+# pdf = file.read()
+# file.close()
+# return HttpResponse(pdf, 'application/pdf')

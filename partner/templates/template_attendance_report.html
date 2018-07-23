@@ -78,6 +78,38 @@
 
     <div class="portlet-body">
         <div class="form-body">
+
+            <div class="row col-md-offset-3">
+                <form method="post" action="{% url 'partner:filter_attendance_report' %}" id="form_sample_1">
+                    {% csrf_token %}
+                    <div class="col-md-4">
+                        <div class="">
+                            <select autocomplete="off" class="form-control" data-live-search="true"
+                                    id="id_modules" name="modules" required="required">
+                                {% if module_obj %}
+                                    <option style="display: none" value="{{ module_obj.id }}"
+                                            selected="selected">{{ module_obj.module_name|title }}</option>
+                                    <option value="All">All</option>
+                                {% else %}
+                                    <option value="" style="display: none" selected="selected">Module</option>
+                                    <option value="All">All</option>
+
+                                {% endif %}
+
+                                {% for rec in modules_recs %}
+                                    <option value="{{ rec.id }}">{{ rec.module_name|title }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <button type="submit" class="btn blue btn-block" id="go">Filter
+                        </button>
+                    </div>
+                </form>
+            </div>
+
             <div class="form-body">
                 <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data"
                         {% comment %}action="{% url 'partner:change_application_status' %}"{% endcomment %}>

@@ -788,7 +788,8 @@ def template_manage_partner_master(request):
     country_recs = CountryDetails.objects.all()
     partner_recs = PartnerDetails.objects.all()
 
-    user_recs = User.objects.filter(~Q(id=1))
+    #user_recs = User.objects.all()#.role.all().filter(name__in=[self.DONOR])
+    user_recs = User.objects.filter(role__name__in=['Partner'])
     return render(request, 'template_partner_master.html',
                   {'country_recs': country_recs, 'partner_recs': partner_recs, 'user_recs': user_recs})
 

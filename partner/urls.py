@@ -8,8 +8,10 @@ app_name = 'partner'
 urlpatterns = [
                   path('template_registered_application/', views.template_registered_application,
                        name='template_registered_application'),
-                  path('filter_registered_application/', views.filter_registered_application,
-                       name='filter_registered_application'),
+                  path('filter_registered_application/', views.filter_registered_application,name='filter_registered_application'),
+                  path('export_registered_application/', views.export_registered_application,name='export_registered_application'),
+                  path('template_applicant_all_details/<int:app_id>/', views.template_applicant_all_details,
+                       name='template_applicant_all_details'),
 
                   path('template_approving_application/', views.template_approving_application,
                        name='template_approving_application'),
@@ -26,18 +28,26 @@ urlpatterns = [
 
                   path('template_psychometric_test_report/', views.template_psychometric_test_report,
                        name='template_psychometric_test_report'),
+                  path('filter_psychometric_test_report/', views.filter_psychometric_test_report,
+                       name='filter_psychometric_test_report'),
+
                   path('template_link_student_program/', views.template_link_student_program,
                        name='template_link_student_program'),
 
                   path('get_semester_modules/', views.get_semester_modules, name='get_semester_modules'),
                   path('save_student_program/', views.save_student_program, name='save_student_program'),
 
-                  path('template_academic_progress/', views.template_academic_progress,name='template_academic_progress'),
-                  path('filter_academic_progress/', views.filter_academic_progress,name='filter_academic_progress'),
-                  # path('export_filtered_academic_progress/', views.export_filtered_academic_progress,name='export_filtered_academic_progress'),
+                  path('template_academic_progress/', views.template_academic_progress,
+                       name='template_academic_progress'),
+                  path('filter_academic_progress/', views.filter_academic_progress, name='filter_academic_progress'),
 
                   path('template_academic_progress_details/<int:app_id>/', views.template_academic_progress_details,
                        name='template_academic_progress_details'),
-                  path('export_academic_progress_details/', views.export_academic_progress_details,name='export_academic_progress_details'),
-                  path('template_attendance_report/', views.template_attendance_report,name='template_attendance_report'),
+                  path('export_academic_progress_details/', views.export_academic_progress_details,
+                       name='export_academic_progress_details'),
+                  path('template_attendance_report/', views.template_attendance_report,
+                       name='template_attendance_report'),
+                  path('filter_attendance_report/', views.filter_attendance_report, name='filter_attendance_report'),
+
+                  # path('generate_student_details_pdf/<int:app_id>/', views.generate_student_details_pdf,name='generate_student_details_pdf'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

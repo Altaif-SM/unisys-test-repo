@@ -138,3 +138,9 @@ def export_wraped_column_xls(output_file_name, column_names, rows):
 
     return response
 
+def get_current_year():
+    try:
+        return YearDetails.objects.get(active_year=True)
+    except:
+        return None
+

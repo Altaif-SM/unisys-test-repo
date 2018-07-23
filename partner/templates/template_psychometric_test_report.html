@@ -71,11 +71,11 @@
             });
         }
 
-            window.setTimeout(function () {
-                $(".alert").fadeTo(500, 0).slideUp(500, function () {
-                    $(this).remove();
-                });
-            }, 4000);
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
     </script>
 
 {% endblock %}
@@ -113,21 +113,22 @@
     <div class="portlet-body">
         <div class="form-body">
             <div class="row col-md-offset-3">
-                <form method="post" action="{% url 'partner:filter_application_status' %}" id="form_sample_1">
+                <form method="post" action="{% url 'partner:filter_psychometric_test_report' %}" id="form_sample_1">
                     {% csrf_token %}
                     <div class="col-md-4">
                         <div class="">
                             <select autocomplete="off" class="form-control" data-live-search="true"
-                                    id="application_status" name="application_status" required="required">
-                                {% if application_status %}
-                                    <option style="display: none" value="{{ application_status }}"
-                                            selected="selected">{{ application_status }}</option>
+                                    id="id_filter" name="filter" required="required">
+                                {% if filter_rec %}
+                                    <option style="display: none" value="{{ filter_rec.value }}"
+                                            selected="selected">{{ filter_rec.name }}</option>
                                 {% else %}
-                                    <option value="" style="display: none" selected="selected">Please Select</option>
+                                    <option value="" style="display: none" selected="selected">Examined/Not Examined</option>
                                 {% endif %}
 
-                                <option value="Tested">Tested</option>
-                                <option value="Not Tested">Not Tested</option>
+                                <option value="examined">Examined</option>
+                                <option value="not_examined">Not Examined</option>
+                                <option value="all">All</option>
                             </select>
                         </div>
                     </div>
@@ -158,25 +159,14 @@
                                 </thead>
 
                                 <tbody id="tbody">
-                                {% for rec in psychometric_obj %}
+                                {% for rec in attended_list %}
                                     <tr id="item{{ forloop.counter }}" class="item">
                                         <td style="display: none"><input id="application_id" class="application_id"
                                                                          value="{{ rec.id }}"></td>
-                                        <td>
-                                            <p>{{ rec.applicant_id.first_name|title }} {{ rec.applicant_id.last_name|title }}</p>
-                                        </td>
-
-                                        <td>
-                                            <p>{{ rec.applicant_id.address.country.country_name|title }}</p>
-                                        </td>
-
-                                        <td>
-                                            <p>{{ rec.result }}</p>
-                                        </td>
-
-                                        <td>
-                                            <p>{{ rec.test_result_document }}</p>
-                                        </td>
+                                        <td><p>{{ rec.name|title }}</p></td>
+                                        <td><p>{{ rec.country|title }}</p></td>
+                                        <td><p>{{ rec.result }}</p></td>
+                                        <td><p>{{ rec.test_result_document }}</p></td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>

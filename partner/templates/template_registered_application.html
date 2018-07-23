@@ -86,11 +86,24 @@
 
         <div class="portlet-body">
             <div class="form-body">
+            <form method="post" action="{% url 'partner:export_registered_application' %}" id="form_sample_1">
+                    {% csrf_token %}
+                    <div class="col-md-4">
+                        <div class="">
+                            <input type='text' name="export" value="1" hidden>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <button type="submit" class="btn green btn-block" id="go">Export</button>
+                    </div>
+                </form>
+
                 <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data"
                       action="{% url 'partner:filter_registered_application' %}">
                     {% csrf_token %}
 
-                    <div class="row">
+                    <div class="row" hidden>
                         <div class="col-md-offset-11">
                             <button type="submit" class="btn green" id="save" style="">Filter</button>
                         </div>
@@ -103,8 +116,8 @@
                                 <tr>
                                     <th style="display: none"></th>
                                     <th>Student Name</th>
-                                    <th>
-                                        <select id='id_nationality' title="Select Nationality"
+                                    <th>Nationality
+                                        {% comment %}<select id='id_nationality' title="Select Nationality"
                                                 name="nationality"
                                                 class="form-control">
                                             {% if curriculum_obj %}
@@ -120,10 +133,10 @@
                                             {% for rec in country_recs %}
                                                 <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
                                             {% endfor %}
-                                        </select>
+                                        </select>{% endcomment %}
                                     </th>
-                                    <th>
-                                        <select id='id_country' title="Select Country"
+                                    <th>Country
+                                        {% comment %}<select id='id_country' title="Select Country"
                                                 name="country"
                                                 class="form-control">
                                             {% if curriculum_obj %}
@@ -143,10 +156,10 @@
                                             {% else %}
                                                 <option value='{{ rec.id }}'>{{ user.partner_user_rel.all.0.country.country_name|title }}</option>
                                             {% endif %}
-                                        </select>
+                                        </select>{% endcomment %}
                                     </th>
-                                    <th>
-                                        <select id='id_university' title="Select University"
+                                    <th>University
+                                        {% comment %}<select id='id_university' title="Select University"
                                                 name="university"
                                                 class="form-control">
                                             {% if curriculum_obj %}
@@ -162,10 +175,10 @@
                                             {% for rec in university_recs %}
                                                 <option value='{{ rec.id }}'>{{ rec.university_name|title }}</option>
                                             {% endfor %}
-                                        </select>
+                                        </select>{% endcomment %}
                                     </th>
-                                    <th>
-                                        <select id='id_degree' title="Select Degree"
+                                    <th>Degree
+                                        {% comment %}<select id='id_degree' title="Select Degree"
                                                 name="degree"
                                                 class="form-control">
                                             {% if curriculum_obj %}
@@ -181,7 +194,7 @@
                                             {% for rec in degree_recs %}
                                                 <option value='{{ rec.id }}'>{{ rec.degree_name|title }}</option>
                                             {% endfor %}
-                                        </select>
+                                        </select>{% endcomment %}
                                     </th>
                                     <th>Program</th>
                                 </tr>
@@ -192,7 +205,8 @@
                                     <tr id="item{{ forloop.counter }}" class="item">
                                         <td style="display: none"><input id="scholarship_id" value="{{ rec.id }}"></td>
                                         <td>
-                                            <text>{{ rec.first_name|title }} {{ rec.last_name|title }}</text>
+                                            <a href="/partner/template_applicant_all_details/{{ rec.id }}" {% if rec.application_rejection %} style="color: darkred" {% endif %}>{{ rec.first_name|title }} {{ rec.last_name|title }}</a></text>
+{#                                            <text>{{ rec.first_name|title }} {{ rec.last_name|title }}</text>#}
                                         </td>
 
                                         <td>

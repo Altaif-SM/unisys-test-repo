@@ -102,7 +102,7 @@
                     <div class="form-body">
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">Scholarship Applied:</label>
+                                <label class="col-md-2 control-label">Scholarship Applied:<span style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <select id='scholarship' title="Select Scholarship" name="scholarship"
                                             class="form-control" required>
@@ -127,7 +127,7 @@
                         <div class="row">
 
                             <div class="">
-                                <label class="col-md-2 control-label">Course Applied:</label>
+                                <label class="col-md-2 control-label">Course Applied:<span style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     {% comment %}<input type="text" title="Enter Course Applied" id="course_applied"
                                            name="course_applied"
@@ -157,7 +157,7 @@
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">University:</label>
+                                <label class="col-md-2 control-label">University:<span style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <select id='university' title="Select University" name="university"
                                             class="form-control" required>
@@ -186,10 +186,10 @@
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">Admission Letter:</label>
+                                <label class="col-md-2 control-label">Admission Letter: <span style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <input type="file" title="Select admission letter" id="admission_letter_document"
-                                          value="{{ scholarship_obj.admission_letter_document }}" name="admission_letter_document" class="doc form-control">
+                                          value="{{ scholarship_obj.admission_letter_document }}" name="admission_letter_document" class="doc form-control" required>
                                 </div>
                             </div>
                         </div>
