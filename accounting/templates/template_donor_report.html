@@ -12,12 +12,20 @@
     <script>
         window.onload = function () {
             $(document).ready(function () {
+                 $('#export_button').attr('disabled', true);
 
                 $("#id_donor_id").change(function () {
 
                     var donor = $(this).val();
                     var url = '/accounting/get_voucher_data_by_donor/';
                     get_voucher_data(url, donor);
+                     $('#export_student_value').val(donor);
+                      $('#export_button').attr('disabled', false);
+
+                });
+                $(document).on("click", "#export_button", function (e) {
+
+                        $('#form_sample_export').submit();
 
                 });
 
@@ -131,6 +139,11 @@
                                     </select>
                                 </div>
                             </div>
+                        <div class="col-md-2">
+                            <button style="width: 100%" type="button" id="export_button" class="btn blue">
+                        Export
+                    </button>
+                             </div>
 
                         </div>
 
@@ -156,6 +169,14 @@
                 </form>
             </div>
         </div>
+        <div class="col-md-2">
+                <form method="post" action="{% url 'accounting:export_donor_receipt_report' %}" id="form_sample_export">
+                    {% csrf_token %}
+                    <input hidden name="donar_id" id="export_student_value" value="">
+
+
+                </form>
+            </div>
     </div>
 
 {% endblock %}

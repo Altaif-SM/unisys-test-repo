@@ -8,6 +8,8 @@ from common.utils import create_voucher_number
 from django.db.models import Sum
 from donor.models import DonorDetails
 from django.db.models import Q
+from common.utils import *
+
 
 # Create your views here.
 def get_student_payment_voucher(request):
@@ -319,3 +321,279 @@ def save_donor_recipt_for_org_payment(request):
         donor_voucher.voucher_total = donor_voucher.application.calculate_student_payment_balance_amount()
         donor_voucher.save()
         return redirect("/accounting/get_donor_receipt_voucher/")
+
+def export_student_recipt_voucher(request):
+    try:
+        val_dict = request.POST
+        student_id = val_dict['student_id']
+        application_rec = ApplicationDetails.objects.filter(student_id=student_id, is_sponsored=True)
+        voucher_record = StudentPaymentReceiptVoucher.objects.filter(application__in=application_rec)
+        balance_total = StudentPaymentReceiptVoucher.objects.filter(voucher_type="credit",application__in=application_rec).values("voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
+        rows = []
+        count =0
+        for app_rec in application_rec:
+           for rec in app_rec.rel_student_payment_receipt_voucher.all():
+                rec_list = []
+                if app_rec.rel_student_payment_receipt_voucher.all()[count].voucher_type=="credit":
+                    if app_rec.rel_student_payment_receipt_voucher.all():
+                        rec_list.append(app_rec.rel_student_payment_receipt_voucher.all()[count].voucher_number)
+                    else:
+                        rec_list.append("")
+                    rec_list.append(app_rec.get_full_name())
+                    rec_list.append(app_rec.address.country.country_name)
+
+                    if app_rec.applicant_scholarship_rel.all() != '':
+                        rec_list.append(app_rec.applicant_scholarship_rel.all()[0].university.university_name)
+                    else:
+                        rec_list.append("")
+
+                    if app_rec.applicant_scholarship_rel.all():
+                        rec_list.append(app_rec.applicant_scholarship_rel.all()[0].scholarship.scholarship_name)
+                    else:
+                        rec_list.append("")
+
+                    if app_rec.applicant_module_rel.all():
+                        rec_list.append(app_rec.applicant_module_rel.all()[0].program.program_name)
+
+                    else:
+                        rec_list.append("")
+
+                    if app_rec.student.student_donor_rel.all():
+                        rec_list.append(app_rec.student.student_donor_rel.all()[0].donor.user.get_full_name())
+                    else:
+                        rec_list.append("")
+
+                    if app_rec.rel_student_payment_receipt_voucher.all():
+                        rec_list.append(app_rec.rel_student_payment_receipt_voucher.all()[count].voucher_amount)
+
+                    count = count + 1
+                    rows.append(rec_list)
+                else:
+                     count = count + 1
+                     pass
+        column_names = ["No", "Student Name", "Country", "University", "Scholarship", "Program", "Donor", "Amount"]
+        return export_wraped_column_xls('StudentReceiptVoucher', column_names, rows)
+    except:
+        return redirect("/accounting/get_student_receipt_voucher/")
+
+
+
+def export_student_payment_voucher(request):
+  try:
+    val_dict = request.POST
+    student_id = val_dict['student_id']
+    application_rec = ApplicationDetails.objects.filter(student_id=student_id, is_sponsored=True)
+    voucher_record = StudentPaymentReceiptVoucher.objects.filter(application__in=application_rec)
+    balance_total = StudentPaymentReceiptVoucher.objects.filter(voucher_type="debit",application__in=application_rec).values("voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
+
+    rows = []
+    count = 0
+    for app_rec in application_rec:
+        for rec in app_rec.rel_student_payment_receipt_voucher.all():
+            rec_list = []
+            if app_rec.rel_student_payment_receipt_voucher.all()[count].voucher_type == "debit":
+                if app_rec.rel_student_payment_receipt_voucher.all():
+                    rec_list.append(app_rec.rel_student_payment_receipt_voucher.all()[count].voucher_number)
+                else:
+                    rec_list.append("")
+                rec_list.append(app_rec.get_full_name())
+                rec_list.append(app_rec.address.country.country_name)
+
+                if app_rec.applicant_scholarship_rel.all() != '':
+                    rec_list.append(app_rec.applicant_scholarship_rel.all()[0].university.university_name)
+                else:
+                    rec_list.append("")
+
+                if app_rec.applicant_scholarship_rel.all():
+                    rec_list.append(app_rec.applicant_scholarship_rel.all()[0].scholarship.scholarship_name)
+                else:
+                    rec_list.append("")
+
+                if app_rec.applicant_module_rel.all():
+                    rec_list.append(app_rec.applicant_module_rel.all()[0].program.program_name)
+
+                else:
+                    rec_list.append("")
+
+                if app_rec.student.student_donor_rel.all():
+                    rec_list.append(app_rec.student.student_donor_rel.all()[0].donor.user.get_full_name())
+                else:
+                    rec_list.append("")
+
+                if app_rec.rel_student_payment_receipt_voucher.all():
+                    rec_list.append(app_rec.rel_student_payment_receipt_voucher.all()[count].voucher_amount)
+
+                count = count + 1
+                rows.append(rec_list)
+            else:
+                count = count + 1
+                pass
+    column_names = ["No", "Student Name", "Country", "University", "Scholarship", "Program", "Donor", "Amount"]
+    return export_wraped_column_xls('StudentPaymentVoucher', column_names, rows)
+  except:
+      return redirect("/accounting/get_student_payment_voucher/")
+
+
+def export_donor_receipt_report(request):
+    val_dict = request.POST
+    donar_id = val_dict['donar_id']
+    student_ids = StudentDonorMapping.objects.filter(donor_id=donar_id).values('student')
+    student_list = StudentDetails.objects.filter(id__in=student_ids).distinct()
+    rows = []
+    for obj in student_list:
+        rec_list = []
+        approval_amount = 0
+        credit_total = 0
+        outstanding_amount = 0
+        for application_obj in obj.student_applicant_rel.filter(is_sponsored=True):
+            approval_amount = application_obj.scholarship_fee
+            for voucher_obj in application_obj.rel_donor_receipt_voucher.all():
+                if voucher_obj!="":
+                    rec_list.append(voucher_obj.voucher_number)
+                if voucher_obj.voucher_type == "debit":
+                    credit_total += float(voucher_obj.voucher_amount)
+            outstanding_amount = float(approval_amount) - float(credit_total)
+            if application_obj.rel_donor_receipt_voucher.all():
+                rec_list.append(obj.student_full_name)
+                if application_obj!="":
+                    rec_list.append(application_obj.scholarship_fee)
+                rec_list.append(float(credit_total))
+                rec_list.append(float(outstanding_amount))
+                rows.append(rec_list)
+
+    column_names = ["No", "Student Name", "Scholorship Fee", "Credit", "Outstanding",]
+    return export_wraped_column_xls('DonorReceiptReport', column_names, rows)
+
+# def export_student_recipt_voucher(request):
+#         val_dict = request.POST
+#         student_id = val_dict['student_id']
+#         application_rec = ApplicationDetails.objects.filter(student_id=student_id, is_sponsored=True)
+#         voucher_record = StudentPaymentReceiptVoucher.objects.filter(application__in=application_rec)
+#         balance_total = StudentPaymentReceiptVoucher.objects.filter(voucher_type="credit",application__in=application_rec).values("voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
+#         rows = []
+#         count =0
+#         for app_rec in application_rec:
+#            for rec in app_rec.rel_student_payment_receipt_voucher.all():
+#                 rec_list = []
+#                 if app_rec.rel_student_payment_receipt_voucher.all()[count].voucher_type=="credit":
+#                     if app_rec.rel_student_payment_receipt_voucher.all():
+#                         rec_list.append(app_rec.rel_student_payment_receipt_voucher.all()[count].voucher_number)
+#                     else:
+#                         rec_list.append("")
+#                     rec_list.append(app_rec.get_full_name())
+#                     rec_list.append(app_rec.address.country.country_name)
+#
+#                     if app_rec.applicant_scholarship_rel.all() != '':
+#                         rec_list.append(app_rec.applicant_scholarship_rel.all()[0].university.university_name)
+#                     else:
+#                         rec_list.append("")
+#
+#                     if app_rec.applicant_scholarship_rel.all():
+#                         rec_list.append(app_rec.applicant_scholarship_rel.all()[0].scholarship.scholarship_name)
+#                     else:
+#                         rec_list.append("")
+#
+#                     if app_rec.applicant_module_rel.all():
+#                         rec_list.append(app_rec.applicant_module_rel.all()[0].program.program_name)
+#
+#                     else:
+#                         rec_list.append("")
+#
+#                     if app_rec.student.student_donor_rel.all():
+#                         rec_list.append(app_rec.student.student_donor_rel.all()[0].donor.user.get_full_name())
+#                     else:
+#                         rec_list.append("")
+#
+#                     if app_rec.rel_student_payment_receipt_voucher.all():
+#                         rec_list.append(app_rec.rel_student_payment_receipt_voucher.all()[count].voucher_amount)
+#
+#                     count = count + 1
+#                     rows.append(rec_list)
+#                 else:
+#                      count = count + 1
+#                      pass
+#         column_names = ["No", "Student Name", "Country", "University", "Scholarship", "Program", "Donor", "Amount"]
+#         return export_wraped_column_xls('StudentReceiptVoucher', column_names, rows)
+#
+
+# def export_student_payment_voucher(request):
+#     val_dict = request.POST
+#     student_id = val_dict['student_id']
+#     application_rec = ApplicationDetails.objects.filter(student_id=student_id, is_sponsored=True)
+#     voucher_record = StudentPaymentReceiptVoucher.objects.filter(application__in=application_rec)
+#     balance_total = StudentPaymentReceiptVoucher.objects.filter(voucher_type="debit",application__in=application_rec).values("voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
+#
+#     rows = []
+#     count = 0
+#     for app_rec in application_rec:
+#         for rec in app_rec.rel_student_payment_receipt_voucher.all():
+#             rec_list = []
+#             if app_rec.rel_student_payment_receipt_voucher.all()[count].voucher_type == "debit":
+#                 if app_rec.rel_student_payment_receipt_voucher.all():
+#                     rec_list.append(app_rec.rel_student_payment_receipt_voucher.all()[count].voucher_number)
+#                 else:
+#                     rec_list.append("")
+#                 rec_list.append(app_rec.get_full_name())
+#                 rec_list.append(app_rec.address.country.country_name)
+#
+#                 if app_rec.applicant_scholarship_rel.all() != '':
+#                     rec_list.append(app_rec.applicant_scholarship_rel.all()[0].university.university_name)
+#                 else:
+#                     rec_list.append("")
+#
+#                 if app_rec.applicant_scholarship_rel.all():
+#                     rec_list.append(app_rec.applicant_scholarship_rel.all()[0].scholarship.scholarship_name)
+#                 else:
+#                     rec_list.append("")
+#
+#                 if app_rec.applicant_module_rel.all():
+#                     rec_list.append(app_rec.applicant_module_rel.all()[0].program.program_name)
+#
+#                 else:
+#                     rec_list.append("")
+#
+#                 if app_rec.student.student_donor_rel.all():
+#                     rec_list.append(app_rec.student.student_donor_rel.all()[0].donor.user.get_full_name())
+#                 else:
+#                     rec_list.append("")
+#
+#                 if app_rec.rel_student_payment_receipt_voucher.all():
+#                     rec_list.append(app_rec.rel_student_payment_receipt_voucher.all()[count].voucher_amount)
+#
+#                 count = count + 1
+#                 rows.append(rec_list)
+#             else:
+#                 count = count + 1
+#                 pass
+#     column_names = ["No", "Student Name", "Country", "University", "Scholarship", "Program", "Donor", "Amount"]
+#     return export_wraped_column_xls('StudentReceiptVoucher', column_names, rows)
+
+# def export_donor_receipt_report(request):
+#     val_dict = request.POST
+#     donar_id = val_dict['donar_id']
+#     student_ids = StudentDonorMapping.objects.filter(donor_id=donar_id).values('student')
+#     student_list = StudentDetails.objects.filter(id__in=student_ids).distinct()
+#     rows = []
+#     for obj in student_list:
+#         rec_list = []
+#         approval_amount = 0
+#         credit_total = 0
+#         outstanding_amount = 0
+#         for application_obj in obj.student_applicant_rel.filter(is_sponsored=True):
+#             approval_amount = application_obj.scholarship_fee
+#             for voucher_obj in application_obj.rel_donor_receipt_voucher.all():
+#                 if voucher_obj!="":
+#                     rec_list.append(voucher_obj.voucher_number)
+#                 if voucher_obj.voucher_type == "debit":
+#                     credit_total += float(voucher_obj.voucher_amount)
+#             outstanding_amount = float(approval_amount) - float(credit_total)
+#             if application_obj.rel_donor_receipt_voucher.all():
+#                 rec_list.append(obj.student_full_name)
+#                 if application_obj!="":
+#                     rec_list.append(application_obj.scholarship_fee)
+#                 rec_list.append(float(credit_total))
+#                 rec_list.append(float(outstanding_amount))
+#                 rows.append(rec_list)
+#
+#     column_names = ["No", "Student Name", "Scholorship Fee", "Credit", "Outstanding",]
+#     return export_wraped_column_xls('DonorReceiptReport', column_names, rows)

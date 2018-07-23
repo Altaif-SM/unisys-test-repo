@@ -12,6 +12,7 @@
     <script>
         window.onload = function () {
             $(document).ready(function () {
+                 $('#export_button').attr('disabled', true);
 
                 function validate() {
                     var flag = false;
@@ -107,6 +108,8 @@
                     var student = $(this).val();
                     var url = '/accounting/get_payment_voucher_data_by_student/';
                     get_voucher_data(url, student);
+                     $('#export_student_value').val(student);
+                      $('#export_button').attr('disabled', false);
                 });
 
 
@@ -446,6 +449,16 @@
 
                     </div>
                 </form>
+            <div class="col-md-2">
+                <form method="post" action="{% url 'accounting:export_student_payment_voucher' %}" id="">
+                    {% csrf_token %}
+                    <input hidden name="student_id" id="export_student_value" value="">
+
+                    <button style="width: 100%" type="submit" value="Submit" id="export_button" class="btn blue">
+                        Export
+                    </button>
+                </form>
+            </div>
             </div>
         </div>
 

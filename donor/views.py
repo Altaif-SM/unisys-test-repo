@@ -4,6 +4,8 @@ from masters.models import StudentDonorMapping, CountryDetails, DegreeDetails, U
 from student.models import ApplicationDetails, ApplicationHistoryDetails, StudentDetails
 import json
 from django.contrib import messages
+from common.utils import *
+
 
 
 # Create your views here.
@@ -267,3 +269,34 @@ def approve_sponsorship(request):
     application_rec.is_sponsored = True
     application_rec.save()
     return render(request, "template_student_details.html", {'application_rec': application_rec})
+
+
+def donor_receipt_report_export(request):
+    try:
+        debit_total = 0
+        outstanding_total = 0
+        stud = StudentDonorMapping.objects.filter(donor__user=request.user).values("student")
+        student_list = ApplicationDetails.objects.filter(student_id__in=stud, is_sponsored=True).distinct()
+        rows = []
+        for application_obj in student_list:
+            rec_list =[]
+            credit_total = 0
+            outstanding_amount = 0
+            rec_list.append(application_obj.student_id)
+            rec_list.append(application_obj.get_full_name())
+            if application_obj.rel_donor_receipt_voucher.all():
+                approval_amount = application_obj.scholarship_fee
+                for voucher_obj in application_obj.rel_student_payment_receipt_voucher.all():
+                    if voucher_obj.voucher_type == "credit":
+                        credit_total += float(voucher_obj.voucher_amount)
+                outstanding_amount = float(approval_amount) - float(credit_total)
+                rec_list.append(float(approval_amount))
+                rec_list.append(float(credit_total))
+                rec_list.append(float(outstanding_amount))
+                rows.append(rec_list)
+            debit_total += float(credit_total)
+            outstanding_total += float(outstanding_amount)
+        column_names = ["Student id", "Student Name", "Scholorship Fee", "Debit", "Balance",]
+        return export_wraped_column_xls('DonorReceiptReport', column_names, rows)
+    except:
+        return redirect('/donar/template_students_receipts/')

@@ -143,9 +143,13 @@
             </div>
 
             <div style="float: right;">
+                <form method="post" action="{% url 'donor:donor_receipt_report_export' %}" id="form_sample_export">
+                    {% csrf_token %}
+
                 <div class="btn-group">
                     <button type="submit" class="btn green" id="export">Export</button>
                 </div>
+                </form>
              </div>
 
         </div>

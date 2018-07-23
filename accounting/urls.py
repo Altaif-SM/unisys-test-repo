@@ -32,5 +32,8 @@ urlpatterns = [
 
                   path('get_donor_report/', views.get_donor_report, name='get_donor_report'),
                   path('get_voucher_data_by_donor/', views.get_voucher_data_by_donor, name='get_voucher_data_by_donor'),
+                  path('export_student_recipt_voucher/', views.export_student_recipt_voucher, name='export_student_recipt_voucher'),
+                  path('export_student_payment_voucher/', views.export_student_payment_voucher, name='export_student_payment_voucher'),
+                  path('export_donor_receipt_report/', views.export_donor_receipt_report, name='export_donor_receipt_report'),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

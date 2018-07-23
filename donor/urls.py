@@ -28,4 +28,6 @@ urlpatterns = [
                        name='filter_student_report'),
                   path('filter_application_history/', views.filter_application_history,
                        name='filter_application_history'),
+                path('donor_receipt_report_export/', views.donor_receipt_report_export,
+                        name='donor_receipt_report_export'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
