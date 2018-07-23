@@ -33,33 +33,7 @@
     <script>
         window.onload = function () {
             $(document).ready(function () {
-
-                $('#save').click(function () {
-                    var array = []
-
-                    {% comment %}$('.item').each(function (e) {
-                        var id = $(this).attr('id');
-                        var flags = {}
-
-                        $('#' + id + ' .app').each(function () {
-                            flags[$(this).attr('id')] = $(this).is(':checked')
-                            {#alert($(this).is(':checked'));#}
-                        })
-                        {#alert($('#'+id+' .application_id').val())#}
-
-                        var payload = {
-                            'application_id': $('#' + id + ' .application_id').val(),
-                            'flags': flags
-                        }
-                        array.push(payload)
-                    })
-
-                    $('#data_value').val(JSON.stringify(array));
-
-                    {#console.log(JSON.stringify(array));#}
-                    {#return false;#}
-                }){% endcomment %}
-                });
+                $("#id_scholarship").chosen();
 
 
                 $('#sample_1').dataTable().fnDestroy();
@@ -113,33 +87,46 @@
     <div class="portlet-body">
         <div class="form-body">
             <div class="form-body">
-            <div class="row col-md-offset-3">
-                <form method="post" action="{% url 'partner:filter_application_history' %}" id="form_sample_1">
-                    {% csrf_token %}
-                    <div class="col-md-4">
-                        <div class="">
-                            <select autocomplete="off" class="form-control" data-live-search="true"
-                                    id="id_application" name="application" required="required">
-                                {% if application_obj %}
-                                    <option style="display: none" value="{{ rec.id }}"
-                                            selected="selected">{{ application_obj.get_full_name }}</option>
-                                {% else %}
-                                    <option value="" style="display: none" selected="selected">Please Select</option>
-                                {% endif %}
+                <div class="row col-md-offset-2">
+                    <form method="post" action="{% url 'partner:filter_academic_progress' %}" id="form_sample_1">
+                        {% csrf_token %}
+                        <div class="col-md-4">
+                            <div class="">
+                                <select autocomplete="off" class="form-control" data-live-search="true"
+                                        id="id_scholarship" name="scholarship" required="required">
+                                    {% if scholarship_obj %}
+                                        <option style="display: none" value="{{ scholarship_obj.id }}"
+                                                selected="selected">{{ scholarship_obj.scholarship_name|title }}</option>
+                                    {% else %}
+                                        <option value="" style="display: none" selected="selected">Scholarship Type
+                                        </option>
+                                    {% endif %}
 
-                                {% for rec in applicant_recs %}
-                                    <option value="{{ rec.id }}">{{ rec.get_full_name }}</option>
-                                {% endfor %}
-                            </select>
+                                    {% for rec in scholarship_type %}
+                                        <option value="{{ rec.id }}">{{ rec.scholarship_name|title }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="col-md-2">
-                        <button type="submit" class="btn blue btn-block" id="go">Search
-                        </button>
-                    </div>
-                </form>
-            </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn blue btn-block" id="go">Search
+                            </button>
+                        </div>
+                    </form>
+
+                    {% if scholarship_obj %}
+                        <form method="post" action="{% url 'partner:filter_academic_progress' %}" id="form_sample_1">
+                            {% csrf_token %}
+                            <div class="col-md-2">
+                                <input type="input" hidden name="export" value="1">
+                                <input type="input" hidden name="scholarship" value="{{ scholarship_obj.id }}">
+                                <button type="submit" class="btn green btn-block" id="go">Export</button>
+                            </div>
+                        </form>
+                    {% endif %}
+                </div>
+
 
                 <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data"
                         {% comment %}action="{% url 'partner:change_application_status' %}"{% endcomment %}>
@@ -172,7 +159,7 @@
                                                                          value="{{ rec.id }}"></td>
                                         <td>
                                             <a href="/partner/template_academic_progress_details/{{ rec.applicant_id.id }}">{{ rec.applicant_id.first_name|title }} {{ rec.applicant_id.last_name|title }}</a>
-{#                                            <p>{{ rec.applicant_id.first_name|title }} {{ rec.applicant_id.last_name|title }}</p>#}
+                                            {#                                            <p>{{ rec.applicant_id.first_name|title }} {{ rec.applicant_id.last_name|title }}</p>#}
                                         </td>
 
                                         <td><p>{{ rec.applicant_id.address.country.country_name|title }}</p></td>

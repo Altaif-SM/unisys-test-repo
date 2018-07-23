@@ -32,8 +32,10 @@ urlpatterns = [
                   path('get_semester_modules/', views.get_semester_modules, name='get_semester_modules'),
                   path('save_student_program/', views.save_student_program, name='save_student_program'),
 
-                  path('template_academic_progress/', views.template_academic_progress,
-                       name='template_academic_progress'),
+                  path('template_academic_progress/', views.template_academic_progress,name='template_academic_progress'),
+                  path('filter_academic_progress/', views.filter_academic_progress,name='filter_academic_progress'),
+                  # path('export_filtered_academic_progress/', views.export_filtered_academic_progress,name='export_filtered_academic_progress'),
+
                   path('template_academic_progress_details/<int:app_id>/', views.template_academic_progress_details,
                        name='template_academic_progress_details'),
                   path('export_academic_progress_details/', views.export_academic_progress_details,name='export_academic_progress_details'),

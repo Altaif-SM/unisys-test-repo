@@ -5,7 +5,7 @@ from partner.models import *
 import json
 from django.contrib import messages
 from django.http import JsonResponse
-from common.utils import send_email_to_applicant, application_notification, export_pdf
+from common.utils import *
 from django.db.models import Max, Q
 
 
@@ -679,18 +679,6 @@ def filter_application_history(request):
             applicant_recs = ApplicationDetails.objects.filter(is_submitted=True)
             application_history_recs = ApplicationDetails.objects.get(id=application).applicant_history_rel.all()
             application_obj = ApplicationDetails.objects.get(id=application)
-
-        # elif request.user.is_donor():
-        #     stud = []
-        #     for obj in StudentDonorMapping.objects.filter(donor__user=request.user):
-        #         stud.append(StudentDetails.objects.get(id=obj.student.id))
-        #
-        #     applicant_recs = ApplicationDetails.objects.filter(student__in=stud,
-        #                                                        address__country=request.user.donor_user_rel.get().country,
-        #                                                        is_sponsored=True)
-        #     application_obj = ApplicationDetails.objects.get(id=application)
-        #     application_history_recs = ApplicationDetails.objects.get(id=application).applicant_history_rel.all()
-
         else:
             applicant_recs = ApplicationDetails.objects.filter(
                 address__country=request.user.partner_user_rel.get().country, is_submitted=True)
@@ -814,6 +802,7 @@ def save_student_program(request):
 
 def template_academic_progress(request):
     try:
+        scholarship_type = ScholarshipDetails.objects.all()
         application_list = []
         application_id = []
         if request.user.is_super_admin():
@@ -833,10 +822,80 @@ def template_academic_progress(request):
 
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
-        return redirect('/partner/template_registered_application/')
+        return redirect('/partner/template_academic_progress/')
 
     return render(request, 'template_academic_progress.html',
-                  {'application_recs': application_list})
+                  {'application_recs': application_list, 'scholarship_type': scholarship_type})
+
+
+def filter_academic_progress(request):
+    if request.POST:
+        request.session['form_data'] = request.POST
+        scholarship = request.POST.get('scholarship')
+        export = request.POST.get('export')
+    else:
+        form_data = request.session.get('form_data')
+        scholarship = form_data.get('scholarship')
+        export = form_data.get('export')
+
+    try:
+        scholarship_type = ScholarshipDetails.objects.all()
+        scholarship_obj = ScholarshipDetails.objects.get(id=scholarship)
+        application_list = []
+        application_id = []
+
+        applicant_ids = ScholarshipSelectionDetails.objects.filter(scholarship_id=scholarship).values_list(
+            'applicant_id')
+        if request.user.is_super_admin():
+            application_recs = ApplicantAcademicProgressDetails.objects.filter(applicant_id__in=applicant_ids).order_by(
+                '-last_updated')
+            # for application in application_recs:
+            #     if application.applicant_id.id not in application_id:
+            #         application_list.append(application)
+            #         application_id.append(application.applicant_id.id)
+        else:
+            application_recs = ApplicantAcademicProgressDetails.objects.filter(applicant_id__in=applicant_ids,
+                                                                               applicant_id__address__country=request.user.partner_user_rel.get().country).order_by(
+                '-last_updated')
+        for application in application_recs:
+            if application.applicant_id.id not in application_id:
+                application_list.append(application)
+                application_id.append(application.applicant_id.id)
+
+        if export:
+            rows = []
+            export_application_id = []
+
+            for application in application_recs:
+                temp_list = []
+                if application.applicant_id.id not in export_application_id:
+                    temp_list.append(application.applicant_id.get_full_name())
+                    temp_list.append(application.applicant_id.address.country.country_name.title())
+                    temp_list.append(application.applicant_id.applicant_scholarship_rel.all()[0].university.university_name.title())
+                    temp_list.append(application.applicant_id.applicant_scholarship_rel.all()[0].course_applied.degree_name.title())
+                    temp_list.append('')
+                    temp_list.append(application.semester.semester_name.title())
+                    temp_list.append(application.gpa_scored)
+                    temp_list.append(application.cgpa_scored)
+                    temp_list.append(application.date)
+                    temp_list.append(application.transcript_document)
+                    rows.append(temp_list)
+
+                    export_application_id.append(application.applicant_id.id)
+
+            column_names = ['Student Name', 'Country', 'University', 'Degree', 'Program', 'Semester', 'GPA', 'CGPA',
+                            'Date', 'PDF']
+            return export_wraped_column_xls('academic_progress_details', column_names, rows)
+
+
+    except Exception as e:
+
+        messages.warning(request, "Form have some error" + str(e))
+        return redirect('/partner/template_academic_progress/')
+
+    return render(request, 'template_academic_progress.html',
+                  {'application_recs': application_list, 'scholarship_type': scholarship_type,
+                   'scholarship_obj': scholarship_obj})
 
 
 def template_academic_progress_details(request, app_id):
@@ -853,38 +912,36 @@ def template_academic_progress_details(request, app_id):
 def template_attendance_report(request):
     try:
         if request.user.is_super_admin():
-            # attendance_rec = ApplicantDevelopmentProgramDetails.objects.filter(applicant_id__year=YearDetails.objects.get(active_year=True))
-            # attended_rec = ApplicantDevelopmentProgramDetails.objects.filter(applicant_id__year=YearDetails.objects.get(active_year=True)).values_list('applicant_id',flat=1)
-            # not_attended_recs = ApplicationDetails.objects.filter(~Q(id__in=attended_rec),year=YearDetails.objects.get(active_year=True))
-            # StudentModuleMapping.objects.filter(~Q(applicant_id__in=attended_rec),year=YearDetails.objects.get(active_year=True),module__module='')
-
-            all_modules = StudentModuleMapping.objects.filter(applicant_id__year=YearDetails.objects.get(active_year=True))
+            all_modules = StudentModuleMapping.objects.filter(
+                applicant_id__year=YearDetails.objects.get(active_year=True))
         else:
-            # attendance_rec = ApplicantDevelopmentProgramDetails.objects.filter(applicant_id__year=YearDetails.objects.get(active_year=True),applicant_id__address__country=request.user.partner_user_rel.get().country)
-            # attended_rec = ApplicantDevelopmentProgramDetails.objects.filter(applicant_id__year=YearDetails.objects.get(active_year=True),applicant_id__address__country=request.user.partner_user_rel.get().country).values_list('applicant_id', flat=1)
-            # not_attended_recs = ApplicationDetails.objects.filter(~Q(id__in=attended_rec),year=YearDetails.objects.get(active_year=True))
-
-            all_modules = StudentModuleMapping.objects.filter(applicant_id__address__country=request.user.partner_user_rel.get().country,applicant_id__year=YearDetails.objects.get(active_year=True))
+            all_modules = StudentModuleMapping.objects.filter(
+                applicant_id__address__country=request.user.partner_user_rel.get().country,
+                applicant_id__year=YearDetails.objects.get(active_year=True))
 
         attended_list = []
         not_attended_list = []
 
         for rec in all_modules:
             program_dict = {}
-            if ApplicantDevelopmentProgramDetails.objects.filter(applicant_id=rec.applicant_id,module=rec.module.module).exists():
-                certificate_rec = ApplicantDevelopmentProgramDetails.objects.get(applicant_id=rec.applicant_id,module=rec.module.module)
-                program_dict['name'] = rec.applicant_id.first_name + ' ' + rec.applicant_id.last_name if rec.applicant_id.last_name else ''
+            if ApplicantDevelopmentProgramDetails.objects.filter(applicant_id=rec.applicant_id,
+                                                                 module=rec.module.module).exists():
+                certificate_rec = ApplicantDevelopmentProgramDetails.objects.get(applicant_id=rec.applicant_id,
+                                                                                 module=rec.module.module)
+                program_dict[
+                    'name'] = rec.applicant_id.first_name + ' ' + rec.applicant_id.last_name if rec.applicant_id.last_name else ''
                 program_dict['country'] = rec.applicant_id.address.country.country_name
                 program_dict['degree'] = rec.degree.degree_name
-                program_dict['program'] =rec.program.program_name
-                program_dict['module'] =rec.module.module.module_name
-                program_dict['semester'] =rec.module.semester.semester_name
-                program_dict['certificate'] =certificate_rec.certificate_document
+                program_dict['program'] = rec.program.program_name
+                program_dict['module'] = rec.module.module.module_name
+                program_dict['semester'] = rec.module.semester.semester_name
+                program_dict['certificate'] = certificate_rec.certificate_document
 
                 attended_list.append(program_dict)
 
             else:
-                program_dict['name'] = rec.applicant_id.first_name + ' ' + rec.applicant_id.last_name if rec.applicant_id.last_name else ''
+                program_dict[
+                    'name'] = rec.applicant_id.first_name + ' ' + rec.applicant_id.last_name if rec.applicant_id.last_name else ''
                 program_dict['country'] = rec.applicant_id.address.country.country_name
                 program_dict['degree'] = rec.degree.degree_name
                 program_dict['program'] = rec.program.program_name
@@ -900,7 +957,7 @@ def template_attendance_report(request):
         return redirect('/partner/template_attendance_report/')
 
     return render(request, "template_attendance_report.html",
-                  {'attended_recs': attended_list,'not_attended_recs':not_attended_list})
+                  {'attended_recs': attended_list, 'not_attended_recs': not_attended_list})
 
 
 def export_academic_progress_details(request):
