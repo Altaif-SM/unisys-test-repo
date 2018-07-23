@@ -51,10 +51,10 @@ class AddressDetails(BaseModel):
     country = models.ForeignKey(CountryDetails, null=True, related_name='address_country_rel', on_delete=models.PROTECT)
 
     class Meta:
-        ordering = ('city',)
+        ordering = ('country',)
 
     def __str__(self):
-        return self.city if self.city else ''
+        return self.country.country_name if self.country else ''
 
     def to_dict(self):
         res = {
