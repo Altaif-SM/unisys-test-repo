@@ -679,6 +679,17 @@ def filter_application_history(request):
             applicant_recs = ApplicationDetails.objects.filter(is_submitted=True)
             application_history_recs = ApplicationDetails.objects.get(id=application).applicant_history_rel.all()
             application_obj = ApplicationDetails.objects.get(id=application)
+
+        elif request.user.is_donor():
+            stud = []
+            for obj in StudentDonorMapping.objects.filter(donor__user=request.user):
+                stud.append(StudentDetails.objects.get(id=obj.student.id))
+
+            applicant_recs = ApplicationDetails.objects.filter(student__in=stud,
+                                                               address__country=request.user.donor_user_rel.get().country,
+                                                               is_sponsored=True)
+            application_obj = ApplicationDetails.objects.get(id=application)
+
         else:
             applicant_recs = ApplicationDetails.objects.filter(
                 address__country=request.user.partner_user_rel.get().country, is_submitted=True)
