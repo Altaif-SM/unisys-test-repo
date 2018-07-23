@@ -182,11 +182,6 @@
                                     + "<td><input id='id_program' class='form-control data voucher_number' value='" + data['voucher_rec'][i]['program']['program_name'] + "' disabled> </td>"
                                     + "<td><input id='id_donor' class='form-control data voucher_number' value='" + data['voucher_rec'][i]['donor']['user']['first_name'] + "' disabled> </td>"
                                     + "<td><input id='id_voucher_amount' class='form-control data voucher_number' value='" + data['voucher_rec'][i]['voucher_amount'] + "' disabled> </td>"
-                                    +"<td>"
-                                        +"<span type='button' name='updt' id='update'"+ i +"' class='update btn green glyphicon glyphicon-ok' style='display:none;'></span>"
-                                        +"<span type='button' name='edit' id='edit'"+ i +"' class='edit btn blue glyphicon glyphicon-pencil'> </span>"
-                                        +"<span type='button' name='delete' id='delete'"+ i +"' class='delete btn red glyphicon glyphicon-trash'> </span>"
-                                    +"</td>"
 
 
                                     }
@@ -209,6 +204,8 @@
             $('#sample_1').dataTable().fnDestroy();
             $('#sample_1').dataTable({
                 "bFilter": false,
+                "paging": false,
+                "info": false,
                 "aoColumnDefs": [
                     {'bSortable': false}
                 ]
@@ -520,7 +517,6 @@
                         <th>Program</th>
                         <th>Donor</th>
                         <th>Amount</th>
-                        <th></th>
                     </tr>
                     </thead>
 
