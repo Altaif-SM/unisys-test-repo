@@ -64,7 +64,7 @@
             </li>
 
             <li>
-                <span> Accepted Applicants </span>
+                <span> Semester Result </span>
             </li>
         </ul>
     </div>
@@ -80,15 +80,15 @@
     <div class="portlet-title">
         <div class="caption">
             <i class="icon-settings font-red"></i>
-            <span class="caption-subject font-red sbold uppercase"> Accepted Applicants </span>
+            <span class="caption-subject font-red sbold uppercase">Semester Result </span>
         </div>
     </div>
 
     <div class="portlet-body">
         <div class="form-body">
             <div class="form-body">
-                <div class="row col-md-offset-2">
-                    {% comment %}<form method="post" action="{% url 'partner:filter_academic_progress' %}" id="form_sample_1">
+                {% comment %}<div class="row col-md-offset-2">
+                    <form method="post" action="{% url 'partner:filter_academic_progress' %}" id="form_sample_1">
                         {% csrf_token %}
                         <div class="col-md-4">
                             <div class="">
@@ -113,9 +113,9 @@
                             <button type="submit" class="btn blue btn-block" id="go">Search
                             </button>
                         </div>
-                    </form>{% endcomment %}
+                    </form>
 
-                    {% comment %}{% if scholarship_obj %}
+                    {% if scholarship_obj %}
                         <form method="post" action="{% url 'partner:filter_academic_progress' %}" id="form_sample_1">
                             {% csrf_token %}
                             <div class="col-md-2">
@@ -124,8 +124,8 @@
                                 <button type="submit" class="btn green btn-block" id="go">Export</button>
                             </div>
                         </form>
-                    {% endif %}{% endcomment %}
-                </div>
+                    {% endif %}
+                </div>{% endcomment %}
 
 
                 <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data"
@@ -140,39 +140,23 @@
                                 <tr>
                                     <th style="display: none"></th>
                                     <th>Student Name</th>
-                                    <th>Nationality</th>
                                     <th>Country</th>
-                                    <th>University</th>
-                                    <th>Degree</th>
-                                    <th>Program</th>
-                                    <th>Donor</th>
-                                    <th>Scholarship Type</th>
+                                    <th>CGPA</th>
+                                    <th>Transcript</th>
                                 </tr>
                                 </thead>
 
                                 <tbody id="tbody">
-                                {% for rec in scholarship_recs %}
+                                {% for rec in application_recs %}
                                     <tr id="item{{ forloop.counter }}" class="item">
                                         <td style="display: none"><input id="application_id" class="application_id"
                                                                          value="{{ rec.id }}"></td>
-                                        <td>
-                                            {#                                            <a href="/partner/template_academic_progress_details/{{ rec.applicant_id.id }}">{{ rec.applicant_id.first_name|title }} {{ rec.applicant_id.last_name|title }}</a>#}
-                                            <p>{{ rec.applicant_id.get_full_name|title }} </p>
-                                        </td>
+                                        <td><a href="/partner/template_academic_progress_details/{{ rec.applicant_id.id }}">{{ rec.applicant_id.first_name|title }} {{ rec.applicant_id.last_name|title }}</a></td>
 
-                                        <td><p>{{ rec.applicant_id.nationality.country_name|title }}</p></td>
                                         <td><p>{{ rec.applicant_id.address.country.country_name|title }}</p></td>
 
-                                        <td>
-                                            <p>{{ rec.university.university_name|title }}</p>
-                                        </td>
-
-                                        <td>
-                                            <p>{{ rec.course_applied.degree_name|title }}</p>
-                                        </td>
-                                        <td><p></p></td>
-                                        <td><p></p></td>
-                                        <td><p>{{ rec.scholarship.scholarship_name|title }}</p></td>
+                                        <td><p>{{ rec.cgpa_scored }}</p></td>
+                                        <td><p>{{ rec.transcript_document }}</p></td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>

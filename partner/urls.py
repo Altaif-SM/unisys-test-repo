@@ -56,5 +56,8 @@ urlpatterns = [
                   path('template_donor_students_linking/', views.template_donor_students_linking, name='template_donor_students_linking'),
                   path('filter_donor_student_linking/', views.filter_donor_student_linking, name='filter_donor_student_linking'),
 
+                  path('template_student_agreement/', views.template_student_agreement, name='template_student_agreement'),
+                  path('template_semester_result/', views.template_semester_result, name='template_semester_result'),
+
                   # path('generate_student_details_pdf/<int:app_id>/', views.generate_student_details_pdf,name='generate_student_details_pdf'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -138,7 +138,7 @@
                             </div>
                         </form>
 
-                        {% if scholarship_obj %}
+                        {% comment %}{% if scholarship_obj %}
                             <form method="post" action="{% url 'partner:filter_academic_progress' %}"
                                   id="form_sample_1">
                                 {% csrf_token %}
@@ -148,7 +148,7 @@
                                     <button type="submit" class="btn green btn-block" id="go">Export</button>
                                 </div>
                             </form>
-                        {% endif %}
+                        {% endif %}{% endcomment %}
                     </div>
 
 

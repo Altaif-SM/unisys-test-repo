@@ -1,0 +1,186 @@
+{% extends "template_base_page.html" %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+
+
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+            $(document).ready(function () {
+                $('table.display').DataTable();
+            });
+        }
+
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'accounts:home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span> Agreements </span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-settings font-red"></i>
+            <span class="caption-subject font-red sbold uppercase"> Agreements Submitted Student</span>
+        </div>
+    </div>
+
+    <div class="portlet-body">
+        <div class="form-body">
+
+            {% comment %}<div class="row col-md-offset-3">
+                <form method="post" action="{% url 'partner:filter_attendance_report' %}" id="form_sample_1">
+                    {% csrf_token %}
+                    <div class="col-md-4">
+                        <div class="">
+                            <select autocomplete="off" class="form-control" data-live-search="true"
+                                    id="id_modules" name="modules" required="required">
+                                {% if module_obj %}
+                                    <option style="display: none" value="{{ module_obj.id }}"
+                                            selected="selected">{{ module_obj.module_name|title }}</option>
+                                    <option value="All">All</option>
+                                {% else %}
+                                    <option value="" style="display: none" selected="selected">Module</option>
+                                    <option value="All">All</option>
+
+                                {% endif %}
+
+                                {% for rec in modules_recs %}
+                                    <option value="{{ rec.id }}">{{ rec.module_name|title }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <button type="submit" class="btn blue btn-block" id="go">Filter
+                        </button>
+                    </div>
+                </form>
+            </div>{% endcomment %}
+
+            <div class="form-body">
+                <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data"
+                        {% comment %}action="{% url 'partner:change_application_status' %}"{% endcomment %}>
+                    {% csrf_token %}
+
+                    <div class="row">
+                        <input hidden id="data_value" name="data_value">
+                        <div class="">
+                            <table class="display table table-striped table-bordered" id="">
+                                <thead>
+                                <tr>
+                                    <th hidden>No.</th>
+                                    <th>Student Name</th>
+                                    <th>Country</th>
+                                    <th>File</th>
+                                </tr>
+                                </thead>
+
+                                <tbody id="tbody">
+                                {% for rec in attended_recs %}
+                                    <tr id="item{{ forloop.counter }}" class="item">
+                                        <td hidden>{{ forloop.counter }}</td>
+                                        <td><p>{{ rec.name|title }}</p></td>
+                                        <td><p>{{ rec.country|title }}</p></td>
+                                        <td><p>{{ rec.four_parties }}<br>
+                                            {{ rec.education_loan }}</p></td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            <hr>
+                            <div class="portlet-title">
+                                <div class="caption">
+                                    <i class="icon-settings font-red"></i>
+                                    <span class="caption-subject font-red sbold uppercase"> Not Submitted Student</span>
+                                </div>
+                            </div>
+                            {#                        <hr>#}
+                            <br>
+
+                            <table class="display table table-striped table-bordered" id="">
+                                <thead>
+                                <tr>
+                                    <th hidden>No.</th>
+                                    <th>Student Name</th>
+                                    <th>Country</th>
+                                    <th>File</th>
+                                </tr>
+                                </thead>
+
+                                <tbody id="tbody">
+                                {% for rec in not_attended_recs %}
+                                    <tr id="item{{ forloop.counter }}" class="item">
+                                        <td hidden>{{ forloop.counter }}</td>
+                                        <td><p>{{ rec.name|title }}</p></td>
+                                        <td><p>{{ rec.country|title }}</p></td>
+                                        <td><p>{{ rec.four_parties }}<br>
+                                            {{ rec.education_loan }}</p></td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% comment %}<div class="">
+                            <div class="col-md-offset-8">
+                                <button type="submit" class="btn green" id="save" style="">Save</button>
+                            </div>
+                        </div>{% endcomment %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
