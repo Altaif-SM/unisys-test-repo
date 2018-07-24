@@ -52,7 +52,7 @@ def user_signup(request):
             try:
                 user = signup_form.save()
                 user.role.add(UserRole.objects.get(name=signup_form.cleaned_data['role']))
-                if str(signup_form.cleaned_data['role']) != "Accountant":
+                if str(signup_form.cleaned_data['role']) not in  ["Accountant", "Parent"]:
                     country = CountryDetails.objects.get(country_name=request.POST['country'])
                     address = AddressDetails.objects.create(country=country)
                     if signup_form.cleaned_data['role'] == "Student":
