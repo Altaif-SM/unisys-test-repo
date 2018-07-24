@@ -9,7 +9,146 @@
 
 {% block ScriptBlock %}
 
-    <script>
+    <script type="text/javascript">
+
+        window.onload = function () {
+            $(document).ready(function () {
+
+                var chart;
+                var data =
+                {{ raw_list }}//[50, 90, 60, 40, 30, 100, 70, 50];
+
+                var chartData = [{
+                    AttendanceStatus: "Applicants",
+                    categrory: data[1],
+                },
+                    {
+                        AttendanceStatus: "Interview1",
+                        categrory: data[2],
+                    },
+                    {
+                        AttendanceStatus: "Interview2",
+                        categrory: data[6],
+                    },
+                    {
+                        AttendanceStatus: "Psychometric Test",
+                        categrory: data[4],
+                    },
+                    {
+                        AttendanceStatus: "Admin Approval",
+                        categrory: data[3],
+                    },
+                    {
+                        AttendanceStatus: "Sponsored",
+                        categrory: data[5],
+                    },
+                    {
+                        AttendanceStatus: "Total",
+                        categrory: data[0],
+                    },
+                ];
+                // SERIAL CHART
+                chart = new AmCharts.AmSerialChart();
+                chart.dataProvider = chartData;
+                chart.categoryField = "AttendanceStatus";
+                chart.fontSize = 14;
+                chart.startDuration = 1;
+                chart.plotAreaFillAlphas = 0.2;
+                // the following two lines makes chart 3D
+                chart.angle = 30;
+                chart.depth3D = 40;
+
+                // AXES
+                // category
+                var categoryAxis = chart.categoryAxis;
+                categoryAxis.gridAlpha = 0.2;
+                categoryAxis.gridPosition = "start";
+                categoryAxis.axisColor = "#DADADA";
+                categoryAxis.axisAlpha = 1;
+                categoryAxis.dashLength = 5;
+
+                // value
+                var valueAxis = new AmCharts.ValueAxis();
+                valueAxis.stackType = "3d"; // This line makes chart 3D stacked (columns are placed one behind another)
+                valueAxis.gridAlpha = 0.2;
+                valueAxis.axisColor = "#DADADA";
+                valueAxis.axisAlpha = 1;
+                valueAxis.dashLength = 5;
+                valueAxis.unit = "%";
+                chart.addValueAxis(valueAxis);
+
+                // GRAPHS
+                // first graph
+                var graph1 = new AmCharts.AmGraph();
+                graph1.title = "Attendance";
+                graph1.valueField = "categrory";
+                graph1.type = "column";
+                graph1.lineAlpha = 0;
+                graph1.lineColor = "#87CEFA";
+                graph1.fillAlphas = 2;
+                graph1.balloonText = " [[category]]";  //" [[category]] Student in Class: [[value]]";
+                chart.addGraph(graph1);
+                chart.write("chartdiv");
+
+
+                var data_one = {{scholarship_list|safe}};
+                console.log(data_one);
+
+                var chartDataTwo = [];
+                for (var i = 0; i < data_one.length; i++) {
+                    chartDataTwo.push({
+                        AttendanceStatus: data_one[i]['scholarship_name'],
+                        categrory: data_one[i]['scholarship_count']
+                    });
+                }
+
+                var chart_two = AmCharts.makeChart("chartdiv_two", {
+                    "type": "pie",
+                    "theme": "light",
+                    "dataProvider": chartDataTwo,
+                    "valueField": "categrory",
+                    "titleField": "AttendanceStatus",
+                    "outlineAlpha": 0.4,
+                    "depth3D": 15,
+                    "balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+                    "angle": 30,
+                    "export": {
+                        "enabled": true
+                    }
+                });
+
+
+                var data_two = {{country_list|safe}};
+                console.log(data_two);
+
+                var chartDataThree = [];
+                for (var i = 0; i < data_two.length; i++) {
+                    chartDataThree.push({
+                        AttendanceStatus: data_two[i]['country_name'],
+                        categrory: data_two[i]['country_count']
+                    });
+                }
+
+
+                var chart_three = AmCharts.makeChart("chartdiv_three", {
+                    "type": "pie",
+                    "theme": "light",
+                    "dataProvider": chartDataThree,
+                    "valueField": "categrory",
+                    "titleField": "AttendanceStatus",
+                    "outlineAlpha": 0.4,
+                    "depth3D": 15,
+                    "balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+                    "angle": 30,
+                    "export": {
+                        "enabled": true
+                    }
+                });
+
+
+            });
+        }
+
     </script>
 
 {% endblock %}
@@ -40,7 +179,7 @@
 
 
             <div class="row">
-                <div class="col-md-6 col-sm-6">
+                <div class="col-md-12 col-sm-12">
                     <!-- BEGIN PORTLET-->
                     <div class="portlet light ">
                         <div class="portlet-title">
@@ -51,21 +190,27 @@
                             </div>
                         </div>
                         <div class="portlet-body">
-                            <div id="site_statistics_loading">
-                                <img src="../assets/global/img/loading.gif" alt="loading"/></div>
-                            <div id="site_statistics_content" class="display-none">
-                                <div id="site_statistics" class="chart"></div>
-                            </div>
+                            <div id="chartdiv" style="width: 100%; height: 262px;"></div>
                         </div>
                     </div>
                     <!-- END PORTLET-->
                 </div>
 
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-6">
+                    <div class="portlet light ">
+                        <div class="portlet-body">
+                            <div id="chartdiv_two" style="width: 100%; height: 262px;"></div>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="col-md-6 col-sm-6">
                     <div class="portlet light ">
                         <div class="portlet-body">
-                            <div id="dashboard_amchart_4" class="CSSAnimationChart"></div>
+                            <div id="chartdiv_three" style="width: 100%; height: 262px;"></div>
                         </div>
                     </div>
                 </div>

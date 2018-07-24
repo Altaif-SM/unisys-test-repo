@@ -9,11 +9,11 @@ from accounts.decoratars import user_login_required
 from accounts.forms import loginForm, signUpForm
 from accounts.service import *
 from accounts.models import UserRole
-from student.models import StudentDetails
-from masters.models import AddressDetails, CountryDetails
+from student.models import StudentDetails, ApplicationDetails, ScholarshipSelectionDetails
+from masters.models import AddressDetails, CountryDetails, ScholarshipDetails
 from partner.models import PartnerDetails
 from donor.models import DonorDetails
-
+import json
 from accounts.service import UserService
 # Create your views here.
 
@@ -25,8 +25,35 @@ def home(request):
     if request.user.is_authenticated:
         user = request.user
 
+        raw_list = []
+
+        raw_list.append(ApplicationDetails.objects.filter(is_submitted=True).count())
+        raw_list.append(ApplicationDetails.objects.filter(first_interview_approval=True).count())
+        raw_list.append(ApplicationDetails.objects.filter(second_interview_approval=True).count())
+        raw_list.append(ApplicationDetails.objects.filter(psychometric_test=True).count())
+        raw_list.append(ApplicationDetails.objects.filter(admin_approval=True).count())
+        raw_list.append(ApplicationDetails.objects.filter(is_sponsored=True).count())
+        raw_list.append(ApplicationDetails.objects.filter().count())
+
+        scholarship_list = []
+        country_list = []
+
+        for scholarship in ScholarshipDetails.objects.all():
+            raw_dict = {}
+            raw_dict['scholarship_name'] = scholarship.scholarship_name
+            raw_dict['scholarship_count'] = ApplicationDetails.objects.filter(applicant_scholarship_rel__scholarship=scholarship).count()
+
+            scholarship_list.append(raw_dict)
+
+        for country in CountryDetails.objects.all():
+            raw_dict = {}
+            raw_dict['country_name'] = country.country_name
+            raw_dict['country_count'] = ApplicationDetails.objects.filter(address__country=country).count()
+
+            country_list.append(raw_dict)
+
         # if user.is_superuser:
-        return render(request, "template_admin_dashboard.html", {'user': user})
+        return render(request, "template_admin_dashboard.html", {'user': user, 'raw_list': raw_list, 'scholarship_list': json.dumps(scholarship_list), 'country_list': json.dumps(country_list)})
 
 
 
