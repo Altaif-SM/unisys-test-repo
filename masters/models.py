@@ -141,6 +141,8 @@ class MasterAndCourseFormula(BaseModel):
 
 class StudentDonorMapping(BaseModel):
     student = models.ForeignKey(StudentDetails, null=True, related_name='student_donor_rel', on_delete=models.PROTECT)
+    applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='donor_applicant_rel',
+                                     on_delete=models.PROTECT)
     donor = models.ForeignKey(DonorDetails, null=True, related_name='donor_student_rel', on_delete=models.PROTECT)
 
     class Meta:

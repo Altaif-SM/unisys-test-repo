@@ -41,6 +41,7 @@ class PartnerDetails(BaseModel):
             ('can_view_link_student_program', 'can view link student program'),
             ('can_view_academic_progress', 'can view academic progress'),
             ('can_view_attendance_report', 'can view attendance report'),
+            ('can_view_accepted_students', 'can view accepted students'),
         )
         ordering = ('user__first_name',)
 

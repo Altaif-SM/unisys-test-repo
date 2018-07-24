@@ -368,10 +368,14 @@ License: You must have a valid license purchased only from themeforest(the above
                                                 Manage Donors </a>
                                         </li>
                                         <li class="nav-item ">
-                                            <a href="#" class="nav-link "> Link Student to Donor </a>
+                                            <a href="{% url 'partner:template_link_students_donor' %}"
+                                               class="nav-link ">
+                                                Link Student to Donor </a>
                                         </li>
                                         <li class="nav-item ">
-                                            <a href="#" class="nav-link "> Donors Student </a>
+                                            <a href="{% url 'partner:template_donor_students_linking' %}"
+                                               class="nav-link ">
+                                                Donors Student </a>
                                         </li>
                                     </ul>
                                 </li>
@@ -542,6 +546,17 @@ License: You must have a valid license purchased only from themeforest(the above
                                class="nav-link nav-toggle">
                                 <i class="glyphicon glyphicon-list-alt"></i>
                                 <span class="title">Approving Applicant Details</span>
+                                <span class="selected"></span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% if 'partner.can_view_accepted_students' in perms %}
+                        <li class="nav-item " id="acd_qli">
+                            <a href="{% url 'partner:template_accepted_students' %}"
+                               class="nav-link nav-toggle">
+                                <i class="glyphicon glyphicon-list-alt"></i>
+                                <span class="title">Accepted Applicants</span>
                                 <span class="selected"></span>
                             </a>
                         </li>

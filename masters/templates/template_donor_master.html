@@ -117,6 +117,18 @@
             });
 
 
+            $(document).on("change", ".doc", function (e) {
+                var files = !!this.files ? this.files : [];
+                if (!files.length || !window.FileReader) return;
+                var fileExtension = ['pdf'];
+                if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                    alert("Only formats are allowed : " + fileExtension.join(', '));
+                    $(this).val('');
+                    return false;
+                }
+            });
+
+
             $('#sample_1').dataTable().fnDestroy();
             $('#sample_1').dataTable({
                 "aoColumnDefs": [
@@ -260,7 +272,7 @@
                                 <div class="col-md-2">
                                     <input type="file" title="Select register document" id="reg_document"
                                            name="reg_document"
-                                           class="" required>
+                                           class="doc" required>
                                 </div>
                             </div>
 

@@ -386,6 +386,10 @@ def template_application_approval_details(request, app_id):
             final_approval = False
 
         elif not application_rec.admin_approval:
+            if not ApplicantAgreementDetails.objects.filter(applicant_id=application_rec).exists():
+                messages.warning(request, "This applicant has not submitted agreements.")
+                return redirect('/partner/template_approving_application/')
+
             approval_messages = 'Admin Approval'
             final_approval = False
             admin_flag = True
@@ -1199,6 +1203,134 @@ def filter_attendance_report(request):
     return render(request, "template_attendance_report.html",
                   {'attended_recs': attended_list, 'not_attended_recs': not_attended_list,
                    'modules_recs': modules_recs, 'module_obj': module_obj})
+
+
+def template_accepted_students(request):
+    try:
+        scholarship_type = ScholarshipDetails.objects.all()
+        application_list = []
+        # application_id = []
+        if request.user.is_super_admin():
+            application_ids = ApplicationDetails.objects.filter(admin_approval=True).values_list('id')
+
+        else:
+            application_ids = ApplicationDetails.objects.filter(
+                address__country=request.user.partner_user_rel.get().country).values_list('id')
+        scholarship_recs = ScholarshipSelectionDetails.objects.filter(applicant_id__in=application_ids)
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+        return redirect('/partner/template_accepted_students/')
+
+    return render(request, 'template_accepted_students.html',
+                  {'scholarship_recs': scholarship_recs, 'scholarship_type': scholarship_type})
+
+
+def template_link_students_donor(request):
+    try:
+        donor_recs = DonorDetails.objects.all()
+        if request.user.is_super_admin():
+            application_ids = ApplicationDetails.objects.filter(admin_approval=True).values_list('id')
+
+        else:
+            application_ids = ApplicationDetails.objects.filter(
+                address__country=request.user.partner_user_rel.get().country).values_list('id')
+        scholarship_recs = ScholarshipSelectionDetails.objects.filter(applicant_id__in=application_ids)
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+        return redirect('/partner/template_link_students_donor/')
+
+    return render(request, 'template_link_students_donor.html',
+                  {'scholarship_recs': scholarship_recs, 'donor_recs': donor_recs})
+
+
+def save_students_donor_linking(request):
+    try:
+        data_value = json.loads(request.POST.get('data_value'))
+
+        for rec in data_value:
+            if StudentDonorMapping.objects.filter(student_id=rec['student'], applicant_id_id=rec['applicant']).exists():
+                StudentDonorMapping.objects.filter(student_id=rec['student'], applicant_id_id=rec['applicant']).update(
+                    donor_id=rec['donor'])
+            else:
+                StudentDonorMapping.objects.create(student_id=rec['student'], applicant_id_id=rec['applicant'],
+                                                   donor_id=rec['donor'])
+
+        messages.success(request, "Record Saved")
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+    return redirect('/partner/template_link_students_donor/')
+
+
+def template_donor_students_linking(request):
+    try:
+        donor_recs = DonorDetails.objects.all()
+        if request.user.is_super_admin():
+            applicant_ids = StudentDonorMapping.objects.filter(applicant_id__year=get_current_year()).values_list(
+                'applicant_id', flat=1)
+            application_ids = ApplicationDetails.objects.filter(id__in=applicant_ids).values_list('id', flat=1)
+
+        else:
+            applicant_ids = StudentDonorMapping.objects.filter(applicant_id__year=get_current_year(),
+                                                               applicant_id__address__country=request.user.partner_user_rel.get().country).values_list(
+                'applicant_id', flat=1)
+            application_ids = ApplicationDetails.objects.filter(id__in=applicant_ids).values_list('id', flat=1)
+
+        scholarship_recs = ScholarshipSelectionDetails.objects.filter(applicant_id__in=application_ids)
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+        return redirect('/partner/template_donor_students_linking/')
+
+    return render(request, 'template_donor_students_linking.html',
+                  {'scholarship_recs': scholarship_recs, 'donor_recs': donor_recs})
+
+
+def filter_donor_student_linking(request):
+    if request.POST:
+        request.session['donor_student_linking'] = request.POST
+        donor = request.POST.get('donor')
+    else:
+        form_data = request.session.get('donor_student_linking')
+        donor = form_data.get('donor')
+
+    try:
+
+        donor_recs = DonorDetails.objects.all()
+        donor_obj = ''
+        if request.user.is_super_admin():
+            if donor == 'All':
+                applicant_ids = StudentDonorMapping.objects.filter(applicant_id__year=get_current_year()).values_list(
+                    'applicant_id', flat=1)
+            else:
+                donor_obj = DonorDetails.objects.get(id=donor)
+                applicant_ids = StudentDonorMapping.objects.filter(applicant_id__year=get_current_year(),
+                                                                   donor_id=donor).values_list('applicant_id', flat=1)
+            application_ids = ApplicationDetails.objects.filter(id__in=applicant_ids).values_list('id', flat=1)
+
+        else:
+            if donor == 'All':
+                applicant_ids = StudentDonorMapping.objects.filter(applicant_id__year=get_current_year(),
+                                                                   applicant_id__address__country=request.user.partner_user_rel.get().country).values_list(
+                    'applicant_id', flat=1)
+            else:
+                donor_obj = DonorDetails.objects.get(id=donor)
+                applicant_ids = StudentDonorMapping.objects.filter(applicant_id__year=get_current_year(),
+                                                                   donor_id=donor,
+                                                                   applicant_id__address__country=request.user.partner_user_rel.get().country).values_list(
+                    'applicant_id', flat=1)
+            application_ids = ApplicationDetails.objects.filter(id__in=applicant_ids).values_list('id', flat=1)
+
+        scholarship_recs = ScholarshipSelectionDetails.objects.filter(applicant_id__in=application_ids)
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+        return redirect('/partner/template_donor_students_linking/')
+
+    return render(request, 'template_donor_students_linking.html',
+                  {'scholarship_recs': scholarship_recs, 'donor_recs': donor_recs, 'donor_obj': donor_obj})
 
 # import os
 # from django.conf import settings

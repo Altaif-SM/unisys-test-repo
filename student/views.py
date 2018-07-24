@@ -95,7 +95,8 @@ def save_update_applicant_personal_info(request):
                     application_obj = ApplicationDetails.objects.create(first_name=request.POST['first_name'],
                                                                         middle_name=request.POST['middle_name'],
                                                                         last_name=request.POST['last_name'],
-                                                                        birth_date=request.POST['birth_date'] if request.POST['birth_date'] else None,
+                                                                        birth_date=request.POST['birth_date'] if
+                                                                        request.POST['birth_date'] else None,
                                                                         gender=request.POST['gender'],
                                                                         nationality_id=request.POST['nationality'],
                                                                         religion_id=request.POST['religion'],
@@ -855,7 +856,11 @@ def my_application(request):
 
     # path = str(settings.MEDIA_URL) + str('reports/Donors.pdf')
     # path =str('/home/redbytes/scholarship_proj/scholarship_mgmt/media/reports/Donors.pdf')
-    return render(request, 'my_application.html',{'siblings_obj':siblings_obj,'application_obj':application_obj,'qualification_obj':qualification_obj,'english_obj':english_obj,'curriculum_obj':curriculum_obj,'applicant_experience_obj':applicant_experience_obj,'scholarship_obj':scholarship_obj})
+    return render(request, 'my_application.html', {'siblings_obj': siblings_obj, 'application_obj': application_obj,
+                                                   'qualification_obj': qualification_obj, 'english_obj': english_obj,
+                                                   'curriculum_obj': curriculum_obj,
+                                                   'applicant_experience_obj': applicant_experience_obj,
+                                                   'scholarship_obj': scholarship_obj})
 
 
 def submit_application(request):
@@ -956,6 +961,11 @@ def save_agreement_submission(request):
         else:
             agreement_obj = ApplicantAgreementDetails.objects.create(
                 applicant_id=request.user.get_application)
+            application_notification(request.user.get_application.id,
+                                     'You have submitted agreements.')
+            ApplicationHistoryDetails.objects.create(applicant_id=agreement_obj,
+                                                     status='Agreements submitted.',
+                                                     remark='You have submitted agreements. Please wait for the further updates.')
 
         if four_parties_agreements:
             parties_agreements = str(four_parties_agreements)

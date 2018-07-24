@@ -49,5 +49,12 @@ urlpatterns = [
                        name='template_attendance_report'),
                   path('filter_attendance_report/', views.filter_attendance_report, name='filter_attendance_report'),
 
+                  path('template_accepted_students/', views.template_accepted_students, name='template_accepted_students'),
+
+                  path('template_link_students_donor/', views.template_link_students_donor, name='template_link_students_donor'),
+                  path('save_students_donor_linking/', views.save_students_donor_linking, name='save_students_donor_linking'),
+                  path('template_donor_students_linking/', views.template_donor_students_linking, name='template_donor_students_linking'),
+                  path('filter_donor_student_linking/', views.filter_donor_student_linking, name='filter_donor_student_linking'),
+
                   # path('generate_student_details_pdf/<int:app_id>/', views.generate_student_details_pdf,name='generate_student_details_pdf'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
