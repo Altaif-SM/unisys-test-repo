@@ -60,7 +60,8 @@ def user_signup(request):
                     if signup_form.cleaned_data['role'] == "Partner":
                         PartnerDetails.objects.create(user=user,address=address)
                     if signup_form.cleaned_data['role'] == "Donor":
-                        DonorDetails.objects.create(user=user,address=address)
+                        organisation = request.POST.get('organisation')
+                        DonorDetails.objects.create(user=user,address=address, organisation=organisation)
 
             except Exception as e:
                 messages.success(request, str(e))
