@@ -32,96 +32,21 @@
         window.onload = function () {
             $(document).ready(function () {
 
-                $(document).on("click", ".update", function (e) {
-                    var parent_id = $(this).closest('tr').attr('id');
-                    var donor_id = $('#' + parent_id + ' #donor_id').val();
-                    var organisation = $('#' + parent_id + ' .organisation').val();
-                    var country = $('#' + parent_id + ' .country').val();
-
-                    var person = $('#' + parent_id + ' .person').val();
-                    var person_contact_number = $('#' + parent_id + ' .person_contact_number').val();
-
-                    var address = $('#' + parent_id + ' .address').val();
-                    var email = $('#' + parent_id + ' .email').val();
-
-                    var url = '/masters/update_manage_donor_master/';
-                    update_manage_donor_info(url, donor_id, organisation, country, person, person_contact_number, email, address)
-                })
-
-                $(document).on("click", ".delete", function (e) {
-
-                    var parent_id = $(this).closest('tr').attr('id');
-                    var donor_id = $('#' + parent_id + ' #donor_id').val();
-
-                    var url = '/masters/delete_manage_donor_master/';
-                    delete_manage_donor_info(url, donor_id)
-                })
-
-                function delete_manage_donor_info(url, donor_id) {
-                    $.ajax({
-                        type: 'POST',
-                        url: url,
-                        data: {
-                            donor_id: donor_id,
-                            csrfmiddlewaretoken: '{{ csrf_token }}',
-                        },
-                        success: function (data) {
-                            location.reload(true)
-                        },
-                        error: function (xhr, msg, err) {
-                            alert(xhr.responseJSON.error);
-                        }
-                    });
-                }
-
-                function update_manage_donor_info(url, donor_id, organisation, country, person, person_contact_number, email, address) {
-                    $.ajax({
-                        type: 'POST',
-                        url: url,
-                        data: {
-                            donor_id: donor_id,
-                            organisation: organisation,
-                            country: country,
-                            person: person,
-                            person_contact_number: person_contact_number,
-                            email: email,
-                            address: address,
-                            csrfmiddlewaretoken: '{{ csrf_token }}',
-                        },
-                        success: function (data) {
-                            location.reload(true)
-                        },
-                        error: function (xhr, msg, err) {
-                            alert(xhr.responseJSON.error);
-                        }
-                    });
-                }
-
-
-                $(document).on("click", ".edit", function (e) {
-                    var parent_id = $(this).closest('tr').attr('id');
-                    var id = $(this).attr('id');
-                    var i = id.split("edit")[1]
-
-                    $(".data").prop("disabled", true);
-                    $(".edit").show();
-                    $(".update").hide();
-
-                    $("#update" + i).show();
-                    $("#edit" + i).hide();
-
-
-                    $("#" + parent_id + " .data").prop("disabled", false);
-
+                $(document).on("change", "#id_account_type", function (e) {
+                    if ($(this).val() == "Donor") {
+                        $("#id_org_display").show();
+                    } else {
+                        $("#id_org_display").hide();
+                    }
                 });
-            });
 
 
-            $('#sample_1').dataTable().fnDestroy();
-            $('#sample_1').dataTable({
-                "aoColumnDefs": [
-                    {'bSortable': false}
-                ]
+                $('#sample_1').dataTable().fnDestroy();
+                $('#sample_1').dataTable({
+                    "aoColumnDefs": [
+                        {'bSortable': false}
+                    ]
+                });
             });
         }
 
@@ -169,7 +94,7 @@
             <!-- BEGIN FORM-->
             <div class="form-body">
 
-                <form action="{% url 'accounts:user_signup' %}" id="form_sample_1"
+                <form action="{% url 'accounts:user_signup' %}"
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
@@ -189,7 +114,7 @@
                             <div class="">
                                 <label class="col-md-2 control-label">Account Type</label>
                                  <div class="col-md-2">
-                                     <select name="role" class="form-control" required>
+                                     <select name="role" class="form-control" required id="id_account_type">
                                         <option value="">Account Type</option>
                                         <option value="Student">Student</option>
                                         <option value="Partner">Partner</option>
@@ -247,6 +172,16 @@
                                            class="form-control" required>
                                 </div>
                             </div>
+
+                            <div class="" id="id_org_display" style="display: none;">
+                                <label class="col-md-2 control-label">Organisation:</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Enter organisation name" id="organisation_name"
+                                           name="organisation"
+                                           class="form-control">
+                                </div>
+                            </div>
+
                         </div>
                         <br><br>
 
@@ -303,7 +238,7 @@
                     <tbody id="tbody">
                     {% for rec in user_recs %}
                         <tr id="item{{ forloop.counter }}" class="item">
-                            <td style="display: none"><input id="donor_id" value="{{ rec.id }}"></td>
+                            <td style="display: none"><input id="donor_{{ forloop.counter }}" value="{{ rec.id }}"></td>
 
                             <td>
                                 <text hidden>{{ rec.get_full_name|title }}</text>
