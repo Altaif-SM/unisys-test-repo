@@ -1108,7 +1108,7 @@ def template_attendance_report(request):
                 certificate_rec = ApplicantDevelopmentProgramDetails.objects.get(applicant_id=rec.applicant_id,
                                                                                  module=rec.module.module)
                 program_dict[
-                    'name'] = rec.applicant_id.first_name + ' ' + rec.applicant_id.last_name if rec.applicant_id.last_name else ''
+                    'name'] = rec.applicant_id.get_full_name()
                 program_dict['country'] = rec.applicant_id.address.country.country_name
                 program_dict['degree'] = rec.degree.degree_name
                 program_dict['program'] = rec.program.program_name
@@ -1120,7 +1120,7 @@ def template_attendance_report(request):
 
             else:
                 program_dict[
-                    'name'] = rec.applicant_id.first_name + ' ' + rec.applicant_id.last_name if rec.applicant_id.last_name else ''
+                    'name'] = rec.applicant_id.get_full_name()
                 program_dict['country'] = rec.applicant_id.address.country.country_name
                 program_dict['degree'] = rec.degree.degree_name
                 program_dict['program'] = rec.program.program_name
