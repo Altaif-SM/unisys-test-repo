@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.db import transaction
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.conf import settings
@@ -8,6 +9,8 @@ from accounts.decoratars import user_login_required
 from accounts.forms import loginForm, signUpForm
 from accounts.service import *
 from accounts.models import UserRole
+from student.models import StudentDetails
+from masters.models import AddressDetails, CountryDetails
 from accounts.service import UserService
 # Create your views here.
 
@@ -29,20 +32,28 @@ def template_signup(request):
     return render(request, 'signup.html', {'form': form})
 
 def template_signin(request):
+    country_list = CountryDetails.objects.all()
     form = loginForm()
 
     if request.user.is_authenticated:
         return redirect('/accounts/home/')
 
     # return render(request, "template_login.html", {'form': form})
-    return render(request, "template_login.html", {'form': form})
+    return render(request, "template_login.html", {'form': form, 'country_list': country_list})
 
+@transaction.atomic
 def user_signup(request):
     signup_form = signUpForm(request.POST)
     if request.method == 'POST':
         if signup_form.is_valid():
-            user = signup_form.save()
-            user.role.add(UserRole.objects.get(name=signup_form.cleaned_data['role']))
+            try:
+                user = signup_form.save()
+                user.role.add(UserRole.objects.get(name=signup_form.cleaned_data['role']))
+                country = CountryDetails.objects.get(country_name=request.POST['country'])
+                address = AddressDetails.objects.create(country=country)
+                StudentDetails.objects.create(user=user,address=address)
+            except Exception as e:
+                messages.success(request, str(e))
             return redirect('/')
         else:
             print(signup_form.errors)

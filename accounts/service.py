@@ -92,7 +92,7 @@ class StaffDetailsService:
     def save(staff_details):
         staff_details.save()
 
-class AddressDetails:
+class AddressDetailsService:
     @staticmethod
     def save_address(address):
         address.save()

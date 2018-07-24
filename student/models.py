@@ -52,8 +52,8 @@ class PassingYear(BaseModel):
 
 class StudentDetails(BaseModel):
     # student_name = computed_property.ComputedCharField(compute_from='student_full_name', null=True, max_length=250)
-    birth_date = models.DateField()
-    gender = models.CharField(max_length=25)
+    birth_date = models.DateField(null=True)
+    gender = models.CharField(max_length=25, null=True)
     father_name = models.CharField(max_length=255, blank=True, null=True)
     photo = models.FileField(upload_to=content_student_file_name_image)
     is_active = models.BooleanField(default=True)
