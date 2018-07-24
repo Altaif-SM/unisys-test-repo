@@ -1,7 +1,7 @@
 from django.urls import path
 
 from . import views
-
+from accounts import views as account_view
 app_name = 'masters'
 
 urlpatterns = [
@@ -99,5 +99,4 @@ urlpatterns = [
 
 
     path('get_table_data/', views.get_table_data, name='get_table_data'),
-
 ]

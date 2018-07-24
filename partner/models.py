@@ -46,7 +46,7 @@ class PartnerDetails(BaseModel):
         ordering = ('user__first_name',)
 
     def __str__(self):
-        details = str(self.country.country_name) + ' and ' + str(self.office_name)
+        details = str(self.country.country_name) if self.country else '' + ' and ' + str(self.office_name) if self.office_name else ''
         return details
 
 

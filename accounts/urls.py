@@ -12,4 +12,6 @@ urlpatterns = [
     path('user_signin/', views.user_signin, name='user_signin'),
     path('user_signout/', views.user_signout, name='user_signout'),
     # path('forget_password/', views.forget_password, name='forget_password'),
+    path('template_manage_user/', views.template_manage_user,
+         name='template_manage_user'),
 ]

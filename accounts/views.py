@@ -11,6 +11,9 @@ from accounts.service import *
 from accounts.models import UserRole
 from student.models import StudentDetails
 from masters.models import AddressDetails, CountryDetails
+from partner.models import PartnerDetails
+from donor.models import DonorDetails
+
 from accounts.service import UserService
 # Create your views here.
 
@@ -49,9 +52,16 @@ def user_signup(request):
             try:
                 user = signup_form.save()
                 user.role.add(UserRole.objects.get(name=signup_form.cleaned_data['role']))
-                country = CountryDetails.objects.get(country_name=request.POST['country'])
-                address = AddressDetails.objects.create(country=country)
-                StudentDetails.objects.create(user=user,address=address)
+                if str(signup_form.cleaned_data['role']) != "Accountant":
+                    country = CountryDetails.objects.get(country_name=request.POST['country'])
+                    address = AddressDetails.objects.create(country=country)
+                    if signup_form.cleaned_data['role'] == "Student":
+                        StudentDetails.objects.create(user=user,address=address)
+                    if signup_form.cleaned_data['role'] == "Partner":
+                        PartnerDetails.objects.create(user=user,address=address)
+                    if signup_form.cleaned_data['role'] == "Donor":
+                        DonorDetails.objects.create(user=user,address=address)
+
             except Exception as e:
                 messages.success(request, str(e))
             return redirect('/')
@@ -93,3 +103,11 @@ def user_signin(request):
 def user_signout(request):
     logout(request)
     return redirect('/')
+
+
+
+def template_manage_user(request):
+    country_list = CountryDetails.objects.all()
+    user_recs = User.objects.filter().exclude(role__name='Admin')
+    return render(request, 'template_manage_user.html',
+                  {'country_list': country_list, 'user_recs': user_recs})
