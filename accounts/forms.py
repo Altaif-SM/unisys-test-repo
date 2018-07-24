@@ -18,15 +18,15 @@ class loginForm(forms.Form):
 
 class signUpForm(forms.ModelForm):
     first_name = forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'form-control form-control-solid placeholder-no-fix' , 'placeholder':'First Name','autocomplete': 'off'}), label='')
-    middle_name = forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'form-control form-control-solid placeholder-no-fix' , 'placeholder':'Middle Name','autocomplete': 'off'}), label='')
     last_name = forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'form-control form-control-solid placeholder-no-fix' , 'placeholder':'Last Name','autocomplete': 'off'}), label='')
-    username = forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'form-control form-control-solid placeholder-no-fix' , 'placeholder':'Username','autocomplete': 'off'}), label='')
+    email = forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'form-control form-control-solid placeholder-no-fix' , 'placeholder':'Username','autocomplete': 'off'}), label='')
     password = forms.CharField(required=True,widget=forms.PasswordInput(attrs={'class':'form-control form-control-solid placeholder-no-fix' , 'placeholder':'Password','autocomplete': 'off'}), label='')
     confirm_password = forms.CharField(required=True,widget=forms.PasswordInput(attrs={'class':'form-control form-control-solid placeholder-no-fix' , 'placeholder':'Confirm Password','autocomplete': 'off'}), label='')
+    role = forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'form-control form-control-solid placeholder-no-fix' , 'placeholder':'Middle Name','autocomplete': 'off'}), label='')
 
     class Meta:
         model = User
-        fields =['first_name','middle_name','last_name','username','password']
+        fields =['first_name','last_name','email','password', 'role']
 
 
     def clean(self):
@@ -40,7 +40,7 @@ class signUpForm(forms.ModelForm):
             )
 
     def clean_email(self):
-        email = self.cleaned_data['username'].strip()
+        email = self.cleaned_data['email'].strip()
         try:
             User.objects.get(email__iexact=email)
             raise forms.ValidationError('email already exists')
@@ -49,12 +49,12 @@ class signUpForm(forms.ModelForm):
 
     def save(self, commit=True):
         user = User.objects.create(username=
-            self.cleaned_data['username'],
-            email=self.cleaned_data['username'],
+            self.cleaned_data['email'],
+            email=self.cleaned_data['email'],
             first_name=self.cleaned_data['first_name'],
-            middle_name=self.cleaned_data['middle_name'],
             last_name=self.cleaned_data['last_name'],
-            password=make_password(self.cleaned_data['password'])
+            password=make_password(self.cleaned_data['password']),
+            # role=UserRole.objects.get(name=self.cleaned_data['role'])
         )
         return user
 

@@ -3,10 +3,12 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-
+from django.conf import settings
 from accounts.decoratars import user_login_required
 from accounts.forms import loginForm, signUpForm
 from accounts.service import *
+from accounts.models import UserRole
+from accounts.service import UserService
 # Create your views here.
 
 def index(request):
@@ -39,7 +41,8 @@ def user_signup(request):
     signup_form = signUpForm(request.POST)
     if request.method == 'POST':
         if signup_form.is_valid():
-            signup_form.save()
+            user = signup_form.save()
+            user.role.add(UserRole.objects.get(name=signup_form.cleaned_data['role']))
             return redirect('/')
         else:
             print(signup_form.errors)
