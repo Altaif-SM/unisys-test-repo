@@ -896,8 +896,17 @@ def delete_manage_partner_master(request):
 def template_manage_donor_master(request):
     country_recs = CountryDetails.objects.all()
     donor_recs = DonorDetails.objects.all()
+    user_recs = User.objects.filter(role__name="Donor")
+
+    query_query = request.GET.get("user") or None
+    donor_rec = {}
+    selected_user = {}
+    if query_query:
+        selected_user = User.objects.get(id=query_query)
+        donor_rec = DonorDetails.objects.get(user_id=query_query)
+
     return render(request, 'template_donor_master.html',
-                  {'country_recs': country_recs, 'donor_recs': donor_recs})
+                  {'country_recs': country_recs, 'donor_recs': donor_recs, 'user_recs': user_recs, 'donor_rec': donor_rec, 'selected_user': selected_user})
 
 
 def save_manage_donor_master(request):
@@ -915,10 +924,15 @@ def save_manage_donor_master(request):
     bank_name = request.POST.get('bank_name')
     bank_swift_code = request.POST.get('bank_swift_code')
     donor_bank_address = request.POST.get('donor_bank_address')
-    abc_document = request.FILES['reg_document']
+    abc_document = request.FILES.get('reg_document')
+
+    donor_details_id = request.POST.get('donor_details_id')
 
     try:
-        if not DonorDetails.objects.filter(country_id=country, organisation=organisation).exists():
+
+
+
+        if not DonorDetails.objects.filter(id=donor_details_id).exists():
             donor_obj = DonorDetails.objects.create(country_id=country, organisation=organisation, person=person,
                                                     person_contact_number=person_contact,
                                                     single_donor_address=donor_address,
@@ -926,16 +940,32 @@ def save_manage_donor_master(request):
                                                     bank_name=bank_name, bank_swift_code=bank_swift_code, email=email,
                                                     donor_bank_address=donor_bank_address)
 
-            file_url = str(abc_document)
+            if abc_document:
+                file_url = str(abc_document)
 
-            handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + file_url), abc_document)
-            donor_obj.reg_document = file_url
-            donor_obj.save()
+                handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + file_url), abc_document)
+                donor_obj.reg_document = file_url
+                donor_obj.save()
             messages.success(request, "Record saved.")
         else:
-            messages.warning(request, "Organisation and country is already exist. Record not saved.")
-    except:
-        messages.warning(request, "Record not saved.")
+
+            donor_obj = DonorDetails.objects.filter(id=donor_details_id).update(country_id=country, organisation=organisation, person=person,
+                                                    person_contact_number=person_contact,
+                                                    single_donor_address=donor_address,
+                                                    due_amount=due_amount, bank_account_number=bank_account_number,
+                                                    bank_name=bank_name, bank_swift_code=bank_swift_code, email=email,
+                                                    donor_bank_address=donor_bank_address)
+
+            if abc_document:
+                file_url = str(abc_document)
+
+                handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + file_url), abc_document)
+                donor_obj.reg_document = file_url
+                donor_obj.save()
+            messages.success(request, "Record Updated.")
+
+    except Exception as e:
+        messages.warning(request, "Record not saved."+ str(e))
     return redirect('/masters/template_manage_donor_master/')
 
 

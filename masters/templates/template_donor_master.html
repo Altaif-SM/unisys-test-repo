@@ -32,6 +32,10 @@
         window.onload = function () {
             $(document).ready(function () {
 
+                $(document).on("change", "#id_user", function (e) {
+                    $("#form_sample_2").submit();
+                })
+
                 $(document).on("click", ".update", function (e) {
                     var parent_id = $(this).closest('tr').attr('id');
                     var donor_id = $('#' + parent_id + ' #donor_id').val();
@@ -181,6 +185,40 @@
             <!-- BEGIN FORM-->
             <div class="form-body">
 
+
+                <div class="row">
+                    <form id="form_sample_2"
+                          class="form-horizontal"
+                          method="GET" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="" style="margin-left: 17px;">
+                            <label class="col-md-2 control-label">User:
+
+                            </label>
+                            <div class="col-md-2">
+                                <select id='id_user' title="Select User" name="user"
+                                        class="form-control"
+                                        required>
+                                    {% if selected_user %}
+                                        <option style="display:none" selected="selected" id=""
+                                                value="{{ selected_user.id }}">{{ selected_user.get_full_name|title }}
+                                        </option>
+                                    {% else %}
+                                        <option style="display:none" selected="selected" id=""
+                                                value="">Please Select
+                                        </option>
+                                    {% endif %}
+
+                                    {% for rec in user_recs %}
+                                        <option value='{{ rec.id }}'>{{ rec.get_full_name|title }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+
                 <form action="{% url 'masters:save_manage_donor_master' %}" id="form_sample_1"
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
@@ -190,11 +228,13 @@
 
                         <div class="row">
                             <div class="">
+                                <input type="hidden" value="{{ donor_rec.id }}" name="donor_details_id">
                                 <label class="col-md-2 control-label">Organisation:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter organisation name" id="organisation_name"
                                            name="organisation"
-                                           class="form-control" required>
+                                           class="form-control" value="{{ donor_rec.organisation|default_if_none:"" }}"
+                                           required>
                                 </div>
                             </div>
 
@@ -206,10 +246,17 @@
                                     <select id='country_name' title="Select country" name="country"
                                             class="form-control"
                                             required>
-                                        <option style="display:none" selected="selected" id=""
-                                                value="">Please Select
-                                        </option>
+                                        {% if donor_rec.address.country %}
+                                            <option style="display:none" selected="selected"
+                                                    id=""
+                                                    value="{{ donor_rec.address.country.id }}">{{ donor_rec.address.country.country_name }}
+                                            </option>
+                                        {% else %}
 
+                                            <option style="display:none" selected="selected" id=""
+                                                    value="">Please Select
+                                            </option>
+                                        {% endif %}
                                         {% for rec in country_recs %}
                                             <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
                                         {% endfor %}
@@ -226,7 +273,8 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Person in charge" id="person"
                                            name="person"
-                                           class="form-control" required>
+                                           class="form-control" value="{{ donor_rec.person|default_if_none:"" }}"
+                                           required>
                                 </div>
                             </div>
 
@@ -235,7 +283,8 @@
                                 <div class="col-md-2">
                                     <input type="number" title="Enter Person in charge  contact"
                                            id="person_contact" name="person_contact"
-                                           class="form-control" required>
+                                           class="form-control"
+                                           value="{{ donor_rec.person_contact_number|default_if_none:"" }}" required>
                                 </div>
                             </div>
                         </div>
@@ -249,7 +298,8 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Enter donor address" id="donor_address"
                                            name="donor_address"
-                                           class="form-control" required>
+                                           class="form-control" value="{{ donor_rec.organisation|default_if_none:"" }}"
+                                           required>
                                 </div>
                             </div>
 
@@ -258,7 +308,8 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Enter email"
                                            id="email" name="email"
-                                           class="form-control" required>
+                                           class="form-control" value="{{ donor_rec.email|default_if_none:"" }}"
+                                           required>
                                 </div>
                             </div>
                         </div>
@@ -272,7 +323,7 @@
                                 <div class="col-md-2">
                                     <input type="file" title="Select register document" id="reg_document"
                                            name="reg_document"
-                                           class="doc" required>
+                                           class="doc" value="{{ donor_rec.reg_document }}">
                                 </div>
                             </div>
 
@@ -281,7 +332,8 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Enter due amount"
                                            id="due_amount" name="due_amount"
-                                           class="form-control" required>
+                                           class="form-control" value="{{ donor_rec.due_amount|default_if_none:"" }}"
+                                           required>
                                 </div>
                             </div>
                         </div>
@@ -300,7 +352,8 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Enter bank account number" id="bank_account_number"
                                            name="bank_account_number"
-                                           class="form-control" required>
+                                           class="form-control"
+                                           value="{{ donor_rec.bank_account_number|default_if_none:"" }}" required>
                                 </div>
                             </div>
 
@@ -309,7 +362,8 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Enter bank name" id="bank_name"
                                            name="bank_name"
-                                           class="form-control" required>
+                                           class="form-control" value="{{ donor_rec.bank_name|default_if_none:"" }}"
+                                           required>
                                 </div>
                             </div>
                         </div>
@@ -323,7 +377,8 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Enter bank swift code" id="bank_swift_code"
                                            name="bank_swift_code"
-                                           class="form-control" required>
+                                           class="form-control"
+                                           value="{{ donor_rec.bank_swift_code|default_if_none:"" }}" required>
                                 </div>
                             </div>
 
@@ -332,7 +387,8 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Enter donor bank address" id="donor_bank_address"
                                            name="donor_bank_address"
-                                           class="form-control" required>
+                                           class="form-control"
+                                           value="{{ donor_rec.donor_bank_address|default_if_none:"" }}" required>
                                 </div>
                             </div>
                         </div>
@@ -379,7 +435,8 @@
                                 <text hidden>{{ rec.organisation|title }}</text>
                                 <input class="form-control data organisation" name="organisation"
                                        type="text"
-                                       id="office{{ forloop.counter }}" value="{{ rec.organisation|title }}"
+                                       id="office{{ forloop.counter }}"
+                                       value="{{ rec.organisation|default_if_none:"" }}"
                                        required
                                        title='Please enter organisation name' disabled>
                             </td>
@@ -401,7 +458,7 @@
                                 <text hidden>{{ rec.person|title }}</text>
                                 <input class="form-control data person" name="person_saved"
                                        type="text"
-                                       id="person{{ forloop.counter }}" value="{{ rec.person|title }}"
+                                       id="person{{ forloop.counter }}" value="{{ rec.person|default_if_none:"" }}"
                                        required
                                        title='Please enter person' disabled>
                             </td>
@@ -411,7 +468,7 @@
                                 <input class="form-control data person_contact_number" name="person_contact_number"
                                        type="text"
                                        id="person_contact_number{{ forloop.counter }}"
-                                       value="{{ rec.person_contact_number }}"
+                                       value="{{ rec.person_contact_number|default_if_none:"" }}"
                                        required
                                        title='Please enter person contact number' disabled>
                             </td>
@@ -420,7 +477,8 @@
                                 <text hidden>{{ rec.single_donor_address }}</text>
                                 <input class="form-control data address" name="single_donor_address"
                                        type="text"
-                                       id="email{{ forloop.counter }}" value="{{ rec.single_donor_address }}"
+                                       id="email{{ forloop.counter }}"
+                                       value="{{ rec.single_donor_address|default_if_none:"" }}"
                                        required
                                        title='Please enter donor address' disabled>
                             </td>
@@ -429,7 +487,7 @@
                                 <text hidden>{{ rec.email }}</text>
                                 <input class="form-control data email" name="email_saved"
                                        type="text"
-                                       id="email{{ forloop.counter }}" value="{{ rec.email }}"
+                                       id="email{{ forloop.counter }}" value="{{ rec.email|default_if_none:"" }}"
                                        required
                                        title='Please enter office email' disabled>
                             </td>
