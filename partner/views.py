@@ -1513,4 +1513,27 @@ def donar_student_linking_export(request):
     except:
         return redirect('/partner/template_donor_students_linking/')
 
+def template_link_students_parent(request):
+    students_recs = ApplicationDetails.objects.filter(admin_approval=True)
 
+    # students_recs = StudentDetails.objects.filter(id__in=studs)
+    parents_recs = GuardianDetails.objects.all()
+    return render(request, "template_link_student_to_parent.html", {'students_recs':students_recs, 'parents_recs': parents_recs})
+
+def save_students_parent_linking(request):
+    try:
+        data_value = json.loads(request.POST.get('data_value'))
+
+        for rec in data_value:
+            if GuardianStudentMapping.objects.filter(student_id=rec['student']).exists():
+                GuardianStudentMapping.objects.filter(student_id=rec['student']).update(
+                    guardian_id=rec['parent'])
+            else:
+                GuardianStudentMapping.objects.create(student_id=rec['student'],
+                                                      guardian_id=rec['parent'])
+
+        messages.success(request, "Record Saved")
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+    return redirect('/partner/template_link_students_parent/')

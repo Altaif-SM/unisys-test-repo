@@ -296,38 +296,32 @@ class DevelopmentProgram(BaseModel):
 
 
 class GuardianDetails(BaseModel):
-    first_name = models.CharField(max_length=255)
-    middle_name = models.CharField(max_length=255, blank=True, null=True)
-    last_name = models.CharField(max_length=255, blank=True, null=True)
-    birth_date = models.DateField()
-    gender = models.CharField(max_length=25)
+    birth_date = models.DateField(null=True)
+    gender = models.CharField(max_length=25, null=True)
     # photo = models.FileField(upload_to=content_file_name_student)
     is_active = models.BooleanField(default=True)
-    nationality = models.ForeignKey(CountryDetails, null=True, related_name='guardian_nationality_rel',
-                                    on_delete=models.PROTECT)
     religion = models.CharField(max_length=255, blank=True, null=True)
     contact_number = models.CharField(max_length=16, blank=True, null=True)
     address = models.ForeignKey(AddressDetails, null=True, related_name='guardian_address_rel',
                                 on_delete=models.PROTECT)
 
-    def get_all_name(self):
-        """
-        Returns the first_name plus the last_name, with a space in between.
-        """
-        if self.middle_name == None:
-            self.middle_name = ''
-        full_name = '%s %s %s' % (self.first_name, self.middle_name, self.last_name)
-        return full_name.strip()
+    user = models.ForeignKey('accounts.User', null=True, related_name='guardian_user_rel', on_delete=models.PROTECT)
+
+    class Meta:
+        ordering = ('user__first_name',)
+
+        permissions = (
+            ('can_view_student_academic_reports', 'can view student academic reports'),
+            ('can_view_application_progress_history', 'can view application progress history'),
+        )
 
     def to_dict(self):
         res = {
             'id': self.id,
-            'first_name': self.first_name,
             'birth_date': self.birth_date,
             'gender': self.gender,
             'contact_number': self.contact_number,
             'address': self.address,
-            'get_all_name': self.get_all_name(),
         }
         return res
 

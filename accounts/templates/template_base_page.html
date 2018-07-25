@@ -442,7 +442,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </li>
                                 </li>
                                 <li class="nav-item start ">
-                                    <a href="#" class="nav-link ">
+                                    <a href="{% url 'partner:template_link_students_parent' %}" class="nav-link ">
                                         <i class="icon-graph"></i>
                                         <span class="title">Manage Guardians</span>
                                     </a>
@@ -683,11 +683,10 @@ License: You must have a valid license purchased only from themeforest(the above
 
 
                     {% if 'donor.can_view_scholarship' in perms %}
-                        <li class="nav-item start ">
+                        <li class="nav-item " id="acd_qli">
                             <a href="javascript:;" class="nav-link nav-toggle">
                                 <i class="fa fa-briefcase"></i>
                                 <span class="title">Scholarship</span>
-                                <span class="arrow"></span>
                             </a>
                             <ul class="sub-menu">
                                 <li class="nav-item ">
@@ -699,11 +698,10 @@ License: You must have a valid license purchased only from themeforest(the above
                     {% endif %}
 
                     {% if 'donor.can_view_reports' in perms %}
-                        <li class="nav-item start ">
+                        <li class="nav-item " id="acd_qli">
                             <a href="javascript:;" class="nav-link nav-toggle">
-                                <i class="fa fa-briefcase"></i>
+                                <i class="glyphicon glyphicon-list-alt"></i>
                                 <span class="title">Report</span>
-                                <span class="arrow"></span>
                             </a>
                             <ul class="sub-menu">
                                 <li class="nav-item ">
@@ -719,11 +717,10 @@ License: You must have a valid license purchased only from themeforest(the above
                     {% endif %}
 
                     {% if 'donor.can_view_payments_reports' in perms %}
-                        <li class="nav-item start ">
+                        <li class="nav-item" id="acd_qli">
                             <a href="javascript:;" class="nav-link nav-toggle">
                                 <i class="fa fa-briefcase"></i>
                                 <span class="title">Payment Report</span>
-                                <span class="arrow"></span>
                             </a>
                             <ul class="sub-menu">
                                 <li class="nav-item ">
@@ -737,6 +734,29 @@ License: You must have a valid license purchased only from themeforest(the above
                             </ul>
                         </li>
                     {% endif %}
+
+                    {% if 'masters.can_view_student_academic_reports' in perms %}
+                        <li class="nav-item " id="acd_qli">
+                            <a href="{% url 'parent:template_student_academic_report' %}"
+                               class="nav-link nav-toggle">
+                                <i class="glyphicon glyphicon-list-alt"></i>
+                                <span class="title">Student Report</span>
+                                <span class="selected"></span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% if 'masters.can_view_application_progress_history' in perms %}
+                        <li class="nav-item " id="acd_qli">
+                            <a href="{% url 'parent:template_student_application_progress_history' %}"
+                               class="nav-link nav-toggle">
+                                <i class="glyphicon glyphicon-list-alt"></i>
+                                <span class="title">Applications Progress History</span>
+                                <span class="selected"></span>
+                            </a>
+                        </li>
+                    {% endif %}
+
 
 
                 </ul>

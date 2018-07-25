@@ -113,6 +113,9 @@ class User(AbstractUser):
     def is_partner(self):
         return True if self.role.all().filter(name__in=[self.PARTNER]).exists() else False
 
+    def is_parent(self):
+        return True if self.role.all().filter(name__in=[self.PARENT]).exists() else False
+
     @property
     def get_user_permissions(self):
 

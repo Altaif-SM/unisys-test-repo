@@ -10,7 +10,7 @@ from accounts.forms import loginForm, signUpForm
 from accounts.service import *
 from accounts.models import UserRole
 from student.models import StudentDetails, ApplicationDetails, ScholarshipSelectionDetails
-from masters.models import AddressDetails, CountryDetails, ScholarshipDetails
+from masters.models import AddressDetails, CountryDetails, ScholarshipDetails, GuardianDetails
 from partner.models import PartnerDetails
 from donor.models import DonorDetails
 import json
@@ -91,13 +91,17 @@ def user_signup(request):
             try:
                 user = signup_form.save()
                 user.role.add(UserRole.objects.get(name=signup_form.cleaned_data['role']))
-                if str(signup_form.cleaned_data['role']) not in  ["Accountant", "Parent"]:
+                if str(signup_form.cleaned_data['role']) not in  ["Accountant"]:
                     country = CountryDetails.objects.get(country_name=request.POST['country'])
                     address = AddressDetails.objects.create(country=country)
                     if signup_form.cleaned_data['role'] == "Student":
                         StudentDetails.objects.create(user=user,address=address)
                     if signup_form.cleaned_data['role'] == "Partner":
                         PartnerDetails.objects.create(user=user,address=address)
+
+                    if signup_form.cleaned_data['role'] == "Parent":
+                        GuardianDetails.objects.create(user=user,address=address)
+
                     if signup_form.cleaned_data['role'] == "Donor":
                         organisation = request.POST.get('organisation')
                         DonorDetails.objects.create(user=user,address=address, organisation=organisation)
@@ -133,6 +137,9 @@ def user_signin(request):
 
             if user.is_donor():
                 return redirect('/donor/template_donor_dashboard/')
+
+            if user.is_parent():
+                return redirect('/parent/template_parent_dashboard/')
 
             return redirect('/accounts/home/')
         else:

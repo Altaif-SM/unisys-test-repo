@@ -1,0 +1,58 @@
+{% extends "template_base_page.html" %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <style type="text/css">
+
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+
+    <script>
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                 <a href="{% url 'parent:template_parent_dashboard' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+        </ul>
+    </div>
+
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light">
+
+        <div class="portlet-body">
+
+
+            <div class="row">
+                <div class="col-md-6 col-sm-6">
+                    <!-- BEGIN PORTLET-->
+                    <h1>Hello {{ user.get_full_name }}</h1>
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <!-- END VALIDATION STATES-->
+
+
+{% endblock %}
