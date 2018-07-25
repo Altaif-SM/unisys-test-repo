@@ -4,7 +4,7 @@ from common.models import BaseModel
 import os
 from accounts.models import User
 from student.models import *
-from student.models import StudentDetails
+from student.models import StudentDetails, ApplicationDetails
 from donor.models import DonorDetails
 
 def content_file_name_partner(instance, filename):
@@ -54,7 +54,7 @@ class AddressDetails(BaseModel):
         ordering = ('country',)
 
     def __str__(self):
-        return self.city if self.city else '' +" "+ self.country.country_name if self.country else ''
+        return self.city +" "+ self.country.country_name#if self.city else '' +" "+ self.country.country_name if self.country else ''
 
     def to_dict(self):
         res = {

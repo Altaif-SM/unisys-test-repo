@@ -7,8 +7,8 @@ from django.contrib import messages
 from common.utils import *
 from accounting.models import DonorReceiptVoucher
 from django.db.models import Sum
-
-
+from accounts.decoratars import user_login_required
+from donor.models import DonorDetails
 
 # Create your views here.
 def template_donor_dashboard(request):
@@ -20,10 +20,11 @@ def template_student_selection(request):
     university_recs = UniversityDetails.objects.filter(country=request.user.donor_user_rel.get().country)
     degree_recs = DegreeDetails.objects.all()
 
-    stud = []
-    for obj in StudentDonorMapping.objects.filter(donor__user=request.user):
-        stud.append(StudentDetails.objects.get(id=obj.student.id))
+    # stud = []
+    # for obj in StudentDonorMapping.objects.filter(donor__user=request.user):
+    #     stud.append(StudentDetails.objects.get(id=obj.student.id))
 
+    stud = StudentDetails.objects.all()
     application_records = ApplicationDetails.objects.filter(student__in=stud, admin_approval=True)
     return render(request, "template_student_selection.html",
                   {"application_records": application_records, 'country_recs': country_recs,
@@ -58,25 +59,27 @@ def filter_student_selection(request):
         university = request.POST.get('university')
         degree = request.POST.get('degree')
         nationality = request.POST.get('nationality')
+        country = request.POST.get('country')
     else:
 
         form_data = request.session.get('form_data')
 
         university = form_data.get('university')
+        country = form_data.get('country')
         degree = form_data.get('degree')
         nationality = form_data.get('nationality')
 
     try:
 
-        stud = []
-        for obj in StudentDonorMapping.objects.filter(donor__user=request.user):
-            stud.append(StudentDetails.objects.get(id=obj.student.id))
+        # stud = []
+        # for obj in StudentDonorMapping.objects.filter(donor__user=request.user):
+        #     stud.append(StudentDetails.objects.get(id=obj.student.id))
+        stud = StudentDetails.objects.all()
 
-        application_records = ApplicationDetails.objects.filter(Q(student__in=stud),
-                                                                Q(
-                                                                    address__country=request.user.donor_user_rel.get().country,
-                                                                    admin_approval=True),
-                                                                filter_nationality(nationality),
+        if country:
+            stud = stud.filter(address__country=country)
+
+        application_records = ApplicationDetails.objects.filter(Q(student__in=stud),filter_nationality(nationality),
                                                                 filter_degree(degree),
                                                                 filter_university(university))
 
@@ -86,7 +89,7 @@ def filter_student_selection(request):
 
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
-        return redirect('/partner/template_registered_application/')
+        return redirect('/donor/template_student_selection/')
 
     return render(request, 'template_student_selection.html',
                   {'application_records': application_records, 'country_recs': country_recs,
@@ -132,15 +135,16 @@ def filter_student_report(request):
         country = form_data.get('country')
 
     try:
-
         stud = []
-        for obj in StudentDonorMapping.objects.filter(donor__user=request.user):
+        student_list = StudentDonorMapping.objects.filter(donor__user=request.user)
+        if country:
+            student_list = student_list.filter(student__address__country=country)
+
+        for obj in student_list:
             stud.append(StudentDetails.objects.get(id=obj.student.id))
 
         application_records = ApplicationDetails.objects.filter(Q(student__in=stud),
-                                                                Q(
-                                                                    address__country=request.user.donor_user_rel.get().country,
-                                                                    is_sponsored=True), filter_nationality(country),
+                                                                Q(is_sponsored=True),
                                                                 filter_degree(degree),
                                                                 filter_university(university))
 
@@ -150,7 +154,7 @@ def filter_student_report(request):
 
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
-        return redirect('/partner/template_registered_application/')
+        return redirect('/donor/template_student_reports/')
 
     return render(request, 'template_student_reports.html',
                   {'application_records': application_records, 'country_recs': country_recs,
@@ -265,11 +269,16 @@ def template_students_receipts(request):
 
     return render(request, "template_students_receipts.html", {'voucher_record': student_list_rec, 'debit_total': debit_total, 'outstanding_total': outstanding_total})
 
-
+@user_login_required
 def approve_sponsorship(request):
     application_rec = ApplicationDetails.objects.get(id=request.POST['app_id'])
     application_rec.is_sponsored = True
     application_rec.save()
+
+    donor = DonorDetails.objects.get(user=request.user)
+
+    StudentDonorMapping.objects.create(student=application_rec.student, donor=donor, applicant_id=application_rec)
+
     return render(request, "template_student_details.html", {'application_rec': application_rec})
 
 
