@@ -54,7 +54,11 @@ class AddressDetails(BaseModel):
         ordering = ('country',)
 
     def __str__(self):
-        return self.city +" "+ self.country.country_name#if self.city else '' +" "+ self.country.country_name if self.country else ''
+
+        city = self.city if self.city else ''
+        country = self.country.country_name if self.country else ''
+
+        return str(city) + str(country)
 
     def to_dict(self):
         res = {
