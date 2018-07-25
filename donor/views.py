@@ -5,6 +5,8 @@ from student.models import ApplicationDetails, ApplicationHistoryDetails, Studen
 import json
 from django.contrib import messages
 from common.utils import *
+from accounting.models import DonorReceiptVoucher
+from django.db.models import Sum
 
 
 
@@ -300,3 +302,60 @@ def donor_receipt_report_export(request):
         return export_wraped_column_xls('DonorReceiptReport', column_names, rows)
     except:
         return redirect('/donar/template_students_receipts/')
+
+
+def student_payment_report_export(request):
+    try:
+        val_dict = request.POST
+        student_id = val_dict['student_id']
+        rows =[]
+        application_rec = ApplicationDetails.objects.filter(student_id=student_id, is_sponsored=True)
+        voucher_record = DonorReceiptVoucher.objects.filter(application__in=application_rec)
+        balance_total = DonorReceiptVoucher.objects.filter(voucher_type="debit",application__in=application_rec).values("voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
+        for rec in voucher_record:
+            rec_list = []
+            rec_list.append(rec.voucher_number)
+            rec_list.append(rec.voucher_description)
+            rec_list.append(rec.voucher_amount)
+            rows.append(rec_list)
+        rec_len = len(voucher_record)
+        total_balance = balance_total['total_credit']
+        column_names = ["NO", "Description", "Debit"]
+        return export_debit_wraped_column_xls(' StudentPaymentReport', column_names, rows,rec_len,total_balance)
+    except:
+        return redirect('/donar/template_my_payments/')
+
+def Register_Applicant_export(request):
+    try:
+        university_recs = UniversityDetails.objects.filter(country=request.user.donor_user_rel.get().country)
+        stud = []
+        rows = []
+        for obj in StudentDonorMapping.objects.filter(donor__user=request.user):
+            stud_id = StudentDetails.objects.get(id=obj.student.id)
+            stud.append(StudentDetails.objects.get(id=obj.student.id))
+
+        application_records = ApplicationDetails.objects.filter(student__in=stud,is_sponsored=True)
+        for rec in application_records:
+            rec_list  = []
+            rec_list.append(rec.get_full_name())
+            rec_list.append(rec.nationality)
+            if rec.applicant_scholarship_rel.all():
+                rec_list.append(rec.applicant_scholarship_rel.all()[0].university.university_name)
+            else:
+                rec_list.append("")
+            if rec.applicant_scholarship_rel.all():
+                rec_list.append(rec.applicant_scholarship_rel.all()[0].course_applied.degree_name)
+            else:
+                rec_list.append("")
+            if rec.applicant_module_rel.all():
+                rec_list.append(rec.applicant_module_rel.all()[0].program.program_name)
+            else:
+                rec_list.append("")
+            rows.append(rec_list)
+
+        column_names = ["Student Name", "Country", "University ", "Degree", "Program","Semester","GPA","CGPA","Payments"]
+
+        return export_wraped_column_xls('RegisterApplicant', column_names, rows)
+    except:
+        return redirect('/donar/template_student_reports/')
+

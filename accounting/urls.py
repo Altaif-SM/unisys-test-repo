@@ -35,5 +35,8 @@ urlpatterns = [
                   path('export_student_recipt_voucher/', views.export_student_recipt_voucher, name='export_student_recipt_voucher'),
                   path('export_student_payment_voucher/', views.export_student_payment_voucher, name='export_student_payment_voucher'),
                   path('export_donor_receipt_report/', views.export_donor_receipt_report, name='export_donor_receipt_report'),
+                  path('export_student_receipt_payment_report/', views.export_student_receipt_payment_report, name='export_student_receipt_payment_report'),
+                  path('student_receipt_payment_report_export/', views.student_receipt_payment_report_export, name='student_receipt_payment_report_export'),
+                  path('export_payment_receipt_report/', views.export_payment_receipt_report, name='export_payment_receipt_report'),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

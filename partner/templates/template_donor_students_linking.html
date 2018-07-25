@@ -33,6 +33,11 @@
     <script>
         window.onload = function () {
             $(document).ready(function () {
+                 $(document).on("click", "#export_button", function (e) {
+
+                        $('#form_sample_export').submit();
+
+                });
                 $("#id_scholarship").chosen();
 
 
@@ -136,6 +141,13 @@
                                 <button type="submit" class="btn blue btn-block" id="go">Filter
                                 </button>
                             </div>
+                        <div class="col-md-2">
+                        <button style="width: 100px" type="button" id="export_button" class="btn blue">
+                            Export
+                        </button>
+                        </div>
+
+
                         </form>
 
                         {% comment %}{% if scholarship_obj %}
@@ -208,6 +220,12 @@
                         </div>
                     </form>
                 </div>
+             <form method="post" action="{% url 'partner:donar_student_linking_export' %}" id="form_sample_export">
+                    {% csrf_token %}
+                    <input hidden name="donor" id="export_student_value" value="{{ donor_obj.id}}">
+
+
+                </form>
             </div>
         </div>
     </div>

@@ -12,6 +12,11 @@
     <script>
         window.onload = function () {
             $(document).ready(function () {
+                $('#export_button').attr('disabled', true);
+                 $(document).on("click", "#export_button", function (e) {
+                        $('#form_sample_export').submit();
+                });
+
 
                 $(document).on("click", "#save", function (e) {
 
@@ -38,6 +43,9 @@
                     var student = $(this).val();
                     var url = '/accounting/get_payment_voucher_data_by_student/';
                     get_voucher_data(url, student);
+                    $('#export_student_value').val(student);
+                      $('#export_button').attr('disabled', false);
+
                 });
 
 
@@ -288,6 +296,12 @@
                     </div>
                 </form>
             </div>
+         <div class="col-md-2">
+                                <button style="width: 100px;" type="button" id="export_button" class="btn blue">
+                                    Export
+                                </button>
+                            </div>
+
         </div>
 
         <div class="portlet-body">
@@ -315,6 +329,13 @@
 
 
         </div>
+    <form method="post" action="{% url 'accounting:export_payment_receipt_report' %}"
+                  id="form_sample_export">
+                {% csrf_token %}
+               <input hidden name="student_id" id="export_student_value" value="">
+
+
+            </form>
     </div>
 
 {% endblock %}

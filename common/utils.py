@@ -130,7 +130,6 @@ def export_wraped_column_xls(output_file_name, column_names, rows):
         row_num += 1
         for col_num in range(len(row)):
                 worksheet.write(row_num, col_num, str(row[col_num]), unlocked)
-
     workbook.close()
     output.seek(0)
     response = HttpResponse(output.read(), content_type='application/ms-excel')
@@ -143,4 +142,93 @@ def get_current_year():
         return YearDetails.objects.get(active_year=True)
     except:
         return None
+
+def export_debit_wraped_column_xls(output_file_name, column_names, rows,rec_len,total_balance):
+    output = BytesIO()
+    workbook = xlsxwriter.Workbook(output)
+    worksheet = workbook.add_worksheet(output_file_name)
+    unlocked = workbook.add_format({'locked': False, 'text_wrap': True})
+    locked = workbook.add_format({'locked': True, 'text_wrap': True})
+    worksheet.set_column('A:XDF', None, unlocked)
+    row_num = 0
+    for col_num in range(len(column_names)):
+        worksheet.set_column(col_num, col_num, 18)
+        worksheet.write(row_num, col_num, column_names[col_num], unlocked)
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+                worksheet.write(row_num, col_num, str(row[col_num]), unlocked)
+
+    start_column = 2
+    rec_len = rec_len+1
+    worksheet.write(rec_len, start_column, total_balance)
+
+    workbook.close()
+    output.seek(0)
+    response = HttpResponse(output.read(), content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=' + output_file_name + ".xls"
+
+    return response
+
+
+def export_student_payment_wraped_column_xls(output_file_name, column_names, rows,rec_len,debit_total,outstanding_total):
+    output = BytesIO()
+    workbook = xlsxwriter.Workbook(output)
+    worksheet = workbook.add_worksheet(output_file_name)
+    unlocked = workbook.add_format({'locked': False, 'text_wrap': True})
+    locked = workbook.add_format({'locked': True, 'text_wrap': True})
+    worksheet.set_column('A:XDF', None, unlocked)
+    row_num = 0
+    for col_num in range(len(column_names)):
+        worksheet.set_column(col_num, col_num, 18)
+        worksheet.write(row_num, col_num, column_names[col_num], unlocked)
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+                worksheet.write(row_num, col_num, str(row[col_num]), unlocked)
+
+    rec_len = rec_len + 1
+    start_column = 4
+    worksheet.write(rec_len, start_column, debit_total)
+
+    start_column = 5
+    worksheet.write(rec_len, start_column, outstanding_total)
+
+    workbook.close()
+    output.seek(0)
+    response = HttpResponse(output.read(), content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=' + output_file_name + ".xls"
+
+    return response
+
+def export_last_row_wraped_column_xls(output_file_name, column_names, rows,rec_len,temp_list):
+    output = BytesIO()
+    workbook = xlsxwriter.Workbook(output)
+    worksheet = workbook.add_worksheet(output_file_name)
+    unlocked = workbook.add_format({'locked': False, 'text_wrap': True})
+    locked = workbook.add_format({'locked': True, 'text_wrap': True})
+    worksheet.set_column('A:XDF', None, unlocked)
+    row_num = 0
+    for col_num in range(len(column_names)):
+        worksheet.set_column(col_num, col_num, 18)
+        worksheet.write(row_num, col_num, column_names[col_num], unlocked)
+
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+                worksheet.write(row_num, col_num, str(row[col_num]), unlocked)
+
+
+    rec_len = rec_len + 1
+    start_column = 1
+    for i in temp_list:
+        worksheet.write(rec_len, start_column, i)
+        start_column = start_column+1
+
+    workbook.close()
+    output.seek(0)
+    response = HttpResponse(output.read(), content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=' + output_file_name + ".xls"
+
+    return response
 

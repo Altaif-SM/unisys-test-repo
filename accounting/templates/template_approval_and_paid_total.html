@@ -12,6 +12,12 @@
     <script>
         window.onload = function () {
             $(document).ready(function () {
+                $(document).on("click", "#export_button", function (e) {
+
+                        $('#form_sample_export').submit();
+
+                });
+
 
 
             });
@@ -156,7 +162,17 @@
                                     <input type="submit" class="btn green" value="Filter">
                                 </div>
                             </div>
+                        <div class="col-md-2">
 
+
+                    <div class="col-md-2">
+                        <button style="width: 100px" type="button" id="export_button" class="btn blue">
+                            Export
+                        </button>
+                    </div>
+
+
+                        </div>
 
 
                         </div>
@@ -253,6 +269,14 @@
                     </div>
                 </form>
             </div>
+          <form method="post" action="{% url 'accounting:export_student_receipt_payment_report' %}" id="form_sample_export">
+                    {% csrf_token %}
+                    <input hidden name="query_country" id="export_student_value" value="{{ selected_country.0.id }}">
+                    <input hidden name="query_scholarship" id="export_student_value" value="{{ selected_scholarship.0.id }}">
+                    <input hidden name="query_student" id="export_student_value" value="{{ selected_student.0.student.id }}">
+
+
+                </form>
         </div>
     </div>
 

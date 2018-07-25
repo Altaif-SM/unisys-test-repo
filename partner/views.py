@@ -1452,3 +1452,65 @@ def template_semester_result(request):
 # pdf = file.read()
 # file.close()
 # return HttpResponse(pdf, 'application/pdf')
+
+
+
+def donar_student_linking_export(request):
+    try:
+        if request.POST:
+            request.session['donor_student_linking'] = request.POST
+            donor = request.POST.get('donor')
+
+        else:
+            form_data = request.session.get('donor_student_linking')
+            donor = form_data.get('donor')
+
+        try:
+            if donor =="":
+                donor="All"
+            rows = []
+            donor_recs = DonorDetails.objects.all()
+            donor_obj = ''
+            if request.user.is_super_admin():
+                if donor == 'All':
+                    applicant_ids = StudentDonorMapping.objects.filter(applicant_id__year=get_current_year()).values_list('applicant_id', flat=1)
+                else:
+                    donor_obj = DonorDetails.objects.get(id=donor)
+                    applicant_ids = StudentDonorMapping.objects.filter(applicant_id__year=get_current_year(),donor_id=donor).values_list('applicant_id',
+                                                                                                   flat=1)
+                application_ids = ApplicationDetails.objects.filter(id__in=applicant_ids).values_list('id', flat=1)
+
+            else:
+                if donor == 'All':
+                    applicant_ids = StudentDonorMapping.objects.filter(applicant_id__year=get_current_year(),applicant_id__address__country=request.user.partner_user_rel.get().address.country).values_list('applicant_id', flat=1)
+                else:
+                    donor_obj = DonorDetails.objects.get(id=donor)
+                    applicant_ids = StudentDonorMapping.objects.filter(applicant_id__year=get_current_year(),donor_id=donor,applicant_id__address__country=request.user.partner_user_rel.get().address.country).values_list('applicant_id', flat=1)
+                application_ids = ApplicationDetails.objects.filter(id__in=applicant_ids).values_list('id', flat=1)
+
+            scholarship_recs = ScholarshipSelectionDetails.objects.filter(applicant_id__in=application_ids)
+            for rec in scholarship_recs:
+                rec_list = []
+                rec_list.append(rec.applicant_id.get_full_name())
+                rec_list.append(rec.applicant_id.nationality.country_name)
+                rec_list.append( rec.applicant_id.address.country.country_name)
+                rec_list.append(rec.university.university_name)
+                rec_list.append(rec.course_applied.degree_name)
+                if rec.applicant_id.applicant_module_rel.all():
+                    rec.append( rec.applicant_id.applicant_module_rel.all()[0].program.program_name)
+                else:
+                    rec_list.append("")
+
+                rows.append(rec_list)
+
+
+        except Exception as e:
+            return redirect('/partner/template_donor_students_linking/')
+
+        column_names = ["Student Name","Nationality" ,"Country", "University ", "Degree", "Program"]
+
+        return export_wraped_column_xls('DonorStudentLinking', column_names, rows)
+    except:
+        return redirect('/partner/template_donor_students_linking/')
+
+

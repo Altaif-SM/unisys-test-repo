@@ -12,6 +12,7 @@
     <script>
         window.onload = function () {
             $(document).ready(function () {
+                   $('#export_button').attr('disabled', true);
 
                 $(document).on("click", "#save", function (e) {
 
@@ -38,6 +39,8 @@
                     var student = $(this).val();
                     var url = '/accounting/get_donor_recipt_for_org_payment/';
                     get_voucher_data(url, student);
+                     $('#export_button').attr('disabled', false);
+                      $('#export_student_value').val(student);
                 });
 
 
@@ -277,6 +280,19 @@
                     </div>
                 </form>
             </div>
+            <div class="col-md-2">
+                <form method="post" action="{% url 'donor:student_payment_report_export' %}" id="">
+                    {% csrf_token %}
+                    <input hidden name="student_id" id="export_student_value" value="">
+
+                    <button style="width: 100%" type="submit" value="Submit" id="export_button" class="btn blue">
+                        Export
+                    </button>
+                </form>
+            </div>
+
+
+
         </div>
 
         <div class="portlet-body">
@@ -299,8 +315,6 @@
                     </tbody>
                 </table>
             </form>
-
-
 
         </div>
     </div>
