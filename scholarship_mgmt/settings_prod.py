@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'partner.apps.PartnerConfig',
     'accounting.apps.AccountingConfig',
     'donor.apps.DonorConfig',
+    'parent.apps.ParentConfig',
 ]
 
 MIDDLEWARE = [
