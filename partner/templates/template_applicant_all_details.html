@@ -17,9 +17,23 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{% url 'accounts:home' %}">Home</a>
+                {% if user.is_student %}
+                    <a href="{% url 'student:student_home' %}">Home</a>
+                {% elif user.is_donor %}
+                    <a href="{% url 'donor:template_donor_dashboard' %}">Home</a>
+                {% elif user.is_partner %}
+                    <a href="{% url 'accounts:home' %}">Home</a>
+                {% else %}
+                    <a href="{% url 'accounts:home' %}">Home</a>
+                {% endif %}
                 <i class="fa fa-angle-right"></i>
             </li>
+            {% if user.is_donor %}
+                <li>
+                     <a href="{% url 'donor:template_student_reports' %}">Applicant Details - Register Applicant</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+            {% endif %}
 
             <li>
                 <span> Applications Details</span>

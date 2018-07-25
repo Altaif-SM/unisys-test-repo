@@ -180,7 +180,7 @@
                                     <tr id="item{{ forloop.counter }}" class="item">
                                         <td style="display: none"><input id="scholarship_id" value="{{ rec.id }}"></td>
                                         <td>
-                                            <text>{{ rec.first_name|title }} {{ rec.last_name|title }}</text>
+                                            <text><a href="/donor/template_applicant_all_details/{{ rec.id }}">{{ rec.first_name|title }} {{ rec.last_name|title }}</a></text>
                                         </td>
 
                                         <td>
@@ -196,22 +196,22 @@
                                         </td>
 
                                         <td>
-
+                                            <text>{{ rec.applicant_module_rel.all.0.program.program_name|title }}</text>
                                         </td>
                                         <td>
-
+                                            <text>{{ rec.applicant_progress_rel.all.last.semester.semester_name }}</text>
                                         </td>
                                         <td>
-
+                                            <text>{{ rec.applicant_progress_rel.all.last.gpa_scored }}</text>
                                         </td>
                                         <td>
-
+                                            <text>{{ rec.applicant_progress_rel.all.last.cgpa_scored }}</text>
                                         </td>
                                         <td>
-
+                                            <text>{{ rec.rel_student_payment_receipt_voucher.all.last.voucher_total }}</text>
                                         </td>
                                         <td>
-
+                                            <text>{{ rec.applicant_progress_rel.all.last.transcript_document }}</text>
                                         </td>
                                     </tr>
                                 {% endfor %}

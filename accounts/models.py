@@ -110,6 +110,9 @@ class User(AbstractUser):
     def is_donor(self):
         return True if self.role.all().filter(name__in=[self.DONOR]).exists() else False
 
+    def is_partner(self):
+        return True if self.role.all().filter(name__in=[self.PARTNER]).exists() else False
+
     @property
     def get_user_permissions(self):
 

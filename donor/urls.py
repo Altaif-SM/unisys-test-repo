@@ -2,7 +2,7 @@ from django.urls import path
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
-
+from partner.views import template_applicant_all_details
 app_name = 'donor'
 
 urlpatterns = [
@@ -34,5 +34,7 @@ urlpatterns = [
                        name='student_payment_report_export'),
                   path('Register_Applicant_export/', views.Register_Applicant_export,
                        name='Register_Applicant_export'),
+                  path('template_applicant_all_details/<int:app_id>/', template_applicant_all_details,
+                       name='template_applicant_all_details'),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
