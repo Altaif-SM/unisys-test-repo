@@ -788,14 +788,23 @@ def template_manage_partner_master(request):
     country_recs = CountryDetails.objects.all()
     partner_recs = PartnerDetails.objects.all()
 
-    #user_recs = User.objects.all()#.role.all().filter(name__in=[self.DONOR])
     user_recs = User.objects.filter(role__name__in=['Partner'])
+
+    query_query = request.GET.get("user") or None
+    partner_rec = {}
+    selected_user = {}
+    if query_query:
+        selected_user = User.objects.get(id=query_query)
+        partner_rec = PartnerDetails.objects.get(user_id=query_query)
+
+    #user_recs = User.objects.all()#.role.all().filter(name__in=[self.DONOR])
+    # user_recs = User.objects.filter(role__name__in=['Partner'])
     return render(request, 'template_partner_master.html',
-                  {'country_recs': country_recs, 'partner_recs': partner_recs, 'user_recs': user_recs})
+                  {'country_recs': country_recs, 'partner_recs': partner_recs, 'user_recs': user_recs, 'partner_rec': partner_rec,'selected_user': selected_user})
 
 
 def save_manage_partner_master(request):
-    country = request.POST.get('country_name')
+    country = request.POST.get('country')
     office_name = request.POST.get('office_name')
     person_one = request.POST.get('person_one')
     person_one_contact = request.POST.get('person_one_contact')
@@ -810,37 +819,71 @@ def save_manage_partner_master(request):
     photo = request.POST.get('photo')
     pic = request.POST.get('pic')
 
-    try:
-        if not PartnerDetails.objects.filter(country_id=country, office_name=office_name).exists():
-            parent_obj = PartnerDetails.objects.create(country_id=country, office_name=office_name,
-                                                       person_one=person_one,
-                                                       person_one_contact_number=person_one_contact,
-                                                       person_two=person_two,
-                                                       person_two_contact_number=person_two_contact,
-                                                       office_contact_number=office_contact,
-                                                       email=email, single_address=address, user_id=user)
+    partner_details_id = request.POST.get('partner_details_id')
 
-            try:
-                if pic:
-                    dirname = datetime.now().strftime('%Y.%m.%d.%H.%M.%S')
-                    filename = "%s_%s.%s" % (str(parent_obj.id), dirname, 'png')
-                    raw_file_path_and_name = os.path.join('images/' + filename)
-                    data = str(pic)
-                    temp_data = data.split('base64,')[1]
-                    raw_data = base64.b64decode(temp_data)
-                    f = open(settings.MEDIA_ROOT + raw_file_path_and_name, 'wb')
-                    f.write(raw_data)
-                    f.close()
-                    parent_obj.photo = raw_file_path_and_name
-                    parent_obj.save()
-            except Exception as e:
-                messages.warning(request, "Form have some error" + str(e))
-                return redirect('/masters/template_manage_partner_master/')
-            messages.success(request, "Record saved.")
-        else:
-            messages.warning(request, "Partner and country is already exist. Record not saved.")
-    except:
-        messages.warning(request, "Record not saved.")
+    try:
+        country = CountryDetails.objects.get(id=country)
+        parent_obj = PartnerDetails.objects.filter(id=partner_details_id).update(country_id=country, office_name=office_name,
+                                                   person_one=person_one,
+                                                   person_one_contact_number=person_one_contact,
+                                                   person_two=person_two,
+                                                   person_two_contact_number=person_two_contact,
+                                                   office_contact_number=office_contact,
+                                                   email=email, single_address=address)
+
+        address = AddressDetails.objects.filter(id=PartnerDetails.objects.get(id=partner_details_id).address.id).update(
+            country=country)
+        try:
+            if pic:
+                dirname = datetime.now().strftime('%Y.%m.%d.%H.%M.%S')
+                filename = "%s_%s.%s" % (str(parent_obj.id), dirname, 'png')
+                raw_file_path_and_name = os.path.join('images/' + filename)
+                data = str(pic)
+                temp_data = data.split('base64,')[1]
+                raw_data = base64.b64decode(temp_data)
+                f = open(settings.MEDIA_ROOT + raw_file_path_and_name, 'wb')
+                f.write(raw_data)
+                f.close()
+                parent_obj.photo = raw_file_path_and_name
+                parent_obj.save()
+        except Exception as e:
+            messages.warning(request, "Form have some error" + str(e))
+
+        messages.success(request, "Record Updated.")
+
+
+
+
+        # if not PartnerDetails.objects.filter(country_id=country, office_name=office_name).exists():
+        #     parent_obj = PartnerDetails.objects.create(country_id=country, office_name=office_name,
+        #                                                person_one=person_one,
+        #                                                person_one_contact_number=person_one_contact,
+        #                                                person_two=person_two,
+        #                                                person_two_contact_number=person_two_contact,
+        #                                                office_contact_number=office_contact,
+        #                                                email=email, single_address=address, user_id=user)
+        #
+        #     try:
+        #         if pic:
+        #             dirname = datetime.now().strftime('%Y.%m.%d.%H.%M.%S')
+        #             filename = "%s_%s.%s" % (str(parent_obj.id), dirname, 'png')
+        #             raw_file_path_and_name = os.path.join('images/' + filename)
+        #             data = str(pic)
+        #             temp_data = data.split('base64,')[1]
+        #             raw_data = base64.b64decode(temp_data)
+        #             f = open(settings.MEDIA_ROOT + raw_file_path_and_name, 'wb')
+        #             f.write(raw_data)
+        #             f.close()
+        #             parent_obj.photo = raw_file_path_and_name
+        #             parent_obj.save()
+        #     except Exception as e:
+        #         messages.warning(request, "Form have some error" + str(e))
+        #         return redirect('/masters/template_manage_partner_master/')
+        #     messages.success(request, "Record saved.")
+        # else:
+        #     messages.warning(request, "Partner and country is already exist. Record not saved.")
+    except Exception as e:
+        messages.warning(request, "Record not saved."+str(e))
     return redirect('/masters/template_manage_partner_master/')
 
 
@@ -932,37 +975,39 @@ def save_manage_donor_master(request):
 
 
 
-        if not DonorDetails.objects.filter(id=donor_details_id).exists():
-            donor_obj = DonorDetails.objects.create(country_id=country, organisation=organisation, person=person,
-                                                    person_contact_number=person_contact,
-                                                    single_donor_address=donor_address,
-                                                    due_amount=due_amount, bank_account_number=bank_account_number,
-                                                    bank_name=bank_name, bank_swift_code=bank_swift_code, email=email,
-                                                    donor_bank_address=donor_bank_address)
+        # if not DonorDetails.objects.filter(id=donor_details_id).exists():
+        #     donor_obj = DonorDetails.objects.create(country_id=country, organisation=organisation, person=person,
+        #                                             person_contact_number=person_contact,
+        #                                             single_donor_address=donor_address,
+        #                                             due_amount=due_amount, bank_account_number=bank_account_number,
+        #                                             bank_name=bank_name, bank_swift_code=bank_swift_code, email=email,
+        #                                             donor_bank_address=donor_bank_address)
+        #
+        #     if abc_document:
+        #         file_url = str(abc_document)
+        #
+        #         handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + file_url), abc_document)
+        #         donor_obj.reg_document = file_url
+        #         donor_obj.save()
+        #     messages.success(request, "Record saved.")
+        # else:
 
-            if abc_document:
-                file_url = str(abc_document)
+        country = CountryDetails.objects.get(id=country)
+        donor_obj = DonorDetails.objects.filter(id=donor_details_id).update(country_id=country, organisation=organisation, person=person,
+                                                person_contact_number=person_contact,
+                                                single_donor_address=donor_address,
+                                                due_amount=due_amount, bank_account_number=bank_account_number,
+                                                bank_name=bank_name, bank_swift_code=bank_swift_code, email=email,
+                                                donor_bank_address=donor_bank_address)
 
-                handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + file_url), abc_document)
-                donor_obj.reg_document = file_url
-                donor_obj.save()
-            messages.success(request, "Record saved.")
-        else:
+        address = AddressDetails.objects.filter(id=DonorDetails.objects.get(id=donor_details_id).address.id).update(country=country)
+        if abc_document:
+            file_url = str(abc_document)
 
-            donor_obj = DonorDetails.objects.filter(id=donor_details_id).update(country_id=country, organisation=organisation, person=person,
-                                                    person_contact_number=person_contact,
-                                                    single_donor_address=donor_address,
-                                                    due_amount=due_amount, bank_account_number=bank_account_number,
-                                                    bank_name=bank_name, bank_swift_code=bank_swift_code, email=email,
-                                                    donor_bank_address=donor_bank_address)
-
-            if abc_document:
-                file_url = str(abc_document)
-
-                handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + file_url), abc_document)
-                donor_obj.reg_document = file_url
-                donor_obj.save()
-            messages.success(request, "Record Updated.")
+            handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + file_url), abc_document)
+            donor_obj.reg_document = file_url
+            donor_obj.save()
+        messages.success(request, "Record Updated.")
 
     except Exception as e:
         messages.warning(request, "Record not saved."+ str(e))

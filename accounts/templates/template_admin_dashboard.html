@@ -19,24 +19,24 @@
                 {{ raw_list }}//[50, 90, 60, 40, 30, 100, 70, 50];
 
                 var chartData = [{
-                    AttendanceStatus: "Applicants",
-                    categrory: data[1],
-                },
+                        AttendanceStatus: "Applicants",
+                        categrory: data[0],
+                    },
                     {
                         AttendanceStatus: "Interview1",
-                        categrory: data[2],
+                        categrory: data[1],
                     },
                     {
                         AttendanceStatus: "Interview2",
-                        categrory: data[6],
+                        categrory: data[2],
                     },
                     {
                         AttendanceStatus: "Psychometric Test",
-                        categrory: data[4],
+                        categrory: data[3],
                     },
                     {
                         AttendanceStatus: "Admin Approval",
-                        categrory: data[3],
+                        categrory: data[4],
                     },
                     {
                         AttendanceStatus: "Sponsored",
@@ -44,7 +44,7 @@
                     },
                     {
                         AttendanceStatus: "Total",
-                        categrory: data[0],
+                        categrory: data[6],
                     },
                 ];
                 // SERIAL CHART
@@ -179,7 +179,7 @@
 
 
             <div class="row">
-                <div class="col-md-12 col-sm-12">
+                <div class="col-md-8 col-sm-8">
                     <!-- BEGIN PORTLET-->
                     <div class="portlet light ">
                         <div class="portlet-title">

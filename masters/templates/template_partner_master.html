@@ -42,6 +42,10 @@
 
             $(document).ready(function () {
 
+                $(document).on("change", "#id_user", function (e) {
+                    $("#form_sample_2").submit();
+                });
+
                 $(document).on("click", ".update", function (e) {
                     var parent_id = $(this).closest('tr').attr('id');
                     var partner_id = $('#' + parent_id + ' #partner_id').val();
@@ -200,6 +204,38 @@
             <!-- BEGIN FORM-->
             <div class="form-body">
 
+                    <div class="row">
+                    <form id="form_sample_2"
+                          class="form-horizontal"
+                          method="GET" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="" style="margin-left: 17px;">
+                            <label class="col-md-2 control-label">User:
+
+                            </label>
+                            <div class="col-md-2">
+                                <select id='id_user' title="Select User" name="user"
+                                        class="form-control"
+                                        required>
+                                    {% if selected_user %}
+                                        <option style="display:none" selected="selected" id=""
+                                                value="{{ selected_user.id }}">{{ selected_user.get_full_name|title }}
+                                        </option>
+                                    {% else %}
+                                        <option style="display:none" selected="selected" id=""
+                                                value="">Please Select
+                                        </option>
+                                    {% endif %}
+
+                                    {% for rec in user_recs %}
+                                        <option value='{{ rec.id }}'>{{ rec.get_full_name|title }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
                 <form action="{% url 'masters:save_manage_partner_master' %}" id="form_sample_1"
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
@@ -213,13 +249,21 @@
 
                                 </label>
                                 <div class="col-md-2">
-                                    <select id='country_name' title="Select country" name="country_name"
+                                    <input type="hidden" value="{{ partner_rec.id }}" name="partner_details_id">
+                                    <select id='country_name' title="Select country" name="country"
                                             class="form-control"
                                             required>
-                                        <option style="display:none" selected="selected" id=""
-                                                value="">Please Select
-                                        </option>
+                                        {% if partner_rec.address.country %}
+                                            <option style="display:none" selected="selected"
+                                                    id=""
+                                                    value="{{ partner_rec.address.country.id }}">{{ partner_rec.address.country.country_name }}
+                                            </option>
+                                        {% else %}
 
+                                            <option style="display:none" selected="selected" id=""
+                                                    value="">Please Select
+                                            </option>
+                                        {% endif %}
                                         {% for rec in country_recs %}
                                             <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
                                         {% endfor %}
@@ -231,24 +275,10 @@
                                 <label class="col-md-1 control-label">Office:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter office name" id="office_name" name="office_name"
-                                           class="form-control" required>
+                                           class="form-control" value="{{ partner_rec.office_name|default_if_none:"" }}" required>
                                 </div>
                             </div>
 
-                            <div class="">
-                                <label class="col-md-1 control-label">Users:</label>
-                                <div class="col-md-2">
-                                    <select id='user' title="Select country" name="user"
-                                            class="form-control"
-                                            required>
-                                        <option style="display:none" selected="selected" id="" value="">Please Select</option>
-
-                                        {% for rec in user_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.get_full_name|title }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
                         </div>
 
                         <br><br>
@@ -259,7 +289,7 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Person in charge 1" id="person_one"
                                            name="person_one"
-                                           class="form-control" required>
+                                           class="form-control" value="{{ partner_rec.person_one|default_if_none:"" }}" required>
                                 </div>
                             </div>
 
@@ -268,7 +298,7 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Person in charge 1 contact"
                                            id="person_one_contact_number" name="person_one_contact"
-                                           class="form-control" required>
+                                           class="form-control" value="{{ partner_rec.person_one_contact_number|default_if_none:"" }}" required>
                                 </div>
                             </div>
                         </div>
@@ -282,7 +312,7 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Person in charge 2" id="person_two"
                                            name="person_two"
-                                           class="form-control" required>
+                                           class="form-control" value="{{ partner_rec.person_two|default_if_none:"" }}" required>
                                 </div>
                             </div>
 
@@ -291,7 +321,7 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Person in charge 2 contact"
                                            id="person_two_contact_number" name="person_two_contact"
-                                           class="form-control" required>
+                                           class="form-control" value="{{ partner_rec.person_two_contact_number|default_if_none:"" }}" required>
                                 </div>
                             </div>
                         </div>
@@ -305,7 +335,7 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Office Phone" id="office_contact_number"
                                            name="office_contact"
-                                           class="form-control" required>
+                                           class="form-control" value="{{ partner_rec.office_contact_number|default_if_none:"" }}" required>
                                 </div>
                             </div>
 
@@ -314,7 +344,7 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Enter email"
                                            id="email" name="email"
-                                           class="form-control" required>
+                                           class="form-control" value="{{ partner_rec.email|default_if_none:"" }}" required>
                                 </div>
                             </div>
                         </div>
@@ -328,7 +358,7 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Enter address" id="address"
                                            name="address"
-                                           class="form-control" required>
+                                           class="form-control" value="{{ partner_rec.address|default_if_none:"" }}" required>
                                 </div>
                             </div>
 
@@ -350,7 +380,7 @@
 
                         <div class="row">
                             <div class="col-md-offset-5 col-md-7">
-                                <button type="submit" class="btn green" id="save">Add</button>
+                                <button type="submit" class="btn green" id="save">Update</button>
                             </div>
                         </div>
                     </div>
@@ -388,7 +418,7 @@
                                     <option style="display:none" selected="selected" id=""
                                             value="{{ rec.country.id }}">{{ rec.country.country_name|title }} </option>
                                     {% for rec in country_recs %}
-                                        <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
+                                        <option value='{{ rec.id }}'>{{ rec.country_name|default_if_none:"" }}</option>
                                     {% endfor %}
                                 </select>
                             </td>
@@ -397,7 +427,7 @@
                                 <text hidden>{{ rec.office_name|title }}</text>
                                 <input class="form-control data office" name="office_name_saved"
                                        type="text"
-                                       id="office{{ forloop.counter }}" value="{{ rec.office_name|title }}"
+                                       id="office{{ forloop.counter }}" value="{{ rec.office_name|default_if_none:"" }}"
                                        required
                                        title='Please enter office name' disabled>
                             </td>
@@ -406,7 +436,7 @@
                                 <text hidden>{{ rec.person_one|title }}</text>
                                 <input class="form-control data person_one" name="person_one_saved"
                                        type="text"
-                                       id="person_one{{ forloop.counter }}" value="{{ rec.person_one|title }}"
+                                       id="person_one{{ forloop.counter }}" value="{{ rec.person_one|default_if_none:"" }}"
                                        required
                                        title='Please enter person_one' disabled>
                             </td>
@@ -416,7 +446,7 @@
                                 <input class="form-control data person_one_contact" name="person_one_contact_saved"
                                        type="text"
                                        id="person_one_contact{{ forloop.counter }}"
-                                       value="{{ rec.person_one_contact_number }}"
+                                       value="{{ rec.person_one_contact_number|default_if_none:"" }}"
                                        required
                                        title='Please enter person one contact' disabled>
                             </td>
@@ -426,7 +456,7 @@
                                 <text hidden>{{ rec.office_contact_number }}</text>
                                 <input class="form-control data office_contact" name="office_contact_saved"
                                        type="text"
-                                       id="office_contact{{ forloop.counter }}" value="{{ rec.office_contact_number }}"
+                                       id="office_contact{{ forloop.counter }}" value="{{ rec.office_contact_number|default_if_none:"" }}"
                                        required
                                        title='Please enter office contact number' disabled>
                             </td>
@@ -435,7 +465,7 @@
                                 <text hidden>{{ rec.email }}</text>
                                 <input class="form-control data email" name="email_saved"
                                        type="text"
-                                       id="email{{ forloop.counter }}" value="{{ rec.email }}"
+                                       id="email{{ forloop.counter }}" value="{{ rec.email|default_if_none:"" }}"
                                        required
                                        title='Please enter office email' disabled>
                             </td>
@@ -444,7 +474,7 @@
                                 <text hidden>{{ rec.single_address }}</text>
                                 <input class="form-control data address" name="address_saved"
                                        type="text"
-                                       id="email{{ forloop.counter }}" value="{{ rec.single_address }}"
+                                       id="email{{ forloop.counter }}" value="{{ rec.single_address|default_if_none:"" }}"
                                        required
                                        title='Please enter office address' disabled>
                             </td>

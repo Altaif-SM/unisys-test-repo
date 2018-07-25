@@ -27,12 +27,24 @@ def home(request):
 
         raw_list = []
 
-        raw_list.append(ApplicationDetails.objects.filter(is_submitted=True).count())
-        raw_list.append(ApplicationDetails.objects.filter(first_interview_approval=True).count())
-        raw_list.append(ApplicationDetails.objects.filter(second_interview_approval=True).count())
-        raw_list.append(ApplicationDetails.objects.filter(psychometric_test=True).count())
-        raw_list.append(ApplicationDetails.objects.filter(admin_approval=True).count())
-        raw_list.append(ApplicationDetails.objects.filter(is_sponsored=True).count())
+        raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=False,
+                                                          second_interview_approval=False, psychometric_test=False,
+                                                          admin_approval=False, is_sponsored=False).count())
+        raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
+                                                          second_interview_approval=False, psychometric_test=False,
+                                                          admin_approval=False, is_sponsored=False).count())
+        raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
+                                                          second_interview_approval=True, psychometric_test=False,
+                                                          admin_approval=False, is_sponsored=False).count())
+        raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
+                                                          second_interview_approval=True, psychometric_test=True,
+                                                          admin_approval=False, is_sponsored=False).count())
+        raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
+                                                          second_interview_approval=True, psychometric_test=True,
+                                                          admin_approval=True, is_sponsored=False).count())
+        raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
+                                                          second_interview_approval=True, psychometric_test=True,
+                                                          admin_approval=True, is_sponsored=True).count())
         raw_list.append(ApplicationDetails.objects.filter().count())
 
         scholarship_list = []
