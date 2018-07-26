@@ -45,7 +45,7 @@ def export_registered_application(request):
         temp_list.append(application.applicant_scholarship_rel.all()[0].course_applied.program_name.title())
         rows.append(temp_list)
 
-    cloumns = ['Student Name', 'Nationality', 'Country', 'University', 'Degree', 'Program']
+    cloumns = ['Student Name', 'Nationality', 'Country', 'University', 'Degree', 'Course']
 
     return export_wraped_column_xls('registered_application', cloumns, rows)
 

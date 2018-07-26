@@ -144,7 +144,7 @@
                                     <th>Country</th>
                                     <th>University</th>
                                     <th>Degree</th>
-                                    <th>Program</th>
+                                    <th>Course</th>
                                     <th>Donor</th>
                                     <th>Scholarship Type</th>
                                 </tr>
@@ -170,8 +170,8 @@
                                         <td>
                                             <p>{{ rec.degree.degree_name|title }}</p>
                                         </td>
-                                        <td><p><p>{{ rec.course_applied.program_name|title }}</p></p></td>
-                                        <td><p></p></td>
+                                        <td><p>{{ rec.course_applied.program_name|title }}</p></td>
+                                        <td><p>{{ rec.applicant_id.donor_applicant_rel.get.donor.organisation }}</p></td>
                                         <td><p>{{ rec.scholarship.scholarship_name|title }}</p></td>
                                     </tr>
                                 {% endfor %}
