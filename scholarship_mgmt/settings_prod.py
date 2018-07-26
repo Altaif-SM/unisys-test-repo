@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'accounting.apps.AccountingConfig',
     'donor.apps.DonorConfig',
     'parent.apps.ParentConfig',
+    'mathfilters',
 ]
 
 MIDDLEWARE = [

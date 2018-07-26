@@ -1,6 +1,6 @@
 {% extends "template_base_page.html" %}
 {% load staticfiles %}
-
+{% load mathfilters %}
 {% block styleBlock %}
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <style type="text/css">
@@ -251,13 +251,28 @@
                                 </td>
 
                                 <td>
-                                    <text hidden>{{ rec.voucher_total }}</text>
-                                    <input class="form-control data voucher_total" name="voucher_total"
+
+
+
+                                    {% if rec.voucher_type == "credit" %}
+                                        <text hidden>{{ rec.voucher_amount }}</text>
+                                        <input class="form-control data voucher_total" name="voucher_total"
                                            type="text"
                                            id="voucher_total{{ forloop.counter }}"
-                                           value="{{ rec.voucher_total }}"
+                                           value="{{ 0|sub:rec.voucher_amount }} "
                                            required
                                            disabled>
+                                    {% else %}
+                                        <text hidden>{{ rec.voucher_amount }}</text>
+                                        <input class="form-control data voucher_total" name="voucher_total"
+                                           type="text"
+                                           id="voucher_total{{ forloop.counter }}"
+                                           value="{{ rec.voucher_amount|sub:0 }} "
+                                           required
+                                           disabled>
+                                    {% endif %}
+
+
                                 </td>
 
                             </tr>

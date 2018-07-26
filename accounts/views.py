@@ -115,7 +115,7 @@ def user_signup(request):
                 # form = signUpForm()
                 for msg in signup_form.errors[error_msg]:
                     messages.success(request, msg)
-        return render(request, 'signup.html', {'form': signup_form})
+        return render(request, 'template_login.html', {'form': signup_form})
 
 # @csrf_exempt
 def user_signin(request):

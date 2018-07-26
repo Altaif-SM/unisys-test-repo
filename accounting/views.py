@@ -82,7 +82,8 @@ def get_student_report(request):
     if balance_total['total_price'] and stud_pay_voucher_list:
         voucher_record['debit_total'] = debit_total
         voucher_record['credit_total'] = credit_total
-        voucher_record['balance_total'] = (float(balance_total['total_price']) - credit_total)
+        # voucher_record['balance_total'] = (float(balance_total['total_price']) - debit_total)
+        voucher_record['balance_total'] = (float(debit_total) - float(credit_total))
         voucher_record['voucher_record'] = voucher_rec_list
 
     return render(request, "template_student_report.html",{'voucher_record': voucher_record, 'country_list': country, 'scholarship_list': scholarship, 'selected_country':CountryDetails.objects.filter(id=query_country), 'selected_scholarship': ScholarshipDetails.objects.filter(id=query_scholarship)})
@@ -173,7 +174,7 @@ def get_approval_and_paid_total(request):
                 for voucher_obj in application_obj.rel_student_payment_receipt_voucher.all():
 
                     raw_dict['voucher_list'] = voucher_obj
-                    if voucher_obj.voucher_type == "credit":
+                    if voucher_obj.voucher_type == "debit":
                         credit_total += float(voucher_obj.voucher_amount)
 
                 outstanding_amount = float(approval_amount) - float(credit_total)
