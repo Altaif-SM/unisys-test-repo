@@ -692,6 +692,7 @@ def save_development_program_master(request):
     semester_name = request.POST.get('semester_name')
     module_name = request.POST.get('module_name')
     code_name = request.POST.get('code_name')
+    name = request.POST.get('name')
 
     activities = request.POST.get('activities')
     outcomes = request.POST.get('outcomes')
@@ -704,10 +705,10 @@ def save_development_program_master(request):
     date_name = request.POST.get('date_name')
     remark_name = request.POST.get('remark_name')
     try:
-        if not DevelopmentProgram.objects.filter(year_id=year_name, semester_id=semester_name,
+        if not DevelopmentProgram.objects.filter(year_id=year_name, semester_id=semester_name,name=name,
                                                  module_id=module_name).exists():
             DevelopmentProgram.objects.create(year_id=year_name, semester_id=semester_name, module_id=module_name,
-                                              code=code_name, date=date_name, marks=mark_name,
+                                              code=code_name, date=date_name, marks=mark_name,name=name,
                                               method=method_name, duration_night=night_duration,
                                               duration_day=day_duration, outcome=outcomes, activity=activities,
                                               remark=remark_name)
@@ -724,6 +725,7 @@ def update_development_program_master(request):
     development_program_id = request.POST.get('development_program_id')
 
     year_name = request.POST.get('year_name')
+    name = request.POST.get('name')
     semester_name = request.POST.get('semester_name')
     module_name = request.POST.get('module_name')
     code_name = request.POST.get('code_name')
@@ -745,7 +747,7 @@ def update_development_program_master(request):
 
             DevelopmentProgram.objects.filter(id=development_program_id).update(year_id=year_name,
                                                                                 semester_id=semester_name,
-                                                                                module_id=module_name,
+                                                                                module_id=module_name,name=name,
                                                                                 code=code_name, date=date_name,
                                                                                 marks=mark_name,
                                                                                 method=method_name,
@@ -934,6 +936,16 @@ def delete_manage_partner_master(request):
     return HttpResponse(json.dumps({'error': 'Record not deleted.'}), content_type="application/json")
 
 
+def export_partner_list(request):
+    try:
+        partner_recs = PartnerDetails.objects.all().values_list('address__country__country_name','office_name','person_one','person_one_contact_number','office_contact_number','email','single_address')
+        column = ['Country','Office Name','Person One','Person One Contact','Office Contact','Email','Address']
+        return export_wraped_column_xls('Parent_Details',column,partner_recs)
+    except Exception as e:
+        messages.warning(request, "Record not exported." + str(e))
+    return redirect('/masters/template_manage_partner_master/')
+
+
 # *********------------ Manage Donor Master ----------***************
 
 def template_manage_donor_master(request):
@@ -1058,6 +1070,23 @@ def delete_manage_donor_master(request):
     except:
         messages.warning(request, "Record not deleted.")
     return HttpResponse(json.dumps({'error': 'Record not deleted.'}), content_type="application/json")
+
+
+def email_templates(request):
+    template_recs = FirstInterviewCallTemplate.objects.all()
+    return render(request, 'email_templates.html',{'template_recs':template_recs})
+
+
+def save_email_template(request):
+    template_one = request.POST.get('template_one')
+    template_one_check = request.POST.get('template_one_check')
+
+    if FirstInterviewCallTemplate.objects.filter().exists():
+        FirstInterviewCallTemplate.objects.filter(id=6).update(template=template_one, is_active=True)
+    else:
+        FirstInterviewCallTemplate.objects.create(template=template_one,is_active=True)
+    return redirect('/masters/email_templates/')
+    # return render(request, 'email_templates.html',{})
 
 
 def get_table_data(request):

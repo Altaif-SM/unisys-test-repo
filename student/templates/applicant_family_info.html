@@ -51,18 +51,24 @@
                         return false;
                     }
                 });
+
+                $(document).on("click", ".remove_doc", function (e) {
+                    {#alert($(this).prev().attr('id'))#}
+                    var id = $(this).prev().attr('id');
+                    $('#'+id).val('');
+                });
             });
 
 
-                $('#sample_1').dataTable().fnDestroy();
-                $('#sample_1').dataTable({
-                    "aoColumnDefs": [
-                        {'bSortable': false}
-                    ]
-                });
-            }
+            $('#sample_1').dataTable().fnDestroy();
+            $('#sample_1').dataTable({
+                "aoColumnDefs": [
+                    {'bSortable': false}
+                ]
+            });
+        }
 
-            window.setTimeout(function () {
+        window.setTimeout(function () {
             $(".alert").fadeTo(500, 0).slideUp(500, function () {
                 $(this).remove();
             });
@@ -122,7 +128,7 @@
                             <div class="">
                                 <label class="col-md-2 control-label">DOB:</label>
                                 <div class="col-md-2">
-                                    <input type="date" title="Enter DOB" id="wife_dob" name="wife_dob"
+                                    <input type="date" title="Enter DOB" id="wife_dob" name="wife_dob"  max="2999-12-31"
                                            value="{{ application_obj.wife_dob|date:"Y-m-d" }}" class="form-control">
                                 </div>
                             </div>
@@ -147,7 +153,9 @@
                                 <div class="col-md-2">
                                     <input type="file" title="Select wife pay slip" id="wife_pay_slip"
                                            value="{{ application_obj.wife_pay_slip|default:"" }}" name="wife_pay_slip"
-                                           class="form-control doc" >
+                                           class="form-control doc"><span
+                                        style="float: right; margin-top: -25px; color: darkred"
+                                        class="remove_doc fa fa-close"></span>
                                 </div>
                             </div>
                         </div>
@@ -167,7 +175,8 @@
                                 <label class="col-md-2 control-label">Telephone (Home):</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Telephone number (Home)" id="wife_number"
-                                           value="{{ application_obj.wife_telephone_home|default:"" }}" name="wife_telephone_home"
+                                           value="{{ application_obj.wife_telephone_home|default:"" }}"
+                                           name="wife_telephone_home"
                                            class="form-control">
                                 </div>
                             </div>
@@ -180,7 +189,8 @@
                                 <label class="col-md-2 control-label">Occupation:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Occupation" id="wife_occupation"
-                                           value="{{ application_obj.wife_occupation|default:"" }}" name="wife_occupation"
+                                           value="{{ application_obj.wife_occupation|default:"" }}"
+                                           name="wife_occupation"
                                            class="form-control">
                                 </div>
                             </div>
@@ -225,16 +235,16 @@
                                 <label class="col-md-2 control-label">Father Name:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter father name" id="father_name" name="father_name"
-                                           value="{{ application_obj.father_name|default:"" }}" class="form-control" >
+                                           value="{{ application_obj.father_name|default:"" }}" class="form-control">
                                 </div>
                             </div>
 
                             <div class="">
                                 <label class="col-md-2 control-label">DOB:</label>
                                 <div class="col-md-2">
-                                    <input type="date" title="Enter DOB" id="father_dob" name="father_dob"
+                                    <input type="date" title="Enter DOB" id="father_dob" name="father_dob"  max="2999-12-31"
                                            value="{{ application_obj.father_dob|date:"Y-m-d" }}" class="form-control"
-                                           >
+                                    >
                                 </div>
                             </div>
                         </div>
@@ -258,7 +268,9 @@
                                 <div class="col-md-2">
                                     <input type="file" title="Select father pay slip" id="father_pay_slip"
                                            value="{{ application_obj.father_pay_slip }}" name="father_pay_slip"
-                                           class="form-control doc">
+                                           class="form-control doc"> <span
+                                        style="float: right; margin-top: -25px; color: darkred"
+                                        class="remove_doc fa fa-close"></span>
                                 </div>
                             </div>
                         </div>
@@ -292,8 +304,9 @@
                                 <label class="col-md-2 control-label">Occupation:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Occupation" id="father_occupation"
-                                           value="{{ application_obj.father_occupation|default:"" }}" name="father_occupation"
-                                           class="form-control" >
+                                           value="{{ application_obj.father_occupation|default:"" }}"
+                                           name="father_occupation"
+                                           class="form-control">
                                 </div>
                             </div>
 
@@ -301,7 +314,7 @@
                                 <label class="col-md-2 control-label">Country:</label>
                                 <div class="col-md-2">
                                     <select id='father_nationality' title="Select Country" name="father_nationality"
-                                            class="form-control" >
+                                            class="form-control">
                                         {% if application_obj.father_nationality %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ application_obj.father_nationality.id }}"

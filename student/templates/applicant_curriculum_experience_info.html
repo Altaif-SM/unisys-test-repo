@@ -44,6 +44,12 @@
                     }
                 });
 
+                $(document).on("click", ".remove_doc", function (e) {
+                    {#alert($(this).prev().attr('id'))#}
+                    var id = $(this).prev().attr('id');
+                    $('#' + id).val('');
+                });
+
 
                 $('#sample_1').dataTable().fnDestroy();
                 $('#sample_1').dataTable({
@@ -109,7 +115,7 @@
                                     <input type="text" title="Enter Co-Curriculum-1" id="curriculum_name_one"
                                            name="curriculum_name_one"
                                            value="{{ curriculum_obj.curriculum_name_one }}" class="form-control"
-                                           >
+                                    >
                                 </div>
                             </div>
 
@@ -117,7 +123,7 @@
                                 <label class="col-md-1 control-label">Year:</label>
                                 <div class="col-md-2">
                                     <select id='curriculum_year_one' title="Select Year" name="curriculum_year_one"
-                                            class="form-control" >
+                                            class="form-control">
                                         {% if curriculum_obj %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ curriculum_obj.curriculum_year_one }}"
@@ -142,6 +148,8 @@
                                            id="curriculum_result_document_one"
                                            value="{{ curriculum_obj.curriculum_result_document_one }}"
                                            name="curriculum_result_document_one" class="form-control doc">
+                                    <span style="float: right; margin-top: -25px; color: darkred"
+                                          class="remove_doc fa fa-close"></span>
                                 </div>
                             </div>
                         </div>
@@ -155,7 +163,7 @@
                                     <input type="text" title="Enter Co-Curriculum-2" id="curriculum_name_two"
                                            name="curriculum_name_two"
                                            value="{{ curriculum_obj.curriculum_name_two }}" class="form-control"
-                                           >
+                                    >
                                 </div>
                             </div>
 
@@ -163,7 +171,7 @@
                                 <label class="col-md-1 control-label">Year:</label>
                                 <div class="col-md-2">
                                     <select id='curriculum_year_two' title="Select Year" name="curriculum_year_two"
-                                            class="form-control" >
+                                            class="form-control">
                                         {% if curriculum_obj %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ curriculum_obj.curriculum_year_two }}"
@@ -188,6 +196,8 @@
                                            id="curriculum_result_document_two"
                                            value="{{ curriculum_obj.curriculum_result_document_two }}"
                                            name="curriculum_result_document_two" class="form-control doc">
+                                    <span style="float: right; margin-top: -25px; color: darkred"
+                                          class="remove_doc fa fa-close"></span>
                                 </div>
                             </div>
                         </div>
@@ -201,7 +211,7 @@
                                     <input type="text" title="Enter Co-Curriculum-3" id="curriculum_name_three"
                                            name="curriculum_name_three"
                                            value="{{ curriculum_obj.curriculum_name_three }}" class="form-control"
-                                           >
+                                    >
                                 </div>
                             </div>
 
@@ -209,7 +219,7 @@
                                 <label class="col-md-1 control-label">Year:</label>
                                 <div class="col-md-2">
                                     <select id='curriculum_year_three' title="Select Year" name="curriculum_year_three"
-                                            class="form-control" >
+                                            class="form-control">
                                         {% if curriculum_obj %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ curriculum_obj.curriculum_year_three }}"
@@ -234,6 +244,8 @@
                                            id="curriculum_result_document_three"
                                            value="{{ curriculum_obj.curriculum_result_document_three }}"
                                            name="curriculum_result_document_three" class="form-control doc">
+                                    <span style="float: right; margin-top: -25px; color: darkred"
+                                          class="remove_doc fa fa-close"></span>
                                 </div>
                             </div>
                         </div>
@@ -255,7 +267,7 @@
                         <div class="row">
                             <div class="">
                                 <label class="col-md-2 control-label">Work Experience 1 :</label>
-                                <div class="col-md-1">
+                                <div class="col-md-3">
                                     <input type="text" title="Enter Work Experience 1" id="work_experience_one"
                                            value="{{ experience_obj.work_experience_one }}" name="work_experience_one"
                                            class="form-control">
@@ -263,41 +275,49 @@
                             </div>
 
                             <div class="">
-                                <label class="col-md-1 control-label">Start Date:</label>
-                                <div class="col-md-2">
-                                    <input type="date" id="from_date_one" name="from_date_one"
+                                <label class="col-md-2 control-label">Result Doc:</label>
+                                <div class="col-md-3">
+                                    <input type="file" title="Select Result document" id="work_experience_document_one"
+                                           name="work_experience_document_one" class="form-control doc">
+                                    <span style="float: right; margin-top: -25px; color: darkred"
+                                          class="remove_doc fa fa-close"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    <br>
+                        <br>
+
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Start Date:</label>
+                                <div class="col-md-3">
+                                    <input type="date" id="from_date_one" name="from_date_one" max="2999-12-31"
                                            value="{{ experience_obj.from_date_one|date:"Y-m-d" }}" class="form-control">
                                 </div>
                             </div>
 
                             <div class="">
-                                <label class="col-md-1 control-label">End Date:
+                                <label class="col-md-2 control-label">End Date:
 
                                 </label>
-                                <div class="col-md-2" id="EndDate">
-                                    <input type="date" id="to_date_one" name="to_date_one"
+                                <div class="col-md-3" id="EndDate">
+                                    <input type="date" id="to_date_one" name="to_date_one" max="2999-12-31"
                                            value="{{ experience_obj.to_date_one|date:"Y-m-d" }}" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Result Doc:</label>
-                                <div class="col-md-2">
-                                    <input type="file" title="Select Result document" id="work_experience_document_one"
-                                           name="work_experience_document_one" class="form-control doc">
                                 </div>
                             </div>
                         </div>
 
 
                         <br>
-                        <br>
+                        <hr>
                         <br>
 
                         <div class="row">
                             <div class="">
                                 <label class="col-md-2 control-label">Work Experience 2 :</label>
-                                <div class="col-md-1">
+                                <div class="col-md-3">
                                     <input type="text" title="Enter Work Experience 2" id="work_experience_two"
                                            name="work_experience_two" value="{{ experience_obj.work_experience_two }}"
                                            class="form-control">
@@ -305,29 +325,38 @@
                             </div>
 
                             <div class="">
-                                <label class="col-md-1 control-label">Start Date:</label>
-                                <div class="col-md-2">
-                                    <input type="date" id="from_date_two" name="from_date_two"
+                                <label class="col-md-2 control-label">Result Doc:</label>
+                                <div class="col-md-3">
+                                    <input type="file" title="Select Result document" id="work_experience_document_two"
+                                           value="{{ experience_obj.work_experience_document_two }}"
+                                           name="work_experience_document_two" class="form-control doc">
+                                    <span style="float: right; margin-top: -25px; color: darkred"
+                                          class="remove_doc fa fa-close"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    <br>
+                        <br>
+                        <div class="row">
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Start Date:</label>
+                                <div class="col-md-3">
+                                    <input type="date" id="from_date_two" name="from_date_two" max="2999-12-31"
                                            value="{{ experience_obj.from_date_two|date:"Y-m-d" }}" class="form-control">
                                 </div>
                             </div>
 
                             <div class="">
-                                <label class="col-md-1 control-label">End Date:</label>
-                                <div class="col-md-2" id="EndDate">
-                                    <input type="date" id="to_date_two" name="to_date_two"
+                                <label class="col-md-2 control-label">End Date:</label>
+                                <div class="col-md-3" id="EndDate">
+                                    <input type="date" id="to_date_two" name="to_date_two" max="2999-12-31"
                                            value="{{ experience_obj.to_date_two|date:"Y-m-d" }}" class="form-control">
                                 </div>
                             </div>
 
-                            <div class="">
-                                <label class="col-md-1 control-label">Result Doc:</label>
-                                <div class="col-md-2">
-                                    <input type="file" title="Select Result document" id="work_experience_document_two"
-                                           value="{{ experience_obj.work_experience_document_two }}"
-                                           name="work_experience_document_two" class="form-control doc">
-                                </div>
-                            </div>
+
                         </div>
 
                         <br><br>

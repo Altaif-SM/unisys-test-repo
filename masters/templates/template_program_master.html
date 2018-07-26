@@ -147,7 +147,7 @@
             </li>
 
             <li>
-                <span> Program </span>
+                <span> Course </span>
             </li>
         </ul>
     </div>
@@ -163,7 +163,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> Manage Program</span>
+                <span class="caption-subject font-red sbold uppercase"> Manage Course</span>
             </div>
         </div>
 
@@ -180,7 +180,7 @@
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">Program Name:
+                                <label class="col-md-2 control-label">Course Name:
 
                                 </label>
                                 <div class="col-md-2">
@@ -242,7 +242,7 @@
                     <thead>
                     <tr>
                         <th style="display: none">Id</th>
-                        <th>Program</th>
+                        <th>Course</th>
                         <th>Degree Type</th>
                         <th>University</th>
                         <th width="10%"></th>
@@ -259,7 +259,7 @@
                                        type="text"
                                        id="program_name{{ forloop.counter }}" value="{{ rec.program_name|title }}"
                                        required pattern='[A-Za-z+-]+'
-                                       title='Please enter program name' disabled></td>
+                                       title='Please enter Course name' disabled></td>
 
                             <td>
                                 <text hidden>{{ rec.degree_type.degree_type_name|title }}</text>

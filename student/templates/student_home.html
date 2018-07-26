@@ -34,31 +34,7 @@
         window.onload = function () {
             $(document).ready(function () {
 
-                $('#save').click(function () {
-                    var array = []
 
-                    $('.item').each(function (e) {
-                        var id = $(this).attr('id');
-                        var flags = {}
-
-                        $('#' + id + ' .app').each(function () {
-                            flags[$(this).attr('id')] = $(this).is(':checked')
-                            {#alert($(this).is(':checked'));#}
-                        })
-                        {#alert($('#'+id+' .application_id').val())#}
-
-                        var payload = {
-                            'application_id': $('#' + id + ' .application_id').val(),
-                            'flags': flags
-                        }
-                        array.push(payload)
-                    })
-
-                    $('#data_value').val(JSON.stringify(array));
-
-                    {#console.log(JSON.stringify(array));#}
-                    {#return false;#}
-                })
             });
 
 
@@ -111,39 +87,11 @@
 
     <div class="portlet-body">
         <div class="form-body">
-            <div class="row col-md-offset-3">
-                {% comment %}<form method="post" action="{% url 'partner:filter_application_status' %}" id="form_sample_1">
-                    {% csrf_token %}
-                    <div class="col-md-4">
-                        <div class="">
-                            <select autocomplete="off" class="form-control" data-live-search="true"
-                                    id="application_status" name="application_status" required="required">
-                                {% if application_status %}
-                                    <option  style="display: none"  value="{{ application_status }}" selected="selected">{{ application_status }}</option>
-                                    {% else %}
-                                    <option value="" style="display: none" selected="selected">Please Select</option>
-                                {% endif %}
-
-                                <option value="First Interview">First Interview</option>
-                                <option value="First Interview attended">First Interview attended</option>
-                                <option value="First Interview approval">First Interview approval</option>
-                                <option value="Psychometric Test">Psychometric Test</option>
-                                <option value="Second Interview attended">Second Interview attended</option>
-                                <option value="Second Interview approval">Second Interview approval</option>
-                                <option value="Admin approval">Admin approval</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="col-md-2">
-                        <button type="submit" class="btn blue btn-block" id="go">Filter
-                        </button>
-                    </div>
-                </form>{% endcomment %}
+            <div class="row col-md-offset-4">
+                <h3 style="color: darkred;"><b>Welcome {{applicant.first_name|title}}. Please fill your details.</b></h3>
             </div>
             <div class="form-body">
-                <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data"
-                      {% comment %}action="{% url 'partner:change_application_status' %}"{% endcomment %}>
+                <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
                     <div class="row">

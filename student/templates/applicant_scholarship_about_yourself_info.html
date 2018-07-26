@@ -42,6 +42,12 @@
                     }
                 });
 
+                $(document).on("click", ".remove_doc", function (e) {
+                    {#alert($(this).prev().attr('id'))#}
+                    var id = $(this).prev().attr('id');
+                    $('#'+id).val('');
+                });
+
 
                 $(document).on("click", "#course_applied", function (e) {
                     var course_applied = $(this).val();
@@ -259,6 +265,8 @@
                                     <input type="file" title="Select admission letter" id="admission_letter_document"
                                            value="{{ scholarship_obj.admission_letter_document }}"
                                            name="admission_letter_document" class="doc form-control" required>
+                                    <span style="float: right; margin-top: -25px; color: darkred"
+                                        class="remove_doc fa fa-close"></span>
                                 </div>
                             </div>
                         </div>

@@ -30,14 +30,17 @@
 {% block ScriptBlock %}
     <script>
         window.onload = function () {
-             $(document).ready(function () {
-        $(document).on("click", "#save_form", function () {
+            $(document).ready(function () {
+                $(document).on("click", "#save_form", function () {
+                    $('#id_accept_student_model').modal();
+                    {#$("#form_sample_1").submit();#}
+                });
 
-          $("#form_sample_1").submit();
-
-         });
-
-        });
+                $(document).on("click", "#submit_appplication", function () {
+                    $('#id_accept_student_model').modal();
+                    $("#form_sample_1").submit();
+                });
+            });
         }
 
         window.setTimeout(function () {
@@ -45,7 +48,6 @@
                 $(this).remove();
             });
         }, 4000);
-
 
 
     </script>
@@ -57,7 +59,7 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                 <a href="{% url 'student:student_home' %}">Home</a>
+                <a href="{% url 'student:student_home' %}">Home</a>
                 <i class="fa fa-angle-right"></i>
             </li>
 
@@ -80,292 +82,294 @@
             <div class="caption">
                 <i class="icon-settings font-red"></i>
                 <span class="caption-subject font-red sbold uppercase">My Application</span>
-                <button type="button" class="btn green submit_application" id="save_form" style="margin-left: 800px">Submit Application</button>
+                <button type="button" class="btn green submit_application" id="save_form" style="margin-left: 800px">
+                    Submit Application
+                </button>
             </div>
         </div>
 
         <div class="portlet-body">
             <div class="form-body">
                 <div class="portlet light portlet-fit portlet-form ">
-                <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> PERSONAL INFO</span>
-            </div>
-                 <div class="row">
-                            <div class="">
-                                <label class="col-md-1 control-label">First Name:</label>
-                                <div class="col-md-2">
-                                    <span class="">{{ application_obj.first_name }}</span>
+                    <i class="icon-settings font-red"></i>
+                    <span class="caption-subject font-red sbold uppercase"> PERSONAL INFO</span>
+                </div>
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-1 control-label">First Name:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ application_obj.first_name }}</span>
 
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Middle Name:</label>
-                                <div class="col-md-2">
-                                    <span class="">{{ application_obj.middle_name }}</span>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Last Name:</label>
-                                <div class="col-md-2">
-                                   <span class="">{{ application_obj.last_name }}</span>
-                                </div>
-                            </div>
                         </div>
-                 <br>
-
-                        <div class="row">
-                            <div class="">
-                                <label class="col-md-1 control-label">DOB:</label>
-                                <div class="col-md-2">
-                                    <span class="">{{ application_obj.birth_date|date:"Y-m-d"}}</span>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Gender:</label>
-                                <div class="col-md-2">
-                                     <span class="">{{ application_obj.gender }}</span>
-
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Nationality:</label>
-                                <div class="col-md-2">
-                                    <span class="">{{ application_obj.nationality }}</span>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <br>
-
-
-                        <div class="row">
-                            <div class="">
-                                <label class="col-md-1 control-label">ID no:</label>
-                                <div class="col-md-2">
-                                    <span class="">{{ application_obj.id_number }}</span>
-
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Passport no:</label>
-                                <div class="col-md-2">
-                                    <span class="">{{ application_obj.passport_number }}</span>
-
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Country of Issuer:</label>
-                                <div class="col-md-2">
-                                    <span class="">{{ application_obj.passport_issue_country }}</span>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <br>
-                    <div class="row">
-                            <div class="">
-                                <label class="col-md-1 control-label">E-mail:</label>
-                                <div class="col-md-2">
-                                   <span class="">{{ application_obj.email }}</span>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Telephone no (HP):</label>
-                                <div class="col-md-2">
-                                    <span class="">{{ application_obj.telephone_hp }}</span>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Telephone no (Home):</label>
-                                <div class="col-md-2">
-                                    <span class="">{{ application_obj.telephone_home }}</span>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <br>
-
-                        <div class="row">
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Religion:</label>
-                                <div class="col-md-2">
-                                    <span class="">{{ application_obj.religion }}</span>
-                                </div>
-                            </div>
-
-
-                            <div class="">
-                                <label class="col-md-2 control-label">Residential/Postal Address:</label>
-                                <div class="col-md-2">
-                                    <span class="">{{ application_obj.address.residential_address }}</span>
-
-                                </div>
-                            </div>
-                        </div>
-
-                       <br>
-
-                        <div class="row">
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Premise/Sub-Locality-2:</label>
-                                <div class="col-md-2">
-
-                                    <span class="">{{ application_obj.address.street }}</span>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Sub-Locality:</label>
-                                <div class="col-md-2">
-
-                                    <span class="">{{ application_obj.address.sub_locality }}</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <br>
-                    <div class="row">
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Postcode:</label>
-                                <div class="col-md-2">
-
-                                    <span class="">{{ application_obj.address.post_code}}</span>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">District:</label>
-                                <div class="col-md-2">
-
-                                    <span class="">{{ application_obj.address.district|title}}</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <br>
-                    <div class="row">
-
-                            <div class="">
-                                <label class="col-md-1 control-label">State/Province:</label>
-                                <div class="col-md-2">
-
-                                    <span class="">{{ application_obj.address.state|title}}</span>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Country:</label>
-                                <div class="col-md-2">
-                                    <span class="">{{ application_obj.address.country.country_name|title}}</span>
-                                </div>
-                            </div>
-                    </div>
-            <br>
-                         <div class="row">
-
-                             <div class="">
-                                <label class="col-md-1 control-label">Photo:</label>
-                                <div class="col-md-2">
-                                    <span class="">{{ application_obj.image}}</span>
-                                </div>
-                            </div>
                     </div>
 
-                        <br>
+                    <div class="">
+                        <label class="col-md-1 control-label">Middle Name:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ application_obj.middle_name }}</span>
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Last Name:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ application_obj.last_name }}</span>
+                        </div>
+                    </div>
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-1 control-label">DOB:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ application_obj.birth_date|date:"Y-m-d" }}</span>
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Gender:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ application_obj.gender }}</span>
+
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Nationality:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ application_obj.nationality }}</span>
+
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+
+
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-1 control-label">ID no:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ application_obj.id_number }}</span>
+
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Passport no:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ application_obj.passport_number }}</span>
+
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Country of Issuer:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ application_obj.passport_issue_country }}</span>
+
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-1 control-label">E-mail:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ application_obj.email }}</span>
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Telephone no (HP):</label>
+                        <div class="col-md-2">
+                            <span class="">{{ application_obj.telephone_hp }}</span>
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Telephone no (Home):</label>
+                        <div class="col-md-2">
+                            <span class="">{{ application_obj.telephone_home }}</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <br>
+
+                <div class="row">
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Religion:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ application_obj.religion }}</span>
+                        </div>
+                    </div>
+
+
+                    <div class="">
+                        <label class="col-md-2 control-label">Residential/Postal Address:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ application_obj.address.residential_address }}</span>
+
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="row">
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Premise/Sub-Locality-2:</label>
+                        <div class="col-md-2">
+
+                            <span class="">{{ application_obj.address.street }}</span>
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Sub-Locality:</label>
+                        <div class="col-md-2">
+
+                            <span class="">{{ application_obj.address.sub_locality }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+                <div class="row">
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Postcode:</label>
+                        <div class="col-md-2">
+
+                            <span class="">{{ application_obj.address.post_code }}</span>
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">District:</label>
+                        <div class="col-md-2">
+
+                            <span class="">{{ application_obj.address.district|title }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+                <div class="row">
+
+                    <div class="">
+                        <label class="col-md-1 control-label">State/Province:</label>
+                        <div class="col-md-2">
+
+                            <span class="">{{ application_obj.address.state|title }}</span>
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Country:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ application_obj.address.country.country_name|title }}</span>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Photo:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ application_obj.image }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
                 <hr>
                 <div class="portlet light portlet-fit portlet-form ">
-                <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> WIFE INFO</span>
-            </div>
-                    <div class="row">
-                            <div class="">
-                                <label class="col-md-1 control-label">Wife Name:</label>
-                                <div class="col-md-2">
-                                    <span class="">{{ application_obj.wife_name}}</span>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">DOB:</label>
-                                <div class="col-md-2">
-
-                                    <span class="">{{ application_obj.wife_dob|date:"Y-m-d"}}</span>
-                                </div>
-                            </div>
+                    <i class="icon-settings font-red"></i>
+                    <span class="caption-subject font-red sbold uppercase"> WIFE INFO</span>
+                </div>
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-1 control-label">Wife Name:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ application_obj.wife_name }}</span>
                         </div>
+                    </div>
 
-                        <br>
+                    <div class="">
+                        <label class="col-md-1 control-label">DOB:</label>
+                        <div class="col-md-2">
 
-
-                        <div class="row">
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Income($):</label>
-                                <div class="col-md-2">
-                                    <span class="">{{ application_obj.wife_income|default:"" }}</span>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Pay Slip:</label>
-                                <div class="col-md-2">
-                                    <span class="">{{ application_obj.wife_pay_slip|default:""  }}</span>
-                                </div>
-                            </div>
+                            <span class="">{{ application_obj.wife_dob|date:"Y-m-d" }}</span>
                         </div>
+                    </div>
+                </div>
 
-                        <br>
-                    <div class="row">
-                            <div class="">
-                                <label class="col-md-1 control-label">E-mail:</label>
-                                <div class="col-md-2">
-                                    <span class="">{{ application_obj.wife_email|default:""  }}</span>
-                                </div>
-                            </div>
+                <br>
 
-                            <div class="">
-                                <label class="col-md-1 control-label">Telephone (Home):</label>
-                                <div class="col-md-2">
 
-                                    <span class="">{{ application_obj.wife_telephone_home|default:""  }}</span>
-                                </div>
-                            </div>
+                <div class="row">
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Income($):</label>
+                        <div class="col-md-2">
+                            <span class="">{{ application_obj.wife_income|default:"" }}</span>
                         </div>
+                    </div>
 
-                        <br>
-                     <div class="row">
-                            <div class="">
-                                <label class="col-md-1 control-label">Occupation:</label>
-                                <div class="col-md-2">
+                    <div class="">
+                        <label class="col-md-1 control-label">Pay Slip:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ application_obj.wife_pay_slip|default:"" }}</span>
+                        </div>
+                    </div>
+                </div>
 
-                                    <span class="">{{ application_obj.wife_occupation|default:""  }}</span>
-                                </div>
-                            </div>
+                <br>
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-1 control-label">E-mail:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ application_obj.wife_email|default:"" }}</span>
+                        </div>
+                    </div>
 
-                            <div class="">
-                                <label class="col-md-1 control-label">Country:</label>
-                                <div class="col-md-2">
+                    <div class="">
+                        <label class="col-md-1 control-label">Telephone (Home):</label>
+                        <div class="col-md-2">
 
-                                    <span class="">{{ application_obj.wife_nationality.country_name|title }}</span>
+                            <span class="">{{ application_obj.wife_telephone_home|default:"" }}</span>
+                        </div>
+                    </div>
+                </div>
 
-                                </div>
-                            </div>
+                <br>
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-1 control-label">Occupation:</label>
+                        <div class="col-md-2">
+
+                            <span class="">{{ application_obj.wife_occupation|default:"" }}</span>
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Country:</label>
+                        <div class="col-md-2">
+
+                            <span class="">{{ application_obj.wife_nationality.country_name|title }}</span>
 
                         </div>
+                    </div>
+
+                </div>
                 <br>
                 <hr>
                 <div class="portlet light portlet-fit portlet-form ">
@@ -408,41 +412,41 @@
 
                 <br>
                 <div class="row">
-                            <div class="">
-                                <label class="col-md-1 control-label">E-mail:</label>
-                                <div class="col-md-2">
+                    <div class="">
+                        <label class="col-md-1 control-label">E-mail:</label>
+                        <div class="col-md-2">
 
-                                    <span class="">{{ application_obj.father_email|default:""}}</span>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Telephone (Home):</label>
-                                <div class="col-md-2">
-
-                                    <span class="">{{ application_obj.father_telephone_home|default:""}}</span>
-                                </div>
-                            </div>
+                            <span class="">{{ application_obj.father_email|default:"" }}</span>
                         </div>
-                 <div class="row">
-                            <div class="">
-                                <label class="col-md-1 control-label">Occupation:</label>
-                                <div class="col-md-2">
+                    </div>
 
-                                    <span class="">{{ application_obj.father_occupation|default:""}}</span>
-                                </div>
-                            </div>
+                    <div class="">
+                        <label class="col-md-1 control-label">Telephone (Home):</label>
+                        <div class="col-md-2">
 
-                            <div class="">
-                                <label class="col-md-1 control-label">Country:</label>
-                                <div class="col-md-2">
-
-                                <span class="">{{ application_obj.father_nationality.country_name|title }}</span>
-                                </div>
-                            </div>
+                            <span class="">{{ application_obj.father_telephone_home|default:"" }}</span>
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-1 control-label">Occupation:</label>
+                        <div class="col-md-2">
 
-                        <br>
+                            <span class="">{{ application_obj.father_occupation|default:"" }}</span>
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Country:</label>
+                        <div class="col-md-2">
+
+                            <span class="">{{ application_obj.father_nationality.country_name|title }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
                 <hr>
                 <div class="portlet light portlet-fit portlet-form ">
                     <i class="icon-settings font-red"></i>
@@ -471,64 +475,64 @@
                 <br>
 
 
-                        <div class="row">
+                <div class="row">
 
-                            <div class="">
-                                <label class="col-md-1 control-label">Income($):</label>
-                                <div class="col-md-2">
-                                <span class="">{{ application_obj.mother_income}}</span>
+                    <div class="">
+                        <label class="col-md-1 control-label">Income($):</label>
+                        <div class="col-md-2">
+                            <span class="">{{ application_obj.mother_income }}</span>
 
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Pay Slip:</label>
-                                <div class="col-md-2">
-                                    <span class="">{{ application_obj.mother_pay_slip }}</span>
-                                </div>
-                            </div>
                         </div>
+                    </div>
 
-                        <br>
-                 <div class="row">
-                            <div class="">
-                                <label class="col-md-1 control-label">E-mail:</label>
-                                <div class="col-md-2">
-                                    <span class="">{{ application_obj.mother_email|default:"" }}</span>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Telephone (Home):</label>
-                                <div class="col-md-2">
-                                    <span class="">{{ application_obj.mother_telephone_home|default:"" }}</span>
-                                </div>
-                            </div>
+                    <div class="">
+                        <label class="col-md-1 control-label">Pay Slip:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ application_obj.mother_pay_slip }}</span>
                         </div>
+                    </div>
+                </div>
+
+                <br>
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-1 control-label">E-mail:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ application_obj.mother_email|default:"" }}</span>
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Telephone (Home):</label>
+                        <div class="col-md-2">
+                            <span class="">{{ application_obj.mother_telephone_home|default:"" }}</span>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="row">
-                            <div class="">
-                                <label class="col-md-1 control-label">Occupation:</label>
-                                <div class="col-md-2">
+                    <div class="">
+                        <label class="col-md-1 control-label">Occupation:</label>
+                        <div class="col-md-2">
 
-                                    <span class="">{{ application_obj.mother_occupation|default:"" }}</span>
-                                </div>
-                            </div>
+                            <span class="">{{ application_obj.mother_occupation|default:"" }}</span>
+                        </div>
+                    </div>
 
-                            <div class="">
-                                <label class="col-md-1 control-label">Country:</label>
-                                <div class="col-md-2">
+                    <div class="">
+                        <label class="col-md-1 control-label">Country:</label>
+                        <div class="col-md-2">
 
-                                      <span class="">{{ application_obj.mother_nationality|title }}</span>
-
-                                </div>
-                            </div>
+                            <span class="">{{ application_obj.mother_nationality|title }}</span>
 
                         </div>
+                    </div>
 
-                        <br>
-                          <hr>
-                         <div class="portlet light portlet-fit portlet-form ">
+                </div>
+
+                <br>
+                <hr>
+                <div class="portlet light portlet-fit portlet-form ">
                     <i class="icon-settings font-red"></i>
                     <span class="caption-subject font-red sbold uppercase">Siblings Info</span>
                 </div>
@@ -550,7 +554,7 @@
                             <label class="col-md-1 control-label">Age:</label>
                             <div class="col-md-2">
 
-                                <span class="">{{ sibling.sibling_age}}</span>
+                                <span class="">{{ sibling.sibling_age }}</span>
 
 
                             </div>
@@ -569,9 +573,9 @@
 
                     </div>
                 {% endfor %}
-            <br>
-             <hr>
-                         <div class="portlet light portlet-fit portlet-form ">
+                <br>
+                <hr>
+                <div class="portlet light portlet-fit portlet-form ">
                     <i class="icon-settings font-red"></i>
                     <span class="caption-subject font-red sbold uppercase">ACADEMIC QUALIFICATION</span>
                 </div>
@@ -587,7 +591,7 @@
                     <div class="">
                         <label class="col-md-1 control-label">Year:</label>
                         <div class="col-md-2">
-                             <span class="">{{ qualification_obj.a_level_year }}</span>
+                            <span class="">{{ qualification_obj.a_level_year }}</span>
 
                         </div>
                     </div>
@@ -602,12 +606,12 @@
                     <div class="">
                         <label class="col-md-1 control-label">Result Doc:</label>
                         <div class="col-md-2">
-                            <span class="">{{ qualification_obj.a_level_result_document}}</span>
+                            <span class="">{{ qualification_obj.a_level_result_document }}</span>
                         </div>
                     </div>
                 </div>
-            <br>
-             <div class="row">
+                <br>
+                <div class="row">
                     <div class="">
                         <label class="col-md-1 control-label">'O' level :</label>
                         <div class="col-md-2">
@@ -618,7 +622,7 @@
                     <div class="">
                         <label class="col-md-1 control-label">Year:</label>
                         <div class="col-md-2">
-                             <span class="">{{ qualification_obj.o_level_year }}</span>
+                            <span class="">{{ qualification_obj.o_level_year }}</span>
 
                         </div>
                     </div>
@@ -633,46 +637,45 @@
                     <div class="">
                         <label class="col-md-1 control-label">Result Doc:</label>
                         <div class="col-md-2">
-                            <span class="">{{ qualification_obj.o_level_result_document}}</span>
+                            <span class="">{{ qualification_obj.o_level_result_document }}</span>
                         </div>
                     </div>
                 </div>
 
 
-
-            <div class="row">
-                            <div class="">
-                                <label class="col-md-1 control-label">High School :</label>
-                                <div class="col-md-2">
-                                   <span class="">{{ qualification_obj.high_school}}</span>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Year:</label>
-                                <div class="col-md-2">
-                                    <span class="">{{ qualification_obj.high_school_year}}</span>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label"> Result:</label>
-                                <div class="col-md-2">
-                                   <span class="">{{ qualification_obj.high_school_result}}</span>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Result Doc:</label>
-                                <div class="col-md-2">
-                                   <span class="">{{ qualification_obj.high_school_result_document}}</span>
-                                </div>
-                            </div>
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-1 control-label">High School :</label>
+                        <div class="col-md-2">
+                            <span class="">{{ qualification_obj.high_school }}</span>
                         </div>
+                    </div>
 
-             <br>
+                    <div class="">
+                        <label class="col-md-1 control-label">Year:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ qualification_obj.high_school_year }}</span>
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label"> Result:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ qualification_obj.high_school_result }}</span>
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Result Doc:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ qualification_obj.high_school_result_document }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
                 <hr>
-                         <div class="portlet light portlet-fit portlet-form ">
+                <div class="portlet light portlet-fit portlet-form ">
                     <i class="icon-settings font-red"></i>
                     <span class="caption-subject font-red sbold uppercase">English Qualification</span>
                 </div>
@@ -706,7 +709,7 @@
                         </div>
                     </div>
                 </div>
-            <br>
+                <br>
 
                 <div class="row">
                     <div class="">
@@ -739,11 +742,11 @@
                 </div>
                 <br>
                 <hr>
-                         <div class="portlet light portlet-fit portlet-form ">
+                <div class="portlet light portlet-fit portlet-form ">
                     <i class="icon-settings font-red"></i>
                     <span class="caption-subject font-red sbold uppercase">Experience Details</span>
                 </div>
-            <div class="row">
+                <div class="row">
                     <div class="">
                         <label class="col-md-1 control-label">Co-Curriculum-1 :</label>
                         <div class="col-md-2">
@@ -766,8 +769,8 @@
                     </div>
 
                 </div>
-            <br>
-             <div class="row">
+                <br>
+                <div class="row">
                     <div class="">
                         <label class="col-md-1 control-label">Co-Curriculum-2 :</label>
                         <div class="col-md-2">
@@ -790,8 +793,8 @@
                     </div>
 
                 </div>
-            <br>
-             <div class="row">
+                <br>
+                <div class="row">
                     <div class="">
                         <label class="col-md-1 control-label">Co-Curriculum-3 :</label>
                         <div class="col-md-2">
@@ -814,14 +817,14 @@
                     </div>
 
                 </div>
-             <hr>
-                         <div class="portlet light portlet-fit portlet-form ">
+                <hr>
+                <div class="portlet light portlet-fit portlet-form ">
                     <i class="icon-settings font-red"></i>
                     <span class="caption-subject font-red sbold uppercase"> Experience Details</span>
                 </div>
-            <div class="row">
+                <div class="row">
                     <div class="">
-                        <label class="col-md-1 control-label">Work Experience 1  :</label>
+                        <label class="col-md-1 control-label">Work Experience 1 :</label>
                         <div class="col-md-2">
                             <span class="">{{ applicant_experience_obj.work_experience_one }}</span>
                         </div>
@@ -840,7 +843,7 @@
                             <span class="">{{ applicant_experience_obj.to_date_one }}</span>
                         </div>
                     </div>
-                <div class="">
+                    <div class="">
                         <label class="col-md-1 control-label">Result Doc:</label>
                         <div class="col-md-2">
                             <span class="">{{ applicant_experience_obj.work_experience_document_one }}</span>
@@ -849,10 +852,10 @@
 
 
                 </div>
-            <br>
-            <div class="row">
+                <br>
+                <div class="row">
                     <div class="">
-                        <label class="col-md-1 control-label">Work Experience 2  :</label>
+                        <label class="col-md-1 control-label">Work Experience 2 :</label>
                         <div class="col-md-2">
                             <span class="">{{ applicant_experience_obj.work_experience_two }}</span>
                         </div>
@@ -871,7 +874,7 @@
                             <span class="">{{ applicant_experience_obj.to_date_two }}</span>
                         </div>
                     </div>
-                <div class="">
+                    <div class="">
                         <label class="col-md-1 control-label">Result Doc:</label>
                         <div class="col-md-2">
                             <span class="">{{ applicant_experience_obj.work_experience_document_two }}</span>
@@ -880,12 +883,12 @@
 
 
                 </div>
-             <hr>
-                         <div class="portlet light portlet-fit portlet-form ">
+                <hr>
+                <div class="portlet light portlet-fit portlet-form ">
                     <i class="icon-settings font-red"></i>
                     <span class="caption-subject font-red sbold uppercase"> SCHOLARSHIP SELECTION</span>
                 </div>
-            <div class="row">
+                <div class="row">
                     <div class="">
                         <label class="col-md-1 control-label">Scholarship Applied :</label>
                         <div class="col-md-2">
@@ -907,17 +910,17 @@
                         </div>
                     </div>
 
-                <div class="">
+                    <div class="">
                         <label class="col-md-1 control-label">Admission Letter:</label>
                         <div class="col-md-2">
                             <span class="">{{ scholarship_obj.admission_letter_document }}</span>
                         </div>
                     </div>
-            </div>
+                </div>
 
-                <form action="{% url 'student:submit_application' %}" id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">{% csrf_token %}
+                <form action="{% url 'student:submit_application' %}" id="form_sample_1" class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">{% csrf_token %}
                     <div class="form-body">
-
 
 
                         {% comment %}<iframe src="{{ path }}" width="100%" height="300px">
@@ -930,7 +933,9 @@
                         <br>
                         <div class="row">
                             <div class="col-md-offset-5 col-md-7">
-                                <button type="submit" class="btn green submit_application" id="save" style="">Submit Application</button>
+                                <button type="submit" class="btn green submit_application" id="save" style="">Submit
+                                    Application
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -940,6 +945,34 @@
 
                 {#                <embed src="{{ path }}" type="application/pdf"   height="300px" width="100%" class="responsive">#}
                 {#<a href="{{ path }}">download</a>#}
+            </div>
+        </div>
+    </div>
+
+    <div id="id_accept_student_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form {% comment %}action="{% url 'donor:approve_sponsorship' %}"{% endcomment %}
+                        id="form_sample_1"
+                        class="form-horizontal"
+                        method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h4 class="modal-title" style="color: #2a015e; text-align: center"><b>Confirmation</b></h4>
+                    </div>
+                    <div class="modal-body">
+                        <p> Are you sure, you want to submit application? </p>
+                        <p> After submission you will not be able to modify the application. </p>
+                        {#                        <input type="hidden" name="app_id" value="{{ application_rec.id }}">#}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancel_model" data-dismiss="modal" class="btn dark btn-outline">
+                            Cancel
+                        </button>
+                        <button type="button" id="submit_appplication" class="btn green">Confirm</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

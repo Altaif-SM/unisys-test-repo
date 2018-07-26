@@ -281,6 +281,7 @@ class DevelopmentProgram(BaseModel):
     module = models.ForeignKey(ModuleDetails, null=True, related_name='development_module_rel',
                                on_delete=models.PROTECT)
     code = models.CharField(max_length=100, blank=True, null=True)
+    name = models.CharField(max_length=255, blank=True, null=True)
     activity = models.CharField(max_length=2000, blank=True, null=True)
     outcome = models.CharField(max_length=2000, blank=True, null=True)
     duration_day = models.IntegerField(blank=True, null=True)

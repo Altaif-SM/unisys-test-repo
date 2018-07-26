@@ -41,8 +41,8 @@ def export_registered_application(request):
         temp_list.append(application.nationality.country_name.title() if application.nationality else '')
         temp_list.append(application.address.country.country_name.title())
         temp_list.append(application.applicant_scholarship_rel.all()[0].university.university_name.title())
-        temp_list.append(application.applicant_scholarship_rel.all()[0].course_applied.degree_name.title())
-        temp_list.append('')
+        temp_list.append(application.applicant_scholarship_rel.all()[0].degree.degree_name.title())
+        temp_list.append(application.applicant_scholarship_rel.all()[0].course_applied.program_name.title())
         rows.append(temp_list)
 
     cloumns = ['Student Name', 'Nationality', 'Country', 'University', 'Degree', 'Program']

@@ -55,6 +55,12 @@
 {#                    return false;#}
                 })
 
+                $(document).on("click", ".remove_doc", function (e) {
+                    {#alert($(this).prev().attr('id'))#}
+                    var id = $(this).prev().attr('id');
+                    $('#'+id).val('');
+                });
+
                 {% if sibling_obj_rec %}
                     var count = $('.item').length;
                     {% else %}
@@ -146,10 +152,10 @@
                                 <label class="col-md-2 control-label">DOB:</label>
                                 <div class="col-md-2">
                                     {% if application_obj.mother_dob %}
-                                        <input type="date" title="Enter DOB" id="mother_dob" name="mother_dob"
+                                        <input type="date" title="Enter DOB" id="mother_dob" name="mother_dob"  max="2999-12-31"
                                            value="{{ application_obj.mother_dob|date:"Y-m-d" }}" class="form-control">
                                     {% else %}
-                                        <input type="date" title="Enter DOB" id="mother_dob" name="mother_dob"
+                                        <input type="date" title="Enter DOB" id="mother_dob" name="mother_dob"  max="2999-12-31"
                                           class="form-control">
                                     {% endif %}
 
@@ -183,7 +189,9 @@
                                 <div class="col-md-2">
                                     <input type="file" title="Select mother pay slip" id="mother_pay_slip"
                                            value="{{ application_obj.mother_pay_slip }}" name="mother_pay_slip"
-                                           class="form-control doc">
+                                           class="form-control doc"> <span
+                                        style="float: right; margin-top: -25px; color: darkred"
+                                        class="remove_doc fa fa-close"></span>
                                 </div>
                             </div>
                         </div>

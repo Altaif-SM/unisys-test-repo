@@ -32,10 +32,9 @@
         window.onload = function () {
             $(document).ready(function () {
 
-                $(document).on("click", ".update", function (e) {
+                {% comment %}$(document).on("click", ".update", function (e) {
                     var parent_id = $(this).closest('tr').attr('id');
                     var development_program_id = $('#' + parent_id + ' #development_program_id').val();
-                    var name = $('#' + parent_id + ' .name').val();
                     var year = $('#' + parent_id + ' .year').val();
                     var semester = $('#' + parent_id + ' .semester').val();
                     var module = $('#' + parent_id + ' .module').val();
@@ -52,7 +51,7 @@
                     var remark = $('#' + parent_id + ' .remark').val();
 
                     var url = '/masters/update_development_program_master/';
-                    update_development_program_info(url, development_program_id, name, year, semester, module, remark, date, marks, method, duration_night, duration_day, outcome, activity, code)
+                    update_development_program_info(url, development_program_id, year, semester, module, remark, date, marks, method, duration_night, duration_day, outcome, activity, code)
                 })
 
                 $(document).on("click", ".delete", function (e) {
@@ -81,13 +80,12 @@
                     });
                 }
 
-                function update_development_program_info(url, development_program_id,name, year, semester, module, remark, date, marks, method, duration_night, duration_day, outcome, activity, code) {
+                function update_development_program_info(url, development_program_id, year, semester, module, remark, date, marks, method, duration_night, duration_day, outcome, activity, code) {
                     $.ajax({
                         type: 'POST',
                         url: url,
                         data: {
                             development_program_id:development_program_id,
-                            name:name,
                             year_name:year,
                             semester_name:semester,
                             module_name:module,
@@ -127,16 +125,16 @@
 
                     $("#"+parent_id+" .data").prop("disabled", false);
 
-                });
+                });{% endcomment %}
             });
 
 
-            $('#sample_1').dataTable().fnDestroy();
+            {% comment %}$('#sample_1').dataTable().fnDestroy();
             $('#sample_1').dataTable({
                 "aoColumnDefs": [
                     {'bSortable': false}
                 ]
-            });
+            });{% endcomment %}
         }
 
 
@@ -159,7 +157,7 @@
             </li>
 
             <li>
-                <span> Development Program </span>
+                <span> Email Templates </span>
             </li>
         </ul>
     </div>
@@ -175,7 +173,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> Manage Development Program</span>
+                <span class="caption-subject font-red sbold uppercase"> Email Templates </span>
             </div>
         </div>
 
@@ -184,100 +182,30 @@
             <!-- BEGIN FORM-->
             <div class="form-body">
 
-                <form action="{% url 'masters:save_development_program_master' %}" id="form_sample_1"
+                <form action="{% url 'masters:save_email_template' %}" id="form_sample_1"
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
                     <div class="form-body">
 
-                        <div class="row">
-                            <div class="">
-                                <label class="col-md-1 control-label">Name:</label>
-                                <div class="col-md-2">
-                                    <input type="text" title="Enter Name" id="name" name="name"
-                                           class="form-control" required>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Code:</label>
-                                <div class="col-md-2">
-                                    <input type="text" title="Enter code" id="code_name" name="code_name"
-                                           class="form-control" required>
-                                </div>
-                            </div>
-                        </div>
-                    <br>
-                    <br>
-                        <div class="row">
-                            <div class="">
-                                <label class="col-md-1 control-label">Year:
-
-                                </label>
-                                <div class="col-md-2">
-                                    <select id='year_name' title="Select year" name="year_name" class="form-control"
-                                            required>
-                                        <option style="display:none" selected="selected" id=""
-                                                value="">Please Select
-                                        </option>
-
-                                        {% for rec in year_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.year_name|title }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Semester:
-
-                                </label>
-                                <div class="col-md-2">
-                                    <select id='semester_name' title="Select semester" name="semester_name"
-                                            class="form-control" required>
-                                        <option style="display:none" selected="selected" id=""
-                                                value="">Please Select
-                                        </option>
-
-                                        {% for rec in semester_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.semester_name|title }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Module:</label>
-                                <div class="col-md-2">
-                                    <select id='module_name' title="Select module" name="module_name"
-                                            class="form-control" required>
-                                        <option style="display:none" selected="selected" id=""
-                                                value="">Please Select
-                                        </option>
-
-                                        {% for rec in module_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.module_name|title }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
 
                         <br><br>
                         <div class="row">
                             <div class="">
-                                <label class="col-md-1 control-label">Activities:</label>
+                                <label class="col-md-2 control-label">First Interview Call:</label>
                                 <div class="col-md-6">
-                                    <textarea id="activities" name="activities" style="height:150px"
-                                              title="specify activities" class="form-control" required></textarea>
+                                    <textarea id="template_one" name="template_one" style="height:150px"
+                                              title="specify template" class="form-control" required> {{ template_recs.0.template }}</textarea>
+
+                                    <input type="checkbox" checked name="template_one_check">
                                 </div>
                             </div>
                         </div>
 
                         <br><br>
 
-                        <div class="row">
+                        {% comment %}<div class="row">
                             <div class="">
                                 <label class="col-md-1 control-label">Outcomes:</label>
                                 <div class="col-md-6">
@@ -285,84 +213,12 @@
                                               class="form-control" required></textarea>
                                 </div>
                             </div>
-                        </div>
+                        </div>{% endcomment %}
 
-                        <br><br>
 
-                        <div class="row">
-                            <div class="">
-                                <label class="col-md-1 control-label">Duration Day:</label>
-                                <div class="col-md-1">
-                                    <select id='day' title="Select day duration" name="day_duration"
-                                            class="form-control"
-                                            required>
-                                        <option style="display:none" selected="selected" id="1" value="1">1</option>
-                                        <option id="2" value="2">2</option>
-                                        <option id="3" value="3">3</option>
-                                        <option id="4" value="4">4</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Night:</label>
-                                <div class="col-md-1">
-                                    <select id='night' title="Select night duration" name="night_duration"
-                                            class="form-control"
-                                            required>
-                                        <option style="display:none" selected="selected" id="1" value="1">1</option>
-                                        <option id="2" value="2">2</option>
-                                        <option id="3" value="3">3</option>
-                                        <option id="4" value="4">4</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Method:</label>
-                                <div class="col-md-2">
-                                    <input type="text" title="Enter method" id="method_name" name="method_name"
-                                           class="form-control" required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <br><br>
-
-                        <div class="row">
-                            <div class="">
-                                <label class="col-md-1 control-label">Mark:</label>
-                                <div class="col-md-2">
-                                    <input type="number" min="0" max="100" title="Enter mark" id="mark_name"
-                                           name="mark_name" class="form-control" required>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-2 control-label">Date:</label>
-                                <div class="col-md-2">
-                                    <input type="date" title="Select date" id="date_name" name="date_name"
-                                           class="form-control" required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <br><br>
-                        <div class="row">
-                            <div class="">
-                                <label class="col-md-1 control-label">Remark:</label>
-                                <div class="col-md-6">
-                                    <textarea id="remark_name" name="remark_name" style="height:150px"
-                                              title="Enter remark" class="form-control" required></textarea>
-                                </div>
-                            </div>
-                        </div>
-
-                        <br><br>
-
-                        <div class="row">
-                            <div class="col-md-offset-5 col-md-7">
-                                <button type="submit" class="btn green" id="save">Add</button>
+                        <div class="">
+                            <div class="col-md-offset-5">
+                                <button type="submit" class="btn green" id="save" style="">Save</button>
                             </div>
                         </div>
                     </div>
@@ -371,18 +227,17 @@
 
             <br><br>
 
-            <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">
+            {% comment %}<form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
 
                 <table class="table table-striped table-hover table-bordered" id="sample_1">
                     <thead>
                     <tr>
                         <th style="display: none">Id</th>
-                        <th>Name</th>
-                        <th>Code</th>
                         <th>Year</th>
                         <th>Semester</th>
                         <th>Module</th>
+                        <th>Code</th>
                         <th>Activities</th>
                         <th>Outcomes</th>
                         <th>Day Duration</th>
@@ -399,25 +254,6 @@
                     {% for rec in development_program_recs %}
                         <tr id="item{{ forloop.counter }}" class="item">
                             <td style="display: none"><input id="development_program_id" value="{{ rec.id }}"></td>
-                            <td>
-                                <text hidden>{{ rec.name|title }}</text>
-
-                                <input class="form-control data name" name="name_saved"
-                                       type="text"
-                                       id="name{{ forloop.counter }}" value="{{ rec.name|title }}"
-                                       required
-                                       title='Please enter name' disabled>
-                            </td>
-
-                            <td>
-                                <text hidden>{{ rec.code|title }}</text>
-                                <input class="form-control data code_name" name="code_name_saved"
-                                       type="text"
-                                       id="code{{ forloop.counter }}" value="{{ rec.code|title }}"
-                                       required
-                                       title='Please enter code' disabled>
-                            </td>
-
                             <td>
                                 <text hidden>{{ rec.year.year_name|title }}</text>
                                 <select id='year{{ forloop.counter }}' name="year_name{{ forloop.counter }}"
@@ -454,7 +290,14 @@
                                 </select>
                             </td>
 
-
+                            <td>
+                                <text hidden>{{ rec.code|title }}</text>
+                                <input class="form-control data code_name" name="code_name_saved"
+                                       type="text"
+                                       id="code{{ forloop.counter }}" value="{{ rec.code|title }}"
+                                       required
+                                       title='Please enter code' disabled>
+                            </td>
 
                             <td>
                                 <text hidden>{{ rec.activity|title }}</text>
@@ -552,7 +395,7 @@
                     {% endfor %}
                     </tbody>
                 </table>
-            </form>
+            </form>{% endcomment %}
         </div>
     </div>
 {% endblock %}

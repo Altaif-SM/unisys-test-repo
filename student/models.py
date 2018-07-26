@@ -430,7 +430,7 @@ class ApplicantAcademicProgressDetails(BaseModel):
 
 
 class ApplicantDevelopmentProgramDetails(BaseModel):
-    module = models.ForeignKey('masters.ModuleDetails', null=True, related_name='development_program_module_rel',
+    module = models.ForeignKey('masters.ProgramDetails', null=True, related_name='development_program_module_rel',
                                on_delete=models.PROTECT)
     certificate_document = models.FileField(upload_to=content_file_name_report)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='development_program_applicant_rel',

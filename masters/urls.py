@@ -89,6 +89,7 @@ urlpatterns = [
     path('save_manage_partner_master/', views.save_manage_partner_master, name='save_manage_partner_master'),
     path('update_manage_partner_master/', views.update_manage_partner_master, name='update_manage_partner_master'),
     path('delete_manage_partner_master/', views.delete_manage_partner_master, name='delete_manage_partner_master'),
+    path('export_partner_list/', views.export_partner_list, name='export_partner_list'),
 
     # ********------ manage donor Master --------****************************
     path('template_manage_donor_master/', views.template_manage_donor_master,
@@ -96,6 +97,9 @@ urlpatterns = [
     path('save_manage_donor_master/', views.save_manage_donor_master, name='save_manage_donor_master'),
     path('update_manage_donor_master/', views.update_manage_donor_master, name='update_manage_donor_master'),
     path('delete_manage_donor_master/', views.delete_manage_donor_master, name='delete_manage_donor_master'),
+
+    path('email_templates/', views.email_templates, name='email_templates'),
+    path('save_email_template/', views.save_email_template, name='save_email_template'),
 
 
     path('get_table_data/', views.get_table_data, name='get_table_data'),

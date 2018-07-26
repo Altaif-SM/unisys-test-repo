@@ -10,17 +10,19 @@ from common.utils import get_application_id
 
 def student_home(request):
     application_history_obj = ''
+    applicant = ''
 
     try:
         if ApplicationDetails.objects.filter(application_id=request.user.get_application_id,
                                              is_submitted=True).exists():
             application_history_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id,
                                                                      is_submitted=True).applicant_history_rel.all()
+            applicant = request.user.get_application_id
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
 
     return render(request, 'student_home.html',
-                  {'application_history_obj': application_history_obj})
+                  {'application_history_obj': application_history_obj,'applicant':applicant})
 
 
 def applicant_personal_info(request):
@@ -931,6 +933,13 @@ def save_psychometric_test(request):
             psychometric_test_obj = ApplicantPsychometricTestDetails.objects.create(
                 applicant_id=request.user.get_application, result=result)
 
+
+        if not ApplicationHistoryDetails.objects.filter(applicant_id=request.user.get_application,
+                                                        status='Psychometric Test Submitted').exists():
+            ApplicationHistoryDetails.objects.create(applicant_id=request.user.get_application,
+                                                     status='Psychometric Test Submitted',
+                                                     remark='You have submitted Psychometric Test. Please wait for the further updates.')
+
         if test_result_document:
             test_result = str(test_result_document)
             handle_uploaded_file(
@@ -1013,7 +1022,8 @@ def applicant_program_certificate_submission(request):
         certificate_recs = ''
         if request.user.get_application:
             if request.user.get_application.is_submitted:
-                module_recs = StudentModuleMapping.objects.filter(applicant_id=request.user.get_application)
+                # module_recs = StudentModuleMapping.objects.filter(applicant_id=request.user.get_application)
+                module_recs = ScholarshipSelectionDetails.objects.filter(applicant_id=request.user.get_application)
                 certificate_recs = ApplicantDevelopmentProgramDetails.objects.filter(
                     applicant_id=request.user.get_application)
 
