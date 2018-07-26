@@ -328,3 +328,18 @@ class GuardianStudentMapping(BaseModel):
                                  on_delete=models.PROTECT)
     student = models.ForeignKey(StudentDetails, null=True, related_name='std_gurd_mapping_rel',
                                 on_delete=models.PROTECT)
+
+
+class FirstInterviewCallTemplate(BaseModel):
+    template = models.CharField(max_length=1000, blank=True, null=True)
+    is_active = models.BooleanField(default=False)
+
+
+class FirstInterviewAttendTemplate(BaseModel):
+    template = models.CharField(max_length=1000, blank=True, null=True)
+    is_active = models.BooleanField(default=False)
+
+
+class FirstInterviewApprovalTemplate(BaseModel):
+    template = models.CharField(max_length=1000, blank=True, null=True)
+    is_active = models.BooleanField(default=False)

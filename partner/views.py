@@ -13,11 +13,11 @@ from django.db.models import Max, Q
 
 def template_registered_application(request):
     if request.user.is_super_admin():
-        applicant_recs = ApplicationDetails.objects.filter(is_submitted=True)
+        applicant_recs = ApplicationDetails.objects.filter(is_submitted=True,year=get_current_year())
         university_recs = UniversityDetails.objects.all()
     else:
         applicant_recs = ApplicationDetails.objects.filter(address__country=request.user.partner_user_rel.get().address.country,
-                                                           is_submitted=True)
+                                                           is_submitted=True,year=get_current_year())
         university_recs = UniversityDetails.objects.filter(country=request.user.partner_user_rel.get().address.country)
     country_recs = CountryDetails.objects.all()
     degree_recs = DegreeDetails.objects.all()
@@ -29,10 +29,10 @@ def template_registered_application(request):
 
 def export_registered_application(request):
     if request.user.is_super_admin():
-        applicant_recs = ApplicationDetails.objects.filter(is_submitted=True)
+        applicant_recs = ApplicationDetails.objects.filter(is_submitted=True,year=get_current_year())
     else:
         applicant_recs = ApplicationDetails.objects.filter(address__country=request.user.partner_user_rel.get().address.country,
-                                                           is_submitted=True)
+                                                           is_submitted=True,year=get_current_year())
 
     rows = []
     for application in applicant_recs:
@@ -1095,11 +1095,11 @@ def template_attendance_report(request):
         # modules_recs = ModuleDetails.objects.all()
         if request.user.is_super_admin():
             all_modules = StudentModuleMapping.objects.filter(
-                applicant_id__year=YearDetails.objects.get(active_year=True))
+                applicant_id__year=get_current_year())
         else:
             all_modules = StudentModuleMapping.objects.filter(
                 applicant_id__address__country=request.user.partner_user_rel.get().address.country,
-                applicant_id__year=YearDetails.objects.get(active_year=True))
+                applicant_id__year=get_current_year())
 
         attended_list = []
         not_attended_list = []
@@ -1107,14 +1107,14 @@ def template_attendance_report(request):
         for rec in all_modules:
             program_dict = {}
             if ApplicantDevelopmentProgramDetails.objects.filter(applicant_id=rec.applicant_id,
-                                                                 module=rec.module.module).exists():
+                                                                 module=rec.module).exists():
                 certificate_rec = ApplicantDevelopmentProgramDetails.objects.get(applicant_id=rec.applicant_id,
-                                                                                 module=rec.module.module)
+                                                                                 module=rec.module)
                 program_dict[
                     'name'] = rec.applicant_id.get_full_name()
                 program_dict['country'] = rec.applicant_id.address.country.country_name
                 program_dict['degree'] = rec.degree.degree_name
-                program_dict['program'] = rec.module.code
+                program_dict['program'] = rec.module.name
                 program_dict['module'] = rec.module.module.module_name
                 program_dict['semester'] = rec.module.semester.semester_name
                 program_dict['certificate'] = certificate_rec.certificate_document
@@ -1126,7 +1126,7 @@ def template_attendance_report(request):
                     'name'] = rec.applicant_id.get_full_name()
                 program_dict['country'] = rec.applicant_id.address.country.country_name
                 program_dict['degree'] = rec.degree.degree_name
-                program_dict['program'] = rec.module.code
+                program_dict['program'] = rec.module.name
                 program_dict['module'] = rec.module.module.module_name
                 program_dict['semester'] = rec.module.semester.semester_name
                 program_dict['certificate'] = ''
@@ -1158,12 +1158,10 @@ def filter_attendance_report(request):
         # modules_recs = ModuleDetails.objects.all()
         # module_obj = ModuleDetails.objects.get(id=modules)
         if request.user.is_super_admin():
-            all_modules = StudentModuleMapping.objects.filter(applicant_id__year=YearDetails.objects.get(
-                                                                  active_year=True))
+            all_modules = StudentModuleMapping.objects.filter(applicant_id__year=get_current_year())
         else:
             all_modules = StudentModuleMapping.objects.filter(applicant_id__address__country=request.user.partner_user_rel.get().address.country,
-                                                              applicant_id__year=YearDetails.objects.get(
-                                                                  active_year=True))
+                                                              applicant_id__year=get_current_year())
 
         attended_list = []
         not_attended_list = []
@@ -1171,14 +1169,14 @@ def filter_attendance_report(request):
         for rec in all_modules:
             program_dict = {}
             if ApplicantDevelopmentProgramDetails.objects.filter(applicant_id=rec.applicant_id,
-                                                                 module=rec.module.module).exists():
+                                                                 module=rec.module).exists():
                 certificate_rec = ApplicantDevelopmentProgramDetails.objects.get(applicant_id=rec.applicant_id,
-                                                                                 module=rec.module.module)
+                                                                                 module=rec.module)
                 program_dict[
                     'name'] = rec.applicant_id.get_full_name()
                 program_dict['country'] = rec.applicant_id.address.country.country_name
                 program_dict['degree'] = rec.degree.degree_name
-                program_dict['program'] = rec.program.program_name
+                program_dict['program'] = rec.module.name
                 program_dict['module'] = rec.module.module.module_name
                 program_dict['semester'] = rec.module.semester.semester_name
                 program_dict['certificate'] = certificate_rec.certificate_document
@@ -1190,7 +1188,7 @@ def filter_attendance_report(request):
                     'name'] = rec.applicant_id.get_full_name()
                 program_dict['country'] = rec.applicant_id.address.country.country_name
                 program_dict['degree'] = rec.degree.degree_name
-                program_dict['program'] = rec.program.program_name
+                program_dict['program'] = rec.module.name
                 program_dict['module'] = rec.module.module.module_name
                 program_dict['semester'] = rec.module.semester.semester_name
                 program_dict['certificate'] = ''

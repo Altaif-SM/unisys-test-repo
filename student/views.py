@@ -1022,8 +1022,8 @@ def applicant_program_certificate_submission(request):
         certificate_recs = ''
         if request.user.get_application:
             if request.user.get_application.is_submitted:
-                # module_recs = StudentModuleMapping.objects.filter(applicant_id=request.user.get_application)
-                module_recs = ScholarshipSelectionDetails.objects.filter(applicant_id=request.user.get_application)
+                module_recs = StudentModuleMapping.objects.filter(applicant_id=request.user.get_application)
+                # module_recs = ScholarshipSelectionDetails.objects.filter(applicant_id=request.user.get_application)
                 certificate_recs = ApplicantDevelopmentProgramDetails.objects.filter(
                     applicant_id=request.user.get_application)
 

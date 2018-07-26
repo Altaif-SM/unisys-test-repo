@@ -439,6 +439,20 @@ License: You must have a valid license purchased only from themeforest(the above
                                         <span class="title">Manage Guardians</span>
                                     </a>
                                 </li>
+
+                                <li class="nav-item start " hidden>
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+                                        <i class="icon-graph"></i>
+                                        <span class="title">Settings</span>
+                                        <span class="icon-wrench"></span>
+                                    </a>
+                                    <ul class="sub-menu">
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:email_templates' %}" class="nav-link ">
+                                                Email templates</a>
+                                        </li>
+                                    </ul>
+                                </li>
                             </ul>
                         </li>
                     {% endif %}

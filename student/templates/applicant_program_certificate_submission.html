@@ -176,7 +176,7 @@
                                         {% endfor %}{% endcomment %}
 
                                         {% for rec in module_recs %}
-                                            <option value='{{ rec.course_applied.id }}'>{{ rec.course_applied.program_name|title }}</option>
+                                            <option value='{{ rec.module.id }}'>{{ rec.module.name|title }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -225,7 +225,7 @@
                         <tr id="item{{ forloop.counter }}" class="item">
                             <td style="display: none"><input id="program_id" value="{{ rec.id }}"></td>
                             <td>
-                                <p>{{ rec.module.program_name|title }}</p>
+                                <p>{{ rec.module.name|title }}</p>
                                 {% comment %}<input class="form-control data module_name" name="module_name_saved" type="text"
                                        id="country_name{{ forloop.counter }}" value="{{ rec.module.module_name|title }}"
                                        required="True" pattern='[A-Za-z+-]+'
