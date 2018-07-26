@@ -39,4 +39,8 @@ urlpatterns = [
                   path('student_receipt_payment_report_export/', views.student_receipt_payment_report_export, name='student_receipt_payment_report_export'),
                   path('export_payment_receipt_report/', views.export_payment_receipt_report, name='export_payment_receipt_report'),
 
+                  path('update_student_payment_voucher/', views.update_student_payment_voucher, name='update_student_payment_voucher'),
+                  path('delete_student_payment_voucher/', views.delete_student_payment_voucher, name='delete_student_payment_voucher'),
+
+
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

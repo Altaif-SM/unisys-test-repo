@@ -298,6 +298,27 @@ def save_payment_voucher_data_by_student(request):
         voucher.save()
         return redirect("/accounting/get_student_payment_voucher/")
 
+def update_student_payment_voucher(request):
+    if request.method == "POST":
+        val_dict = request.POST
+        try:
+            voucher = StudentPaymentReceiptVoucher.objects.get(id=val_dict['voucher_id'])
+            voucher.voucher_amount = float(val_dict['voucher_amount'])
+            voucher.save()
+        except Exception as e:
+            return HttpResponseBadRequest(json.dumps({'error': str(e)}), content_type='application/json')
+        return HttpResponse(json.dumps({'success': "Record updated successfully."}), content_type='application/json')
+
+def delete_student_payment_voucher(request):
+    if request.method == "POST":
+        val_dict = request.POST
+        try:
+            StudentPaymentReceiptVoucher.objects.get(id=val_dict['voucher_id']).delete()
+        except Exception as e:
+            return HttpResponseBadRequest(json.dumps({'error': str(e)}), content_type='application/json')
+
+        return HttpResponse(json.dumps({'success': "Record deleted successfully."}), content_type='application/json')
+
 def save_student_receipt_voucher(request):
     if request.method == 'POST':
         val_dict = request.POST
