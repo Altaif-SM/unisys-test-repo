@@ -84,21 +84,24 @@
                     {% csrf_token %}
                     <div class="col-md-4">
                         <div class="">
-                            <select autocomplete="off" class="form-control" data-live-search="true"
-                                    id="id_modules" name="modules" required="required">
-                                {% if module_obj %}
-                                    <option style="display: none" value="{{ module_obj.id }}"
-                                            selected="selected">{{ module_obj.module_name|title }}</option>
+                            <select autocomplete="off" class="form-control" data-live-search="true" id="id_modules"
+                                    name="modules" required="required">
+                                {% if filter_obj %}
+                                    <option style="display: none" value="{{ filter_obj.value }}"
+                                            selected="selected">{{ filter_obj.name }}</option>
                                     <option value="All">All</option>
                                 {% else %}
-                                    <option value="" style="display: none" selected="selected">Module</option>
-                                    <option value="All">All</option>
+                                    <option value="" style="display: none" selected="selected">All</option>
+                                    {#                                    <option value="All">All</option>#}
 
                                 {% endif %}
 
-                                {% for rec in modules_recs %}
+                                <option value="attended">Attended</option>
+                                <option value="not_attended">Not Attended</option>
+
+                                {% comment %}{% for rec in modules_recs %}
                                     <option value="{{ rec.id }}">{{ rec.module_name|title }}</option>
-                                {% endfor %}
+                                {% endfor %}{% endcomment %}
                             </select>
                         </div>
                     </div>

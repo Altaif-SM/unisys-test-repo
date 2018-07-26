@@ -43,6 +43,45 @@
                 });
 
 
+                $(document).on("click", "#course_applied", function (e) {
+                    var course_applied = $(this).val();
+                    var url = '/student/get_degrees/';
+                    get_degrees(url, course_applied)
+                })
+
+                function get_degrees(url, course_applied) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            course_applied: course_applied,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+                            $('#university').empty();
+                            $('#id_university').empty();
+
+                            {#alert(data[0]['university_id'])#}
+
+                            $('#university').val(data[0]['university']);
+                            $('#id_university').val(data[0]['university_id']);
+
+                            $('#degree_applied').empty();
+                            $('#degree_applied').append(
+                                '<option value="">Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#degree_applied').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['name'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+
                 $('#sample_1').dataTable().fnDestroy();
                 $('#sample_1').dataTable({
                     "aoColumnDefs": [
@@ -66,7 +105,7 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                 <a href="{% url 'student:student_home' %}">Home</a>
+                <a href="{% url 'student:student_home' %}">Home</a>
                 <i class="fa fa-angle-right"></i>
             </li>
 
@@ -102,7 +141,8 @@
                     <div class="form-body">
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">Scholarship Applied:<span style="color: red">*</span></label>
+                                <label class="col-md-2 control-label">Scholarship Applied:<span
+                                        style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <select id='scholarship' title="Select Scholarship" name="scholarship"
                                             class="form-control" required>
@@ -123,30 +163,28 @@
                                 </div>
                             </div>
                         </div>
+
                         <br>
+
                         <div class="row">
-
                             <div class="">
-                                <label class="col-md-2 control-label">Course Applied:<span style="color: red">*</span></label>
+                                <label class="col-md-2 control-label">Course Applied:<span
+                                        style="color: red">*</span></label>
                                 <div class="col-md-3">
-                                    {% comment %}<input type="text" title="Enter Course Applied" id="course_applied"
-                                           name="course_applied"
-                                          value="{{ scholarship_obj.course_applied }}" class="form-control" required>{% endcomment %}
-
                                     <select id='course_applied' title="Select Course" name="course_applied"
                                             class="form-control" required>
                                         {% if scholarship_obj %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ scholarship_obj.course_applied.id }}"
-                                                    value="">{{ scholarship_obj.course_applied.degree_name|title }}</option>
+                                                    value="">{{ scholarship_obj.course_applied.program_name|title }}</option>
                                         {% else %}
                                             <option style="display:none" selected="selected" id="" value="">Please
                                                 Select
                                             </option>
                                         {% endif %}
 
-                                        {% for rec in degree_obj %}
-                                            <option value='{{ rec.id }}'>{{ rec.degree_name|title }}</option>
+                                        {% for rec in course_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.program_name|title }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -154,12 +192,41 @@
                         </div>
 
                         <br>
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Degree:<span style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    <select id='degree_applied' title="Select degree" name="degree_applied"
+                                            class="form-control" required>
+                                        {% if scholarship_obj %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ scholarship_obj.degree.id }}"
+                                                    value="">{{ scholarship_obj.degree.degree_name|title }}</option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">Please
+                                                Select
+                                            </option>
+                                        {% endif %}
+
+                                        {% comment %}{% for rec in degree_obj %}
+                                            <option value='{{ rec.id }}'>{{ rec.degree_name|title }}</option>
+                                        {% endfor %}{% endcomment %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">University:<span style="color: red">*</span></label>
+                                <label class="col-md-2 control-label">University:<span
+                                        style="color: red">*</span></label>
                                 <div class="col-md-3">
-                                    <select id='university' title="Select University" name="university"
+                                    <input hidden id="id_university" name="university" value="{{ scholarship_obj.university.id }}">
+                                    <input id="university" readonly class="form-control" value="{{ scholarship_obj.university.university_name|title }}">
+                                    {% comment %}  <select id='university' title="Select University" name="university"
                                             class="form-control" required>
                                         {% if scholarship_obj %}
                                             <option style="display:none" selected="selected"
@@ -174,7 +241,7 @@
                                         {% for rec in university_obj %}
                                             <option value='{{ rec.id }}'>{{ rec.university_name|title }}</option>
                                         {% endfor %}
-                                    </select>
+                                    </select>{% endcomment %}
 
                                     {% comment %}<input type="text" title="Enter University" id="university" name="university"
                                          value="{{ scholarship_obj.university }}"  class="form-control" required>{% endcomment %}
@@ -186,10 +253,12 @@
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">Admission Letter: <span style="color: red">*</span></label>
+                                <label class="col-md-2 control-label">Admission Letter: <span
+                                        style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <input type="file" title="Select admission letter" id="admission_letter_document"
-                                          value="{{ scholarship_obj.admission_letter_document }}" name="admission_letter_document" class="doc form-control" required>
+                                           value="{{ scholarship_obj.admission_letter_document }}"
+                                           name="admission_letter_document" class="doc form-control" required>
                                 </div>
                             </div>
                         </div>

@@ -7,6 +7,7 @@ from student.models import *
 from student.models import StudentDetails, ApplicationDetails
 from donor.models import DonorDetails
 
+
 def content_file_name_partner(instance, filename):
     dirname = datetime.now().strftime('%Y.%m.%d.%H.%M.%S')
     ext = filename.split('.')[-1]
@@ -37,7 +38,6 @@ class CountryDetails(BaseModel):
         }
 
         return res
-
 
 
 class AddressDetails(BaseModel):
@@ -116,7 +116,6 @@ class ScholarshipDetails(BaseModel):
         return res
 
 
-
 class DegreeFormula(BaseModel):
     scholarship = models.ForeignKey(ScholarshipDetails, null=True, related_name='degree_scholarship_formula_relation',
                                     on_delete=models.PROTECT)
@@ -159,7 +158,8 @@ class StudentDonorMapping(BaseModel):
     def to_dict(self):
         res = {
             'id': self.id if self.id else '',
-            'student': self.student.student_applicant_rel.all()[0].to_dict_student_application() if self.student else '',
+            'student': self.student.student_applicant_rel.all()[
+                0].to_dict_student_application() if self.student else '',
             'donor': self.donor.to_dict() if self.donor else '',
         }
 
@@ -186,7 +186,6 @@ class UniversityDetails(BaseModel):
         }
 
         return res
-
 
 
 class SemesterDetails(BaseModel):
@@ -248,7 +247,6 @@ class DegreeDetails(BaseModel):
         return res
 
 
-
 class ProgramDetails(BaseModel):
     program_name = models.CharField(max_length=255, blank=True, null=True)
     degree_type = models.ForeignKey(DegreeTypeDetails, null=True, related_name='program_degree_type_rel',
@@ -262,7 +260,6 @@ class ProgramDetails(BaseModel):
     def __str__(self):
         return self.program_name
 
-
     def to_dict(self):
         res = {
             'id': self.id if self.id else '',
@@ -270,7 +267,6 @@ class ProgramDetails(BaseModel):
         }
 
         return res
-
 
 
 class ModuleDetails(BaseModel):

@@ -62,6 +62,7 @@ class StudentModuleMapping(BaseModel):
     degree = models.ForeignKey('masters.DegreeDetails', blank=True, null=True,
                                related_name='degree_module_rel',
                                on_delete=models.PROTECT)
+
     program = models.ForeignKey('masters.ProgramDetails', blank=True, null=True,
                                 related_name='program_module_rel',
                                 on_delete=models.PROTECT)

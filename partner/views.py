@@ -407,6 +407,10 @@ def template_application_approval_details(request, app_id):
                    'flag_schedule': flag_schedule, 'admin_flag': admin_flag, 'final_approval': final_approval})
 
 
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
+
+
 def change_application_status(request):
     application_id = request.POST.get('application_rec')
 
@@ -857,11 +861,11 @@ def filter_psychometric_test_report(request):
 
 def template_link_student_program(request):
     if request.user.is_super_admin():
-        applicant_recs = ApplicationDetails.objects.filter(is_submitted=True)
+        applicant_recs = ApplicationDetails.objects.filter(is_submitted=True,year=get_current_year())
         university_recs = UniversityDetails.objects.filter()
     else:
         applicant_recs = ApplicationDetails.objects.filter(address__country=request.user.partner_user_rel.get().address.country,
-                                                           is_submitted=True)
+                                                           year=get_current_year(),is_submitted=True)
         university_recs = UniversityDetails.objects.filter(country=request.user.partner_user_rel.get().address.country)
 
     module_recs = ModuleDetails.objects.all()
@@ -883,11 +887,9 @@ def template_link_student_program(request):
             temp_dict['flag'] = False
 
         else:
-            program_recs = ProgramDetails.objects.filter(
-                university=applicant_rec.applicant_scholarship_rel.get().university,
-                degree_type=applicant_rec.applicant_scholarship_rel.get().course_applied.degree_type)
-
-            temp_dict['program_recs'] = program_recs
+            temp_dict['program'] = applicant_rec.applicant_scholarship_rel.get().course_applied
+            temp_dict['module'] = ''
+            temp_dict['semester'] = ''
             temp_dict['applicant_rec'] = applicant_rec
             temp_dict['flag'] = True
 
@@ -895,12 +897,13 @@ def template_link_student_program(request):
 
     country_recs = CountryDetails.objects.all()
     degree_recs = DegreeDetails.objects.all()
-    program_recs = ProgramDetails.objects.all()
+    modules_recs = ModuleDetails.objects.all()
+    program_recs = DevelopmentProgram.objects.filter(year=YearDetails.objects.get(active_year=1))
 
     return render(request, 'template_link_student_program.html',
                   {'applicant_recs': applicant_recs, 'country_recs': country_recs, 'university_recs': university_recs,
                    'degree_recs': degree_recs, 'semester_recs': semester_recs, 'rec_list': rec_list,
-                   'program_recs': program_recs})
+                   'program_recs': program_recs,'modules_recs':modules_recs})
 
 
 def get_semester_modules(request):
@@ -922,7 +925,7 @@ def save_student_program(request):
     try:
         data_value = json.loads(request.POST.get('data_value'))
     except Exception as e:
-        messages.warning(request, "Records is already saved")
+        messages.warning(request, "No record updated.")
         return redirect('/partner/template_link_student_program/')
 
     try:
@@ -1089,7 +1092,7 @@ def template_academic_progress_details(request, app_id):
 
 def template_attendance_report(request):
     try:
-        modules_recs = ModuleDetails.objects.all()
+        # modules_recs = ModuleDetails.objects.all()
         if request.user.is_super_admin():
             all_modules = StudentModuleMapping.objects.filter(
                 applicant_id__year=YearDetails.objects.get(active_year=True))
@@ -1111,7 +1114,7 @@ def template_attendance_report(request):
                     'name'] = rec.applicant_id.get_full_name()
                 program_dict['country'] = rec.applicant_id.address.country.country_name
                 program_dict['degree'] = rec.degree.degree_name
-                program_dict['program'] = rec.program.program_name
+                program_dict['program'] = rec.module.code
                 program_dict['module'] = rec.module.module.module_name
                 program_dict['semester'] = rec.module.semester.semester_name
                 program_dict['certificate'] = certificate_rec.certificate_document
@@ -1123,7 +1126,7 @@ def template_attendance_report(request):
                     'name'] = rec.applicant_id.get_full_name()
                 program_dict['country'] = rec.applicant_id.address.country.country_name
                 program_dict['degree'] = rec.degree.degree_name
-                program_dict['program'] = rec.program.program_name
+                program_dict['program'] = rec.module.code
                 program_dict['module'] = rec.module.module.module_name
                 program_dict['semester'] = rec.module.semester.semester_name
                 program_dict['certificate'] = ''
@@ -1133,11 +1136,10 @@ def template_attendance_report(request):
 
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
-        return redirect('/partner/template_attendance_report/')
+        return redirect('/partner/template_registered_application/')
 
     return render(request, "template_attendance_report.html",
-                  {'attended_recs': attended_list, 'not_attended_recs': not_attended_list,
-                   'modules_recs': modules_recs})
+                  {'attended_recs': attended_list, 'not_attended_recs': not_attended_list})
 
 
 def filter_attendance_report(request):
@@ -1153,15 +1155,13 @@ def filter_attendance_report(request):
         if modules == 'All':
             return redirect('/partner/template_attendance_report/')
 
-        modules_recs = ModuleDetails.objects.all()
-        module_obj = ModuleDetails.objects.get(id=modules)
+        # modules_recs = ModuleDetails.objects.all()
+        # module_obj = ModuleDetails.objects.get(id=modules)
         if request.user.is_super_admin():
-            all_modules = StudentModuleMapping.objects.filter(module__module_id=modules,
-                                                              applicant_id__year=YearDetails.objects.get(
+            all_modules = StudentModuleMapping.objects.filter(applicant_id__year=YearDetails.objects.get(
                                                                   active_year=True))
         else:
-            all_modules = StudentModuleMapping.objects.filter(module__module_id=modules,
-                                                              applicant_id__address__country=request.user.partner_user_rel.get().address.country,
+            all_modules = StudentModuleMapping.objects.filter(applicant_id__address__country=request.user.partner_user_rel.get().address.country,
                                                               applicant_id__year=YearDetails.objects.get(
                                                                   active_year=True))
 
@@ -1175,7 +1175,7 @@ def filter_attendance_report(request):
                 certificate_rec = ApplicantDevelopmentProgramDetails.objects.get(applicant_id=rec.applicant_id,
                                                                                  module=rec.module.module)
                 program_dict[
-                    'name'] = rec.applicant_id.applicant_id.get_full_name()
+                    'name'] = rec.applicant_id.get_full_name()
                 program_dict['country'] = rec.applicant_id.address.country.country_name
                 program_dict['degree'] = rec.degree.degree_name
                 program_dict['program'] = rec.program.program_name
@@ -1197,14 +1197,24 @@ def filter_attendance_report(request):
 
                 not_attended_list.append(program_dict)
 
+        filter_obj = {}
+
+        if modules == 'attended':
+            filter_obj['value'] = 'attended'
+            filter_obj['name'] = 'Attended'
+            return render(request, "template_attendance_report.html",
+                          {'attended_recs': attended_list,'filter_obj':filter_obj})
+        else:
+            filter_obj['value'] = 'not_attended'
+            filter_obj['name'] = 'Not Attended'
+
+            return render(request, "template_attendance_report.html",
+                          {'not_attended_recs': not_attended_list,'filter_obj':filter_obj})
+
 
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
         return redirect('/partner/template_attendance_report/')
-
-    return render(request, "template_attendance_report.html",
-                  {'attended_recs': attended_list, 'not_attended_recs': not_attended_list,
-                   'modules_recs': modules_recs, 'module_obj': module_obj})
 
 
 def template_accepted_students(request):

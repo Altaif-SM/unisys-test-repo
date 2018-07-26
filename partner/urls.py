@@ -8,8 +8,10 @@ app_name = 'partner'
 urlpatterns = [
                   path('template_registered_application/', views.template_registered_application,
                        name='template_registered_application'),
-                  path('filter_registered_application/', views.filter_registered_application,name='filter_registered_application'),
-                  path('export_registered_application/', views.export_registered_application,name='export_registered_application'),
+                  path('filter_registered_application/', views.filter_registered_application,
+                       name='filter_registered_application'),
+                  path('export_registered_application/', views.export_registered_application,
+                       name='export_registered_application'),
                   path('template_applicant_all_details/<int:app_id>/', views.template_applicant_all_details,
                        name='template_applicant_all_details'),
 
@@ -49,14 +51,20 @@ urlpatterns = [
                        name='template_attendance_report'),
                   path('filter_attendance_report/', views.filter_attendance_report, name='filter_attendance_report'),
 
-                  path('template_accepted_students/', views.template_accepted_students, name='template_accepted_students'),
+                  path('template_accepted_students/', views.template_accepted_students,
+                       name='template_accepted_students'),
 
-                  path('template_link_students_donor/', views.template_link_students_donor, name='template_link_students_donor'),
-                  path('save_students_donor_linking/', views.save_students_donor_linking, name='save_students_donor_linking'),
-                  path('template_donor_students_linking/', views.template_donor_students_linking, name='template_donor_students_linking'),
-                  path('filter_donor_student_linking/', views.filter_donor_student_linking, name='filter_donor_student_linking'),
+                  path('template_link_students_donor/', views.template_link_students_donor,
+                       name='template_link_students_donor'),
+                  path('save_students_donor_linking/', views.save_students_donor_linking,
+                       name='save_students_donor_linking'),
+                  path('template_donor_students_linking/', views.template_donor_students_linking,
+                       name='template_donor_students_linking'),
+                  path('filter_donor_student_linking/', views.filter_donor_student_linking,
+                       name='filter_donor_student_linking'),
 
-                  path('template_student_agreement/', views.template_student_agreement, name='template_student_agreement'),
+                  path('template_student_agreement/', views.template_student_agreement,
+                       name='template_student_agreement'),
                   path('template_semester_result/', views.template_semester_result, name='template_semester_result'),
                   path('donar_student_linking_export/', views.donar_student_linking_export, name='donar_student_linking_export'),
 

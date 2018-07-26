@@ -6,6 +6,7 @@ from masters.models import *
 from accounts.models import *
 import computed_property
 
+
 def content_file_name_image(instance, filename):
     dirname = datetime.now().strftime('%Y.%m.%d.%H.%M.%S')
     ext = filename.split('.')[-1]
@@ -24,6 +25,12 @@ def content_file_name_report(instance, filename):
     dirname = datetime.now().strftime('%Y.%m.%d.%H.%M.%S')
     ext = filename.split('.')[-1]
     filename = "%s_%s.%s" % (instance.first_name, dirname, ext)
+    return os.path.join('reports', filename)
+
+def content_aplicant_file_name_report(instance, filename):
+    dirname = datetime.now().strftime('%Y.%m.%d.%H.%M.%S')
+    ext = filename.split('.')[-1]
+    filename = "%s_%s.%s" % (instance.applicant_id.first_name, dirname, ext)
     return os.path.join('reports', filename)
 
 
@@ -196,7 +203,6 @@ class ApplicationDetails(BaseModel):
     def __str__(self):
         return '%s %s' % (self.first_name, self.last_name if self.last_name else '')
 
-
     def calculate_balance_amount(self):
         voucher_amount = 0.00
         for obj in self.rel_student_payment_receipt_voucher.all():
@@ -235,15 +241,21 @@ class ApplicationDetails(BaseModel):
         res = {
             'id': self.id,
             'country': self.address.country.to_dict() if self.address else '',
-            'scholarship': self.applicant_scholarship_rel.all()[0].scholarship.to_dict() if self.applicant_scholarship_rel.all() else '',
-            'university': self.applicant_scholarship_rel.all()[0].university.to_dict() if self.applicant_scholarship_rel.all() else '',
-            'program':    self.applicant_module_rel.all()[0].program.to_dict() if self.applicant_module_rel.all() else '',
-            'donor': self.student.student_donor_rel.all()[0].donor.to_dict() if self.student.student_donor_rel.all() else '',
+            'scholarship': self.applicant_scholarship_rel.all()[
+                0].scholarship.to_dict() if self.applicant_scholarship_rel.all() else '',
+            'university': self.applicant_scholarship_rel.all()[
+                0].university.to_dict() if self.applicant_scholarship_rel.all() else '',
+            'program': self.applicant_module_rel.all()[0].program.to_dict() if self.applicant_module_rel.all() else '',
+            'donor': self.student.student_donor_rel.all()[
+                0].donor.to_dict() if self.student.student_donor_rel.all() else '',
             'balance': self.calculate_balance_amount() if self.rel_student_payment_receipt_voucher.all() else 0,
             'scholarship_fee': self.scholarship_fee if self.scholarship_fee else 0,
-            'voucher_number': self.rel_student_payment_receipt_voucher.all()[0].voucher_number  if self.rel_student_payment_receipt_voucher.all() else  '',
-            'semester': self.applicant_progress_rel.all()[0].semester.to_dict() if self.applicant_progress_rel.all() else '',
-            'degree': self.applicant_scholarship_rel.all()[0].course_applied.to_dict() if self.applicant_scholarship_rel.all() else '',
+            'voucher_number': self.rel_student_payment_receipt_voucher.all()[
+                0].voucher_number if self.rel_student_payment_receipt_voucher.all() else '',
+            'semester': self.applicant_progress_rel.all()[
+                0].semester.to_dict() if self.applicant_progress_rel.all() else '',
+            'degree': self.applicant_scholarship_rel.all()[
+                0].course_applied.to_dict() if self.applicant_scholarship_rel.all() else '',
         }
         return res
 
@@ -251,18 +263,23 @@ class ApplicationDetails(BaseModel):
         res = {
             'id': self.id,
             'country': self.address.country.to_dict() if self.address else '',
-            'scholarship': self.applicant_scholarship_rel.all()[0].scholarship.to_dict() if self.applicant_scholarship_rel.all() else '',
-            'university': self.applicant_scholarship_rel.all()[0].university.to_dict() if self.applicant_scholarship_rel.all() else '',
-            'program':    self.applicant_module_rel.all()[0].program.to_dict() if self.applicant_module_rel.all() else '',
-            'donor': self.student.student_donor_rel.all()[0].donor.to_dict() if self.student.student_donor_rel.all() else '',
+            'scholarship': self.applicant_scholarship_rel.all()[
+                0].scholarship.to_dict() if self.applicant_scholarship_rel.all() else '',
+            'university': self.applicant_scholarship_rel.all()[
+                0].university.to_dict() if self.applicant_scholarship_rel.all() else '',
+            'program': self.applicant_module_rel.all()[0].program.to_dict() if self.applicant_module_rel.all() else '',
+            'donor': self.student.student_donor_rel.all()[
+                0].donor.to_dict() if self.student.student_donor_rel.all() else '',
             'balance': self.calculate_student_payment_balance_amount() if self.rel_student_payment_receipt_voucher.all() else 0,
             'scholarship_fee': self.scholarship_fee if self.scholarship_fee else 0,
-            'voucher_number': self.rel_student_payment_receipt_voucher.all()[0].voucher_number  if self.rel_student_payment_receipt_voucher.all() else  '',
-            'semester': self.applicant_progress_rel.all()[0].semester.to_dict() if self.applicant_progress_rel.all() else '',
-            'degree': self.applicant_scholarship_rel.all()[0].course_applied.to_dict() if self.applicant_scholarship_rel.all() else '',
+            'voucher_number': self.rel_student_payment_receipt_voucher.all()[
+                0].voucher_number if self.rel_student_payment_receipt_voucher.all() else '',
+            'semester': self.applicant_progress_rel.all()[
+                0].semester.to_dict() if self.applicant_progress_rel.all() else '',
+            'degree': self.applicant_scholarship_rel.all()[
+                0].course_applied.to_dict() if self.applicant_scholarship_rel.all() else '',
         }
         return res
-
 
 
 class ApplicationHistoryDetails(BaseModel):
@@ -359,15 +376,19 @@ class ExperienceDetails(BaseModel):
 class ScholarshipSelectionDetails(BaseModel):
     scholarship = models.ForeignKey('masters.ScholarshipDetails', null=True, related_name='scholarship_selection_rel',
                                     on_delete=models.PROTECT)
-    course_applied = models.ForeignKey('masters.DegreeDetails', blank=True, null=True,
-                                       related_name='degree_scholarship_rel',
+    degree = models.ForeignKey('masters.DegreeDetails', blank=True, null=True,
+                               related_name='degree_scholarship_rel',
+                               on_delete=models.PROTECT)
+
+    course_applied = models.ForeignKey('masters.ProgramDetails', blank=True, null=True,
+                                       related_name='course_scholarship_rel',
                                        on_delete=models.PROTECT)
 
     university = models.ForeignKey('masters.UniversityDetails', blank=True, null=True,
                                    related_name='university_scholarship_rel',
                                    on_delete=models.PROTECT)
 
-    admission_letter_document = models.FileField(upload_to=content_file_name_report)
+    admission_letter_document = models.FileField(upload_to=content_aplicant_file_name_report)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_scholarship_rel',
                                      on_delete=models.PROTECT)
 

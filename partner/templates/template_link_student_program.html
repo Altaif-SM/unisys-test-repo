@@ -79,7 +79,7 @@
                         var id = $(this).attr('id');
 
                         {#alert($('#' + id + ' #id_applicant_module').val())#}
-                        if ($('#' + id + ' #id_applicant_program').val() != '' && $('#' + id + ' #id_applicant_module').val() != null) {
+                        if ($('#' + id + ' #id_applicant_module').val() != null) {
                             payload['applicant_id'] = $('#' + id + ' #applicant_id').val();
                             payload['degree'] = $('#' + id + ' #id_applicant_degree').val();
                             payload['applicant_program'] = $('#' + id + ' #id_applicant_program').val();
@@ -231,25 +231,28 @@
                                         </td>
 
                                         <td>
-                                            <text>{{ rec.applicant_rec.nationality.country_name|title }}</text>
+                                            <text>{{ rec.applicant_rec.address.country.country_name|title }}</text>
                                         </td>
 
                                         <td>
                                             <input hidden id="id_applicant_degree"
-                                                   value="{{ rec.applicant_rec.applicant_scholarship_rel.all.0.course_applied.id }}">
-                                            <text>{{ rec.applicant_rec.applicant_scholarship_rel.all.0.course_applied.degree_name|title }}</text>
+                                                   value="{{ rec.applicant_rec.applicant_scholarship_rel.all.0.degree.id }}">
+                                            <text>{{ rec.applicant_rec.applicant_scholarship_rel.all.0.degree.degree_name|title }}</text>
                                         </td>
 
 
                                         <td>
+                                            <input hidden value="{{ rec.program.id }}" id="id_applicant_program" class="id_applicant_program">
+                                            <p>{{ rec.program.program_name|title }}</p>
 
-                                            <select id='id_applicant_program' title="Select Program"
+                                            {% comment %}<select id='id_applicant_program' title="Select Program"
                                                     name="applicant_program"
-                                                    class="form-control" style="width: 80%" {% if rec.program %}
+                                                    class="form-control id_applicant_program" style="width: 80%"
+                                                    {% if rec.program %}
                                                     disabled{% endif %}>
                                                 {% if rec.program %}
                                                     <option style="display:none" selected="selected"
-                                                            value="{{ rec.program.id }}"> {{ rec.program.program_name|title }}
+                                                            value="{{ rec.program.id }}"> {{ rec.program.code|title }}
                                                     </option>
                                                 {% else %}
                                                     <option style="display:none" selected="selected" id="" value="">
@@ -257,13 +260,16 @@
                                                     </option>
                                                 {% endif %}
 
-                                                {% for program_rec in rec.program_recs %}
-                                                    <option value='{{ program_rec.id }}'>{{ program_rec.program_name|title }}</option>
+                                                {% for program_rec in program_recs %}
+                                                    <option value='{{ program_rec.id }}'>{{ program_rec.code|title }}</option>
                                                 {% endfor %}
-                                            </select>
+                                            </select>{% endcomment %}
                                         </td>
 
                                         <td>
+                                            {% comment %}<input readonly style="border: none" id='id_applicant_semester'
+                                                   title="Semester" class="form-control id_applicant_semester"
+                                                   name="applicant_semester">{% endcomment %}
                                             <select id='id_applicant_semester' title="Select Semester"
                                                     name="applicant_semester"
                                                     class="form-control id_applicant_semester" {% if rec.semester %}

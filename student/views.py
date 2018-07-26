@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from masters.views import *
 
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 from django.contrib import messages
 from common.utils import get_application_id
 
@@ -751,6 +751,7 @@ def applicant_scholarship_about_yourself_info(request):
     scholarship_recs = ScholarshipDetails.objects.all()
     degree_obj = DegreeDetails.objects.all()
     university_obj = UniversityDetails.objects.all()
+    course_recs = ProgramDetails.objects.all()
 
     scholarship_obj = ''
     about_obj = ''
@@ -767,7 +768,21 @@ def applicant_scholarship_about_yourself_info(request):
         messages.warning(request, "Form have some error" + str(e))
     return render(request, 'applicant_scholarship_about_yourself_info.html',
                   {'scholarship_recs': scholarship_recs, 'scholarship_obj': scholarship_obj, 'about_obj': about_obj,
-                   'university_obj': university_obj, 'degree_obj': degree_obj})
+                   'university_obj': university_obj, 'degree_obj': degree_obj,'course_recs':course_recs})
+
+
+def get_degrees(request):
+    finalDict = []
+    course_applied = request.POST.get('course_applied', None)
+
+    program_rec = ProgramDetails.objects.get(id=course_applied)
+    degree_detail_rec = DegreeDetails.objects.filter(degree_type=program_rec.degree_type)
+
+    for rec in degree_detail_rec:
+        degree_data = {'name':rec.degree_name.title(),'id': rec.id,'university':program_rec.university.university_name.title(),'university_id':program_rec.university.id}
+        finalDict.append(degree_data)
+
+    return JsonResponse(finalDict, safe=False)
 
 
 def save_update_applicant_scholarship_about_yourself_info(request):
@@ -789,7 +804,8 @@ def save_update_applicant_scholarship_about_yourself_info(request):
                                 applicant_id=request.user.get_application).update(
                                 scholarship_id=request.POST['scholarship'],
                                 course_applied_id=request.POST['course_applied'],
-                                university=request.POST['university'])
+                                degree_id=request.POST['degree_applied'],
+                                university_id=request.POST['university'])
 
                             scholarship_obj = ScholarshipSelectionDetails.objects.get(
                                 applicant_id=request.user.get_application)
@@ -813,6 +829,7 @@ def save_update_applicant_scholarship_about_yourself_info(request):
                             scholarship_obj = ScholarshipSelectionDetails.objects.create(
                                 scholarship_id=request.POST['scholarship'],
                                 course_applied_id=request.POST['course_applied'],
+                                degree_id=request.POST['degree_applied'],
                                 university_id=request.POST['university'],
                                 applicant_id=request.user.get_application)
 
@@ -963,7 +980,7 @@ def save_agreement_submission(request):
                 applicant_id=request.user.get_application)
             application_notification(request.user.get_application.id,
                                      'You have submitted agreements.')
-            ApplicationHistoryDetails.objects.create(applicant_id=agreement_obj,
+            ApplicationHistoryDetails.objects.create(applicant_id=request.user.get_application,
                                                      status='Agreements submitted.',
                                                      remark='You have submitted agreements. Please wait for the further updates.')
 

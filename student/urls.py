@@ -37,6 +37,7 @@ urlpatterns = [
 
                   path('applicant_scholarship_about_yourself_info/', views.applicant_scholarship_about_yourself_info,
                        name='applicant_scholarship_about_yourself_info'),
+                  path('get_degrees/', views.get_degrees, name='get_degrees'),
                   path('save_update_applicant_scholarship_about_yourself_info/',
                        views.save_update_applicant_scholarship_about_yourself_info,
                        name='save_update_applicant_scholarship_about_yourself_info'),
