@@ -13,6 +13,14 @@
         window.onload = function () {
             $(document).ready(function () {
 
+                $("#id_donor_list").chosen();
+                var now = new Date();
+                var day = ("0" + now.getDate()).slice(-2);
+                var month = ("0" + (now.getMonth() + 1)).slice(-2);
+                var today = now.getFullYear() + "-" + (month) + "-" + (day);
+                var date = $('#date').val();
+                $('#id_voucher_date').val(today);
+
 
                 function validate() {
                     var flag = false;
@@ -124,7 +132,8 @@
                                     + data[i]['student']['get_all_name'] + '</option>')
 
                             }
-
+                            $("#id_student").trigger("chosen:updated");
+                            $("#id_student").chosen();
 
                         },
                         error: function (xhr, msg, err) {
@@ -207,6 +216,7 @@
                                     output_html += "" +
                                     "<tr id='item"+ i +"' class='item'>"
                                     + "<td style='width:150px;'><input id='id_voucher_number' class='form-control data voucher_number' value='"+ data['voucher_rec'][i]['voucher_number'] +"' disabled> </td>"
+                                    + "<td><input id='id_voucher_date"+ i +"' class='form-control data voucher_date' value='" + data['voucher_rec'][i]['voucher_date'] + "' disabled> </td>"
                                     + "<td><input id='id_student"+ i +"' class='form-control data voucher_number' value='"+ data['voucher_rec'][i]['donor']['user']['first_name'] +"' disabled> </td>"
                                     + "<td><input id='id_country"+ i +"' class='form-control data voucher_number' value='" + data['voucher_rec'][i]['voucher_description'] + "' disabled> </td>"
                                     + "<td><input id='id_voucher_amount"+ i +"' class='form-control data voucher_number' value='" + data['voucher_rec'][i]['voucher_amount'] + "' disabled> </td>"
@@ -215,6 +225,9 @@
 
                                     output_html+= "</tr>"
                             }
+
+                             output_html+= "<tr id='item_total' class='item'><td colspan='4'></td>"
+                            + "<td style='width:150px;'><input id='id_total' class='form-control data total_amount' value='"+ data['total_amount'] +"' disabled> </td></tr>"
 
                             $("#tbody").html(output_html);
 
@@ -316,7 +329,7 @@
                                 <label class="col-md-2 control-label">Donor:</label>
                                 <div class="col-md-2">
                                     <select id='id_donor_list' title="Select Donor" name="donor"
-                                            class="form-control"
+                                            autocomplete="off" class="form-control" data-live-search="true"
                                             required>
                                         <option style="display:none" selected="selected" id=""
                                                 value="">Please Select
@@ -327,6 +340,16 @@
                                         {% endfor %}
                                     </select>
                                     <span id="id_donor_error_msg" style="display: none;color: red;"></span>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Date:</label>
+                                <div class="col-md-2">
+                                    <input type="date" title="Date" placeholder="Date"
+                                           id="id_voucher_date" name="voucher_date"
+                                           class="form-control" required max="9999-12-31">
+                                    <span id="data_error_msg" style="display: none;color: red;"></span>
                                 </div>
                             </div>
 
@@ -350,7 +373,7 @@
                                 <label class="col-md-2 control-label">Student:</label>
                                 <div class="col-md-2">
                                     <select id='id_student' title="Select country" name="student"
-                                            class="form-control"
+                                            autocomplete="off" class="form-control" data-live-search="true"
                                             required>
                                         <option style="display:none" selected="selected" id=""
                                                 value="">Please Select
@@ -429,6 +452,7 @@
                     <thead>
                     <tr>
                         <th>No</th>
+                        <th>Voucher Date</th>
                         <th>Donor Name</th>
                         <th>Description</th>
                         <th>Amount</th>

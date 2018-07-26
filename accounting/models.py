@@ -89,6 +89,7 @@ class StudentPaymentReceiptVoucher(BaseModel):
             'program': self.application.applicant_module_rel.all()[0].program.to_dict() if self.application.applicant_module_rel.all() else '',
             'donor': self.application.student.student_donor_rel.all()[0].donor.to_dict() if self.application.student.student_donor_rel.all() else '',
             'voucher_number': self.voucher_number if self.voucher_number else '',
+            'voucher_date': self.voucher_date.isoformat() if self.voucher_date else '',
             'semester': self.application.applicant_progress_rel.all()[0].semester.to_dict() if self.application.applicant_progress_rel.all() else '',
             'degree': self.application.applicant_scholarship_rel.all()[0].course_applied.to_dict() if self.application.applicant_scholarship_rel.all() else '',
 
@@ -194,6 +195,7 @@ class DonorReceiptVoucher(BaseModel):
     VOUCHER_TOTAL = 'voucher_total'
     VOUCHER_DESC = 'voucher_description'
     VOUCHER_TYPE = 'voucher_type'
+    VOUCHER_DATE = 'voucher_date'
 
     voucher_number = models.CharField(max_length=50, null=True)
     application = models.ForeignKey(ApplicationDetails, related_name="rel_donor_receipt_voucher",
@@ -204,7 +206,7 @@ class DonorReceiptVoucher(BaseModel):
     voucher_description = models.CharField(max_length=50, null=True)
 
     voucher_type = models.CharField(max_length=50, null=True)
-
+    voucher_date = models.DateField(auto_now_add=True)
     # class Meta:
     #     permissions = (
     #         ('can_view_donor_payment_voucher', 'can view donor payment voucher'),
@@ -225,6 +227,10 @@ class DonorReceiptVoucher(BaseModel):
         if DonorReceiptVoucher.VOUCHER_NUMBER in val_dict and val_dict[
             DonorReceiptVoucher.VOUCHER_NUMBER]:
             voucher.voucher_number = val_dict[DonorReceiptVoucher.VOUCHER_NUMBER]
+
+        if DonorReceiptVoucher.VOUCHER_DATE in val_dict and val_dict[DonorReceiptVoucher.VOUCHER_DATE]:
+            voucher.voucher_date = val_dict[DonorReceiptVoucher.VOUCHER_DATE]
+
 
         if DonorReceiptVoucher.APP_ID in val_dict and val_dict[DonorReceiptVoucher.APP_ID]:
             voucher.application = ApplicationDetails.objects.get(id=val_dict[DonorReceiptVoucher.APP_ID])
@@ -263,6 +269,7 @@ class DonorReceiptVoucher(BaseModel):
             'donor': self.application.student.student_donor_rel.all()[
                 0].donor.to_dict() if self.application.student.student_donor_rel.all() else '',
             'voucher_number': self.voucher_number if self.voucher_number else '',
+            'voucher_date': self.voucher_date.isoformat() if self.voucher_date else '',
             'semester': self.application.applicant_progress_rel.all()[
                 0].semester.to_dict() if self.application.applicant_progress_rel.all() else '',
             'degree': self.application.applicant_scholarship_rel.all()[
@@ -275,6 +282,8 @@ class DonorReceiptVoucher(BaseModel):
         resp = {
             "id": self.id,
             DonorReceiptVoucher.VOUCHER_NUMBER: self.voucher_number,
-            "student": self.application.to_dict_student_application() if self.application else ''
+            "student": self.application.to_dict_student_application() if self.application else '',
+            'semester':self.application.applicant_progress_rel.all()[
+            0].semester.to_dict() if self.application.applicant_progress_rel.all() else '',
         }
         return resp

@@ -251,10 +251,10 @@ def template_students_receipts(request):
             approval_amount = application_obj.scholarship_fee
 
             raw_dict['application_rec'] = application_obj
-            for voucher_obj in application_obj.rel_student_payment_receipt_voucher.all():
+            for voucher_obj in application_obj.rel_donor_receipt_voucher.all():
 
                 raw_dict['voucher_rec'] = voucher_obj
-                if voucher_obj.voucher_type == "credit":
+                if voucher_obj.voucher_type == "debit":
                     credit_total += float(voucher_obj.voucher_amount)
 
             outstanding_amount = float(approval_amount) - float(credit_total)

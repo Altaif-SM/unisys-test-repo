@@ -12,6 +12,9 @@
     <script>
         window.onload = function () {
             $(document).ready(function () {
+
+                $("#id_student").chosen();
+
                 $('#export_button').attr('disabled', true);
                  $(document).on("click", "#export_button", function (e) {
                         $('#form_sample_export').submit();
@@ -113,9 +116,10 @@
                                     output_html += "" +
                                     "<tr id='item{{ forloop.counter }}' class='item'>"
                                     + "<td><input id='id_voucher_number_list' class='form-control data voucher_number' value='"+ data['voucher_rec'][i]['voucher_number'] +"' disabled> </td>"
-                                    + "<td><input id='id_voucher_number_list' class='form-control data voucher_number' value='"+ data['voucher_rec'][i]['voucher_description'] +"' disabled> </td>"
-                                    + "<td><input id='id_voucher_number_list' class='form-control data voucher_number' value='' disabled> </td>"
-                                    + "<td><input id='id_voucher_number_list' class='form-control data voucher_number' value='" + data['voucher_rec'][i]['voucher_amount'] + "' disabled> </td>"
+                                    + "<td><input id='id_voucher_date' class='form-control data voucher_date' value='"+ data['voucher_rec'][i]['voucher_date'] +"' disabled> </td>"
+                                    + "<td><input id='id_voucher_description' class='form-control data voucher_description' value='"+ data['voucher_rec'][i]['voucher_description'] +"' disabled> </td>"
+                                    + "<td><input id='id_voucher_amount_credit' class='form-control data voucher_number' value='' disabled> </td>"
+                                    + "<td><input id='id_voucher_amount_debit' class='form-control data voucher_amount' value='" + data['voucher_rec'][i]['voucher_amount'] + "' disabled> </td>"
 
                                 }
 
@@ -123,14 +127,20 @@
                                     output_html += "" +
                                     "<tr id='item{{ forloop.counter }}' class='item'>"
                                     + "<td><input id='id_voucher_number_list' class='form-control data voucher_number' value='"+ data['voucher_rec'][i]['voucher_number'] +"' disabled> </td>"
-                                    + "<td><input id='id_voucher_number_list' class='form-control data voucher_number' value='"+ data['voucher_rec'][i]['voucher_description'] +"' disabled> </td>"
-                                    + "<td><input id='id_voucher_number_list' class='form-control data voucher_number' value='" + data['voucher_rec'][i]['voucher_amount'] + "' disabled> </td>"
-                                    + "<td><input id='id_voucher_number_list' class='form-control data voucher_number' value='' disabled> </td>"
+                                    + "<td><input id='id_voucher_date' class='form-control data voucher_date' value='"+ data['voucher_rec'][i]['voucher_date'] +"' disabled> </td>"
+                                    + "<td><input id='id_voucher_description' class='form-control data voucher_description' value='"+ data['voucher_rec'][i]['voucher_description'] +"' disabled> </td>"
+                                    + "<td><input id='id_voucher_amount_credit' class='form-control data voucher_amount' value='" + data['voucher_rec'][i]['voucher_amount'] + "' disabled> </td>"
+                                    + "<td><input id='id_voucher_amount_debit' class='form-control data voucher_number' value='' disabled> </td>"
 
                                 }
 
                                 output_html+= "</tr>"
                             }
+
+                            output_html+= "<tr id='item_total' class='item'><td colspan='3'></td>"
+                            + "<td style='width:150px;'><input id='id_debit_total' class='form-control data total_amount' value='"+ data['total_debit_amount'] +"' disabled> </td>"
+                            + "<td style='width:150px;'><input id='id_credit_total' class='form-control data total_amount' value='"+ data['total_amount'] +"' disabled> </td></tr>"
+
 
                             $("#tbody").html(output_html);
 
@@ -208,7 +218,7 @@
                                 <label class="col-md-2 control-label">Student:</label>
                                 <div class="col-md-2">
                                     <select id='id_student' title="Select country" name="student"
-                                            class="form-control"
+                                            autocomplete="off" class="form-control" data-live-search="true"
                                             required>
                                         <option style="display:none" selected="selected" id=""
                                                 value="">Please Select
@@ -314,6 +324,7 @@
                     <thead>
                     <tr>
                         <th>No</th>
+                        <th>Voucher Date</th>
                         <th>Description</th>
                         <th>Debit</th>
                         <th>Credit</th>

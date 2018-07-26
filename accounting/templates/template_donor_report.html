@@ -14,6 +14,8 @@
             $(document).ready(function () {
                  $('#export_button').attr('disabled', true);
 
+                  $("#id_donor_id").chosen();
+
                 $("#id_donor_id").change(function () {
 
                     var donor = $(this).val();
@@ -42,18 +44,24 @@
 
                             var output_html = "";
 
-                            for(var i= 0; i< (data).length ; i++) {
+                            for(var i= 0; i< (data['voucher_records']).length ; i++) {
 
                                 output_html += "" +
                                 "<tr id='item"+ i +"' class='item'>"
-                                + "<td style='width:150px;'><input id='id_voucher_number' class='form-control data voucher_number' value='"+ data[i]['voucher_rec']['voucher_number'] +"' disabled> </td>"
-                                + "<td><input id='id_student"+ i +"' class='form-control data voucher_number' value='"+ data[i]['voucher_rec']['student']['get_all_name'] +"' disabled> </td>"
-                                + "<td><input id='id_country"+ i +"' class='form-control data voucher_number' value='" + data[i]['approval_amount'] + "' disabled> </td>"
-                                + "<td><input id='id_voucher_amount"+ i +"' class='form-control data voucher_number' value='" + data[i]['credit_total'] + "' disabled> </td>"
-                                + "<td><input id='id_voucher_amount"+ i +"' class='form-control data voucher_number' value='" + data[i]['outstanding_amount'] + "' disabled> </td>"
+                                + "<td style='width:150px;'><input id='id_voucher_number' class='form-control data voucher_number' value='"+ data['voucher_records'][i]['voucher_rec']['voucher_number'] +"' disabled> </td>"
+                                + "<td><input id='id_student"+ i +"' class='form-control data student' value='"+ data['voucher_records'][i]['voucher_rec']['student']['get_all_name'] +"' disabled> </td>"
+                                + "<td><input id='id_semester"+ i +"' class='form-control data semester' value='"+ data['voucher_records'][i]['voucher_rec']['semester']['semester_name'] +"' disabled> </td>"
+                                + "<td><input id='id_country"+ i +"' class='form-control data country' value='" + data['voucher_records'][i]['approval_amount'] + "' disabled> </td>"
+                                + "<td><input id='id_voucher_amount"+ i +"' class='form-control data voucher_amount' value='" + data['voucher_records'][i]['credit_total'] + "' disabled> </td>"
+                                + "<td><input id='id_voucher_amount"+ i +"' class='form-control data voucher_number' value='" + data['voucher_records'][i]['outstanding_amount'] + "' disabled> </td>"
 
                                 output_html+= "</tr>"
                             }
+
+                             output_html+= "<tr id='item_total' class='item'><td colspan='4'></td>"
+                            + "<td style='width:150px;'><input id='id_total' class='form-control data total_amount' value='"+ data['total_credit_amount'] +"' disabled> </td>"
+                            + "<td style='width:150px;'><input id='id_total' class='form-control data total_amount' value='"+ data['total_outstanding_amount'] +"' disabled> </td></tr>"
+
 
                             $("#tbody").html(output_html);
 
@@ -127,7 +135,7 @@
                                 <label class="col-md-3 control-label">Donor:</label>
                                 <div class="col-md-3">
                                     <select id='id_donor_id' title="Select Donor" name="donor"
-                                            class="form-control"
+                                            autocomplete="off" class="form-control" data-live-search="true"
                                             required>
                                         <option style="display:none" selected="selected" id=""
                                                 value="">Please Select
@@ -154,6 +162,7 @@
                         <tr>
                             <th>No</th>
                             <th>Student</th>
+                            <th>Semester</th>
                             <th>Scholorship Fee</th>
                             <th>Credit</th>
                             <th>Outstanding</th>

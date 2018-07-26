@@ -12,12 +12,13 @@
     <script>
         window.onload = function () {
             $(document).ready(function () {
+
+                $("#id_scholarship").chosen();
+                $("#id_country").chosen();
+
                 $(document).on("click", "#export_button", function (e) {
                         $('#form_sample_export').submit();
                 });
-
-
-
             });
 
 
@@ -82,7 +83,7 @@
                                 <div class="col-md-3">
                                      <select id='id_country' title="Select Country"
                                                 name="country"
-                                                class="form-control">
+                                                autocomplete="off" class="form-control" data-live-search="true">
                                         {% if selected_country %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ selected_country.0.id }}">{{ selected_country.0.country_name|title }}
@@ -131,7 +132,7 @@
 
                                     <select id='id_scholarship' title="Select Scholarship"
                                                 name="scholarship"
-                                                class="form-control">
+                                                autocomplete="off" class="form-control" data-live-search="true">
                                         {% if selected_scholarship %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ selected_scholarship.0.id }}">{{ selected_scholarship.0.scholarship_name|title }}
@@ -174,7 +175,9 @@
                         <thead>
                         <tr>
                             <th>No</th>
+                            <th>Voucher Date</th>
                             <th>Student</th>
+                            <th>Semister</th>
                             <th>Debit</th>
                             <th>Credit</th>
                             <th>Balance</th>
@@ -190,10 +193,24 @@
                                 </td>
 
                                 <td>
+                                    <text hidden>{{ rec.voucher_date }}</text>
+                                    <input id="id_voucher_date" class="form-control data voucher_date" value="{{ rec.voucher_date }}" disabled>
+                                </td>
+
+                                <td>
                                     <text hidden>{{ rec.application.get_full_name|title }}</text>
                                     <input class="form-control data student" name="student"
-                                           type="text"
+                                           type="text" title="{{ rec.application.get_full_name|title }}"
                                            id="student{{ forloop.counter }}" value="{{ rec.application.get_full_name|title }}"
+                                           required
+                                           disabled>
+                                </td>
+
+                                <td>
+                                    <text hidden>{{ rec.application.applicant_progress_rel.all.0.semester.semester_name|title }}</text>
+                                    <input class="form-control data semester_name" name="semester_name"
+                                           type="text"
+                                           id="semester_name{{ forloop.counter }}" value="{{ rec.application.applicant_progress_rel.all.0.semester.semester_name|title }}"
                                            required
                                            disabled>
                                 </td>
@@ -246,6 +263,8 @@
                             </tr>
                         {% endfor %}
                             <tr>
+                                <td></td>
+                                <td></td>
                                 <td></td>
                                 <td><b>Total</b></td>
                                 <td>

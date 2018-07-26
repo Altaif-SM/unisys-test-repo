@@ -12,13 +12,16 @@
     <script>
         window.onload = function () {
             $(document).ready(function () {
+
+                $("#id_scholarship").chosen();
+                $("#id_country").chosen();
+                $("#id_student").chosen();
+
                 $(document).on("click", "#export_button", function (e) {
 
                         $('#form_sample_export').submit();
 
                 });
-
-
 
             });
 
@@ -46,7 +49,7 @@
             </li>
 
             <li>
-                <span> Student Receipt & Payment Report </span>
+                <span> Approval & Paid Total </span>
             </li>
         </ul>
     </div>
@@ -64,7 +67,7 @@
         <div class="portlet-title">
             <div class="caption font-dark">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> Student Receipt & Payment Report </span>
+                <span class="caption-subject font-red sbold uppercase"> Approval & Paid Total </span>
             </div>
         </div>
 
@@ -82,9 +85,9 @@
                             <div class="">
                                 <label class="col-md-3 control-label">Student:</label>
                                 <div class="col-md-3">
-                                    <select id='id_country' title="Select Student"
+                                    <select id='id_student' title="Select Student"
                                                 name="student"
-                                                class="form-control">
+                                                autocomplete="off" class="form-control" data-live-search="true">
                                         {% if selected_student %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ selected_student.0.student.id }}">{{ selected_student.0.get_full_name|title }}
@@ -108,7 +111,7 @@
                                 <div class="col-md-3">
                                     <select id='id_country' title="Select Country"
                                                 name="country"
-                                                class="form-control">
+                                                autocomplete="off" class="form-control" data-live-search="true">
                                         {% if selected_country %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ selected_country.0.id }}">{{ selected_country.0.country_name|title }}
@@ -138,7 +141,7 @@
                                 <div class="col-md-3">
                                     <select id='id_scholarship' title="Select Scholarship"
                                                 name="scholarship"
-                                                class="form-control">
+                                                autocomplete="off" class="form-control" data-live-search="true">
                                         {% if selected_scholarship %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ selected_scholarship.0.id }}">{{ selected_scholarship.0.scholarship_name|title }}

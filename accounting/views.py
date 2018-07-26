@@ -9,16 +9,20 @@ from django.db.models import Sum
 from donor.models import DonorDetails
 from django.db.models import Q
 from common.utils import *
-
+from datetime import datetime
 
 # Create your views here.
 def get_student_payment_voucher(request):
     # student_list = StudentDetails.objects.filter(student_applicant_rel__is_sponsored=True)
+    myDate = datetime.now()
+
+    # Give a format to the date
+    formatedDate = myDate.strftime("%d-%m-%Y")
 
     student_list = ApplicationDetails.objects.filter(is_sponsored=True)
 
     voucher_record = StudentPaymentReceiptVoucher.objects.all()
-    return render(request, "template_student_payment_voucher.html",{'student_list': student_list, 'voucher_record': voucher_record})
+    return render(request, "template_student_payment_voucher.html",{'student_list': student_list, 'voucher_record': voucher_record,'formatedDate': formatedDate})
 
 def get_student_receipt_voucher(request):
     # student_list = StudentDetails.objects.filter(student_applicant_rel__is_sponsored=True)
@@ -210,10 +214,12 @@ def get_voucher_data_by_donor(request):
     student_list = StudentDetails.objects.filter(id__in=student_ids).distinct()
     student_list_rec = []
 
+    raw_dict_one = {}
+    student_main_list = []
     for obj in student_list:
 
         raw_dict = {}
-        raw_dict_one = {}
+
         approval_amount = 0
         credit_total = 0
         outstanding_amount = 0
@@ -238,7 +244,15 @@ def get_voucher_data_by_donor(request):
         debit_total += float(credit_total) if credit_total else 0
         outstanding_total += float(outstanding_amount) if outstanding_amount else 0
 
-    return HttpResponse(json.dumps(student_list_rec), content_type='application/json')
+
+    raw_dict = {}
+    raw_dict['voucher_records'] = student_list_rec
+    raw_dict['total_credit_amount'] = debit_total
+    raw_dict['total_outstanding_amount'] = outstanding_total
+
+    student_main_list.append(raw_dict)
+
+    return HttpResponse(json.dumps(raw_dict), content_type='application/json')
 
 def get_payment_voucher_data_by_student(request):
 
@@ -247,8 +261,12 @@ def get_payment_voucher_data_by_student(request):
     total_amount = StudentPaymentReceiptVoucher.objects.filter(voucher_type="credit",application=application_rec).values(
         "voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
 
+    total_debit_amount = StudentPaymentReceiptVoucher.objects.filter(voucher_type="debit",application=application_rec).values(
+        "voucher_amount").aggregate(total_debit=Sum('voucher_amount'))
+
     raw_dict = {}
     raw_dict['total_amount'] = float(total_amount['total_credit']) if total_amount['total_credit'] else 0
+    raw_dict['total_debit_amount'] = float(total_debit_amount['total_debit']) if total_debit_amount['total_debit'] else 0
     raw_dict['application_rec'] = application_rec.to_student_payment_application_dict()
     raw_dict['voucher_rec'] = [ obj.to_dict() for obj in voucher_record]
 
