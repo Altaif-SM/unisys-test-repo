@@ -14,6 +14,7 @@ from masters.models import AddressDetails, CountryDetails, ScholarshipDetails, G
 from partner.models import PartnerDetails
 from donor.models import DonorDetails
 import json
+from common.utils import application_notification,get_current_year
 from accounts.service import UserService
 # Create your views here.
 
@@ -165,19 +166,24 @@ def update_switch(request):
         val_dict = request.POST
         if request.user.is_superuser:
             if 'switch_type' in val_dict and val_dict['switch_type'] == 'is_registration_switch':
-                User.objects.filter().update(registration_switch=(json.loads(request.POST['switch'])))
+                User.objects.filter().update(registration_switch=(json.loads(val_dict['switch'])))
 
             if 'switch_type' in val_dict and val_dict['switch_type'] == 'is_submission_switch':
-                User.objects.filter().update(submission_switch=(json.loads(request.POST['switch'])))
+                User.objects.filter().update(submission_switch=(json.loads(val_dict['switch'])))
 
             if 'switch_type' in val_dict and val_dict['switch_type'] == 'is_psyc_switch':
-                User.objects.filter().update(psyc_switch=(json.loads(request.POST['switch'])))
+                User.objects.filter().update(psyc_switch=(json.loads(val_dict['switch'])))
+
+                if val_dict['switch'] == 'true':
+                    application_ids = ApplicationDetails.objects.filter(year=get_current_year(),is_submitted=True).values_list('id')
+                    application_notification(application_ids,
+                                             'Now you can take your psychometric test.')
 
             if 'switch_type' in val_dict and val_dict['switch_type'] == 'is_agreements_switch':
-                User.objects.filter().update(agreements_switch=(json.loads(request.POST['switch'])))
+                User.objects.filter().update(agreements_switch=(json.loads(val_dict['switch'])))
 
             if 'switch_type' in val_dict and val_dict['switch_type'] == 'is_semester_switch':
-                User.objects.filter().update(semester_switch=(json.loads(request.POST['switch'])))
+                User.objects.filter().update(semester_switch=(json.loads(val_dict['switch'])))
 
             if 'switch_type' in val_dict and val_dict['switch_type'] == 'is_program_switch':
                             User.objects.filter().update(program_switch=(json.loads(request.POST['switch'])))

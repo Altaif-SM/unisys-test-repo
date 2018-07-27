@@ -72,9 +72,13 @@ def create_voucher_number(voucher_type, voucher):
 
 def application_notification(applicant_id, message):
     try:
-        StudentNotifications.objects.create(applicant_id_id=applicant_id, message=message)
+            StudentNotifications.objects.create(applicant_id_id=applicant_id, message=message)
     except:
-        pass
+        try:
+            for id in applicant_id:
+                StudentNotifications.objects.create(applicant_id_id=id[0], message=message)
+        except:
+            pass
 
 
 def admin_notification(applicant_id, message):
