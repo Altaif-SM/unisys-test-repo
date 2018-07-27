@@ -1,6 +1,6 @@
 {% extends "template_base_page.html" %}
 {% load staticfiles %}
-
+{% load mathfilters %}
 {% block styleBlock %}
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
 
@@ -208,7 +208,7 @@
                                             <text>{{ rec.applicant_progress_rel.all.last.cgpa_scored }}</text>
                                         </td>
                                         <td>
-                                            <text>{{ rec.rel_student_payment_receipt_voucher.all.last.voucher_total }}</text>
+                                            <text>{{ rec.scholarship_fee|sub:rec.rel_student_payment_receipt_voucher.all.last.voucher_total }}</text>
                                         </td>
                                         <td>
                                             <text>{{ rec.applicant_progress_rel.all.last.transcript_document }}</text>
