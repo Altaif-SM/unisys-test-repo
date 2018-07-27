@@ -323,14 +323,26 @@ def student_payment_report_export(request):
         balance_total = DonorReceiptVoucher.objects.filter(voucher_type="debit",application__in=application_rec).values("voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
         for rec in voucher_record:
             rec_list = []
-            rec_list.append(rec.voucher_number)
-            rec_list.append(rec.voucher_description)
-            rec_list.append(rec.voucher_amount)
+            if rec.voucher_number!="":
+                rec_list.append(rec.voucher_number)
+            else:
+                rec_list.append("")
+
+            if rec.voucher_description !="":
+                rec_list.append(rec.voucher_description)
+            else:
+                rec_list.append("")
+
+            if rec.voucher_amount!="":
+                rec_list.append(rec.voucher_amount)
+            else:
+                rec_list.append("")
+
             rows.append(rec_list)
-        rec_len = len(voucher_record)
-        total_balance = balance_total['total_credit']
+        #rec_len = len(voucher_record)
+        #total_balance = balance_total['total_credit']
         column_names = ["NO", "Description", "Debit"]
-        return export_debit_wraped_column_xls(' StudentPaymentReport', column_names, rows,rec_len,total_balance)
+        return export_wraped_column_xls(' StudentPaymentReport', column_names, rows)
     except:
         return redirect('/donar/template_my_payments/')
 

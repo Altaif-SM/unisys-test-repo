@@ -244,7 +244,7 @@ def export_last_row_wraped_column_xls(output_file_name, column_names, rows, rec_
             worksheet.write(row_num, col_num, str(row[col_num]), unlocked)
 
     rec_len = rec_len + 1
-    start_column = 1
+    start_column = 3
     for i in temp_list:
         worksheet.write(rec_len, start_column, i)
         start_column = start_column + 1

@@ -379,10 +379,22 @@ def export_student_recipt_voucher(request):
                         rec_list.append(app_rec.rel_student_payment_receipt_voucher.all()[count].voucher_number)
                     else:
                         rec_list.append("")
+
+                    if rec.voucher_date :
+                        rec_list.append(rec.voucher_date)
+                    else:
+                        rec_list.append("")
+
                     rec_list.append(app_rec.get_full_name())
+
+                    if app_rec.applicant_progress_rel.all():
+                        rec_list.append(app_rec.applicant_progress_rel.all()[0].semester.semester_name)
+                    else:
+                        rec_list.append("")
+
                     rec_list.append(app_rec.address.country.country_name)
 
-                    if app_rec.applicant_scholarship_rel.all() != '':
+                    if app_rec.applicant_scholarship_rel.all():
                         rec_list.append(app_rec.applicant_scholarship_rel.all()[0].university.university_name)
                     else:
                         rec_list.append("")
@@ -392,8 +404,8 @@ def export_student_recipt_voucher(request):
                     else:
                         rec_list.append("")
 
-                    if app_rec.applicant_module_rel.all():
-                        rec_list.append(app_rec.applicant_module_rel.all()[0].program.program_name)
+                    if app_rec.applicant_scholarship_rel.all():
+                        rec_list.append(app_rec.applicant_scholarship_rel.all()[0].course_applied.program_name)
 
                     else:
                         rec_list.append("")
@@ -411,7 +423,7 @@ def export_student_recipt_voucher(request):
                 else:
                      count = count + 1
                      pass
-        column_names = ["No", "Student Name", "Country", "University", "Scholarship", "Program", "Donor", "Amount"]
+        column_names = ["No","Voucher Date", "Student Name","Semester", "Country", "University", "Scholarship", "Program", "Donor", "Amount"]
         return export_wraped_column_xls('StudentReceiptVoucher', column_names, rows)
     except:
         return redirect("/accounting/get_student_receipt_voucher/")
@@ -436,10 +448,21 @@ def export_student_payment_voucher(request):
                     rec_list.append(app_rec.rel_student_payment_receipt_voucher.all()[count].voucher_number)
                 else:
                     rec_list.append("")
+                if rec.voucher_date :
+                    rec_list.append(rec.voucher_date)
+                else:
+                    rec_list.append("")
+
                 rec_list.append(app_rec.get_full_name())
+                if app_rec.applicant_progress_rel.all():
+                    rec_list.append(app_rec.applicant_progress_rel.all()[0].semester.semester_name)
+                else:
+                    rec_list.append("")
+
+
                 rec_list.append(app_rec.address.country.country_name)
 
-                if app_rec.applicant_scholarship_rel.all() != '':
+                if app_rec.applicant_scholarship_rel.all():
                     rec_list.append(app_rec.applicant_scholarship_rel.all()[0].university.university_name)
                 else:
                     rec_list.append("")
@@ -449,8 +472,8 @@ def export_student_payment_voucher(request):
                 else:
                     rec_list.append("")
 
-                if app_rec.applicant_module_rel.all():
-                    rec_list.append(app_rec.applicant_module_rel.all()[0].program.program_name)
+                if app_rec.applicant_scholarship_rel.all():
+                    rec_list.append(app_rec.applicant_scholarship_rel.all()[0].course_applied.program_name)
 
                 else:
                     rec_list.append("")
@@ -468,41 +491,63 @@ def export_student_payment_voucher(request):
             else:
                 count = count + 1
                 pass
-    column_names = ["No", "Student Name", "Country", "University", "Scholarship", "Program", "Donor", "Amount"]
+    column_names = ["No","Voucher Date" ,"Student Name","Semester", "Country", "University", "Scholarship", "Program", "Donor", "Amount"]
     return export_wraped_column_xls('StudentPaymentVoucher', column_names, rows)
   except:
       return redirect("/accounting/get_student_payment_voucher/")
 
 
 def export_donor_receipt_report(request):
-    val_dict = request.POST
-    donar_id = val_dict['donar_id']
-    student_ids = StudentDonorMapping.objects.filter(donor_id=donar_id).values('student')
-    student_list = StudentDetails.objects.filter(id__in=student_ids).distinct()
-    rows = []
-    for obj in student_list:
-        rec_list = []
-        approval_amount = 0
-        credit_total = 0
-        outstanding_amount = 0
-        for application_obj in obj.student_applicant_rel.filter(is_sponsored=True):
-            approval_amount = application_obj.scholarship_fee
-            for voucher_obj in application_obj.rel_donor_receipt_voucher.all():
-                if voucher_obj!="":
-                    rec_list.append(voucher_obj.voucher_number)
-                if voucher_obj.voucher_type == "debit":
-                    credit_total += float(voucher_obj.voucher_amount)
-            outstanding_amount = float(approval_amount) - float(credit_total)
-            if application_obj.rel_donor_receipt_voucher.all():
-                rec_list.append(obj.student_full_name)
-                if application_obj!="":
-                    rec_list.append(application_obj.scholarship_fee)
-                rec_list.append(float(credit_total))
-                rec_list.append(float(outstanding_amount))
-                rows.append(rec_list)
+    try:
+        debit_total = 0
+        outstanding_total = 0
+        val_dict = request.POST
+        donar_id = val_dict['donar_id']
+        student_ids = StudentDonorMapping.objects.filter(donor_id=donar_id).values('student')
+        student_list = StudentDetails.objects.filter(id__in=student_ids).distinct()
+        rows = []
+        for obj in student_list:
+            rec_list = []
+            approval_amount = 0
+            credit_total = 0
+            outstanding_amount = 0
 
-    column_names = ["No", "Student Name", "Scholorship Fee", "Credit", "Outstanding",]
-    return export_wraped_column_xls('DonorReceiptReport', column_names, rows)
+            for application_obj in obj.student_applicant_rel.filter(is_sponsored=True):
+
+                approval_amount = application_obj.scholarship_fee
+
+                for voucher_obj in application_obj.rel_donor_receipt_voucher.all():
+                    # if voucher_obj!="":
+                    #   rec_list.append(voucher_obj.voucher_number)
+
+                    if voucher_obj.voucher_type == "debit":
+                        credit_total += float(voucher_obj.voucher_amount)
+
+                outstanding_amount = float(approval_amount) - float(credit_total)
+
+                if application_obj.rel_donor_receipt_voucher.all():
+                    rec_list.append(voucher_obj.voucher_number)
+                    rec_list.append(voucher_obj.application.get_full_name())
+                    if voucher_obj.application.applicant_progress_rel.all():
+                        rec_list.append(voucher_obj.application.applicant_progress_rel.all()[0].semester.semester_name)
+                    else:
+                        rec_list.append("")
+
+                    if application_obj!="":
+                        rec_list.append(application_obj.scholarship_fee)
+
+                    rec_list.append(float(credit_total))
+
+                    rec_list.append(float(outstanding_amount))
+
+                    rows.append(rec_list)
+
+
+        column_names = ["No", "Student Name","Semester", "Scholorship Fee", "Credit", "Outstanding",]
+        return export_wraped_column_xls('DonorReceiptReport', column_names, rows)
+    except:
+        return redirect("/accounting/get_donor_report/")
+
 
 # def export_student_recipt_voucher(request):
 #         val_dict = request.POST
@@ -687,8 +732,8 @@ def export_student_receipt_payment_report(request):
             outstanding_amount = 0
             for application_obj in obj.student_applicant_rel.filter(is_sponsored=True):
                 rec_list.append(application_obj.get_full_name())
-                if application_obj.applicant_module_rel.all():
-                    rec_list.append(application_obj.applicant_module_rel.all()[0].program.program_name)
+                if application_obj.applicant_scholarship_rel.all():
+                    rec_list.append(application_obj.applicant_scholarship_rel.all()[0].course_applied.program_name)
                 else:
                     rec_list.append("")
                 if application_obj.applicant_progress_rel.all():
@@ -698,12 +743,17 @@ def export_student_receipt_payment_report(request):
                 if application_obj.rel_student_payment_receipt_voucher.all():
                     approval_amount = application_obj.scholarship_fee
                     for voucher_obj in application_obj.rel_student_payment_receipt_voucher.all():
-                        if voucher_obj.voucher_type == "credit":
+                        if voucher_obj.voucher_type == "debit":
                             credit_total += float(voucher_obj.voucher_amount)
+
                     outstanding_amount = float(approval_amount) - float(credit_total)
+
                     rec_list.append(float(approval_amount))
+
                     rec_list.append(float(credit_total))
+
                     rec_list.append(float(outstanding_amount))
+
                     rows.append(rec_list)
 
 
@@ -751,12 +801,16 @@ def student_receipt_payment_report_export(request):
         for obj in stud_pay_voucher_list:
             rec_list = []
             rec_list.append(obj.voucher_number)
+            rec_list.append(obj.voucher_date)
             rec_list.append(obj.application.get_full_name())
+            if obj.application.applicant_progress_rel.all():
+                rec_list.append(obj.application.applicant_progress_rel.all()[0].semester.semester_name)
+            else:
+                rec_list.append("")
 
             if obj.voucher_type == "debit":
-
                 debit_total += float(obj.voucher_amount)
-
+                credit_value = 0
                 if debit_total != "":
                     debit_value = float(obj.voucher_amount)
                     rec_list.append(debit_value)
@@ -765,28 +819,29 @@ def student_receipt_payment_report_export(request):
                 rec_list.append("")
                 credit_value = float(obj.voucher_amount)
                 credit_total += float(obj.voucher_amount)
+                debit_value = 0
                 if credit_total != "":
                     rec_list.append(credit_value)
 
             if obj.voucher_type != "credit":
                 rec_list.append("")
 
-            rec_list.append(obj.voucher_total)
+            balance_value = (float(debit_value) - float(credit_value))
+
+            rec_list.append(balance_value)
             rows.append(rec_list)
         balance_total = StudentPaymentReceiptVoucher.objects.values("application__scholarship_fee").distinct().aggregate(total_price=Sum('application__scholarship_fee'))
 
         if balance_total and stud_pay_voucher_list:
             debit_total  = debit_total
             credit_total = credit_total
-
-            balance_total = (float(balance_total['total_price']) - credit_total)
-
+            balance_total = (float(debit_total) -  float(credit_total))
             temp_list.append("Total")
             temp_list.append(debit_total)
             temp_list.append(credit_total)
             temp_list.append(balance_total)
 
-        column_names = ["NO", "Student", "Debit", "Credit", "Balance"]
+        column_names = ["NO","Voucher Date", "Student","Semester", "Debit", "Credit", "Balance"]
 
 
         return export_last_row_wraped_column_xls('StudentReceipt&Payment', column_names, rows,rec_len,temp_list)
