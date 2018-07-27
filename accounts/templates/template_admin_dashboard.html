@@ -3,6 +3,71 @@
 
 {% block styleBlock %}
     <style type="text/css">
+                .s-switch input[type='checkbox'] {
+            display: none
+        }
+
+        .s-switch {
+            width: 62px;
+            height: 32px;
+            z-index: 0;
+            margin: 0;
+            padding: 0;
+            appearance: none;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            border-radius: 16px;
+            -moz-border-radius: 16px;
+            -webkit-border-radius: 16px;
+        }
+
+        .s-switch:before {
+            content: ' ';
+            background: #D9534F !important;
+            position: absolute;
+            left: 1px;
+            top: 1px;
+            width: 60px;
+            height: 30px;
+            background: #FFFFFF;
+            z-index: 1;
+            border-radius: 16px;
+            -moz-border-radius: 16px;
+            -webkit-border-radius: 16px;
+        }
+
+        .s-switch:after {
+            content: ' ';
+            height: 29px;
+            width: 29px;
+            border-radius: 28px;
+            z-index: 2;
+            background: #FFFFFF;
+            position: absolute;
+            -webkit-transition-duration: 300ms;
+            transition-duration: 300ms;
+            top: 1px;
+            left: 3px;
+            -webkit-box-shadow: 0 2px 5px #999999;
+            box-shadow: 0 2px 5px #999999;
+        }
+
+        .s-switch-on:before {
+            background: #4DAF48 !important;
+        }
+
+        .s-switch-on:after {
+            left: 31px !important;
+        }
+
+        .s-switch-readonly, .s-switch-disabled {
+            opacity: 0.8;
+        }
+
+        {#tspan {#}
+        {#      display: none;#}
+        {#    }#}
 
     </style>
 {% endblock %}
@@ -146,6 +211,69 @@
                 });
 
 
+                $("#id_registration_switch").Sswitch({
+                    onSwitchChange: function (event) {
+                        // Your magic
+                        var mode = $(this).prop('checked');
+                        toggle_switch('is_registration_switch', mode);
+                    }
+                });
+
+                $("#id_submission_switch").Sswitch({
+                    onSwitchChange: function (event) {
+                        var mode = $(this).prop('checked');
+                        toggle_switch('is_submission_switch', mode);
+                    }
+                });
+
+                $("#id_psyc_switch").Sswitch({
+                    onSwitchChange: function (event) {
+                        var mode = $(this).prop('checked');
+                        toggle_switch('is_psyc_switch', mode);
+                    }
+                });
+
+                $("#id_agreements_switch").Sswitch({
+                    onSwitchChange: function (event) {
+                        var mode = $(this).prop('checked');
+                        toggle_switch('is_agreements_switch', mode);
+                    }
+                });
+
+                $("#id_semester_switch").Sswitch({
+                    onSwitchChange: function (event) {
+                        var mode = $(this).prop('checked');
+                        toggle_switch('is_semester_switch', mode);
+                    }
+                });
+
+                 $("#id_program_switch").Sswitch({
+                    onSwitchChange: function (event) {
+                        var mode = $(this).prop('checked');
+                        toggle_switch('is_program_switch', mode);
+                    }
+                });
+
+                function toggle_switch(switch_type, switch_mode) {
+                    $.ajax({
+                        type: "POST",
+                        cache: false,
+                        url: '/accounts/update_switch/',
+                        data:{
+                            'switch':switch_mode,
+                            'switch_type': switch_type,
+                            'csrfmiddlewaretoken': '{{ csrf_token }}'
+                        },
+                        success: function (res) {
+                            //alert(JSON.stringify(res));
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            //alert('error!');
+                        }
+                    });
+                }
+
+
             });
         }
 
@@ -179,6 +307,7 @@
 
 
             <div class="row">
+
                 <div class="col-md-8 col-sm-8">
                     <!-- BEGIN PORTLET-->
                     <div class="portlet light ">
@@ -190,6 +319,66 @@
                         </div>
                         <div class="portlet-body">
                             <div id="chartdiv" style="width: 100%; height: 262px;"></div>
+                        </div>
+                    </div>
+                    <!-- END PORTLET-->
+                </div>
+
+
+                <div class="col-md-4 col-sm-4">
+                    <!-- BEGIN PORTLET-->
+                    <div class="portlet light ">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-bar-chart font-dark hide"></i>
+                                <span class="caption-subject font-dark bold uppercase">Quick Controls </span>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+
+
+                            <div class="row ">
+                                <label class="col-md-3 control-label">Registration:</label>
+                                <div class="col-md-offset-6" style="">
+                                    <input type="checkbox" id="id_registration_switch" {% if user.registration_switch == True %} checked {% endif %}/>
+                                </div>
+                            </div><br>
+
+                            <div class="row">
+                                <label class="col-md-3 control-label">Submission:</label>
+                                <div class="col-md-offset-6">
+                                    <input type="checkbox" id="id_submission_switch" {% if user.submission_switch == True %} checked {% endif %}/>
+                                </div>
+                            </div><br>
+
+                            <div class="row">
+                                <label class="col-md-3 control-label">Psyc Test:</label>
+                                <div class="col-md-offset-6">
+                                    <input type="checkbox" id="id_psyc_switch" {% if user.psyc_switch == True %} checked {% endif %}/>
+                                </div>
+                            </div><br>
+
+                            <div class="row">
+                                <label class="col-md-3 control-label">Agreements:</label>
+                                <div class="col-md-offset-6">
+                                    <input type="checkbox" id="id_agreements_switch" {% if user.agreements_switch == True %} checked {% endif %}/>
+                                </div>
+                            </div><br>
+
+                            <div class="row">
+                                <label class="col-md-3 control-label">Semester:</label>
+                                <div class="col-md-offset-6">
+                                    <input type="checkbox" id="id_semester_switch" {% if user.semester_switch == True %} checked {% endif %}/>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <label class="col-md-3 control-label">Dev Program:</label>
+                                <div class="col-md-offset-6">
+                                    <input type="checkbox" id="id_program_switch" {% if user.program_switch == True %} checked {% endif %}/>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                     <!-- END PORTLET-->

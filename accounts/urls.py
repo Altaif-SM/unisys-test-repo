@@ -14,4 +14,7 @@ urlpatterns = [
     # path('forget_password/', views.forget_password, name='forget_password'),
     path('template_manage_user/', views.template_manage_user,
          name='template_manage_user'),
+
+    path('update_switch/', views.update_switch,
+         name='update_switch'),
 ]

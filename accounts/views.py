@@ -158,3 +158,28 @@ def template_manage_user(request):
     user_recs = User.objects.filter().exclude(role__name='Admin')
     return render(request, 'template_manage_user.html',
                   {'country_list': country_list, 'user_recs': user_recs})
+
+
+def update_switch(request):
+    if request.method == 'POST':
+        val_dict = request.POST
+        if request.user.is_superuser:
+            if 'switch_type' in val_dict and val_dict['switch_type'] == 'is_registration_switch':
+                User.objects.filter().update(registration_switch=(json.loads(request.POST['switch'])))
+
+            if 'switch_type' in val_dict and val_dict['switch_type'] == 'is_submission_switch':
+                User.objects.filter().update(submission_switch=(json.loads(request.POST['switch'])))
+
+            if 'switch_type' in val_dict and val_dict['switch_type'] == 'is_psyc_switch':
+                User.objects.filter().update(psyc_switch=(json.loads(request.POST['switch'])))
+
+            if 'switch_type' in val_dict and val_dict['switch_type'] == 'is_agreements_switch':
+                User.objects.filter().update(agreements_switch=(json.loads(request.POST['switch'])))
+
+            if 'switch_type' in val_dict and val_dict['switch_type'] == 'is_semester_switch':
+                User.objects.filter().update(semester_switch=(json.loads(request.POST['switch'])))
+
+            if 'switch_type' in val_dict and val_dict['switch_type'] == 'is_program_switch':
+                            User.objects.filter().update(program_switch=(json.loads(request.POST['switch'])))
+
+    return HttpResponse(json.dumps({'flag': json.loads(request.POST['switch'])}))

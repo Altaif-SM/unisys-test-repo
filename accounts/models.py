@@ -38,6 +38,13 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=256, blank=True, null=True)
     role = models.ManyToManyField(UserRole, related_name='user_role', null=True)
 
+    registration_switch = models.BooleanField(default=False)
+    submission_switch = models.BooleanField(default=False)
+    psyc_switch = models.BooleanField(default=False)
+    agreements_switch = models.BooleanField(default=False)
+    semester_switch = models.BooleanField(default=False)
+    program_switch = models.BooleanField(default=False)
+
     class Meta:
         permissions = (
             ('can_view_year_master', 'can view year master'),
