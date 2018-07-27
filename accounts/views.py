@@ -5,7 +5,7 @@ from django.db import transaction
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.conf import settings
-from accounts.decoratars import user_login_required
+from accounts.decoratars import user_login_required, registration_required
 from accounts.forms import loginForm, signUpForm
 from accounts.service import *
 from accounts.models import UserRole
@@ -79,11 +79,13 @@ def template_signin(request):
     form = loginForm()
 
     if request.user.is_authenticated:
-        return redirect('/accounts/home/')
+        dashboard_path = request.user.get_dashboard_path()
+        return redirect(dashboard_path)
 
     # return render(request, "template_login.html", {'form': form})
     return render(request, "template_login.html", {'form': form, 'country_list': country_list})
 
+@registration_required
 @transaction.atomic
 def user_signup(request):
     signup_form = signUpForm(request.POST)
@@ -132,17 +134,8 @@ def user_signin(request):
 
         if user:
             login(request, user)
-
-            if user.is_student():
-                return redirect('/student/student_home/')
-
-            if user.is_donor():
-                return redirect('/donor/template_donor_dashboard/')
-
-            if user.is_parent():
-                return redirect('/parent/template_parent_dashboard/')
-
-            return redirect('/accounts/home/')
+            dashboard_path = user.get_dashboard_path()
+            return redirect(dashboard_path)
         else:
             messages.success(request, "Enter Valid User Name and Password.")
             return redirect('/')

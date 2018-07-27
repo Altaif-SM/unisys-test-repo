@@ -4,10 +4,10 @@ from masters.views import *
 from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from common.utils import get_application_id
-
+from accounts.decoratars import student_login_required, psycho_test_required, semester_required, registration_required, dev_program_required, agreements_required, submission_required
 
 # Create your views here.
-
+@student_login_required
 def student_home(request):
     username = ''
 
@@ -899,7 +899,7 @@ def submit_application(request):
         messages.warning(request, "Form have some error" + str(e))
     return redirect('/student/student_home/')
 
-
+@psycho_test_required
 def applicant_psychometric_test(request):
     try:
         psychometric_test_obj = ''
@@ -914,7 +914,7 @@ def applicant_psychometric_test(request):
         return redirect('/student/student_home/')
     return render(request, 'applicant_psychometric_test.html', {'psychometric_test_obj': psychometric_test_obj})
 
-
+@psycho_test_required
 def save_psychometric_test(request):
     try:
         test_result_document = request.FILES['test_result_document']
@@ -954,7 +954,7 @@ def save_psychometric_test(request):
         messages.warning(request, "Form have some error" + str(e))
     return redirect('/student/applicant_psychometric_test/')
 
-
+@agreements_required
 def applicant_agreement_submission(request):
     try:
         agreement_submission_obj = ''
@@ -970,7 +970,7 @@ def applicant_agreement_submission(request):
     return render(request, 'applicant_agreement_submission.html',
                   {'agreement_submission_obj': agreement_submission_obj})
 
-
+@agreements_required
 def save_agreement_submission(request):
     try:
         four_parties_agreements = request.FILES['four_parties_agreements']
@@ -1015,7 +1015,7 @@ def save_agreement_submission(request):
         messages.warning(request, "Form have some error" + str(e))
     return redirect('/student/applicant_agreement_submission/')
 
-
+@dev_program_required
 def applicant_program_certificate_submission(request):
     try:
         module_recs = ''
@@ -1033,7 +1033,7 @@ def applicant_program_certificate_submission(request):
     return render(request, 'applicant_program_certificate_submission.html',
                   {'module_recs': module_recs, 'certificate_recs': certificate_recs})
 
-
+@dev_program_required
 def save_applicant_program_certificate_submission(request):
     try:
         certificate_document = request.FILES['certificate_document']
@@ -1071,7 +1071,7 @@ def delete_applicant_program_certificate_submission(request):
         messages.warning(request, "Record not deleted.")
     return HttpResponse(json.dumps({'error': 'Record not deleted.'}), content_type="application/json")
 
-
+@semester_required
 def applicant_academic_progress(request):
     try:
         semester_recs = ''
@@ -1091,7 +1091,7 @@ def applicant_academic_progress(request):
     return render(request, 'applicant_academic_progress.html',
                   {'semester_recs': semester_recs, 'year_recs': year_recs, 'progress_recs': progress_recs})
 
-
+@semester_required
 def save_applicant_academic_progress(request):
     try:
         transcript_document = request.FILES['transcript_document']

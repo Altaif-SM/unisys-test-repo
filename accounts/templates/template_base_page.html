@@ -491,7 +491,7 @@ License: You must have a valid license purchased only from themeforest(the above
                         </li>
                     {% endif %}
 
-                    {% if 'student.can_view_student_psychometric_test' in perms  and user.psyc_switch %}
+                    {% if 'student.can_view_student_psychometric_test' in perms %}
                         <li class="nav-item " id="acd_qli">
                             <a href="{% url 'student:applicant_psychometric_test' %}"
                                class="nav-link nav-toggle">
@@ -502,7 +502,7 @@ License: You must have a valid license purchased only from themeforest(the above
                         </li>
                     {% endif %}
 
-                    {% if 'student.can_view_student_agreements' in perms and user.agreements_switch %}
+                    {% if 'student.can_view_student_agreements' in perms %}
                         <li class="nav-item " id="acd_qli">
                             <a href="{% url 'student:applicant_agreement_submission' %}"
                                class="nav-link nav-toggle">
@@ -524,7 +524,7 @@ License: You must have a valid license purchased only from themeforest(the above
                         </li>
                     {% endif %}
 
-                    {% if 'student.can_view_student_academic_progress' in perms  and user.semester_switch %}
+                    {% if 'student.can_view_student_academic_progress' in perms %}
                         <li class="nav-item " id="acd_qli">
                             <a href="{% url 'student:applicant_academic_progress' %}"
                                class="nav-link nav-toggle">

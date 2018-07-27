@@ -123,6 +123,9 @@ class User(AbstractUser):
     def is_parent(self):
         return True if self.role.all().filter(name__in=[self.PARENT]).exists() else False
 
+    def is_accountant(self):
+        return True if self.role.all().filter(name__in=[self.ACCOUNTANT]).exists() else False
+
     @property
     def get_user_permissions(self):
 
@@ -189,3 +192,28 @@ class User(AbstractUser):
                 return payload
         except:
             return payload
+
+    ADMIN_DASHBOARD = '/accounts/home/'
+    STUDENT_DASHBOARD = '/student/student_home/'
+    PARENT_DASHBOARD = '/accounts/home/'
+    PARTNER_DASHBOARD = '/care_coordinator_dashboard'
+    DONOR_DASHBOARD = '/donor/template_donor_dashboard/'
+    ACCOUNTANT_DASHBOARD = '/accounts/home/'
+
+    def get_dashboard_path(self):
+
+        dashboard_path = User.ADMIN_DASHBOARD
+        if self.role.get().name == User.ADMIN:
+            dashboard_path = User.ADMIN_DASHBOARD
+        elif self.role.get().name == User.STUDENT:
+            dashboard_path = User.STUDENT_DASHBOARD
+        elif self.role.get().name == User.PARTNER:
+            dashboard_path = User.PARTNER_DASHBOARD
+        elif self.role.get().name == User.PARENT:
+            dashboard_path = User.PARENT_DASHBOARD
+        elif self.role.get().name == User.DONOR:
+            dashboard_path = User.DONOR_DASHBOARD
+        elif self.role.get().name == User.ACCOUNTANT:
+            dashboard_path = User.ACCOUNTANT_DASHBOARD
+        return dashboard_path
+
