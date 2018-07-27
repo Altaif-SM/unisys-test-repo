@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from masters.views import *
 
-from django.http import HttpResponse,JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from common.utils import get_application_id
 
@@ -9,20 +9,17 @@ from common.utils import get_application_id
 # Create your views here.
 
 def student_home(request):
-    application_history_obj = ''
-    applicant = ''
+    username = ''
 
     try:
-        if ApplicationDetails.objects.filter(application_id=request.user.get_application_id,
-                                             is_submitted=True).exists():
-            application_history_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id,
-                                                                     is_submitted=True).applicant_history_rel.all()
-            applicant = request.user.get_application_id
+        if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
+            username = request.user.get_application.get_full_name()
+
     except Exception as e:
+        username = request.user.first_name
         messages.warning(request, "Form have some error" + str(e))
 
-    return render(request, 'student_home.html',
-                  {'application_history_obj': application_history_obj,'applicant':applicant})
+    return render(request, 'student_home.html',{'username': username})
 
 
 def applicant_personal_info(request):
@@ -770,7 +767,7 @@ def applicant_scholarship_about_yourself_info(request):
         messages.warning(request, "Form have some error" + str(e))
     return render(request, 'applicant_scholarship_about_yourself_info.html',
                   {'scholarship_recs': scholarship_recs, 'scholarship_obj': scholarship_obj, 'about_obj': about_obj,
-                   'university_obj': university_obj, 'degree_obj': degree_obj,'course_recs':course_recs})
+                   'university_obj': university_obj, 'degree_obj': degree_obj, 'course_recs': course_recs})
 
 
 def get_degrees(request):
@@ -781,7 +778,9 @@ def get_degrees(request):
     degree_detail_rec = DegreeDetails.objects.filter(degree_type=program_rec.degree_type)
 
     for rec in degree_detail_rec:
-        degree_data = {'name':rec.degree_name.title(),'id': rec.id,'university':program_rec.university.university_name.title(),'university_id':program_rec.university.id}
+        degree_data = {'name': rec.degree_name.title(), 'id': rec.id,
+                       'university': program_rec.university.university_name.title(),
+                       'university_id': program_rec.university.id}
         finalDict.append(degree_data)
 
     return JsonResponse(finalDict, safe=False)
@@ -932,7 +931,6 @@ def save_psychometric_test(request):
         else:
             psychometric_test_obj = ApplicantPsychometricTestDetails.objects.create(
                 applicant_id=request.user.get_application, result=result)
-
 
         if not ApplicationHistoryDetails.objects.filter(applicant_id=request.user.get_application,
                                                         status='Psychometric Test Submitted').exists():
@@ -1128,6 +1126,23 @@ def save_applicant_academic_progress(request):
     except:
         messages.warning(request, "Record not saved.")
     return redirect('/student/applicant_academic_progress/')
+
+
+def applicant_progress_history(request):
+    username = ''
+    application_history_obj = ''
+    try:
+        username = request.user.get_application.get_full_name()
+        if ApplicationDetails.objects.filter(application_id=request.user.get_application_id,
+                                             is_submitted=True).exists():
+            application_history_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id,
+                                                                     is_submitted=True).applicant_history_rel.all()
+    except Exception as e:
+        username = request.user.first_name
+        messages.warning(request, "Form have some error" + str(e))
+
+    return render(request, 'applicant_progress_history.html',
+                  {'application_history_obj': application_history_obj, 'username': username})
 
 # import os
 # from django.conf import settings

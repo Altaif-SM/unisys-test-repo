@@ -67,5 +67,8 @@ urlpatterns = [
                        name='applicant_academic_progress'),
                   path('save_applicant_academic_progress/', views.save_applicant_academic_progress,
                        name='save_applicant_academic_progress'),
+
+                  path('applicant_progress_history/', views.applicant_progress_history,
+                       name='applicant_progress_history'),
                   # path('generate_PDF/', views.generate_PDF, name='generate_PDF'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

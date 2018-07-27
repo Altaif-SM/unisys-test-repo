@@ -432,11 +432,11 @@
                             <tr id="item{{ forloop.counter }}" class="item">
                                 <td style="display: none"><input id="partner_id" value="{{ rec.id }}"></td>
                                 <td>
-                                    <text hidden>{{ rec.country.country_name|title }}</text>
+                                    <text hidden>{{ rec.address.country.country_name|title }}</text>
                                     <select id='country{{ forloop.counter }}' name="country_name{{ forloop.counter }}"
                                             class="form-control data country" disabled required>
                                         <option style="display:none" selected="selected" id=""
-                                                value="{{ rec.country.id }}">{{ rec.country.country_name|title }} </option>
+                                                value="{{ rec.address.country.id }}">{{ rec.address.country.country_name|title }} </option>
                                         {% for rec in country_recs %}
                                             <option value='{{ rec.id }}'>{{ rec.country_name|default_if_none:"" }}</option>
                                         {% endfor %}

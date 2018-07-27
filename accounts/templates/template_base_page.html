@@ -535,6 +535,17 @@ License: You must have a valid license purchased only from themeforest(the above
                         </li>
                     {% endif %}
 
+                    {% if 'student.can_view_student_application_progress_history' in perms %}
+                        <li class="nav-item " id="acd_qli">
+                            <a href="{% url 'student:applicant_progress_history' %}"
+                               class="nav-link nav-toggle">
+                                <i class="glyphicon glyphicon-list-alt"></i>
+                                <span class="title">Application Progress History</span>
+                                <span class="selected"></span>
+                            </a>
+                        </li>
+                    {% endif %}
+
                     {% if 'partner.can_view_applicant_details' in perms %}
                         <li class="nav-item " id="acd_qli">
                             <a href="{% url 'partner:template_registered_application' %}"

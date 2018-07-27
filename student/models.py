@@ -81,6 +81,7 @@ class StudentDetails(BaseModel):
             ('can_view_student_agreements', 'can view student agreements'),
             ('can_view_student_development_program', 'can view student development program certificate'),
             ('can_view_student_academic_progress', 'can view student academic progress'),
+            ('can_view_student_application_progress_history', 'can view student application progress history'),
         )
 
     def __str__(self):
