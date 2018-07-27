@@ -449,3 +449,16 @@ class StudentNotifications(BaseModel):
 
     def __str__(self):
         return self.applicant_id.first_name
+
+
+class AdminNotifications(BaseModel):
+    is_read = models.BooleanField(default=False)
+    message = models.CharField(max_length=500, blank=True, null=True)
+    applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='admin_notification_rel',
+                                     on_delete=models.PROTECT)
+
+    class Meta:
+        ordering = ('-id',)
+
+    def __str__(self):
+        return self.applicant_id.first_name

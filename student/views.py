@@ -890,6 +890,8 @@ def submit_application(request):
 
         application_notification(request.user.get_application.id,
                                  'You have successfully submitted your application.')
+        admin_notification(request.user.get_application.id,
+                                 str(request.user.get_application.get_full_name())+' have submitted application.')
 
         messages.success(request, "Application submitted successfully.")
 

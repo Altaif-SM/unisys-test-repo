@@ -54,7 +54,6 @@ class AddressDetails(BaseModel):
         ordering = ('country',)
 
     def __str__(self):
-
         city = self.city if self.city else ''
         country = self.country.country_name if self.country else ''
 

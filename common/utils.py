@@ -1,8 +1,8 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import random
 import string
 from masters.models import YearDetails
-from student.models import StudentNotifications
+from student.models import StudentNotifications,AdminNotifications
 from django.template.loader import render_to_string, get_template
 from django.core.mail import send_mail
 from django.contrib import messages
@@ -12,7 +12,7 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, Tabl
 from reportlab.lib.pagesizes import A4, inch, landscape
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.enums import TA_CENTER,TA_RIGHT
+from reportlab.lib.enums import TA_CENTER, TA_RIGHT
 import xlsxwriter
 from io import BytesIO
 
@@ -77,9 +77,23 @@ def application_notification(applicant_id, message):
         pass
 
 
+def admin_notification(applicant_id, message):
+    try:
+        AdminNotifications.objects.create(applicant_id_id=applicant_id, message=message)
+    except:
+        pass
+
+
+def get_admin_notification():
+    try:
+        return AdminNotifications.objects.filter(applicant_id__year=get_current_year(),applicant_id__is_submitted=True)
+    except:
+        pass
+
+
 def export_pdf(output_file_name, records):
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename=' + str(output_file_name)+'.pdf'
+    response['Content-Disposition'] = 'attachment; filename=' + str(output_file_name) + '.pdf'
 
     elements = []
 
@@ -129,7 +143,7 @@ def export_wraped_column_xls(output_file_name, column_names, rows):
     for row in rows:
         row_num += 1
         for col_num in range(len(row)):
-                worksheet.write(row_num, col_num, str(row[col_num]), unlocked)
+            worksheet.write(row_num, col_num, str(row[col_num]), unlocked)
     workbook.close()
     output.seek(0)
     response = HttpResponse(output.read(), content_type='application/ms-excel')
@@ -137,13 +151,15 @@ def export_wraped_column_xls(output_file_name, column_names, rows):
 
     return response
 
+
 def get_current_year():
     try:
         return YearDetails.objects.get(active_year=True)
     except:
         return None
 
-def export_debit_wraped_column_xls(output_file_name, column_names, rows,rec_len,total_balance):
+
+def export_debit_wraped_column_xls(output_file_name, column_names, rows, rec_len, total_balance):
     output = BytesIO()
     workbook = xlsxwriter.Workbook(output)
     worksheet = workbook.add_worksheet(output_file_name)
@@ -157,10 +173,10 @@ def export_debit_wraped_column_xls(output_file_name, column_names, rows,rec_len,
     for row in rows:
         row_num += 1
         for col_num in range(len(row)):
-                worksheet.write(row_num, col_num, str(row[col_num]), unlocked)
+            worksheet.write(row_num, col_num, str(row[col_num]), unlocked)
 
     start_column = 2
-    rec_len = rec_len+1
+    rec_len = rec_len + 1
     worksheet.write(rec_len, start_column, total_balance)
 
     workbook.close()
@@ -171,7 +187,8 @@ def export_debit_wraped_column_xls(output_file_name, column_names, rows,rec_len,
     return response
 
 
-def export_student_payment_wraped_column_xls(output_file_name, column_names, rows,rec_len,debit_total,outstanding_total):
+def export_student_payment_wraped_column_xls(output_file_name, column_names, rows, rec_len, debit_total,
+                                             outstanding_total):
     output = BytesIO()
     workbook = xlsxwriter.Workbook(output)
     worksheet = workbook.add_worksheet(output_file_name)
@@ -185,7 +202,7 @@ def export_student_payment_wraped_column_xls(output_file_name, column_names, row
     for row in rows:
         row_num += 1
         for col_num in range(len(row)):
-                worksheet.write(row_num, col_num, str(row[col_num]), unlocked)
+            worksheet.write(row_num, col_num, str(row[col_num]), unlocked)
 
     rec_len = rec_len + 1
     start_column = 4
@@ -201,7 +218,8 @@ def export_student_payment_wraped_column_xls(output_file_name, column_names, row
 
     return response
 
-def export_last_row_wraped_column_xls(output_file_name, column_names, rows,rec_len,temp_list):
+
+def export_last_row_wraped_column_xls(output_file_name, column_names, rows, rec_len, temp_list):
     output = BytesIO()
     workbook = xlsxwriter.Workbook(output)
     worksheet = workbook.add_worksheet(output_file_name)
@@ -216,14 +234,13 @@ def export_last_row_wraped_column_xls(output_file_name, column_names, rows,rec_l
     for row in rows:
         row_num += 1
         for col_num in range(len(row)):
-                worksheet.write(row_num, col_num, str(row[col_num]), unlocked)
-
+            worksheet.write(row_num, col_num, str(row[col_num]), unlocked)
 
     rec_len = rec_len + 1
     start_column = 1
     for i in temp_list:
         worksheet.write(rec_len, start_column, i)
-        start_column = start_column+1
+        start_column = start_column + 1
 
     workbook.close()
     output.seek(0)
@@ -231,4 +248,3 @@ def export_last_row_wraped_column_xls(output_file_name, column_names, rows,rec_l
     response['Content-Disposition'] = 'attachment; filename=' + output_file_name + ".xls"
 
     return response
-
