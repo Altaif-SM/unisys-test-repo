@@ -1,0 +1,145 @@
+{% extends "template_base_page.html" %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+        }
+
+
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'accounts:home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span> {% if template_recs %} Update {% else %} Creating{% endif %} Email Templates  </span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">{% if template_recs %} Update {% else %} Creating{% endif %} Email Templates </span>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+
+            <div class="form-body">
+                <form action="{% url 'masters:save_email_template' %}" id="form_sample_1"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-body">
+                        <br><br>
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Template For:</label>
+                                <div class="col-md-3">
+                                    <select id='template_for' name="template_for" class="form-control" required>
+                                        {% if template_recs %}
+                                            <option style="display:none" selected="selected" id="" value="{{ template_recs.template_for }}">{{ template_recs.template_for }}</option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">Please Select</option>
+                                        {% endif %}
+
+                                        <option value='First Interview Call'>First Interview Call</option>
+                                        <option value='First Interview Attend'>First Interview Attend</option>
+                                        <option value='First Interview Approval'>First Interview Approval</option>
+                                        <option value='Psychometric Test'>Psychometric Test</option>
+                                        <option value='Second Interview Attend'>Second Interview Attend</option>
+                                        <option value='Second Interview Approval'>Second Interview Approval</option>
+                                        <option value='Admin Approval'>Admin Approval</option>
+                                        <option value='Application Rejected'>Application Rejected</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+                        <br>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Subject:</label>
+                                <div class="col-md-4">
+                                    {% if template_recs %}
+                                        <input type="text" name="update" hidden value="{{ template_recs.id }}"> {% endif %}
+                                    <input type="text" name="subject" class="form-control"
+                                           title="Enter subject of email" value="{{ template_recs.subject }}" required>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Interview Template:</label>
+                                <div class="col-md-6">
+                                    <textarea id="email_body" name="email_body" style="height:150px"
+                                              title="specify email body" class="form-control"
+                                              required>{{ template_recs.email_body }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Active:</label>
+                                <div class="col-md-1">
+                                    <input class="form-control" type="checkbox" {% if template_recs.is_active %}
+                                           checked {% endif %} name="active">
+                                </div>
+                            </div>
+                        </div>
+
+                        <br><br>
+
+                        <div class="">
+                            <div class="col-md-offset-5">
+                                <button type="submit" class="btn green" id="save" style="">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

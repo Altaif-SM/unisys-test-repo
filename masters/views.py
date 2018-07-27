@@ -705,10 +705,10 @@ def save_development_program_master(request):
     date_name = request.POST.get('date_name')
     remark_name = request.POST.get('remark_name')
     try:
-        if not DevelopmentProgram.objects.filter(year_id=year_name, semester_id=semester_name,name=name,
+        if not DevelopmentProgram.objects.filter(year_id=year_name, semester_id=semester_name, name=name,
                                                  module_id=module_name).exists():
             DevelopmentProgram.objects.create(year_id=year_name, semester_id=semester_name, module_id=module_name,
-                                              code=code_name, date=date_name, marks=mark_name,name=name,
+                                              code=code_name, date=date_name, marks=mark_name, name=name,
                                               method=method_name, duration_night=night_duration,
                                               duration_day=day_duration, outcome=outcomes, activity=activities,
                                               remark=remark_name)
@@ -747,7 +747,7 @@ def update_development_program_master(request):
 
             DevelopmentProgram.objects.filter(id=development_program_id).update(year_id=year_name,
                                                                                 semester_id=semester_name,
-                                                                                module_id=module_name,name=name,
+                                                                                module_id=module_name, name=name,
                                                                                 code=code_name, date=date_name,
                                                                                 marks=mark_name,
                                                                                 method=method_name,
@@ -799,10 +799,11 @@ def template_manage_partner_master(request):
         selected_user = User.objects.get(id=query_query)
         partner_rec = PartnerDetails.objects.get(user_id=query_query)
 
-    #user_recs = User.objects.all()#.role.all().filter(name__in=[self.DONOR])
+    # user_recs = User.objects.all()#.role.all().filter(name__in=[self.DONOR])
     # user_recs = User.objects.filter(role__name__in=['Partner'])
     return render(request, 'template_partner_master.html',
-                  {'country_recs': country_recs, 'partner_recs': partner_recs, 'user_recs': user_recs, 'partner_rec': partner_rec,'selected_user': selected_user})
+                  {'country_recs': country_recs, 'partner_recs': partner_recs, 'user_recs': user_recs,
+                   'partner_rec': partner_rec, 'selected_user': selected_user})
 
 
 def save_manage_partner_master(request):
@@ -825,13 +826,14 @@ def save_manage_partner_master(request):
 
     try:
         country = CountryDetails.objects.get(id=country)
-        parent_obj = PartnerDetails.objects.filter(id=partner_details_id).update(country_id=country, office_name=office_name,
-                                                   person_one=person_one,
-                                                   person_one_contact_number=person_one_contact,
-                                                   person_two=person_two,
-                                                   person_two_contact_number=person_two_contact,
-                                                   office_contact_number=office_contact,
-                                                   email=email, single_address=address)
+        parent_obj = PartnerDetails.objects.filter(id=partner_details_id).update(country_id=country,
+                                                                                 office_name=office_name,
+                                                                                 person_one=person_one,
+                                                                                 person_one_contact_number=person_one_contact,
+                                                                                 person_two=person_two,
+                                                                                 person_two_contact_number=person_two_contact,
+                                                                                 office_contact_number=office_contact,
+                                                                                 email=email, single_address=address)
 
         address = AddressDetails.objects.filter(id=PartnerDetails.objects.get(id=partner_details_id).address.id).update(
             country=country)
@@ -852,9 +854,6 @@ def save_manage_partner_master(request):
             messages.warning(request, "Form have some error" + str(e))
 
         messages.success(request, "Record Updated.")
-
-
-
 
         # if not PartnerDetails.objects.filter(country_id=country, office_name=office_name).exists():
         #     parent_obj = PartnerDetails.objects.create(country_id=country, office_name=office_name,
@@ -885,7 +884,7 @@ def save_manage_partner_master(request):
         # else:
         #     messages.warning(request, "Partner and country is already exist. Record not saved.")
     except Exception as e:
-        messages.warning(request, "Record not saved."+str(e))
+        messages.warning(request, "Record not saved." + str(e))
     return redirect('/masters/template_manage_partner_master/')
 
 
@@ -938,9 +937,11 @@ def delete_manage_partner_master(request):
 
 def export_partner_list(request):
     try:
-        partner_recs = PartnerDetails.objects.all().values_list('address__country__country_name','office_name','person_one','person_one_contact_number','office_contact_number','email','single_address')
-        column = ['Country','Office Name','Person One','Person One Contact','Office Contact','Email','Address']
-        return export_wraped_column_xls('Parent_Details',column,partner_recs)
+        partner_recs = PartnerDetails.objects.all().values_list('address__country__country_name', 'office_name',
+                                                                'person_one', 'person_one_contact_number',
+                                                                'office_contact_number', 'email', 'single_address')
+        column = ['Country', 'Office Name', 'Person One', 'Person One Contact', 'Office Contact', 'Email', 'Address']
+        return export_wraped_column_xls('Parent_Details', column, partner_recs)
     except Exception as e:
         messages.warning(request, "Record not exported." + str(e))
     return redirect('/masters/template_manage_partner_master/')
@@ -961,7 +962,8 @@ def template_manage_donor_master(request):
         donor_rec = DonorDetails.objects.get(user_id=query_query)
 
     return render(request, 'template_donor_master.html',
-                  {'country_recs': country_recs, 'donor_recs': donor_recs, 'user_recs': user_recs, 'donor_rec': donor_rec, 'selected_user': selected_user})
+                  {'country_recs': country_recs, 'donor_recs': donor_recs, 'user_recs': user_recs,
+                   'donor_rec': donor_rec, 'selected_user': selected_user})
 
 
 def save_manage_donor_master(request):
@@ -985,8 +987,6 @@ def save_manage_donor_master(request):
 
     try:
 
-
-
         # if not DonorDetails.objects.filter(id=donor_details_id).exists():
         #     donor_obj = DonorDetails.objects.create(country_id=country, organisation=organisation, person=person,
         #                                             person_contact_number=person_contact,
@@ -1005,14 +1005,19 @@ def save_manage_donor_master(request):
         # else:
 
         country = CountryDetails.objects.get(id=country)
-        donor_obj = DonorDetails.objects.filter(id=donor_details_id).update(country_id=country, organisation=organisation, person=person,
-                                                person_contact_number=person_contact,
-                                                single_donor_address=donor_address,
-                                                due_amount=due_amount, bank_account_number=bank_account_number,
-                                                bank_name=bank_name, bank_swift_code=bank_swift_code, email=email,
-                                                donor_bank_address=donor_bank_address)
+        donor_obj = DonorDetails.objects.filter(id=donor_details_id).update(country_id=country,
+                                                                            organisation=organisation, person=person,
+                                                                            person_contact_number=person_contact,
+                                                                            single_donor_address=donor_address,
+                                                                            due_amount=due_amount,
+                                                                            bank_account_number=bank_account_number,
+                                                                            bank_name=bank_name,
+                                                                            bank_swift_code=bank_swift_code,
+                                                                            email=email,
+                                                                            donor_bank_address=donor_bank_address)
 
-        address = AddressDetails.objects.filter(id=DonorDetails.objects.get(id=donor_details_id).address.id).update(country=country)
+        address = AddressDetails.objects.filter(id=DonorDetails.objects.get(id=donor_details_id).address.id).update(
+            country=country)
         if abc_document:
             file_url = str(abc_document)
 
@@ -1022,7 +1027,7 @@ def save_manage_donor_master(request):
         messages.success(request, "Record Updated.")
 
     except Exception as e:
-        messages.warning(request, "Record not saved."+ str(e))
+        messages.warning(request, "Record not saved." + str(e))
     return redirect('/masters/template_manage_donor_master/')
 
 
@@ -1072,21 +1077,97 @@ def delete_manage_donor_master(request):
     return HttpResponse(json.dumps({'error': 'Record not deleted.'}), content_type="application/json")
 
 
-def email_templates(request):
-    template_recs = FirstInterviewCallTemplate.objects.all()
-    return render(request, 'email_templates.html',{'template_recs':template_recs})
+def create_email_template(request):
+    return render(request, 'create_email_template.html')
+
+
+def email_templates_list(request):
+    template_recs = EmailTemplates.objects.all()
+
+    return render(request, 'email_templates_list.html', {'template_recs': template_recs})
+
+
+def email_templates_view(request, rec_id):
+    template_recs = EmailTemplates.objects.get(id=rec_id)
+
+    return render(request, 'create_email_template.html', {'template_recs': template_recs})
 
 
 def save_email_template(request):
-    template_one = request.POST.get('template_one')
-    template_one_check = request.POST.get('template_one_check')
+    template_for = request.POST.get('template_for')
+    subject = request.POST.get('subject')
+    email_body = request.POST.get('email_body')
+    active = request.POST.get('active')
+    update = request.POST.get('update')
 
-    if FirstInterviewCallTemplate.objects.filter().exists():
-        FirstInterviewCallTemplate.objects.filter(id=6).update(template=template_one, is_active=True)
-    else:
-        FirstInterviewCallTemplate.objects.create(template=template_one,is_active=True)
-    return redirect('/masters/email_templates/')
-    # return render(request, 'email_templates.html',{})
+    try:
+        if template_for:
+            if update:
+                EmailTemplates.objects.filter(id=update).update(template_for=template_for, subject=subject,
+                                                                email_body=email_body)
+                create_email = EmailTemplates.objects.get(id=update)
+            else:
+                create_email = EmailTemplates.objects.create(template_for=template_for, subject=subject,
+                                                             email_body=email_body)
+
+            if active:
+                EmailTemplates.objects.filter(template_for=template_for).update(is_active=False)
+                create_email.is_active = True
+                create_email.save()
+    except Exception as e:
+        messages.warning(request, "Template not saved." + str(e))
+    return redirect('/masters/email_templates_list/')
+
+
+def first_interview_call(request):
+    first_call_recs = FirstInterviewCallTemplate.objects.all()
+    first_attend_recs = FirstInterviewAttendTemplate.objects.all()
+    first_approval_recs = FirstInterviewApprovalTemplate.objects.all()
+
+    return render(request, 'email_templates_list.html',
+                  {'first_call_recs': first_call_recs, 'first_attend_recs': first_attend_recs,
+                   'first_approval_recs': first_approval_recs})
+
+
+# def save_email_template(request):
+#     first_call_recs = request.POST.get('first_call_recs')
+#     first_attend_recs = request.POST.get('first_attend_recs')
+#     first_approval_recs = request.POST.get('first_approval_recs')
+#
+#     template_one_check = request.POST.get('template_one_check')
+#
+#     if first_call_recs:
+#         if FirstInterviewCallTemplate.objects.filter().exists():
+#             # FirstInterviewCallTemplate.objects.filter(id=6).update(template=template_one, is_active=True)
+#             rec = FirstInterviewCallTemplate.objects.all()[0]
+#             rec.template = first_call_recs
+#             rec.is_active = True
+#             rec.save()
+#         else:
+#             FirstInterviewCallTemplate.objects.create(template=first_call_recs, is_active=True)
+#
+#     if first_attend_recs:
+#         if FirstInterviewAttendTemplate.objects.filter().exists():
+#             # FirstInterviewAttendTemplate.objects.filter(id=6).update(template=template_one, is_active=True)
+#             rec = FirstInterviewAttendTemplate.objects.all()[0]
+#             rec.template = first_attend_recs
+#             rec.is_active = True
+#             rec.save()
+#         else:
+#             FirstInterviewAttendTemplate.objects.create(template=first_attend_recs, is_active=True)
+#
+#     if first_approval_recs:
+#         if FirstInterviewApprovalTemplate.objects.filter().exists():
+#             # FirstInterviewApprovalTemplate.objects.filter(id=6).update(template=template_one, is_active=True)
+#             rec = FirstInterviewApprovalTemplate.objects.all()[0]
+#             rec.template = first_approval_recs
+#             rec.is_active = True
+#             rec.save()
+#         else:
+#             FirstInterviewApprovalTemplate.objects.create(template=first_approval_recs, is_active=True)
+#
+#     return redirect('/masters/first_interview_call/')
+# return render(request, 'email_templates.html',{})
 
 
 def get_table_data(request):

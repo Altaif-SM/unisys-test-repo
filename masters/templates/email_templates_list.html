@@ -1,0 +1,98 @@
+{% extends "template_base_page.html" %}
+{% load staticfiles %}
+
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <!-- END HEAD -->
+
+{% endblock %}
+{% block ScriptBlock %}
+
+    <script type='text/javascript'>
+
+        window.onload = function () {
+
+            $('#sample_1').dataTable().fnDestroy();
+
+            $('#sample_1').dataTable({
+                "aoColumnDefs": [
+                    {'bSortable': false}
+                ]
+            });
+        }
+
+
+    </script>
+
+{% endblock %}
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'accounts:home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span> Email Templates  </span>
+            </li>
+        </ul>
+    </div>
+
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+
+    <!-- BEGIN EXAMPLE TABLE PORTLET-->
+    <div class="portlet light ">
+        <div class="portlet-title">
+            <div class="caption font-dark">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">Email Templates </span>
+            </div>
+
+        </div>
+        <div class="portlet-body">
+            <div class="table-toolbar">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="btn-group">
+                            <a href="{% url 'masters:create_email_template' %}">
+                                <button class="btn sbold green"> Add New <i class="fa fa-plus"></i></button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_1">
+                <thead>
+                <tr>
+                    <th style="display:none;">Serial No</th>
+                    <th>For</th>
+                    <th>Subjects</th>
+                    <th>Active</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for template in template_recs %}
+                    <tr onclick="window.location.href='{% url "masters:email_templates_view" template.id %}'" style="cursor: pointer;">
+                        <td style="display:none;">{{ forloop.counter }}</td>
+                        <td>{{ template.template_for }}</td>
+                        <td>{{ template.subject|truncatechars:50 }}</td>
+                        <td> <input type="checkbox" {% if template.is_active %}checked{% endif %} name="active" disabled></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

@@ -30,111 +30,6 @@
 {% block ScriptBlock %}
     <script>
         window.onload = function () {
-            $(document).ready(function () {
-
-                {% comment %}$(document).on("click", ".update", function (e) {
-                    var parent_id = $(this).closest('tr').attr('id');
-                    var development_program_id = $('#' + parent_id + ' #development_program_id').val();
-                    var year = $('#' + parent_id + ' .year').val();
-                    var semester = $('#' + parent_id + ' .semester').val();
-                    var module = $('#' + parent_id + ' .module').val();
-                    var code = $('#' + parent_id + ' .code_name').val();
-
-                    var activity = $('#' + parent_id + ' .activity').val();
-                    var outcome = $('#' + parent_id + ' .outcome').val();
-                    var duration_day = $('#' + parent_id + ' .duration_day').val();
-                    var duration_night = $('#' + parent_id + ' .duration_night').val();
-
-                    var method = $('#' + parent_id + ' .method').val();
-                    var marks = $('#' + parent_id + ' .marks').val();
-                    var date = $('#' + parent_id + ' .date').val();
-                    var remark = $('#' + parent_id + ' .remark').val();
-
-                    var url = '/masters/update_development_program_master/';
-                    update_development_program_info(url, development_program_id, year, semester, module, remark, date, marks, method, duration_night, duration_day, outcome, activity, code)
-                })
-
-                $(document).on("click", ".delete", function (e) {
-
-                    var parent_id = $(this).closest('tr').attr('id');
-                    var development_program_id = $('#' + parent_id + ' #development_program_id').val();
-
-                    var url = '/masters/delete_development_program_master/';
-                    delete_development_program_info(url, development_program_id)
-                })
-
-                function delete_development_program_info(url, development_program_id) {
-                    $.ajax({
-                        type: 'POST',
-                        url: url,
-                        data: {
-                            development_program_id: development_program_id,
-                            csrfmiddlewaretoken: '{{ csrf_token }}',
-                        },
-                        success: function (data) {
-                            location.reload(true)
-                        },
-                        error: function (xhr, msg, err) {
-                            alert(xhr.responseJSON.error);
-                        }
-                    });
-                }
-
-                function update_development_program_info(url, development_program_id, year, semester, module, remark, date, marks, method, duration_night, duration_day, outcome, activity, code) {
-                    $.ajax({
-                        type: 'POST',
-                        url: url,
-                        data: {
-                            development_program_id:development_program_id,
-                            year_name:year,
-                            semester_name:semester,
-                            module_name:module,
-                            code_name:code,
-                            activities:activity,
-                            outcomes:outcome,
-                            day_duration:duration_day,
-                            night_duration:duration_night,
-                            method_name:method,
-                            mark_name:marks,
-                            date_name:date,
-                            remark_name:remark,
-                            csrfmiddlewaretoken: '{{ csrf_token }}',
-                        },
-                        success: function (data) {
-                            location.reload(true)
-                        },
-                        error: function (xhr, msg, err) {
-                            alert(xhr.responseJSON.error);
-                        }
-                    });
-                }
-
-
-                $(document).on("click", ".edit", function (e) {
-                    var parent_id = $(this).closest('tr').attr('id');
-                    var id = $(this).attr('id');
-                    var i = id.split("edit")[1]
-
-                    $(".data").prop("disabled", true);
-                    $(".edit").show();
-                    $(".update").hide();
-
-                    $("#update" + i).show();
-                    $("#edit" + i).hide();
-
-
-                    $("#"+parent_id+" .data").prop("disabled", false);
-
-                });{% endcomment %}
-            });
-
-
-            {% comment %}$('#sample_1').dataTable().fnDestroy();
-            $('#sample_1').dataTable({
-                "aoColumnDefs": [
-                    {'bSortable': false}
-                ]
-            });{% endcomment %}
         }
 
 
@@ -157,7 +52,7 @@
             </li>
 
             <li>
-                <span> Email Templates </span>
+                <span> First Interview Email Templates  </span>
             </li>
         </ul>
     </div>
@@ -173,7 +68,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> Email Templates </span>
+                <span class="caption-subject font-red sbold uppercase">First Interview Email Templates </span>
             </div>
         </div>
 
@@ -186,35 +81,92 @@
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-
                     <div class="form-body">
-
 
                         <br><br>
                         <div class="row">
                             <div class="">
                                 <label class="col-md-2 control-label">First Interview Call:</label>
                                 <div class="col-md-6">
-                                    <textarea id="template_one" name="template_one" style="height:150px"
-                                              title="specify template" class="form-control" required> {{ template_recs.0.template }}</textarea>
+                                    <textarea id="first_call_recs" name="first_call_recs" style="height:150px"
+                                              title="specify template" class="form-control" required> {{ first_call_recs.0.template }}</textarea>
 
-                                    <input type="checkbox" checked name="template_one_check">
+{#                                    <input type="checkbox" checked name="template_one_check">#}
                                 </div>
                             </div>
                         </div>
 
                         <br><br>
 
-                        {% comment %}<div class="row">
+                        <div class="">
+                            <div class="col-md-offset-5">
+                                <button type="submit" class="btn green" id="save" style="">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <br>
+            <br>
+            <br>
+            <div class="form-body">
+
+                <form action="{% url 'masters:save_email_template' %}" id="form_sample_1"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-body">
+
+
+                        <br><br>
+                        <div class="row">
                             <div class="">
-                                <label class="col-md-1 control-label">Outcomes:</label>
+                                <label class="col-md-2 control-label">First Interview Attend:</label>
                                 <div class="col-md-6">
-                                    <textarea id="outcomes" name="outcomes" style="height:150px" title="specify outcome"
-                                              class="form-control" required></textarea>
+                                    <textarea id="first_attend_recs" name="first_attend_recs" style="height:150px"
+                                              title="specify template" class="form-control" required> {{ first_attend_recs.0.template }}</textarea>
+
+{#                                    <input type="checkbox" checked name="template_one_check">#}
                                 </div>
                             </div>
-                        </div>{% endcomment %}
+                        </div>
 
+                        <br><br>
+
+                        <div class="">
+                            <div class="col-md-offset-5">
+                                <button type="submit" class="btn green" id="save" style="">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <br>
+            <br>
+            <br>
+            <div class="form-body">
+
+                <form action="{% url 'masters:save_email_template' %}" id="form_sample_1"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-body">
+
+
+                        <br><br>
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">First Interview Approval:</label>
+                                <div class="col-md-6">
+                                    <textarea id="first_approval_recs" name="first_approval_recs" style="height:150px"
+                                              title="specify template" class="form-control" required> {{ first_approval_recs.0.template }}</textarea>
+
+{#                                    <input type="checkbox" checked name="template_one_check">#}
+                                </div>
+                            </div>
+                        </div>
+
+                        <br><br>
 
                         <div class="">
                             <div class="col-md-offset-5">

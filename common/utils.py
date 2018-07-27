@@ -2,7 +2,7 @@
 import random
 import string
 from masters.models import YearDetails
-from student.models import StudentNotifications,AdminNotifications
+from student.models import StudentNotifications, AdminNotifications
 from django.template.loader import render_to_string, get_template
 from django.core.mail import send_mail
 from django.contrib import messages
@@ -15,6 +15,9 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_CENTER, TA_RIGHT
 import xlsxwriter
 from io import BytesIO
+import os
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
 
 
 def random_string_generator(size, include_lowercase=True, include_uppercase=True, include_number=True):
@@ -72,7 +75,7 @@ def create_voucher_number(voucher_type, voucher):
 
 def application_notification(applicant_id, message):
     try:
-            StudentNotifications.objects.create(applicant_id_id=applicant_id, message=message)
+        StudentNotifications.objects.create(applicant_id_id=applicant_id, message=message)
     except:
         try:
             for id in applicant_id:
@@ -90,7 +93,7 @@ def admin_notification(applicant_id, message):
 
 def get_admin_notification():
     try:
-        return AdminNotifications.objects.filter(applicant_id__year=get_current_year(),applicant_id__is_submitted=True)
+        return AdminNotifications.objects.filter(applicant_id__year=get_current_year(), applicant_id__is_submitted=True)
     except:
         pass
 
@@ -252,3 +255,31 @@ def export_last_row_wraped_column_xls(output_file_name, column_names, rows, rec_
     response['Content-Disposition'] = 'attachment; filename=' + output_file_name + ".xls"
 
     return response
+
+
+def send_email_with_template(application_obj, context, subject, email_body, request):
+    try:
+        email_template = email_body
+        subject = subject
+        text_content = ''
+
+        path = "partner/templates/" + str(application_obj.id) + ".html"
+        file_name = str(application_obj.id) + ".html"
+
+        open(path, "w").close()
+        text_file = open(path, "w")
+        text_file.write(email_template)
+        text_file.close()
+
+        email_template = get_template(file_name)
+
+        html_content = email_template.render(context)
+
+        msg = EmailMultiAlternatives(subject, text_content, request.user.email, [application_obj.email])
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+
+        if os.path.exists(path):
+            os.remove(path)
+    except:
+        pass

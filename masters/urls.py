@@ -98,9 +98,13 @@ urlpatterns = [
     path('update_manage_donor_master/', views.update_manage_donor_master, name='update_manage_donor_master'),
     path('delete_manage_donor_master/', views.delete_manage_donor_master, name='delete_manage_donor_master'),
 
-    path('email_templates/', views.email_templates, name='email_templates'),
+    path('email_templates_list/', views.email_templates_list, name='email_templates_list'),
+    path('create_email_template/', views.create_email_template, name='create_email_template'),
+    path('email_templates_view/<int:rec_id>/',views.email_templates_view, name='email_templates_view'),
     path('save_email_template/', views.save_email_template, name='save_email_template'),
 
+
+    path('first_interview_call/', views.first_interview_call, name='first_interview_call'),
 
     path('get_table_data/', views.get_table_data, name='get_table_data'),
 ]

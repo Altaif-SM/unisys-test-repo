@@ -13,11 +13,12 @@ from django.db.models import Max, Q
 
 def template_registered_application(request):
     if request.user.is_super_admin():
-        applicant_recs = ApplicationDetails.objects.filter(is_submitted=True,year=get_current_year())
+        applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, year=get_current_year())
         university_recs = UniversityDetails.objects.all()
     else:
-        applicant_recs = ApplicationDetails.objects.filter(address__country=request.user.partner_user_rel.get().address.country,
-                                                           is_submitted=True,year=get_current_year())
+        applicant_recs = ApplicationDetails.objects.filter(
+            address__country=request.user.partner_user_rel.get().address.country,
+            is_submitted=True, year=get_current_year())
         university_recs = UniversityDetails.objects.filter(country=request.user.partner_user_rel.get().address.country)
     country_recs = CountryDetails.objects.all()
     degree_recs = DegreeDetails.objects.all()
@@ -29,10 +30,11 @@ def template_registered_application(request):
 
 def export_registered_application(request):
     if request.user.is_super_admin():
-        applicant_recs = ApplicationDetails.objects.filter(is_submitted=True,year=get_current_year())
+        applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, year=get_current_year())
     else:
-        applicant_recs = ApplicationDetails.objects.filter(address__country=request.user.partner_user_rel.get().address.country,
-                                                           is_submitted=True,year=get_current_year())
+        applicant_recs = ApplicationDetails.objects.filter(
+            address__country=request.user.partner_user_rel.get().address.country,
+            is_submitted=True, year=get_current_year())
 
     rows = []
     for application in applicant_recs:
@@ -127,7 +129,8 @@ def filter_registered_application(request):
                 filter_degree(degree),
                 filter_university(university))
 
-            university_recs = UniversityDetails.objects.filter(country=request.user.partner_user_rel.get().address.country)
+            university_recs = UniversityDetails.objects.filter(
+                country=request.user.partner_user_rel.get().address.country)
 
         country_recs = CountryDetails.objects.all()
         degree_recs = DegreeDetails.objects.all()
@@ -407,10 +410,6 @@ def template_application_approval_details(request, app_id):
                    'flag_schedule': flag_schedule, 'admin_flag': admin_flag, 'final_approval': final_approval})
 
 
-from django.core.mail import EmailMultiAlternatives
-from django.template.loader import get_template
-
-
 def change_application_status(request):
     application_id = request.POST.get('application_rec')
 
@@ -434,16 +433,19 @@ def change_application_status(request):
             application_obj.application_rejection = True
             application_obj.save()
 
-            subject = 'Application Rejected'
-            message = 'Your application has rejected.'
+            try:
+                email_rec = EmailTemplates.objects.get(template_for='Application Rejected', is_active=True)
+                context = {'first_name': application_obj.first_name}
+                send_email_with_template(application_obj, context, email_rec.subject, email_rec.email_body, request)
+            except:
+                subject = 'Application Rejected'
+                message = 'Your application has rejected.'
 
-            send_email_to_applicant(request.user.email, application_obj.email, subject, message,
-                                    application_obj.first_name)
+                send_email_to_applicant(request.user.email, application_obj.email, subject, message,
+                                        application_obj.first_name)
 
             application_notification(application_obj.id, 'Application Rejected')
 
-            # if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
-            #                                                 status='Application Rejected').exists():
             ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
                                                      status='Application Rejected',
                                                      remark='Your application has rejected.')
@@ -464,12 +466,19 @@ def change_application_status(request):
                     application_obj.interview_venue = venue
                     application_obj.save()
 
-                    subject = 'First Interview Call'
-                    message = 'You are requested to come down for the first interview time at-' + str(
-                        time) + ' on ' + str(date) + ' at ' + str(venue) + '. \n \n Thanks and Regards \n \n XYZ'
+                    try:
+                        email_rec = EmailTemplates.objects.get(template_for='First Interview Call', is_active=True)
+                        context = {'first_name': application_obj.first_name, 'time': time, 'venue': venue, 'date': date}
+                        send_email_with_template(application_obj, context, email_rec.subject, email_rec.email_body,
+                                                 request)
+                    except:
+                        subject = 'First Interview Call'
+                        message = 'You are requested to come down for the first interview time at-' + str(
+                            time) + ' on ' + str(date) + ' at ' + str(venue) + '. \n \n Thanks and Regards \n \n XYZ'
 
-                    send_email_to_applicant(request.user.email, application_obj.email, subject, message,
-                                            application_obj.first_name)
+                        send_email_to_applicant(request.user.email, application_obj.email, subject, message,
+                                                application_obj.first_name)
+
                     application_notification(application_obj.id,
                                              'You are requested to come down for the first interview. Check your mail for more updates.')
 
@@ -490,11 +499,17 @@ def change_application_status(request):
                 application_obj.first_interview_attend = True
                 application_obj.save()
 
-                subject = 'First Interview Attended'
-                message = 'This mail is to notify that you have attended first interview. We will update you about the result soon.'
+                try:
+                    email_rec = EmailTemplates.objects.get(template_for='First Interview Attend', is_active=True)
+                    context = {'first_name': application_obj.first_name}
+                    send_email_with_template(application_obj, context, email_rec.subject, email_rec.email_body, request)
+                except:
+                    subject = 'First Interview Attended'
+                    message = 'This mail is to notify that you have attended first interview. We will update you about the result soon.'
 
-                send_email_to_applicant(request.user.email, application_obj.email, subject, message,
-                                        application_obj.first_name)
+                    send_email_to_applicant(request.user.email, application_obj.email, subject, message,
+                                            application_obj.first_name)
+
                 application_notification(application_obj.id, 'You have attended first interview.')
 
                 if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
@@ -510,11 +525,16 @@ def change_application_status(request):
                 application_obj.first_interview_approval = True
                 application_obj.save()
 
-                subject = 'First Interview Approval'
-                message = 'You have cleared the first round of interview. Please Upload the Psychometric test result. For test please visit at https://www.surveymonkey.com/ and perform test.'
+                try:
+                    email_rec = EmailTemplates.objects.get(template_for='First Interview Approval', is_active=True)
+                    context = {'first_name': application_obj.first_name}
+                    send_email_with_template(application_obj, context, email_rec.subject, email_rec.email_body, request)
+                except:
+                    subject = 'First Interview Approval'
+                    message = 'You have cleared the first round of interview. Please Upload the Psychometric test result. For test please visit at https://www.surveymonkey.com/ and perform test.'
+                    send_email_to_applicant(request.user.email, application_obj.email, subject, message,
+                                            application_obj.first_name)
 
-                send_email_to_applicant(request.user.email, application_obj.email, subject, message,
-                                        application_obj.first_name)
                 application_notification(application_obj.id,
                                          'You have cleared your first interview. For more updates please check your mail.')
 
@@ -531,18 +551,21 @@ def change_application_status(request):
                 application_obj.psychometric_test = True
                 application_obj.save()
 
-                subject = 'Psychometric Test Update'
-                message = 'You have submitted the Psychometric Test result.'
+                try:
+                    email_rec = EmailTemplates.objects.get(template_for='Psychometric Test', is_active=True)
+                    context = {'first_name': application_obj.first_name}
+                    send_email_with_template(application_obj, context, email_rec.subject, email_rec.email_body, request)
+                except:
+                    subject = 'Psychometric Test Update'
+                    message = 'You have submitted the Psychometric Test result.'
+                    send_email_to_applicant(request.user.email, application_obj.email, subject, message,
+                                            application_obj.first_name)
 
-                send_email_to_applicant(request.user.email, application_obj.email, subject, message,
-                                        application_obj.first_name)
-                application_notification(application_obj.id,
-                                         'You have submitted Psychometric test result.')
+                application_notification(application_obj.id, 'You have submitted Psychometric test result.')
 
                 if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
                                                                 status='Psychometric Test').exists():
-                    ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
-                                                             status='Psychometric Test',
+                    ApplicationHistoryDetails.objects.create(applicant_id=application_obj, status='Psychometric Test',
                                                              remark='You have submitted Psychometric test result. Please wait for the further updates.')
                 messages.success(request, "Record Updated.")
                 return redirect('/partner/template_approving_application/')
@@ -551,11 +574,17 @@ def change_application_status(request):
                 application_obj.second_interview_attend = True
                 application_obj.save()
 
-                subject = 'Second Interview Attended'
-                message = 'This mail is to notify that you have attended second interview. We will update you about the result soon.'
+                try:
+                    email_rec = EmailTemplates.objects.get(template_for='Second Interview Attend', is_active=True)
+                    context = {'first_name': application_obj.first_name}
+                    send_email_with_template(application_obj, context, email_rec.subject, email_rec.email_body, request)
+                except:
+                    subject = 'Second Interview Attended'
+                    message = 'This mail is to notify that you have attended second interview. We will update you about the result soon.'
 
-                send_email_to_applicant(request.user.email, application_obj.email, subject, message,
-                                        application_obj.first_name)
+                    send_email_to_applicant(request.user.email, application_obj.email, subject, message,
+                                            application_obj.first_name)
+
                 application_notification(application_obj.id,
                                          'You have attended second interview. We will update you about the result soon.')
 
@@ -571,19 +600,23 @@ def change_application_status(request):
                 application_obj.second_interview_approval = True
                 application_obj.save()
 
-                subject = 'Second Interview Approval'
-                message = 'You have cleared the second round of interview.'
-
-                send_email_to_applicant(request.user.email, application_obj.email, subject, message,
-                                        application_obj.first_name)
-                application_notification(application_obj.id,
-                                         'You have cleared the second round of interview.')
+                try:
+                    email_rec = EmailTemplates.objects.get(template_for='Second Interview Approval', is_active=True)
+                    context = {'first_name': application_obj.first_name}
+                    send_email_with_template(application_obj, context, email_rec.subject, email_rec.email_body, request)
+                except:
+                    subject = 'Second Interview Approval'
+                    message = 'You have cleared the second round of interview.'
+                    send_email_to_applicant(request.user.email, application_obj.email, subject, message,
+                                            application_obj.first_name)
+                application_notification(application_obj.id, 'You have cleared the second round of interview.')
 
                 if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
                                                                 status='Second Interview Approval').exists():
                     ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
                                                              status='Second Interview Approval',
                                                              remark='You have cleared your second interview. Please wait for the further updates.')
+
                 messages.success(request, "Record Updated.")
                 return redirect('/partner/template_approving_application/')
 
@@ -594,11 +627,18 @@ def change_application_status(request):
                     application_obj.scholarship_fee = scholarship_fee
                     application_obj.save()
 
-                    subject = 'Admin Approval'
-                    message = 'Congrats... Your application has got final approval by the admin.'
+                    try:
+                        email_rec = EmailTemplates.objects.get(template_for='Admin Approval', is_active=True)
+                        context = {'first_name': application_obj.first_name}
+                        send_email_with_template(application_obj, context, email_rec.subject, email_rec.email_body,
+                                                 request)
+                    except:
+                        subject = 'Admin Approval'
+                        message = 'Congrats... Your application has got final approval by the admin.'
 
-                    send_email_to_applicant(request.user.email, application_obj.email, subject, message,
-                                            application_obj.first_name)
+                        send_email_to_applicant(request.user.email, application_obj.email, subject, message,
+                                                application_obj.first_name)
+
                     application_notification(application_obj.id,
                                              'Congrats... Your application has got final approval by the admin.')
 
@@ -861,11 +901,12 @@ def filter_psychometric_test_report(request):
 
 def template_link_student_program(request):
     if request.user.is_super_admin():
-        applicant_recs = ApplicationDetails.objects.filter(is_submitted=True,year=get_current_year())
+        applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, year=get_current_year())
         university_recs = UniversityDetails.objects.filter()
     else:
-        applicant_recs = ApplicationDetails.objects.filter(address__country=request.user.partner_user_rel.get().address.country,
-                                                           year=get_current_year(),is_submitted=True)
+        applicant_recs = ApplicationDetails.objects.filter(
+            address__country=request.user.partner_user_rel.get().address.country,
+            year=get_current_year(), is_submitted=True)
         university_recs = UniversityDetails.objects.filter(country=request.user.partner_user_rel.get().address.country)
 
     module_recs = ModuleDetails.objects.all()
@@ -903,7 +944,7 @@ def template_link_student_program(request):
     return render(request, 'template_link_student_program.html',
                   {'applicant_recs': applicant_recs, 'country_recs': country_recs, 'university_recs': university_recs,
                    'degree_recs': degree_recs, 'semester_recs': semester_recs, 'rec_list': rec_list,
-                   'program_recs': program_recs,'modules_recs':modules_recs})
+                   'program_recs': program_recs, 'modules_recs': modules_recs})
 
 
 def get_semester_modules(request):
@@ -1160,8 +1201,9 @@ def filter_attendance_report(request):
         if request.user.is_super_admin():
             all_modules = StudentModuleMapping.objects.filter(applicant_id__year=get_current_year())
         else:
-            all_modules = StudentModuleMapping.objects.filter(applicant_id__address__country=request.user.partner_user_rel.get().address.country,
-                                                              applicant_id__year=get_current_year())
+            all_modules = StudentModuleMapping.objects.filter(
+                applicant_id__address__country=request.user.partner_user_rel.get().address.country,
+                applicant_id__year=get_current_year())
 
         attended_list = []
         not_attended_list = []
@@ -1201,13 +1243,13 @@ def filter_attendance_report(request):
             filter_obj['value'] = 'attended'
             filter_obj['name'] = 'Attended'
             return render(request, "template_attendance_report.html",
-                          {'attended_recs': attended_list,'filter_obj':filter_obj})
+                          {'attended_recs': attended_list, 'filter_obj': filter_obj})
         else:
             filter_obj['value'] = 'not_attended'
             filter_obj['name'] = 'Not Attended'
 
             return render(request, "template_attendance_report.html",
-                          {'not_attended_recs': not_attended_list,'filter_obj':filter_obj})
+                          {'not_attended_recs': not_attended_list, 'filter_obj': filter_obj})
 
 
     except Exception as e:
@@ -1414,6 +1456,7 @@ def template_semester_result(request):
     return render(request, 'template_semester_result.html',
                   {'application_recs': application_list, 'scholarship_type': scholarship_type})
 
+
 # import os
 # from django.conf import settings
 # from django.http import HttpResponse
@@ -1462,7 +1505,6 @@ def template_semester_result(request):
 # return HttpResponse(pdf, 'application/pdf')
 
 
-
 def donar_student_linking_export(request):
     try:
         if request.POST:
@@ -1474,26 +1516,33 @@ def donar_student_linking_export(request):
             donor = form_data.get('donor')
 
         try:
-            if donor =="":
-                donor="All"
+            if donor == "":
+                donor = "All"
             rows = []
             donor_recs = DonorDetails.objects.all()
             donor_obj = ''
             if request.user.is_super_admin():
                 if donor == 'All':
-                    applicant_ids = StudentDonorMapping.objects.filter(applicant_id__year=get_current_year()).values_list('applicant_id', flat=1)
+                    applicant_ids = StudentDonorMapping.objects.filter(
+                        applicant_id__year=get_current_year()).values_list('applicant_id', flat=1)
                 else:
                     donor_obj = DonorDetails.objects.get(id=donor)
-                    applicant_ids = StudentDonorMapping.objects.filter(applicant_id__year=get_current_year(),donor_id=donor).values_list('applicant_id',
+                    applicant_ids = StudentDonorMapping.objects.filter(applicant_id__year=get_current_year(),
+                                                                       donor_id=donor).values_list('applicant_id',
                                                                                                    flat=1)
                 application_ids = ApplicationDetails.objects.filter(id__in=applicant_ids).values_list('id', flat=1)
 
             else:
                 if donor == 'All':
-                    applicant_ids = StudentDonorMapping.objects.filter(applicant_id__year=get_current_year(),applicant_id__address__country=request.user.partner_user_rel.get().address.country).values_list('applicant_id', flat=1)
+                    applicant_ids = StudentDonorMapping.objects.filter(applicant_id__year=get_current_year(),
+                                                                       applicant_id__address__country=request.user.partner_user_rel.get().address.country).values_list(
+                        'applicant_id', flat=1)
                 else:
                     donor_obj = DonorDetails.objects.get(id=donor)
-                    applicant_ids = StudentDonorMapping.objects.filter(applicant_id__year=get_current_year(),donor_id=donor,applicant_id__address__country=request.user.partner_user_rel.get().address.country).values_list('applicant_id', flat=1)
+                    applicant_ids = StudentDonorMapping.objects.filter(applicant_id__year=get_current_year(),
+                                                                       donor_id=donor,
+                                                                       applicant_id__address__country=request.user.partner_user_rel.get().address.country).values_list(
+                        'applicant_id', flat=1)
                 application_ids = ApplicationDetails.objects.filter(id__in=applicant_ids).values_list('id', flat=1)
 
             scholarship_recs = ScholarshipSelectionDetails.objects.filter(applicant_id__in=application_ids)
@@ -1501,11 +1550,11 @@ def donar_student_linking_export(request):
                 rec_list = []
                 rec_list.append(rec.applicant_id.get_full_name())
                 rec_list.append(rec.applicant_id.nationality.country_name)
-                rec_list.append( rec.applicant_id.address.country.country_name)
+                rec_list.append(rec.applicant_id.address.country.country_name)
                 rec_list.append(rec.university.university_name)
                 rec_list.append(rec.course_applied.degree_name)
                 if rec.applicant_id.applicant_module_rel.all():
-                    rec.append( rec.applicant_id.applicant_module_rel.all()[0].program.program_name)
+                    rec.append(rec.applicant_id.applicant_module_rel.all()[0].program.program_name)
                 else:
                     rec_list.append("")
 
@@ -1515,18 +1564,21 @@ def donar_student_linking_export(request):
         except Exception as e:
             return redirect('/partner/template_donor_students_linking/')
 
-        column_names = ["Student Name","Nationality" ,"Country", "University ", "Degree", "Program"]
+        column_names = ["Student Name", "Nationality", "Country", "University ", "Degree", "Program"]
 
         return export_wraped_column_xls('DonorStudentLinking', column_names, rows)
     except:
         return redirect('/partner/template_donor_students_linking/')
+
 
 def template_link_students_parent(request):
     students_recs = ApplicationDetails.objects.filter(admin_approval=True)
 
     # students_recs = StudentDetails.objects.filter(id__in=studs)
     parents_recs = GuardianDetails.objects.all()
-    return render(request, "template_link_student_to_parent.html", {'students_recs':students_recs, 'parents_recs': parents_recs})
+    return render(request, "template_link_student_to_parent.html",
+                  {'students_recs': students_recs, 'parents_recs': parents_recs})
+
 
 def save_students_parent_linking(request):
     try:
