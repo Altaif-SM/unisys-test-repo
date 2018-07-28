@@ -196,7 +196,9 @@ class User(AbstractUser):
     ADMIN_DASHBOARD = '/accounts/home/'
     STUDENT_DASHBOARD = '/student/student_home/'
     PARENT_DASHBOARD = '/accounts/home/'
-    PARTNER_DASHBOARD = '/care_coordinator_dashboard'
+    # PARTNER_DASHBOARD = '/care_coordinator_dashboard'
+    PARTNER_DASHBOARD = '/accounts/home/'
+    # PARTNER_DASHBOARD = '/partner/partner_home'
     DONOR_DASHBOARD = '/donor/template_donor_dashboard/'
     ACCOUNTANT_DASHBOARD = '/accounts/home/'
 

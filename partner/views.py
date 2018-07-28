@@ -11,6 +11,17 @@ from django.db.models import Max, Q
 
 # Create your views here.
 
+def partner_home(request):
+    username = ''
+    try:
+        username = request.user.first_name
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+
+    return render(request, 'partner_home.html',{'username': username})
+
+
 def template_registered_application(request):
     if request.user.is_super_admin():
         applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, year=get_current_year())
@@ -1063,11 +1074,9 @@ def filter_academic_progress(request):
                 if application.applicant_id.id not in export_application_id:
                     temp_list.append(application.applicant_id.get_full_name())
                     temp_list.append(application.applicant_id.address.country.country_name.title())
-                    temp_list.append(
-                        application.applicant_id.applicant_scholarship_rel.all()[0].university.university_name.title())
-                    temp_list.append(
-                        application.applicant_id.applicant_scholarship_rel.all()[0].course_applied.degree_name.title())
-                    temp_list.append('')
+                    temp_list.append(application.applicant_id.applicant_scholarship_rel.all()[0].university.university_name.title())
+                    temp_list.append(application.applicant_id.applicant_scholarship_rel.all()[0].degree.degree_name.title())
+                    temp_list.append(application.applicant_id.applicant_scholarship_rel.all()[0].course_applied.program_name.title())
                     temp_list.append(application.semester.semester_name.title())
                     temp_list.append(application.gpa_scored)
                     temp_list.append(application.cgpa_scored)

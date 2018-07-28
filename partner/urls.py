@@ -6,8 +6,9 @@ from django.conf.urls.static import static
 app_name = 'partner'
 
 urlpatterns = [
-                  path('template_registered_application/', views.template_registered_application,
-                       name='template_registered_application'),
+                  path('partner_home/', views.partner_home,name='partner_home'),
+
+                  path('template_registered_application/', views.template_registered_application,name='template_registered_application'),
                   path('filter_registered_application/', views.filter_registered_application,
                        name='filter_registered_application'),
                   path('export_registered_application/', views.export_registered_application,
