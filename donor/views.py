@@ -89,7 +89,7 @@ def filter_student_selection(request):
 
         application_records = ApplicationDetails.objects.filter(Q(student__in=stud),filter_nationality(nationality),
                                                                 filter_degree(degree),filter_program(program),
-                                                                filter_university(university))
+                                                                filter_university(university), admin_approval=True)
 
         country_recs = CountryDetails.objects.all()
         university_recs = UniversityDetails.objects.filter(country=request.user.donor_user_rel.get().country)
