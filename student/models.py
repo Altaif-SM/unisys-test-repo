@@ -256,7 +256,7 @@ class ApplicationDetails(BaseModel):
             'semester': self.applicant_progress_rel.all()[
                 0].semester.to_dict() if self.applicant_progress_rel.all() else '',
             'degree': self.applicant_scholarship_rel.all()[
-                0].course_applied.to_dict() if self.applicant_scholarship_rel.all() else '',
+                0].degree.to_dict() if self.applicant_scholarship_rel.all() else '',
         }
         return res
 
@@ -278,7 +278,7 @@ class ApplicationDetails(BaseModel):
             'semester': self.applicant_progress_rel.all()[
                 0].semester.to_dict() if self.applicant_progress_rel.all() else '',
             'degree': self.applicant_scholarship_rel.all()[
-                0].course_applied.to_dict() if self.applicant_scholarship_rel.all() else '',
+                0].degree.to_dict() if self.applicant_scholarship_rel.all() else '',
         }
         return res
 

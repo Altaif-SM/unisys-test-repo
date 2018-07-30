@@ -91,7 +91,7 @@ class StudentPaymentReceiptVoucher(BaseModel):
             'voucher_number': self.voucher_number if self.voucher_number else '',
             'voucher_date': self.voucher_date.isoformat() if self.voucher_date else '',
             'semester': self.application.applicant_progress_rel.all()[0].semester.to_dict() if self.application.applicant_progress_rel.all() else '',
-            'degree': self.application.applicant_scholarship_rel.all()[0].course_applied.to_dict() if self.application.applicant_scholarship_rel.all() else '',
+            'degree': self.application.applicant_scholarship_rel.all()[0].degree.to_dict() if self.application.applicant_scholarship_rel.all() else '',
 
         }
         return resp
@@ -273,7 +273,7 @@ class DonorReceiptVoucher(BaseModel):
             'semester': self.application.applicant_progress_rel.all()[
                 0].semester.to_dict() if self.application.applicant_progress_rel.all() else '',
             'degree': self.application.applicant_scholarship_rel.all()[
-                0].course_applied.to_dict() if self.application.applicant_scholarship_rel.all() else '',
+                0].degree.to_dict() if self.application.applicant_scholarship_rel.all() else '',
 
         }
         return resp
