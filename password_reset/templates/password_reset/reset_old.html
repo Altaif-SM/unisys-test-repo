@@ -1,0 +1,50 @@
+{% extends "base1.html" %}
+{% load static from staticfiles %}
+{% load i18n %}
+
+{%block head%}
+<style>
+.recover:hover{
+	color: #0c7da9;
+background-color: #fff;
+border-color: #008FC8;
+}
+
+.recover{
+	background-color:#0c7da9;
+	box-border:#008FC8;
+	color:#fff;
+}
+</style>
+<script src="{% static 'js/validation/reset_pwd.js' %}"></script>
+{%endblock%}
+{% block content %}
+<div class="data_reset" style="background-color:#f4f6f6;margin-top:5px;">
+<div class="container" style="width:40%">
+<div  style=" min-height: calc(72vh - 40px);">
+      <div class="page-header" style="border-bottom: 0px solid #eee; margin: 40px 0 0px">
+      <div class="alert alert-warning" role="alert"  style="background-color:#fff;">
+  <a href="#" class="alert-link" style="color:#008FC8;font-size: 15px;"><center>{% blocktrans %}Hi, <strong>{{ username }}</strong>. Please choose your new password.{% endblocktrans %}</center></a>
+</div>
+      </div>
+				<form method="post" action="{% url 'password_reset:password_reset_reset' token %}" role="form">
+					{% csrf_token %}
+							
+   							{{ form.password1 }}
+   							<span id="error1"style="color:red"></span>
+						
+                  <br>
+   							{{ form.password2 }}
+   							<span id="error2"style="color:red"></span>
+						<br>
+								<input class="btn recover" id="submit_frm" type="submit" value="{% trans 'submit' %}" style="width:100%; margin-top: 15;">
+						
+				</form>
+						
+						</div>
+					
+		</div>
+					
+			
+    </div>
+{% endblock %}

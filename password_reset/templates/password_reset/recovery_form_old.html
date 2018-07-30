@@ -1,0 +1,64 @@
+{% extends "base1.html" %}
+{% load static from staticfiles %}
+{% load i18n %}
+{%block head%}
+<style>
+.recover:hover{
+ color: #008FC8;
+background-color: #fff;
+border-color: #008FC8;
+}
+
+.recover{
+ 
+ background-color:#008FC8;
+ box-border:#008FC8;
+ color:#fff;
+}
+</style>
+<script>
+$(document).ready(function(){
+ 
+ $("#btn").click(function() {
+  $("#id_username_or_email").attr("class","form-control");
+  flag=true;
+  if(id_username_or_email.value==""){
+   document.getElementById('error2').innerHTML=" This field is required!";
+   
+   flag=false;
+   }
+  
+  return flag;
+ });
+});
+
+
+</script>
+{%endblock%}
+{% block content %}
+<div class="data_recover" style="background-color:#f4f6f6;margin-top:5px;"><br>
+<div class=container  style=" min-height: calc(66vh - 40px);">
+    <div class="jumbotron" style="background-color:#f4f6f6;">
+<div class="row">
+          <div  class="col-md-3 col-xs-10"></div>
+      <div  class="col-md-5 col-xs-10">
+         <div class="page-header" style="border-bottom: 0px solid #eee; margin: 40px 0 0px">
+             <div class="alert alert-warning" role="alert"  style="background-color:#fff; border-color: #cce5fa;">
+               <a href="#" class="alert-link" style="color:#008FC8;font-size: 15px;">Kindly enter your registered Email !!</a>
+            </div>
+         </div>
+   <form method="post" action="#"  role="form">
+   {% csrf_token %}
+   {% csrf_token %}
+   {{ form.as_p }}<div id="error2" style="color:red"></div>
+  <center> <input class="btn recover  btn-block "  id="btn" type="submit" value="{% trans 'Recover my password' %}"  >   </center>   
+  </form>
+  <hr class="separator-line"style="border-top: 1px solid #c3c5c5;">
+        <center><div class="login"> Click here to
+    <a href="/register/club_login/"> <font style="color:#008FC8;text-decoration:underline;"> Login </font></a></div></center>
+    </div>
+
+
+</div></div></div>
+ <br/> <br/> </div>
+{% endblock %}

@@ -1,0 +1,117 @@
+
+{% extends "index.html" %}
+{% load static from staticfiles %}
+{% block head %}
+
+ <script src="{% static 'js/validation/updatepassword.js' %}"></script>
+   
+{% endblock %}
+	
+{%block styleBlock%}
+ <style type="text/css">
+/* Style the list */
+
+#head{
+    background-color: #008FC8
+    color: #fff;
+    padding: 15px 15px;
+    size: 15px;
+
+}
+ul.tab {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: #008FC8;
+    background-color: #008FC8;
+}
+
+/* Float the list items side by side */
+ul.tab li {float: left;}
+
+/* Style the links inside the list items */
+ul.tab li a {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+/* Change background color of links on hover */
+ul.tab li a:hover {background-color: #ddd;}
+
+/* Create an active/current tablink class */
+ul.tab li a:focus, .active {background-color: #ccc;}
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+
+</style>
+
+{%endblock%}
+{%block content%}
+<br>
+   <div class="container">
+      {% if context2 %}
+      <label id="error_update" class="alert alert-success">{{context2}}</label>
+      {% endif %}
+    
+             <ul class="tab">
+                  <li><a  data-toggle="tab">Change Password</a></li>
+                 
+             </ul>
+      
+   <div class="panel-body">
+       <div class="tab-content">
+       
+         
+
+					                  
+					  
+					    <form method="post" action="{% url 'password_reset:password_change' user.id %}"> {% csrf_token %} 
+					        <div class="row">
+								<div class="col-md-4">
+								 <div class="form-group">
+								  {{updatepassword.oldPassword}}<div id="errs" style="color:red;"></div>
+					           </div>
+								 </div>
+								</div>
+								
+								<div class="row">
+								<div class="col-md-4">
+								 <div class="form-group">
+								<a data-toggle="tooltip" title="Enter password must 8 digit one is uppercase,one is lowercase,one digit,one special character ">{{updatepassword.new_password}}</a>  
+								 <div id="errs1" style="color:red;"></div>
+								 </div>
+								</div>
+								</div>
+								<div class="row">
+								<div class="col-md-4">
+								  <div class="form-group">
+									{{updatepassword.confirm_pass}}<div id="errs2" style="color:red;"></div>
+								  </div>
+								</div>
+                             </div>
+                              <div class="row">
+								     <div class="col-md-4">
+										 <div class="dropdown">
+										  <button style="background-color: #008FC8" type="submit" id="submit" class="btn btn-success">Submit</button>
+										 </div>
+									</div>
+				               </div>
+				               </form>
+                    
+                </div>
+           </div>
+   
+    </div>
+{% endblock%}

@@ -1,0 +1,27 @@
+{% extends "base1.html" %}
+{% load static from staticfiles %}
+{% load i18n %}
+{% block content %}
+
+<div class="data_recover" style="background-color:#f4f6f6;margin-top:4px; min-height: calc(72vh - 40px);"><br>
+<div class="container" >
+	<div class="jumbotron" style="background-color:#f4f6f6;">
+		<center>
+	    <div class="row">
+				<div class="col-md-2 col-xs-6"></div>
+				<div class="col-md-8 col-xs-6">
+      <div class="page-header" >
+          <div class="alert alert-warning" role="alert"  >
+             <font style="color:#008FC8;"> New password set !!</font>
+         </div>
+      </div>
+      <div class="input-group">
+		 <p>Your password has been successfully reset. You can use it right now on the login page.</p>
+		 <center ><B><a href="/school/login/"><font style="color:#008FC8;text-decoration:underline;"> login</font> </a></B></center>
+	  </div></div></div>
+		</center>
+    </div>
+	</div>
+
+    </div>
+{% endblock %}
