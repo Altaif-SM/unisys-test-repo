@@ -166,7 +166,25 @@
                                             {% endfor %}
                                         </select>
                                     </th>
-                                    <th>Program</th>
+                                    <th>
+                                        <select id='id_program' title="Select Degree"
+                                                name="program"
+                                                class="form-control">
+                                            {% if curriculum_obj %}
+                                                <option style="display:none" selected="selected"
+                                                        value="">
+                                                </option>
+                                            {% else %}
+                                                <option style="display:none" selected="selected" id="" value="">
+                                                    Program
+                                                </option>
+                                            {% endif %}
+
+                                            {% for rec in program_recs %}
+                                                <option value='{{ rec.id }}'>{{ rec.program_name|title }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </th>
                                     <th>Semester</th>
                                     <th>GPA</th>
                                     <th>CGPA</th>

@@ -1,6 +1,6 @@
 from django.db.models import Q
 from django.shortcuts import render, redirect
-from masters.models import StudentDonorMapping, CountryDetails, DegreeDetails, UniversityDetails
+from masters.models import StudentDonorMapping, CountryDetails, DegreeDetails, UniversityDetails, ProgramDetails
 from student.models import ApplicationDetails, ApplicationHistoryDetails, StudentDetails
 import json
 from django.contrib import messages
@@ -19,7 +19,7 @@ def template_student_selection(request):
     country_recs = CountryDetails.objects.all()
     university_recs = UniversityDetails.objects.filter(country=request.user.donor_user_rel.get().country)
     degree_recs = DegreeDetails.objects.all()
-
+    program_recs = ProgramDetails.objects.all()
     # stud = []
     # for obj in StudentDonorMapping.objects.filter(donor__user=request.user):
     #     stud.append(StudentDetails.objects.get(id=obj.student.id))
@@ -28,7 +28,7 @@ def template_student_selection(request):
     application_records = ApplicationDetails.objects.filter(student__in=stud, admin_approval=True)
     return render(request, "template_student_selection.html",
                   {"application_records": application_records, 'country_recs': country_recs,
-                   'university_recs': university_recs,
+                   'university_recs': university_recs,'program_recs': program_recs,
                    'degree_recs': degree_recs})
 
 
@@ -41,7 +41,7 @@ def filter_nationality(field):
 
 def filter_degree(degree):
     if degree != '':
-        return Q(applicant_scholarship_rel__course_applied_id=degree)
+        return Q(applicant_scholarship_rel__degree_id=degree)
     else:
         return Q()  # Dummy filter
 
@@ -49,6 +49,12 @@ def filter_degree(degree):
 def filter_university(university):
     if university != '':
         return Q(applicant_scholarship_rel__university_id=university)
+    else:
+        return Q()  # Dummy filter
+
+def filter_program(program):
+    if program != '':
+        return Q(applicant_scholarship_rel__course_applied_id=program)
     else:
         return Q()  # Dummy filter
 
@@ -60,6 +66,7 @@ def filter_student_selection(request):
         degree = request.POST.get('degree')
         nationality = request.POST.get('nationality')
         country = request.POST.get('country')
+        program = request.POST.get('program')
     else:
 
         form_data = request.session.get('form_data')
@@ -68,6 +75,7 @@ def filter_student_selection(request):
         country = form_data.get('country')
         degree = form_data.get('degree')
         nationality = form_data.get('nationality')
+        program = form_data.get('program')
 
     try:
 
@@ -80,12 +88,13 @@ def filter_student_selection(request):
             stud = stud.filter(address__country=country)
 
         application_records = ApplicationDetails.objects.filter(Q(student__in=stud),filter_nationality(nationality),
-                                                                filter_degree(degree),
+                                                                filter_degree(degree),filter_program(program),
                                                                 filter_university(university))
 
         country_recs = CountryDetails.objects.all()
         university_recs = UniversityDetails.objects.filter(country=request.user.donor_user_rel.get().country)
         degree_recs = DegreeDetails.objects.all()
+        program_recs = ProgramDetails.objects.all()
 
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
@@ -93,7 +102,7 @@ def filter_student_selection(request):
 
     return render(request, 'template_student_selection.html',
                   {'application_records': application_records, 'country_recs': country_recs,
-                   'university_recs': university_recs,
+                   'university_recs': university_recs,'program_recs': program_recs,
                    'degree_recs': degree_recs})
 
 
@@ -118,6 +127,7 @@ def template_student_reports(request):
     country_recs = CountryDetails.objects.all()
     university_recs = UniversityDetails.objects.filter(country=request.user.donor_user_rel.get().country)
     degree_recs = DegreeDetails.objects.all()
+    program_recs = ProgramDetails.objects.all()
 
     stud = []
     for obj in StudentDonorMapping.objects.filter(donor__user=request.user):
@@ -128,7 +138,7 @@ def template_student_reports(request):
 
     return render(request, "template_student_reports.html",
                   {"application_records": application_records, 'country_recs': country_recs,
-                   'university_recs': university_recs,
+                   'university_recs': university_recs, 'program_recs': program_recs,
                    'degree_recs': degree_recs})
 
 
@@ -138,6 +148,7 @@ def filter_student_report(request):
         university = request.POST.get('university')
         degree = request.POST.get('degree')
         country = request.POST.get('country')
+        program = request.POST.get('program')
     else:
 
         form_data = request.session.get('form_data')
@@ -145,6 +156,7 @@ def filter_student_report(request):
         university = form_data.get('university')
         degree = form_data.get('degree')
         country = form_data.get('country')
+        program = form_data.get('program')
 
     try:
         stud = []
@@ -158,11 +170,13 @@ def filter_student_report(request):
         application_records = ApplicationDetails.objects.filter(Q(student__in=stud),
                                                                 Q(is_sponsored=True),
                                                                 filter_degree(degree),
+                                                                filter_program(program),
                                                                 filter_university(university))
 
         country_recs = CountryDetails.objects.all()
         university_recs = UniversityDetails.objects.filter(country=request.user.donor_user_rel.get().country)
         degree_recs = DegreeDetails.objects.all()
+        program_recs = ProgramDetails.objects.all()
 
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
@@ -170,7 +184,7 @@ def filter_student_report(request):
 
     return render(request, 'template_student_reports.html',
                   {'application_records': application_records, 'country_recs': country_recs,
-                   'university_recs': university_recs,
+                   'university_recs': university_recs,'program_recs': program_recs,
                    'degree_recs': degree_recs})
 
 
