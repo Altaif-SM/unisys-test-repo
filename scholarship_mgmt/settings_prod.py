@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'donor.apps.DonorConfig',
     'parent.apps.ParentConfig',
     'mathfilters',
+    'password_reset.apps.PasswordResetConfig',
 ]
 
 MIDDLEWARE = [
