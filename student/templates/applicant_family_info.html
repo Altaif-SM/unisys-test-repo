@@ -41,7 +41,7 @@
 
 
             $(document).ready(function () {
-                $(document).on("change", ".doc", function (e) {
+                {% comment %}$(document).on("change", ".doc", function (e) {
                     var files = !!this.files ? this.files : [];
                     if (!files.length || !window.FileReader) return;
                     var fileExtension = ['pdf'];
@@ -50,7 +50,7 @@
                         $(this).val('');
                         return false;
                     }
-                });
+                });{% endcomment %}
 
                 $(document).on("click", ".remove_doc", function (e) {
                     {#alert($(this).prev().attr('id'))#}
@@ -60,11 +60,19 @@
 
                 $(document).on("click", ".file", function (e) {
                     $(this).parent('.form-control').next('.file_type').trigger('click');
-                    {#$('#father_pay_slip').trigger('click');#}
-                    {#alert($('#father_pay_slip'))#}
                 });
 
                 $('.file_type').change(function (evt) {
+
+                    var files = !!this.files ? this.files : [];
+                    if (!files.length || !window.FileReader) return;
+                    var fileExtension = ['pdf'];
+                    if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                        alert("Only formats are allowed : " + fileExtension.join(', '));
+                        $(this).val('');
+                        return false;
+                    }
+
                     var file_name = $(this).val().split('\\')[2];
                     $(this).prev().children().children('.file_value').val(file_name);
                 });
@@ -185,11 +193,11 @@
                                     {% else %}
                                         <label class="form-control"
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
-                                                class="file"
+                                                class="file" style="width: 50%"
                                                 type='button' value='Choose File:'><a><input type="text"
                                                                                              readonly
                                                                                              class="file_value"
-                                                                                             style="cursor: pointer;border: none; width: 100px; color: #292328"></a></label>
+                                                                                             style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
                                     {% endif %}
                                     <input type="file" style="display: none" class="file_type"
                                            title="Select wife pay slip" id="wife_pay_slip" name="wife_pay_slip">
@@ -309,25 +317,20 @@
                                     {% if application_obj.father_pay_slip %}
                                         <label class="form-control"
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left"><input
-                                                type='button' class="file" value='Choose File:'><a
+                                                class="file"
+                                                type='button' value='Choose File:' style="width: 50%"><a
                                                 href="{{ path }}{{ application_obj.father_pay_slip }}"><input readonly
                                                                                                               class="file_value"
-                                                                                                              style="border: red; width: 100px"
+                                                                                                              style="border: red; width: 50%"
                                                                                                               value="{{ application_obj.father_pay_slip }}"></a></label>
                                     {% else %}
                                         <label class="form-control"
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
-                                                class="file"
+                                                class="file" style="width: 50%"
                                                 type='button' value='Choose File:'><a><input type="text"
                                                                                              readonly
                                                                                              class="file_value"
-                                                                                             style="cursor: pointer;border: none; width: 100px; color: #292328"></a></label>
-
-                                        {% comment %}<label class="btn file form-control"
-                                               style="border-color: #b1ad9f;width: 100%;text-align: left"><input
-                                                type='button' value='Choose File:'><input type="text" readonly
-                                                                                          class="file_value"
-                                                                                          style="border: red; width: 100px"></label>{% endcomment %}
+                                                                                             style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
                                     {% endif %}
                                     <input style="display: none" class="file_type" type="file"
                                            title="Select father pay slip" id="father_pay_slip" name="father_pay_slip">

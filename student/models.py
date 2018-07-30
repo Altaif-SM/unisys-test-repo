@@ -5,6 +5,7 @@ from datetime import datetime
 from masters.models import *
 from accounts.models import *
 import computed_property
+from django.conf import settings
 
 
 def content_file_name_image(instance, filename):
@@ -200,6 +201,12 @@ class ApplicationDetails(BaseModel):
         """
         full_name = '%s %s' % (self.first_name, self.last_name if self.last_name else '')
         return full_name.strip()
+
+    def report_path(self):
+        """
+        Return the path plus the id, with a _ in between.
+        """
+        return str(settings.MEDIA_URL) + str('reports/') + str(self.first_name) + '_' + str(self.id)+ '/'
 
     def __str__(self):
         return '%s %s' % (self.first_name, self.last_name if self.last_name else '')

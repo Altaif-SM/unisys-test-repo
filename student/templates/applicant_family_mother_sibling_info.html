@@ -34,7 +34,7 @@
 
             $(document).ready(function () {
 
-                $(document).on("change", ".doc", function (e) {
+                {% comment %}$(document).on("change", ".doc", function (e) {
                     var files = !!this.files ? this.files : [];
                     if (!files.length || !window.FileReader) return;
                     var fileExtension = ['pdf'];
@@ -43,7 +43,7 @@
                         $(this).val('');
                         return false;
                     }
-                });
+                });{% endcomment %}
 
 
                 $('#save').click(function () {
@@ -51,25 +51,25 @@
                     var count = $(".item:last").attr('id').split('_')[1];
                     $('#sibling_count').val(count);
 
-                        {#alert($(".item:last").attr('id').split('_')[1])#}
-{#                    return false;#}
+                    {#alert($(".item:last").attr('id').split('_')[1])#}
+                    {#                    return false;#}
                 })
 
                 $(document).on("click", ".remove_doc", function (e) {
                     {#alert($(this).prev().attr('id'))#}
                     var id = $(this).prev().attr('id');
-                    $('#'+id).val('');
+                    $('#' + id).val('');
                 });
 
                 {% if sibling_obj_rec %}
                     var count = $('.item').length;
-                    {% else %}
+                {% else %}
                     var count = 1;
                 {% endif %}
 
 
                 $(".add_row").click(function () {
-                    count = count+1;
+                    count = count + 1;
                     var row = '<div class="row item" id="item_' + count + '" style="margin-top:15px"><div class=""><div class=""><div class="col-md-1"><a href="javascript:;" class="delete btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div><div class=""><label class="col-md-1 control-label">Sibling:</label><div class="col-md-2"><input type="text" title="Enter Sibling " id="sibling_' + count + '" name="sibling_' + count + '"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Age:</label><div class="col-md-2"><input type="text" title="Enter age" id="age_' + count + '"name="age_' + count + '"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Status:</label><div class="col-md-2"> <input type="text" title="Enter status" id="status_' + count + '" name="status_' + count + '" class="form-control"><input type="text" hidden id="sibling_id_' + count + '" name="sibling_id_' + count + '"></div></div></div>'
                     $(row).removeAttr().hide().insertAfter(".item:last").slideDown(300);
                     {#count++;#}
@@ -79,6 +79,25 @@
                     $(this).parents('.item').remove();
                     $(this).parents('.item').next('br').remove();
                     ;
+                });
+
+                $(document).on("click", ".file", function (e) {
+                    $(this).parent('.form-control').next('.file_type').trigger('click');
+                });
+
+                $('.file_type11').change(function (evt) {
+
+                    var files = !!this.files ? this.files : [];
+                    if (!files.length || !window.FileReader) return;
+                    var fileExtension = ['pdf'];
+                    if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                        alert("Only formats are allowed : " + fileExtension.join(', '));
+                        $(this).val('');
+                        return false;
+                    }
+
+                    var file_name = $(this).val().split('\\')[2];
+                    $(this).prev().children().children('.file_value').val(file_name);
                 });
             });
 
@@ -91,7 +110,7 @@
             });
         }
 
-    window.setTimeout(function () {
+        window.setTimeout(function () {
             $(".alert").fadeTo(500, 0).slideUp(500, function () {
                 $(this).remove();
             });
@@ -105,7 +124,7 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                 <a href="{% url 'student:student_home' %}">Home</a>
+                <a href="{% url 'student:student_home' %}">Home</a>
                 <i class="fa fa-angle-right"></i>
             </li>
 
@@ -152,11 +171,14 @@
                                 <label class="col-md-2 control-label">DOB:</label>
                                 <div class="col-md-2">
                                     {% if application_obj.mother_dob %}
-                                        <input type="date" title="Enter DOB" id="mother_dob" name="mother_dob"  max="2999-12-31"
-                                           value="{{ application_obj.mother_dob|date:"Y-m-d" }}" class="form-control">
+                                        <input type="date" title="Enter DOB" id="mother_dob" name="mother_dob"
+                                               max="2999-12-31"
+                                               value="{{ application_obj.mother_dob|date:"Y-m-d" }}"
+                                               class="form-control">
                                     {% else %}
-                                        <input type="date" title="Enter DOB" id="mother_dob" name="mother_dob"  max="2999-12-31"
-                                          class="form-control">
+                                        <input type="date" title="Enter DOB" id="mother_dob" name="mother_dob"
+                                               max="2999-12-31"
+                                               class="form-control">
                                     {% endif %}
 
 
@@ -174,11 +196,11 @@
                                 <div class="col-md-2">
                                     {% if application_obj.mother_income %}
                                         <input type="text" title="Enter Income" id="mother_income"
-                                           value="{{ application_obj.mother_income }}" name="mother_income"
-                                           class="form-control">
+                                               value="{{ application_obj.mother_income }}" name="mother_income"
+                                               class="form-control">
                                     {% else %}
                                         <input type="text" title="Enter Income" id="mother_income" name="mother_income"
-                                           class="form-control">
+                                               class="form-control">
                                     {% endif %}
 
                                 </div>
@@ -187,11 +209,33 @@
                             <div class="">
                                 <label class="col-md-2 control-label">Pay Slip:</label>
                                 <div class="col-md-2">
-                                    <input type="file" title="Select mother pay slip" id="mother_pay_slip"
-                                           value="{{ application_obj.mother_pay_slip }}" name="mother_pay_slip"
-                                           class="form-control doc"> <span
+                                    {% if application_obj.mother_pay_slip %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f; text-align: left;"><input
+                                                class="file"
+                                                type='button' value='Choose File:' style="width: 50%"><a
+                                                href="{{ application_obj.report_path }}{{ application_obj.mother_pay_slip }}"><input type="text"
+                                                                                                            readonly
+                                                                                                            class="file_value"
+                                                                                                            style="cursor: pointer;border: none; width: 50%"
+                                                                                                            value="{{ application_obj.mother_pay_slip }}"></a></label>
+
+
+                                    {% else %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f; text-align: left;"><input
+                                                class="file"
+                                                type='button' value='Choose File:'><a><input type="text"
+                                                                                             readonly
+                                                                                             class="file_value"
+                                                                                             style="cursor: pointer;border: none; width: 100px; color: #292328"></a></label>
+                                    {% endif %}
+                                    <input style="display: none" type="file" title="Select mother pay slip"
+                                           id="mother_pay_slip"
+                                           name="mother_pay_slip"
+                                           class="file_type"> {% comment %}<span
                                         style="float: right; margin-top: -25px; color: darkred"
-                                        class="remove_doc fa fa-close"></span>
+                                        class="remove_doc fa fa-close"></span>{% endcomment %}
                                 </div>
                             </div>
                         </div>
@@ -225,7 +269,8 @@
                                 <label class="col-md-2 control-label">Occupation:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Occupation" id="mother_occupation"
-                                           value="{{ application_obj.mother_occupation|default:"" }}" name="mother_occupation"
+                                           value="{{ application_obj.mother_occupation|default:"" }}"
+                                           name="mother_occupation"
                                            class="form-control">
                                 </div>
                             </div>
@@ -265,7 +310,7 @@
                         </div>
                         <hr>
 
-                    <input id="sibling_count" name="sibling_count" hidden>
+                        <input id="sibling_count" name="sibling_count" hidden>
 
                         {% if sibling_obj_rec %}
                             {% for sibling_obj in sibling_obj_rec %}
@@ -287,7 +332,9 @@
                                         <label class="col-md-1 control-label">Sibling:</label>
                                         <div class="col-md-2">
                                             <input type="text" title="Enter Sibling "
-                                                   value="{{ sibling_obj.sibling_name }}" id="sibling_{{ forloop.counter }}" name="sibling_{{ forloop.counter }}"
+                                                   value="{{ sibling_obj.sibling_name }}"
+                                                   id="sibling_{{ forloop.counter }}"
+                                                   name="sibling_{{ forloop.counter }}"
                                                    class="form-control">
                                         </div>
                                     </div>
@@ -296,7 +343,8 @@
                                         <label class="col-md-1 control-label">Age:</label>
                                         <div class="col-md-2">
                                             <input type="text" title="Enter age" id="age_{{ forloop.counter }}"
-                                                   value="{{ sibling_obj.sibling_age  }}" name="age_{{ forloop.counter }}"
+                                                   value="{{ sibling_obj.sibling_age }}"
+                                                   name="age_{{ forloop.counter }}"
                                                    class="form-control">
                                         </div>
                                     </div>
@@ -305,10 +353,12 @@
                                         <label class="col-md-1 control-label">Status:</label>
                                         <div class="col-md-2">
                                             <input type="text" title="Enter status" id="status_{{ forloop.counter }}"
-                                                   value="{{ sibling_obj.sibling_status }}" name="status_{{ forloop.counter }}"
+                                                   value="{{ sibling_obj.sibling_status }}"
+                                                   name="status_{{ forloop.counter }}"
                                                    class="form-control">
 
-                                            <input type="text" hidden value="{{ sibling_obj.id }}" id="sibling_id_{{ forloop.counter }}"
+                                            <input type="text" hidden value="{{ sibling_obj.id }}"
+                                                   id="sibling_id_{{ forloop.counter }}"
                                                    name="sibling_id_{{ forloop.counter }}">
                                         </div>
                                     </div>
@@ -318,7 +368,7 @@
                         {% else %}
                             <div class="row item" id="item_1">
 
-{#                                <input id="sibling_count" name="sibling_count" hidden>#}
+                                {#                                <input id="sibling_count" name="sibling_count" hidden>#}
                                 <div class="">
                                     <div class="col-md-1">
                                         <a href="javascript:;" id="add" class="btn btn-icon-only green add_row"
