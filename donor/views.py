@@ -17,7 +17,7 @@ def template_donor_dashboard(request):
 
 def template_student_selection(request):
     country_recs = CountryDetails.objects.all()
-    university_recs = UniversityDetails.objects.filter(country=request.user.donor_user_rel.get().country)
+    university_recs = UniversityDetails.objects.all()
     degree_recs = DegreeDetails.objects.all()
     program_recs = ProgramDetails.objects.all()
     # stud = []
@@ -92,7 +92,7 @@ def filter_student_selection(request):
                                                                 filter_university(university), admin_approval=True)
 
         country_recs = CountryDetails.objects.all()
-        university_recs = UniversityDetails.objects.filter(country=request.user.donor_user_rel.get().country)
+        university_recs = UniversityDetails.objects.all()
         degree_recs = DegreeDetails.objects.all()
         program_recs = ProgramDetails.objects.all()
 
@@ -125,7 +125,7 @@ def template_student_details(request, app_id):
 
 def template_student_reports(request):
     country_recs = CountryDetails.objects.all()
-    university_recs = UniversityDetails.objects.filter(country=request.user.donor_user_rel.get().country)
+    university_recs = UniversityDetails.objects.all()
     degree_recs = DegreeDetails.objects.all()
     program_recs = ProgramDetails.objects.all()
 
@@ -174,7 +174,7 @@ def filter_student_report(request):
                                                                 filter_university(university))
 
         country_recs = CountryDetails.objects.all()
-        university_recs = UniversityDetails.objects.filter(country=request.user.donor_user_rel.get().country)
+        university_recs = UniversityDetails.objects.all()
         degree_recs = DegreeDetails.objects.all()
         program_recs = ProgramDetails.objects.all()
 
@@ -374,7 +374,7 @@ def student_payment_report_export(request):
 
 def Register_Applicant_export(request):
     try:
-        university_recs = UniversityDetails.objects.filter(country=request.user.donor_user_rel.get().country)
+        university_recs = UniversityDetails.objects.all()
         stud = []
         rows = []
         for obj in StudentDonorMapping.objects.filter(donor__user=request.user):
