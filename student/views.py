@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
 from masters.views import *
-
 from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from common.utils import get_application_id
-from accounts.decoratars import student_login_required, psycho_test_required, semester_required, registration_required, dev_program_required, agreements_required, submission_required
+from accounts.decoratars import student_login_required, psycho_test_required, semester_required, registration_required, \
+    dev_program_required, agreements_required, submission_required
+import os
+
 
 # Create your views here.
 @student_login_required
@@ -19,7 +21,7 @@ def student_home(request):
         username = request.user.first_name
         messages.warning(request, "Form have some error" + str(e))
 
-    return render(request, 'student_home.html',{'username': username})
+    return render(request, 'student_home.html', {'username': username})
 
 
 def applicant_personal_info(request):
@@ -152,6 +154,7 @@ def save_update_applicant_personal_info(request):
 
 def applicant_family_info(request):
     country_recs = CountryDetails.objects.all()
+    path = ''
 
     application_obj = ''
 
@@ -159,9 +162,10 @@ def applicant_family_info(request):
                                          is_submitted=False).exists():
         application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id,
                                                          is_submitted=False)
+        path = base_path(application_obj)
 
     return render(request, 'applicant_family_info.html',
-                  {'country_recs': country_recs, 'application_obj': application_obj})
+                  {'country_recs': country_recs, 'application_obj': application_obj,'path':path})
 
 
 def save_update_applicant_family_info(request):
@@ -171,9 +175,12 @@ def save_update_applicant_family_info(request):
         try:
             try:
                 wife_pay_slip = request.FILES['wife_pay_slip']
-                father_pay_slip = request.FILES['father_pay_slip']
             except Exception as e:
                 wife_pay_slip = ''
+
+            try:
+                father_pay_slip = request.FILES['father_pay_slip']
+            except:
                 father_pay_slip = ''
 
             if StudentDetails.objects.filter(user=request.user):
@@ -211,14 +218,21 @@ def save_update_applicant_family_info(request):
                     application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
 
                     if wife_pay_slip:
+                        object_path = media_path(application_obj)
+
+                        # ab = str(application_obj.first_name) + '_' + str(application_obj.id)
+                        # if not os.path.exists(media_path):
+                        #     os.makedirs(media_path)
+
                         wife_slip = str(wife_pay_slip)
-                        handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + wife_slip), wife_pay_slip)
+                        handle_uploaded_file(str(object_path) + '/' + wife_slip, wife_pay_slip)
                         application_obj.wife_pay_slip = wife_slip
 
                     if father_pay_slip:
+                        object_path = media_path(application_obj)
                         father_slip = str(father_pay_slip)
-                        handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + father_slip),
-                                             father_pay_slip)
+                        # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + father_slip),father_pay_slip)
+                        handle_uploaded_file(str(object_path) + '/' + father_slip, father_pay_slip)
                         application_obj.father_pay_slip = father_slip
 
                     application_obj.save()
@@ -284,8 +298,10 @@ def save_update_applicant_family_mother_sibling_info(request):
                     mother_slip = str(mother_pay_slip)
 
                     if mother_pay_slip:
-                        handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + mother_slip),
-                                             mother_pay_slip)
+                        object_path = media_path(application_obj)
+
+                        handle_uploaded_file(str(object_path) + '/' + mother_slip, mother_pay_slip)
+                        # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + mother_slip),mother_pay_slip)
                         application_obj.mother_pay_slip = mother_slip
                         application_obj.save()
 
@@ -386,21 +402,26 @@ def save_update_applicant_academic_english_qualification(request):
 
                             if a_level_result_document:
                                 a_level_result = str(a_level_result_document)
-                                handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + a_level_result),
-                                                     a_level_result_document)
+                                object_path = media_path(qualification_obj.applicant_id)
+                                handle_uploaded_file(str(object_path) + '/' + a_level_result, a_level_result_document)
+
+                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + a_level_result),a_level_result_document)
                                 qualification_obj.a_level_result_document = a_level_result
 
                             if o_level_result_document:
                                 o_level_result = str(o_level_result_document)
-                                handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + o_level_result),
-                                                     o_level_result_document)
+                                object_path = media_path(qualification_obj.applicant_id)
+                                handle_uploaded_file(str(object_path) + '/' + o_level_result, o_level_result_document)
+
+                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + o_level_result),o_level_result_document)
                                 qualification_obj.o_level_result_document = o_level_result
 
                             if high_school_result_document:
                                 high_school_result = str(high_school_result_document)
-                                handle_uploaded_file(
-                                    settings.MEDIA_ROOT + os.path.join('reports/' + high_school_result),
-                                    high_school_result_document)
+                                object_path = media_path(qualification_obj.applicant_id)
+                                handle_uploaded_file(str(object_path) + '/' + high_school_result_document, high_school_result_document)
+
+                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + high_school_result),high_school_result_document)
                                 qualification_obj.high_school_result_document = high_school_result
 
                             qualification_obj.save()
@@ -422,15 +443,17 @@ def save_update_applicant_academic_english_qualification(request):
                             english_test_two_result = str(english_test_two_result_document)
 
                             if english_test_one_result_document:
-                                handle_uploaded_file(
-                                    settings.MEDIA_ROOT + os.path.join('reports/' + english_test_one_result),
-                                    english_test_one_result_document)
+                                object_path = media_path(english_object.applicant_id)
+                                handle_uploaded_file(str(object_path) + '/' + english_test_one_result, english_test_one_result_document)
+
+                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + english_test_one_result),english_test_one_result_document)
                                 english_object.english_test_one_result_document = english_test_one_result
 
                             if english_test_two_result_document:
-                                handle_uploaded_file(
-                                    settings.MEDIA_ROOT + os.path.join('reports/' + english_test_two_result),
-                                    english_test_two_result_document)
+                                object_path = media_path(english_object.applicant_id)
+                                handle_uploaded_file(str(object_path) + '/' + english_test_two_result, english_test_two_result_document)
+
+                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + english_test_two_result),english_test_two_result_document)
                                 english_object.english_test_two_result_document = english_test_two_result
 
                             english_object.save()
@@ -456,21 +479,27 @@ def save_update_applicant_academic_english_qualification(request):
 
                             if a_level_result_document:
                                 a_level_result = str(a_level_result_document)
-                                handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + a_level_result),
-                                                     a_level_result_document)
+
+                                object_path = media_path(qualification_obj.applicant_id)
+                                handle_uploaded_file(str(object_path) + '/' + a_level_result, a_level_result_document)
+
+                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + a_level_result),a_level_result_document)
                                 qualification_obj.a_level_result_document = a_level_result
 
                             if o_level_result_document:
                                 o_level_result = str(o_level_result_document)
-                                handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + o_level_result),
-                                                     o_level_result_document)
+                                object_path = media_path(qualification_obj.applicant_id)
+                                handle_uploaded_file(str(object_path) + '/' + o_level_result, o_level_result_document)
+
+                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + o_level_result),o_level_result_document)
                                 qualification_obj.o_level_result_document = o_level_result
 
                             if high_school_result_document:
                                 high_school_result = str(high_school_result_document)
-                                handle_uploaded_file(
-                                    settings.MEDIA_ROOT + os.path.join('reports/' + high_school_result),
-                                    high_school_result_document)
+                                object_path = media_path(qualification_obj.applicant_id)
+                                handle_uploaded_file(str(object_path) + '/' + high_school_result, high_school_result_document)
+
+                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + high_school_result),high_school_result_document)
                                 qualification_obj.high_school_result_document = high_school_result
 
                             qualification_obj.save()
@@ -488,16 +517,18 @@ def save_update_applicant_academic_english_qualification(request):
 
                             if english_test_one_result_document:
                                 english_test_one_result = str(english_test_one_result_document)
-                                handle_uploaded_file(
-                                    settings.MEDIA_ROOT + os.path.join('reports/' + english_test_one_result),
-                                    english_test_two_result_document)
+                                object_path = media_path(english_object.applicant_id)
+                                handle_uploaded_file(str(object_path) + '/' + english_test_one_result, english_test_two_result_document)
+                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + english_test_one_result),english_test_two_result_document)
+
                                 english_object.english_test_one_result_document = english_test_one_result
 
                             if english_test_two_result_document:
                                 english_test_two_result = str(english_test_two_result_document)
-                                handle_uploaded_file(
-                                    settings.MEDIA_ROOT + os.path.join('reports/' + english_test_two_result),
-                                    english_test_two_result_document)
+                                object_path = media_path(english_object.applicant_id)
+                                handle_uploaded_file(str(object_path) + '/' + english_test_two_result, english_test_two_result_document)
+
+                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + english_test_two_result),english_test_two_result_document)
                                 english_object.english_test_two_result_document = english_test_two_result
 
                             english_object.save()
@@ -585,26 +616,29 @@ def save_update_applicant_curriculum_experience_info(request):
 
                             if curriculum_result_document_one:
                                 curriculum_result_one = str(curriculum_result_document_one)
-                                handle_uploaded_file(
-                                    settings.MEDIA_ROOT + os.path.join('reports/' + curriculum_result_one),
-                                    curriculum_result_document_one)
+                                object_path = media_path(curriculum_obj.applicant_id)
+                                handle_uploaded_file(str(object_path) + '/' + curriculum_result_one, curriculum_result_document_one)
+
+                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + curriculum_result_one),curriculum_result_document_one)
                                 curriculum_obj.curriculum_result_document_one = curriculum_result_one
 
                             if curriculum_result_document_two:
                                 curriculum_result_two = str(curriculum_result_document_two)
-                                handle_uploaded_file(
-                                    settings.MEDIA_ROOT + os.path.join('reports/' + curriculum_result_two),
-                                    curriculum_result_document_two)
+                                object_path = media_path(curriculum_obj.applicant_id)
+                                handle_uploaded_file(str(object_path) + '/' + curriculum_result_two, curriculum_result_document_two)
+
+                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + curriculum_result_two),curriculum_result_document_two)
                                 curriculum_obj.curriculum_result_document_two = curriculum_result_two
 
                             if curriculum_result_document_three:
                                 curriculum_result_three = str(curriculum_result_document_three)
-                                handle_uploaded_file(
-                                    settings.MEDIA_ROOT + os.path.join('reports/' + curriculum_result_three),
-                                    curriculum_result_document_three)
+                                object_path = media_path(curriculum_obj.applicant_id)
+                                handle_uploaded_file(str(object_path) + '/' + curriculum_result_three, curriculum_result_document_three)
+
+                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + curriculum_result_three),curriculum_result_document_three)
                                 curriculum_obj.curriculum_result_document_three = curriculum_result_three
 
-                                curriculum_obj.save()
+                            curriculum_obj.save()
 
                             ExperienceDetails.objects.filter(applicant_id=request.user.get_application).update(
                                 work_experience_one=request.POST['work_experience_one'],
@@ -632,34 +666,21 @@ def save_update_applicant_curriculum_experience_info(request):
                                     to_date_two=request.POST['to_date_two'] if request.POST['to_date_two'] else None,
                                     applicant_id=request.user.get_application)
 
-                                # if work_experience_document_one:
-                                #     work_experience_one = str(work_experience_document_one)
-                                #     handle_uploaded_file(
-                                #         settings.MEDIA_ROOT + os.path.join('reports/' + work_experience_one),
-                                #         work_experience_document_one)
-                                #     experience_object.work_experience_document_one = work_experience_one
-                                #
-                                # if work_experience_document_two:
-                                #     work_experience_two = str(work_experience_document_two)
-                                #     handle_uploaded_file(
-                                #         settings.MEDIA_ROOT + os.path.join('reports/' + work_experience_two),
-                                #         work_experience_document_two)
-                                #     experience_object.work_experience_document_two = work_experience_two
-                                #
-                                # experience_object.save()
 
                             if work_experience_document_one:
                                 work_experience_one = str(work_experience_document_one)
-                                handle_uploaded_file(
-                                    settings.MEDIA_ROOT + os.path.join('reports/' + work_experience_one),
-                                    work_experience_document_one)
+                                object_path = media_path(experience_object.applicant_id)
+                                handle_uploaded_file(str(object_path) + '/' + work_experience_one, work_experience_document_one)
+
+                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + work_experience_one),work_experience_document_one)
                                 experience_object.work_experience_document_one = work_experience_one
 
                             if work_experience_document_two:
                                 work_experience_two = str(work_experience_document_two)
-                                handle_uploaded_file(
-                                    settings.MEDIA_ROOT + os.path.join('reports/' + work_experience_two),
-                                    work_experience_document_two)
+                                object_path = media_path(experience_object.applicant_id)
+                                handle_uploaded_file(str(object_path) + '/' + work_experience_two, work_experience_document_two)
+
+                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + work_experience_two),work_experience_document_two)
                                 experience_object.work_experience_document_two = work_experience_two
 
                             experience_object.save()
@@ -682,26 +703,32 @@ def save_update_applicant_curriculum_experience_info(request):
 
                             if curriculum_result_document_one:
                                 curriculum_result_one = str(curriculum_result_document_one)
-                                handle_uploaded_file(
-                                    settings.MEDIA_ROOT + os.path.join('reports/' + curriculum_result_one),
-                                    curriculum_result_document_one)
+                                object_path = media_path(curriculum_obj.applicant_id)
+                                handle_uploaded_file(str(object_path) + '/' + curriculum_result_one,
+                                                     curriculum_result_document_one)
+
+                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + curriculum_result_one),curriculum_result_document_one)
                                 curriculum_obj.curriculum_result_document_one = curriculum_result_one
 
                             if curriculum_result_document_two:
                                 curriculum_result_two = str(curriculum_result_document_two)
-                                handle_uploaded_file(
-                                    settings.MEDIA_ROOT + os.path.join('reports/' + curriculum_result_two),
-                                    curriculum_result_document_two)
+                                object_path = media_path(curriculum_obj.applicant_id)
+                                handle_uploaded_file(str(object_path) + '/' + curriculum_result_two,
+                                                     curriculum_result_document_two)
+
+                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + curriculum_result_two),curriculum_result_document_two)
                                 curriculum_obj.curriculum_result_document_two = curriculum_result_two
 
                             if curriculum_result_document_three:
                                 curriculum_result_three = str(curriculum_result_document_three)
-                                handle_uploaded_file(
-                                    settings.MEDIA_ROOT + os.path.join('reports/' + curriculum_result_three),
-                                    curriculum_result_document_three)
+                                object_path = media_path(curriculum_obj.applicant_id)
+                                handle_uploaded_file(str(object_path) + '/' + curriculum_result_three,
+                                                     curriculum_result_document_three)
+
+                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + curriculum_result_three),curriculum_result_document_three)
                                 curriculum_obj.curriculum_result_document_three = curriculum_result_three
 
-                                curriculum_obj.save()
+                            curriculum_obj.save()
 
                             experience_object = ExperienceDetails.objects.create(
                                 work_experience_one=request.POST['work_experience_one'],
@@ -715,16 +742,20 @@ def save_update_applicant_curriculum_experience_info(request):
 
                             if work_experience_document_one:
                                 work_experience_one = str(work_experience_document_one)
-                                handle_uploaded_file(
-                                    settings.MEDIA_ROOT + os.path.join('reports/' + work_experience_one),
-                                    work_experience_document_one)
+                                object_path = media_path(experience_object.applicant_id)
+                                handle_uploaded_file(str(object_path) + '/' + work_experience_one,
+                                                     work_experience_document_one)
+
+                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + work_experience_one),work_experience_document_one)
                                 experience_object.work_experience_document_one = work_experience_one
 
                             if work_experience_document_two:
                                 work_experience_two = str(work_experience_document_two)
-                                handle_uploaded_file(
-                                    settings.MEDIA_ROOT + os.path.join('reports/' + work_experience_two),
-                                    work_experience_document_two)
+                                object_path = media_path(experience_object.applicant_id)
+                                handle_uploaded_file(str(object_path) + '/' + work_experience_two,
+                                                     work_experience_document_two)
+
+                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + work_experience_two),work_experience_document_two)
                                 experience_object.work_experience_document_two = work_experience_two
 
                             experience_object.save()
@@ -813,9 +844,10 @@ def save_update_applicant_scholarship_about_yourself_info(request):
 
                             if admission_letter_document:
                                 admission_letter = str(admission_letter_document)
-                                handle_uploaded_file(
-                                    settings.MEDIA_ROOT + os.path.join('reports/' + admission_letter),
-                                    admission_letter_document)
+                                object_path = media_path(scholarship_obj.applicant_id)
+                                handle_uploaded_file(str(object_path) + '/' + admission_letter, admission_letter_document)
+
+                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + admission_letter),admission_letter_document)
                                 scholarship_obj.admission_letter_document = admission_letter
                                 scholarship_obj.save()
 
@@ -836,9 +868,11 @@ def save_update_applicant_scholarship_about_yourself_info(request):
 
                             if admission_letter_document:
                                 admission_letter = str(admission_letter_document)
-                                handle_uploaded_file(
-                                    settings.MEDIA_ROOT + os.path.join('reports/' + admission_letter),
-                                    admission_letter_document)
+                                object_path = media_path(scholarship_obj.applicant_id)
+                                handle_uploaded_file(str(object_path) + '/' + admission_letter,
+                                                     admission_letter_document)
+
+                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + admission_letter),admission_letter_document)
                                 scholarship_obj.admission_letter_document = admission_letter
                                 scholarship_obj.save()
 
@@ -891,13 +925,14 @@ def submit_application(request):
         application_notification(request.user.get_application.id,
                                  'You have successfully submitted your application.')
         admin_notification(request.user.get_application.id,
-                                 str(request.user.get_application.get_full_name())+' have submitted application.')
+                           str(request.user.get_application.get_full_name()) + ' have submitted application.')
 
         messages.success(request, "Application submitted successfully.")
 
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
     return redirect('/student/student_home/')
+
 
 @psycho_test_required
 def applicant_psychometric_test(request):
@@ -913,6 +948,7 @@ def applicant_psychometric_test(request):
         messages.warning(request, "Form have some error" + str(e))
         return redirect('/student/student_home/')
     return render(request, 'applicant_psychometric_test.html', {'psychometric_test_obj': psychometric_test_obj})
+
 
 @psycho_test_required
 def save_psychometric_test(request):
@@ -942,9 +978,10 @@ def save_psychometric_test(request):
 
         if test_result_document:
             test_result = str(test_result_document)
-            handle_uploaded_file(
-                settings.MEDIA_ROOT + os.path.join('reports/' + test_result),
-                test_result_document)
+            object_path = media_path(psychometric_test_obj.applicant_id)
+            handle_uploaded_file(str(object_path) + '/' + test_result, test_result_document)
+
+            # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + test_result),test_result_document)
             psychometric_test_obj.test_result_document = test_result
             psychometric_test_obj.save()
 
@@ -953,6 +990,7 @@ def save_psychometric_test(request):
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
     return redirect('/student/applicant_psychometric_test/')
+
 
 @agreements_required
 def applicant_agreement_submission(request):
@@ -969,6 +1007,7 @@ def applicant_agreement_submission(request):
         return redirect('/student/student_home/')
     return render(request, 'applicant_agreement_submission.html',
                   {'agreement_submission_obj': agreement_submission_obj})
+
 
 @agreements_required
 def save_agreement_submission(request):
@@ -995,17 +1034,19 @@ def save_agreement_submission(request):
 
         if four_parties_agreements:
             parties_agreements = str(four_parties_agreements)
-            handle_uploaded_file(
-                settings.MEDIA_ROOT + os.path.join('reports/' + parties_agreements),
-                four_parties_agreements)
+            object_path = media_path(agreement_obj.applicant_id)
+            handle_uploaded_file(str(object_path) + '/' + parties_agreements, four_parties_agreements)
+
+            # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + parties_agreements),four_parties_agreements)
             agreement_obj.four_parties_agreement_document = parties_agreements
             agreement_obj.save()
 
         if education_loan_agreements:
             education_agreements = str(education_loan_agreements)
-            handle_uploaded_file(
-                settings.MEDIA_ROOT + os.path.join('reports/' + education_agreements),
-                education_loan_agreements)
+            object_path = media_path(agreement_obj.applicant_id)
+            handle_uploaded_file(str(object_path) + '/' + education_agreements, education_loan_agreements)
+
+            # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + education_agreements),education_loan_agreements)
             agreement_obj.education_loan_agreement_document = education_agreements
             agreement_obj.save()
 
@@ -1014,6 +1055,7 @@ def save_agreement_submission(request):
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
     return redirect('/student/applicant_agreement_submission/')
+
 
 @dev_program_required
 def applicant_program_certificate_submission(request):
@@ -1033,6 +1075,7 @@ def applicant_program_certificate_submission(request):
     return render(request, 'applicant_program_certificate_submission.html',
                   {'module_recs': module_recs, 'certificate_recs': certificate_recs})
 
+
 @dev_program_required
 def save_applicant_program_certificate_submission(request):
     try:
@@ -1048,9 +1091,10 @@ def save_applicant_program_certificate_submission(request):
 
         if certificate_document:
             certificate = str(certificate_document)
-            handle_uploaded_file(
-                settings.MEDIA_ROOT + os.path.join('reports/' + certificate),
-                certificate_document)
+            object_path = media_path(agreement_obj.applicant_id)
+            handle_uploaded_file(str(object_path) + '/' + certificate, certificate_document)
+
+            # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + certificate),certificate_document)
             agreement_obj.certificate_document = certificate
             agreement_obj.save()
 
@@ -1071,6 +1115,7 @@ def delete_applicant_program_certificate_submission(request):
         messages.warning(request, "Record not deleted.")
     return HttpResponse(json.dumps({'error': 'Record not deleted.'}), content_type="application/json")
 
+
 @semester_required
 def applicant_academic_progress(request):
     try:
@@ -1090,6 +1135,7 @@ def applicant_academic_progress(request):
         return redirect('/student/student_home/')
     return render(request, 'applicant_academic_progress.html',
                   {'semester_recs': semester_recs, 'year_recs': year_recs, 'progress_recs': progress_recs})
+
 
 @semester_required
 def save_applicant_academic_progress(request):
@@ -1119,9 +1165,10 @@ def save_applicant_academic_progress(request):
 
         if transcript_document:
             transcript = str(transcript_document)
-            handle_uploaded_file(
-                settings.MEDIA_ROOT + os.path.join('reports/' + transcript),
-                transcript_document)
+            object_path = media_path(progress_obj.applicant_id)
+            handle_uploaded_file(str(object_path) + '/' + transcript, transcript_document)
+
+            # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + transcript),transcript_document)
             progress_obj.transcript_document = transcript
             progress_obj.save()
         messages.success(request, "Record saved.")

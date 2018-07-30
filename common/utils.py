@@ -18,6 +18,7 @@ from io import BytesIO
 import os
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
+from django.conf import settings
 
 
 def random_string_generator(size, include_lowercase=True, include_uppercase=True, include_number=True):
@@ -283,3 +284,15 @@ def send_email_with_template(application_obj, context, subject, email_body, requ
             os.remove(path)
     except:
         pass
+
+
+def media_path(application_obj):
+    object_path = str(application_obj.first_name) + '_' + str(application_obj.id)
+    object_path = settings.MEDIA_ROOT + os.path.join('reports/' + str(object_path))
+    if not os.path.exists(str(object_path)):
+        os.makedirs(object_path)
+    return object_path
+
+
+def base_path(application_obj):
+    return str(settings.MEDIA_URL) + str('reports/') + str(application_obj.first_name) + '_' + str(application_obj.id)+ '/'

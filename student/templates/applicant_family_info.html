@@ -55,8 +55,20 @@
                 $(document).on("click", ".remove_doc", function (e) {
                     {#alert($(this).prev().attr('id'))#}
                     var id = $(this).prev().attr('id');
-                    $('#'+id).val('');
+                    $('#' + id).val('');
                 });
+
+                $(document).on("click", ".file", function (e) {
+                    $(this).parent('.form-control').next('.file_type').trigger('click');
+                    {#$('#father_pay_slip').trigger('click');#}
+                    {#alert($('#father_pay_slip'))#}
+                });
+
+                $('.file_type').change(function (evt) {
+                    var file_name = $(this).val().split('\\')[2];
+                    $(this).prev().children().children('.file_value').val(file_name);
+                });
+
             });
 
 
@@ -128,7 +140,7 @@
                             <div class="">
                                 <label class="col-md-2 control-label">DOB:</label>
                                 <div class="col-md-2">
-                                    <input type="date" title="Enter DOB" id="wife_dob" name="wife_dob"  max="2999-12-31"
+                                    <input type="date" title="Enter DOB" id="wife_dob" name="wife_dob" max="2999-12-31"
                                            value="{{ application_obj.wife_dob|date:"Y-m-d" }}" class="form-control">
                                 </div>
                             </div>
@@ -150,13 +162,40 @@
 
                             <div class="">
                                 <label class="col-md-2 control-label">Pay Slip:</label>
+                                {#                                <div class="col-md-2">#}
+                                {% comment %}{% if application_obj.wife_pay_slip %}
+                                        <a href="{{ path }}{{ application_obj.wife_pay_slip }}">{{ application_obj.wife_pay_slip }}</a>
+                                        {% else %}
+                                        <input type="file" title="Select wife pay slip" id="wife_pay_slip" value="{{ application_obj.wife_pay_slip|default:"" }}" name="wife_pay_slip" class="form-control doc"><span style="float: right; margin-top: -25px; color: darkred"class="remove_doc fa fa-close"></span>
+                                    {% endif %}{% endcomment %}
+
                                 <div class="col-md-2">
-                                    <input type="file" title="Select wife pay slip" id="wife_pay_slip"
-                                           value="{{ application_obj.wife_pay_slip|default:"" }}" name="wife_pay_slip"
-                                           class="form-control doc"><span
-                                        style="float: right; margin-top: -25px; color: darkred"
-                                        class="remove_doc fa fa-close"></span>
+                                    {% if application_obj.wife_pay_slip %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file"
+                                                type='button' value='Choose File:'><a
+                                                href="{{ path }}{{ application_obj.wife_pay_slip }}"><input type="text"
+                                                                                                            readonly
+                                                                                                            class="file_value"
+                                                                                                            style="cursor: pointer;border: none; width: 100px"
+                                                                                                            value="{{ application_obj.wife_pay_slip }}"></a></label>
+
+
+                                    {% else %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file"
+                                                type='button' value='Choose File:'><a><input type="text"
+                                                                                             readonly
+                                                                                             class="file_value"
+                                                                                             style="cursor: pointer;border: none; width: 100px; color: #292328"></a></label>
+                                    {% endif %}
+                                    <input type="file" style="display: none" class="file_type"
+                                           title="Select wife pay slip" id="wife_pay_slip" name="wife_pay_slip">
+                                    {#                                    <input style="display: none" class="file_type" type="file" title="Select father pay slip" id="father_pay_slip" name="father_pay_slip">#}
                                 </div>
+                                {#                                </div>#}
                             </div>
                         </div>
 
@@ -242,7 +281,8 @@
                             <div class="">
                                 <label class="col-md-2 control-label">DOB:</label>
                                 <div class="col-md-2">
-                                    <input type="date" title="Enter DOB" id="father_dob" name="father_dob"  max="2999-12-31"
+                                    <input type="date" title="Enter DOB" id="father_dob" name="father_dob"
+                                           max="2999-12-31"
                                            value="{{ application_obj.father_dob|date:"Y-m-d" }}" class="form-control"
                                     >
                                 </div>
@@ -266,11 +306,31 @@
                             <div class="">
                                 <label class="col-md-2 control-label">Pay Slip:</label>
                                 <div class="col-md-2">
-                                    <input type="file" title="Select father pay slip" id="father_pay_slip"
-                                           value="{{ application_obj.father_pay_slip }}" name="father_pay_slip"
-                                           class="form-control doc"> <span
-                                        style="float: right; margin-top: -25px; color: darkred"
-                                        class="remove_doc fa fa-close"></span>
+                                    {% if application_obj.father_pay_slip %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left"><input
+                                                type='button' class="file" value='Choose File:'><a
+                                                href="{{ path }}{{ application_obj.father_pay_slip }}"><input readonly
+                                                                                                              class="file_value"
+                                                                                                              style="border: red; width: 100px"
+                                                                                                              value="{{ application_obj.father_pay_slip }}"></a></label>
+                                    {% else %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file"
+                                                type='button' value='Choose File:'><a><input type="text"
+                                                                                             readonly
+                                                                                             class="file_value"
+                                                                                             style="cursor: pointer;border: none; width: 100px; color: #292328"></a></label>
+
+                                        {% comment %}<label class="btn file form-control"
+                                               style="border-color: #b1ad9f;width: 100%;text-align: left"><input
+                                                type='button' value='Choose File:'><input type="text" readonly
+                                                                                          class="file_value"
+                                                                                          style="border: red; width: 100px"></label>{% endcomment %}
+                                    {% endif %}
+                                    <input style="display: none" class="file_type" type="file"
+                                           title="Select father pay slip" id="father_pay_slip" name="father_pay_slip">
                                 </div>
                             </div>
                         </div>
