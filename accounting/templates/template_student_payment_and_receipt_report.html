@@ -88,6 +88,11 @@
                                 $('#id_university_id').val(data['application_rec']['university']['university_name']);
                             }
 
+                            if (data['application_rec']['degree'] != null) {
+                                $('#id_degree').val(data['application_rec']['degree']['degree_name']);
+                                $('#id_degree_id').val(data['application_rec']['degree']['degree_name']);
+                            }
+
                             if (data['application_rec']['scholarship'] != null) {
                                 $('#id_scholarship').val(data['application_rec']['scholarship']['scholarship_name']);
                                 $('#id_scholarship_id').val(data['application_rec']['scholarship']['scholarship_name']);
@@ -296,6 +301,35 @@
 
                         </div>
 
+
+                        <br><br>
+
+
+                        <div class="row">
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Degree:</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Degree" id="id_degree"
+                                           name="semester" placeholder="Degree"
+                                           class="form-control" required disabled>
+
+                                    <input type="text" id="id_degree_id" name="degree" hidden>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Semister:</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Semister" id="id_semester"
+                                           name="semester" placeholder="Semester"
+                                           class="form-control" required disabled>
+
+                                    <input type="text" id="id_semester_id" name="semester" hidden>
+                                </div>
+                            </div>
+
+                        </div>
 
                         <br><br>
 

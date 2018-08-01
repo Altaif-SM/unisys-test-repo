@@ -42,12 +42,12 @@
               type="text/css"/>
         <!-- END PAGE LEVEL PLUGINS -->
         <!-- BEGIN THEME GLOBAL STYLES -->
-        <link href="{% static 'assets/global/css/components.min.css' %}" rel="stylesheet" id="style_components"
+        <link href="{% static 'assets/global/css/components.css' %}" rel="stylesheet" id="style_components"
               type="text/css"/>
         <link href="{% static 'assets/global/css/plugins.min.css' %}" rel="stylesheet" type="text/css"/>
         <!-- END THEME GLOBAL STYLES -->
         <!-- BEGIN PAGE LEVEL STYLES -->
-        <link href="{% static 'assets/pages/css/login.min.css' %}" rel="stylesheet" type="text/css"/>
+        <link href="{% static 'assets/pages/css/login.css' %}" rel="stylesheet" type="text/css"/>
         <!-- END PAGE LEVEL STYLES -->
         <!-- BEGIN THEME LAYOUT STYLES -->
         <!-- END THEME LAYOUT STYLES -->
@@ -57,7 +57,7 @@
 
     <body class=" login">
     <!-- BEGIN LOGO -->
-    <div class="logo" style="margin: 0px; padding: 0px;color: #32c5d2;" >
+    <div class="logo" style="margin: 0px; padding: 0px;color: #250055;" >
 
         <img src="{% static 'images/logo.png' %}" alt="" widtn="150px" height="150px;"/>
         <h1 style="font-size:35px;font-weight: bold;">NAMA Fund System</h1>
@@ -68,7 +68,7 @@
         <!-- BEGIN LOGIN FORM -->
         <form class="login-form" method="post" action="{% url 'accounts:user_signin' %}">
             {% csrf_token %}
-            <h3 class="form-title font-green">Sign In</h3>
+            <h3 class="form-title font" style="color: #0a001f;">Sign In</h3>
             <div class="alert alert-danger display-hide">
                 <button class="close" data-close="alert"></button>
 
@@ -96,14 +96,14 @@
                 <label class="control-label visible-ie8 visible-ie9">Password</label>
                 {{ form.password }}</div>
             <div class="form-actions" id="log">
-                <button type="submit" class="btn green uppercase">Login</button>
+                <button type="submit" style="background-color: #0a001f;color: aliceblue" class="btn uppercase">Login</button>
                 <label class="rememberme check mt-checkbox mt-checkbox-outline">
                     <input type="checkbox" name="remember" value="1"/>Remember
                     <span></span>
                 </label>
                 <a href="/password_reset/recover/" id="forget-password" class="forget-password">Forgot Password?</a>
             </div>
-            <div class="create-account">
+            <div class="create-account" style="background-color: #0a001f;">
                 <p>
                     <a href="javascript:;" id="register-btn" class="uppercase">Create an account</a>
                 </p>
@@ -115,7 +115,7 @@
             <!-- END FORGOT PASSWORD FORM -->
          <!-- BEGIN REGISTRATION FORM -->
             <form class="register-form" action="{% url 'accounts:user_signup' %}" method="post">{% csrf_token %}
-                <h3 class="font-green">Sign Up</h3>
+                <h3 class="font" style="color: #0a001f;">Sign Up</h3>
                 <p class="hint"> Enter your personal details below: </p>
                 <div class="form-group">
                     <label class="control-label visible-ie8 visible-ie9">First Name</label>
@@ -161,8 +161,8 @@
 {#                    <div id="register_tnc_error"> </div>#}
 {#                </div>#}
                 <div class="form-actions">
-                    <button type="button" id="register-back-btn" class="btn green btn-outline">Back</button>
-                    <button type="submit" id="register-submit-btn" class="btn btn-success uppercase pull-right">Submit</button>
+                    <button type="button" id="register-back-btn" class="btn btn-outline">Back</button>
+                    <button type="submit" id="register-submit-btn" style="background-color: #0a001f;color: aliceblue;" class="btn uppercase pull-right">Submit</button>
                 </div>
             </form>
         <!-- BEGIN REGISTRATION FORM -->

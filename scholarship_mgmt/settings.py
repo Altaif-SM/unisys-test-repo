@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
-
+import psycopg2
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -42,6 +42,14 @@ INSTALLED_APPS = [
     'common.apps.CommonConfig',
     'masters.apps.MastersConfig',
     'student.apps.StudentConfig',
+    'accounting.apps.AccountingConfig',
+    'partner.apps.PartnerConfig',
+    'donor.apps.DonorConfig',
+    'computed_property',
+    'parent.apps.ParentConfig',
+    'mathfilters',
+    'password_reset.apps.PasswordResetConfig',
+
 ]
 
 MIDDLEWARE = [
@@ -91,14 +99,27 @@ DATABASES = {
           # 'NAME': 'scholarship_mgmt',
           'NAME': 'scholarship_test',
           'USER':'root',
-          'PASSWORD':'',
+          'PASSWORD':'redbytes',
           'HOST': '127.0.0.1',
           'PORT':'3306'
      }
  }
 
 
-
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+#         'NAME':'scholarship_test',                      # Or path to database file if using sqlite3.
+#         'USER':'sms',                      # Not used with sqlite3.
+#         'PASSWORD':'redbytes',                  # Not used with sqlite3.
+#         'HOST':'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
+#         'PORT':'',                    # Set to empty string for default. Not used with sqlite3.
+#         # 'ATOMIC_REQUESTS':True
+#     },
+#     'OPTIONS': {
+#         'isolation_level' : psycopg2.extensions.ISOLATION_LEVEL_SERIALIZABLE
+#     }
+# }
 
 '''DATABASES = {
     'default': {
@@ -148,3 +169,14 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR,'static'),
 )
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = None
+
+REGISTRATION_FLAG = False
+
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+
+EMAIL_HOST_USER = 'redbytes.test@gmail.com'
+EMAIL_HOST_PASSWORD = 'redbytes@123'

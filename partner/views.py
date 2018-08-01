@@ -679,7 +679,7 @@ def filter_application_status(request):
     applicant_recs = ''
 
     try:
-        if request.user.is_system_admin:
+        if request.user.is_superuser:
             if application_status == 'First Interview':
                 applicant_recs = ApplicationDetails.objects.filter(
                     is_submitted=True, first_interview=True)
@@ -709,41 +709,41 @@ def filter_application_status(request):
             if application_status == 'First Interview':
                 applicant_recs = ApplicationDetails.objects.filter(
                     address__country=request.user.partner_user_rel.get().address.country,
-                    is_submitted=True, first_interview=True)
+                    is_submitted=True, first_interview=True,year=get_current_year())
 
             elif application_status == 'First Interview attended':
                 applicant_recs = ApplicationDetails.objects.filter(
                     address__country=request.user.partner_user_rel.get().address.country,
-                    is_submitted=True, first_interview_attend=True)
+                    is_submitted=True, first_interview_attend=True,year=get_current_year())
 
             elif application_status == 'First Interview approval':
                 applicant_recs = ApplicationDetails.objects.filter(
                     address__country=request.user.partner_user_rel.get().address.country,
-                    is_submitted=True, first_interview_approval=True)
+                    is_submitted=True, first_interview_approval=True,year=get_current_year())
 
             elif application_status == 'Psychometric Test':
                 applicant_recs = ApplicationDetails.objects.filter(
                     address__country=request.user.partner_user_rel.get().address.country,
-                    is_submitted=True, psychometric_test=True)
+                    is_submitted=True, psychometric_test=True,year=get_current_year())
 
             elif application_status == 'Second Interview attended':
                 applicant_recs = ApplicationDetails.objects.filter(
                     address__country=request.user.partner_user_rel.get().address.country,
-                    is_submitted=True, second_interview_attend=True)
+                    is_submitted=True, second_interview_attend=True,year=get_current_year())
 
             elif application_status == 'Second Interview approval':
                 applicant_recs = ApplicationDetails.objects.filter(
                     address__country=request.user.partner_user_rel.get().address.country,
-                    is_submitted=True, second_interview_approval=True)
+                    is_submitted=True, second_interview_approval=True,year=get_current_year())
 
             elif application_status == 'Admin approval':
                 applicant_recs = ApplicationDetails.objects.filter(
                     address__country=request.user.partner_user_rel.get().address.country,
-                    is_submitted=True, admin_approval=True)
+                    is_submitted=True, admin_approval=True,year=get_current_year())
             else:
                 applicant_recs = ApplicationDetails.objects.filter(
                     address__country=request.user.partner_user_rel.get().address.country,
-                    is_submitted=True)
+                    is_submitted=True,year=get_current_year())
 
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
