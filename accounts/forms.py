@@ -22,11 +22,10 @@ class signUpForm(forms.ModelForm):
     email = forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'form-control form-control-solid placeholder-no-fix' , 'placeholder':'Username','autocomplete': 'off'}), label='')
     password = forms.CharField(required=True,widget=forms.PasswordInput(attrs={'class':'form-control form-control-solid placeholder-no-fix' , 'placeholder':'Password','autocomplete': 'off'}), label='')
     confirm_password = forms.CharField(required=True,widget=forms.PasswordInput(attrs={'class':'form-control form-control-solid placeholder-no-fix' , 'placeholder':'Confirm Password','autocomplete': 'off'}), label='')
-    role = forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'form-control form-control-solid placeholder-no-fix' , 'placeholder':'Middle Name','autocomplete': 'off'}), label='')
 
     class Meta:
         model = User
-        fields =['first_name','last_name','email','password', 'role']
+        fields =['first_name','last_name','email','password']
 
 
     def clean(self):

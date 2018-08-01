@@ -94,6 +94,26 @@
                 $(document).on("click", "#save", function (e) {
 
                     if(validate() == false) {
+                        $("#id_btn_type").val("save");
+                        $('#form_sample_1').submit();
+                    }
+
+                });
+
+
+                $(document).on("click", "#save_and_send", function (e) {
+
+                    if(validate() == false) {
+                        $("#id_btn_type").val("save_and_send");
+                        $('#form_sample_1').submit();
+                    }
+
+                });
+
+                $(document).on("click", "#save_and_print", function (e) {
+
+                    if(validate() == false) {
+                        $("#id_btn_type").val("save_and_print");
                         $('#form_sample_1').submit();
                     }
 
@@ -339,10 +359,10 @@
                     <button type="button" class="btn green" id="save">Save</button>
                 </div>
                 <div class="btn-group">
-                    <button type="submit" class="btn green" id="save">Save & Print PDF</button>
+                    <button type="submit" class="btn green" id="save_and_print">Save & Print PDF</button>
                 </div>
                 <div class="btn-group">
-                    <button type="submit" class="btn green" id="save">Save & Send</button>
+                    <button type="submit" class="btn green" id="save_and_send">Save & Send</button>
                 </div>
             </div>
 
@@ -355,6 +375,7 @@
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <input type="hidden" id="id_app_id" name="application">
+                <input type="hidden" name="btn_type" id="id_btn_type">
                     <div class="form-body">
 
                         <div class="row">

@@ -22,21 +22,25 @@ def get_student_payment_voucher(request):
     student_list = ApplicationDetails.objects.filter(is_sponsored=True)
 
     voucher_record = StudentPaymentReceiptVoucher.objects.all()
-    return render(request, "template_student_payment_voucher.html",{'student_list': student_list, 'voucher_record': voucher_record,'formatedDate': formatedDate})
+    return render(request, "template_student_payment_voucher.html",
+                  {'student_list': student_list, 'voucher_record': voucher_record, 'formatedDate': formatedDate})
+
 
 def get_student_receipt_voucher(request):
     # student_list = StudentDetails.objects.filter(student_applicant_rel__is_sponsored=True)
     student_list = ApplicationDetails.objects.filter(is_sponsored=True)
     voucher_record = StudentPaymentReceiptVoucher.objects.all()
-    return render(request, "template_student_receipt_voucher.html",{'student_list': student_list, 'voucher_record': voucher_record})
+    return render(request, "template_student_receipt_voucher.html",
+                  {'student_list': student_list, 'voucher_record': voucher_record})
+
 
 def get_student_payment_and_receipt_report(request):
     # student_list = StudentDetails.objects.filter(student_applicant_rel__is_sponsored=True)
     student_list = ApplicationDetails.objects.filter(is_sponsored=True)
-    return render(request, "template_student_payment_and_receipt_report.html",{'student_list': student_list})
+    return render(request, "template_student_payment_and_receipt_report.html", {'student_list': student_list})
+
 
 def get_student_report(request):
-
     query_country = request.GET.get("country") or None
     query_scholarship = request.GET.get("scholarship") or None
     query_voucher_beneficiary = request.GET.get("voucher_beneficiary") or None
@@ -46,13 +50,13 @@ def get_student_report(request):
     debit_total = 0
     voucher_rec_list = []
 
-
     stud_pay_voucher_list = StudentPaymentReceiptVoucher.objects.all()
 
     if query_country:
         stud_pay_voucher_list = stud_pay_voucher_list.filter(application__address__country_id=query_country)
     if query_scholarship:
-        stud_pay_voucher_list = stud_pay_voucher_list.filter(application__applicant_scholarship_rel__scholarship_id=query_scholarship)
+        stud_pay_voucher_list = stud_pay_voucher_list.filter(
+            application__applicant_scholarship_rel__scholarship_id=query_scholarship)
     if query_voucher_beneficiary:
         stud_pay_voucher_list = stud_pay_voucher_list.filter(voucher_beneficiary=query_voucher_beneficiary)
 
@@ -67,7 +71,6 @@ def get_student_report(request):
     for scho in ScholarshipDetails.objects.all():
         scholarship.append(scho)
 
-
     for obj in stud_pay_voucher_list:
         if obj.voucher_type == "debit":
             debit_total += float(obj.voucher_amount)
@@ -77,7 +80,8 @@ def get_student_report(request):
 
         voucher_rec_list.append(obj)
 
-    balance_total = StudentPaymentReceiptVoucher.objects.values("application__scholarship_fee").distinct().aggregate(total_price=Sum('application__scholarship_fee'))
+    balance_total = StudentPaymentReceiptVoucher.objects.values("application__scholarship_fee").distinct().aggregate(
+        total_price=Sum('application__scholarship_fee'))
 
     if balance_total['total_price'] and stud_pay_voucher_list:
         voucher_record['debit_total'] = debit_total
@@ -86,10 +90,13 @@ def get_student_report(request):
         voucher_record['balance_total'] = (float(debit_total) - float(credit_total))
         voucher_record['voucher_record'] = voucher_rec_list
 
-    return render(request, "template_student_report.html",{'voucher_record': voucher_record, 'country_list': country, 'scholarship_list': scholarship, 'selected_country':CountryDetails.objects.filter(id=query_country), 'selected_scholarship': ScholarshipDetails.objects.filter(id=query_scholarship)})
+    return render(request, "template_student_report.html",
+                  {'voucher_record': voucher_record, 'country_list': country, 'scholarship_list': scholarship,
+                   'selected_country': CountryDetails.objects.filter(id=query_country),
+                   'selected_scholarship': ScholarshipDetails.objects.filter(id=query_scholarship)})
+
 
 def get_filtered_student_report(request):
-
     val_dict = request.POST
 
     country = val_dict['country']
@@ -101,7 +108,9 @@ def get_filtered_student_report(request):
     credit_total = 0
     balance_total = 0
     voucher_rec_list = []
-    for obj in StudentPaymentReceiptVoucher.objects.filter(application__address__country__country_name=country, voucher_beneficiary=beneficiary, application__scholarship_selection_rel__scholarship__scholarship_name=scholarship_type):
+    for obj in StudentPaymentReceiptVoucher.objects.filter(application__address__country__country_name=country,
+                                                           voucher_beneficiary=beneficiary,
+                                                           application__scholarship_selection_rel__scholarship__scholarship_name=scholarship_type):
         if obj.voucher_type == "debit":
             debit_total += float(obj.voucher_amount)
 
@@ -110,17 +119,18 @@ def get_filtered_student_report(request):
 
         voucher_rec_list.append(obj)
 
-    balance_total = StudentPaymentReceiptVoucher.objects.values("application__scholarship_fee").distinct().aggregate(total_price=Sum('application__scholarship_fee'))
+    balance_total = StudentPaymentReceiptVoucher.objects.values("application__scholarship_fee").distinct().aggregate(
+        total_price=Sum('application__scholarship_fee'))
 
     voucher_record['debit_total'] = debit_total
     voucher_record['credit_total'] = credit_total
     voucher_record['balance_total'] = float(balance_total['total_price']) - credit_total
     voucher_record['voucher_record'] = voucher_rec_list
 
-    return render(request, "template_student_report.html",{'voucher_record': voucher_record})
+    return render(request, "template_student_report.html", {'voucher_record': voucher_record})
+
 
 def get_approval_and_paid_total(request):
-
     debit_total = 0
     outstanding_total = 0
 
@@ -143,15 +153,14 @@ def get_approval_and_paid_total(request):
     for stud in ApplicationDetails.objects.filter(is_sponsored=True):
         students.append(stud)
 
-
-
     student_list = StudentDetails.objects.all().distinct()
 
     if query_student:
         student_list = student_list.filter(id=query_student)
 
     if query_scholarship:
-        student_list = student_list.filter(student_applicant_rel__applicant_scholarship_rel__scholarship_id=query_scholarship)
+        student_list = student_list.filter(
+            student_applicant_rel__applicant_scholarship_rel__scholarship_id=query_scholarship)
 
     if query_country:
         student_list = student_list.filter(address__country_id=query_country)
@@ -187,24 +196,35 @@ def get_approval_and_paid_total(request):
         debit_total += float(credit_total)
         outstanding_total += float(outstanding_amount)
 
-    return render(request, "template_approval_and_paid_total.html",{'voucher_record': student_list_rec, 'debit_total': debit_total, 'outstanding_total': outstanding_total, 'country_list': country, 'scholarship_list': scholarship, 'selected_country':CountryDetails.objects.filter(id=query_country), 'selected_scholarship': ScholarshipDetails.objects.filter(id=query_scholarship),'student_list': students, 'selected_student': ApplicationDetails.objects.filter(student_id=query_student)})
+    return render(request, "template_approval_and_paid_total.html",
+                  {'voucher_record': student_list_rec, 'debit_total': debit_total,
+                   'outstanding_total': outstanding_total, 'country_list': country, 'scholarship_list': scholarship,
+                   'selected_country': CountryDetails.objects.filter(id=query_country),
+                   'selected_scholarship': ScholarshipDetails.objects.filter(id=query_scholarship),
+                   'student_list': students,
+                   'selected_student': ApplicationDetails.objects.filter(student_id=query_student)})
+
 
 def get_donor_receipt_voucher(request):
-
     donor_list = DonorDetails.objects.all()
 
-    return render(request, "template_donor_receipt_voucher.html",{'donor_list': donor_list})
+    return render(request, "template_donor_receipt_voucher.html", {'donor_list': donor_list})
+
 
 from django.forms.models import model_to_dict
+
+
 def get_donors_student_list(request):
+    student_list = StudentDonorMapping.objects.filter(donor=request.POST['donor'],
+                                                      student__student_applicant_rel__is_sponsored=True)
 
-    student_list = StudentDonorMapping.objects.filter(donor=request.POST['donor'],student__student_applicant_rel__is_sponsored=True)
+    return HttpResponse(json.dumps([obj.to_dict() for obj in student_list]), content_type='application/json')
 
-    return HttpResponse(json.dumps([ obj.to_dict() for obj in student_list]), content_type='application/json')
 
 def get_donor_report(request):
     donor_list = DonorDetails.objects.all()
-    return render(request, "template_donor_report.html",{'donor_list': donor_list})
+    return render(request, "template_donor_report.html", {'donor_list': donor_list})
+
 
 def get_voucher_data_by_donor(request):
     debit_total = 0
@@ -245,7 +265,6 @@ def get_voucher_data_by_donor(request):
         debit_total += float(credit_total) if credit_total else 0
         outstanding_total += float(outstanding_amount) if outstanding_amount else 0
 
-
     raw_dict = {}
     raw_dict['voucher_records'] = student_list_rec
     raw_dict['total_credit_amount'] = debit_total
@@ -255,36 +274,42 @@ def get_voucher_data_by_donor(request):
 
     return HttpResponse(json.dumps(raw_dict), content_type='application/json')
 
-def get_payment_voucher_data_by_student(request):
 
+def get_payment_voucher_data_by_student(request):
     application_rec = ApplicationDetails.objects.get(student_id=request.POST['student'])
     voucher_record = StudentPaymentReceiptVoucher.objects.filter(application_id=application_rec.id)
-    total_amount = StudentPaymentReceiptVoucher.objects.filter(voucher_type="credit",application=application_rec).values(
+    total_amount = StudentPaymentReceiptVoucher.objects.filter(voucher_type="credit",
+                                                               application=application_rec).values(
         "voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
 
-    total_debit_amount = StudentPaymentReceiptVoucher.objects.filter(voucher_type="debit",application=application_rec).values(
+    total_debit_amount = StudentPaymentReceiptVoucher.objects.filter(voucher_type="debit",
+                                                                     application=application_rec).values(
         "voucher_amount").aggregate(total_debit=Sum('voucher_amount'))
 
     raw_dict = {}
     raw_dict['total_amount'] = float(total_amount['total_credit']) if total_amount['total_credit'] else 0
-    raw_dict['total_debit_amount'] = float(total_debit_amount['total_debit']) if total_debit_amount['total_debit'] else 0
+    raw_dict['total_debit_amount'] = float(total_debit_amount['total_debit']) if total_debit_amount[
+        'total_debit'] else 0
     raw_dict['application_rec'] = application_rec.to_student_payment_application_dict()
-    raw_dict['voucher_rec'] = [ obj.to_dict() for obj in voucher_record]
+    raw_dict['voucher_rec'] = [obj.to_dict() for obj in voucher_record]
 
     return HttpResponse(json.dumps(raw_dict), content_type='application/json')
 
 
 def get_receipt_voucher_data_by_student(request):
-
     application_rec = ApplicationDetails.objects.get(student_id=request.POST['student'])
     voucher_record = StudentPaymentReceiptVoucher.objects.filter(application_id=application_rec.id)
 
     raw_dict = {}
-    balance_total = StudentPaymentReceiptVoucher.objects.filter(voucher_type="credit", application=application_rec).values("voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
+    balance_total = StudentPaymentReceiptVoucher.objects.filter(voucher_type="credit",
+                                                                application=application_rec).values(
+        "voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
     raw_dict['application_rec'] = application_rec.to_application_dict()
-    raw_dict['outstanding_amount'] = (float(application_rec.scholarship_fee) - float(balance_total['total_credit'])) if balance_total['total_credit'] else 0
-    raw_dict['voucher_rec'] = [ obj.to_dict() for obj in voucher_record]
+    raw_dict['outstanding_amount'] = (float(application_rec.scholarship_fee) - float(balance_total['total_credit'])) if \
+    balance_total['total_credit'] else 0
+    raw_dict['voucher_rec'] = [obj.to_dict() for obj in voucher_record]
     return HttpResponse(json.dumps(raw_dict), content_type='application/json')
+
 
 def save_payment_voucher_data_by_student(request):
     if request.method == 'POST':
@@ -296,7 +321,32 @@ def save_payment_voucher_data_by_student(request):
         voucher.voucher_number = voucher_number
         voucher.voucher_total = voucher.application.calculate_student_payment_balance_amount()
         voucher.save()
-        return redirect("/accounting/get_student_payment_voucher/")
+
+        if str(request.POST['btn_type']) == 'save_and_send':
+            params = {
+                'voucher_type': 'Student Payment Voucher Report',
+                'voucher': voucher,
+                'request': request
+            }
+            # return render_to_pdf('report_voucher.html', params)
+            if voucher.application.email:
+                subject, from_email, to = 'Student Payment Voucher', settings.EMAIL_HOST_USER, voucher.application.email
+                text_content = 'Please Find Attachment'
+
+                file = render_to_file('report_voucher.html', params)
+                thread = Thread(target=send_email, args=(file, subject, text_content, from_email, to))
+                thread.start()
+
+        if str(request.POST['btn_type']) == 'save_and_print':
+            params = {
+                'voucher_type': 'Student Payment Voucher Report',
+                'voucher': voucher,
+                'request': request
+            }
+            return render_to_pdf('report_voucher.html', params)
+
+    return redirect("/accounting/get_student_payment_voucher/")
+
 
 def update_student_payment_voucher(request):
     if request.method == "POST":
@@ -309,6 +359,7 @@ def update_student_payment_voucher(request):
             return HttpResponseBadRequest(json.dumps({'error': str(e)}), content_type='application/json')
         return HttpResponse(json.dumps({'success': "Record updated successfully."}), content_type='application/json')
 
+
 def delete_student_payment_voucher(request):
     if request.method == "POST":
         val_dict = request.POST
@@ -318,6 +369,7 @@ def delete_student_payment_voucher(request):
             return HttpResponseBadRequest(json.dumps({'error': str(e)}), content_type='application/json')
 
         return HttpResponse(json.dumps({'success': "Record deleted successfully."}), content_type='application/json')
+
 
 def save_student_receipt_voucher(request):
     if request.method == 'POST':
@@ -330,37 +382,91 @@ def save_student_receipt_voucher(request):
         receipt_voucher.voucher_number = voucher_number
         receipt_voucher.voucher_total = receipt_voucher.application.calculate_balance_amount()
         receipt_voucher.save()
+
+        if str(request.POST['btn_type']) == 'save_and_send':
+            params = {
+                'voucher_type': 'Student Receipt Voucher Report',
+                'voucher': receipt_voucher,
+                'request': request
+            }
+            # return render_to_pdf('report_voucher.html', params)
+
+            if receipt_voucher.application.email:
+                subject, from_email, to = 'Student Receipt Voucher', settings.EMAIL_HOST_USER, receipt_voucher.application.email
+                text_content = 'Please Find Attachment'
+
+                file = render_to_file('report_voucher.html', params)
+                thread = Thread(target=send_email, args=(file, subject, text_content, from_email, to))
+                thread.start()
+
+        if str(request.POST['btn_type']) == 'save_and_print':
+            params = {
+                'voucher_type': 'Student Receipt Voucher Report',
+                'voucher': receipt_voucher,
+                'request': request
+            }
+            return render_to_pdf('report_voucher.html', params)
+
         return redirect("/accounting/get_student_receipt_voucher/")
 
 
-
 def get_donor_recipt_for_org_payment(request):
-
     application_rec = ApplicationDetails.objects.get(student_id=request.POST['student'])
     voucher_record = DonorReceiptVoucher.objects.filter(application_id=application_rec.id)
-    total_amount = DonorReceiptVoucher.objects.filter(voucher_type="debit",application=application_rec).values(
+    total_amount = DonorReceiptVoucher.objects.filter(voucher_type="debit", application=application_rec).values(
         "voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
 
     raw_dict = {}
-    balance_total = DonorReceiptVoucher.objects.filter(voucher_type="debit", application=application_rec).values("voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
+    balance_total = DonorReceiptVoucher.objects.filter(voucher_type="debit", application=application_rec).values(
+        "voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
     raw_dict['application_rec'] = application_rec.to_application_dict() if application_rec else ''
-    raw_dict['outstanding_amount'] = ( float(application_rec.scholarship_fee) - float(balance_total['total_credit']) ) if application_rec.scholarship_fee and balance_total['total_credit'] else 0
+    raw_dict['outstanding_amount'] = (float(application_rec.scholarship_fee) - float(
+        balance_total['total_credit'])) if application_rec.scholarship_fee and balance_total['total_credit'] else 0
     raw_dict['total_amount'] = float(total_amount['total_credit']) if total_amount['total_credit'] else 0
-    raw_dict['voucher_rec'] = [ obj.to_dict() for obj in voucher_record] if voucher_record else ''
+    raw_dict['voucher_rec'] = [obj.to_dict() for obj in voucher_record] if voucher_record else ''
 
     return HttpResponse(json.dumps(raw_dict), content_type='application/json')
+
 
 def save_donor_recipt_for_org_payment(request):
     if request.method == 'POST':
         val_dict = request.POST
         donor_voucher = DonorReceiptVoucher.get_instance(val_dict, None)
         donor_voucher.voucher_type = "debit"
+        donor_voucher.donor_student = StudentDonorMapping.objects.get(student_id=val_dict['student'], donor_id=val_dict['donor'])
         donor_voucher.save()
         voucher_number = create_voucher_number("DRV", donor_voucher)
         donor_voucher.voucher_number = voucher_number
         donor_voucher.voucher_total = donor_voucher.application.calculate_student_payment_balance_amount()
         donor_voucher.save()
+
+
+        if str(request.POST['btn_type']) == 'save_and_send':
+            params = {
+                'voucher_type': 'Donor Receipt Voucher Report',
+                'voucher': donor_voucher,
+                'request': request
+            }
+            # return render_to_pdf('report_voucher.html', params)
+
+            if donor_voucher.donor_student.donor.email:
+                subject, from_email, to = 'Donor Receipt Voucher', settings.EMAIL_HOST_USER, donor_voucher.donor_student.donor.email
+                text_content = 'Please Find Attachment'
+
+                file = render_to_file('report_voucher.html', params)
+                thread = Thread(target=send_email, args=(file, subject, text_content, from_email, to))
+                thread.start()
+
+        if str(request.POST['btn_type']) == 'save_and_print':
+            params = {
+                'voucher_type': 'Donor Receipt Voucher Report',
+                'voucher': donor_voucher,
+                'request': request
+            }
+            return render_to_pdf('report_voucher.html', params)
+
         return redirect("/accounting/get_donor_receipt_voucher/")
+
 
 def export_student_recipt_voucher(request):
     try:
@@ -368,19 +474,21 @@ def export_student_recipt_voucher(request):
         student_id = val_dict['student_id']
         application_rec = ApplicationDetails.objects.filter(student_id=student_id, is_sponsored=True)
         voucher_record = StudentPaymentReceiptVoucher.objects.filter(application__in=application_rec)
-        balance_total = StudentPaymentReceiptVoucher.objects.filter(voucher_type="credit",application__in=application_rec).values("voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
+        balance_total = StudentPaymentReceiptVoucher.objects.filter(voucher_type="credit",
+                                                                    application__in=application_rec).values(
+            "voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
         rows = []
-        count =0
+        count = 0
         for app_rec in application_rec:
-           for rec in app_rec.rel_student_payment_receipt_voucher.all():
+            for rec in app_rec.rel_student_payment_receipt_voucher.all():
                 rec_list = []
-                if app_rec.rel_student_payment_receipt_voucher.all()[count].voucher_type=="credit":
+                if app_rec.rel_student_payment_receipt_voucher.all()[count].voucher_type == "credit":
                     if app_rec.rel_student_payment_receipt_voucher.all():
                         rec_list.append(app_rec.rel_student_payment_receipt_voucher.all()[count].voucher_number)
                     else:
                         rec_list.append("")
 
-                    if rec.voucher_date :
+                    if rec.voucher_date:
                         rec_list.append(rec.voucher_date)
                     else:
                         rec_list.append("")
@@ -421,80 +529,82 @@ def export_student_recipt_voucher(request):
                     count = count + 1
                     rows.append(rec_list)
                 else:
-                     count = count + 1
-                     pass
-        column_names = ["No","Voucher Date", "Student Name","Semester", "Country", "University", "Scholarship", "Program", "Donor", "Amount"]
+                    count = count + 1
+                    pass
+        column_names = ["No", "Voucher Date", "Student Name", "Semester", "Country", "University", "Scholarship",
+                        "Program", "Donor", "Amount"]
         return export_wraped_column_xls('StudentReceiptVoucher', column_names, rows)
     except:
         return redirect("/accounting/get_student_receipt_voucher/")
 
 
-
 def export_student_payment_voucher(request):
-  try:
-    val_dict = request.POST
-    student_id = val_dict['student_id']
-    application_rec = ApplicationDetails.objects.filter(student_id=student_id, is_sponsored=True)
-    voucher_record = StudentPaymentReceiptVoucher.objects.filter(application__in=application_rec)
-    balance_total = StudentPaymentReceiptVoucher.objects.filter(voucher_type="debit",application__in=application_rec).values("voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
+    try:
+        val_dict = request.POST
+        student_id = val_dict['student_id']
+        application_rec = ApplicationDetails.objects.filter(student_id=student_id, is_sponsored=True)
+        voucher_record = StudentPaymentReceiptVoucher.objects.filter(application__in=application_rec)
+        balance_total = StudentPaymentReceiptVoucher.objects.filter(voucher_type="debit",
+                                                                    application__in=application_rec).values(
+            "voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
 
-    rows = []
-    count = 0
-    for app_rec in application_rec:
-        for rec in app_rec.rel_student_payment_receipt_voucher.all():
-            rec_list = []
-            if app_rec.rel_student_payment_receipt_voucher.all()[count].voucher_type == "debit":
-                if app_rec.rel_student_payment_receipt_voucher.all():
-                    rec_list.append(app_rec.rel_student_payment_receipt_voucher.all()[count].voucher_number)
+        rows = []
+        count = 0
+        for app_rec in application_rec:
+            for rec in app_rec.rel_student_payment_receipt_voucher.all():
+                rec_list = []
+                if app_rec.rel_student_payment_receipt_voucher.all()[count].voucher_type == "debit":
+                    if app_rec.rel_student_payment_receipt_voucher.all():
+                        rec_list.append(app_rec.rel_student_payment_receipt_voucher.all()[count].voucher_number)
+                    else:
+                        rec_list.append("")
+                    if rec.voucher_date:
+                        rec_list.append(rec.voucher_date)
+                    else:
+                        rec_list.append("")
+
+                    rec_list.append(app_rec.get_full_name())
+                    if app_rec.applicant_progress_rel.all():
+                        rec_list.append(app_rec.applicant_progress_rel.all()[0].semester.semester_name)
+                    else:
+                        rec_list.append("")
+
+                    rec_list.append(app_rec.address.country.country_name)
+
+                    if app_rec.applicant_scholarship_rel.all():
+                        rec_list.append(app_rec.applicant_scholarship_rel.all()[0].university.university_name)
+                    else:
+                        rec_list.append("")
+
+                    if app_rec.applicant_scholarship_rel.all():
+                        rec_list.append(app_rec.applicant_scholarship_rel.all()[0].scholarship.scholarship_name)
+                    else:
+                        rec_list.append("")
+
+                    if app_rec.applicant_scholarship_rel.all():
+                        rec_list.append(app_rec.applicant_scholarship_rel.all()[0].course_applied.program_name)
+
+                    else:
+                        rec_list.append("")
+
+                    if app_rec.student.student_donor_rel.all():
+                        rec_list.append(app_rec.student.student_donor_rel.all()[0].donor.user.get_full_name())
+                    else:
+                        rec_list.append("")
+
+                    if app_rec.rel_student_payment_receipt_voucher.all():
+                        rec_list.append(app_rec.rel_student_payment_receipt_voucher.all()[count].voucher_amount)
+
+                    count = count + 1
+                    rows.append(rec_list)
                 else:
-                    rec_list.append("")
-                if rec.voucher_date :
-                    rec_list.append(rec.voucher_date)
-                else:
-                    rec_list.append("")
-
-                rec_list.append(app_rec.get_full_name())
-                if app_rec.applicant_progress_rel.all():
-                    rec_list.append(app_rec.applicant_progress_rel.all()[0].semester.semester_name)
-                else:
-                    rec_list.append("")
-
-
-                rec_list.append(app_rec.address.country.country_name)
-
-                if app_rec.applicant_scholarship_rel.all():
-                    rec_list.append(app_rec.applicant_scholarship_rel.all()[0].university.university_name)
-                else:
-                    rec_list.append("")
-
-                if app_rec.applicant_scholarship_rel.all():
-                    rec_list.append(app_rec.applicant_scholarship_rel.all()[0].scholarship.scholarship_name)
-                else:
-                    rec_list.append("")
-
-                if app_rec.applicant_scholarship_rel.all():
-                    rec_list.append(app_rec.applicant_scholarship_rel.all()[0].course_applied.program_name)
-
-                else:
-                    rec_list.append("")
-
-                if app_rec.student.student_donor_rel.all():
-                    rec_list.append(app_rec.student.student_donor_rel.all()[0].donor.user.get_full_name())
-                else:
-                    rec_list.append("")
-
-                if app_rec.rel_student_payment_receipt_voucher.all():
-                    rec_list.append(app_rec.rel_student_payment_receipt_voucher.all()[count].voucher_amount)
-
-                count = count + 1
-                rows.append(rec_list)
-            else:
-                count = count + 1
-                pass
-    column_names = ["No","Voucher Date" ,"Student Name","Semester", "Country", "University", "Scholarship", "Program", "Donor", "Amount"]
-    return export_wraped_column_xls('StudentPaymentVoucher', column_names, rows)
-  except:
-      return redirect("/accounting/get_student_payment_voucher/")
+                    count = count + 1
+                    pass
+        column_names = ["No", "Voucher Date", "Student Name", "Semester", "Country", "University", "Scholarship",
+                        "Program", "Donor", "Amount"]
+        return export_wraped_column_xls('StudentPaymentVoucher', column_names, rows)
+    except:
+        return redirect("/accounting/get_student_payment_voucher/")
 
 
 def export_donor_receipt_report(request):
@@ -533,7 +643,7 @@ def export_donor_receipt_report(request):
                     else:
                         rec_list.append("")
 
-                    if application_obj!="":
+                    if application_obj != "":
                         rec_list.append(application_obj.scholarship_fee)
 
                     rec_list.append(float(credit_total))
@@ -542,8 +652,7 @@ def export_donor_receipt_report(request):
 
                     rows.append(rec_list)
 
-
-        column_names = ["No", "Student Name","Semester", "Scholorship Fee", "Credit", "Outstanding",]
+        column_names = ["No", "Student Name", "Semester", "Scholorship Fee", "Credit", "Outstanding", ]
         return export_wraped_column_xls('DonorReceiptReport', column_names, rows)
     except:
         return redirect("/accounting/get_donor_report/")
@@ -756,14 +865,15 @@ def export_student_receipt_payment_report(request):
 
                     rows.append(rec_list)
 
-
             debit_total += float(credit_total)
             outstanding_total += float(outstanding_amount)
 
-        column_names = ["Student", "Program","Semester","Approval Amount","Debit","Outstanding"]
-        return export_student_payment_wraped_column_xls('StudentReceipt&Payment', column_names, rows,rec_len,debit_total,outstanding_total)
+        column_names = ["Student", "Program", "Semester", "Approval Amount", "Debit", "Outstanding"]
+        return export_student_payment_wraped_column_xls('StudentReceipt&Payment', column_names, rows, rec_len,
+                                                        debit_total, outstanding_total)
     except:
         return redirect("/accounting/get_approval_and_paid_total/")
+
 
 def student_receipt_payment_report_export(request):
     try:
@@ -830,23 +940,24 @@ def student_receipt_payment_report_export(request):
 
             rec_list.append(balance_value)
             rows.append(rec_list)
-        balance_total = StudentPaymentReceiptVoucher.objects.values("application__scholarship_fee").distinct().aggregate(total_price=Sum('application__scholarship_fee'))
+        balance_total = StudentPaymentReceiptVoucher.objects.values(
+            "application__scholarship_fee").distinct().aggregate(total_price=Sum('application__scholarship_fee'))
 
         if balance_total and stud_pay_voucher_list:
-            debit_total  = debit_total
+            debit_total = debit_total
             credit_total = credit_total
-            balance_total = (float(debit_total) -  float(credit_total))
+            balance_total = (float(debit_total) - float(credit_total))
             temp_list.append("Total")
             temp_list.append(debit_total)
             temp_list.append(credit_total)
             temp_list.append(balance_total)
 
-        column_names = ["NO","Voucher Date", "Student","Semester", "Debit", "Credit", "Balance"]
+        column_names = ["NO", "Voucher Date", "Student", "Semester", "Debit", "Credit", "Balance"]
 
-
-        return export_last_row_wraped_column_xls('StudentReceipt&Payment', column_names, rows,rec_len,temp_list)
+        return export_last_row_wraped_column_xls('StudentReceipt&Payment', column_names, rows, rec_len, temp_list)
     except:
         return redirect("/accounting/get_student_report/")
+
 
 def export_payment_receipt_report(request):
     try:
@@ -855,7 +966,9 @@ def export_payment_receipt_report(request):
         rows = []
         application_rec = ApplicationDetails.objects.filter(student_id=student_id)
         voucher_record = StudentPaymentReceiptVoucher.objects.filter(application__in=application_rec)
-        total_amount = StudentPaymentReceiptVoucher.objects.filter(voucher_type="credit",application__in=application_rec).values("voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
+        total_amount = StudentPaymentReceiptVoucher.objects.filter(voucher_type="credit",
+                                                                   application__in=application_rec).values(
+            "voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
         raw_dict = {}
         for rec in voucher_record:
             rec_list = []
@@ -876,10 +989,69 @@ def export_payment_receipt_report(request):
             if rec.voucher_type != "credit":
                 rec_list.append("")
 
-
             rows.append(rec_list)
 
-        column_names = ["NO", "Description","Debit","Credit"]
+        column_names = ["NO", "Description", "Debit", "Credit"]
         return export_wraped_column_xls('StudentPayment&Receipt', column_names, rows)
     except:
         return redirect("/accounting/get_student_payment_and_receipt_report/")
+
+
+from django.http import HttpResponse
+from django.views.generic import View
+from common.utils import render_to_pdf, render_to_file  # created in step 4
+import requests
+from threading import Thread, activeCount
+from django.core.mail import EmailMultiAlternatives
+
+def send_email(file: list, subject, text_content, from_email, to):
+
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+    attachment = open('/home/redbytes/scholarship_mgmt_system/scholarship_mgmt/store/'+file[0], 'rb')
+    msg.attach(file[0], attachment.read(), 'application/pdf')
+    msg.send()
+
+
+def get_report(request):
+    payment_voucher = StudentPaymentReceiptVoucher.objects.all()
+    # today = datetime.date.today()
+    params = {
+        'payment_voucher': payment_voucher,
+        'request': request
+    }
+    #return render_to_pdf('report_voucher.html', params)
+    subject, from_email, to = 'Student Payment Voucher', 'redbytes.test@gmail.com', 'vaibhav734@gmail.com'
+    text_content = 'Please FInd Attachment'
+
+    file = render_to_file('report_voucher.html', params)
+    thread = Thread(target=send_email, args=(file, subject, text_content, from_email, to))
+    thread.start()
+    return HttpResponse("Processed")
+
+
+
+def save_and_send_payment_voucher_data_by_student(request):
+    if request.method == 'POST':
+        val_dict = request.POST
+        voucher = StudentPaymentReceiptVoucher.get_instance(val_dict, None)
+        voucher.voucher_type = "debit"
+        voucher.save()
+        voucher_number = create_voucher_number("SPV", voucher)
+        voucher.voucher_number = voucher_number
+        voucher.voucher_total = voucher.application.calculate_student_payment_balance_amount()
+        voucher.save()
+
+        params = {
+            'voucher': voucher,
+            'request': request
+        }
+        # return render_to_pdf('report_voucher.html', params)
+        subject, from_email, to = 'Student Payment Voucher', 'redbytes.test@gmail.com', 'vaibhav734@gmail.com'
+        text_content = 'Please FInd Attachment'
+
+        file = render_to_file('report_voucher.html', params)
+        thread = Thread(target=send_email, args=(file, subject, text_content, from_email, to))
+        thread.start()
+
+
+        return redirect("/accounting/get_student_payment_voucher/")

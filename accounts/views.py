@@ -85,7 +85,6 @@ def template_signin(request):
     # return render(request, "template_login.html", {'form': form})
     return render(request, "template_login.html", {'form': form, 'country_list': country_list})
 
-@registration_required
 @transaction.atomic
 def user_signup(request):
     signup_form = signUpForm(request.POST)
@@ -93,11 +92,11 @@ def user_signup(request):
         if signup_form.is_valid():
             try:
                 user = signup_form.save()
-                user.role.add(UserRole.objects.get(name=signup_form.cleaned_data['role']))
-                if str(signup_form.cleaned_data['role']) not in  ["Accountant"]:
+                user.role.add(UserRole.objects.get(name=request.POST['role']))
+                if str(request.POST['role']) not in  ["Accountant"]:
                     country = CountryDetails.objects.get(country_name=request.POST['country'])
                     address = AddressDetails.objects.create(country=country)
-                    if signup_form.cleaned_data['role'] == "Student":
+                    if request.POST['role'] == "Student":
                         student_obj = StudentDetails.objects.create(user=user,address=address)
 
                         try:
@@ -111,13 +110,13 @@ def user_signup(request):
                             send_email_to_applicant(student_obj.user.email, student_obj.user.email, subject, message,
                                                     student_obj.user.first_name)
 
-                    if signup_form.cleaned_data['role'] == "Partner":
+                    if request.POST['role'] == "Partner":
                         PartnerDetails.objects.create(user=user,address=address)
 
-                    if signup_form.cleaned_data['role'] == "Parent":
+                    if request.POST['role'] == "Parent":
                         GuardianDetails.objects.create(user=user,address=address)
 
-                    if signup_form.cleaned_data['role'] == "Donor":
+                    if request.POST['role'] == "Donor":
                         organisation = request.POST.get('organisation')
                         DonorDetails.objects.create(user=user,address=address, organisation=organisation)
 
