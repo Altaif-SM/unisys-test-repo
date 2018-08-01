@@ -188,6 +188,8 @@
 
 
                 $(document).on("change", "#id_student", function (e) {
+                    $(".overlay").show();
+                    $("#loading-img").show();
                     $("#id_voucher_description").css("border","");
                     $("#id_voucher_description_error_msg").hide();
                     $("#id_voucher_amount").css("border-color","");
@@ -209,6 +211,9 @@
 
 
                 function get_voucher_data(url, student) {
+
+
+
                     $.ajax({
                         type: 'POST',
                         url: url,
@@ -217,7 +222,7 @@
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
-
+                             $(".overlay").hide();
 
                             {#alert(JSON.stringify(data));#}
 
@@ -299,6 +304,7 @@
 
                         },
                         error: function (xhr, msg, err) {
+                            $(".overlay").hide();
                             alert(xhr.responseJSON.error);
                         }
                     });

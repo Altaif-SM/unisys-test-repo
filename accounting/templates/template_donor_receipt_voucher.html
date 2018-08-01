@@ -162,6 +162,7 @@
 
 
                 $(document).on("change", "#id_student", function (e) {
+                    $(".overlay").show();
                      $("#error_msg").hide();
                      $("#data_error_msg").hide();
                     var student = $(this).val();
@@ -179,7 +180,7 @@
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
-
+                             $(".overlay").hide();
 
                             {#$('#id_donor').append(#}
                             {#        '<option value="' + data['application_rec']['donor']['user']['id'] + '">'#}
@@ -251,6 +252,7 @@
 
                         },
                         error: function (xhr, msg, err) {
+                            $(".overlay").hide();
                             alert(xhr.responseJSON.error);
                         }
                     });

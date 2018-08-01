@@ -189,6 +189,7 @@
 
 
                 $(document).on("change", "#id_student", function (e) {
+                    $(".overlay").show();
                     $("#id_voucher_description").css("border","");
                     $("#id_voucher_description_error_msg").hide();
                     $("#id_voucher_amount").css("border-color","");
@@ -218,7 +219,7 @@
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
-
+                            $(".overlay").hide();
 
                             $('#id_app_id').val(data['application_rec']['id']);
                             $('#id_voucher_number').val(data['application_rec']['voucher_number']);
@@ -298,6 +299,7 @@
 
                         },
                         error: function (xhr, msg, err) {
+                            $(".overlay").hide();
                             alert(xhr.responseJSON.error);
                         }
                     });
