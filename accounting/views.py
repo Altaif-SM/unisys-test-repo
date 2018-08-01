@@ -1000,7 +1000,6 @@ def export_payment_receipt_report(request):
 from django.http import HttpResponse
 from django.views.generic import View
 from common.utils import render_to_pdf, render_to_file  # created in step 4
-import requests
 from threading import Thread, activeCount
 from django.core.mail import EmailMultiAlternatives
 
