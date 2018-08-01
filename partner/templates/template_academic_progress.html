@@ -176,7 +176,9 @@
                                         <td><p>{{ rec.gpa_scored }}</p></td>
                                         <td><p>{{ rec.cgpa_scored }}</p></td>
                                         <td><p>{{ rec.date }}</p></td>
-                                        <td><p>{{ rec.transcript_document }}</p></td>
+                                        <td><p>
+                                            <a href="{{ rec.applicant_id.report_path}}{{ rec.transcript_document}}">{{ rec.transcript_document|default:"" }}</a>
+                                            {% comment %}{{ rec.transcript_document }}{% endcomment %}</p></td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>

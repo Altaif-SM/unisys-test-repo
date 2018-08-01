@@ -69,17 +69,17 @@
 
     <!-- BEGIN VALIDATION STATES-->
     <div class="portlet light portlet-fit portlet-form ">
-    <div class="portlet-title">
-        <div class="caption">
-            <i class="icon-settings font-red"></i>
-            <span class="caption-subject font-red sbold uppercase"> Agreements Submitted Student</span>
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase"> Agreements Submitted Student</span>
+            </div>
         </div>
-    </div>
 
-    <div class="portlet-body">
-        <div class="form-body">
+        <div class="portlet-body">
+            <div class="form-body">
 
-            {% comment %}<div class="row col-md-offset-3">
+                {% comment %}<div class="row col-md-offset-3">
                 <form method="post" action="{% url 'partner:filter_attendance_report' %}" id="form_sample_1">
                     {% csrf_token %}
                     <div class="col-md-4">
@@ -110,76 +110,84 @@
                 </form>
             </div>{% endcomment %}
 
-            <div class="form-body">
-                <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data"
-                        {% comment %}action="{% url 'partner:change_application_status' %}"{% endcomment %}>
-                    {% csrf_token %}
+                <div class="form-body">
+                    <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data"
+                            {% comment %}action="{% url 'partner:change_application_status' %}"{% endcomment %}>
+                        {% csrf_token %}
 
-                    <div class="row">
-                        <input hidden id="data_value" name="data_value">
-                        <div class="">
-                            <table class="display table table-striped table-bordered" id="">
-                                <thead>
-                                <tr>
-                                    <th hidden>No.</th>
-                                    <th>Student Name</th>
-                                    <th>Country</th>
-                                    <th>File</th>
-                                </tr>
-                                </thead>
-
-                                <tbody id="tbody">
-                                {% for rec in attended_recs %}
-                                    <tr id="item{{ forloop.counter }}" class="item">
-                                        <td hidden>{{ forloop.counter }}</td>
-                                        <td><p>{{ rec.name|title }}</p></td>
-                                        <td><p>{{ rec.country|title }}</p></td>
-                                        <td><p>{{ rec.four_parties }}<br>
-                                            {{ rec.education_loan }}</p></td>
+                        <div class="row">
+                            <input hidden id="data_value" name="data_value">
+                            <div class="">
+                                <table class="display table table-striped table-bordered" id="">
+                                    <thead>
+                                    <tr>
+                                        <th hidden>No.</th>
+                                        <th>Student Name</th>
+                                        <th>Country</th>
+                                        <th>File</th>
                                     </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                            <hr>
-                            <div class="portlet-title">
-                                <div class="caption">
-                                    <i class="icon-settings font-red"></i>
-                                    <span class="caption-subject font-red sbold uppercase"> Not Submitted Student</span>
+                                    </thead>
+
+                                    <tbody id="tbody">
+                                    {% for rec in attended_recs %}
+                                        <tr id="item{{ forloop.counter }}" class="item">
+                                            <td hidden>{{ forloop.counter }}</td>
+                                            <td><p>{{ rec.name|title }}</p></td>
+                                            <td><p>{{ rec.country|title }}</p></td>
+                                            <td><p>
+                                                <p>
+                                                    <a href="
+                                                            {{ rec.application.report_path }}{{ rec.four_parties }}">{{ rec.four_parties|default:"" }}</a>
+                                                    <br>
+                                                    <a href="
+                                                            {{ rec.application.report_path }}{{ rec.education_loan }}">{{ rec.education_loan|default:"" }}</a>
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                <hr>
+                                <div class="portlet-title">
+                                    <div class="caption">
+                                        <i class="icon-settings font-red"></i>
+                                        <span class="caption-subject font-red sbold uppercase"> Not Submitted Student</span>
+                                    </div>
                                 </div>
-                            </div>
-                            {#                        <hr>#}
-                            <br>
+                                {#                        <hr>#}
+                                <br>
 
-                            <table class="display table table-striped table-bordered" id="">
-                                <thead>
-                                <tr>
-                                    <th hidden>No.</th>
-                                    <th>Student Name</th>
-                                    <th>Country</th>
-                                    <th>File</th>
-                                </tr>
-                                </thead>
-
-                                <tbody id="tbody">
-                                {% for rec in not_attended_recs %}
-                                    <tr id="item{{ forloop.counter }}" class="item">
-                                        <td hidden>{{ forloop.counter }}</td>
-                                        <td><p>{{ rec.name|title }}</p></td>
-                                        <td><p>{{ rec.country|title }}</p></td>
-                                        <td><p>{{ rec.four_parties }}<br>
-                                            {{ rec.education_loan }}</p></td>
+                                <table class="display table table-striped table-bordered" id="">
+                                    <thead>
+                                    <tr>
+                                        <th hidden>No.</th>
+                                        <th>Student Name</th>
+                                        <th>Country</th>
+                                        <th>File</th>
                                     </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                        {% comment %}<div class="">
+                                    </thead>
+
+                                    <tbody id="tbody">
+                                    {% for rec in not_attended_recs %}
+                                        <tr id="item{{ forloop.counter }}" class="item">
+                                            <td hidden>{{ forloop.counter }}</td>
+                                            <td><p>{{ rec.name|title }}</p></td>
+                                            <td><p>{{ rec.country|title }}</p></td>
+                                            <td><p>{{ rec.four_parties }}<br>
+                                                {{ rec.education_loan }}</p></td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% comment %}<div class="">
                             <div class="col-md-offset-8">
                                 <button type="submit" class="btn green" id="save" style="">Save</button>
                             </div>
                         </div>{% endcomment %}
-                    </div>
-                </form>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

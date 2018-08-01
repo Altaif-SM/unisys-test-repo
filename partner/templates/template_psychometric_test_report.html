@@ -166,7 +166,9 @@
                                         <td><p>{{ rec.name|title }}</p></td>
                                         <td><p>{{ rec.country|title }}</p></td>
                                         <td><p>{{ rec.result }}</p></td>
-                                        <td><p>{{ rec.test_result_document }}</p></td>
+                                        <td><p>
+                                            <a href="{{ rec.application.report_path}}{{ rec.test_result_document }}">{{ rec.test_result_document|default:"" }}</a>
+                                            {% comment %}{{ rec.test_result_document }}{% endcomment %}</p></td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -181,5 +183,6 @@
                 </form>
             </div>
         </div>
+    </div>
     </div>
 {% endblock %}

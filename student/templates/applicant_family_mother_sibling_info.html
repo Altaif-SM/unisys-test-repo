@@ -55,11 +55,6 @@
                     {#                    return false;#}
                 })
 
-                $(document).on("click", ".remove_doc", function (e) {
-                    {#alert($(this).prev().attr('id'))#}
-                    var id = $(this).prev().attr('id');
-                    $('#' + id).val('');
-                });
 
                 {% if sibling_obj_rec %}
                     var count = $('.item').length;
@@ -81,11 +76,16 @@
                     ;
                 });
 
+                $(document).on("click", ".remove_doc", function (e) {
+                    var parent_id = $(this).closest('div').attr('id');
+                    $('#' + parent_id + ' .emp').val('');
+                });
+
                 $(document).on("click", ".file", function (e) {
                     $(this).parent('.form-control').next('.file_type').trigger('click');
                 });
 
-                $('.file_type11').change(function (evt) {
+                $('.file_type').change(function (evt) {
 
                     var files = !!this.files ? this.files : [];
                     if (!files.length || !window.FileReader) return;
@@ -208,15 +208,15 @@
 
                             <div class="">
                                 <label class="col-md-2 control-label">Pay Slip:</label>
-                                <div class="col-md-2">
+                                <div class="col-md-2" id="mother_parent">
                                     {% if application_obj.mother_pay_slip %}
                                         <label class="form-control"
                                                style="border-color: #b1ad9f; text-align: left;"><input
                                                 class="file"
                                                 type='button' value='Choose File:' style="width: 50%"><a
                                                 href="{{ application_obj.report_path }}{{ application_obj.mother_pay_slip }}"><input type="text"
-                                                                                                            readonly
-                                                                                                            class="file_value"
+                                                                                                            readonly name="mother_pay_slip_text"
+                                                                                                            class="file_value emp"
                                                                                                             style="cursor: pointer;border: none; width: 50%"
                                                                                                             value="{{ application_obj.mother_pay_slip }}"></a></label>
 
@@ -226,16 +226,16 @@
                                                style="border-color: #b1ad9f; text-align: left;"><input
                                                 class="file"
                                                 type='button' value='Choose File:'><a><input type="text"
-                                                                                             readonly
-                                                                                             class="file_value"
+                                                                                             readonly name="mother_pay_slip_text"
+                                                                                             class="file_value emp"
                                                                                              style="cursor: pointer;border: none; width: 100px; color: #292328"></a></label>
                                     {% endif %}
                                     <input style="display: none" type="file" title="Select mother pay slip"
                                            id="mother_pay_slip"
                                            name="mother_pay_slip"
-                                           class="file_type"> {% comment %}<span
-                                        style="float: right; margin-top: -25px; color: darkred"
-                                        class="remove_doc fa fa-close"></span>{% endcomment %}
+                                           class="file_type">
+                                <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                                          class="remove_doc fa fa-close"></span>
                                 </div>
                             </div>
                         </div>

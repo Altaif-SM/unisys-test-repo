@@ -70,5 +70,4 @@ urlpatterns = [
 
                   path('applicant_progress_history/', views.applicant_progress_history,
                        name='applicant_progress_history'),
-                  # path('generate_PDF/', views.generate_PDF, name='generate_PDF'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -77,17 +77,17 @@
 
     <!-- BEGIN VALIDATION STATES-->
     <div class="portlet light portlet-fit portlet-form ">
-    <div class="portlet-title">
-        <div class="caption">
-            <i class="icon-settings font-red"></i>
-            <span class="caption-subject font-red sbold uppercase">Semester Result </span>
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">Semester Result </span>
+            </div>
         </div>
-    </div>
 
-    <div class="portlet-body">
-        <div class="form-body">
+        <div class="portlet-body">
             <div class="form-body">
-                {% comment %}<div class="row col-md-offset-2">
+                <div class="form-body">
+                    {% comment %}<div class="row col-md-offset-2">
                     <form method="post" action="{% url 'partner:filter_academic_progress' %}" id="form_sample_1">
                         {% csrf_token %}
                         <div class="col-md-4">
@@ -128,47 +128,52 @@
                 </div>{% endcomment %}
 
 
-                <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data"
-                        {% comment %}action="{% url 'partner:change_application_status' %}"{% endcomment %}>
-                    {% csrf_token %}
+                    <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data"
+                            {% comment %}action="{% url 'partner:change_application_status' %}"{% endcomment %}>
+                        {% csrf_token %}
 
-                    <div class="row">
-                        <input hidden id="data_value" name="data_value">
-                        <div class="">
-                            <table class="table table-striped table-hover table-bordered" id="sample_1">
-                                <thead>
-                                <tr>
-                                    <th style="display: none"></th>
-                                    <th>Student Name</th>
-                                    <th>Country</th>
-                                    <th>CGPA</th>
-                                    <th>Transcript</th>
-                                </tr>
-                                </thead>
-
-                                <tbody id="tbody">
-                                {% for rec in application_recs %}
-                                    <tr id="item{{ forloop.counter }}" class="item">
-                                        <td style="display: none"><input id="application_id" class="application_id"
-                                                                         value="{{ rec.id }}"></td>
-                                        <td><a href="/partner/template_academic_progress_details/{{ rec.applicant_id.id }}">{{ rec.applicant_id.first_name|title }} {{ rec.applicant_id.last_name|title }}</a></td>
-
-                                        <td><p>{{ rec.applicant_id.address.country.country_name|title }}</p></td>
-
-                                        <td><p>{{ rec.cgpa_scored }}</p></td>
-                                        <td><p>{{ rec.transcript_document }}</p></td>
+                        <div class="row">
+                            <input hidden id="data_value" name="data_value">
+                            <div class="">
+                                <table class="table table-striped table-hover table-bordered" id="sample_1">
+                                    <thead>
+                                    <tr>
+                                        <th style="display: none"></th>
+                                        <th>Student Name</th>
+                                        <th>Country</th>
+                                        <th>CGPA</th>
+                                        <th>Transcript</th>
                                     </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                        {% comment %}<div class="">
+                                    </thead>
+
+                                    <tbody id="tbody">
+                                    {% for rec in application_recs %}
+                                        <tr id="item{{ forloop.counter }}" class="item">
+                                            <td style="display: none"><input id="application_id" class="application_id"
+                                                                             value="{{ rec.id }}"></td>
+                                            <td>
+                                                <a href="/partner/template_academic_progress_details/{{ rec.applicant_id.id }}">{{ rec.applicant_id.first_name|title }} {{ rec.applicant_id.last_name|title }}</a>
+                                            </td>
+
+                                            <td><p>{{ rec.applicant_id.address.country.country_name|title }}</p></td>
+
+                                            <td><p>{{ rec.cgpa_scored }}</p></td>
+                                            <td><p>
+                                                <a href="{{ rec.applicant_id.report_path}}{{ rec.transcript_document}}">{{ rec.transcript_document|default:"" }}</a>
+                                                {% comment %}{{ rec.transcript_document }}{% endcomment %}</p></td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% comment %}<div class="">
                             <div class="col-md-offset-8">
                                 <button type="submit" class="btn green" id="save" style="">Save</button>
                             </div>
                         </div>{% endcomment %}
-                    </div>
-                </form>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

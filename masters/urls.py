@@ -105,6 +105,8 @@ urlpatterns = [
 
 
     path('first_interview_call/', views.first_interview_call, name='first_interview_call'),
+    path('development_program_pdf/', views.development_program_pdf, name='development_program_pdf'),
+    path('generate_PDF/', views.generate_PDF, name='generate_PDF'),
 
     path('get_table_data/', views.get_table_data, name='get_table_data'),
 ]

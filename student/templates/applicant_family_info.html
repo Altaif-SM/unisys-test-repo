@@ -31,31 +31,11 @@
     <script>
         window.onload = function () {
 
-            {% comment %}File.prototype.convertToBase64 = function (callback) {
-                var reader = new FileReader();
-                reader.onloadend = function (e) {
-                    callback(e.target.result, e.target.error);
-                };
-                reader.readAsDataURL(this);
-            };{% endcomment %}
-
-
             $(document).ready(function () {
-                {% comment %}$(document).on("change", ".doc", function (e) {
-                    var files = !!this.files ? this.files : [];
-                    if (!files.length || !window.FileReader) return;
-                    var fileExtension = ['pdf'];
-                    if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
-                        alert("Only formats are allowed : " + fileExtension.join(', '));
-                        $(this).val('');
-                        return false;
-                    }
-                });{% endcomment %}
 
                 $(document).on("click", ".remove_doc", function (e) {
-                    {#alert($(this).prev().attr('id'))#}
-                    var id = $(this).prev().attr('id');
-                    $('#' + id).val('');
+                    var parent_id = $(this).closest('div').attr('id');
+                    $('#' + parent_id + ' .emp').val('');
                 });
 
                 $(document).on("click", ".file", function (e) {
@@ -170,40 +150,32 @@
 
                             <div class="">
                                 <label class="col-md-2 control-label">Pay Slip:</label>
-                                {#                                <div class="col-md-2">#}
-                                {% comment %}{% if application_obj.wife_pay_slip %}
-                                        <a href="{{ path }}{{ application_obj.wife_pay_slip }}">{{ application_obj.wife_pay_slip }}</a>
-                                        {% else %}
-                                        <input type="file" title="Select wife pay slip" id="wife_pay_slip" value="{{ application_obj.wife_pay_slip|default:"" }}" name="wife_pay_slip" class="form-control doc"><span style="float: right; margin-top: -25px; color: darkred"class="remove_doc fa fa-close"></span>
-                                    {% endif %}{% endcomment %}
-
-                                <div class="col-md-2">
+                                <div class="col-md-2" id="parent1">
                                     {% if application_obj.wife_pay_slip %}
                                         <label class="form-control"
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
                                                 class="file"
                                                 type='button' value='Choose File:'><a
                                                 href="{{ path }}{{ application_obj.wife_pay_slip }}"><input type="text"
-                                                                                                            readonly
-                                                                                                            class="file_value"
+                                                                                                            readonly name="wife_pay_slip_text"
+                                                                                                            class="file_value emp"
                                                                                                             style="cursor: pointer;border: none; width: 100px"
-                                                                                                            value="{{ application_obj.wife_pay_slip }}"></a></label>
-
-
+                                                                                                            value="{{ application_obj.wife_pay_slip }}"></a>
+                                        </label>
                                     {% else %}
                                         <label class="form-control"
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
                                                 class="file" style="width: 50%"
                                                 type='button' value='Choose File:'><a><input type="text"
-                                                                                             readonly
-                                                                                             class="file_value"
+                                                                                             readonly name="wife_pay_slip_text"
+                                                                                             class="file_value emp"
                                                                                              style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
                                     {% endif %}
                                     <input type="file" style="display: none" class="file_type"
                                            title="Select wife pay slip" id="wife_pay_slip" name="wife_pay_slip">
-                                    {#                                    <input style="display: none" class="file_type" type="file" title="Select father pay slip" id="father_pay_slip" name="father_pay_slip">#}
+                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                                          class="remove_doc fa fa-close"></span>
                                 </div>
-                                {#                                </div>#}
                             </div>
                         </div>
 
@@ -313,27 +285,30 @@
 
                             <div class="">
                                 <label class="col-md-2 control-label">Pay Slip:</label>
-                                <div class="col-md-2">
+                                <div class="col-md-2" id="parent_2">
                                     {% if application_obj.father_pay_slip %}
                                         <label class="form-control"
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left"><input
                                                 class="file"
                                                 type='button' value='Choose File:' style="width: 50%"><a
                                                 href="{{ path }}{{ application_obj.father_pay_slip }}"><input readonly
-                                                                                                              class="file_value"
-                                                                                                              style="border: red; width: 50%"
+                                                                                                              class="file_value emp"
+                                                                                                              style="border: red; width: 50%" name="father_pay_slip_text"
                                                                                                               value="{{ application_obj.father_pay_slip }}"></a></label>
                                     {% else %}
                                         <label class="form-control"
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
                                                 class="file" style="width: 50%"
                                                 type='button' value='Choose File:'><a><input type="text"
-                                                                                             readonly
-                                                                                             class="file_value"
+                                                                                             readonly name="father_pay_slip_text"
+                                                                                             class="file_value emp"
                                                                                              style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
                                     {% endif %}
                                     <input style="display: none" class="file_type" type="file"
                                            title="Select father pay slip" id="father_pay_slip" name="father_pay_slip">
+
+                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                                          class="remove_doc fa fa-close"></span>
                                 </div>
                             </div>
                         </div>

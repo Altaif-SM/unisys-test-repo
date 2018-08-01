@@ -233,11 +233,10 @@
                             </td>
 
                             <td>
-                                <p>{{ rec.certificate_document }}</p>
-                                {% comment %}<input class="form-control data certificate_document" name="country_name_saved" type="text"
-                                       id="country_name{{ forloop.counter }}" value="{{ rec.certificate_document }}"
-                                       required="True" pattern='[A-Za-z+-]+'
-                                       title='Please enter country name' disabled>{% endcomment %}
+                                <p>
+                                    <a href="{{ rec.applicant_id.report_path}}{{ rec.certificate_document }}">{{ rec.certificate_document|default:"" }}</a>
+                                    {% comment %}{{ rec.certificate_document }}{% endcomment %}
+                                </p>
                             </td>
 
                             <td>

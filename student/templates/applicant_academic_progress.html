@@ -381,10 +381,10 @@
                             </td>
 
                             <td>
-                                <p>{{ rec.transcript_document }}</p>
+                                <p><a href="{{ rec.applicant_id.report_path}}{{ rec.transcript_document}}">{{ rec.transcript_document|default:"" }}</a></p>
                                 <input  style="display: none"  class="form-control data transcript_document" name="transcript_document_name_saved"
                                        type="text"
-                                       id="transcript_document{{ forloop.counter }}" value="{{ rec.transcript_document}}"
+                                       id="transcript_document{{ forloop.counter }}" value="{{ rec.applicant_id.report_path}} {{ rec.transcript_document}}"
                                        required pattern='[A-Za-z+-]+'
                                        title='Please enter transcript document' disabled>
                             </td>

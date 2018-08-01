@@ -31,7 +31,7 @@
     <script>
         window.onload = function () {
             $(document).ready(function () {
-                $(document).on("change", ".doc", function (e) {
+                {% comment %}$(document).on("change", ".doc", function (e) {
                     var files = !!this.files ? this.files : [];
                     if (!files.length || !window.FileReader) return;
                     var fileExtension = ['pdf'];
@@ -40,6 +40,30 @@
                         $(this).val('');
                         return false;
                     }
+                });{% endcomment %}
+
+                $(document).on("click", ".remove_doc", function (e) {
+                    var parent_id = $(this).closest('div').attr('id');
+                    $('#' + parent_id + ' .emp').val('');
+                });
+
+                $(document).on("click", ".file", function (e) {
+                    $(this).parent('.form-control').next('.file_type').trigger('click');
+                });
+
+                $('.file_type').change(function (evt) {
+
+                    var files = !!this.files ? this.files : [];
+                    if (!files.length || !window.FileReader) return;
+                    var fileExtension = ['pdf'];
+                    if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                        alert("Only formats are allowed : " + fileExtension.join(', '));
+                        $(this).val('');
+                        return false;
+                    }
+
+                    var file_name = $(this).val().split('\\')[2];
+                    $(this).prev().children().children('.file_value').val(file_name);
                 });
 
 
@@ -128,10 +152,37 @@
                         <div class="row">
                             <div class="">
                                 <label class="col-md-3 control-label">Test Result:</label>
-                                <div class="col-md-3">
+
+                                <div class="col-md-3" id="item1">
+                                    {% if psychometric_test_obj.test_result_document %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a
+                                                href="{{ psychometric_test_obj.applicant_id.report_path }}{{ psychometric_test_obj.test_result_document }}"><input type="text"
+                                                                                                            readonly name="test_result_document_text"
+                                                                                                            class="file_value emp"
+                                                                                                            style="cursor: pointer;border: none; width: 100px"
+                                                                                                            value="{{ psychometric_test_obj.test_result_document }}"></a>
+                                        </label>
+                                    {% else %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a><input type="text"
+                                                                                             readonly name="test_result_document_text"
+                                                                                             class="file_value emp"
+                                                                                             style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
+                                    {% endif %}
+                                    <input type="file" style="display: none" class="file_type"
+                                           title="Select Test Result" id="id_test_result_document" name="test_result_document">
+                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                                          class="remove_doc fa fa-close"></span>
+                                </div>
+                                {% comment %}<div class="col-md-3">
                                     <input type="file" title="Select Test Result" id="id_test_result_document"
                                            name="test_result_document" class="doc form-control">
-                                </div>
+                                </div>{% endcomment %}
                             </div>
                         </div>
 

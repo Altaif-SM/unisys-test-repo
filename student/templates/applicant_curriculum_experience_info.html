@@ -33,7 +33,7 @@
 
             $(document).ready(function () {
 
-                $(document).on("change", ".doc", function (e) {
+                {% comment %}$(document).on("change", ".doc", function (e) {
                     var files = !!this.files ? this.files : [];
                     if (!files.length || !window.FileReader) return;
                     var fileExtension = ['pdf'];
@@ -42,12 +42,37 @@
                         $(this).val('');
                         return false;
                     }
-                });
+                });{% endcomment %}
 
-                $(document).on("click", ".remove_doc", function (e) {
+                {% comment %}$(document).on("click", ".remove_doc", function (e) {
                     {#alert($(this).prev().attr('id'))#}
                     var id = $(this).prev().attr('id');
                     $('#' + id).val('');
+                });{% endcomment %}
+
+                $(document).on("click", ".remove_doc", function (e) {
+                    var parent_id = $(this).closest('div').attr('id');
+                    $('#' + parent_id + ' .emp').val('');
+                });
+
+                $(document).on("click", ".file", function (e) {
+                    $(this).parent('.form-control').next('.file_type').trigger('click');
+                });
+
+
+                $('.file_type').change(function (evt) {
+
+                    var files = !!this.files ? this.files : [];
+                    if (!files.length || !window.FileReader) return;
+                    var fileExtension = ['pdf'];
+                    if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                        alert("Only formats are allowed : " + fileExtension.join(', '));
+                        $(this).val('');
+                        return false;
+                    }
+
+                    var file_name = $(this).val().split('\\')[2];
+                    $(this).prev().children().children('.file_value').val(file_name);
                 });
 
 
@@ -143,12 +168,35 @@
 
                             <div class="">
                                 <label class="col-md-1 control-label">Result:</label>
-                                <div class="col-md-2">
-                                    <input type="file" title="Select Result document"
+                                <div class="col-md-2" id="item1">
+
+                                    {% if curriculum_obj.curriculum_result_document_one %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left"><input
+                                                style="width: 50%"
+                                                type='button' class="file" value='Choose File:'><a
+                                                href="
+                                                        {{ curriculum_obj.applicant_id.report_path }}{{ curriculum_obj.curriculum_result_document_one }}"><input
+                                                readonly name="curriculum_result_document_one_text"
+                                                class="file_value emp"
+                                                style="border: red; width: 50%"
+                                                value="{{ curriculum_obj.curriculum_result_document_one }}"></a></label>
+                                    {% else %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a><input type="text"
+                                                                                             readonly name="curriculum_result_document_one_text"
+                                                                                             class="file_value emp"
+                                                                                             style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
+                                    {% endif %}
+
+
+                                    <input style="display: none" type="file" title="Select Result document"
                                            id="curriculum_result_document_one"
                                            value="{{ curriculum_obj.curriculum_result_document_one }}"
-                                           name="curriculum_result_document_one" class="form-control doc">
-                                    <span style="float: right; margin-top: -25px; color: darkred"
+                                           name="curriculum_result_document_one" class="file_type">
+                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
                                           class="remove_doc fa fa-close"></span>
                                 </div>
                             </div>
@@ -162,8 +210,7 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Co-Curriculum-2" id="curriculum_name_two"
                                            name="curriculum_name_two"
-                                           value="{{ curriculum_obj.curriculum_name_two }}" class="form-control"
-                                    >
+                                           value="{{ curriculum_obj.curriculum_name_two }}" class="form-control">
                                 </div>
                             </div>
 
@@ -191,12 +238,34 @@
 
                             <div class="">
                                 <label class="col-md-1 control-label">Result:</label>
-                                <div class="col-md-2">
-                                    <input type="file" title="Select Result document"
+                                <div class="col-md-2" id="item2">
+
+                                    {% if curriculum_obj.curriculum_result_document_one %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left"><input
+                                                style="width: 50%"
+                                                type='button' class="file" value='Choose File:'><a
+                                                href="
+                                                        {{ curriculum_obj.applicant_id.report_path }}{{ curriculum_obj.curriculum_result_document_two }}"><input
+                                                readonly
+                                                class="file_value emp"
+                                                style="border: red; width: 50%" name="curriculum_result_document_two_text"
+                                                value="{{ curriculum_obj.curriculum_result_document_two }}"></a></label>
+                                    {% else %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a><input type="text"
+                                                                                             readonly name="curriculum_result_document_two_text"
+                                                                                             class="file_value emp"
+                                                                                             style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
+                                    {% endif %}
+
+                                    <input style="display: none" type="file" title="Select Result document"
                                            id="curriculum_result_document_two"
                                            value="{{ curriculum_obj.curriculum_result_document_two }}"
-                                           name="curriculum_result_document_two" class="form-control doc">
-                                    <span style="float: right; margin-top: -25px; color: darkred"
+                                           name="curriculum_result_document_two" class="file_type">
+                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
                                           class="remove_doc fa fa-close"></span>
                                 </div>
                             </div>
@@ -210,8 +279,7 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Co-Curriculum-3" id="curriculum_name_three"
                                            name="curriculum_name_three"
-                                           value="{{ curriculum_obj.curriculum_name_three }}" class="form-control"
-                                    >
+                                           value="{{ curriculum_obj.curriculum_name_three }}" class="form-control">
                                 </div>
                             </div>
 
@@ -239,12 +307,33 @@
 
                             <div class="">
                                 <label class="col-md-1 control-label">Result:</label>
-                                <div class="col-md-2">
-                                    <input type="file" title="Select Result document"
+                                <div class="col-md-2" id="item3">
+                                    {% if curriculum_obj.curriculum_result_document_three %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left"><input
+                                                style="width: 50%"
+                                                type='button' class="file" value='Choose File:'><a
+                                                href="
+                                                        {{ curriculum_obj.applicant_id.report_path }}{{ curriculum_obj.curriculum_result_document_three }}"><input
+                                                readonly
+                                                class="file_value emp"
+                                                style="border: red; width: 50%" name="curriculum_result_document_three_text"
+                                                value="{{ curriculum_obj.curriculum_result_document_three }}"></a></label>
+                                    {% else %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a><input type="text"
+                                                                                             readonly name="curriculum_result_document_three_text"
+                                                                                             class="file_value emp"
+                                                                                             style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
+                                    {% endif %}
+
+                                    <input style="display: none" type="file" title="Select Result document"
                                            id="curriculum_result_document_three"
                                            value="{{ curriculum_obj.curriculum_result_document_three }}"
-                                           name="curriculum_result_document_three" class="form-control doc">
-                                    <span style="float: right; margin-top: -25px; color: darkred"
+                                           name="curriculum_result_document_three" class="file_type">
+                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
                                           class="remove_doc fa fa-close"></span>
                                 </div>
                             </div>
@@ -276,16 +365,38 @@
 
                             <div class="">
                                 <label class="col-md-2 control-label">Result Doc:</label>
-                                <div class="col-md-3">
-                                    <input type="file" title="Select Result document" id="work_experience_document_one"
-                                           name="work_experience_document_one" class="form-control doc">
-                                    <span style="float: right; margin-top: -25px; color: darkred"
+                                <div class="col-md-3" id="item4">
+                                    {% if experience_obj.work_experience_document_one %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left"><input
+                                                style="width: 50%"
+                                                type='button' class="file" value='Choose File:'><a
+                                                href="
+                                                        {{ experience_obj.applicant_id.report_path }}{{ experience_obj.work_experience_document_one }}"><input
+                                                readonly
+                                                class="file_value emp"
+                                                style="border: red; width: 50%" name="work_experience_document_one_text"
+                                                value="{{ experience_obj.work_experience_document_one }}"></a></label>
+                                    {% else %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a><input type="text"
+                                                                                             readonly name="work_experience_document_one_text"
+                                                                                             class="file_value emp"
+                                                                                             style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
+                                    {% endif %}
+
+                                    <input style="display: none" type="file" title="Select Result document"
+                                           id="work_experience_document_one"
+                                           name="work_experience_document_one" class="file_type">
+                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
                                           class="remove_doc fa fa-close"></span>
                                 </div>
                             </div>
                         </div>
 
-                    <br>
+                        <br>
                         <br>
 
 
@@ -326,17 +437,39 @@
 
                             <div class="">
                                 <label class="col-md-2 control-label">Result Doc:</label>
-                                <div class="col-md-3">
-                                    <input type="file" title="Select Result document" id="work_experience_document_two"
+                                <div class="col-md-3" id="item5">
+                                    {% if experience_obj.work_experience_document_two %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left"><input
+                                                style="width: 50%"
+                                                type='button' class="file" value='Choose File:'><a
+                                                href="
+                                                        {{ experience_obj.applicant_id.report_path }}{{ experience_obj.work_experience_document_two }}"><input
+                                                readonly name="work_experience_document_two_text"
+                                                class="file_value emp"
+                                                style="border: red; width: 50%"
+                                                value="{{ experience_obj.work_experience_document_two }}"></a></label>
+                                    {% else %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a><input type="text"
+                                                                                             readonly name="work_experience_document_two_text"
+                                                                                             class="file_value emp"
+                                                                                             style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
+                                    {% endif %}
+
+                                    <input style="display: none" type="file" title="Select Result document"
+                                           id="work_experience_document_two"
                                            value="{{ experience_obj.work_experience_document_two }}"
-                                           name="work_experience_document_two" class="form-control doc">
-                                    <span style="float: right; margin-top: -25px; color: darkred"
+                                           name="work_experience_document_two" class="file_type">
+                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
                                           class="remove_doc fa fa-close"></span>
                                 </div>
                             </div>
                         </div>
 
-                    <br>
+                        <br>
                         <br>
                         <div class="row">
 

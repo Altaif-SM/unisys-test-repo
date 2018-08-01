@@ -825,6 +825,8 @@ def template_psychometric_test_report(request):
                 program_dict['result'] = ''
                 program_dict['test_result_document'] = ''
 
+            program_dict['application'] = rec
+
             attended_list.append(program_dict)
 
     except Exception as e:
@@ -864,11 +866,13 @@ def filter_psychometric_test_report(request):
                     program_dict = {}
                     program_dict['name'] = rec.get_full_name()
                     program_dict['country'] = rec.address.country.country_name
+                    program_dict['application'] = rec
 
                     program_dict['result'] = psychometric_rec.result
                     program_dict['test_result_document'] = psychometric_rec.test_result_document
                     filter_rec['value'] = 'examined'
                     filter_rec['name'] = 'Examined'
+
                     attended_list.append(program_dict)
 
             elif filter == 'not_examined':
@@ -876,6 +880,7 @@ def filter_psychometric_test_report(request):
                     program_dict = {}
                     program_dict['name'] = rec.get_full_name()
                     program_dict['country'] = rec.address.country.country_name
+                    program_dict['application'] = rec
 
                     program_dict['result'] = ''
                     program_dict['test_result_document'] = ''
@@ -887,6 +892,7 @@ def filter_psychometric_test_report(request):
                 program_dict = {}
                 program_dict['name'] = rec.get_full_name()
                 program_dict['country'] = rec.address.country.country_name
+                program_dict['application'] = rec
 
                 if ApplicantPsychometricTestDetails.objects.filter(applicant_id=rec.id).exists():
                     psychometric_rec = ApplicantPsychometricTestDetails.objects.get(applicant_id=rec.id)
@@ -1416,6 +1422,7 @@ def template_student_agreement(request):
                 program_dict['country'] = rec.address.country.country_name
                 program_dict['four_parties'] = agreement_rec.four_parties_agreement_document
                 program_dict['education_loan'] = agreement_rec.education_loan_agreement_document
+                program_dict['application'] = rec
 
                 attended_list.append(program_dict)
 
@@ -1424,6 +1431,7 @@ def template_student_agreement(request):
                 program_dict['country'] = rec.address.country.country_name
                 program_dict['four_parties'] = ''
                 program_dict['education_loan'] = ''
+                program_dict['application'] = rec
 
                 not_attended_list.append(program_dict)
 

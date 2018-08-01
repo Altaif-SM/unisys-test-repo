@@ -226,10 +226,10 @@
                                             <text>{{ rec.applicant_progress_rel.all.last.cgpa_scored }}</text>
                                         </td>
                                         <td>
-                                            <text>{{ rec.scholarship_fee|sub:rec.rel_student_payment_receipt_voucher.all.last.voucher_total }}</text>
+                                            <text>{% if rec.rel_student_payment_receipt_voucher.all %}{{ rec.scholarship_fee|sub:rec.rel_student_payment_receipt_voucher.all.last.voucher_total }}{% endif %}</text>
                                         </td>
                                         <td>
-                                            <text>{{ rec.applicant_progress_rel.all.last.transcript_document }}</text>
+                                            <text><a href="{{ rec.report_path }}{{ rec.applicant_progress_rel.all.last.transcript_document }}">{{ rec.applicant_progress_rel.all.last.transcript_document }}</a></text>
                                         </td>
                                     </tr>
                                 {% endfor %}

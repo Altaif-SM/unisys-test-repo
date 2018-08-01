@@ -1128,46 +1128,80 @@ def first_interview_call(request):
                   {'first_call_recs': first_call_recs, 'first_attend_recs': first_attend_recs,
                    'first_approval_recs': first_approval_recs})
 
+# def development_program_pdf(request):
+#     pdf_recs = [['Development Program: ','AAAAA bbbbbbbbbbb dddddddddddddddd eeeeeeeeeeeee qqqqqqqqqqqqq eeeeeeeeeeeeee ffffffffffffffffffffff \n eeeeeeeeeeeeeeeeeee weeeeeeeeee'],['Name:','Javed Alam', 'Class','10']]
+#     return export_pdf1('test_pdf',pdf_recs)
 
-# def save_email_template(request):
-#     first_call_recs = request.POST.get('first_call_recs')
-#     first_attend_recs = request.POST.get('first_attend_recs')
-#     first_approval_recs = request.POST.get('first_approval_recs')
-#
-#     template_one_check = request.POST.get('template_one_check')
-#
-#     if first_call_recs:
-#         if FirstInterviewCallTemplate.objects.filter().exists():
-#             # FirstInterviewCallTemplate.objects.filter(id=6).update(template=template_one, is_active=True)
-#             rec = FirstInterviewCallTemplate.objects.all()[0]
-#             rec.template = first_call_recs
-#             rec.is_active = True
-#             rec.save()
-#         else:
-#             FirstInterviewCallTemplate.objects.create(template=first_call_recs, is_active=True)
-#
-#     if first_attend_recs:
-#         if FirstInterviewAttendTemplate.objects.filter().exists():
-#             # FirstInterviewAttendTemplate.objects.filter(id=6).update(template=template_one, is_active=True)
-#             rec = FirstInterviewAttendTemplate.objects.all()[0]
-#             rec.template = first_attend_recs
-#             rec.is_active = True
-#             rec.save()
-#         else:
-#             FirstInterviewAttendTemplate.objects.create(template=first_attend_recs, is_active=True)
-#
-#     if first_approval_recs:
-#         if FirstInterviewApprovalTemplate.objects.filter().exists():
-#             # FirstInterviewApprovalTemplate.objects.filter(id=6).update(template=template_one, is_active=True)
-#             rec = FirstInterviewApprovalTemplate.objects.all()[0]
-#             rec.template = first_approval_recs
-#             rec.is_active = True
-#             rec.save()
-#         else:
-#             FirstInterviewApprovalTemplate.objects.create(template=first_approval_recs, is_active=True)
-#
-#     return redirect('/masters/first_interview_call/')
-# return render(request, 'email_templates.html',{})
+
+from django.core.files.storage import FileSystemStorage
+from django.http import HttpResponse
+
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.units import inch
+
+def development_program_pdf(request):
+    return export_pdf1()
+    # doc = SimpleDocTemplate("/tmp/somefilename.pdf")
+    # styles = getSampleStyleSheet()
+    # Story = [Spacer(1,2*inch)]
+    # style = styles["Normal"]
+    # bogustext = ('Development Program: Test')
+    # p = Paragraph(bogustext, style)
+    # Story.append(p)
+    #
+    # bogustext = ('Test Work: Open')
+    # p = Paragraph(bogustext, style)
+    # Story.append(p)
+    #
+    # bogustext = ('Class: 10')
+    # p = Paragraph(bogustext, style)
+    # Story.append(p)
+    #
+    # bogustext = ('Role: Admin')
+    # p = Paragraph(bogustext, style)
+    # Story.append(p)
+    #
+    # Story.append(Spacer(1,0.2*inch))
+    # doc.build(Story)
+    #
+    # fs = FileSystemStorage("/tmp")
+    # with fs.open("somefilename.pdf") as pdf:
+    #     response = HttpResponse(pdf, content_type='application/pdf')
+    #     response['Content-Disposition'] = 'attachment; filename="somefilename.pdf"'
+    #     return response
+    #
+    # return response
+
+    return render(request, 'development_program_pdf_template.html')
+
+import os
+from django.conf import settings
+from django.http import HttpResponse
+from django.template import Context
+from django.template.loader import get_template
+import datetime
+from xhtml2pdf import pisa
+
+
+def generate_PDF(request):
+    year_recs = YearDetails.objects.all()
+    curriculum_obj = ''
+    experience_obj = ''
+
+
+    template = get_template('development_program_pdf_template.html')
+    Context = ({})
+    html = template.render(Context)
+
+    file = open('test.pdf', "w+b")
+    pisaStatus = pisa.CreatePDF(html.encode('utf-8'), dest=file,
+            encoding='utf-8')
+
+    file.seek(0)
+    pdf = file.read()
+    file.close()
+    return HttpResponse(pdf, 'application/pdf')
 
 
 def get_table_data(request):

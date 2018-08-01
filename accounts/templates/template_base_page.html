@@ -88,9 +88,10 @@ License: You must have a valid license purchased only from themeforest(the above
         <div class="page-logo">
 
             {#            <h4>SMS</h4>#}
-            <img src="{% static 'assets/layouts/layout2/img/fms-logo.png' %}" alt="logo" class="logo-default"/>
+            <img src="{% static 'assets/layouts/layout2/img/fms-logo.png' %}" alt="logo"
+                 style="width: 80px;height: 30px;margin-left: 10%" class="logo-default"/>
             {#            <div class="menu-toggler sidebar-toggler">#}
-            <div class="sidebar-toggler">
+            <div class="menu-toggler sidebar-toggler">
                 <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
             </div>
         </div>
@@ -120,12 +121,19 @@ License: You must have a valid license purchased only from themeforest(the above
                     <li class="dropdown dropdown-user">
                         <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"
                            data-close-others="true">
-                            {% if not user.get_application.is_submitted %}
-                                <img alt="" class="img-circle" src="../../media/{{ user.get_application.image }}"/>
-                                <span class="username username-hide-on-mobile"> {{ user.get_application.first_name }} {{ user.get_application.last_name }} </span>
-                                <br>
-                                <span class="username username-hide-on-mobile"> {{ user.get_application_id }}
-                            </span> {% endif %}
+                            {% if user.is_student %}
+                                {% if user.get_application %}
+                                    <img alt="" class="img-circle" src="../../media/{{ user.get_application.image }}"/>
+                                    <span class="username username-hide-on-mobile"> {{ user.get_application.first_name }} {{ user.get_application.last_name }} </span>-<b><span class="username username-hide-on-mobile"> {{ user.get_application_id }}</span></b>
+                                {% endif %}
+                            {% else %}
+{#                                <img alt="" class="img-circle" src="../../media/{{ user.get_application.image }}"/>#}
+                                <b><span class="username username-hide-on-mobile">{{ user.accountant_type }}-{{ user.first_name }} {{ user.last_name }} </span></b>
+{#                                <br>#}
+{#                                <span class="username username-hide-on-mobile"> {{ user.get_application_id }}#}
+                            </span>
+                            {% endif %}
+
                             {#                            <i class="fa fa-angle-down"></i>#}
                         </a>
                         {% comment %}<ul class="dropdown-menu dropdown-menu-default">
@@ -448,7 +456,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </a>
                                     <ul class="sub-menu">
                                         <li class="nav-item ">
-{#                                            <a href="{% url 'masters:email_templates' %}" class="nav-link ">Email templates</a>#}
+                                            {#                                            <a href="{% url 'masters:email_templates' %}" class="nav-link ">Email templates</a>#}
                                             <a href="{% url 'masters:email_templates_list' %}" class="nav-link ">Template</a>
                                         </li>
                                     </ul>
@@ -829,7 +837,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.5.1/chosen.jquery.min.js" type="text/javascript"></script>
 <!-- END CORE PLUGINS -->
 <!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="{% static 'switch/js/Sswitch.js'%}" type="text/javascript"></script>
+<script src="{% static 'switch/js/Sswitch.js' %}" type="text/javascript"></script>
 <script src="{% static 'assets/global/plugins/moment.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js' %}"
         type="text/javascript"></script>

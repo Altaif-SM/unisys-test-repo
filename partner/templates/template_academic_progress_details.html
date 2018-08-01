@@ -143,7 +143,7 @@
                                 </td>
 
                                 <td>
-                                    <p>{{ rec.transcript_document }}</p>
+                                    <p><a href="{{ rec.applicant_id.report_path }}{{ rec.transcript_document }}">{{ rec.transcript_document }}</a></p>
                                     <input style="display: none" class="form-control data transcript_document"
                                            name="transcript_document_name_saved"
                                            type="text"

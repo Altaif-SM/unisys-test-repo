@@ -334,18 +334,3 @@ class EmailTemplates(BaseModel):
     subject = models.CharField(max_length=500, blank=True, null=True)
     email_body = models.CharField(max_length=1000, blank=True, null=True)
     is_active = models.BooleanField(default=False)
-
-
-class FirstInterviewCallTemplate(BaseModel):
-    template = models.CharField(max_length=1000, blank=True, null=True)
-    is_active = models.BooleanField(default=False)
-
-
-class FirstInterviewAttendTemplate(BaseModel):
-    template = models.CharField(max_length=1000, blank=True, null=True)
-    is_active = models.BooleanField(default=False)
-
-
-class FirstInterviewApprovalTemplate(BaseModel):
-    template = models.CharField(max_length=1000, blank=True, null=True)
-    is_active = models.BooleanField(default=False)

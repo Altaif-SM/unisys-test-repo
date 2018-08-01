@@ -126,6 +126,9 @@ class User(AbstractUser):
     def is_accountant(self):
         return True if self.role.all().filter(name__in=[self.ACCOUNTANT]).exists() else False
 
+    def accountant_type(self):
+        return self.role.all()[0].name.title() if self.role.all().exists() else None
+
     @property
     def get_user_permissions(self):
 
