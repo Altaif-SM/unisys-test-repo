@@ -136,6 +136,48 @@ def export_pdf(output_file_name, records):
     doc.build(elements)
     return response
 
+def export_pdf1():
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename=' + str('Helo') + '.pdf'
+
+    elements = []
+
+    doc = SimpleDocTemplate(response, topMargin=20)
+    doc.pagesize = landscape(A4)
+
+    # #Get this line right instead of just copying it from the docs
+    data = [['00', '01', '02', '03', '04','05'],
+            ['10', '11', '12', '13', '14','15'],
+            ['20', '21', '22', '23', '24','25'],
+            ['30', '31', '32', '33', '34','35'],
+            ['40', '41', '42', '43', '44','45']]
+    table_obj = Table(data)
+    table_obj = Table(data, 6 * [0.4 * inch], 5 * [0.4 * inch])
+    table_obj.setStyle(TableStyle([('ALIGN', (1, 1), (-2, -2), 'RIGHT'),
+                                   ('TEXTCOLOR', (1, 1), (-2, -2), colors.red),
+                                   ('TEXTCOLOR', (0, 0), (0, -1), colors.blue),
+                                   ('ALIGN', (0, -1), (-1, -1), 'CENTER'),
+                                   ('VALIGN', (0, -1), (-1, -1), 'MIDDLE'),
+                                   ('TEXTCOLOR', (0, -1), (-1, -1), colors.green),
+                                   ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+                                   ('BOX', (0, 0), (-1, -1), 0.25, colors.black),
+                                   ]))
+    # Configure style and word wrap
+
+    # ps = ParagraphStyle('title', fontSize=10, alignment=TA_CENTER, spaceBefore=10, spaceAfter=10)
+    # ps = ParagraphStyle('title', fontSize=10, alignment=TA_RIGHT, spaceBefore=10, spaceAfter=10)
+
+    # s = getSampleStyleSheet()
+    # s = s["BodyText"]
+    # s.wordWrap = 'LTR'
+    # data = [[Paragraph(cell, s) for cell in row] for row in records]
+    # table_obj = Table(data)
+    # table_obj.setStyle(style)
+
+    elements.append(table_obj)
+    doc.build(elements)
+    return response
+
 
 def export_wraped_column_xls(output_file_name, column_names, rows):
     output = BytesIO()
@@ -258,7 +300,7 @@ def export_last_row_wraped_column_xls(output_file_name, column_names, rows, rec_
     return response
 
 
-def send_email_with_template(application_obj, context, subject, email_body, request):
+def send_email_with_template(application_obj, context, subject, email_body, request,flag=False):
     try:
         email_template = email_body
         subject = subject
@@ -276,7 +318,10 @@ def send_email_with_template(application_obj, context, subject, email_body, requ
 
         html_content = email_template.render(context)
 
-        msg = EmailMultiAlternatives(subject, text_content, request.user.email, [application_obj.email])
+        if flag:
+            msg = EmailMultiAlternatives(subject, text_content, application_obj.user.email, [application_obj.user.email])
+        else:
+            msg = EmailMultiAlternatives(subject, text_content, request.user.email, [application_obj.email])
         msg.attach_alternative(html_content, "text/html")
         msg.send()
 

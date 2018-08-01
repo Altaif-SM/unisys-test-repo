@@ -10,11 +10,11 @@ from accounts.forms import loginForm, signUpForm
 from accounts.service import *
 from accounts.models import UserRole
 from student.models import StudentDetails, ApplicationDetails, ScholarshipSelectionDetails
-from masters.models import AddressDetails, CountryDetails, ScholarshipDetails, GuardianDetails
+from masters.models import AddressDetails, CountryDetails, ScholarshipDetails, GuardianDetails, EmailTemplates
 from partner.models import PartnerDetails
 from donor.models import DonorDetails
 import json
-from common.utils import application_notification,get_current_year
+from common.utils import application_notification,get_current_year,send_email_with_template,send_email_to_applicant
 from accounts.service import UserService
 # Create your views here.
 
@@ -98,7 +98,19 @@ def user_signup(request):
                     country = CountryDetails.objects.get(country_name=request.POST['country'])
                     address = AddressDetails.objects.create(country=country)
                     if signup_form.cleaned_data['role'] == "Student":
-                        StudentDetails.objects.create(user=user,address=address)
+                        student_obj = StudentDetails.objects.create(user=user,address=address)
+
+                        try:
+                            email_rec = EmailTemplates.objects.get(template_for='Student Signup', is_active=True)
+                            context = {'first_name': student_obj.user.first_name}
+                            send_email_with_template(student_obj, context, email_rec.subject, email_rec.email_body,
+                                                     request,True)
+                        except:
+                            subject = 'Signup Completed'
+                            message = 'Your signup completed in NAMA.'
+                            send_email_to_applicant(student_obj.user.email, student_obj.user.email, subject, message,
+                                                    student_obj.user.first_name)
+
                     if signup_form.cleaned_data['role'] == "Partner":
                         PartnerDetails.objects.create(user=user,address=address)
 
