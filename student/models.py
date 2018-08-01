@@ -28,6 +28,7 @@ def content_file_name_report(instance, filename):
     filename = "%s_%s.%s" % (instance.first_name, dirname, ext)
     return os.path.join('reports', filename)
 
+
 def content_aplicant_file_name_report(instance, filename):
     dirname = datetime.now().strftime('%Y.%m.%d.%H.%M.%S')
     ext = filename.split('.')[-1]
@@ -135,9 +136,12 @@ class ApplicationDetails(BaseModel):
     passport_issue_country = models.ForeignKey('masters.CountryDetails', blank=True, null=True,
                                                related_name='passport_issue_country_rel',
                                                on_delete=models.PROTECT)
+    passport_image = models.FileField(upload_to=content_file_name_image, blank=True, null=True)
 
     address = models.ForeignKey('masters.AddressDetails', blank=True, null=True, related_name='applicant_address_rel',
                                 on_delete=models.PROTECT)
+    permanent_address = models.ForeignKey('masters.AddressDetails', blank=True, null=True,
+                                          related_name='applicant_permanent_address_rel', on_delete=models.PROTECT)
     telephone_hp = models.CharField(max_length=16, blank=True, null=True)
     telephone_home = models.CharField(max_length=16, blank=True, null=True)
     email = models.EmailField(max_length=255, blank=True, null=True)
@@ -206,7 +210,7 @@ class ApplicationDetails(BaseModel):
         """
         Return the path plus the id, with a _ in between.
         """
-        return str(settings.MEDIA_URL) + str('reports/') + str(self.first_name) + '_' + str(self.id)+ '/'
+        return str(settings.MEDIA_URL) + str('reports/') + str(self.first_name) + '_' + str(self.id) + '/'
 
     def __str__(self):
         return '%s %s' % (self.first_name, self.last_name if self.last_name else '')
@@ -313,18 +317,21 @@ class AcademicQualificationDetails(BaseModel):
     # a_level_year = models.ForeignKey('masters.YearDetails', null=True, blank=True, related_name='a_level_year_rel',on_delete=models.PROTECT)
     a_level_year = models.CharField(max_length=6, blank=True, null=True)
     a_level_result = models.CharField(max_length=255, blank=True, null=True)
+    a_level_institution = models.CharField(max_length=255, blank=True, null=True)
     a_level_result_document = models.FileField(upload_to=content_file_name_report)
 
     o_level = models.CharField(max_length=255, blank=True, null=True)
     # o_level_year = models.ForeignKey('masters.YearDetails', null=True, blank=True, related_name='o_level_year_rel',on_delete=models.PROTECT)
     o_level_year = models.CharField(max_length=6, blank=True, null=True)
     o_level_result = models.CharField(max_length=255, blank=True, null=True)
+    o_level_institution = models.CharField(max_length=255, blank=True, null=True)
     o_level_result_document = models.FileField(upload_to=content_file_name_report)
 
     high_school = models.CharField(max_length=255, blank=True, null=True)
     # high_school_year = models.ForeignKey('masters.YearDetails', null=True, blank=True,related_name='high_school_year_rel',on_delete=models.PROTECT)
     high_school_year = models.CharField(max_length=10, blank=True, null=True)
     high_school_result = models.CharField(max_length=255, blank=True, null=True)
+    high_school_institution = models.CharField(max_length=255, blank=True, null=True)
     high_school_result_document = models.FileField(upload_to=content_file_name_report)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='academic_applicant_rel',
                                      on_delete=models.PROTECT)

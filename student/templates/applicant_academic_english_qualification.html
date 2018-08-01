@@ -31,11 +31,11 @@
     <script>
         window.onload = function () {
 
-           {% comment %} $(document).on("click", ".remove_doc", function (e) {
-                {#alert($(this).prev().attr('id'))#}
-                var id = $(this).prev().attr('id');
-                $('#' + id).val('');
-            });{% endcomment %}
+            {% comment %} $(document).on("click", ".remove_doc", function (e) {
+                 {#alert($(this).prev().attr('id'))#}
+                 var id = $(this).prev().attr('id');
+                 $('#' + id).val('');
+             });{% endcomment %}
 
             {% comment %}File.prototype.convertToBase64 = function (callback) {
                 var reader = new FileReader();
@@ -153,7 +153,7 @@
 
                             <div class="">
                                 <label class="col-md-1 control-label">Year:</label>
-                                <div class="col-md-1">
+                                <div class="col-md-2">
                                     <select id='a_level_year' title="Select Year" name="a_level_year"
                                             class="form-control">
                                         {% if qualification_obj %}
@@ -175,12 +175,22 @@
 
                             <div class="">
                                 <label class="col-md-1 control-label"> Result:</label>
-                                <div class="col-md-1">
+                                <div class="col-md-2">
                                     <input type="text" title="Enter result" id="a_level_result" name="a_level_result"
                                            value="{{ qualification_obj.a_level_result }}" class="form-control">
                                 </div>
                             </div>
-
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-1 control-label"> Institution:</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Enter institution" id="a_level_institution"
+                                           name="a_level_institution"
+                                           value="{{ qualification_obj.a_level_institution }}" class="form-control">
+                                </div>
+                            </div>
                             <div class="">
                                 <label class="col-md-1 control-label">Result Doc:</label>
                                 <div class="col-md-2" id="item1">
@@ -219,6 +229,8 @@
                         </div>
 
                         <br>
+                        <hr>
+                        <br>
 
                         <div class="row">
                             <div class="">
@@ -231,7 +243,7 @@
 
                             <div class="">
                                 <label class="col-md-1 control-label">Year:</label>
-                                <div class="col-md-1">
+                                <div class="col-md-2">
                                     <select id='o_level_year' title="Select Year" name="o_level_year"
                                             class="form-control">
                                         {% if qualification_obj %}
@@ -253,9 +265,22 @@
 
                             <div class="">
                                 <label class="col-md-1 control-label"> Result:</label>
-                                <div class="col-md-1">
+                                <div class="col-md-2">
                                     <input type="text" title="Enter result" id="o_level_result" name="o_level_result"
                                            value="{{ qualification_obj.o_level_result }}" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-1 control-label"> Institution:</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Enter institution" id="o_level_institution"
+                                           name="o_level_institution"
+                                           value="{{ qualification_obj.o_level_institution }}" class="form-control">
                                 </div>
                             </div>
 
@@ -268,9 +293,6 @@
                                                 style="width: 50%"
                                                 type='button' class="file" value='Choose File:'><a
                                                 href="
-
-
-
                                                         {{ qualification_obj.applicant_id.report_path }}{{ qualification_obj.o_level_result_document }}"><input
                                                 readonly
                                                 class="file_value emp"
@@ -297,6 +319,8 @@
                         </div>
 
                         <br>
+                        <hr>
+                        <br>
 
                         <div class="row">
                             <div class="">
@@ -309,7 +333,7 @@
 
                             <div class="">
                                 <label class="col-md-1 control-label">Year:</label>
-                                <div class="col-md-1">
+                                <div class="col-md-2">
                                     <select id='high_school_year' title="Select Year" name="high_school_year"
                                             class="form-control">
                                         {% if qualification_obj %}
@@ -331,10 +355,24 @@
 
                             <div class="">
                                 <label class="col-md-1 control-label"> Result:</label>
-                                <div class="col-md-1">
+                                <div class="col-md-2">
                                     <input type="text" title="Enter result" id="high_school_result"
                                            name="high_school_result"
                                            value="{{ qualification_obj.high_school_result }}" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+
+
+                        <div class="row">
+
+                            <div class="">
+                                <label class="col-md-1 control-label"> Institution:</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Enter institution" id="high_school_institution"
+                                           name="high_school_institution"
+                                           value="{{ qualification_obj.high_school_institution }}" class="form-control">
                                 </div>
                             </div>
 
@@ -347,9 +385,6 @@
                                                 style="width: 50%"
                                                 type='button' class="file" value='Choose File:'><a
                                                 href="
-
-
-
                                                         {{ qualification_obj.applicant_id.report_path }}{{ qualification_obj.high_school_result_document }}"><input
                                                 readonly
                                                 class="file_value emp"
@@ -440,7 +475,6 @@
                                                     type='button' class="file" value='Choose File:'><a
                                                     href="
 
-
                                                             {{ english_obj.applicant_id.report_path }}{{ english_obj.english_test_one_result_document }}"><input
                                                     readonly
                                                     class="file_value emp"
@@ -525,7 +559,6 @@
                                                             style="width: 50%"
                                                             type='button' class="file" value='Choose File:'><a
                                                             href="
-
 
                                                                     {{ english_obj.applicant_id.report_path }}{{ english_obj.english_test_two_result_document }}"><input
                                                             readonly

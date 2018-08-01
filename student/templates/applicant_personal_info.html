@@ -67,14 +67,14 @@
                 });{% endcomment %}
 
 
-                $(document).on("change", "#applicant_photo", function (e) {
-
-                    var selectedFile = this.files[0];
-                    selectedFile.convertToBase64(function (base64) {
-                        var converted_base64_image = (base64);
-                        $("#pic").val(converted_base64_image);
-                        {#alert(converted_base64_image)#}
-                    })
+                $(document).on("change", ".photo", function (e) {
+                    {% comment %}
+                                        var selectedFile = this.files[0];
+                                        selectedFile.convertToBase64(function (base64) {
+                                            var converted_base64_image = (base64);
+                                            $("#pic").val(converted_base64_image);
+                                            {#alert(converted_base64_image)#}
+                                        }){% endcomment %}
 
 
                     var files = !!this.files ? this.files : [];
@@ -86,6 +86,31 @@
                         return false;
                     }
                 });
+
+                $('#same_as').click(function (e) {
+                    if (e.target.checked) {
+                        $('.emp').val('');
+                        var country = $('#address_country').val();
+                        var street = $('#street').val();
+                        var district = $('#district').val();
+                        var post_code = $('#post_code').val();
+                        var sub_locality = $('#sub_locality').val();
+                        var residential_address = $('#residential_address').val();
+                        var residential_state = $('#state').val();
+
+                       $('#permanent_country').val(country);
+                       $('#permanent_street').val(street);
+                       $('#permanent_district').val(district);
+                       $('#permanent_post_code').val(post_code);
+                       $('#permanent_sub_locality').val(sub_locality);
+                       $('#permanent_residential_address').val(residential_address);
+                       $('#permanent_state').val(residential_state);
+                        {#alert('checked........')#}
+                    } else {
+                        {#alert('not checked........')#}
+                        {#$('.emp').val('');#}
+                    }
+                })
             });
 
 
@@ -184,7 +209,7 @@
                                 <div class="col-md-2">
                                     <input type="date" title="Enter DOB" id="birth_date" name="birth_date"
                                            value="{{ application_obj.birth_date|date:"Y-m-d" }}" class="form-control"
-                                           max="2999-12-31">
+                                           max="2999-12-31" required>
                                 </div>
                             </div>
 
@@ -212,8 +237,7 @@
                                 <label class="col-md-1 control-label">Nationality:</label>
                                 <div class="col-md-2">
                                     <select id='nationality' title="Select nationality" name="nationality"
-                                            class="form-control"
-                                    >
+                                            class="form-control" required>
                                         {% if application_obj %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ application_obj.nationality.id }}"
@@ -291,7 +315,7 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Telephone number (HP)" id="telephone_hp"
                                            value="{{ application_obj.telephone_hp }}" name="telephone_hp"
-                                           class="form-control">
+                                           class="form-control" required>
                                 </div>
                             </div>
 
@@ -300,20 +324,16 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Telephone number (Home)" id="telephone_home"
                                            value="{{ application_obj.telephone_home }}" name="telephone_home"
-                                           class="form-control">
+                                           class="form-control" required>
                                 </div>
                             </div>
                         </div>
-
                         <br>
-                        <hr>
-                        <br>
-
                         <div class="row">
 
                             <div class="">
                                 <label class="col-md-2 control-label">Religion:</label>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <select id='issue_country' title="Select Religion" name="religion"
                                             class="form-control">
                                         {% if application_obj %}
@@ -332,82 +352,48 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="">
+                                <label class="col-md-1 control-label">Face Photo:</label>
+                                <div class="col-md-2">
+                                    <input type="text" id="pic" name="pic" hidden>
 
+                                    <input name="photo" type="file" title="Select photo"
+                                           id="applicant_photo"
+                                           class="form-control photo">{% if application_obj.image %}
+                                    <img width="100px" height="120px"
+                                         src="{{ application_obj.report_path }}{{ application_obj.image }}">{% endif %}
+                                </div>
+                            </div>
 
                             <div class="">
-                                <label class="col-md-2 control-label">Residential/Postal Address:</label>
-                                <div class="col-md-3">
-                                    <input type="text" title="Enter Residential/Postal Address" id="residential_address"
-                                           value="{{ application_obj.address.residential_address }}"
-                                           name="residential_address"
-                                           class="form-control">
+                                <label class="col-md-1 control-label">Passport Photo:</label>
+                                <div class="col-md-2">
+                                    <input type="text" id="passport_pic" name="passport_pic" hidden>
+
+                                    <input name="passport_photo" type="file" title="Select photo"
+                                           id="passport_photo"
+                                           class="form-control photo">{% if application_obj.passport_image %}
+                                    <img width="100px" height="120px"
+                                         src="{{ application_obj.report_path }}{{ application_obj.passport_image }}">{% endif %}
                                 </div>
                             </div>
                         </div>
 
                         <br>
-
-                        <div class="row">
-
-                            <div class="">
-                                <label class="col-md-2 control-label">Premise/Sub-Locality-2:</label>
-                                <div class="col-md-3">
-                                    <input type="text" title="Enter Premise/Sub-Locality-2" id="premise_add"
-                                           value="{{ application_obj.address.street }}" name="street"
-                                           class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-2 control-label">Sub-Locality:</label>
-                                <div class="col-md-3">
-                                    <input type="text" title="Enter Sub-Locality " id="sub_locality"
-                                           value="{{ application_obj.address.sub_locality }}" name="sub_locality"
-                                           class="form-control">
-                                </div>
+                        <hr>
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-settings font-red"></i>
+                                <span class="caption-subject font-red sbold uppercase"> Present Address</span>
                             </div>
                         </div>
-
-                        <br>
-
-                        <div class="row">
-
-                            <div class="">
-                                <label class="col-md-2 control-label">Postcode:</label>
-                                <div class="col-md-3">
-                                    <input type="text" title="Enter Postcode" id="post_code"
-                                           value="{{ application_obj.address.post_code }}" name="post_code"
-                                           class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-2 control-label">District:</label>
-                                <div class="col-md-3">
-                                    <input type="text" title="Enter District " id="district"
-                                           value="{{ application_obj.address.district|title }}" name="district"
-                                           class="form-control">
-                                </div>
-                            </div>
-                        </div>
-
-                        <br>
+                        <hr>
 
                         <div class="row">
-
-                            <div class="">
-                                <label class="col-md-2 control-label">State/Province:</label>
-                                <div class="col-md-3">
-                                    <input type="text" title="Enter State/Province" id="state"
-                                           value="{{ application_obj.address.state|title }}" name="state"
-                                           class="form-control">
-                                </div>
-                            </div>
-
                             <div class="">
                                 <label class="col-md-2 control-label">Country: <span style="color: red">*</span></label>
                                 <div class="col-md-3">
-                                    <select id='country' title="Select Country" name="country"
+                                    <select id='address_country' title="Select Country" name="country"
                                             class="form-control" required>
 
                                         {% if application_obj %}
@@ -426,36 +412,196 @@
                                     </select>
                                 </div>
                             </div>
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Residential/Postal Address:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Residential/Postal Address" id="residential_address"
+                                           value="{{ application_obj.address.residential_address }}"
+                                           name="residential_address"
+                                           class="form-control" required>
+                                </div>
+                            </div>
                         </div>
 
                         <br>
 
                         <div class="row">
+
                             <div class="">
-                                <label class="col-md-2 control-label">Photo:</label>
+                                <label class="col-md-2 control-label">Premise/Sub-Locality-2:</label>
                                 <div class="col-md-3">
-                                    <input type="text" id="pic" name="pic" hidden>
+                                    <input type="text" title="Enter Premise/Sub-Locality-2" id="street"
+                                           value="{{ application_obj.address.street }}" name="street"
+                                           class="form-control" required>
+                                </div>
+                            </div>
 
-
-                                    {% comment %}<label for="file-upload" class="custom-file-upload">
-                                        <i class="fa fa-cloud-upload"></i> Upload Image
-                                    </label>
-
-                                    <input id="file-upload" name='upload_cont_img' type="file" style="display:none;">{% endcomment %}
-
-
-                                    <input name="photo" type="file" title="Select photo"
-                                           id="applicant_photo"
-                                           class="form-control">{% if application_obj.image %}
-                                    <img width="100px" height="120px"
-                                         src="../../media/{{ application_obj.image }}">{% endif %}
+                            <div class="">
+                                <label class="col-md-2 control-label">Sub-Locality:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Sub-Locality " id="sub_locality"
+                                           value="{{ application_obj.address.sub_locality }}" name="sub_locality"
+                                           class="form-control" required>
                                 </div>
                             </div>
                         </div>
 
+                        <br>
+
+                        <div class="row">
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Postcode:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Postcode" id="post_code"
+                                           value="{{ application_obj.address.post_code }}" name="post_code"
+                                           class="form-control" required>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-2 control-label">District:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter District " id="district"
+                                           value="{{ application_obj.address.district|title }}" name="district"
+                                           class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+
+                            <div class="">
+                                <label class="col-md-2 control-label">State/Province:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter State/Province" id="state"
+                                           value="{{ application_obj.address.state|title }}" name="state"
+                                           class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+                        <hr>
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-settings font-red"></i>
+                                <span class="caption-subject font-red sbold uppercase"> Permanent Address</span>
+                                <span style="margin-left: 20px" class="sbold">Same as Present Address:</span> <input
+                                    class="large" type="checkbox" name="same_as" id="same_as"
+                                {% if application_obj.address.is_same %}checked{% endif %}>
+                            </div>
+                        </div>
+                        <hr>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Country: <span style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    <select id='permanent_country' title="Select Country" name="permanent_country"
+                                            class="form-control emp" required>
+
+                                        {% if application_obj %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.permanent_address.country.id }}"
+                                                    value="">{{ application_obj.permanent_address.country.country_name|title }}</option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">Please
+                                                Select
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in country_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Residential/Postal Address:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Residential/Postal Address"
+                                           id="permanent_residential_address"
+                                           value="{{ application_obj.permanent_address.residential_address }}"
+                                           name="permanent_residential_address"
+                                           class="form-control emp" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Premise/Sub-Locality-2:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Premise/Sub-Locality-2" id="permanent_street"
+                                           value="{{ application_obj.permanent_address.street }}"
+                                           name="permanent_street"
+                                           class="form-control emp" required>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Sub-Locality:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Sub-Locality " id="permanent_sub_locality"
+                                           value="{{ application_obj.permanent_address.sub_locality }}"
+                                           name="permanent_sub_locality"
+                                           class="form-control emp" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Postcode:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Postcode" id="permanent_post_code"
+                                           value="{{ application_obj.permanent_address.post_code }}"
+                                           name="permanent_post_code"
+                                           class="form-control emp" required>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-2 control-label">District:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter District " id="permanent_district"
+                                           value="{{ application_obj.permanent_address.district|title }}"
+                                           name="permanent_district"
+                                           class="form-control emp" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+
+                            <div class="">
+                                <label class="col-md-2 control-label">State/Province:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter State/Province" id="permanent_state"
+                                           value="{{ application_obj.permanent_address.state|title }}" name="permanent_state"
+                                           class="form-control emp" required>
+                                </div>
+                            </div>
+
+
+                        </div>
+
                         <br><br>
-
-
                         <br><br>
 
                         <div class="row">

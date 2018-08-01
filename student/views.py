@@ -39,7 +39,9 @@ def applicant_personal_info(request):
 
 
 def save_update_applicant_personal_info(request):
-    pic = request.POST.get('pic')
+    passport_photo = request.FILES.get('passport_photo')
+    pic = request.FILES.get('photo')
+    same_as = request.POST.get('same_as')
     redirect_flag = False
 
     if request.POST:
@@ -83,10 +85,46 @@ def save_update_applicant_personal_info(request):
                     residential_address=request.POST['residential_address'])
 
                 address_obj = AddressDetails.objects.get(id=application_obj.address.id)
-                # application_id = get_application_id(application_obj)
 
-                application_obj.address = address_obj
-                # application_obj.application_id = application_id
+                if same_as:
+                    try:
+                        if not address_obj.is_same:
+                            address_id = application_obj.permanent_address.id
+                            application_obj.permanent_address=None
+                            application_obj.save()
+                            AddressDetails.objects.filter(id=address_id).delete()
+
+                    except Exception as e:
+                        pass
+
+                    address_obj.is_same = True
+                    application_obj.permanent_address = address_obj
+                    address_obj.save()
+                else:
+                    if application_obj.permanent_address.is_same:
+                        address_obj.is_same = False
+                        address_obj.save()
+
+                        permanent_address_obj = AddressDetails.objects.create(
+                            country_id=request.POST['permanent_country'],
+                            street=request.POST['permanent_street'],
+                            state=request.POST['permanent_state'],
+                            district=request.POST['permanent_district'],
+                            post_code=request.POST['permanent_post_code'],
+                            sub_locality=request.POST['permanent_sub_locality'],
+                            residential_address=request.POST['permanent_residential_address'])
+
+                        application_obj.permanent_address = permanent_address_obj
+
+                    else:
+                        AddressDetails.objects.filter(id=application_obj.permanent_address.id).update(
+                            country_id=request.POST['permanent_country'],
+                            street=request.POST['permanent_street'],
+                            state=request.POST['permanent_state'],
+                            district=request.POST['permanent_district'],
+                            post_code=request.POST['permanent_post_code'],
+                            sub_locality=request.POST['permanent_sub_locality'],
+                            residential_address=request.POST['permanent_residential_address'])
                 application_obj.save()
 
                 redirect_flag = True
@@ -119,28 +157,67 @@ def save_update_applicant_personal_info(request):
                                                                 sub_locality=request.POST['sub_locality'],
                                                                 residential_address=request.POST['residential_address'])
 
+                    if same_as:
+                        address_obj.is_same = True
+                        address_obj.save()
+                        application_obj.permanent_address = address_obj
+                    else:
+                        permanent_address_obj = AddressDetails.objects.create(
+                            country_id=request.POST['permanent_country'],
+                            street=request.POST['permanent_street'],
+                            state=request.POST['permanent_state'],
+                            district=request.POST['permanent_district'],
+                            post_code=request.POST['permanent_post_code'],
+                            sub_locality=request.POST['permanent_sub_locality'],
+                            residential_address=request.POST['permanent_residential_address'])
+
+                        application_obj.permanent_address = permanent_address_obj
+
                     application_id = get_application_id(application_obj)
 
                     application_obj.application_id = application_id
                     application_obj.address = address_obj
                     application_obj.save()
+
                     redirect_flag = True
                 except Exception as e:
                     messages.warning(request, "Form have some error" + str(e))
 
             try:
+                if passport_photo:
+                    object_path = media_path(application_obj)
+
+                    passport_photo_name = str(passport_photo)
+                    handle_uploaded_file(str(object_path) + '/' + passport_photo_name, passport_photo)
+                    application_obj.passport_image = passport_photo_name
+
+                # if not passport_photo:
+                #     application_obj.passport_image = ''
+
                 if pic:
-                    dirname = datetime.now().strftime('%Y.%m.%d.%H.%M.%S')
-                    filename = "%s_%s.%s" % (str(application_obj.id), dirname, 'png')
-                    raw_file_path_and_name = os.path.join('images/' + filename)
-                    data = str(pic)
-                    temp_data = data.split('base64,')[1]
-                    raw_data = base64.b64decode(temp_data)
-                    f = open(settings.MEDIA_ROOT + raw_file_path_and_name, 'wb')
-                    f.write(raw_data)
-                    f.close()
-                    application_obj.image = raw_file_path_and_name
-                    application_obj.save()
+                    object_path = media_path(application_obj)
+
+                    photo = str(pic)
+                    handle_uploaded_file(str(object_path) + '/' + photo, pic)
+                    application_obj.image = photo
+
+                # if not pic:
+                #     application_obj.image = ''
+
+                application_obj.save()
+
+                # if pic:
+                #     dirname = datetime.now().strftime('%Y.%m.%d.%H.%M.%S')
+                #     filename = "%s_%s.%s" % (str(application_obj.id), dirname, 'png')
+                #     raw_file_path_and_name = os.path.join('images/' + filename)
+                #     data = str(pic)
+                #     temp_data = data.split('base64,')[1]
+                #     raw_data = base64.b64decode(temp_data)
+                #     f = open(settings.MEDIA_ROOT + raw_file_path_and_name, 'wb')
+                #     f.write(raw_data)
+                #     f.close()
+                #     application_obj.image = raw_file_path_and_name
+                #     application_obj.save()
             except Exception as e:
                 messages.warning(request, "Form have some error" + str(e))
 
@@ -404,6 +481,7 @@ def save_update_applicant_academic_english_qualification(request):
         high_school_result_document_text = request.POST.get('high_school_result_document_text')
         english_test_one_result_document_text = request.POST.get('english_test_one_result_document_text')
         english_test_two_result_document_text = request.POST.get('english_test_two_result_document_text')
+
         try:
             if StudentDetails.objects.filter(user=request.user):
                 if not request.user.get_application.is_submitted:
@@ -413,14 +491,17 @@ def save_update_applicant_academic_english_qualification(request):
                                 applicant_id=request.user.get_application).update(
                                 a_level=request.POST['a_level'],
                                 a_level_year=request.POST['a_level_year'],
+                                a_level_institution=request.POST['a_level_institution'],
                                 a_level_result=request.POST['a_level_result'],
 
                                 o_level=request.POST['o_level'],
                                 o_level_year=request.POST['o_level_year'],
+                                o_level_institution=request.POST['o_level_institution'],
                                 o_level_result=request.POST['o_level_result'],
 
                                 high_school=request.POST['high_school'],
                                 high_school_year=request.POST['high_school_year'],
+                                high_school_institution=request.POST['high_school_institution'],
                                 high_school_result=request.POST['high_school_result'])
 
                             qualification_obj = AcademicQualificationDetails.objects.get(
@@ -511,14 +592,17 @@ def save_update_applicant_academic_english_qualification(request):
                                 a_level=request.POST['a_level'],
                                 a_level_year=request.POST['a_level_year'],
                                 a_level_result=request.POST['a_level_result'],
+                                a_level_institution=request.POST['a_level_institution'],
 
                                 o_level=request.POST['o_level'],
                                 o_level_year=request.POST['o_level_year'],
                                 o_level_result=request.POST['o_level_result'],
+                                o_level_institution=request.POST['o_level_institution'],
 
                                 high_school=request.POST['high_school'],
                                 high_school_year=request.POST['high_school_year'],
                                 high_school_result=request.POST['high_school_result'],
+                                high_school_institution=request.POST['high_school_institution'],
                                 applicant_id=request.user.get_application)
 
                             if a_level_result_document:
