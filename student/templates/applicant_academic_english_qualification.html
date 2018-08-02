@@ -84,6 +84,34 @@
                     $(this).prev().children().children('.file_value').val(file_name);
                 });
 
+                $('#save_form').click(function () {
+                    var flag_emp = false;
+                    $('.eng_emp').css('border-color', '');
+                    $('label').css('border-color', '');
+                    $('.eng_emp').each(function () {
+                        if($(this).val()==''){
+                            {#alert($(this).hasClass('file_value'));#}
+                            if($(this).hasClass('file_value')){
+                                $(this).parents('label:eq(0)').css('border-color', 'red');
+                                {#$(this).parent('label').css('border-color', 'red');#}
+                            }
+                            else{
+                                $(this).css('border-color', 'red');
+                            $(this).focus();
+                            }
+                            flag_emp = true;
+                        }
+                        {#alert($(this).val())#}
+                    })
+
+                    if(flag_emp){
+                        return false;
+                    }
+                    else{
+                        $('#id_form').submit();
+                    }
+                })
+
 
                 $('#sample_1').dataTable().fnDestroy();
                 $('#sample_1').dataTable({
@@ -136,7 +164,7 @@
         <div class="portlet-body">
             <div class="form-body">
                 <form action="{% url 'student:save_update_applicant_academic_english_qualification' %}"
-                      id="form_sample_1"
+                      id="id_form"
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
@@ -427,7 +455,7 @@
                                     <div class="col-md-1">
                                         <input type="text" title="Enter English Competency Test 1" id="english_test_one"
                                                name="english_test_one" value="{{ english_obj.english_test_one }}"
-                                               class="form-control">
+                                               class="form-control eng_emp">
                                     </div>
                                 </div>
 
@@ -436,7 +464,7 @@
                                     <div class="col-md-1">
                                         <select id='english_test_one_year' title="Select Year"
                                                 name="english_test_one_year"
-                                                class="form-control">
+                                                class="form-control eng_emp">
                                             {% if english_obj %}
                                                 <option style="display:none" selected="selected"
                                                         value="{{ english_obj.english_test_one_year }}"
@@ -460,7 +488,7 @@
                                         <input type="text" title="Enter result" id="english_test_one_result"
                                                name="english_test_one_result"
                                                value="{{ english_obj.english_test_one_result }}"
-                                               class="form-control">
+                                               class="form-control eng_emp">
                                     </div>
                                 </div>
 
@@ -477,7 +505,7 @@
 
                                                             {{ english_obj.applicant_id.report_path }}{{ english_obj.english_test_one_result_document }}"><input
                                                     readonly
-                                                    class="file_value emp"
+                                                    class="file_value emp eng_emp"
                                                     style="border: none; width: 50%"
                                                     name="english_test_one_result_document_text"
                                                     value="{{ english_obj.english_test_one_result_document }}"></a></label>
@@ -488,7 +516,7 @@
                                                     type='button' value='Choose File:'><a><input type="text"
                                                                                                  readonly
                                                                                                  name="english_test_one_result_document_text"
-                                                                                                 class="file_value emp"
+                                                                                                 class="file_value emp eng_emp"
                                                                                                  style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
                                         {% endif %}
 
@@ -596,7 +624,7 @@
                                                     onclick="window.location='{% url "student:applicant_family_mother_sibling_info" %}'">
                                                 Back
                                             </button>
-                                            <button type="submit" class="btn green" id="save" style="">Save/Next
+                                            <button type="button" class="btn green" id="save_form" style="">Save/Next
                                             </button>
                                             {% comment %}<button type="button" class="btn blue" id="next"
                                         onclick="window.location='{% url "student:applicant_curriculum_experience_info" %}'">

@@ -6,22 +6,60 @@ from common.utils import get_application_id
 from accounts.decoratars import student_login_required, psycho_test_required, semester_required, registration_required, \
     dev_program_required, agreements_required, submission_required
 import os
+import shutil
 
 
 # Create your views here.
 @student_login_required
 def student_home(request):
     username = ''
+    application_history_obj = ''
+    application_id = ''
 
     try:
+        first_name = request.user.first_name
+        last_name = request.user.last_name if request.user.last_name else ''
+        username = str(first_name) + ' ' + str(last_name)
+
         if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
-            username = request.user.get_application.get_full_name()
+            if request.user.get_application.is_submitted:
+                application_history_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id,
+                                                                         is_submitted=True).applicant_history_rel.all()
+            else:
+                application_id = request.user.get_application.id
 
     except Exception as e:
         username = request.user.first_name
         messages.warning(request, "Form have some error" + str(e))
 
-    return render(request, 'student_home.html', {'username': username})
+    return render(request, 'student_home.html',
+                  {'username': username, 'application_history_obj': application_history_obj,
+                   'application_id': application_id})
+
+
+def delete_application(request, app_id):
+    try:
+        application_obj = ApplicationDetails.objects.get(id=app_id)
+
+        object_path = str(application_obj.first_name) + '_' + str(application_obj.id)
+        object_path = settings.MEDIA_ROOT + os.path.join('reports/' + str(object_path))
+        if os.path.exists(str(object_path)):
+            shutil.rmtree(object_path)
+
+        ApplicationHistoryDetails.objects.filter(applicant_id=app_id).delete()
+        SiblingDetails.objects.filter(applicant_id=app_id).delete()
+        AcademicQualificationDetails.objects.filter(applicant_id=app_id).delete()
+        EnglishQualificationDetails.objects.filter(applicant_id=app_id).delete()
+        CurriculumDetails.objects.filter(applicant_id=app_id).delete()
+        ExperienceDetails.objects.filter(applicant_id=app_id).delete()
+        ScholarshipSelectionDetails.objects.filter(applicant_id=app_id).delete()
+        ApplicantAboutDetails.objects.filter(applicant_id=app_id).delete()
+        StudentNotifications.objects.filter(applicant_id=app_id).delete()
+        ApplicationDetails.objects.filter(id=app_id).delete()
+
+    except Exception as e:
+        messages.warning(request, "An error occurred " + str(e))
+    return redirect('/student/student_home/')
 
 
 def applicant_personal_info(request):
@@ -90,7 +128,7 @@ def save_update_applicant_personal_info(request):
                     try:
                         if not address_obj.is_same:
                             address_id = application_obj.permanent_address.id
-                            application_obj.permanent_address=None
+                            application_obj.permanent_address = None
                             application_obj.save()
                             AddressDetails.objects.filter(id=address_id).delete()
 
@@ -657,7 +695,7 @@ def save_update_applicant_academic_english_qualification(request):
                                 english_test_one_result = str(english_test_one_result_document)
                                 object_path = media_path(english_object.applicant_id)
                                 handle_uploaded_file(str(object_path) + '/' + english_test_one_result,
-                                                     english_test_two_result_document)
+                                                     english_test_one_result_document)
                                 # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + english_test_one_result),english_test_two_result_document)
 
                                 english_object.english_test_one_result_document = english_test_one_result
@@ -972,10 +1010,13 @@ def applicant_scholarship_about_yourself_info(request):
 
     scholarship_obj = ''
     about_obj = ''
+    application_obj = ''
 
     try:
         if request.user.get_application:
             if not request.user.get_application.is_submitted:
+                application_obj = request.user.get_application
+
                 if ScholarshipSelectionDetails.objects.filter(applicant_id=request.user.get_application).exists():
                     scholarship_obj = ScholarshipSelectionDetails.objects.get(applicant_id=request.user.get_application)
 
@@ -985,7 +1026,8 @@ def applicant_scholarship_about_yourself_info(request):
         messages.warning(request, "Form have some error" + str(e))
     return render(request, 'applicant_scholarship_about_yourself_info.html',
                   {'scholarship_recs': scholarship_recs, 'scholarship_obj': scholarship_obj, 'about_obj': about_obj,
-                   'university_obj': university_obj, 'degree_obj': degree_obj, 'course_recs': course_recs})
+                   'university_obj': university_obj, 'degree_obj': degree_obj, 'course_recs': course_recs,
+                   'application_obj': application_obj})
 
 
 def get_degrees(request):
@@ -1403,6 +1445,21 @@ def applicant_progress_history(request):
 
     return render(request, 'applicant_progress_history.html',
                   {'application_history_obj': application_history_obj, 'username': username})
+
+
+def save_other_university(request):
+    university_name = request.POST.get('other_university_name')
+    country_id = request.POST.get('other_university_country')
+    try:
+        if not UniversityDetails.objects.filter(university_name=university_name.lower(),
+                                                country_id=country_id).exists():
+            UniversityDetails.objects.create(university_name=university_name.lower(), country_id=country_id)
+            messages.success(request, "Record saved.")
+        else:
+            messages.warning(request, "University added.")
+    except:
+        messages.warning(request, "University not added.")
+    return redirect('/student/applicant_scholarship_about_yourself_info/')
 
 # import os
 # from django.conf import settings

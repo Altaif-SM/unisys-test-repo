@@ -8,6 +8,8 @@ app_name = 'student'
 
 urlpatterns = [
                   path('student_home/', views.student_home, name='student_home'),
+                  path('delete_application/<int:app_id>/', views.delete_application,
+                       name='delete_application'),
 
                   path('applicant_personal_info/', views.applicant_personal_info, name='applicant_personal_info'),
                   path('save_update_applicant_personal_info/', views.save_update_applicant_personal_info,
@@ -68,6 +70,6 @@ urlpatterns = [
                   path('save_applicant_academic_progress/', views.save_applicant_academic_progress,
                        name='save_applicant_academic_progress'),
 
-                  path('applicant_progress_history/', views.applicant_progress_history,
-                       name='applicant_progress_history'),
+                  path('applicant_progress_history/', views.applicant_progress_history,name='applicant_progress_history'),
+                  path('save_other_university/', views.save_other_university,name='save_other_university'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

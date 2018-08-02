@@ -81,6 +81,20 @@
                     get_degrees(url, course_applied)
                 })
 
+
+                $(document).on("change", "#university", function (s) {
+                    if(this.options[this.selectedIndex].id == 'add_university'){
+                        $('#id_accept_student_model').modal();
+                    }
+
+                    {#$('#id_accept_student_model').modal();#}
+                    {#$("#form_sample_1").submit();#}
+                });
+
+                $('#cancel_model').click(function () {
+                    $('#university').val('')
+                })
+
                 function get_degrees(url, course_applied) {
                     $.ajax({
                         type: 'POST',
@@ -90,13 +104,13 @@
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
-                            $('#university').empty();
-                            $('#id_university').empty();
+                            {#$('#university').empty();#}
+                            {#$('#id_university').empty();#}
 
                             {#alert(data[0]['university_id'])#}
 
-                            $('#university').val(data[0]['university']);
-                            $('#id_university').val(data[0]['university_id']);
+                            {#$('#university').val(data[0]['university']);#}
+                            {#$('#id_university').val(data[0]['university_id']);#}
 
                             $('#degree_applied').empty();
                             $('#degree_applied').append(
@@ -256,9 +270,9 @@
                                 <label class="col-md-2 control-label">University:<span
                                         style="color: red">*</span></label>
                                 <div class="col-md-3">
-                                    <input hidden id="id_university" name="university" value="{{ scholarship_obj.university.id }}">
-                                    <input id="university" readonly class="form-control" value="{{ scholarship_obj.university.university_name|title }}">
-                                    {% comment %}  <select id='university' title="Select University" name="university"
+                                    {#                                    <input hidden id="id_university" name="university" value="{{ scholarship_obj.university.id }}">#}
+                                    {#                                    <input id="university" readonly class="form-control" value="{{ scholarship_obj.university.university_name|title }}">#}
+                                    <select id='university' title="Select University" name="university"
                                             class="form-control" required>
                                         {% if scholarship_obj %}
                                             <option style="display:none" selected="selected"
@@ -273,10 +287,11 @@
                                         {% for rec in university_obj %}
                                             <option value='{{ rec.id }}'>{{ rec.university_name|title }}</option>
                                         {% endfor %}
-                                    </select>{% endcomment %}
+                                        <option id="add_university" value="" style="color: #0000C0" class="fa fa-plus">Add University +</option>
+                                    </select>
 
-                                    {% comment %}<input type="text" title="Enter University" id="university" name="university"
-                                         value="{{ scholarship_obj.university }}"  class="form-control" required>{% endcomment %}
+                                    {#                                    <input type="text" title="Enter University" id="university" name="university"#}
+                                    {#                                         value="{{ scholarship_obj.university }}"  class="form-control" required>#}
                                 </div>
                             </div>
                         </div>
@@ -291,22 +306,28 @@
 
                                     {% if scholarship_obj.admission_letter_document %}
                                         <label class="form-control"
-                                               style="border-color: #b1ad9f;  width: 100%;text-align: left"><input style="width: 50%"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left"><input
+                                                style="width: 50%"
                                                 type='button' class="file" value='Choose File:'><a
-                                                href="{{ scholarship_obj.applicant_id.report_path }}{{ scholarship_obj.admission_letter_document }}"><input readonly
-                                                                                                              class="file_value emp" name="admission_letter_document_text"
-                                                                                                              style="border: red; width: 50%"
-                                                                                                              value="{{ scholarship_obj.admission_letter_document }}"></a></label>
+                                                href="
+
+                                                        {{ scholarship_obj.applicant_id.report_path }}{{ scholarship_obj.admission_letter_document }}"><input
+                                                readonly
+                                                class="file_value emp" name="admission_letter_document_text"
+                                                style="border: red; width: 50%"
+                                                value="{{ scholarship_obj.admission_letter_document }}"></a></label>
                                     {% else %}
                                         <label class="form-control"
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
                                                 class="file" style="width: 50%"
                                                 type='button' value='Choose File:'><a><input type="text"
-                                                                                             readonly name="admission_letter_document_text"
+                                                                                             readonly
+                                                                                             name="admission_letter_document_text"
                                                                                              class="file_value emp"
                                                                                              style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
                                     {% endif %}
-                                    <input style="display: none" type="file" title="Select admission letter" id="admission_letter_document"
+                                    <input style="display: none" type="file" title="Select admission letter"
+                                           id="admission_letter_document"
                                            value="{{ scholarship_obj.admission_letter_document }}"
                                            name="admission_letter_document" class="file_type">
 
@@ -351,6 +372,35 @@
                                 <button type="submit" class="btn green" id="save" style="">Save/Next</button>
                             </div>
                         </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="id_accept_student_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{% url 'student:save_other_university' %}"
+                      id="form_sample_1"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h4 class="modal-title" style="color: #2a015e; text-align: center"><b>Add University</b></h4>
+                    </div>
+                    <div class="modal-body">
+                        <p> Enter University Name: </p>
+                        <input type="text" name="other_university_name" class="form-control">
+                        <input hidden type="text" name="other_university_country"
+                               value="{{ application_obj.nationality.id }}">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancel_model" data-dismiss="modal" class="btn dark btn-outline">
+                            Cancel
+                        </button>
+                        <button type="submit" id="submit_appplication" class="btn green">Add</button>
                     </div>
                 </form>
             </div>

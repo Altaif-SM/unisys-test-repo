@@ -87,8 +87,63 @@
 
         <div class="portlet-body">
             <div class="form-body">
-                <h3 style="color: darkred; text-align: center"><b>Welcome <span style="color: #0c203a">{{username|title}}</span>. <br><br>We are Happy to see you.</b></h3>
+                <h3 style="color: darkred; text-align: center"><b>Welcome <span
+                        style="color: #0c203a">{{ username|title }}</span>. <br><br>We are Happy to see you.</b></h3>
             </div>
+        </div>
+
+        <div class="form-body">
+            <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <br>
+                <hr>
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-settings font-red"></i>
+                        <span class="caption-subject font-red sbold uppercase"> Application Progress History</span>
+                        {% if application_id %}<span class="btn red btn" style="margin-left: 70%" onclick="window.location='{% url "student:delete_application" application_id %}'">Delete Application</span>{% endif %}
+                    </div>
+                </div>
+                <hr>
+
+                <div class="row">
+                    <input hidden id="data_value" name="data_value">
+                    <div class="">
+                        <table class="table table-striped table-hover table-bordered" id="sample_1">
+                            <thead>
+                            <tr>
+                                <th style="display: none"></th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Remark</th>
+                            </tr>
+                            </thead>
+
+                            <tbody id="tbody">
+                            {% for rec in application_history_obj %}
+                                <tr id="item{{ forloop.counter }}" class="item">
+                                    <td style="display: none"><input id="application_id" class="application_id"
+                                                                     value="{{ rec.id }}"></td>
+
+                                    <td>
+                                        <text>{{ rec.last_updated|date:"d-m-Y" }}</text>
+                                    </td>
+
+                                    <td>
+                                        <text>{{ rec.status }}</text>
+                                    </td>
+
+                                    <td>
+                                        <text>{{ rec.remark }}</text>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 {% endblock %}

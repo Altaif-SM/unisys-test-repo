@@ -98,13 +98,13 @@
                         var residential_address = $('#residential_address').val();
                         var residential_state = $('#state').val();
 
-                       $('#permanent_country').val(country);
-                       $('#permanent_street').val(street);
-                       $('#permanent_district').val(district);
-                       $('#permanent_post_code').val(post_code);
-                       $('#permanent_sub_locality').val(sub_locality);
-                       $('#permanent_residential_address').val(residential_address);
-                       $('#permanent_state').val(residential_state);
+                        $('#permanent_country').val(country);
+                        $('#permanent_street').val(street);
+                        $('#permanent_district').val(district);
+                        $('#permanent_post_code').val(post_code);
+                        $('#permanent_sub_locality').val(sub_locality);
+                        $('#permanent_residential_address').val(residential_address);
+                        $('#permanent_state').val(residential_state);
                         {#alert('checked........')#}
                     } else {
                         {#alert('not checked........')#}
@@ -205,7 +205,8 @@
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">DOB:</label>
+                                <label class="col-md-2 control-label">DOB:<span
+                                        style="color: red">*</span></label>
                                 <div class="col-md-2">
                                     <input type="date" title="Enter DOB" id="birth_date" name="birth_date"
                                            value="{{ application_obj.birth_date|date:"Y-m-d" }}" class="form-control"
@@ -234,7 +235,8 @@
                             </div>
 
                             <div class="">
-                                <label class="col-md-1 control-label">Nationality:</label>
+                                <label class="col-md-1 control-label">Nationality:<span
+                                        style="color: red">*</span></label>
                                 <div class="col-md-2">
                                     <select id='nationality' title="Select nationality" name="nationality"
                                             class="form-control" required>
@@ -311,7 +313,8 @@
                             </div>
 
                             <div class="">
-                                <label class="col-md-1 control-label">Telephone no (HP):</label>
+                                <label class="col-md-1 control-label">Telephone no (HP):<span
+                                        style="color: red">*</span></label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Telephone number (HP)" id="telephone_hp"
                                            value="{{ application_obj.telephone_hp }}" name="telephone_hp"
@@ -320,7 +323,8 @@
                             </div>
 
                             <div class="">
-                                <label class="col-md-1 control-label">Telephone no (Home):</label>
+                                <label class="col-md-1 control-label">Telephone no (Home):<span
+                                        style="color: red">*</span></label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Telephone number (Home)" id="telephone_home"
                                            value="{{ application_obj.telephone_home }}" name="telephone_home"
@@ -374,7 +378,8 @@
                                            id="passport_photo"
                                            class="form-control photo">{% if application_obj.passport_image %}
                                     <img width="100px" height="120px"
-                                         src="{{ application_obj.report_path }}{{ application_obj.passport_image }}">{% endif %}
+                                         src="
+                                                 {{ application_obj.report_path }}{{ application_obj.passport_image }}">{% endif %}
                                 </div>
                             </div>
                         </div>
@@ -415,7 +420,8 @@
 
 
                             <div class="">
-                                <label class="col-md-2 control-label">Residential/Postal Address:</label>
+                                <label class="col-md-2 control-label">Residential/Postal Address:<span
+                                        style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <input type="text" title="Enter Residential/Postal Address" id="residential_address"
                                            value="{{ application_obj.address.residential_address }}"
@@ -430,7 +436,8 @@
                         <div class="row">
 
                             <div class="">
-                                <label class="col-md-2 control-label">Premise/Sub-Locality-2:</label>
+                                <label class="col-md-2 control-label">Premise/Sub-Locality-2:<span
+                                        style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <input type="text" title="Enter Premise/Sub-Locality-2" id="street"
                                            value="{{ application_obj.address.street }}" name="street"
@@ -439,7 +446,8 @@
                             </div>
 
                             <div class="">
-                                <label class="col-md-2 control-label">Sub-Locality:</label>
+                                <label class="col-md-2 control-label">Sub-Locality:<span
+                                        style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <input type="text" title="Enter Sub-Locality " id="sub_locality"
                                            value="{{ application_obj.address.sub_locality }}" name="sub_locality"
@@ -453,7 +461,8 @@
                         <div class="row">
 
                             <div class="">
-                                <label class="col-md-2 control-label">Postcode:</label>
+                                <label class="col-md-2 control-label">Postcode:<span
+                                        style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <input type="text" title="Enter Postcode" id="post_code"
                                            value="{{ application_obj.address.post_code }}" name="post_code"
@@ -462,7 +471,8 @@
                             </div>
 
                             <div class="">
-                                <label class="col-md-2 control-label">District:</label>
+                                <label class="col-md-2 control-label">District:<span
+                                        style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <input type="text" title="Enter District " id="district"
                                            value="{{ application_obj.address.district|title }}" name="district"
@@ -476,7 +486,8 @@
                         <div class="row">
 
                             <div class="">
-                                <label class="col-md-2 control-label">State/Province:</label>
+                                <label class="col-md-2 control-label">State/Province:<span
+                                        style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <input type="text" title="Enter State/Province" id="state"
                                            value="{{ application_obj.address.state|title }}" name="state"
@@ -493,7 +504,7 @@
                                 <span class="caption-subject font-red sbold uppercase"> Permanent Address</span>
                                 <span style="margin-left: 20px" class="sbold">Same as Present Address:</span> <input
                                     class="large" type="checkbox" name="same_as" id="same_as"
-                                {% if application_obj.address.is_same %}checked{% endif %}>
+                                    {% if application_obj.address.is_same %}checked{% endif %}>
                             </div>
                         </div>
                         <hr>
@@ -524,7 +535,8 @@
 
 
                             <div class="">
-                                <label class="col-md-2 control-label">Residential/Postal Address:</label>
+                                <label class="col-md-2 control-label">Residential/Postal Address:<span
+                                        style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <input type="text" title="Enter Residential/Postal Address"
                                            id="permanent_residential_address"
@@ -540,7 +552,8 @@
                         <div class="row">
 
                             <div class="">
-                                <label class="col-md-2 control-label">Premise/Sub-Locality-2:</label>
+                                <label class="col-md-2 control-label">Premise/Sub-Locality-2:<span
+                                        style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <input type="text" title="Enter Premise/Sub-Locality-2" id="permanent_street"
                                            value="{{ application_obj.permanent_address.street }}"
@@ -550,7 +563,8 @@
                             </div>
 
                             <div class="">
-                                <label class="col-md-2 control-label">Sub-Locality:</label>
+                                <label class="col-md-2 control-label">Sub-Locality:<span
+                                        style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <input type="text" title="Enter Sub-Locality " id="permanent_sub_locality"
                                            value="{{ application_obj.permanent_address.sub_locality }}"
@@ -565,7 +579,8 @@
                         <div class="row">
 
                             <div class="">
-                                <label class="col-md-2 control-label">Postcode:</label>
+                                <label class="col-md-2 control-label">Postcode:<span
+                                        style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <input type="text" title="Enter Postcode" id="permanent_post_code"
                                            value="{{ application_obj.permanent_address.post_code }}"
@@ -575,7 +590,8 @@
                             </div>
 
                             <div class="">
-                                <label class="col-md-2 control-label">District:</label>
+                                <label class="col-md-2 control-label">District:<span
+                                        style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <input type="text" title="Enter District " id="permanent_district"
                                            value="{{ application_obj.permanent_address.district|title }}"
@@ -590,15 +606,15 @@
                         <div class="row">
 
                             <div class="">
-                                <label class="col-md-2 control-label">State/Province:</label>
+                                <label class="col-md-2 control-label">State/Province:<span
+                                        style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <input type="text" title="Enter State/Province" id="permanent_state"
-                                           value="{{ application_obj.permanent_address.state|title }}" name="permanent_state"
+                                           value="{{ application_obj.permanent_address.state|title }}"
+                                           name="permanent_state"
                                            class="form-control emp" required>
                                 </div>
                             </div>
-
-
                         </div>
 
                         <br><br>
