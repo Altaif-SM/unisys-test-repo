@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
 from student.models import StudentDetails, ApplicationDetails
-from masters.models import CountryDetails, ScholarshipDetails, StudentDonorMapping
+from masters.models import CountryDetails, ScholarshipDetails, StudentDonorMapping, DegreeDetails, SemesterDetails
 from .models import StudentPaymentReceiptVoucher, DonorReceiptVoucher
 import json
 from common.utils import create_voucher_number
@@ -45,6 +45,9 @@ def get_student_report(request):
     query_scholarship = request.GET.get("scholarship") or None
     query_voucher_beneficiary = request.GET.get("voucher_beneficiary") or None
 
+    query_degree = request.GET.get("degree") or None
+    query_semester = request.GET.get("semester") or None
+
     credit_total = 0
     balance_total = 0
     debit_total = 0
@@ -60,6 +63,16 @@ def get_student_report(request):
     if query_voucher_beneficiary:
         stud_pay_voucher_list = stud_pay_voucher_list.filter(voucher_beneficiary=query_voucher_beneficiary)
 
+    if query_degree:
+        stud_pay_voucher_list = stud_pay_voucher_list.filter(
+            application__applicant_scholarship_rel__degree_id=query_degree)
+
+    if query_semester:
+        ids_list = stud_pay_voucher_list.filter(application__applicant_progress_rel__semester_id=query_semester).values(
+            "id").distinct()
+        stud_pay_voucher_list = stud_pay_voucher_list.filter(id__in=ids_list)
+
+
     voucher_record = {}
     all_country_obj = type('', (object,), {"id": "", "country_name": "All"})()
     country = [all_country_obj]
@@ -70,6 +83,16 @@ def get_student_report(request):
     scholarship = [all_scholarship_obj]
     for scho in ScholarshipDetails.objects.all():
         scholarship.append(scho)
+
+    all_degree_obj = type('', (object,), {"id": "", "degree_name": "All"})()
+    degree = [all_degree_obj]
+    for scho in DegreeDetails.objects.all():
+        degree.append(scho)
+
+    all_semester_obj = type('', (object,), {"id": "", "semester_name": "All"})()
+    semester = [all_semester_obj]
+    for scho in SemesterDetails.objects.all():
+        semester.append(scho)
 
     for obj in stud_pay_voucher_list:
         if obj.voucher_type == "debit":
@@ -91,8 +114,8 @@ def get_student_report(request):
         voucher_record['voucher_record'] = voucher_rec_list
 
     return render(request, "template_student_report.html",
-                  {'voucher_record': voucher_record, 'country_list': country, 'scholarship_list': scholarship,
-                   'selected_country': CountryDetails.objects.filter(id=query_country),
+                  {'voucher_record': voucher_record, 'country_list': country, 'scholarship_list': scholarship,'degree_list':degree, 'semester_list':semester,
+                   'selected_country': CountryDetails.objects.filter(id=query_country),'selected_degree': DegreeDetails.objects.filter(id=query_degree),'selected_semester': SemesterDetails.objects.filter(id=query_semester),
                    'selected_scholarship': ScholarshipDetails.objects.filter(id=query_scholarship)})
 
 
