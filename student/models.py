@@ -378,10 +378,12 @@ class ExperienceDetails(BaseModel):
     from_date_one = models.DateField(null=True, blank=True, )
     to_date_one = models.DateField(null=True, blank=True, )
     work_experience_document_one = models.FileField(upload_to=content_file_name_report)
+    experience_one_current = models.BooleanField(default=False)
 
     work_experience_two = models.CharField(max_length=255, blank=True, null=True)
     from_date_two = models.DateField(null=True, blank=True)
     to_date_two = models.DateField(null=True, blank=True, )
+    experience_two_current = models.BooleanField(default=False)
     work_experience_document_two = models.FileField(upload_to=content_file_name_report)
 
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_experience_rel',

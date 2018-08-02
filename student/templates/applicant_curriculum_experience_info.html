@@ -33,22 +33,13 @@
 
             $(document).ready(function () {
 
-                {% comment %}$(document).on("change", ".doc", function (e) {
-                    var files = !!this.files ? this.files : [];
-                    if (!files.length || !window.FileReader) return;
-                    var fileExtension = ['pdf'];
-                    if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
-                        alert("Only formats are allowed : " + fileExtension.join(', '));
-                        $(this).val('');
-                        return false;
-                    }
-                });{% endcomment %}
+                $(document).on("click", ".current", function (e) {
+                    $('.current').prop('checked', false);
+                    $('.end_date').prop('readonly','')
 
-                {% comment %}$(document).on("click", ".remove_doc", function (e) {
-                    {#alert($(this).prev().attr('id'))#}
-                    var id = $(this).prev().attr('id');
-                    $('#' + id).val('');
-                });{% endcomment %}
+                    $(this).prop('checked', true);
+                    $(this).prevAll('input').prop('readonly','true');
+                });
 
                 $(document).on("click", ".remove_doc", function (e) {
                     var parent_id = $(this).closest('div').attr('id');
@@ -415,7 +406,11 @@
                                 </label>
                                 <div class="col-md-3" id="EndDate">
                                     <input type="date" id="to_date_one" name="to_date_one" max="2999-12-31"
-                                           value="{{ experience_obj.to_date_one|date:"Y-m-d" }}" class="form-control">
+                                           {% if experience_obj.experience_one_current %}readonly{% endif %}
+                                           value="{{ experience_obj.to_date_one|date:"Y-m-d" }}" class="form-control end_date">
+                                    <br><span>Currently Working </span>
+                                    <input class="current" type="checkbox" name="experience_one_current" id="experience_one_current"
+                                    {% if experience_obj.experience_one_current %}checked{% endif %}>
                                 </div>
                             </div>
                         </div>
@@ -485,7 +480,11 @@
                                 <label class="col-md-2 control-label">End Date:</label>
                                 <div class="col-md-3" id="EndDate">
                                     <input type="date" id="to_date_two" name="to_date_two" max="2999-12-31"
-                                           value="{{ experience_obj.to_date_two|date:"Y-m-d" }}" class="form-control">
+                                           {% if experience_obj.experience_two_current %}readonly{% endif %}
+                                           value="{{ experience_obj.to_date_two|date:"Y-m-d" }}" class="form-control end_date">
+                                    <br><span>Currently Working </span>
+                                    <input class="current" type="checkbox" name="experience_two_current" id="experience_two_current"
+                                    {% if experience_obj.experience_two_current %}checked{% endif %}>
                                 </div>
                             </div>
                         </div>

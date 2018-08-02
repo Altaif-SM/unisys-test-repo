@@ -46,6 +46,9 @@ def delete_application(request, app_id):
         if os.path.exists(str(object_path)):
             shutil.rmtree(object_path)
 
+        AddressDetails.objects.filter(id=application_obj.address.id).delete()
+        AddressDetails.objects.filter(id=application_obj.permanent_address.id).delete()
+
         ApplicationHistoryDetails.objects.filter(applicant_id=app_id).delete()
         SiblingDetails.objects.filter(applicant_id=app_id).delete()
         AcademicQualificationDetails.objects.filter(applicant_id=app_id).delete()
@@ -847,10 +850,13 @@ def save_update_applicant_curriculum_experience_info(request):
                                 work_experience_one=request.POST['work_experience_one'],
                                 from_date_one=request.POST['from_date_one'] if request.POST['from_date_one'] else None,
                                 to_date_one=request.POST['to_date_one'] if request.POST['to_date_one'] else None,
+                                experience_one_current=True if request.POST.get('experience_one_current') else False,
 
                                 work_experience_two=request.POST['work_experience_two'],
                                 from_date_two=request.POST['from_date_two'] if request.POST['from_date_two'] else None,
-                                to_date_two=request.POST['to_date_two'] if request.POST['to_date_two'] else None)
+                                to_date_two=request.POST['to_date_two'] if request.POST['to_date_two'] else None,
+                                experience_two_current=True if request.POST.get('experience_two_current') else False,
+                            )
 
                             try:
 
@@ -862,11 +868,13 @@ def save_update_applicant_curriculum_experience_info(request):
                                     from_date_one=request.POST['from_date_one'] if request.POST[
                                         'from_date_one'] else None,
                                     to_date_one=request.POST['to_date_one'] if request.POST['to_date_one'] else None,
+                                    experience_one_current=True if request.POST.get('experience_one_current') else False,
 
                                     work_experience_two=request.POST['work_experience_two'],
                                     from_date_two=request.POST['from_date_two'] if request.POST[
                                         'from_date_two'] else None,
                                     to_date_two=request.POST['to_date_two'] if request.POST['to_date_two'] else None,
+                                    experience_two_current=True if request.POST.get('experience_two_current') else False,
                                     applicant_id=request.user.get_application)
 
                             if work_experience_document_one:
@@ -953,10 +961,12 @@ def save_update_applicant_curriculum_experience_info(request):
                                 work_experience_one=request.POST['work_experience_one'],
                                 from_date_one=request.POST['from_date_one'] if request.POST['from_date_one'] else None,
                                 to_date_one=request.POST['to_date_one'] if request.POST['to_date_one'] else None,
+                                experience_one_current=True if request.POST.get('experience_one_current') else False,
 
                                 work_experience_two=request.POST['work_experience_two'],
                                 from_date_two=request.POST['from_date_two'] if request.POST['from_date_two'] else None,
                                 to_date_two=request.POST['to_date_two'] if request.POST['to_date_two'] else None,
+                                experience_two_current=True if request.POST.get('experience_two_current') else False,
                                 applicant_id=request.user.get_application)
 
                             if work_experience_document_one:
