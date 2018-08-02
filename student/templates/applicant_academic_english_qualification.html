@@ -70,7 +70,6 @@
 
 
                 $('.file_type').change(function (evt) {
-
                     var files = !!this.files ? this.files : [];
                     if (!files.length || !window.FileReader) return;
                     var fileExtension = ['pdf'];
@@ -85,30 +84,63 @@
                 });
 
                 $('#save_form').click(function () {
+                    $('.chk').css('border-color', '');
+                    $('label').css('border-color', '');
+
+                    var final_flag = false;
+                    var check_flag = false;
+                    $('.item').each(function () {
+                        var parent_id = $(this).attr('id');
+
+                        var empty_flag = false;
+                        $('#' + parent_id + ' .chk').each(function (e) {
+                            if ($(this).val() != '') {
+                                empty_flag = true;
+                            }
+                            else {
+                                check_flag = true;
+                                if ($(this).hasClass('file_value')) {
+                                    $(this).parents('label').css('border-color', 'red');
+                                }
+                                else {
+                                    $(this).css('border-color', 'red');
+                                }
+                            }
+                        })
+
+
+                        if (empty_flag && check_flag) {
+                            final_flag = true;
+                        }
+
+                        if (!empty_flag) {
+                            $('#' + parent_id + ' .chk').css('border-color', '');
+                            $('#' + parent_id + ' label').css('border-color', '');
+                        }
+                    })
+
+
                     var flag_emp = false;
                     $('.eng_emp').css('border-color', '');
-                    $('label').css('border-color', '');
                     $('.eng_emp').each(function () {
-                        if($(this).val()==''){
-                            {#alert($(this).hasClass('file_value'));#}
-                            if($(this).hasClass('file_value')){
+                        if ($(this).val() == '') {
+                            if ($(this).hasClass('file_value')) {
                                 $(this).parents('label:eq(0)').css('border-color', 'red');
-                                {#$(this).parent('label').css('border-color', 'red');#}
                             }
-                            else{
+                            else {
                                 $(this).css('border-color', 'red');
-                            $(this).focus();
                             }
                             flag_emp = true;
                         }
-                        {#alert($(this).val())#}
                     })
 
-                    if(flag_emp){
+                    if (flag_emp) {
                         return false;
                     }
-                    else{
-                        $('#id_form').submit();
+                    else {
+                        if (!final_flag) {
+                            $('#id_form').submit();
+                        }
                     }
                 })
 
@@ -170,305 +202,25 @@
                     {% csrf_token %}
 
                     <div class="form-body">
-                        <div class="row">
-                            <div class="">
-                                <label class="col-md-1 control-label">'A' level :</label>
-                                <div class="col-md-2">
-                                    <input type="text" title="Enter 'A' Level" id="a_level" name="a_level"
-                                           value="{{ qualification_obj.a_level }}" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Year:</label>
-                                <div class="col-md-2">
-                                    <select id='a_level_year' title="Select Year" name="a_level_year"
-                                            class="form-control">
-                                        {% if qualification_obj %}
-                                            <option style="display:none" selected="selected"
-                                                    value="{{ qualification_obj.a_level_year }}"
-                                                    value="">{{ qualification_obj.a_level_year }}</option>
-                                        {% else %}
-                                            <option style="display:none" selected="selected" id="" value="">Please
-                                                Select
-                                            </option>
-                                        {% endif %}
-
-                                        {% for rec in passing_year_recs %}
-                                            <option value='{{ rec.year }}'>{{ rec.year }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label"> Result:</label>
-                                <div class="col-md-2">
-                                    <input type="text" title="Enter result" id="a_level_result" name="a_level_result"
-                                           value="{{ qualification_obj.a_level_result }}" class="form-control">
-                                </div>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="">
-                                <label class="col-md-1 control-label"> Institution:</label>
-                                <div class="col-md-2">
-                                    <input type="text" title="Enter institution" id="a_level_institution"
-                                           name="a_level_institution"
-                                           value="{{ qualification_obj.a_level_institution }}" class="form-control">
-                                </div>
-                            </div>
-                            <div class="">
-                                <label class="col-md-1 control-label">Result Doc:</label>
-                                <div class="col-md-2" id="item1">
-                                    {% if qualification_obj.a_level_result_document %}
-                                        <label class="form-control"
-                                               style="border-color: #b1ad9f;  width: 100%;text-align: left"><input
-                                                style="width: 50%"
-                                                type='button' class="file" value='Choose File:'><a
-                                                href="
-
-
-
-                                                        {{ qualification_obj.applicant_id.report_path }}{{ qualification_obj.a_level_result_document }}"><input
-                                                readonly
-                                                class="file_value emp"
-                                                style="border: none; width: 50%" name="a_level_result_document_text"
-                                                value="{{ qualification_obj.a_level_result_document }}"></a></label>
-                                    {% else %}
-                                        <label class="form-control"
-                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
-                                                class="file" style="width: 50%"
-                                                type='button' value='Choose File:'><a><input type="text"
-                                                                                             readonly
-                                                                                             name="a_level_result_document_text"
-                                                                                             class="file_value emp"
-                                                                                             style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
-                                    {% endif %}
-
-                                    <input style="display: none" type="file" title="Select Result document"
-                                           id="a_level_result_document"
-                                           name="a_level_result_document" class="file_type">
-                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
-                                          class="remove_doc fa fa-close"></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <br>
-                        <hr>
-                        <br>
-
-                        <div class="row">
-                            <div class="">
-                                <label class="col-md-1 control-label">'O' level :</label>
-                                <div class="col-md-2">
-                                    <input type="text" title="Enter 'O' Level" id="o_level" name="o_level"
-                                           value="{{ qualification_obj.o_level }}" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Year:</label>
-                                <div class="col-md-2">
-                                    <select id='o_level_year' title="Select Year" name="o_level_year"
-                                            class="form-control">
-                                        {% if qualification_obj %}
-                                            <option style="display:none" selected="selected"
-                                                    value="{{ qualification_obj.o_level_year }}"
-                                                    value="">{{ qualification_obj.o_level_year }}</option>
-                                        {% else %}
-                                            <option style="display:none" selected="selected" id="" value="">Please
-                                                Select
-                                            </option>
-                                        {% endif %}
-
-                                        {% for rec in passing_year_recs %}
-                                            <option value='{{ rec.year }}'>{{ rec.year }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label"> Result:</label>
-                                <div class="col-md-2">
-                                    <input type="text" title="Enter result" id="o_level_result" name="o_level_result"
-                                           value="{{ qualification_obj.o_level_result }}" class="form-control">
-                                </div>
-                            </div>
-                        </div>
-
-                        <br>
-
-                        <div class="row">
-                            <div class="">
-                                <label class="col-md-1 control-label"> Institution:</label>
-                                <div class="col-md-2">
-                                    <input type="text" title="Enter institution" id="o_level_institution"
-                                           name="o_level_institution"
-                                           value="{{ qualification_obj.o_level_institution }}" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Result Doc:</label>
-                                <div class="col-md-2" id="item2">
-                                    {% if qualification_obj.o_level_result_document %}
-                                        <label class="form-control"
-                                               style="border-color: #b1ad9f;  width: 100%;text-align: left"><input
-                                                style="width: 50%"
-                                                type='button' class="file" value='Choose File:'><a
-                                                href="
-                                                        {{ qualification_obj.applicant_id.report_path }}{{ qualification_obj.o_level_result_document }}"><input
-                                                readonly
-                                                class="file_value emp"
-                                                style="border: none; width: 50%" name="o_level_result_document_text"
-                                                value="{{ qualification_obj.o_level_result_document }}"></a></label>
-                                    {% else %}
-                                        <label class="form-control"
-                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
-                                                name="o_level_result_document_text"
-                                                class="file" style="width: 50%"
-                                                type='button' value='Choose File:'><a><input type="text"
-                                                                                             readonly
-                                                                                             class="file_value emp"
-                                                                                             style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
-                                    {% endif %}
-
-                                    <input style="display: none" type="file" title="Select Result document"
-                                           id="o_level_result_document"
-                                           name="o_level_result_document" class="file_type">
-                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
-                                          class="remove_doc fa fa-close"></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <br>
-                        <hr>
-                        <br>
-
-                        <div class="row">
-                            <div class="">
-                                <label class="col-md-1 control-label">High School :</label>
-                                <div class="col-md-2">
-                                    <input type="text" title="Enter high school" id="high_school" name="high_school"
-                                           value="{{ qualification_obj.high_school }}" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Year:</label>
-                                <div class="col-md-2">
-                                    <select id='high_school_year' title="Select Year" name="high_school_year"
-                                            class="form-control">
-                                        {% if qualification_obj %}
-                                            <option style="display:none" selected="selected"
-                                                    value="{{ qualification_obj.high_school_year }}"
-                                                    value="">{{ qualification_obj.high_school_year }}</option>
-                                        {% else %}
-                                            <option style="display:none" selected="selected" id="" value="">Please
-                                                Select
-                                            </option>
-                                        {% endif %}
-
-                                        {% for rec in passing_year_recs %}
-                                            <option value='{{ rec.year }}'>{{ rec.year }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label"> Result:</label>
-                                <div class="col-md-2">
-                                    <input type="text" title="Enter result" id="high_school_result"
-                                           name="high_school_result"
-                                           value="{{ qualification_obj.high_school_result }}" class="form-control">
-                                </div>
-                            </div>
-                        </div>
-                        <br>
-
-
-                        <div class="row">
-
-                            <div class="">
-                                <label class="col-md-1 control-label"> Institution:</label>
-                                <div class="col-md-2">
-                                    <input type="text" title="Enter institution" id="high_school_institution"
-                                           name="high_school_institution"
-                                           value="{{ qualification_obj.high_school_institution }}" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Result Doc:</label>
-                                <div class="col-md-2" id="item3">
-                                    {% if qualification_obj.high_school_result_document %}
-                                        <label class="form-control"
-                                               style="border-color: #b1ad9f;  width: 100%;text-align: left"><input
-                                                style="width: 50%"
-                                                type='button' class="file" value='Choose File:'><a
-                                                href="
-                                                        {{ qualification_obj.applicant_id.report_path }}{{ qualification_obj.high_school_result_document }}"><input
-                                                readonly
-                                                class="file_value emp"
-                                                style="border: none; width: 50%" name="high_school_result_document_text"
-                                                value="{{ qualification_obj.high_school_result_document }}"></a></label>
-                                    {% else %}
-                                        <label class="form-control"
-                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
-                                                class="file" style="width: 50%"
-                                                type='button' value='Choose File:'><a><input type="text"
-                                                                                             readonly
-                                                                                             name="high_school_result_document_text"
-                                                                                             class="file_value emp"
-                                                                                             style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
-                                    {% endif %}
-
-                                    <input style="display: none" type="file" title="Select Result document"
-                                           id="high_school_result_document"
-                                           name="high_school_result_document" class="file_type">
-                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
-                                          class="remove_doc fa fa-close"></span>
-                                </div>
-                            </div>
-
-
-                            <br>
-                            <br>
-                            <hr>
-                            <div class="portlet-title">
-                                <div class="caption">
-                                    <i class="icon-settings font-red"></i>
-                                    <span class="caption-subject font-red sbold uppercase"> English Qualification</span>
-                                </div>
-                            </div>
-                            <hr>
-
+                        <div class="row item" id="check_1">
                             <div class="row">
                                 <div class="">
-                                    <label class="col-md-2 control-label">English Competency Test 1 :</label>
-                                    <div class="col-md-1">
-                                        <input type="text" title="Enter English Competency Test 1" id="english_test_one"
-                                               name="english_test_one" value="{{ english_obj.english_test_one }}"
-                                               class="form-control eng_emp">
+                                    <label class="col-md-1 control-label">'A' level :</label>
+                                    <div class="col-md-2">
+                                        <input type="text" title="Enter 'A' Level" id="a_level" name="a_level"
+                                               value="{{ qualification_obj.a_level }}" class="form-control chk">
                                     </div>
                                 </div>
 
                                 <div class="">
                                     <label class="col-md-1 control-label">Year:</label>
-                                    <div class="col-md-1">
-                                        <select id='english_test_one_year' title="Select Year"
-                                                name="english_test_one_year"
-                                                class="form-control eng_emp">
-                                            {% if english_obj %}
+                                    <div class="col-md-2">
+                                        <select id='a_level_year' title="Select Year" name="a_level_year"
+                                                class="form-control chk">
+                                            {% if qualification_obj %}
                                                 <option style="display:none" selected="selected"
-                                                        value="{{ english_obj.english_test_one_year }}"
-                                                        value="">{{ english_obj.english_test_one_year }}</option>
+                                                        value="{{ qualification_obj.a_level_year }}"
+                                                        value="">{{ qualification_obj.a_level_year }}</option>
                                             {% else %}
                                                 <option style="display:none" selected="selected" id="" value="">Please
                                                     Select
@@ -484,155 +236,474 @@
 
                                 <div class="">
                                     <label class="col-md-1 control-label"> Result:</label>
-                                    <div class="col-md-1">
-                                        <input type="text" title="Enter result" id="english_test_one_result"
-                                               name="english_test_one_result"
-                                               value="{{ english_obj.english_test_one_result }}"
-                                               class="form-control eng_emp">
+                                    <div class="col-md-2">
+                                        <input type="text" title="Enter result" id="a_level_result"
+                                               name="a_level_result"
+                                               value="{{ qualification_obj.a_level_result }}" class="form-control chk">
                                     </div>
                                 </div>
-
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="">
+                                    <label class="col-md-1 control-label"> Institution:</label>
+                                    <div class="col-md-2">
+                                        <input type="text" title="Enter institution" id="a_level_institution"
+                                               name="a_level_institution"
+                                               value="{{ qualification_obj.a_level_institution }}"
+                                               class="form-control chk">
+                                    </div>
+                                </div>
                                 <div class="">
                                     <label class="col-md-1 control-label">Result Doc:</label>
-
-                                    <div class="col-md-2" id="item4">
-                                        {% if english_obj.english_test_one_result_document %}
+                                    <div class="col-md-2" id="item1">
+                                        {% if qualification_obj.a_level_result_document %}
                                             <label class="form-control"
                                                    style="border-color: #b1ad9f;  width: 100%;text-align: left"><input
                                                     style="width: 50%"
                                                     type='button' class="file" value='Choose File:'><a
                                                     href="
 
-                                                            {{ english_obj.applicant_id.report_path }}{{ english_obj.english_test_one_result_document }}"><input
+
+
+
+
+                                                            {{ qualification_obj.applicant_id.report_path }}{{ qualification_obj.a_level_result_document }}"><input
                                                     readonly
-                                                    class="file_value emp eng_emp"
-                                                    style="border: none; width: 50%"
-                                                    name="english_test_one_result_document_text"
-                                                    value="{{ english_obj.english_test_one_result_document }}"></a></label>
+                                                    class="file_value emp chk"
+                                                    style="border: none; width: 50%" name="a_level_result_document_text"
+                                                    value="{{ qualification_obj.a_level_result_document }}"></a></label>
                                         {% else %}
                                             <label class="form-control"
                                                    style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
                                                     class="file" style="width: 50%"
                                                     type='button' value='Choose File:'><a><input type="text"
                                                                                                  readonly
-                                                                                                 name="english_test_one_result_document_text"
-                                                                                                 class="file_value emp eng_emp"
+                                                                                                 name="a_level_result_document_text"
+                                                                                                 class="file_value emp chk"
                                                                                                  style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
                                         {% endif %}
 
                                         <input style="display: none" type="file" title="Select Result document"
-                                               id="english_test_one_result_document"
-                                               name="english_test_one_result_document" class="file_type">
+                                               id="a_level_result_document"
+                                               name="a_level_result_document" class="file_type">
                                         <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
                                               class="remove_doc fa fa-close"></span>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
 
-                                    <br>
-                                    <br>
-                                    <br>
+                        <br>
+                        <hr>
+                        <br>
 
-                                    <div class="row">
-                                        <div class="">
-                                            <label class="col-md-2 control-label">English Competency Test 2 :</label>
-                                            <div class="col-md-1">
-                                                <input type="text" title="Enter English Competency Test 2"
-                                                       id="english_test_two"
-                                                       name="english_test_two"
-                                                       value="{{ english_obj.english_test_two }}"
-                                                       class="form-control">
-                                            </div>
-                                        </div>
-
-                                        <div class="">
-                                            <label class="col-md-1 control-label">Year:</label>
-                                            <div class="col-md-1">
-                                                <select id='english_test_two_year' title="Select Year"
-                                                        name="english_test_two_year"
-                                                        class="form-control">
-                                                    {% if english_obj %}
-                                                        <option style="display:none" selected="selected"
-                                                                value="{{ english_obj.english_test_two_year }}"
-                                                                value="">{{ english_obj.english_test_two_year }}</option>
-                                                    {% else %}
-                                                        <option style="display:none" selected="selected" id="" value="">
-                                                            Please
-                                                            Select
-                                                        </option>
-                                                    {% endif %}
-
-                                                    {% for rec in passing_year_recs %}
-                                                        <option value='{{ rec.year }}'>{{ rec.year }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="">
-                                            <label class="col-md-1 control-label"> Result:</label>
-                                            <div class="col-md-1">
-                                                <input type="text" title="Enter result" id="english_test_two_result"
-                                                       name="english_test_two_result"
-                                                       value="{{ english_obj.english_test_two_result }}"
-                                                       class="form-control">
-                                            </div>
-                                        </div>
-
-                                        <div class="">
-                                            <label class="col-md-1 control-label">Result Doc:</label>
-                                            <div class="col-md-2" id="item5">
-
-                                                {% if english_obj.english_test_two_result_document %}
-                                                    <label class="form-control"
-                                                           style="border-color: #b1ad9f;  width: 100%;text-align: left"><input
-                                                            style="width: 50%"
-                                                            type='button' class="file" value='Choose File:'><a
-                                                            href="
-
-                                                                    {{ english_obj.applicant_id.report_path }}{{ english_obj.english_test_two_result_document }}"><input
-                                                            readonly
-                                                            class="file_value emp"
-                                                            style="border: none; width: 50%"
-                                                            name="english_test_two_result_document_text"
-                                                            value="{{ english_obj.english_test_two_result_document }}"></a></label>
-                                                {% else %}
-                                                    <label class="form-control"
-                                                           style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
-                                                            class="file" style="width: 50%"
-                                                            type='button' value='Choose File:'><a><input type="text"
-                                                                                                         readonly
-                                                                                                         name="english_test_two_result_document_text"
-                                                                                                         class="file_value emp"
-                                                                                                         style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
-                                                {% endif %}
-
-                                                <input style="display: none" type="file" title="Select Result document"
-                                                       id="english_test_two_result_document"
-                                                       name="english_test_two_result_document" class="file_type">
-                                                <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
-                                                      class="remove_doc fa fa-close"></span>
-                                            </div>
-                                        </div>
+                        <div class="row item" id="check_2">
+                            <div class="row">
+                                <div class="">
+                                    <label class="col-md-1 control-label">'O' level :</label>
+                                    <div class="col-md-2">
+                                        <input type="text" title="Enter 'O' Level" id="o_level" name="o_level"
+                                               value="{{ qualification_obj.o_level }}" class="form-control chk">
                                     </div>
-                                    <br>
+                                </div>
 
-                                    <br><br>
-                                    <br><br>
+                                <div class="">
+                                    <label class="col-md-1 control-label">Year:</label>
+                                    <div class="col-md-2">
+                                        <select id='o_level_year' title="Select Year" name="o_level_year"
+                                                class="form-control chk">
+                                            {% if qualification_obj %}
+                                                <option style="display:none" selected="selected"
+                                                        value="{{ qualification_obj.o_level_year }}"
+                                                        value="">{{ qualification_obj.o_level_year }}</option>
+                                            {% else %}
+                                                <option style="display:none" selected="selected" id="" value="">Please
+                                                    Select
+                                                </option>
+                                            {% endif %}
 
-                                    <div class="row">
-                                        <div class="col-md-offset-5 col-md-7">
-                                            <button type="button" class="btn blue" id="save" style="margin-left: 70%"
-                                                    onclick="window.location='{% url "student:applicant_family_mother_sibling_info" %}'">
-                                                Back
-                                            </button>
-                                            <button type="button" class="btn green" id="save_form" style="">Save/Next
-                                            </button>
-                                            {% comment %}<button type="button" class="btn blue" id="next"
+                                            {% for rec in passing_year_recs %}
+                                                <option value='{{ rec.year }}'>{{ rec.year }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <label class="col-md-1 control-label"> Result:</label>
+                                    <div class="col-md-2">
+                                        <input type="text" title="Enter result" id="o_level_result"
+                                               name="o_level_result"
+                                               value="{{ qualification_obj.o_level_result }}" class="form-control chk">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br>
+
+                            <div class="row">
+                                <div class="">
+                                    <label class="col-md-1 control-label"> Institution:</label>
+                                    <div class="col-md-2">
+                                        <input type="text" title="Enter institution" id="o_level_institution"
+                                               name="o_level_institution"
+                                               value="{{ qualification_obj.o_level_institution }}"
+                                               class="form-control chk">
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <label class="col-md-1 control-label">Result Doc:</label>
+                                    <div class="col-md-2" id="item2">
+                                        {% if qualification_obj.o_level_result_document %}
+                                            <label class="form-control"
+                                                   style="border-color: #b1ad9f;  width: 100%;text-align: left"><input
+                                                    style="width: 50%"
+                                                    type='button' class="file" value='Choose File:'><a
+                                                    href="
+
+
+
+
+                                                            {{ qualification_obj.applicant_id.report_path }}{{ qualification_obj.o_level_result_document }}"><input
+                                                    readonly
+                                                    class="file_value emp chk"
+                                                    style="border: none; width: 50%" name="o_level_result_document_text"
+                                                    value="{{ qualification_obj.o_level_result_document }}"></a></label>
+                                        {% else %}
+                                            <label class="form-control"
+                                                   style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                    name="o_level_result_document_text"
+                                                    class="file" style="width: 50%"
+                                                    type='button' value='Choose File:'><a><input type="text"
+                                                                                                 readonly
+                                                                                                 class="file_value emp chk"
+                                                                                                 style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
+                                        {% endif %}
+
+                                        <input style="display: none" type="file" title="Select Result document"
+                                               id="o_level_result_document"
+                                               name="o_level_result_document" class="file_type">
+                                        <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                                              class="remove_doc fa fa-close"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+                        <hr>
+                        <br>
+                        <div class="row item" id="check_3">
+                            <div class="row">
+                                <div class="">
+                                    <label class="col-md-1 control-label">High School :</label>
+                                    <div class="col-md-2">
+                                        <input type="text" title="Enter high school" id="high_school" name="high_school"
+                                               value="{{ qualification_obj.high_school }}" class="form-control chk">
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <label class="col-md-1 control-label">Year:</label>
+                                    <div class="col-md-2">
+                                        <select id='high_school_year' title="Select Year" name="high_school_year"
+                                                class="form-control chk">
+                                            {% if qualification_obj %}
+                                                <option style="display:none" selected="selected"
+                                                        value="{{ qualification_obj.high_school_year }}"
+                                                        value="">{{ qualification_obj.high_school_year }}</option>
+                                            {% else %}
+                                                <option style="display:none" selected="selected" id="" value="">Please
+                                                    Select
+                                                </option>
+                                            {% endif %}
+
+                                            {% for rec in passing_year_recs %}
+                                                <option value='{{ rec.year }}'>{{ rec.year }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <label class="col-md-1 control-label"> Result:</label>
+                                    <div class="col-md-2">
+                                        <input type="text" title="Enter result" id="high_school_result"
+                                               name="high_school_result"
+                                               value="{{ qualification_obj.high_school_result }}"
+                                               class="form-control chk">
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+
+
+                            <div class="row">
+
+                                <div class="">
+                                    <label class="col-md-1 control-label"> Institution:</label>
+                                    <div class="col-md-2">
+                                        <input type="text" title="Enter institution" id="high_school_institution"
+                                               name="high_school_institution"
+                                               value="{{ qualification_obj.high_school_institution }}"
+                                               class="form-control chk">
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <label class="col-md-1 control-label">Result Doc:</label>
+                                    <div class="col-md-2" id="item3">
+                                        {% if qualification_obj.high_school_result_document %}
+                                            <label class="form-control"
+                                                   style="border-color: #b1ad9f;  width: 100%;text-align: left"><input
+                                                    style="width: 50%"
+                                                    type='button' class="file" value='Choose File:'><a
+                                                    href="
+
+
+
+
+                                                            {{ qualification_obj.applicant_id.report_path }}{{ qualification_obj.high_school_result_document }}"><input
+                                                    readonly
+                                                    class="file_value emp chk"
+                                                    style="border: none; width: 50%"
+                                                    name="high_school_result_document_text"
+                                                    value="{{ qualification_obj.high_school_result_document }}"></a></label>
+                                        {% else %}
+                                            <label class="form-control"
+                                                   style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                    class="file" style="width: 50%"
+                                                    type='button' value='Choose File:'><a><input type="text"
+                                                                                                 readonly
+                                                                                                 name="high_school_result_document_text"
+                                                                                                 class="file_value emp chk"
+                                                                                                 style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
+                                        {% endif %}
+
+                                        <input style="display: none" type="file" title="Select Result document"
+                                               id="high_school_result_document"
+                                               name="high_school_result_document" class="file_type">
+                                        <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                                              class="remove_doc fa fa-close"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <br>
+                        <br>
+                        <hr>
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-settings font-red"></i>
+                                <span class="caption-subject font-red sbold uppercase"> English Qualification</span>
+                            </div>
+                        </div>
+                        <hr>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">English Competency Test 1 :</label>
+                                <div class="col-md-1">
+                                    <input type="text" title="Enter English Competency Test 1" id="english_test_one"
+                                           name="english_test_one" value="{{ english_obj.english_test_one }}"
+                                           class="form-control eng_emp">
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Year:</label>
+                                <div class="col-md-1">
+                                    <select id='english_test_one_year' title="Select Year"
+                                            name="english_test_one_year"
+                                            class="form-control eng_emp">
+                                        {% if english_obj %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ english_obj.english_test_one_year }}"
+                                                    value="">{{ english_obj.english_test_one_year }}</option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">Please
+                                                Select
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in passing_year_recs %}
+                                            <option value='{{ rec.year }}'>{{ rec.year }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label"> Result:</label>
+                                <div class="col-md-1">
+                                    <input type="text" title="Enter result" id="english_test_one_result"
+                                           name="english_test_one_result"
+                                           value="{{ english_obj.english_test_one_result }}"
+                                           class="form-control eng_emp">
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Result Doc:</label>
+
+                                <div class="col-md-2" id="item4">
+                                    {% if english_obj.english_test_one_result_document %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left"><input
+                                                style="width: 50%"
+                                                type='button' class="file" value='Choose File:'><a
+                                                href="
+
+
+
+
+
+
+
+
+                                                        {{ english_obj.applicant_id.report_path }}{{ english_obj.english_test_one_result_document }}"><input
+                                                readonly
+                                                class="file_value emp eng_emp"
+                                                style="border: none; width: 50%"
+                                                name="english_test_one_result_document_text"
+                                                value="{{ english_obj.english_test_one_result_document }}"></a></label>
+                                    {% else %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a><input type="text"
+                                                                                             readonly
+                                                                                             name="english_test_one_result_document_text"
+                                                                                             class="file_value emp eng_emp"
+                                                                                             style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
+                                    {% endif %}
+
+                                    <input style="display: none" type="file" title="Select Result document"
+                                           id="english_test_one_result_document"
+                                           name="english_test_one_result_document" class="file_type">
+                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                                          class="remove_doc fa fa-close"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+                        <br>
+                        <br>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">English Competency Test 2 :</label>
+                                <div class="col-md-1">
+                                    <input type="text" title="Enter English Competency Test 2"
+                                           id="english_test_two"
+                                           name="english_test_two"
+                                           value="{{ english_obj.english_test_two }}"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Year:</label>
+                                <div class="col-md-1">
+                                    <select id='english_test_two_year' title="Select Year"
+                                            name="english_test_two_year"
+                                            class="form-control">
+                                        {% if english_obj %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ english_obj.english_test_two_year }}"
+                                                    value="">{{ english_obj.english_test_two_year }}</option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">
+                                                Please
+                                                Select
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in passing_year_recs %}
+                                            <option value='{{ rec.year }}'>{{ rec.year }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label"> Result:</label>
+                                <div class="col-md-1">
+                                    <input type="text" title="Enter result" id="english_test_two_result"
+                                           name="english_test_two_result"
+                                           value="{{ english_obj.english_test_two_result }}"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Result Doc:</label>
+                                <div class="col-md-2" id="item5">
+
+                                    {% if english_obj.english_test_two_result_document %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left"><input
+                                                style="width: 50%"
+                                                type='button' class="file" value='Choose File:'><a
+                                                href="
+
+
+
+
+
+
+
+
+                                                        {{ english_obj.applicant_id.report_path }}{{ english_obj.english_test_two_result_document }}"><input
+                                                readonly
+                                                class="file_value emp"
+                                                style="border: none; width: 50%"
+                                                name="english_test_two_result_document_text"
+                                                value="{{ english_obj.english_test_two_result_document }}"></a></label>
+                                    {% else %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a><input type="text"
+                                                                                             readonly
+                                                                                             name="english_test_two_result_document_text"
+                                                                                             class="file_value emp"
+                                                                                             style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
+                                    {% endif %}
+
+                                    <input style="display: none" type="file" title="Select Result document"
+                                           id="english_test_two_result_document"
+                                           name="english_test_two_result_document" class="file_type">
+                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                                          class="remove_doc fa fa-close"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+
+                        <br><br>
+                        <br><br>
+
+                        <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="save" style="margin-left: 70%"
+                                        onclick="window.location='{% url "student:applicant_family_mother_sibling_info" %}'">
+                                    Back
+                                </button>
+                                <button type="button" class="btn green" id="save_form" style="">Save/Next
+                                </button>
+                                {% comment %}<button type="button" class="btn blue" id="next"
                                         onclick="window.location='{% url "student:applicant_curriculum_experience_info" %}'">
                                     Next
                                 </button>{% endcomment %}
-                                        </div>
-                                    </div>
-                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
