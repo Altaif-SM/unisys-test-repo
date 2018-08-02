@@ -88,28 +88,31 @@
                     $('label').css('border-color', '');
 
                     var final_flag = false;
-                    var check_flag = false;
+
                     $('.item').each(function () {
                         var parent_id = $(this).attr('id');
 
-                        var empty_flag = false;
+                        var empty_flag = false;;
+                        var check_flag = false;
                         $('#' + parent_id + ' .chk').each(function (e) {
                             if ($(this).val() != '') {
                                 empty_flag = true;
                             }
                             else {
-                                check_flag = true;
                                 if ($(this).hasClass('file_value')) {
                                     $(this).parents('label').css('border-color', 'red');
+                                    check_flag = true;
                                 }
                                 else {
                                     $(this).css('border-color', 'red');
+                                    check_flag = true;
                                 }
                             }
                         })
 
 
                         if (empty_flag && check_flag) {
+                            alert('final_flag')
                             final_flag = true;
                         }
 
@@ -362,10 +365,6 @@
                                                     style="width: 50%"
                                                     type='button' class="file" value='Choose File:'><a
                                                     href="
-
-
-
-
                                                             {{ qualification_obj.applicant_id.report_path }}{{ qualification_obj.o_level_result_document }}"><input
                                                     readonly
                                                     class="file_value emp chk"
@@ -374,9 +373,9 @@
                                         {% else %}
                                             <label class="form-control"
                                                    style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
-                                                    name="o_level_result_document_text"
                                                     class="file" style="width: 50%"
                                                     type='button' value='Choose File:'><a><input type="text"
+                                                                                                 name="o_level_result_document_text"
                                                                                                  readonly
                                                                                                  class="file_value emp chk"
                                                                                                  style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
