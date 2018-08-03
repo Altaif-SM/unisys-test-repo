@@ -1,0 +1,26 @@
+{#{% extends "template_base_page.html" %}#}
+
+{% block content %}
+            <table>
+                <tr>
+                    <td style="text-align: center">
+                        <span class="">First Name: {{ application_obj.first_name }}</span>
+                    </td>
+
+                    <td style="text-align: center">
+                        <span class="">Last Name: {{ application_obj.last_name }}</span>
+                    </td>
+
+                    <td style="text-align: center">
+                        <span class="">Last Name: {{ application_obj.last_name }}</span>
+                    </td>
+                    <td style="text-align: center; font-size: {{ x }}px">
+                        <p>Country name {{ application_obj.address.country.country_name }}</p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{% endblock %}

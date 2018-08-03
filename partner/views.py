@@ -1614,3 +1614,29 @@ def save_students_parent_linking(request):
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
     return redirect('/partner/template_link_students_parent/')
+
+
+
+
+def application_all_details_pdf(request,app_id):
+    year_recs = YearDetails.objects.all()
+    curriculum_obj = ''
+    experience_obj = ''
+
+    x = 16
+
+    application_obj = ApplicationDetails.objects.get(id=app_id)
+
+
+    template = get_template('application_all_details_pdf.html')
+    Context = ({'application_obj':application_obj,'x':x})
+    html = template.render(Context)
+
+    file = open('test.pdf', "w+b")
+    pisaStatus = pisa.CreatePDF(html.encode('utf-8'), dest=file,
+            encoding='utf-8')
+
+    file.seek(0)
+    pdf = file.read()
+    file.close()
+    return HttpResponse(pdf, 'application/pdf')

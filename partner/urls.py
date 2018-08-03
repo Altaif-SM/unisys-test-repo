@@ -6,9 +6,10 @@ from django.conf.urls.static import static
 app_name = 'partner'
 
 urlpatterns = [
-                  path('partner_home/', views.partner_home,name='partner_home'),
+                  path('partner_home/', views.partner_home, name='partner_home'),
 
-                  path('template_registered_application/', views.template_registered_application,name='template_registered_application'),
+                  path('template_registered_application/', views.template_registered_application,
+                       name='template_registered_application'),
                   path('filter_registered_application/', views.filter_registered_application,
                        name='filter_registered_application'),
                   path('export_registered_application/', views.export_registered_application,
@@ -67,9 +68,14 @@ urlpatterns = [
                   path('template_student_agreement/', views.template_student_agreement,
                        name='template_student_agreement'),
                   path('template_semester_result/', views.template_semester_result, name='template_semester_result'),
-                  path('donar_student_linking_export/', views.donar_student_linking_export, name='donar_student_linking_export'),
+                  path('donar_student_linking_export/', views.donar_student_linking_export,
+                       name='donar_student_linking_export'),
 
-                  path('template_link_students_parent/', views.template_link_students_parent, name='template_link_students_parent'),
-                  path('save_students_parent_linking/', views.save_students_parent_linking, name='save_students_parent_linking'),
+                  path('template_link_students_parent/', views.template_link_students_parent,
+                       name='template_link_students_parent'),
+                  path('save_students_parent_linking/', views.save_students_parent_linking,
+                       name='save_students_parent_linking'),
+
+                  path('application_all_details_pdf/<int:app_id>/', views.application_all_details_pdf, name='application_all_details_pdf'),
                   # path('generate_student_details_pdf/<int:app_id>/', views.generate_student_details_pdf,name='generate_student_details_pdf'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

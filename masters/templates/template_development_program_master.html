@@ -180,16 +180,16 @@
         </div>
 
         <div class="portlet-body">
-            <form action="{% url 'masters:generate_PDF' %}" id="form_sample_1"
+            {% comment %}<form action="{% url 'masters:generate_PDF' %}" id="form_sample_1"
                   class="form-horizontal"
                   method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                {% comment %}<div class="row">
+                <div class="row">
                     <div class="col-md-offset-5 col-md-7">
-                        <button type="submit" class="btn green" id="save">Add</button>
+                        <button type="submit" class="btn green" id="save">PDF</button>
                     </div>
-                </div>{% endcomment %}
-            </form>
+                </div>
+            </form>{% endcomment %}
 
             <!-- BEGIN FORM-->
             <div class="form-body">
