@@ -21,6 +21,8 @@ urlpatterns = [
                        name='template_approving_application'),
                   path('filter_application_status/', views.filter_application_status, name='filter_application_status'),
                   path('change_application_status/', views.change_application_status, name='change_application_status'),
+                  path('change_final_application_status/', views.change_final_application_status,
+                       name='change_final_application_status'),
 
                   path('template_application_approval_details/<int:app_id>/',
                        views.template_application_approval_details, name='template_application_approval_details'),
@@ -76,6 +78,7 @@ urlpatterns = [
                   path('save_students_parent_linking/', views.save_students_parent_linking,
                        name='save_students_parent_linking'),
 
-                  path('application_all_details_pdf/<int:app_id>/', views.application_all_details_pdf, name='application_all_details_pdf'),
+                  path('application_all_details_pdf/<int:app_id>/', views.application_all_details_pdf,
+                       name='application_all_details_pdf'),
                   # path('generate_student_details_pdf/<int:app_id>/', views.generate_student_details_pdf,name='generate_student_details_pdf'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

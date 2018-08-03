@@ -203,7 +203,7 @@
 
         <div class="portlet-body">
             <div class="form-body">
-                <form action="{% url 'partner:change_application_status' %}"
+                <form action="{% url 'partner:change_final_application_status' %}"
                       id="id_application_status_form"
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
@@ -316,14 +316,14 @@
                                     <div class=" col-md-3">
                                         <input type="checkbox" name="accept_interview" {% if flag_schedule %}
                                                class="flag_schedule" {% endif %}
-                                               id="id_accept_interview"> {{ approval_messages }}
+                                               id="id_accept_interview" required> {{ approval_messages }}
                                     </div>
                                 {% endif %}
 
-                                <div class=" col-md-3">
+                                {% comment %}<div class=" col-md-3">
                                     <input type="checkbox" name="reject_interview" {% if application_rec.application_rejection %} checked{% endif %}
                                            id="id_reject_interview"> Reject Application
-                                </div>
+                                </div>{% endcomment %}
                             </div>
 
 
