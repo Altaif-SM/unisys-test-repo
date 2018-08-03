@@ -1,0 +1,203 @@
+{% extends "template_base_page.html" %}
+{% load staticfiles %}
+
+{% block ScriptBlock %}
+    <script>
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+
+         window.onload = function () {
+
+             $(document).ready(function () {
+                  $(document).on("click", "#button_pdf_id", function (e) {
+                 $('#form_pdf_id').submit();
+             });
+
+                 $(document).on("change", "#id_accept_student", function (e) {
+
+                     if (e.target.checked) {
+                         $('#id_accept_student_model').modal();
+                     } else {
+                         $('#id_accept_student').prop('checked', false);
+                     }
+
+                 });
+
+                 $(document).on("click", "#cancel_model", function (e) {
+
+                     $('#id_accept_student').prop('checked', false);
+
+                 });
+             });
+         }
+
+
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                {% if user.is_student %}
+                    <a href="{% url 'student:student_home' %}">Home</a>
+                {% elif user.is_donor %}
+                    <a href="{% url 'donor:template_donor_dashboard' %}">Home</a>
+                {% elif user.is_partner %}
+                    <a href="{% url 'accounts:home' %}">Home</a>
+                {% else %}
+                    <a href="{% url 'accounts:home' %}">Home</a>
+                {% endif %}
+                <i class="fa fa-angle-right"></i>
+            </li>
+            {% if user.is_donor %}
+                <li>
+                     <a href="{% url 'donor:template_student_selection' %}">Scholarship</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+            {% endif %}
+
+            <li>
+                <span> Partner Details</span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase"> Partner Details</span>
+                 <span style="margin-left: 800px">
+                <button type="button" id="button_pdf_id" class="btn green" id="save">PDF</button>
+                    </span>
+
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="form-body">
+
+            <form action="{% url 'masters:partner_all_details_pdf' partner_rec.id %}" id="form_pdf_id"
+                          class="form-horizontal"
+                          method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row" style="margin-top: -20px">
+
+                        </div>
+            </form>
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-1 control-label">Name:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ partner_rec.user.get_full_name }}</span>
+
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Country:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ partner_rec.address.country.country_name }}</span>
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Office:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ partner_rec.office_name }}</span>
+                        </div>
+                    </div>
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-1 control-label">Person in charge 1:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ partner_rec.person_one }}</span>
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Mobile:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ partner_rec.person_one_contact_number }}</span>
+
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Person in charge 2:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ partner_rec.person_two }}</span>
+
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+
+
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-1 control-label">Mobile:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ partner_rec.person_two_contact_number }}</span>
+
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Office Contact:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ partner_rec.office_contact_number }}</span>
+
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Email:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ partner_rec.email }}</span>
+
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-1 control-label">Address:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ partner_rec.single_address }}</span>
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Photo:</label>
+                        <div class="col-md-2">
+                            <span class=""><img src="{{ partner_rec.photo.url }}"></span>
+                        </div>
+                    </div>
+
+                </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

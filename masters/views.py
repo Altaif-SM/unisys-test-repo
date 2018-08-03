@@ -839,7 +839,8 @@ def save_manage_partner_master(request):
             country=country)
         try:
             if pic:
-                dirname = datetime.now().strftime('%Y.%m.%d.%H.%M.%S')
+                parent_obj = PartnerDetails.objects.get(id=parent_obj)
+                dirname = datetime.datetime.now().strftime('%Y.%m.%d.%H.%M.%S')
                 filename = "%s_%s.%s" % (str(parent_obj.id), dirname, 'png')
                 raw_file_path_and_name = os.path.join('images/' + filename)
                 data = str(pic)
@@ -1208,3 +1209,75 @@ def get_table_data(request):
     data = {'id': 1, 'column_name': 'abc', 'value': 'ABCD'}
 
     return HttpResponse(json.dumps(data), content_type="application/json")
+
+def template_partner_details(request, partner_id=None):
+    if partner_id:
+        partner_rec = PartnerDetails.objects.get(id=partner_id)
+        return render(request, "template_partner_details.html", {'partner_rec': partner_rec})
+
+
+
+def partner_all_details_pdf(request,partner_id):
+    try:
+        year_recs = YearDetails.objects.all()
+        curriculum_obj = ''
+        experience_obj = ''
+
+
+        x = 14
+
+
+
+        if partner_id:
+            partner_rec = PartnerDetails.objects.get(id=partner_id)
+        template = get_template('template_partner_details_pdf.html')
+        Context = ({'partner_rec':partner_rec,'x':x})
+        html = template.render(Context)
+
+        file = open('test.pdf', "w+b")
+        pisaStatus = pisa.CreatePDF(html.encode('utf-8'), dest=file,
+                encoding='utf-8')
+
+        file.seek(0)
+        pdf = file.read()
+        file.close()
+        return HttpResponse(pdf, 'application/pdf')
+    except:
+        return redirect('/masters/template_partner_details/'+str(partner_id))
+
+
+def template_partner_details(request, partner_id=None):
+    if partner_id:
+        partner_rec = PartnerDetails.objects.get(id=partner_id)
+        return render(request, "template_partner_details.html", {'partner_rec': partner_rec})
+
+
+
+def partner_all_details_pdf(request,partner_id):
+    try:
+        year_recs = YearDetails.objects.all()
+        curriculum_obj = ''
+        experience_obj = ''
+
+
+        x = 14
+
+
+
+        if partner_id:
+            partner_rec = PartnerDetails.objects.get(id=partner_id)
+        template = get_template('template_partner_details_pdf.html')
+        Context = ({'partner_rec':partner_rec,'x':x})
+        html = template.render(Context)
+
+        file = open('test.pdf', "w+b")
+        pisaStatus = pisa.CreatePDF(html.encode('utf-8'), dest=file,
+                encoding='utf-8')
+
+        file.seek(0)
+        pdf = file.read()
+        file.close()
+        return HttpResponse(pdf, 'application/pdf')
+    except:
+        return redirect('/masters/template_partner_details/'+str(partner_id))
+

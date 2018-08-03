@@ -1,0 +1,97 @@
+{#{% extends "template_base_page.html" %}#}
+<style>
+    table {
+    border-collapse: collapse;
+}
+
+td {
+    padding-top: .5em;
+    padding-bottom: .5em;
+
+}
+
+</style>
+
+{% block content %}
+
+                    <span style="margin-left: 550px">
+                    <img style="width: 100px;" src={{  partner_rec.photo.path }}>
+                    </span>
+                    <hr>
+                    <br>
+
+            <table>
+
+
+
+                <tr>
+
+                    {% comment %}<span class="" style="margin-left: 105px">PERSONAL INFO :</span>{% endcomment %}
+                    <td style="text-align: left ;font-size: {{ x }}px;margin-top: 20px" >
+                        <span class="">Name: {{ partner_rec.user.get_full_name |title}}</span>
+                    </td>
+
+                    <td style="text-align: left;font-size: {{ x }}px">
+                        <span class="">Country : {{ partner_rec.address.country.country_name  }}</span>
+                    </td>
+
+                    <td style="text-align: left;font-size: {{ x }}px">
+                        <span class="">Office: {{ partner_rec.office_name}}</span>
+                    </td>
+
+                     </tr>
+
+                    <tr>
+                        <td style="text-align: left; font-size: {{ x }}px">
+                        <span>Person in charge 1: {{ partner_rec.person_one  }}</span>
+                        </td>
+
+
+                        <td style="text-align: left; font-size: {{ x }}px">
+                            <span>Mobile: {{partner_rec.person_one_contact_number  }}</span>
+                        </td>
+
+
+                        </tr>
+
+                <tr>
+                            <td style="text-align: left; font-size: {{ x }}px">
+                            <span>Person in charge 2:{{ partner_rec.person_two | title }}</span>
+                         </td>
+
+                    <td style="text-align: left; font-size: {{ x }}px">
+                        <span>Mobile: {{ partner_rec.person_two_contact_number }}</span>
+                    </td>
+                    </tr>
+                    <tr>
+
+                    <td style="text-align: left; font-size: {{ x }}px">
+                        <span>Office Contact: {{ partner_rec.office_contact_number }}</span>
+                    </td>
+
+                    <td style="text-align: left; font-size: {{ x }}px">
+                        <span>Email: {{ partner_rec.email  }}</span>
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td style="text-align: left; font-size: {{ x }}px">
+                        <span>Address: {{ partner_rec.single_address }}</span>
+                    </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+                </tbody>
+            </table>
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{% endblock %}

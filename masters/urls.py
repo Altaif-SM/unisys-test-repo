@@ -109,4 +109,7 @@ urlpatterns = [
     path('generate_PDF/', views.generate_PDF, name='generate_PDF'),
 
     path('get_table_data/', views.get_table_data, name='get_table_data'),
+
+    path('template_partner_details/<int:partner_id>/', views.template_partner_details, name='template_partner_details'),
+    path('partner_all_details_pdf/<int:partner_id>/', views.partner_all_details_pdf, name='partner_all_details_pdf'),
 ]
