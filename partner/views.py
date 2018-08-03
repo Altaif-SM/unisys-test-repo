@@ -28,7 +28,7 @@ def template_registered_application(request):
         university_recs = UniversityDetails.objects.all()
     else:
         applicant_recs = ApplicationDetails.objects.filter(
-            address__country=request.user.partner_user_rel.get().address.country,
+            nationality=request.user.partner_user_rel.get().address.country,
             is_submitted=True, year=get_current_year())
         university_recs = UniversityDetails.objects.filter(country=request.user.partner_user_rel.get().address.country)
     country_recs = CountryDetails.objects.all()
@@ -44,7 +44,7 @@ def export_registered_application(request):
         applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, year=get_current_year())
     else:
         applicant_recs = ApplicationDetails.objects.filter(
-            address__country=request.user.partner_user_rel.get().address.country,
+            nationality=request.user.partner_user_rel.get().address.country,
             is_submitted=True, year=get_current_year())
 
     rows = []
@@ -135,7 +135,7 @@ def filter_registered_application(request):
             university_recs = UniversityDetails.objects.all()
         else:
             applicant_recs = ApplicationDetails.objects.filter(
-                Q(address__country=request.user.partner_user_rel.get().address.country,
+                Q(nationality=request.user.partner_user_rel.get().address.country,
                   is_submitted=True), filter_nationality(nationality),
                 filter_degree(degree),
                 filter_university(university))
@@ -162,7 +162,7 @@ def template_approving_application(request):
             applicant_recs = ApplicationDetails.objects.filter(is_submitted=True)
         else:
             applicant_recs = ApplicationDetails.objects.filter(
-                address__country=request.user.partner_user_rel.get().address.country,
+                nationality=request.user.partner_user_rel.get().address.country,
                 is_submitted=True)
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
@@ -1043,41 +1043,41 @@ def filter_application_status(request):
 
             if application_status == 'First Interview':
                 applicant_recs = ApplicationDetails.objects.filter(
-                    address__country=request.user.partner_user_rel.get().address.country,
+                    nationality=request.user.partner_user_rel.get().address.country,
                     is_submitted=True, first_interview=True, year=get_current_year())
 
             elif application_status == 'First Interview attended':
                 applicant_recs = ApplicationDetails.objects.filter(
-                    address__country=request.user.partner_user_rel.get().address.country,
+                    nationality=request.user.partner_user_rel.get().address.country,
                     is_submitted=True, first_interview_attend=True, year=get_current_year())
 
             elif application_status == 'First Interview approval':
                 applicant_recs = ApplicationDetails.objects.filter(
-                    address__country=request.user.partner_user_rel.get().address.country,
+                    nationality=request.user.partner_user_rel.get().address.country,
                     is_submitted=True, first_interview_approval=True, year=get_current_year())
 
             elif application_status == 'Psychometric Test':
                 applicant_recs = ApplicationDetails.objects.filter(
-                    address__country=request.user.partner_user_rel.get().address.country,
+                    nationality=request.user.partner_user_rel.get().address.country,
                     is_submitted=True, psychometric_test=True, year=get_current_year())
 
             elif application_status == 'Second Interview attended':
                 applicant_recs = ApplicationDetails.objects.filter(
-                    address__country=request.user.partner_user_rel.get().address.country,
+                    nationality=request.user.partner_user_rel.get().address.country,
                     is_submitted=True, second_interview_attend=True, year=get_current_year())
 
             elif application_status == 'Second Interview approval':
                 applicant_recs = ApplicationDetails.objects.filter(
-                    address__country=request.user.partner_user_rel.get().address.country,
+                    nationality=request.user.partner_user_rel.get().address.country,
                     is_submitted=True, second_interview_approval=True, year=get_current_year())
 
             elif application_status == 'Admin approval':
                 applicant_recs = ApplicationDetails.objects.filter(
-                    address__country=request.user.partner_user_rel.get().address.country,
+                    nationality=request.user.partner_user_rel.get().address.country,
                     is_submitted=True, admin_approval=True, year=get_current_year())
             else:
                 applicant_recs = ApplicationDetails.objects.filter(
-                    address__country=request.user.partner_user_rel.get().address.country,
+                    nationality=request.user.partner_user_rel.get().address.country,
                     is_submitted=True, year=get_current_year())
 
     except Exception as e:
@@ -1094,7 +1094,7 @@ def template_student_progress_history(request):
             applicant_recs = ApplicationDetails.objects.filter(is_submitted=True)
         else:
             applicant_recs = ApplicationDetails.objects.filter(
-                address__country=request.user.partner_user_rel.get().address.country,
+                nationality=request.user.partner_user_rel.get().address.country,
                 is_submitted=True)
 
     except Exception as e:
@@ -1119,7 +1119,7 @@ def filter_application_history(request):
             application_obj = ApplicationDetails.objects.get(id=application)
         else:
             applicant_recs = ApplicationDetails.objects.filter(
-                address__country=request.user.partner_user_rel.get().address.country, is_submitted=True)
+                nationality=request.user.partner_user_rel.get().address.country, is_submitted=True)
             application_obj = ApplicationDetails.objects.get(id=application)
 
             application_history_recs = ApplicationDetails.objects.get(id=application).applicant_history_rel.all()
@@ -1140,7 +1140,7 @@ def template_psychometric_test_report(request):
                                                                  first_interview_approval=True)
         else:
             appliaction_recs = ApplicationDetails.objects.filter(year=get_current_year(), first_interview_approval=True,
-                                                                 address__country=request.user.partner_user_rel.get().address.country,
+                                                                 nationality=request.user.partner_user_rel.get().address.country,
                                                                  is_submitted=True)
 
         attended_list = []
@@ -1185,7 +1185,7 @@ def filter_psychometric_test_report(request):
                                                                  first_interview_approval=True)
         else:
             appliaction_recs = ApplicationDetails.objects.filter(year=get_current_year(), first_interview_approval=True,
-                                                                 address__country=request.user.partner_user_rel.get().address.country,
+                                                                 nationality=request.user.partner_user_rel.get().address.country,
                                                                  is_submitted=True)
 
         filter_rec = {}
@@ -1257,7 +1257,7 @@ def template_link_student_program(request):
         university_recs = UniversityDetails.objects.filter()
     else:
         applicant_recs = ApplicationDetails.objects.filter(
-            address__country=request.user.partner_user_rel.get().address.country,
+            nationality=request.user.partner_user_rel.get().address.country,
             year=get_current_year(), is_submitted=True)
         university_recs = UniversityDetails.objects.filter(country=request.user.partner_user_rel.get().address.country)
 
@@ -1354,7 +1354,7 @@ def template_academic_progress(request):
                     application_id.append(application.applicant_id.id)
         else:
             application_recs = ApplicantAcademicProgressDetails.objects.filter(applicant_id__year=get_current_year(),
-                                                                               applicant_id__address__country=request.user.partner_user_rel.get().address.country).order_by(
+                                                                               applicant_id__nationality=request.user.partner_user_rel.get().address.country).order_by(
                 '-last_updated')
             for application in application_recs:
                 if application.applicant_id.id not in application_id:
@@ -1399,7 +1399,7 @@ def filter_academic_progress(request):
         else:
             application_recs = ApplicantAcademicProgressDetails.objects.filter(applicant_id__in=applicant_ids,
                                                                                applicant_id__year=get_current_year(),
-                                                                               applicant_id__address__country=request.user.partner_user_rel.get().address.country).order_by(
+                                                                               applicant_id__nationality=request.user.partner_user_rel.get().address.country).order_by(
                 '-last_updated')
         for application in application_recs:
             if application.applicant_id.id not in application_id:
@@ -1492,7 +1492,7 @@ def template_attendance_report(request):
                 applicant_id__year=get_current_year())
         else:
             all_modules = StudentModuleMapping.objects.filter(
-                applicant_id__address__country=request.user.partner_user_rel.get().address.country,
+                applicant_id__nationality=request.user.partner_user_rel.get().address.country,
                 applicant_id__year=get_current_year())
 
         attended_list = []
@@ -1555,7 +1555,7 @@ def filter_attendance_report(request):
             all_modules = StudentModuleMapping.objects.filter(applicant_id__year=get_current_year())
         else:
             all_modules = StudentModuleMapping.objects.filter(
-                applicant_id__address__country=request.user.partner_user_rel.get().address.country,
+                applicant_id__nationality=request.user.partner_user_rel.get().address.country,
                 applicant_id__year=get_current_year())
 
         attended_list = []
@@ -1620,7 +1620,7 @@ def template_accepted_students(request):
 
         else:
             application_ids = ApplicationDetails.objects.filter(
-                address__country=request.user.partner_user_rel.get().address.country).values_list('id')
+                nationality=request.user.partner_user_rel.get().address.country).values_list('id')
         scholarship_recs = ScholarshipSelectionDetails.objects.filter(applicant_id__in=application_ids)
 
     except Exception as e:
@@ -1639,7 +1639,7 @@ def template_link_students_donor(request):
 
         else:
             application_ids = ApplicationDetails.objects.filter(
-                address__country=request.user.partner_user_rel.get().address.country).values_list('id')
+                nationality=request.user.partner_user_rel.get().address.country).values_list('id')
         scholarship_recs = ScholarshipSelectionDetails.objects.filter(applicant_id__in=application_ids)
 
     except Exception as e:
@@ -1679,7 +1679,7 @@ def template_donor_students_linking(request):
 
         else:
             applicant_ids = StudentDonorMapping.objects.filter(applicant_id__year=get_current_year(),
-                                                               applicant_id__address__country=request.user.partner_user_rel.get().address.country).values_list(
+                                                               applicant_id__nationality=request.user.partner_user_rel.get().address.country).values_list(
                 'applicant_id', flat=1)
             application_ids = ApplicationDetails.objects.filter(id__in=applicant_ids).values_list('id', flat=1)
 
@@ -1718,13 +1718,13 @@ def filter_donor_student_linking(request):
         else:
             if donor == 'All':
                 applicant_ids = StudentDonorMapping.objects.filter(applicant_id__year=get_current_year(),
-                                                                   applicant_id__address__country=request.user.partner_user_rel.get().address.country).values_list(
+                                                                   applicant_id__nationality=request.user.partner_user_rel.get().address.country).values_list(
                     'applicant_id', flat=1)
             else:
                 donor_obj = DonorDetails.objects.get(id=donor)
                 applicant_ids = StudentDonorMapping.objects.filter(applicant_id__year=get_current_year(),
                                                                    donor_id=donor,
-                                                                   applicant_id__address__country=request.user.partner_user_rel.get().address.country).values_list(
+                                                                   applicant_id__nationality=request.user.partner_user_rel.get().address.country).values_list(
                     'applicant_id', flat=1)
             application_ids = ApplicationDetails.objects.filter(id__in=applicant_ids).values_list('id', flat=1)
 
@@ -1744,7 +1744,7 @@ def template_student_agreement(request):
             all_applications = ApplicationDetails.objects.filter(year=YearDetails.objects.get(active_year=True))
         else:
             all_applications = ApplicationDetails.objects.filter(
-                address__country=request.user.partner_user_rel.get().address.country,
+                nationality=request.user.partner_user_rel.get().address.country,
                 year=YearDetails.objects.get(active_year=True))
 
         attended_list = []
@@ -1796,7 +1796,7 @@ def template_semester_result(request):
                     application_id.append(application.applicant_id.id)
         else:
             application_recs = ApplicantAcademicProgressDetails.objects.filter(applicant_id__year=get_current_year(),
-                                                                               applicant_id__address__country=request.user.partner_user_rel.get().address.country).order_by(
+                                                                               applicant_id__nationality=request.user.partner_user_rel.get().address.country).order_by(
                 '-last_updated')
             for application in application_recs:
                 if application.applicant_id.id not in application_id:
@@ -1890,13 +1890,13 @@ def donar_student_linking_export(request):
             else:
                 if donor == 'All':
                     applicant_ids = StudentDonorMapping.objects.filter(applicant_id__year=get_current_year(),
-                                                                       applicant_id__address__country=request.user.partner_user_rel.get().address.country).values_list(
+                                                                       applicant_id__nationality=request.user.partner_user_rel.get().address.country).values_list(
                         'applicant_id', flat=1)
                 else:
                     donor_obj = DonorDetails.objects.get(id=donor)
                     applicant_ids = StudentDonorMapping.objects.filter(applicant_id__year=get_current_year(),
                                                                        donor_id=donor,
-                                                                       applicant_id__address__country=request.user.partner_user_rel.get().address.country).values_list(
+                                                                       applicant_id__nationality=request.user.partner_user_rel.get().address.country).values_list(
                         'applicant_id', flat=1)
                 application_ids = ApplicationDetails.objects.filter(id__in=applicant_ids).values_list('id', flat=1)
 
