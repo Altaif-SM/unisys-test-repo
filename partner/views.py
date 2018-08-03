@@ -1619,24 +1619,35 @@ def save_students_parent_linking(request):
 
 
 def application_all_details_pdf(request,app_id):
-    year_recs = YearDetails.objects.all()
-    curriculum_obj = ''
-    experience_obj = ''
-
-    x = 16
-
-    application_obj = ApplicationDetails.objects.get(id=app_id)
+    try:
+        year_recs = YearDetails.objects.all()
+        curriculum_obj = ''
+        experience_obj = ''
 
 
-    template = get_template('application_all_details_pdf.html')
-    Context = ({'application_obj':application_obj,'x':x})
-    html = template.render(Context)
+        x = 14
 
-    file = open('test.pdf', "w+b")
-    pisaStatus = pisa.CreatePDF(html.encode('utf-8'), dest=file,
-            encoding='utf-8')
+        application_obj = ApplicationDetails.objects.get(id=app_id)
 
-    file.seek(0)
-    pdf = file.read()
-    file.close()
-    return HttpResponse(pdf, 'application/pdf')
+        siblings_obj = application_obj.sibling_applicant_rel.all() if application_obj.sibling_applicant_rel.all() else ''
+        qualification_obj = application_obj.academic_applicant_rel.get() if application_obj.academic_applicant_rel.all() else ''
+        english_obj = application_obj.english_applicant_rel.get() if application_obj.english_applicant_rel.all() else ''
+        curriculum_obj = application_obj.curriculum_applicant_rel.get() if application_obj.curriculum_applicant_rel.all() else ''
+        applicant_experience_obj = application_obj.applicant_experience_rel.get() if application_obj.applicant_experience_rel.all() else ''
+        scholarship_obj = application_obj.applicant_scholarship_rel.get() if application_obj.applicant_scholarship_rel.all() else ''
+
+        template = get_template('application_all_details_pdf.html')
+        Context = ({'application_obj':application_obj,'siblings_obj':siblings_obj,'qualification_obj':qualification_obj,'english_obj':english_obj,'curriculum_obj':curriculum_obj,'applicant_experience_obj':applicant_experience_obj,'scholarship_obj':scholarship_obj,'x':x})
+        html = template.render(Context)
+
+        file = open('test.pdf', "w+b")
+        pisaStatus = pisa.CreatePDF(html.encode('utf-8'), dest=file,
+                encoding='utf-8')
+
+        file.seek(0)
+        pdf = file.read()
+        file.close()
+        return HttpResponse(pdf, 'application/pdf')
+    except:
+        return redirect('/partner/template_applicant_all_details/'+str(app_id))
+
