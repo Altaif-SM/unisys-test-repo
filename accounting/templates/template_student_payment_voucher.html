@@ -318,13 +318,13 @@
 
                 <div class="form-body">
 
-                    <div class="row">
 
                         <form id="form_sample"
                               class="form-horizontal"
                               method="GET" enctype="multipart/form-data">
                             {% csrf_token %}
 
+                    <div class="row">
                             <div class="">
                                 <label class="col-md-2 control-label">Student:</label>
                                 <div class="col-md-2">
@@ -348,12 +348,13 @@
                                     <span id="id_student_error_msg" style="display: none;color: red;"></span>
                                 </div>
                             </div>
-                        </form>
-
+                    </div>
+                        </form><br><br>
                         <form action="{% url 'accounting:save_payment_voucher_data_by_student' %}" id="form_sample_1"
                               class="form-horizontal"
                               method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
+                <div class="row">
                             <input type="hidden" id="id_app_id" name="application" value="{{ raw_dict.application_rec.id }}">
                             <input type="hidden" name="btn_type" id="id_btn_type">
 
@@ -543,8 +544,7 @@
         </div>
 
         <div class="portlet-body">
-            <div class="table-toolbar">
-            </div>
+
 
             <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}

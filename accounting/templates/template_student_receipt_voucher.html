@@ -325,10 +325,12 @@
                                 </div>
                             </div>
                         </form>
+                    </div><br><br>
                         <form action="{% url 'accounting:save_student_receipt_voucher' %}" id="form_sample_1"
                               class="form-horizontal"
                               method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
+                    <div class="row">
                             <input type="hidden" id="id_app_id" name="application" value="{{ raw_dict.application_rec.id }}">
                             <input type="hidden" id="id_scholarship_fee" value="{{ raw_dict.application_rec.scholarship_fee }}">
                             <input type="hidden" name="btn_type" id="id_btn_type">
