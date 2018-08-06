@@ -95,8 +95,10 @@ License: You must have a valid license purchased only from themeforest(the above
             {#            <div class="menu-toggler sidebar-toggler">#}
             <div class="menu-toggler sidebar-toggler" id="id_toggle">
                 <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
-                <img  id="left" class="" style="width: 25px;height: 25px;display: none;margin-left: 20px;" src="{% static 'images/left_icon.png' %}">
-                <img  id="right" style="width: 25px;height: 25px;margin-left: 5px;" src="{% static 'images/right_icon.png' %}">
+                <img id="left" class="" style="width: 25px;height: 25px;display: none;margin-left: 20px;"
+                     src="{% static 'images/left_icon.png' %}">
+                <img id="right" style="width: 25px;height: 25px;margin-left: 5px;"
+                     src="{% static 'images/right_icon.png' %}">
             </div>
         </div>
 
@@ -128,14 +130,17 @@ License: You must have a valid license purchased only from themeforest(the above
                             {% if user.is_student %}
                                 {% if user.get_application %}
                                     <img alt="" class="img-circle" src="../../media/{{ user.get_application.image }}"/>
-                                    <span class="username username-hide-on-mobile"> {{ user.get_application.first_name }} {{ user.get_application.last_name }} </span>-<b><span class="username username-hide-on-mobile"> {{ user.get_application_id }}</span></b>
+                                    <span class="username username-hide-on-mobile"> {{ user.get_application.first_name }} {{ user.get_application.last_name }} </span>
+                                    -<b><span
+                                        class="username username-hide-on-mobile"> {{ user.get_application_id }}</span></b>
                                 {% endif %}
                             {% else %}
-{#                                <img alt="" class="img-circle" src="../../media/{{ user.get_application.image }}"/>#}
-                                <b><span class="username username-hide-on-mobile">{{ user.accountant_type }}-{{ user.first_name }} {{ user.last_name }} </span></b>
-{#                                <br>#}
-{#                                <span class="username username-hide-on-mobile"> {{ user.get_application_id }}#}
-                            </span>
+                                {#                                <img alt="" class="img-circle" src="../../media/{{ user.get_application.image }}"/>#}
+                                <b><span
+                                        class="username username-hide-on-mobile">{{ user.accountant_type }}-{{ user.first_name }} {{ user.last_name }} </span></b>
+                                {#                                <br>#}
+                                {#                                <span class="username username-hide-on-mobile"> {{ user.get_application_id }}#}
+                                </span>
                             {% endif %}
 
                             {#                            <i class="fa fa-angle-down"></i>#}
@@ -168,7 +173,42 @@ License: You must have a valid license purchased only from themeforest(the above
                     </li>
                 </ul>{% endcomment %}
 
+                {% comment %}<ul class="dropdown-menu pull-right" id="action">
+                                        <li><a href="javascript:;" class="action" id="First Interview"> First
+                                            Interview</a></li>
+                                        <li><a href="javascript:;" class="action" id="First Interview attended">First
+                                            Interview attended</a></li>
+                                        <li><a href="javascript:;" class="action" id="First Interview approval">First
+                                            Interview approval</a></li>
+                                        <li><a href="javascript:;" class="action" id="Psychometric Test">Psychometric
+                                            Test</a></li>
+                                        <li><a href="javascript:;" class="action" id="Second Interview attended">Second
+                                            Interview attended</a></li>
+                                        <li><a href="javascript:;" class="action" id="Second Interview approval">Second
+                                            Interview approval</a></li>
+{#                                        <li><a href="javascript:;" class="action" id="Admin approval">Admin approval</a></li>#}
+                                        <li><a href="javascript:;" class="action" id="Reject">Reject</a></li>
+                                    </ul>{% endcomment %}
+
                 <ul class="nav navbar-nav pull-right">
+
+                {% if user.is_super_admin %}
+                    <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
+                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
+                           data-close-others="true">
+                            <i class="icon-settings"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                {% for year in user.year_list %}
+                                    <a href="javascript:;" class="action" id="{{ year.id }}"> {{ year.year_name }}</a>
+                                {% endfor %}
+                            </li>
+                        </ul>
+                    </li>
+                {% endif %}
+
+
                     <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
                         {% if user.notifications.flag %}
                             <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
@@ -203,6 +243,8 @@ License: You must have a valid license purchased only from themeforest(the above
                             </a>
                         {% endif %}
                     </li>
+
+
                     <!-- BEGIN NOTIFICATION DROPDOWN -->
                     <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
 
@@ -217,6 +259,7 @@ License: You must have a valid license purchased only from themeforest(the above
                     <!-- END TODO DROPDOWN -->
                     <!-- BEGIN USER LOGIN DROPDOWN -->
                     <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
+
                     <li class="dropdown dropdown-user">
                         <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
                            data-close-others="true">
@@ -238,6 +281,8 @@ License: You must have a valid license purchased only from themeforest(the above
                             {#                    </li>#}
                             <i class="fa fa-angle-down"></i>
                         </a>
+
+
                         <ul class="dropdown-menu dropdown-menu-default">
                             {% comment %}<li>
                                 <a href="/school/my_profile/">
@@ -915,15 +960,40 @@ License: You must have a valid license purchased only from themeforest(the above
 <script type="text/javascript">
 
     $(document).on("click", "#id_toggle", function (e) {
-        if($('body').attr("class") == "page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid"){
+        if ($('body').attr("class") == "page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid") {
             $("#right").hide();
             $("#left").show();
-        }else{
+        } else {
             $("#right").show();
             $("#left").hide();
         }
 
     });
 
-    </script>
+    $(document).on("click", ".action", function (e) {
+        var selected_year = $(this).attr('id');
+        var url = '/masters/change_session_year/';
+
+        {#alert(selected_year);#}
+        change_session_year(url, selected_year)
+    })
+
+    function change_session_year(url, selected_year) {
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                selected_year: selected_year,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            success: function (data) {
+                location.reload();
+            },
+            error: function (xhr, msg, err) {
+                alert(xhr.responseJSON.error);
+            }
+        });
+    }
+
+</script>
 </html>

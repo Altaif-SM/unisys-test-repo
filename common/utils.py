@@ -202,8 +202,15 @@ def export_wraped_column_xls(output_file_name, column_names, rows):
     return response
 
 
-def get_current_year():
+def get_current_year(request=None):
     try:
+        try:
+            if request:
+                if request.session.get('selected_year'):
+                    return YearDetails.objects.get(id=request.session.get('selected_year'))
+        except:
+            pass
+
         return YearDetails.objects.get(active_year=True)
     except:
         return None

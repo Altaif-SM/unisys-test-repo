@@ -33,46 +33,6 @@
     <script>
         window.onload = function () {
             $(document).ready(function () {
-
-                {% comment %}$('#save').click(function () {
-                    var array = []
-
-                    $('.item').each(function (e) {
-                        var id = $(this).attr('id');
-                        var flags = {}
-
-                        $('#' + id + ' .app').each(function () {
-                            flags[$(this).attr('id')] = $(this).is(':checked')
-                            {#alert($(this).is(':checked'));#}
-                        })
-
-                        flags['id_scholarship_fee'] = $('#' + id + ' #id_scholarship_fee').val()
-                        {#alert($('#'+id+' .application_id').val())#}
-
-                        var payload = {
-                            'application_id': $('#' + id + ' .application_id').val(),
-                            'flags': flags
-                        }
-                        array.push(payload)
-                    })
-
-                    $('#data_value').val(JSON.stringify(array));
-
-                    {#console.log(JSON.stringify(array));#}
-                    {#return false;#}
-                }){% endcomment %}
-
-                {% comment %}$(document).on("change", ".class_admin", function (e) {
-                    var parent_id = $(this).closest('tr').attr('id');
-
-                    if (e.target.checked) {
-                        $('#' + parent_id + ' #id_scholarship_fee').show();
-                    } else {
-                        $('#' + parent_id + ' #id_scholarship_fee').hide();
-                    }
-                    {#alert(parent_id)#}
-
-                });{% endcomment %}
             });
 
 
@@ -83,30 +43,6 @@
                 ]
             });
 
-            {% comment %}$(document).on("change", ".class_detail", function (e) {
-                var parent = $(this).closest('tr').attr('id');
-                {#var td_id = $(this).closest('td').attr('id');#}
-
-                if (e.target.checked) {
-                    $('#id_accept_student_model').modal();
-                } else {
-                    $('#id_accept_student').prop('checked', false);
-                }
-
-            });{% endcomment %}
-
-
-            {% comment %}$(document).on("click", "#okay", function (e) {
-                var date = $('#id_accept_student_model #date').val();
-                var time = $('#id_accept_student_model #time').val();
-                var venue = $('#id_accept_student_model #venue').val();
-
-                var parent_id = $(this).closest('tr').attr('id');
-
-                $('#'+parent_id+' #id_time').val(time);
-                $('#'+parent_id+' #id_date').val(date);
-                $('#'+parent_id+' #id_venue').val(venue);
-            });{% endcomment %}
 
 
             function updateDataTableSelectAllCtrl(table) {

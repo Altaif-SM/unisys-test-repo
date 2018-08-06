@@ -87,6 +87,14 @@ class YearDetails(BaseModel):
     def __str__(self):
         return self.year_name
 
+    def to_dict(self):
+        res = {
+            'id': self.id if self.id else '',
+            'year_name': self.year_name if self.year_name else '',
+        }
+
+        return res
+
 
 class ReligionDetails(BaseModel):
     religion_name = models.CharField(max_length=255, blank=True, null=True)

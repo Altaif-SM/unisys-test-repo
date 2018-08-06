@@ -196,6 +196,11 @@ class User(AbstractUser):
         except:
             return payload
 
+    def year_list(self):
+        from masters.models import YearDetails
+        return YearDetails.objects.all()
+
+
     ADMIN_DASHBOARD = '/accounts/home/'
     STUDENT_DASHBOARD = '/student/student_home/'
     PARENT_DASHBOARD = '/accounts/home/'

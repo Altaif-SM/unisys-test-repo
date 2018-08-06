@@ -11,27 +11,27 @@ from django.db.models import Q
 from common.utils import *
 from datetime import datetime
 
+
 # Create your views here.
 def get_student_payment_voucher(request):
     # student_list = StudentDetails.objects.filter(student_applicant_rel__is_sponsored=True)
 
     query_student = request.GET.get('student') or None
 
-
     myDate = datetime.now()
 
     # Give a format to the date
     formatedDate = myDate.strftime("%d-%m-%Y")
 
-    student_list = ApplicationDetails.objects.filter(is_sponsored=True)
+    student_list = ApplicationDetails.objects.filter(is_sponsored=True, year=get_current_year(request))
 
-    voucher_record = StudentPaymentReceiptVoucher.objects.filter(voucher_type='debit')
-
+    voucher_record = StudentPaymentReceiptVoucher.objects.filter(voucher_type='debit',
+                                                                 application__year=get_current_year(request))
 
     raw_dict = {}
     if query_student:
-
-        application_rec =  ApplicationDetails.objects.get(is_sponsored=True, student_id=query_student)
+        application_rec = ApplicationDetails.objects.get(is_sponsored=True, student_id=query_student,
+                                                         year=get_current_year(request))
 
         voucher_ids = voucher_record.filter(application_id=application_rec).values('id')
         voucher_record = voucher_record.filter(id__in=voucher_ids)
@@ -51,20 +51,22 @@ def get_student_payment_voucher(request):
         raw_dict['voucher_rec'] = [obj.to_dict() for obj in voucher_record]
 
     return render(request, "template_student_payment_voucher.html",
-                  {'student_list': student_list, 'voucher_record': voucher_record, 'formatedDate': formatedDate, 'raw_dict': raw_dict})
+                  {'student_list': student_list, 'voucher_record': voucher_record, 'formatedDate': formatedDate,
+                   'raw_dict': raw_dict})
 
 
 def get_student_receipt_voucher(request):
-
     query_student = request.GET.get('student') or None
 
     # student_list = StudentDetails.objects.filter(student_applicant_rel__is_sponsored=True)
-    student_list = ApplicationDetails.objects.filter(is_sponsored=True)
-    voucher_record = StudentPaymentReceiptVoucher.objects.filter(voucher_type='credit')
+    student_list = ApplicationDetails.objects.filter(is_sponsored=True, year=get_current_year(request))
+    voucher_record = StudentPaymentReceiptVoucher.objects.filter(voucher_type='credit',
+                                                                 application__year=get_current_year(request))
 
     raw_dict = {}
     if query_student:
-        application_rec = ApplicationDetails.objects.get(is_sponsored=True, student_id=query_student)
+        application_rec = ApplicationDetails.objects.get(is_sponsored=True, student_id=query_student,
+                                                         year=get_current_year(request))
 
         voucher_ids = voucher_record.filter(application_id=application_rec).values('id')
         voucher_record = voucher_record.filter(id__in=voucher_ids)
@@ -84,7 +86,7 @@ def get_student_receipt_voucher(request):
 
 def get_student_payment_and_receipt_report(request):
     # student_list = StudentDetails.objects.filter(student_applicant_rel__is_sponsored=True)
-    student_list = ApplicationDetails.objects.filter(is_sponsored=True)
+    student_list = ApplicationDetails.objects.filter(is_sponsored=True, year=get_current_year(request))
     return render(request, "template_student_payment_and_receipt_report.html", {'student_list': student_list})
 
 
@@ -101,7 +103,7 @@ def get_student_report(request):
     debit_total = 0
     voucher_rec_list = []
 
-    stud_pay_voucher_list = StudentPaymentReceiptVoucher.objects.all()
+    stud_pay_voucher_list = StudentPaymentReceiptVoucher.objects.filter(application__year=get_current_year(request))
 
     if query_country:
         stud_pay_voucher_list = stud_pay_voucher_list.filter(application__address__country_id=query_country)
@@ -119,7 +121,6 @@ def get_student_report(request):
         ids_list = stud_pay_voucher_list.filter(application__applicant_progress_rel__semester_id=query_semester).values(
             "id").distinct()
         stud_pay_voucher_list = stud_pay_voucher_list.filter(id__in=ids_list)
-
 
     voucher_record = {}
     all_country_obj = type('', (object,), {"id": "", "country_name": "All"})()
@@ -151,7 +152,8 @@ def get_student_report(request):
 
         voucher_rec_list.append(obj)
 
-    balance_total = StudentPaymentReceiptVoucher.objects.values("application__scholarship_fee").distinct().aggregate(
+    balance_total = StudentPaymentReceiptVoucher.objects.filter(application__year=get_current_year(request)).values(
+        "application__scholarship_fee").distinct().aggregate(
         total_price=Sum('application__scholarship_fee'))
 
     if balance_total['total_price'] and stud_pay_voucher_list:
@@ -162,8 +164,11 @@ def get_student_report(request):
         voucher_record['voucher_record'] = voucher_rec_list
 
     return render(request, "template_student_report.html",
-                  {'voucher_record': voucher_record, 'country_list': country, 'scholarship_list': scholarship,'degree_list':degree, 'semester_list':semester,
-                   'selected_country': CountryDetails.objects.filter(id=query_country),'selected_degree': DegreeDetails.objects.filter(id=query_degree),'selected_semester': SemesterDetails.objects.filter(id=query_semester),
+                  {'voucher_record': voucher_record, 'country_list': country, 'scholarship_list': scholarship,
+                   'degree_list': degree, 'semester_list': semester,
+                   'selected_country': CountryDetails.objects.filter(id=query_country),
+                   'selected_degree': DegreeDetails.objects.filter(id=query_degree),
+                   'selected_semester': SemesterDetails.objects.filter(id=query_semester),
                    'selected_scholarship': ScholarshipDetails.objects.filter(id=query_scholarship)})
 
 
@@ -181,6 +186,7 @@ def get_filtered_student_report(request):
     voucher_rec_list = []
     for obj in StudentPaymentReceiptVoucher.objects.filter(application__address__country__country_name=country,
                                                            voucher_beneficiary=beneficiary,
+                                                           application__year=get_current_year(request),
                                                            application__scholarship_selection_rel__scholarship__scholarship_name=scholarship_type):
         if obj.voucher_type == "debit":
             debit_total += float(obj.voucher_amount)
@@ -190,7 +196,8 @@ def get_filtered_student_report(request):
 
         voucher_rec_list.append(obj)
 
-    balance_total = StudentPaymentReceiptVoucher.objects.values("application__scholarship_fee").distinct().aggregate(
+    balance_total = StudentPaymentReceiptVoucher.objects.filter(application__year=get_current_year(request)).values(
+        "application__scholarship_fee").distinct().aggregate(
         total_price=Sum('application__scholarship_fee'))
 
     voucher_record['debit_total'] = debit_total
@@ -221,7 +228,7 @@ def get_approval_and_paid_total(request):
 
     all_student_obj = type('', (object,), {"id": "", "get_full_name": "All"})()
     students = [all_student_obj]
-    for stud in ApplicationDetails.objects.filter(is_sponsored=True):
+    for stud in ApplicationDetails.objects.filter(is_sponsored=True, year=get_current_year(request)):
         students.append(stud)
 
     student_list = StudentDetails.objects.all().distinct()
@@ -348,9 +355,11 @@ def get_voucher_data_by_donor(request):
 
 def get_payment_voucher_data_by_student(request):
     application_rec = ApplicationDetails.objects.get(student_id=request.POST['student'])
-    voucher_record = StudentPaymentReceiptVoucher.objects.filter(application_id=application_rec.id)
+    voucher_record = StudentPaymentReceiptVoucher.objects.filter(application_id=application_rec.id,
+                                                                 application__year=get_current_year(request))
     total_amount = StudentPaymentReceiptVoucher.objects.filter(voucher_type="credit",
-                                                               application=application_rec).values(
+                                                               application=application_rec,
+                                                               application__year=get_current_year(request)).values(
         "voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
 
     total_debit_amount = StudentPaymentReceiptVoucher.objects.filter(voucher_type="debit",
@@ -377,7 +386,7 @@ def get_receipt_voucher_data_by_student(request):
         "voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
     raw_dict['application_rec'] = application_rec.to_application_dict()
     raw_dict['outstanding_amount'] = (float(application_rec.scholarship_fee) - float(balance_total['total_credit'])) if \
-    balance_total['total_credit'] else 0
+        balance_total['total_credit'] else 0
     raw_dict['voucher_rec'] = [obj.to_dict() for obj in voucher_record]
     return HttpResponse(json.dumps(raw_dict), content_type='application/json')
 
@@ -504,13 +513,13 @@ def save_donor_recipt_for_org_payment(request):
         val_dict = request.POST
         donor_voucher = DonorReceiptVoucher.get_instance(val_dict, None)
         donor_voucher.voucher_type = "debit"
-        donor_voucher.donor_student = StudentDonorMapping.objects.get(student_id=val_dict['student'], donor_id=val_dict['donor'])
+        donor_voucher.donor_student = StudentDonorMapping.objects.get(student_id=val_dict['student'],
+                                                                      donor_id=val_dict['donor'])
         donor_voucher.save()
         voucher_number = create_voucher_number("DRV", donor_voucher)
         donor_voucher.voucher_number = voucher_number
         donor_voucher.voucher_total = donor_voucher.application.calculate_student_payment_balance_amount()
         donor_voucher.save()
-
 
         if str(request.POST['btn_type']) == 'save_and_send':
             params = {
@@ -543,7 +552,8 @@ def export_student_recipt_voucher(request):
     try:
         val_dict = request.POST
         student_id = val_dict['student_id']
-        application_rec = ApplicationDetails.objects.filter(student_id=student_id, is_sponsored=True)
+        application_rec = ApplicationDetails.objects.filter(student_id=student_id, is_sponsored=True,
+                                                            year=get_current_year(request))
         voucher_record = StudentPaymentReceiptVoucher.objects.filter(application__in=application_rec)
         balance_total = StudentPaymentReceiptVoucher.objects.filter(voucher_type="credit",
                                                                     application__in=application_rec).values(
@@ -613,7 +623,8 @@ def export_student_payment_voucher(request):
     try:
         val_dict = request.POST
         student_id = val_dict['student_id']
-        application_rec = ApplicationDetails.objects.filter(student_id=student_id, is_sponsored=True)
+        application_rec = ApplicationDetails.objects.filter(student_id=student_id, is_sponsored=True,
+                                                            year=get_current_year(request))
         voucher_record = StudentPaymentReceiptVoucher.objects.filter(application__in=application_rec)
         balance_total = StudentPaymentReceiptVoucher.objects.filter(voucher_type="debit",
                                                                     application__in=application_rec).values(
@@ -888,7 +899,7 @@ def export_student_receipt_payment_report(request):
 
         all_student_obj = type('', (object,), {"id": "", "get_full_name": "All"})()
         students = [all_student_obj]
-        for stud in ApplicationDetails.objects.filter(is_sponsored=True):
+        for stud in ApplicationDetails.objects.filter(is_sponsored=True, year=get_current_year(request)):
             students.append(stud)
 
         student_list = StudentDetails.objects.all().distinct()
@@ -955,7 +966,7 @@ def student_receipt_payment_report_export(request):
         balance_total = 0
         debit_total = 0
         temp_list = []
-        stud_pay_voucher_list = StudentPaymentReceiptVoucher.objects.all()
+        stud_pay_voucher_list = StudentPaymentReceiptVoucher.objects.filter(application__year=get_current_year(request))
         if query_country:
             stud_pay_voucher_list = stud_pay_voucher_list.filter(application__address__country_id=query_country)
         if query_scholarship:
@@ -1011,7 +1022,7 @@ def student_receipt_payment_report_export(request):
 
             rec_list.append(balance_value)
             rows.append(rec_list)
-        balance_total = StudentPaymentReceiptVoucher.objects.values(
+        balance_total = StudentPaymentReceiptVoucher.objects.filter(application__year=get_current_year(request)).values(
             "application__scholarship_fee").distinct().aggregate(total_price=Sum('application__scholarship_fee'))
 
         if balance_total and stud_pay_voucher_list:
@@ -1035,7 +1046,7 @@ def export_payment_receipt_report(request):
         val_dict = request.POST
         student_id = val_dict['student_id']
         rows = []
-        application_rec = ApplicationDetails.objects.filter(student_id=student_id)
+        application_rec = ApplicationDetails.objects.filter(student_id=student_id, year=get_current_year(request))
         voucher_record = StudentPaymentReceiptVoucher.objects.filter(application__in=application_rec)
         total_amount = StudentPaymentReceiptVoucher.objects.filter(voucher_type="credit",
                                                                    application__in=application_rec).values(
@@ -1074,22 +1085,22 @@ from common.utils import render_to_pdf, render_to_file  # created in step 4
 from threading import Thread, activeCount
 from django.core.mail import EmailMultiAlternatives
 
-def send_email(file: list, subject, text_content, from_email, to):
 
+def send_email(file: list, subject, text_content, from_email, to):
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-    attachment = open('/home/redbytes/scholarship_mgmt_system/scholarship_mgmt/store/'+file[0], 'rb')
+    attachment = open('/home/redbytes/scholarship_mgmt_system/scholarship_mgmt/store/' + file[0], 'rb')
     msg.attach(file[0], attachment.read(), 'application/pdf')
     msg.send()
 
 
 def get_report(request):
-    payment_voucher = StudentPaymentReceiptVoucher.objects.all()
+    payment_voucher = StudentPaymentReceiptVoucher.objects.filter(application__year=get_current_year(request))
     # today = datetime.date.today()
     params = {
         'payment_voucher': payment_voucher,
         'request': request
     }
-    #return render_to_pdf('report_voucher.html', params)
+    # return render_to_pdf('report_voucher.html', params)
     subject, from_email, to = 'Student Payment Voucher', 'redbytes.test@gmail.com', 'vaibhav734@gmail.com'
     text_content = 'Please FInd Attachment'
 
@@ -1097,7 +1108,6 @@ def get_report(request):
     thread = Thread(target=send_email, args=(file, subject, text_content, from_email, to))
     thread.start()
     return HttpResponse("Processed")
-
 
 
 def save_and_send_payment_voucher_data_by_student(request):
@@ -1122,6 +1132,5 @@ def save_and_send_payment_voucher_data_by_student(request):
         file = render_to_file('report_voucher.html', params)
         thread = Thread(target=send_email, args=(file, subject, text_content, from_email, to))
         thread.start()
-
 
         return redirect("/accounting/get_student_payment_voucher/")

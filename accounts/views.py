@@ -10,7 +10,7 @@ from accounts.forms import loginForm, signUpForm
 from accounts.service import *
 from accounts.models import UserRole
 from student.models import StudentDetails, ApplicationDetails, ScholarshipSelectionDetails
-from masters.models import AddressDetails, CountryDetails, ScholarshipDetails, GuardianDetails, EmailTemplates
+from masters.models import AddressDetails, CountryDetails, ScholarshipDetails, GuardianDetails, EmailTemplates,YearDetails
 from partner.models import PartnerDetails
 from donor.models import DonorDetails
 import json
@@ -137,6 +137,11 @@ def user_signin(request):
     if request.POST:
         form = loginForm(request.POST or None)
         request.session['form_data'] = form_data
+        try:
+            # YearDetails.objects.get(id=year_id)
+            request.session['selected_year'] = YearDetails.objects.get(active_year=True).id
+        except:
+            request.session['selected_year'] = ''
     else:
         form=loginForm(request.session.get('form_data'))
 

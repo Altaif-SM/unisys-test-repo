@@ -12,6 +12,8 @@ urlpatterns = [
     path('update_year/', views.update_year, name='update_year'),
     path('delete_year/', views.delete_year, name='delete_year'),
 
+    path('change_session_year/', views.change_session_year, name='change_session_year'),
+
     # ********------ Scholarship Master --------****************************
     path('template_scholarship_master/', views.template_scholarship_master, name='template_scholarship_master'),
     path('save_scholarship/', views.save_scholarship, name='save_scholarship'),
@@ -104,7 +106,6 @@ urlpatterns = [
     path('save_email_template/', views.save_email_template, name='save_email_template'),
 
 
-    path('first_interview_call/', views.first_interview_call, name='first_interview_call'),
     path('development_program_pdf/', views.development_program_pdf, name='development_program_pdf'),
     path('generate_PDF/', views.generate_PDF, name='generate_PDF'),
 

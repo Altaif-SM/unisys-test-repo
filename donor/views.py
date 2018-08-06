@@ -25,7 +25,7 @@ def template_student_selection(request):
     #     stud.append(StudentDetails.objects.get(id=obj.student.id))
 
     stud = StudentDetails.objects.all()
-    application_records = ApplicationDetails.objects.filter(student__in=stud, admin_approval=True)
+    application_records = ApplicationDetails.objects.filter(student__in=stud, admin_approval=True,year=get_current_year())
     return render(request, "template_student_selection.html",
                   {"application_records": application_records, 'country_recs': country_recs,
                    'university_recs': university_recs,'program_recs': program_recs,
@@ -89,7 +89,7 @@ def filter_student_selection(request):
 
         application_records = ApplicationDetails.objects.filter(Q(student__in=stud),filter_nationality(nationality),
                                                                 filter_degree(degree),filter_program(program),
-                                                                filter_university(university), admin_approval=True)
+                                                                filter_university(university), admin_approval=True,year=get_current_year())
 
         country_recs = CountryDetails.objects.all()
         university_recs = UniversityDetails.objects.all()
@@ -130,7 +130,7 @@ def template_student_reports(request):
     program_recs = ProgramDetails.objects.all()
 
     stud = []
-    for obj in StudentDonorMapping.objects.filter(donor__user=request.user):
+    for obj in StudentDonorMapping.objects.filter(donor__user=request.user,applicant_id__year=get_current_year()):
         stud.append(StudentDetails.objects.get(id=obj.student.id))
 
     application_records = ApplicationDetails.objects.filter(student__in=stud,
@@ -160,7 +160,7 @@ def filter_student_report(request):
 
     try:
         stud = []
-        student_list = StudentDonorMapping.objects.filter(donor__user=request.user)
+        student_list = StudentDonorMapping.objects.filter(donor__user=request.user,applicant_id__year=get_current_year())
         if country:
             student_list = student_list.filter(student__address__country=country)
 
@@ -171,7 +171,7 @@ def filter_student_report(request):
                                                                 Q(is_sponsored=True),
                                                                 filter_degree(degree),
                                                                 filter_program(program),
-                                                                filter_university(university))
+                                                                filter_university(university),year=get_current_year())
 
         country_recs = CountryDetails.objects.all()
         university_recs = UniversityDetails.objects.all()
@@ -192,10 +192,10 @@ def template_application_progress_history(request):
     applicant_recs = ''
     try:
         if request.user.is_super_admin():
-            applicant_recs = ApplicationDetails.objects.filter(is_submitted=True)
+            applicant_recs = ApplicationDetails.objects.filter(is_submitted=True,year=get_current_year())
         else:
             stud = []
-            for obj in StudentDonorMapping.objects.filter(donor__user=request.user):
+            for obj in StudentDonorMapping.objects.filter(donor__user=request.user,applicant_id__year=get_current_year()):
                 stud.append(StudentDetails.objects.get(id=obj.student.id))
 
             applicant_recs = ApplicationDetails.objects.filter(student__in=stud,is_submitted=True,
@@ -218,12 +218,12 @@ def filter_application_history(request):
     try:
 
         if request.user.is_super_admin():
-            applicant_recs = ApplicationDetails.objects.filter(is_sponsored=True)
+            applicant_recs = ApplicationDetails.objects.filter(is_sponsored=True,year=get_current_year())
             application_history_recs = ApplicationDetails.objects.get(id=application).applicant_history_rel.all()
             application_obj = ApplicationDetails.objects.get(id=application)
         else:
             stud = []
-            for obj in StudentDonorMapping.objects.filter(donor__user=request.user):
+            for obj in StudentDonorMapping.objects.filter(donor__user=request.user,applicant_id__year=get_current_year()):
                 stud.append(StudentDetails.objects.get(id=obj.student.id))
 
             applicant_recs = ApplicationDetails.objects.filter(student__in=stud,
@@ -243,7 +243,7 @@ def filter_application_history(request):
 
 def template_my_payments(request):
 
-    stud = StudentDonorMapping.objects.filter(donor__user=request.user).values("student")
+    stud = StudentDonorMapping.objects.filter(donor__user=request.user,applicant_id__year=get_current_year()).values("student")
     # student_list = StudentDetails.objects.filter(id__in=stud)
     student_list = ApplicationDetails.objects.filter(student_id__in=stud, is_sponsored=True)
 
@@ -256,7 +256,7 @@ def template_students_receipts(request):
     outstanding_total = 0
 
 
-    stud = StudentDonorMapping.objects.filter(donor__user=request.user).values("student")
+    stud = StudentDonorMapping.objects.filter(donor__user=request.user,applicant_id__year=get_current_year()).values("student")
     # student_list = StudentDetails.objects.filter(id__in=stud).distinct()
     student_list = ApplicationDetails.objects.filter(student_id__in=stud, is_sponsored=True).distinct()
 
@@ -312,7 +312,7 @@ def donor_receipt_report_export(request):
     try:
         debit_total = 0
         outstanding_total = 0
-        stud = StudentDonorMapping.objects.filter(donor__user=request.user).values("student")
+        stud = StudentDonorMapping.objects.filter(donor__user=request.user,applicant_id__year=get_current_year()).values("student")
         student_list = ApplicationDetails.objects.filter(student_id__in=stud, is_sponsored=True).distinct()
         rows = []
         for application_obj in student_list:
@@ -344,7 +344,7 @@ def student_payment_report_export(request):
         val_dict = request.POST
         student_id = val_dict['student_id']
         rows =[]
-        application_rec = ApplicationDetails.objects.filter(student_id=student_id, is_sponsored=True)
+        application_rec = ApplicationDetails.objects.filter(student_id=student_id, is_sponsored=True,year=get_current_year())
         voucher_record = DonorReceiptVoucher.objects.filter(application__in=application_rec)
         balance_total = DonorReceiptVoucher.objects.filter(voucher_type="debit",application__in=application_rec).values("voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
         for rec in voucher_record:
@@ -377,7 +377,7 @@ def Register_Applicant_export(request):
         university_recs = UniversityDetails.objects.all()
         stud = []
         rows = []
-        for obj in StudentDonorMapping.objects.filter(donor__user=request.user):
+        for obj in StudentDonorMapping.objects.filter(donor__user=request.user,applicant_id__year=get_current_year()):
             stud_id = StudentDetails.objects.get(id=obj.student.id)
             stud.append(StudentDetails.objects.get(id=obj.student.id))
 

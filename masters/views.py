@@ -66,6 +66,18 @@ def delete_year(request):
     return HttpResponse(json.dumps({'error': 'Record not deleted.'}), content_type="application/json")
 
 
+def change_session_year(request):
+    year_id = request.POST.get('selected_year')
+
+    try:
+        # YearDetails.objects.get(id=year_id)
+        request.session['selected_year'] = YearDetails.objects.get(id=year_id).id
+    except:
+        request.session['selected_year'] = ''
+
+    return HttpResponse(json.dumps({}), content_type="application/json")
+
+
 # *********------------ Scholarship Master ----------***************
 
 def template_scholarship_master(request):
@@ -1121,14 +1133,6 @@ def save_email_template(request):
     return redirect('/masters/email_templates_list/')
 
 
-def first_interview_call(request):
-    first_call_recs = FirstInterviewCallTemplate.objects.all()
-    first_attend_recs = FirstInterviewAttendTemplate.objects.all()
-    first_approval_recs = FirstInterviewApprovalTemplate.objects.all()
-
-    return render(request, 'email_templates_list.html',
-                  {'first_call_recs': first_call_recs, 'first_attend_recs': first_attend_recs,
-                   'first_approval_recs': first_approval_recs})
 
 # def development_program_pdf(request):
 #     pdf_recs = [['Development Program: ','AAAAA bbbbbbbbbbb dddddddddddddddd eeeeeeeeeeeee qqqqqqqqqqqqq eeeeeeeeeeeeee ffffffffffffffffffffff \n eeeeeeeeeeeeeeeeeee weeeeeeeeee'],['Name:','Javed Alam', 'Class','10']]
