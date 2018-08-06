@@ -1020,6 +1020,7 @@ def save_manage_donor_master(request):
         address = AddressDetails.objects.filter(id=DonorDetails.objects.get(id=donor_details_id).address.id).update(
             country=country)
         if abc_document:
+            donor_obj = DonorDetails.objects.get(id=donor_details_id)
             file_url = str(abc_document)
 
             handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + file_url), abc_document)
@@ -1247,9 +1248,15 @@ def partner_all_details_pdf(request,partner_id):
 
 
 def template_partner_details(request, partner_id=None):
-    if partner_id:
-        partner_rec = PartnerDetails.objects.get(id=partner_id)
-        return render(request, "template_partner_details.html", {'partner_rec': partner_rec})
+    try:
+        if partner_id:
+            partner_rec = PartnerDetails.objects.get(id=partner_id)
+            return render(request, "template_partner_details.html", {'partner_rec': partner_rec})
+    except:
+        return redirect('/masters/template_manage_partner_master/')
+
+
+
 
 
 
@@ -1273,7 +1280,6 @@ def partner_all_details_pdf(request,partner_id):
         file = open('test.pdf', "w+b")
         pisaStatus = pisa.CreatePDF(html.encode('utf-8'), dest=file,
                 encoding='utf-8')
-
         file.seek(0)
         pdf = file.read()
         file.close()
@@ -1281,3 +1287,33 @@ def partner_all_details_pdf(request,partner_id):
     except:
         return redirect('/masters/template_partner_details/'+str(partner_id))
 
+
+def template_donar_details(request, donor_id=None):
+    try:
+        if donor_id:
+            donor_rec = DonorDetails.objects.get(id=donor_id)
+            return render(request, "template_donor_details.html", {'donor_rec': donor_rec})
+    except Exception as e :
+        return redirect('/masters/template_manage_donor_master/')
+
+
+
+def donar_all_details_pdf(request,donor_id):
+    try:
+        year_recs = YearDetails.objects.all()
+        curriculum_obj = ''
+        experience_obj = ''
+        x = 14
+        if donor_id:
+            donar_rec = DonorDetails.objects.get(id=donor_id)
+        template = get_template('template_donar_details_PDF.html')
+        Context = ({'donar_rec':donar_rec,'x':x})
+        html = template.render(Context)
+        file = open('test.pdf', "w+b")
+        pisaStatus = pisa.CreatePDF(html.encode('utf-8'), dest=file,encoding='utf-8')
+        file.seek(0)
+        pdf = file.read()
+        file.close()
+        return HttpResponse(pdf, 'application/pdf')
+    except Exception as e:
+        return redirect('/masters/template_donar_details/'+str(donor_id))

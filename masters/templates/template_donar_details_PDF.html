@@ -1,0 +1,93 @@
+{#{% extends "template_base_page.html" %}#}
+<style>
+    table {
+    border-collapse: collapse;
+}
+
+td {
+    padding-top: .5em;
+    padding-bottom: .5em;
+
+}
+
+</style>
+
+{% block content %}
+
+
+
+            <table>
+
+                <tr>
+
+
+
+                    <td style="text-align: left ;font-size: {{ x }}px;margin-top: 20px">
+                        <span class="">Name: {{ donar_rec.user.get_full_name |title }}</span>
+                    </td>
+
+                    <td style="text-align: left;font-size: {{ x }}px">
+                        <span class="">Organisation : {{ donar_rec.organisation|title }}</span>
+                    </td>
+
+                    <td style="text-align: left;font-size: {{ x }}px">
+                        <span class="">Country: {{ donar_rec.country|default_if_none:"" }}</span>
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <td style="text-align: left; font-size: {{ x }}px">
+                        <span>Person in charge: {{ donar_rec.person |default_if_none:""}}</span>
+                    </td>
+
+
+                    <td style="text-align: left; font-size: {{ x }}px">
+                        <span>Mobile: {{ donar_rec.person_contact_number|default_if_none:"" }}</span>
+                    </td>
+
+
+                </tr>
+
+                <tr>
+                    <td style="text-align: left; font-size: {{ x }}px">
+                        <span>Address:{{ donar_rec.single_donor_address|default_if_none:"" }}</span>
+                    </td>
+                </tr>
+                <tr>
+
+                    <td style="text-align: left; font-size: {{ x }}px">
+                        <span>Email : {{ donar_rec.email |default_if_none:""}}</span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="text-align: left; font-size: {{ x }}px">
+                        <span >Register Documents: {{ donar_rec.reg_document|default_if_none:"" }}</span>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td style="text-align: left; font-size: {{ x }}px">
+                        <span>Bank Account no: {{ donar_rec.bank_account_number|default_if_none:"" }}</span>
+                    </td>
+                    <td style="text-align: left; font-size: {{ x }}px">
+                        <span>Bank Name: {{ donar_rec.bank_name|default_if_none:"" }}</span>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td style="text-align: left; font-size: {{ x }}px">
+                        <span>Swift code: {{ donar_rec.bank_swift_code|default_if_none:"" }}</span>
+                    </td>
+                    <td style="text-align: left; font-size: {{ x }}px">
+                        <span>Bank Address: {{ donar_rec.donor_bank_address|default_if_none:"" }}</span>
+                    </td>
+
+                </tr>
+
+
+                </tbody>
+            </table>
+
+{% endblock %}

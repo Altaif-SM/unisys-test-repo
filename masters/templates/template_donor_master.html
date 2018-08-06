@@ -433,12 +433,12 @@
 
                             <td>
                                 <text hidden>{{ rec.organisation|title }}</text>
-                                <input class="form-control data organisation" name="organisation"
+                                 <a href="/masters/template_donar_details/{{ rec.id }}" ><input class="form-control data organisation" name="organisation"
                                        type="text"
                                        id="office{{ forloop.counter }}"
                                        value="{{ rec.organisation|default_if_none:"" }}"
                                        required
-                                       title='Please enter organisation name' disabled>
+                                                                                                  title='Please enter organisation name' disabled></a>
                             </td>
 
                             <td>

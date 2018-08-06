@@ -63,7 +63,7 @@
             {% endif %}
 
             <li>
-                <span> Partner Details</span>
+                <span> Donor Details</span>
             </li>
         </ul>
     </div>
@@ -76,126 +76,159 @@
 
     <!-- BEGIN VALIDATION STATES-->
     <div class="portlet light portlet-fit portlet-form ">
-        <div class="portlet-title">
+
             <div class="caption">
-                <i class="icon-settings font-red">
-                <span class="caption-subject font-red sbold uppercase"> Partner Details</span></i>
-                 <span style="margin-left: 800px">
-                <button type="button" id="button_pdf_id" class="btn green" id="save">PDF</button>
-                    </span>
+
 
             </div>
-        </div>
+
 
         <div class="portlet-body">
             <div class="form-body">
+                <div class="portlet light portlet-fit portlet-form ">
+                    <i class="icon-settings font-red"></i>
+                    <span class="caption-subject font-red sbold uppercase"> PERSONAL INFO</span>
+                     <span style="margin-left: 900px">
+                <button type="button" id="button_pdf_id" class="btn green" id="save">PDF</button>
+                    </span>
 
-            <form action="{% url 'masters:partner_all_details_pdf' partner_rec.id %}" id="form_pdf_id"
-                          class="form-horizontal"
-                          method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="row" style="margin-top: -20px">
+                </div>
 
-                        </div>
-            </form>
                 <div class="row">
                     <div class="">
-                        <label class="col-md-1 control-label">Name:</label>
+                        <label class="col-md-2 control-label">First Name:</label>
                         <div class="col-md-2">
-                            <span class="">{{ partner_rec.user.get_full_name }}</span>
+                            <span class="">{{ donor_rec.user.get_full_name }}</span>
 
                         </div>
                     </div>
 
                     <div class="">
-                        <label class="col-md-1 control-label">Country:</label>
+                        <label class="col-md-2 control-label">Organisation:</label>
                         <div class="col-md-2">
-                            <span class="">{{ partner_rec.address.country.country_name }}</span>
+                            <span class="">{{ donor_rec.organisation|title }}</span>
                         </div>
                     </div>
 
-                    <div class="">
-                        <label class="col-md-1 control-label">Office:</label>
-                        <div class="col-md-2">
-                            <span class="">{{ partner_rec.office_name }}</span>
-                        </div>
-                    </div>
+
                 </div>
                 <br>
 
                 <div class="row">
                     <div class="">
-                        <label class="col-md-1 control-label">Person in charge 1:</label>
+                        <label class="col-md-2 control-label">Country :</label>
                         <div class="col-md-2">
-                            <span class="">{{ partner_rec.person_one }}</span>
+                            <span class="">{{ donor_rec.country|default_if_none:"" }}</span>
                         </div>
                     </div>
 
                     <div class="">
-                        <label class="col-md-1 control-label">Mobile:</label>
+
+                        <label class="col-md-2 control-label">Person in charge:</label>
                         <div class="col-md-2">
-                            <span class="">{{ partner_rec.person_one_contact_number }}</span>
+                            <span class="">{{ donor_rec.person |default_if_none:""}}</span>
+                        </div>
+                    </div>
+                </div>
+                    <br>
+
+                <div class="row">
+
+                    <div class="">
+                        <label class="col-md-2 control-label">Mobile:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ donor_rec.person_contact_number|default_if_none:"" }}</span>
 
                         </div>
                     </div>
 
                     <div class="">
-                        <label class="col-md-1 control-label">Person in charge 2:</label>
+                        <label class="col-md-2 control-label">Address:</label>
                         <div class="col-md-2">
-                            <span class="">{{ partner_rec.person_two }}</span>
+                            <span class="">{{ donor_rec.single_donor_address|default_if_none:"" }}</span>
 
                         </div>
                     </div>
+                </div>
+                <br>
+                <div class="row">
+
+                    <div class="">
+                        <label class="col-md-2 control-label">Email:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ donor_rec.email|default_if_none:"" }}</span>
+
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-2 control-label">Register Documents:</label>
+                        <div class="col-md-2">
+                            <span class="">{{ donor_rec.reg_document |default_if_none:""}}</span>
+
+                        </div>
+                    </div>
+
                 </div>
 
                 <br>
-
+                <hr>
+                <div class="portlet light portlet-fit portlet-form ">
+                    <i class="icon-settings font-red"></i>
+                    <span class="caption-subject font-red sbold uppercase"> Bank Account Details</span>
+                </div>
 
                 <div class="row">
+
                     <div class="">
-                        <label class="col-md-1 control-label">Mobile:</label>
+                        <label class="col-md-2 control-label">Bank Account no:</label>
                         <div class="col-md-2">
-                            <span class="">{{ partner_rec.person_two_contact_number }}</span>
+                            <span class="">{{ donor_rec.bank_account_number|default_if_none:"" }}</span>
 
                         </div>
                     </div>
 
                     <div class="">
-                        <label class="col-md-1 control-label">Office Contact:</label>
+                        <label class="col-md-2 control-label">Bank Name:
+                </label>
                         <div class="col-md-2">
-                            <span class="">{{ partner_rec.office_contact_number }}</span>
-
-                        </div>
-                    </div>
-
-                    <div class="">
-                        <label class="col-md-1 control-label">Email:</label>
-                        <div class="col-md-2">
-                            <span class="">{{ partner_rec.email }}</span>
+                            <span class="">{{ donor_rec.bank_name|default_if_none:"" }}</span>
 
                         </div>
                     </div>
                 </div>
-
-                <br>
+                 <br>
                 <div class="row">
+
                     <div class="">
-                        <label class="col-md-1 control-label">Address:</label>
+                        <label class="col-md-2 control-label">Swift code:</label>
                         <div class="col-md-2">
-                            <span class="">{{ partner_rec.single_address }}</span>
+                            <span class="">{{ donor_rec.bank_swift_code|default_if_none:"" }}</span>
+
                         </div>
                     </div>
 
                     <div class="">
-                        <label class="col-md-1 control-label">Photo:</label>
+                        <label class="col-md-2 control-label">Bank Address:
+                    </label>
                         <div class="col-md-2">
-                            <span class=""><img src="{{ partner_rec.photo.url }}" style="width: 100px;"></span>
+                            <span class="">{{ donor_rec.donor_bank_address|default_if_none:"" }}</span>
+
                         </div>
                     </div>
-
                 </div>
+                <form action="{% url 'masters:donar_all_details_pdf' donor_rec.id %}" id="form_pdf_id"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row" style="margin-top: -20px">
 
-                </div>
+                    </div>
+                </form>
+
+
+
+            </div>
             </div>
         </div>
     </div>
