@@ -27,73 +27,73 @@
                 function validate() {
                     var flag = false;
 
-                    if($("#id_student").val() == '' ){
-                         flag = true;
-                         $("#id_student").css("border","solid 1px red");
-                         $("#id_student_error_msg").text("Please select Student.");
-                         $("#id_student_error_msg").show();
-                    }else {
-                         $("#id_student").css("border","");
-                         $("#id_student_error_msg").hide();
+                    if ($("#id_student").val() == '') {
+                        flag = true;
+                        $("#id_student").css("border", "solid 1px red");
+                        $("#id_student_error_msg").text("Please select Student.");
+                        $("#id_student_error_msg").show();
+                    } else {
+                        $("#id_student").css("border", "");
+                        $("#id_student_error_msg").hide();
                     }
 
-                    if( $("#id_voucher_date").val() == "" ) {
-                         flag = true;
-                         $("#id_voucher_date").css("border","solid 1px red");
-                         $("#data_error_msg").text("Please Select Date.");
-                         $("#data_error_msg").show();
-                     }else {
-                         $("#data_error_msg").hide();
-                         $("#id_voucher_date").css("border","");
-                     }
-
-                     if( $("#id_voucher_amount").val() != "") {
-
-                         if (Number($("#id_voucher_amount").val()) != 0) {
-
-                             if( Number($("#id_voucher_amount").val()) > Number($("#id_scholarship_fee").val())){
-                                 flag = true;
-                                 $("#id_voucher_amount").css("border", "1px solid red");
-                                 $("#id_voucher_amount_error_msg").text("Amount should not be greater tha Scholarship Fee");
-                                 $("#id_voucher_amount_error_msg").show();
-                             }else{
-                                 $("#id_voucher_amount_error_msg").hide();
-                                 $("#id_voucher_amount").css("border","");
-                                  $("#id_voucher_amount_error_msg").text("");
-                             }
-
-
-                         } else {
-                             flag = true;
-                             $("#id_voucher_amount").css("border", "1px solid red");
-                             $("#id_voucher_amount_error_msg").text("Please enter Amount greater than 0");
-                             $("#id_voucher_amount_error_msg").show();
-                         }
-                     }else{
-
-                         flag = true;
-                         $("#id_voucher_amount").css("border", "1px solid red");
-                         $("#id_voucher_amount_error_msg").text("Please enter Amount!");
-                         $("#id_voucher_amount_error_msg").show();
+                    if ($("#id_voucher_date").val() == "") {
+                        flag = true;
+                        $("#id_voucher_date").css("border", "solid 1px red");
+                        $("#data_error_msg").text("Please Select Date.");
+                        $("#data_error_msg").show();
+                    } else {
+                        $("#data_error_msg").hide();
+                        $("#id_voucher_date").css("border", "");
                     }
 
-                     if($("#id_voucher_description").val() == '' ){
-                         flag = true;
-                         $("#id_voucher_description").css("border","solid 1px red");
-                         $("#id_voucher_description_error_msg").text("Please enter Voucher description.");
-                         $("#id_voucher_description_error_msg").show();
-                     }else {
-                         $("#id_voucher_description").css("border","");
-                         $("#id_voucher_description_error_msg").hide();
-                     }
+                    if ($("#id_voucher_amount").val() != "") {
 
-                     return flag;
+                        if (Number($("#id_voucher_amount").val()) != 0) {
+
+                            if (Number($("#id_voucher_amount").val()) > Number($("#id_scholarship_fee").val())) {
+                                flag = true;
+                                $("#id_voucher_amount").css("border", "1px solid red");
+                                $("#id_voucher_amount_error_msg").text("Amount should not be greater tha Scholarship Fee");
+                                $("#id_voucher_amount_error_msg").show();
+                            } else {
+                                $("#id_voucher_amount_error_msg").hide();
+                                $("#id_voucher_amount").css("border", "");
+                                $("#id_voucher_amount_error_msg").text("");
+                            }
+
+
+                        } else {
+                            flag = true;
+                            $("#id_voucher_amount").css("border", "1px solid red");
+                            $("#id_voucher_amount_error_msg").text("Please enter Amount greater than 0");
+                            $("#id_voucher_amount_error_msg").show();
+                        }
+                    } else {
+
+                        flag = true;
+                        $("#id_voucher_amount").css("border", "1px solid red");
+                        $("#id_voucher_amount_error_msg").text("Please enter Amount!");
+                        $("#id_voucher_amount_error_msg").show();
+                    }
+
+                    if ($("#id_voucher_description").val() == '') {
+                        flag = true;
+                        $("#id_voucher_description").css("border", "solid 1px red");
+                        $("#id_voucher_description_error_msg").text("Please enter Voucher description.");
+                        $("#id_voucher_description_error_msg").show();
+                    } else {
+                        $("#id_voucher_description").css("border", "");
+                        $("#id_voucher_description_error_msg").hide();
+                    }
+
+                    return flag;
 
                 }
 
                 $(document).on("click", "#save", function (e) {
 
-                    if(validate() == false) {
+                    if (validate() == false) {
                         $("#id_btn_type").val("save");
                         $('#form_sample_1').submit();
                     }
@@ -103,7 +103,7 @@
 
                 $(document).on("click", "#save_and_send", function (e) {
 
-                    if(validate() == false) {
+                    if (validate() == false) {
                         $("#id_btn_type").val("save_and_send");
                         $('#form_sample_1').submit();
                     }
@@ -112,7 +112,7 @@
 
                 $(document).on("click", "#save_and_print", function (e) {
 
-                    if(validate() == false) {
+                    if (validate() == false) {
                         $("#id_btn_type").val("save_and_print");
                         $('#form_sample_1').submit();
                     }
@@ -122,7 +122,7 @@
 
                 $(document).on("click", ".update", function (e) {
                     var voucher_id = $(this).closest('tr').attr('id');
-                    var voucher_amount = $('#' + voucher_id + ' .voucher_amount').val();
+                    var voucher_amount = $('#id_voucher_amount' + voucher_id).val();
                     var url = '/accounting/update_student_payment_voucher/';
                     update_student_payment_voucher(url, voucher_id, voucher_amount)
                 });
@@ -190,138 +190,77 @@
                 $(document).on("change", "#id_student", function (e) {
                     $(".overlay").show();
                     $("#loading-img").show();
-                    $("#id_voucher_description").css("border","");
+                    $("#id_voucher_description").css("border", "");
                     $("#id_voucher_description_error_msg").hide();
-                    $("#id_voucher_amount").css("border-color","");
+                    $("#id_voucher_amount").css("border-color", "");
                     $("#id_voucher_amount_error_msg").hide();
                     $("#data_error_msg").hide();
-                    $("#data_error_msg").css("border","");
+                    $("#data_error_msg").css("border", "");
                     $("#id_voucher_amount_error_msg").hide();
-                    $("#id_voucher_amount_error_msg").css("border","");
-                    $("#id_student").css("border","");
+                    $("#id_voucher_amount_error_msg").css("border", "");
+                    $("#id_student").css("border", "");
                     $("#id_student_error_msg").hide();
                     $("#data_error_msg").hide();
-                    $("#id_voucher_date").css("border","");
-                    var student = $(this).val();
-                    var url = '/accounting/get_payment_voucher_data_by_student/';
-                    get_voucher_data(url, student);
-                     $('#export_student_value').val(student);
-                      $('#export_button').attr('disabled', false);
+                    $("#id_voucher_date").css("border", "");
+                    {#var student = $(this).val();#}
+                    {#var url = '/accounting/get_payment_voucher_data_by_student/';#}
+                    {#get_voucher_data(url, student);#}
+
+                    $("#form_sample").submit();
+
+                    // $('#export_student_value').val(student);
+                    // $('#export_button').attr('disabled', false);
                 });
 
 
-                function get_voucher_data(url, student) {
-
-
-
-                    $.ajax({
-                        type: 'POST',
-                        url: url,
-                        data: {
-                            student: student,
-                            csrfmiddlewaretoken: '{{ csrf_token }}',
-                        },
-                        success: function (data) {
-                             $(".overlay").hide();
-
-                            {#alert(JSON.stringify(data));#}
-
-                            $('#id_app_id').val(data['application_rec']['id']);
-                            $('#id_voucher_number').val(data['application_rec']['voucher_number']);
-                            $('#id_voucher_number_id').val(data['application_rec']['voucher_number']);
-
-                            if (data['application_rec']['semester'] != null) {
-                                $('#id_semester').val(data['application_rec']['semester']['semester_name']);
-                                $('#id_semester_id').val(data['application_rec']['semester']['semester_name']);
-                            }
-
-
-                            $('#id_scholarship_fee').val(data['application_rec']['scholarship_fee']);
-                            $('#id_balance').val(data['application_rec']['balance']);
-
-                            if (data['application_rec']['country'] != null) {
-                                $('#id_country').val(data['application_rec']['country']['country_name']);
-                                $('#id_country_id').val(data['application_rec']['country']['country_name']);
-                            }
-
-                            if (data['application_rec']['university'] != null) {
-                                $('#id_university').val(data['application_rec']['university']['university_name']);
-                                $('#id_university_id').val(data['application_rec']['university']['university_name']);
-                            }
-
-                            if (data['application_rec']['scholarship'] != null) {
-                                $('#id_scholarship').val(data['application_rec']['scholarship']['scholarship_name']);
-                                $('#id_scholarship_id').val(data['application_rec']['scholarship']['scholarship_name']);
-                            }
-
-                            if (data['application_rec']['scholarship_fee'] != null) {
-                                $('#id_scholarship_fee').val(data['application_rec']['scholarship_fee']);
-                            }
-
-                            if (data['application_rec']['donor'] != null) {
-                                $('#id_donor').val(data['application_rec']['donor']['user']['first_name']);
-                                $('#id_donor_id').val(data['application_rec']['donor']['user']['first_name']);
-                            }
-
-                            if (data['application_rec']['program'] != null) {
-                                $('#id_program').val(data['application_rec']['program']['program_name']);
-                                $('#id_program_id').val(data['application_rec']['program']['program_name']);
-                            }
-
-
-                            var output_html = "";
-
-                            for(var i= 0; i< (data['voucher_rec']).length ; i++) {
-
-                                 if(data['voucher_rec'][i]['voucher_type'] == "debit") {
-                                    output_html += "" +
-                                    "<tr id='"+ data['voucher_rec'][i]['id'] +"' class='item'>"
-                                    + "<td style='width:150px;'><input id='id_voucher_number"+ i +"' class='form-control  voucher_number' value='"+ data['voucher_rec'][i]['voucher_number'] +"' disabled> </td>"
-                                    + "<td><input id='id_voucher_date"+ i +"' class='form-control  voucher_date' value='"+ data['voucher_rec'][i]['voucher_date'] +"' disabled> </td>"
-                                    + "<td><input id='id_student"+ i +"' class='form-control  student' value='"+ data['voucher_rec'][i]['student']['get_all_name'] +"' disabled> </td>"
-                                    + "<td><input id='id_semester"+ i +"' class='form-control  semester' value='"+ data['voucher_rec'][i]['semester']['semester_name'] +"' disabled> </td>"
-                                    + "<td><input id='id_country"+ i +"' class='form-control  country' value='" + data['voucher_rec'][i]['country']['country_name'] + "' disabled> </td>"
-                                    + "<td><input id='id_university"+ i +"' class='form-control  university' value='" + data['voucher_rec'][i]['university']['university_name'] + "' disabled> </td>"
-                                    + "<td><input id='id_scholarship"+ i +"' class='form-control  scholarship' value='" + data['voucher_rec'][i]['scholarship']['scholarship_name'] + "' disabled> </td>"
-                                    + "<td><input id='id_program"+ i +"' class='form-control  program_name' value='" + data['voucher_rec'][i]['program']['program_name'] + "' disabled> </td>"
-                                    + "<td><input id='id_donor"+ i +"' class='form-control  first_name' value='" + data['voucher_rec'][i]['donor']['user']['first_name'] + "' disabled> </td>"
-                                    + "<td><input id='id_voucher_amount"+ i +"' class='form-control data voucher_amount' value='" + data['voucher_rec'][i]['voucher_amount'] + "' disabled> </td>"
-
-
-                                    +"<td>"
-                                        +"<span type='button' name='updt' id='update"+ i +"' class='update btn green glyphicon glyphicon-ok' style='display:none;'></span>"
-                                        +"<span type='button' name='edit' id='edit"+ i +"' class='edit btn blue glyphicon glyphicon-pencil'></span>"
-                                        +"<span type='button' name='delete' id='delete"+ i +"' class='delete btn red glyphicon glyphicon-trash'></span>"
-                                    +"</td>"
-
-
-                                    }
-
-                                    output_html+= "</tr>"
-                            }
-
-                            $("#tbody").html(output_html);
-
-                        },
-                        error: function (xhr, msg, err) {
-                            $(".overlay").hide();
-                            alert(xhr.responseJSON.error);
-                        }
-                    });
-                }
 
             });
 
 
             $('#sample_1').dataTable().fnDestroy();
             $('#sample_1').dataTable({
-                "bFilter": false,
-                "paging": false,
-                "info": false,
+                "bFilter": true,
+                "paging": true,
+                "info": true,
+                "ordering": false,
                 "aoColumnDefs": [
                     {'bSortable': false}
-                ]
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+                    /* {
+                         extend: 'copyHtml5',
+                         exportOptions: {
+                             columns: [ 0, ':visible' ]
+                         }
+                     },*/
+                    //'print',
+                    {
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: ':visible'
+                            //columns: [ 1,2, 3,4, 5, 6, 7 ]
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        exportOptions: {
+                            //columns: [ 2, 3,4, 5, 6, 7 ]
+                            columns: ':visible'
+                        }
+                    },
+                    //'colvis'
+                ],
+
+
+                /*ajax: {
+                        url: '/accounting/get_payment_voucher_data_by_student/?student='+ 2,
+                        type: 'GET',
+
+                    },*/
+
             });
+
         }
     </script>
 
@@ -376,24 +315,31 @@
 
         <div class="portlet-body">
             <div class="form-body">
-                <form action="{% url 'accounting:save_payment_voucher_data_by_student' %}" id="form_sample_1"
-                      class="form-horizontal"
-                      method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <input type="hidden" id="id_app_id" name="application">
-                <input type="hidden" name="btn_type" id="id_btn_type">
-                    <div class="form-body">
 
-                        <div class="row">
+                <div class="form-body">
+
+                    <div class="row">
+
+                        <form id="form_sample"
+                              class="form-horizontal"
+                              method="GET" enctype="multipart/form-data">
+                            {% csrf_token %}
+
                             <div class="">
                                 <label class="col-md-2 control-label">Student:</label>
                                 <div class="col-md-2">
                                     <select id='id_student' title="Select country" name="student"
                                             autocomplete="off" class="form-control" data-live-search="true"
                                             required>
-                                        <option style="display:none" selected="selected" id=""
-                                                value="">Please Select
-                                        </option>
+                                        {%  if raw_dict.application_rec.student  %}
+                                            <option style="display:none" selected="selected" id=""
+                                                value="{{ raw_dict.application_rec.student.id }}">{{ raw_dict.application_rec.student.get_all_name }}
+                                            </option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id=""
+                                                    value="">Please Select
+                                            </option>
+                                        {% endif %}
 
                                         {% for rec in student_list %}
                                             <option value='{{ rec.student.id }}'>{{ rec.get_full_name|title }}</option>
@@ -402,6 +348,14 @@
                                     <span id="id_student_error_msg" style="display: none;color: red;"></span>
                                 </div>
                             </div>
+                        </form>
+
+                        <form action="{% url 'accounting:save_payment_voucher_data_by_student' %}" id="form_sample_1"
+                              class="form-horizontal"
+                              method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="hidden" id="id_app_id" name="application" value="{{ raw_dict.application_rec.id }}">
+                            <input type="hidden" name="btn_type" id="id_btn_type">
 
                             <div class="">
                                 <label class="col-md-2 control-label">Voucher Number:
@@ -424,167 +378,167 @@
                                 </div>
                             </div>
 
-                        </div>
+                    </div>
 
-                        <br><br>
+                    <br><br>
 
-                        <div class="row">
+                    <div class="row">
 
-                            <div class="">
-                                <label class="col-md-2 control-label">Semister:</label>
-                                <div class="col-md-2">
-                                    <input type="text" title="Semister" id="id_semester"
-                                           name="semester" placeholder="Semester"
-                                           class="form-control" required disabled>
+                        <div class="">
+                            <label class="col-md-2 control-label">Semister:</label>
+                            <div class="col-md-2">
+                                <input type="text" title="Semister" id="id_semester"
+                                       name="semester" placeholder="Semester"
+                                       class="form-control" required disabled value="{{ raw_dict.application_rec.semester.semester_name }}">
 
-                                    <input type="text" id="id_semester_id" name="semester" hidden>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-2 control-label">Scholarship Fee:</label>
-                                <div class="col-md-2">
-                                    <input type="number" title="Scholarship Fee" id="id_scholarship_fee"
-                                           name="scholarship_fee" placeholder="0.00"
-                                           class="form-control" required disabled>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-2 control-label">Balance:</label>
-                                <div class="col-md-2">
-                                    <input type="number" title="Balance" placeholder="0.00"
-                                           id="id_balance" name="balance"
-                                           class="form-control" required disabled>
-                                </div>
-                            </div>
-
-
-                        </div>
-
-                        <br><br>
-
-                        <div class="row">
-
-                            <div class="">
-                                <label class="col-md-2 control-label">Country:</label>
-                                <div class="col-md-2">
-                                    <input type="text" title="Country" placeholder="Country"
-                                           id="id_country" name="country"
-                                           class="form-control" required disabled>
-
-                                    <input type="text" id="id_country_id" name="country" hidden>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-2 control-label">University:</label>
-                                <div class="col-md-2">
-                                    <input type="text" title="University" placeholder="University"
-                                           id="id_university" name="university"
-                                           class="form-control" required disabled>
-
-                                    <input type="text" id="id_university_id" name="university" hidden>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-2 control-label">Scholarship:</label>
-                                <div class="col-md-2">
-                                    <input type="text" title="Scholarship" placeholder="Scholarship"
-                                           id="id_scholarship" name="scholarship"
-                                           class="form-control" required disabled>
-
-                                    <input type="text" id="id_scholarship_id" name="scholarship" hidden>
-                                </div>
+                                <input type="text" id="id_semester_id" name="semester" hidden>
                             </div>
                         </div>
 
-
-                        <br><br>
-
-                        <div class="row">
-
-                            <div class="">
-                                <label class="col-md-2 control-label">Program:</label>
-                                <div class="col-md-2">
-                                    <input type="text" title="Program" placeholder="Program"
-                                           id="id_program" name="program"
-                                           class="form-control" required disabled>
-
-                                     <input type="text" id="id_program_id" name="program" hidden>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-2 control-label">Donor:</label>
-                                <div class="col-md-2">
-                                    <input type="text" title="Donor" placeholder="Donor"
-                                           id="id_donor" name="donor"
-                                           class="form-control" required disabled>
-
-                                     <input type="text" id="id_donor_id" name="donor" hidden>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-2 control-label">Amount:</label>
-                                <div class="col-md-2">
-                                    <input type="number" title="Amount" placeholder="0.00"
-                                           id="id_voucher_amount" name="voucher_amount"
-                                           class="form-control" required>
-                                    <span id="id_voucher_amount_error_msg" style="display: none;color: red;"></span>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <br><br>
-
-                        <div class="row">
-
-                            <div class="">
-                                <label class="col-md-2 control-label">Beneficiary:</label>
-                                <div class="col-md-2">
-                                    <input type="text" name="voucher_beneficiary"
-                                      class="form-control" required id="id_voucher_beneficiary">
-
-                                </div>
+                        <div class="">
+                            <label class="col-md-2 control-label">Scholarship Fee:</label>
+                            <div class="col-md-2">
+                                <input type="number" title="Scholarship Fee" id="id_scholarship_fee"
+                                       name="scholarship_fee" placeholder="0.00"
+                                       class="form-control" required disabled value="{{ raw_dict.application_rec.scholarship_fee }}">
                             </div>
                         </div>
 
-                        <br><br>
-
-                        <div class="row">
-
-                            <div class="">
-                                <label class="col-md-2 control-label">Description:</label>
-                                <div class="col-md-10">
-                                    <textarea rows="5" cols="95" name="voucher_description"
-                                              id="id_voucher_description"></textarea><br>
-                                    <span id="id_voucher_description_error_msg" style="display: none;color: red;"></span>
-
-                                </div>
+                        <div class="">
+                            <label class="col-md-2 control-label">Balance:</label>
+                            <div class="col-md-2">
+                                <input type="number" title="Balance" placeholder="0.00"
+                                       id="id_balance" name="balance"
+                                       class="form-control" required disabled value="{{ raw_dict.application_rec.balance }}">
                             </div>
                         </div>
-
-
-                        <h3 class="form-section">Receipt Vouchers</h3>
-                        <hr>
 
 
                     </div>
-                </form>
-            <div class="col-md-2">
-                <form method="post" action="{% url 'accounting:export_student_payment_voucher' %}" id="">
-                    {% csrf_token %}
-                    <input hidden name="student_id" id="export_student_value" value="">
 
-                    <button style="width: 100%" type="submit" value="Submit" id="export_button" class="btn blue">
-                        Export
-                    </button>
+                    <br><br>
+
+                    <div class="row">
+
+                        <div class="">
+                            <label class="col-md-2 control-label">Country:</label>
+                            <div class="col-md-2">
+                                <input type="text" title="Country" placeholder="Country"
+                                       id="id_country" name="country"
+                                       class="form-control" required disabled value="{{ raw_dict.application_rec.country.country_name }}">
+
+                                <input type="text" id="id_country_id" name="country" hidden>
+                            </div>
+                        </div>
+
+                        <div class="">
+                            <label class="col-md-2 control-label">University:</label>
+                            <div class="col-md-2">
+                                <input type="text" title="University" placeholder="University"
+                                       id="id_university" name="university"
+                                       class="form-control" required disabled value="{{ raw_dict.application_rec.university.university_name }}">
+
+                                <input type="text" id="id_university_id" name="university" hidden>
+                            </div>
+                        </div>
+
+                        <div class="">
+                            <label class="col-md-2 control-label">Scholarship:</label>
+                            <div class="col-md-2">
+                                <input type="text" title="Scholarship" placeholder="Scholarship"
+                                       id="id_scholarship" name="scholarship"
+                                       class="form-control" required disabled value="{{ raw_dict.application_rec.scholarship.scholarship_name }}">
+
+                                <input type="text" id="id_scholarship_id" name="scholarship" hidden>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <br><br>
+
+                    <div class="row">
+
+                        <div class="">
+                            <label class="col-md-2 control-label">Program:</label>
+                            <div class="col-md-2">
+                                <input type="text" title="Program" placeholder="Program"
+                                       id="id_program" name="program"
+                                       class="form-control" required disabled value="{{ raw_dict.application_rec.program.program_name }}">
+
+                                <input type="text" id="id_program_id" name="program" hidden>
+                            </div>
+                        </div>
+
+                        <div class="">
+                            <label class="col-md-2 control-label">Donor:</label>
+                            <div class="col-md-2">
+                                <input type="text" title="Donor" placeholder="Donor"
+                                       id="id_donor" name="donor"
+                                       class="form-control" required disabled value="{{ raw_dict.application_rec.donor.user.first_name }}">
+
+                                <input type="text" id="id_donor_id" name="donor" hidden>
+                            </div>
+                        </div>
+
+                        <div class="">
+                            <label class="col-md-2 control-label">Amount:</label>
+                            <div class="col-md-2">
+                                <input type="number" title="Amount" placeholder="0.00"
+                                       id="id_voucher_amount" name="voucher_amount"
+                                       class="form-control" required value="{{ voucher_rec.voucher_amount }}">
+                                <span id="id_voucher_amount_error_msg" style="display: none;color: red;"></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <br><br>
+
+                    <div class="row">
+
+                        <div class="">
+                            <label class="col-md-2 control-label">Beneficiary:</label>
+                            <div class="col-md-2">
+                                <input type="text" name="voucher_beneficiary"
+                                       class="form-control" required id="id_voucher_beneficiary">
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <br><br>
+
+                    <div class="row">
+
+                        <div class="">
+                            <label class="col-md-2 control-label">Description:</label>
+                            <div class="col-md-10">
+                                    <textarea rows="5" cols="95" name="voucher_description"
+                                              id="id_voucher_description"></textarea><br>
+                                <span id="id_voucher_description_error_msg" style="display: none;color: red;"></span>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <h3 class="form-section">Receipt Vouchers</h3>
+                    <hr>
+
+
+                </div>
                 </form>
-            </div>
+{#                <div class="col-md-2">#}
+{#                    <form method="post" action="{% url 'accounting:export_student_payment_voucher' %}" id="">#}
+{#                        {% csrf_token %}#}
+{#                        <input hidden name="student_id" id="export_student_value" value="">#}
+{##}
+{#                        <button style="width: 100%" type="submit" value="Submit" id="export_button" class="btn blue">#}
+{#                            Export#}
+{#                        </button>#}
+{#                    </form>#}
+{#                </div>#}
             </div>
         </div>
 
@@ -592,99 +546,12 @@
             <div class="table-toolbar">
             </div>
 
-{#            <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">#}
-{#                {% csrf_token %}#}
-{#                <table class="table table-striped table-hover table-bordered" id="sample_1">#}
-{#                    <thead>#}
-{#                    <tr>#}
-{#                        <th>No</th>#}
-{#                        <th>Student Name</th>#}
-{#                        <th>Country</th>#}
-{#                        <th>University</th>#}
-{#                        <th>Scholarship</th>#}
-{#                        <th>Program</th>#}
-{#                        <th>Donor</th>#}
-{#                        <th>Amount</th>#}
-{#                        <th></th>#}
-{#                    </tr>#}
-{#                    </thead>#}
-{##}
-{#                    <tbody id="tbody">#}
-{#                    {% for rec in voucher_record %}#}
-{#                        <tr id="item{{ forloop.counter }}" class="item">#}
-{#                            <td>#}
-{#                                <p hidden>{{ rec.voucher_number }}</p>#}
-{#                                <input id="id_voucher_number_list" class="form-control data voucher_number"  value="{{ rec.voucher_number }}" disabled>#}
-{#                            </td>#}
-{##}
-{#                            <td>#}
-{#                                <p hidden>{{ rec.application.student.user.get_full_name|title }}</p>#}
-{#                                <input class="form-control data voucher_number" name="student" type="text"#}
-{#                                       id="student{{ forloop.counter }}"#}
-{#                                       value="{{ rec.application.student.user.get_full_name|title }}"#}
-{#                                       required="True" title='Student Name' disabled>#}
-{#                            </td>#}
-{#                            <td>#}
-{#                                <p hidden>{{ rec.application.address.country.country_name }}</p>#}
-{#                                <input class="form-control data start_date" name="country" type="text"#}
-{#                                       id="start_date{{ forloop.counter }}"#}
-{#                                       value="{{ rec.application.address.country.country_name }}" required="True" disabled>#}
-{#                            </td>#}
-{#                            <td>#}
-{#                                <p hidden>{{ rec.application.applicant_scholarship_rel.all.0.university.university_name }}</p>#}
-{#                                <input class="form-control data end_date" name="university" type="text"#}
-{#                                       id="end_date{{ forloop.counter }}"#}
-{#                                       value="{{ rec.application.applicant_scholarship_rel.all.0.university.university_name }}" required="True" disabled>#}
-{#                            </td>#}
-{#                            <td>#}
-{#                                <p hidden>{{ rec.application.applicant_scholarship_rel.all.0.scholarship.scholarship_name }}</p>#}
-{#                                <input class="form-control data end_date" name="scholarship" type="text"#}
-{#                                       id="end_date{{ forloop.counter }}"#}
-{#                                       value="{{ rec.application.applicant_scholarship_rel.all.0.scholarship.scholarship_name }}" required="True" disabled>#}
-{#                            </td>#}
-{#                            <td>#}
-{#                                <p hidden>{{ rec.application.applicant_module_rel.all.0.program.program_name }}</p>#}
-{#                                <input class="form-control data end_date" name="program" type="text"#}
-{#                                       id="end_date{{ forloop.counter }}"#}
-{#                                       value="{{ rec.application.applicant_module_rel.all.0.program.program_name }}" required="True" disabled>#}
-{#                            </td>#}
-{#                            <td>#}
-{#                                <p hidden>{{ rec.application.student.student_donor_rel.all.0.donor }}</p>#}
-{#                                <input class="form-control data end_date" name="donor" type="text"#}
-{#                                       id="end_date{{ forloop.counter }}"#}
-{#                                       value="{{ rec.application.student.student_donor_rel.all.0.donor }}" required="True" disabled>#}
-{#                            </td>#}
-{#                            <td>#}
-{#                                <p hidden>{{ rec.voucher_amount }}</p>#}
-{#                                <input class="form-control data end_date" name="amount" type="text"#}
-{#                                       id="end_date{{ forloop.counter }}"#}
-{#                                       value="{{ rec.voucher_amount }}" required="True" disabled>#}
-{#                            </td>#}
-{#                            <td>#}
-{#                                <span type="button" name="updt" id="update{{ forloop.counter }}"#}
-{#                                      class=" update btn green glyphicon glyphicon-ok" style="display:none;">#}
-{#                                </span>#}
-{#                                <span type="button" name="edit" id="edit{{ forloop.counter }}"#}
-{#                                      class=" edit btn blue glyphicon glyphicon-pencil">#}
-{#                                </span>#}
-{#                                <span type="button" name="delete" id="delete{{ forloop.counter }}"#}
-{#                                      class=" delete btn red glyphicon glyphicon-trash">#}
-{#                                </span>#}
-{#                            </td>#}
-{#                        </tr>#}
-{#                    {% endfor %}#}
-{#                    </tbody>#}
-{#                </table>#}
-{#            </form>#}
-
-
-
             <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <table class="table table-striped table-hover table-bordered" id="sample_1">
                     <thead>
                     <tr>
-                        <th>No</th>
+                        <th>Voucher No</th>
                         <th>Voucher Date</th>
                         <th>Student Name</th>
                         <th>Semester</th>
@@ -699,11 +566,115 @@
                     </thead>
 
                     <tbody id="tbody">
-
+                    {% for rec in voucher_record %}
+                        <tr id="{{ rec.id }}" class="item">
+                            <td>
+                                <p hidden>{{ rec.voucher_number }}</p>
+                                <input id="id_voucher_number{{ forloop.counter }}" class="form-control voucher_number"
+                                       value="{{ rec.voucher_number }}" disabled>
+                            </td>
+                            <td>
+                                <p hidden>{{ rec.voucher_date }}</p>
+                                <input id="id_voucher_date{{ forloop.counter }}" class="form-control voucher_number"
+                                       value="{{ rec.voucher_date }}" disabled>
+                            </td>
+                            <td>
+                                <p hidden>{{ rec.application.student.user.get_full_name|title }}</p>
+                                <input class="form-control voucher_number" name="student" type="text"
+                                       id="student{{ forloop.counter }}"
+                                       value="{{ rec.application.student.user.get_full_name|title }}"
+                                       required="True" title='Student Name' disabled>
+                            </td>
+                            <td>
+                                <p hidden>{{ rec.application.applicant_progress_rel.all.0.semester.semester_name  }}</p>
+                                <input class="form-control semester" name="semester" type="text"
+                                       id="semester{{ forloop.counter }}"
+                                       value="{{ rec.application.applicant_progress_rel.all.0.semester.semester_name  }}"
+                                       required="True" disabled>
+                            </td>
+                            <td>
+                                <p hidden>{{ rec.application.address.country.country_name }}</p>
+                                <input class="form-control start_date" name="country" type="text"
+                                       id="start_date{{ forloop.counter }}"
+                                       value="{{ rec.application.address.country.country_name }}" required="True"
+                                       disabled>
+                            </td>
+                            <td>
+                                <p hidden>{{ rec.application.applicant_scholarship_rel.all.0.university.university_name }}</p>
+                                <input class="form-control end_date" name="university" type="text"
+                                       id="end_date{{ forloop.counter }}"
+                                       value="{{ rec.application.applicant_scholarship_rel.all.0.university.university_name }}"
+                                       required="True" disabled>
+                            </td>
+                            <td>
+                                <p hidden>{{ rec.application.applicant_scholarship_rel.all.0.scholarship.scholarship_name }}</p>
+                                <input class="form-control end_date" name="scholarship" type="text"
+                                       id="end_date{{ forloop.counter }}"
+                                       value="{{ rec.application.applicant_scholarship_rel.all.0.scholarship.scholarship_name }}"
+                                       required="True" disabled>
+                            </td>
+                            <td>
+                                <p hidden>{{ rec.application.applicant_module_rel.all.0.program.program_name }}</p>
+                                <input class="form-control end_date" name="program" type="text"
+                                       id="end_date{{ forloop.counter }}"
+                                       value="{{ rec.application.applicant_module_rel.all.0.program.program_name }}"
+                                       required="True" disabled>
+                            </td>
+                            <td>
+                                <p hidden>{{ rec.application.student.student_donor_rel.all.0.donor }}</p>
+                                <input class="form-control end_date" name="donor" type="text"
+                                       id="end_date{{ forloop.counter }}"
+                                       value="{{ rec.application.student.student_donor_rel.all.0.donor }}"
+                                       required="True" disabled>
+                            </td>
+                            <td>
+                                <p hidden>{{ rec.voucher_amount }}</p>
+                                <input class="form-control data end_date" name="voucher_amount" type="text"
+                                       id="id_voucher_amount{{ rec.id }}"
+                                       value="{{ rec.voucher_amount }}" required="True" disabled>
+                            </td>
+                            <td>
+                                <span type="button" name="updt" id="update{{ forloop.counter }}"
+                                      class=" update btn green glyphicon glyphicon-ok" style="display:none;">
+                                </span>
+                                <span type="button" name="edit" id="edit{{ forloop.counter }}"
+                                      class=" edit btn blue glyphicon glyphicon-pencil">
+                                </span>
+                                <span type="button" name="delete" id="delete{{ forloop.counter }}"
+                                      class=" delete btn red glyphicon glyphicon-trash">
+                                </span>
+                            </td>
+                        </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
             </form>
 
+
+            {#            <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">#}
+            {#                {% csrf_token %}#}
+            {#                <table class="table table-striped table-hover table-bordered" id="sample_1">#}
+            {#                    <thead>#}
+            {#                    <tr>#}
+            {#                        <th>No</th>#}
+            {#                        <th>Voucher Date</th>#}
+            {#                        <th>Student Name</th>#}
+            {#                        <th>Semester</th>#}
+            {#                        <th>Country</th>#}
+            {#                        <th>University</th>#}
+            {#                        <th>Scholarship</th>#}
+            {#                        <th>Program</th>#}
+            {#                        <th>Donor</th>#}
+            {#                        <th>Amount</th>#}
+            {#                        <th></th>#}
+            {#                    </tr>#}
+            {#                    </thead>#}
+            {##}
+            {#                    <tbody id="tbody">#}
+            {##}
+            {#                    </tbody>#}
+            {#                </table>#}
+            {#            </form>#}
 
 
         </div>

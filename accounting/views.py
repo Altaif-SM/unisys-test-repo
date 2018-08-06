@@ -14,6 +14,10 @@ from datetime import datetime
 # Create your views here.
 def get_student_payment_voucher(request):
     # student_list = StudentDetails.objects.filter(student_applicant_rel__is_sponsored=True)
+
+    query_student = request.GET.get('student') or None
+
+
     myDate = datetime.now()
 
     # Give a format to the date
@@ -21,17 +25,61 @@ def get_student_payment_voucher(request):
 
     student_list = ApplicationDetails.objects.filter(is_sponsored=True)
 
-    voucher_record = StudentPaymentReceiptVoucher.objects.all()
+    voucher_record = StudentPaymentReceiptVoucher.objects.filter(voucher_type='debit')
+
+
+    raw_dict = {}
+    if query_student:
+
+        application_rec =  ApplicationDetails.objects.get(is_sponsored=True, student_id=query_student)
+
+        voucher_ids = voucher_record.filter(application_id=application_rec).values('id')
+        voucher_record = voucher_record.filter(id__in=voucher_ids)
+
+        total_amount = StudentPaymentReceiptVoucher.objects.filter(voucher_type="credit",
+                                                                   application=application_rec).values(
+            "voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
+
+        total_debit_amount = StudentPaymentReceiptVoucher.objects.filter(voucher_type="debit",
+                                                                         application=application_rec).values(
+            "voucher_amount").aggregate(total_debit=Sum('voucher_amount'))
+
+        raw_dict['total_amount'] = float(total_amount['total_credit']) if total_amount['total_credit'] else 0
+        raw_dict['total_debit_amount'] = float(total_debit_amount['total_debit']) if total_debit_amount[
+            'total_debit'] else 0
+        raw_dict['application_rec'] = application_rec.to_student_payment_application_dict()
+        raw_dict['voucher_rec'] = [obj.to_dict() for obj in voucher_record]
+
     return render(request, "template_student_payment_voucher.html",
-                  {'student_list': student_list, 'voucher_record': voucher_record, 'formatedDate': formatedDate})
+                  {'student_list': student_list, 'voucher_record': voucher_record, 'formatedDate': formatedDate, 'raw_dict': raw_dict})
 
 
 def get_student_receipt_voucher(request):
+
+    query_student = request.GET.get('student') or None
+
     # student_list = StudentDetails.objects.filter(student_applicant_rel__is_sponsored=True)
     student_list = ApplicationDetails.objects.filter(is_sponsored=True)
-    voucher_record = StudentPaymentReceiptVoucher.objects.all()
+    voucher_record = StudentPaymentReceiptVoucher.objects.filter(voucher_type='credit')
+
+    raw_dict = {}
+    if query_student:
+        application_rec = ApplicationDetails.objects.get(is_sponsored=True, student_id=query_student)
+
+        voucher_ids = voucher_record.filter(application_id=application_rec).values('id')
+        voucher_record = voucher_record.filter(id__in=voucher_ids)
+
+        balance_total = StudentPaymentReceiptVoucher.objects.filter(voucher_type="credit",
+                                                                    application=application_rec).values(
+            "voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
+        raw_dict['application_rec'] = application_rec.to_application_dict()
+        raw_dict['outstanding_amount'] = (
+                float(application_rec.scholarship_fee) - float(balance_total['total_credit'])) if \
+            balance_total['total_credit'] else 0
+        raw_dict['voucher_rec'] = [obj.to_dict() for obj in voucher_record]
+
     return render(request, "template_student_receipt_voucher.html",
-                  {'student_list': student_list, 'voucher_record': voucher_record})
+                  {'student_list': student_list, 'voucher_record': voucher_record, 'raw_dict': raw_dict})
 
 
 def get_student_payment_and_receipt_report(request):

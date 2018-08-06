@@ -35,6 +35,7 @@ class StudentPaymentReceiptVoucher(BaseModel):
             ('can_view_donor_payment_voucher', 'can view donor payment voucher'),
             ('can_view_donor_receipt_voucher', 'can view donor receipt voucher'),
         )
+        ordering = ('-created_on',)
 
     def validate(self):
         self.voucher_amount >= self.application.scholarship_fee
