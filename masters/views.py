@@ -851,9 +851,9 @@ def save_manage_partner_master(request):
             country=country)
         try:
             if pic:
-                parent_obj = PartnerDetails.objects.get(id=parent_obj)
+                partner_obj = PartnerDetails.objects.get(id=partner_details_id)
                 dirname = datetime.datetime.now().strftime('%Y.%m.%d.%H.%M.%S')
-                filename = "%s_%s.%s" % (str(parent_obj.id), dirname, 'png')
+                filename = "%s_%s.%s" % (str(partner_obj.id), dirname, 'png')
                 raw_file_path_and_name = os.path.join('images/' + filename)
                 data = str(pic)
                 temp_data = data.split('base64,')[1]
@@ -861,8 +861,8 @@ def save_manage_partner_master(request):
                 f = open(settings.MEDIA_ROOT + raw_file_path_and_name, 'wb')
                 f.write(raw_data)
                 f.close()
-                parent_obj.photo = raw_file_path_and_name
-                parent_obj.save()
+                partner_obj.photo = raw_file_path_and_name
+                partner_obj.save()
         except Exception as e:
             messages.warning(request, "Form have some error" + str(e))
 
@@ -1256,7 +1256,8 @@ def template_partner_details(request, partner_id=None):
         if partner_id:
             partner_rec = PartnerDetails.objects.get(id=partner_id)
             return render(request, "template_partner_details.html", {'partner_rec': partner_rec})
-    except:
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
         return redirect('/masters/template_manage_partner_master/')
 
 
@@ -1298,6 +1299,7 @@ def template_donar_details(request, donor_id=None):
             donor_rec = DonorDetails.objects.get(id=donor_id)
             return render(request, "template_donor_details.html", {'donor_rec': donor_rec})
     except Exception as e :
+        messages.warning(request, "Form have some error" + str(e))
         return redirect('/masters/template_manage_donor_master/')
 
 
