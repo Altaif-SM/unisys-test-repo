@@ -15,6 +15,7 @@ def student_home(request):
     username = ''
     application_history_obj = ''
     application_id = ''
+    application = ''
 
     try:
         first_name = request.user.first_name
@@ -22,6 +23,7 @@ def student_home(request):
         username = str(first_name) + ' ' + str(last_name)
 
         if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
+            application = request.user.get_application
             if request.user.get_application.is_submitted:
                 application_history_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id,
                                                                          is_submitted=True).applicant_history_rel.all()
@@ -34,7 +36,7 @@ def student_home(request):
 
     return render(request, 'student_home.html',
                   {'username': username, 'application_history_obj': application_history_obj,
-                   'application_id': application_id})
+                   'application_id': application_id,'application':application})
 
 
 def delete_application(request, app_id):

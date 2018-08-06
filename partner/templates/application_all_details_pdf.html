@@ -1,490 +1,487 @@
 {#{% extends "template_base_page.html" %}#}
 <style>
     table {
-    border-collapse: collapse;
-}
+        border-collapse: collapse;
+    }
 
-td {
-    padding-top: .5em;
-    padding-bottom: .5em;
+    td {
+        padding-top: .5em;
+        padding-bottom: .5em;
 
-}
+    }
 
 </style>
 
 {% block content %}
 
-                    <span style="margin-left: 550px">
-                    <img style="width: 100px;" src={{ application_obj.image.path }}>
+    <span style="margin-left: 550px">
+{#        {{ application_obj.image.path }}  ------- {{ application_obj.report_path }}{{ application_obj.image }} - - - -- -{{ report_path }}{{ application_obj.image }}#}
+{#                    <img style="width: 100px;" src={{ application_obj.image.path }}>#}
+                    <img style="width: 100px;" src={{ report_path }}{{ application_obj.image }}>
                     </span>
+    <table>
 
 
-            <table>
+        <td style="font-size: 16px;font-weight:bold">PERSONAL INFO:</td>
+        <tr>
 
+            {% comment %}<span class="" style="margin-left: 105px">PERSONAL INFO :</span>{% endcomment %}
+            <td style="text-align: left ;font-size: {{ x }}px;margin-top: 20px">
+                <span class="">First Name: {{ application_obj.first_name|title }}</span>
+            </td>
 
-                <td style="font-size: 16px;font-weight:bold">PERSONAL INFO:</td>
-                <tr>
+            <td style="text-align: left;font-size: {{ x }}px">
+                <span class="">Middle Name: {{ application_obj.middle_name|title }}</span>
+            </td>
 
-                    {% comment %}<span class="" style="margin-left: 105px">PERSONAL INFO :</span>{% endcomment %}
-                    <td style="text-align: left ;font-size: {{ x }}px;margin-top: 20px" >
-                        <span class="">First Name: {{ application_obj.first_name|title }}</span>
-                    </td>
+            <td style="text-align: left;font-size: {{ x }}px">
+                <span class="">Last Name: {{ application_obj.last_name|title }}</span>
+            </td>
 
-                    <td style="text-align: left;font-size: {{ x }}px">
-                        <span class="">Middle Name: {{ application_obj.middle_name|title  }}</span>
-                    </td>
+        </tr>
 
-                    <td style="text-align: left;font-size: {{ x }}px">
-                        <span class="">Last Name: {{ application_obj.last_name|title  }}</span>
-                    </td>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>DOB: {{ application_obj.birth_date|date:"Y-m-d" }}</span>
+            </td>
 
-                     </tr>
 
-                    <tr>
-                        <td style="text-align: left; font-size: {{ x }}px">
-                        <span>DOB: {{ application_obj.birth_date|date:"Y-m-d"  }}</span>
-                        </td>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Gender: {{ application_obj.gender|title }}</span>
+            </td>
 
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Nationality: {{ application_obj.nationality|title }}</span>
+            </td>
 
-                        <td style="text-align: left; font-size: {{ x }}px">
-                            <span>Gender: {{ application_obj.gender|title  }}</span>
-                        </td>
+        </tr>
 
-                         <td style="text-align: left; font-size: {{ x }}px">
-                            <span>Nationality: {{ application_obj.nationality|title  }}</span>
-                         </td>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>ID no: {{ application_obj.id_number }}</span>
+            </td>
 
-                        </tr>
 
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>ID no: {{ application_obj.id_number }}</span>
-                    </td>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Passport no: {{ application_obj.passport_number }}</span>
+            </td>
 
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Country of Issuer: {{ application_obj.passport_issue_country|title }}</span>
+            </td>
 
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Passport no: {{ application_obj.passport_number }}</span>
-                    </td>
+        </tr>
 
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Country of Issuer: {{ application_obj.passport_issue_country|title  }}</span>
-                    </td>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>E-mail: {{ application_obj.email }}</span>
+            </td>
 
-                </tr>
 
-                 <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>E-mail: {{ application_obj.email }}</span>
-                    </td>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Telephone no (HP): {{ application_obj.telephone_hp }}</span>
+            </td>
 
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Telephone no (Home): {{ application_obj.telephone_home }}</span>
+            </td>
 
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Telephone no (HP): {{ application_obj.telephone_hp }}</span>
-                    </td>
+        </tr>
 
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Telephone no (Home): {{ application_obj.telephone_home }}</span>
-                    </td>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Religion: {{ application_obj.religion|title }}</span>
+            </td>
 
-                </tr>
 
-                 <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Religion: {{ application_obj.religion|title  }}</span>
-                    </td>
+        </tr>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Residential/Postal Address: {{ application_obj.address.residential_address|title }}</span>
+            </td>
 
+        </tr>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Premise/Sub-Locality-2:{{ application_obj.address.street|title }}</span>
+            </td>
+        </tr>
+        <tr>
 
 
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Sub-Locality:{{ application_obj.address.sub_locality|title }}</span>
+            </td>
 
-                </tr>
-                <tr>
-                     <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Residential/Postal Address: {{ application_obj.address.residential_address|title  }}</span>
-                    </td>
+        </tr>
+        <tr>
 
-                </tr>
-                <tr>
-                     <td style="text-align: left; font-size: {{ x }}px">
-                        <span >Premise/Sub-Locality-2:{{ application_obj.address.street|title   }}</span>
-                    </td>
-                    </tr>
-                <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Postcode:{{ application_obj.address.post_code }}</span>
+            </td>
 
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>District:{{ application_obj.address.district|title }}</span>
+            </td>
 
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Sub-Locality:{{ application_obj.address.sub_locality|title  }}</span>
-                    </td>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>State/Province:{{ application_obj.address.state|title }}</span>
+            </td>
 
-                </tr>
-                <tr>
 
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Postcode:{{ application_obj.address.post_code }}</span>
-                    </td>
+        </tr>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Country:{{ application_obj.address.country.country_name|title }}</span>
+            </td>
 
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>District:{{ application_obj.address.district|title  }}</span>
-                    </td>
+        </tr>
+        <td style="font-size: 16px;font-weight:bold">WIFE INFO:</td>
 
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>State/Province:{{ application_obj.address.state|title  }}</span>
-                    </td>
 
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Wife Name:{{ application_obj.wife_name|title }}</span>
+            </td>
 
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>DOB:{{ application_obj.wife_dob|date:"Y-m-d" }}</span>
+            </td>
 
-                </tr>
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Country:{{ application_obj.address.country.country_name|title  }}</span>
-                    </td>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Income($):{{ application_obj.wife_income|default:"" }}</span>
+            </td>
+        </tr>
+
+
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>PaySlip:{{ application_obj.wife_pay_slip|default:"" }}</span>
+            </td>
 
-                </tr>
-                 <td style="font-size: 16px;font-weight:bold">WIFE INFO:</td>
 
+        </tr>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>E-mail:{{ application_obj.wife_email|default:"" }}</span>
+            </td>
 
-                <tr>
-                     <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Wife Name:{{ application_obj.wife_name|title  }}</span>
-                    </td>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Telephone (Home):{{ application_obj.wife_telephone_home|default:"" }}</span>
+            </td>
 
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>DOB:{{ application_obj.wife_dob|date:"Y-m-d"  }}</span>
-                    </td>
 
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Income($):{{ application_obj.wife_income|default:"" }}</span>
-                    </td>
-                </tr>
-
-
-                <tr>
-                     <td style="text-align: left; font-size: {{ x }}px">
-                        <span>PaySlip:{{  application_obj.wife_pay_slip|default:"" }}</span>
-                    </td>
-
-
-                </tr>
-                 <tr>
-                     <td style="text-align: left; font-size: {{ x }}px">
-                        <span>E-mail:{{ application_obj.wife_email|default:"" }}</span>
-                    </td>
-
-                     <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Telephone (Home):{{ application_obj.wife_telephone_home|default:""  }}</span>
-                    </td>
-
-
-                </tr>
-
-                <tr>
-
-                     <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Occupation:{{ application_obj.wife_occupation|default:"" }}</span>
-                    </td>
-
-                     <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Country :{{  application_obj.wife_nationality.country_name|title  }}</span>
-                    </td>
-
-
-                </tr>
-                 <td style="font-size: 16px;font-weight:bold">FATHER INFO:</td>
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Father Name:{{ application_obj.father_name|default:""|title }}</span>
-                    </td>
-
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>DOB:{{ application_obj.father_dob|date:"Y-m-d" }}</span>
-                    </td>
-
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Income($):{{  application_obj.father_income|default:"" }}</span>
-                    </td>
-
-                </tr>
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Payslip :{{  application_obj.father_pay_slip|default:"" }}</span>
-                    </td>
-
-                </tr>
-
-                 <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>E-mail :{{  application_obj.father_email|default:""}}</span>
-                    </td>
-
-                      <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Telephone (Home):{{application_obj.father_telephone_home|default:""}}</span>
-                    </td>
-
-                </tr>
-
-                 <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Occupation :{{  application_obj.father_occupation|default:""}}</span>
-                    </td>
-
-                      <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Country:{{application_obj.father_nationality.country_name|title}}</span>
-                    </td>
-
-                </tr>
-                <td style="font-size: 16px;font-weight:bold">MOTHER INFO:</td>
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Mother Name : {{  application_obj.mother_name|default:""|title }}</span>
-                    </td>
-
-                      <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Country : {{application_obj.mother_dob|date:"Y-m-d"}}</span>
-                    </td>
-
-                </tr>
-                 <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Income($): {{  application_obj.mother_income}}</span>
-                    </td>
-                 </tr>
-                 <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Payslip:{{ application_obj.mother_pay_slip|default:""}}</span>
-                    </td>
-                 </tr>
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>E-mail :{{  application_obj.mother_email|default:""}}</span>
-                    </td>
-
-                      <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Telephone (Home):{{application_obj.mother_telephone_home|default:""}}</span>
-                    </td>
-
-                </tr>
-
-                 <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Occupation :{{  application_obj.mother_occupation|default:""}}</span>
-                    </td>
-
-                      <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Country:{{application_obj.mother_nationality.country_name|title}}</span>
-                    </td>
-
-                </tr>
-                 <td style="font-size: 16px;font-weight:bold">Siblings INFO:</td>
-                  {% for sibling in siblings_obj %}
-                 <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Sibling :{{ sibling.sibling_name|default:""|title }}</span>
-                    </td>
-
-                      <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Age :{{ sibling.sibling_age }}</span>
-                    </td>
-                     <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Status :{{ sibling.sibling_status|title }}</span>
-                    </td>
-
-                </tr>
-                {% endfor %}
-                <td style="font-size: 16px;font-weight:bold">ACADEMIC QUALIFICATION :</td>
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>'A'level :{{ qualification_obj.a_level }}</span>
-                    </td>
-
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Year :{{ qualification_obj.a_level_year }}</span>
-                    </td>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Result :{{ qualification_obj.a_level_result }}</span>
-                    </td>
-
-                </tr>
-                <tr>
-
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Result Doc :{{  qualification_obj.a_level_result_document|default:"" }}</span>
-                    </td>
-
-                </tr>
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>'O'level :{{qualification_obj.o_level}}</span>
-                    </td>
-
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Year :{{ qualification_obj.o_level_year }}</span>
-                    </td>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Result :{{ qualification_obj.o_level_result }}</span>
-                    </td>
-
-                </tr>
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Result Doc :{{ qualification_obj.applicant_id.report_path }}</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>High School:{{ qualification_obj.high_school }}</span>
-                    </td>
-
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Year :{{qualification_obj.high_school_year}}</span>
-                    </td>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Result :{{ qualification_obj.high_school_result }}</span>
-                    </td>
-
-                </tr>
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Result Doc :{{ qualification_obj.high_school_result_document|default:"" }}</span>
-                    </td>
-                </tr>
-             <td style="font-size: 16px;font-weight:bold">English Qualification :</td>
-             <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>English Competency Test 1 :{{ english_obj.english_test_one }}</span>
-                    </td>
-
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Year :{{english_obj.english_test_one_year}}</span>
-                    </td>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Result :{{  english_obj.english_test_one_result }}</span>
-                    </td>
-
-                </tr>
-             <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Result Doc :{{english_obj.english_test_one_result_document|default:"" }}</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>English Competency Test 2 :{{ english_obj.english_test_two }}</span>
-                    </td>
-
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Year :{{ english_obj.english_test_two_year }}</span>
-                    </td>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Result :{{ english_obj.english_test_two_result }}</span>
-                    </td>
-
-                </tr>
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Result Doc :{{ english_obj.english_test_two_result_document|default:""}}</span>
-                    </td>
-                </tr>
-            <td style="font-size: 16px;font-weight:bold">Experience Details:</td>
+        </tr>
+
+        <tr>
+
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Occupation:{{ application_obj.wife_occupation|default:"" }}</span>
+            </td>
+
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Country :{{ application_obj.wife_nationality.country_name|title }}</span>
+            </td>
+
+
+        </tr>
+        <td style="font-size: 16px;font-weight:bold">FATHER INFO:</td>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Father Name:{{ application_obj.father_name|default:""|title }}</span>
+            </td>
+
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>DOB:{{ application_obj.father_dob|date:"Y-m-d" }}</span>
+            </td>
+
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Income($):{{ application_obj.father_income|default:"" }}</span>
+            </td>
+
+        </tr>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Payslip :{{ application_obj.father_pay_slip|default:"" }}</span>
+            </td>
+
+        </tr>
+
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>E-mail :{{ application_obj.father_email|default:"" }}</span>
+            </td>
+
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Telephone (Home):{{ application_obj.father_telephone_home|default:"" }}</span>
+            </td>
+
+        </tr>
+
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Occupation :{{ application_obj.father_occupation|default:"" }}</span>
+            </td>
+
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Country:{{ application_obj.father_nationality.country_name|title }}</span>
+            </td>
+
+        </tr>
+        <td style="font-size: 16px;font-weight:bold">MOTHER INFO:</td>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Mother Name : {{ application_obj.mother_name|default:""|title }}</span>
+            </td>
+
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Country : {{ application_obj.mother_dob|date:"Y-m-d" }}</span>
+            </td>
+
+        </tr>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Income($): {{ application_obj.mother_income }}</span>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Payslip:{{ application_obj.mother_pay_slip|default:"" }}</span>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>E-mail :{{ application_obj.mother_email|default:"" }}</span>
+            </td>
+
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Telephone (Home):{{ application_obj.mother_telephone_home|default:"" }}</span>
+            </td>
+
+        </tr>
+
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Occupation :{{ application_obj.mother_occupation|default:"" }}</span>
+            </td>
+
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Country:{{ application_obj.mother_nationality.country_name|title }}</span>
+            </td>
+
+        </tr>
+        <td style="font-size: 16px;font-weight:bold">Siblings INFO:</td>
+        {% for sibling in siblings_obj %}
             <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Co-Curriculum-1 :{{ curriculum_obj.curriculum_name_one }}</span>
-                    </td>
+                <td style="text-align: left; font-size: {{ x }}px">
+                    <span>Sibling :{{ sibling.sibling_name|default:""|title }}</span>
+                </td>
 
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Year :{{ curriculum_obj.curriculum_year_one }}</span>
-                    </td>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Result :{{ curriculum_obj.curriculum_result_document_one|default:""  }}</span>
-                    </td>
+                <td style="text-align: left; font-size: {{ x }}px">
+                    <span>Age :{{ sibling.sibling_age }}</span>
+                </td>
+                <td style="text-align: left; font-size: {{ x }}px">
+                    <span>Status :{{ sibling.sibling_status|title }}</span>
+                </td>
 
-                </tr>
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Co-Curriculum-2 :{{ curriculum_obj.curriculum_name_two }}</span>
-                    </td>
+            </tr>
+        {% endfor %}
+        <td style="font-size: 16px;font-weight:bold">ACADEMIC QUALIFICATION :</td>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>'A'level :{{ qualification_obj.a_level }}</span>
+            </td>
 
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Year :{{ curriculum_obj.curriculum_year_two }}</span>
-                    </td>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Result :{{ curriculum_obj.curriculum_result_document_two|default:""}}</span>
-                    </td>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Year :{{ qualification_obj.a_level_year }}</span>
+            </td>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Result :{{ qualification_obj.a_level_result }}</span>
+            </td>
 
-                </tr>
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Co-Curriculum-3 :{{curriculum_obj.curriculum_name_three }}</span>
-                    </td>
+        </tr>
+        <tr>
 
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Year :{{ curriculum_obj.curriculum_year_three }}</span>
-                    </td>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Result :{{ curriculum_obj.curriculum_result_document_three|default:""  }}</span>
-                    </td>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Result Doc :{{ qualification_obj.a_level_result_document|default:"" }}</span>
+            </td>
 
-                </tr>
-             <td style="font-size: 16px;font-weight:bold">Experience Details:</td>
-             <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Work Experience 1 :{{applicant_experience_obj.work_experience_one }}</span>
-                    </td>
+        </tr>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>'O'level :{{ qualification_obj.o_level }}</span>
+            </td>
 
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Start Date :{{ applicant_experience_obj.from_date_one }}</span>
-                    </td>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>End Date :{{ applicant_experience_obj.to_date_one }}</span>
-                    </td>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Year :{{ qualification_obj.o_level_year }}</span>
+            </td>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Result :{{ qualification_obj.o_level_result }}</span>
+            </td>
 
-                </tr>
-                 <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Result Doc :{{ applicant_experience_obj.work_experience_document_one|default:"" }}</span>
-                    </td>
-                </tr>
+        </tr>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Result Doc :{{ qualification_obj.applicant_id.report_path }}</span>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>High School:{{ qualification_obj.high_school }}</span>
+            </td>
+
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Year :{{ qualification_obj.high_school_year }}</span>
+            </td>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Result :{{ qualification_obj.high_school_result }}</span>
+            </td>
+
+        </tr>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Result Doc :{{ qualification_obj.high_school_result_document|default:"" }}</span>
+            </td>
+        </tr>
+        <td style="font-size: 16px;font-weight:bold">English Qualification :</td>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>English Competency Test 1 :{{ english_obj.english_test_one }}</span>
+            </td>
+
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Year :{{ english_obj.english_test_one_year }}</span>
+            </td>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Result :{{ english_obj.english_test_one_result }}</span>
+            </td>
+
+        </tr>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Result Doc :{{ english_obj.english_test_one_result_document|default:"" }}</span>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>English Competency Test 2 :{{ english_obj.english_test_two }}</span>
+            </td>
+
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Year :{{ english_obj.english_test_two_year }}</span>
+            </td>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Result :{{ english_obj.english_test_two_result }}</span>
+            </td>
+
+        </tr>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Result Doc :{{ english_obj.english_test_two_result_document|default:"" }}</span>
+            </td>
+        </tr>
+        <td style="font-size: 16px;font-weight:bold">Experience Details:</td>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Co-Curriculum-1 :{{ curriculum_obj.curriculum_name_one }}</span>
+            </td>
+
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Year :{{ curriculum_obj.curriculum_year_one }}</span>
+            </td>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Result :{{ curriculum_obj.curriculum_result_document_one|default:"" }}</span>
+            </td>
+
+        </tr>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Co-Curriculum-2 :{{ curriculum_obj.curriculum_name_two }}</span>
+            </td>
+
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Year :{{ curriculum_obj.curriculum_year_two }}</span>
+            </td>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Result :{{ curriculum_obj.curriculum_result_document_two|default:"" }}</span>
+            </td>
+
+        </tr>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Co-Curriculum-3 :{{ curriculum_obj.curriculum_name_three }}</span>
+            </td>
+
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Year :{{ curriculum_obj.curriculum_year_three }}</span>
+            </td>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Result :{{ curriculum_obj.curriculum_result_document_three|default:"" }}</span>
+            </td>
+
+        </tr>
+        <td style="font-size: 16px;font-weight:bold">Experience Details:</td>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Work Experience 1 :{{ applicant_experience_obj.work_experience_one }}</span>
+            </td>
+
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Start Date :{{ applicant_experience_obj.from_date_one }}</span>
+            </td>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>End Date :{{ applicant_experience_obj.to_date_one }}</span>
+            </td>
+
+        </tr>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Result Doc :{{ applicant_experience_obj.work_experience_document_one|default:"" }}</span>
+            </td>
+        </tr>
 
 
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Work Experience 2 :{{ applicant_experience_obj.work_experience_two}}</span>
-                    </td>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Work Experience 2 :{{ applicant_experience_obj.work_experience_two }}</span>
+            </td>
 
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Start Date :{{ applicant_experience_obj.from_date_two }}</span>
-                    </td>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>End Date :{{ applicant_experience_obj.to_date_two }}</span>
-                    </td>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Start Date :{{ applicant_experience_obj.from_date_two }}</span>
+            </td>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>End Date :{{ applicant_experience_obj.to_date_two }}</span>
+            </td>
 
-                </tr>
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Result Doc :{{ applicant_experience_obj.work_experience_document_two|default:""}}</span>
-                    </td>
-                </tr>
-           <td style="font-size: 16px;font-weight:bold">SCHOLARSHIP SELECTION:</td>
-             <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Scholarship Applied  :{{ scholarship_obj.scholarship}}</span>
-                    </td>
+        </tr>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Result Doc :{{ applicant_experience_obj.work_experience_document_two|default:"" }}</span>
+            </td>
+        </tr>
+        <td style="font-size: 16px;font-weight:bold">SCHOLARSHIP SELECTION:</td>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Scholarship Applied  :{{ scholarship_obj.scholarship }}</span>
+            </td>
 
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Course Applied:{{scholarship_obj.course_applied }}</span>
-                    </td>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>University :{{ scholarship_obj.university  }}</span>
-                    </td>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Course Applied:{{ scholarship_obj.course_applied }}</span>
+            </td>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>University :{{ scholarship_obj.university }}</span>
+            </td>
 
-                </tr>
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Admission Letter:{{ scholarship_obj.admission_letter_document|default:"" }}</span>
-                    </td>
-                </tr>
+        </tr>
+        <tr>
+            <td style="text-align: left; font-size: {{ x }}px">
+                <span>Admission Letter:{{ scholarship_obj.admission_letter_document|default:"" }}</span>
+            </td>
+        </tr>
 
-                </tbody>
-            </table>
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
+        </tbody>
+    </table>
+    {#            </div>#}
+    {#        </div>#}
+    {#    </div>#}
 {% endblock %}

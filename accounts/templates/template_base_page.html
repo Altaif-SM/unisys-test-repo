@@ -129,7 +129,7 @@ License: You must have a valid license purchased only from themeforest(the above
                            data-close-others="true">
                             {% if user.is_student %}
                                 {% if user.get_application %}
-                                    <img alt="" class="img-circle" src="../../media/{{ user.get_application.image }}"/>
+                                    <img alt="" class="img-circle" src="{{ user.get_application.report_path }}{{ user.get_application.image }}"/>
                                     <span class="username username-hide-on-mobile"> {{ user.get_application.first_name }} {{ user.get_application.last_name }} </span>
                                     -<b><span
                                         class="username username-hide-on-mobile"> {{ user.get_application_id }}</span></b>
@@ -173,22 +173,6 @@ License: You must have a valid license purchased only from themeforest(the above
                     </li>
                 </ul>{% endcomment %}
 
-                {% comment %}<ul class="dropdown-menu pull-right" id="action">
-                                        <li><a href="javascript:;" class="action" id="First Interview"> First
-                                            Interview</a></li>
-                                        <li><a href="javascript:;" class="action" id="First Interview attended">First
-                                            Interview attended</a></li>
-                                        <li><a href="javascript:;" class="action" id="First Interview approval">First
-                                            Interview approval</a></li>
-                                        <li><a href="javascript:;" class="action" id="Psychometric Test">Psychometric
-                                            Test</a></li>
-                                        <li><a href="javascript:;" class="action" id="Second Interview attended">Second
-                                            Interview attended</a></li>
-                                        <li><a href="javascript:;" class="action" id="Second Interview approval">Second
-                                            Interview approval</a></li>
-{#                                        <li><a href="javascript:;" class="action" id="Admin approval">Admin approval</a></li>#}
-                                        <li><a href="javascript:;" class="action" id="Reject">Reject</a></li>
-                                    </ul>{% endcomment %}
 
                 <ul class="nav navbar-nav pull-right">
 

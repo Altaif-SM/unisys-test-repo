@@ -93,7 +93,7 @@
         </div>
 
         <div class="form-body">
-            <form id="form_sample_1" action="{% url 'partner:application_all_details_pdf' user.get_application.id %}" class="form-horizontal" method="POST" enctype="multipart/form-data">
+            <form id="form_sample_1" {% if application %} action="{% url 'partner:application_all_details_pdf' application.id %}" {% endif %} class="form-horizontal" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
 
                 <br>
@@ -102,12 +102,15 @@
                     <div class="caption">
                         <i class="icon-settings font-red"></i>
                         <span class="caption-subject font-red sbold uppercase"> Application Progress History</span>
-                        {% if application_id %}<span class="btn red btn" style="margin-left: 70%"
-                                                     onclick="window.location='{% url "student:delete_application" application_id %}'">Delete Application</span>
-                        {% endif %}
+                        {% if application %}
                             <span style="margin-left: 10%">
                                 <button type="submit" id="button_pdf_id" class="btn green">PDF</button>
                             </span>
+                        {% endif %}
+
+                        {% if application_id %}<span class="btn red btn" style="margin-left: 70%"
+                                                     onclick="window.location='{% url "student:delete_application" application_id %}'">Delete Application</span>
+                        {% endif %}
                     </div>
                 </div>
                 <hr>

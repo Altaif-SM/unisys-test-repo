@@ -1960,10 +1960,10 @@ def application_all_details_pdf(request,app_id):
         curriculum_obj = ''
         experience_obj = ''
 
-
         x = 14
 
         application_obj = ApplicationDetails.objects.get(id=app_id)
+        report_path = settings.MEDIA_ROOT + str('reports/') + str(application_obj.first_name) + '_' + str(application_obj.id) + '/'
 
         siblings_obj = application_obj.sibling_applicant_rel.all() if application_obj.sibling_applicant_rel.all() else ''
         qualification_obj = application_obj.academic_applicant_rel.get() if application_obj.academic_applicant_rel.all() else ''
@@ -1973,7 +1973,7 @@ def application_all_details_pdf(request,app_id):
         scholarship_obj = application_obj.applicant_scholarship_rel.get() if application_obj.applicant_scholarship_rel.all() else ''
 
         template = get_template('application_all_details_pdf.html')
-        Context = ({'application_obj':application_obj,'siblings_obj':siblings_obj,'qualification_obj':qualification_obj,'english_obj':english_obj,'curriculum_obj':curriculum_obj,'applicant_experience_obj':applicant_experience_obj,'scholarship_obj':scholarship_obj,'x':x})
+        Context = ({'report_path':report_path,'application_obj':application_obj,'siblings_obj':siblings_obj,'qualification_obj':qualification_obj,'english_obj':english_obj,'curriculum_obj':curriculum_obj,'applicant_experience_obj':applicant_experience_obj,'scholarship_obj':scholarship_obj,'x':x})
         html = template.render(Context)
 
         file = open('test.pdf', "w+b")
