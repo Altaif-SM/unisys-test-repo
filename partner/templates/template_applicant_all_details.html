@@ -3,15 +3,15 @@
 
 {% block ScriptBlock %}
     <script>
-     window.onload = function () {
-         $(document).ready(function () {
-             $(document).on("click", "#button_pdf_id", function (e) {
-                 $('#form_pdf_id').submit();
-             });
+        window.onload = function () {
+            $(document).ready(function () {
+                $(document).on("click", "#button_pdf_id", function (e) {
+                    $('#form_pdf_id').submit();
+                });
 
 
-         });
-     }
+            });
+        }
 
         window.setTimeout(function () {
             $(".alert").fadeTo(500, 0).slideUp(500, function () {
@@ -67,11 +67,9 @@
                 <span class="caption-subject font-red sbold uppercase"> Applications Details</span>
 
             </div>
-            <span style="margin-left: 800px">
+            <span style="margin-left: 10%">
                 <button type="button" id="button_pdf_id" class="btn green" id="save">PDF</button>
-                    </span>
-
-
+            </span>
 
         </div>
 
@@ -84,9 +82,6 @@
                           class="form-horizontal"
                           method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <div class="row" style="margin-top: -20px">
-
-                        </div>
                     </form>
                 </div>
 
@@ -326,6 +321,8 @@
                         <div class="col-md-2">
                             <a href="
 
+
+
                                     {{ application_obj.report_path }}{{ application_obj.wife_pay_slip }}">{{ application_obj.wife_pay_slip|default:"" }}</a>
                             {#                            <span class="">{{ application_obj.wife_pay_slip|default:"" }}</span>#}
                         </div>
@@ -406,6 +403,8 @@
                         <label class="col-md-1 control-label">Pay Slip:</label>
                         <div class="col-md-2">
                             <a href="
+
+
 
                                     {{ application_obj.report_path }}{{ application_obj.father_pay_slip }}">{{ application_obj.father_pay_slip|default:"" }}</a>
                             {#                            <span class="">{{ application_obj.father_pay_slip }}</span>#}
@@ -492,6 +491,8 @@
                         <label class="col-md-1 control-label">Pay Slip:</label>
                         <div class="col-md-2">
                             <a href="
+
+
 
                                     {{ application_obj.report_path }}{{ application_obj.mother_pay_slip }}">{{ application_obj.mother_pay_slip|default:"" }}</a>
                             {#                            <span class="">{{ application_obj.mother_pay_slip }}</span>#}
@@ -614,6 +615,8 @@
                         <div class="col-md-2">
                             <a href="
 
+
+
                                     {{ qualification_obj.applicant_id.report_path }}{{ qualification_obj.a_level_result_document }}">{{ qualification_obj.a_level_result_document|default:"" }}</a>
                             {#                            <span class="">{{ qualification_obj.a_level_result_document }}</span>#}
                         </div>
@@ -648,6 +651,8 @@
                         <div class="col-md-2">
                             <a href="
 
+
+
                                     {{ qualification_obj.applicant_id.report_path }}{{ qualification_obj.o_level_result_document }}">{{ qualification_obj.o_level_result_document|default:"" }}</a>
                             {#                            <span class="">{{ qualification_obj.o_level_result_document }}</span>#}
                         </div>
@@ -681,6 +686,8 @@
                         <label class="col-md-1 control-label">Result Doc:</label>
                         <div class="col-md-2">
                             <a href="
+
+
 
                                     {{ qualification_obj.applicant_id.report_path }}{{ qualification_obj.high_school_result_document }}">{{ qualification_obj.high_school_result_document|default:"" }}</a>
                             {#                            <span class="">{{ qualification_obj.high_school_result_document }}</span>#}
@@ -722,6 +729,8 @@
                         <div class="col-md-2">
                             <a href="
 
+
+
                                     {{ english_obj.applicant_id.report_path }}{{ english_obj.english_test_one_result_document }}">{{ english_obj.english_test_one_result_document|default:"" }}</a>
                             {#                            <span class="">{{ english_obj.english_test_one_result_document }}</span>#}
                         </div>
@@ -756,6 +765,8 @@
                         <div class="col-md-2">
                             <a href="
 
+
+
                                     {{ english_obj.applicant_id.report_path }}{{ english_obj.english_test_two_result_document }}">{{ english_obj.english_test_two_result_document|default:"" }}</a>
                             {#                            <span class="">{{ english_obj.english_test_two_result_document }}</span>#}
                         </div>
@@ -787,6 +798,8 @@
                         <div class="col-md-2">
                             <a href="
 
+
+
                                     {{ curriculum_obj.applicant_id.report_path }}{{ curriculum_obj.curriculum_result_document_one }}">{{ curriculum_obj.curriculum_result_document_one|default:"" }}</a>
                             {#                            <span class="">{{ curriculum_obj.curriculum_result_document_one }}</span>#}
                         </div>
@@ -814,6 +827,8 @@
                         <div class="col-md-2">
                             <a href="
 
+
+
                                     {{ curriculum_obj.applicant_id.report_path }}{{ curriculum_obj.curriculum_result_document_two }}">{{ curriculum_obj.curriculum_result_document_two|default:"" }}</a>
                             {#                            <span class="">{{ curriculum_obj.curriculum_result_document_two }}</span>#}
                         </div>
@@ -840,6 +855,8 @@
                         <label class="col-md-1 control-label"> Result:</label>
                         <div class="col-md-2">
                             <a href="
+
+
 
                                     {{ curriculum_obj.applicant_id.report_path }}{{ curriculum_obj.curriculum_result_document_three }}">{{ curriculum_obj.curriculum_result_document_three|default:"" }}</a>
                             {#                            <span class="">{{ curriculum_obj.curriculum_result_document_three }}</span>#}
@@ -878,6 +895,8 @@
                         <div class="col-md-2">
                             <a href="
 
+
+
                                     {{ applicant_experience_obj.applicant_id.report_path }}{{ applicant_experience_obj.work_experience_document_one }}">{{ applicant_experience_obj.work_experience_document_one|default:"" }}</a>
                             {#                            <span class="">{{ applicant_experience_obj.work_experience_document_one }}</span>#}
                         </div>
@@ -911,6 +930,8 @@
                         <label class="col-md-1 control-label">Result Doc:</label>
                         <div class="col-md-2">
                             <a href="
+
+
 
                                     {{ applicant_experience_obj.applicant_id.report_path }}{{ applicant_experience_obj.work_experience_document_two }}">{{ applicant_experience_obj.work_experience_document_two|default:"" }}</a>
                             {#                            <span class="">{{ applicant_experience_obj.work_experience_document_two }}</span>#}
@@ -950,6 +971,8 @@
                         <label class="col-md-1 control-label">Admission Letter:</label>
                         <div class="col-md-2">
                             <a href="
+
+
 
                                     {{ scholarship_obj.applicant_id.report_path }}{{ scholarship_obj.admission_letter_document }}">{{ scholarship_obj.admission_letter_document|default:"" }}</a>
                             {#                            <span class="">{{ scholarship_obj.admission_letter_document }}</span>#}
