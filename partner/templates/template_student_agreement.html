@@ -110,6 +110,34 @@
                 </form>
             </div>{% endcomment %}
 
+            <div class="row col-md-offset-3">
+                <form method="post" action="{% url 'partner:filter_student_agreement' %}" id="form_sample_1">
+                    {% csrf_token %}
+                    <div class="col-md-4">
+                        <div class="">
+                            <select autocomplete="off" class="form-control" data-live-search="true"
+                                    id="id_filter" name="filter" required="required">
+                                {% if filter_rec %}
+                                    <option style="display: none" value="{{ filter_rec.value }}"
+                                            selected="selected">{{ filter_rec.name }}</option>
+                                {% else %}
+                                    <option value="" style="display: none" selected="selected">Submitted/Not Submitted</option>
+                                {% endif %}
+
+                                <option value="submitted">Submitted</option>
+                                <option value="not_submitted">Not Submitted</option>
+                                <option value="all">All</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <button type="submit" class="btn blue btn-block" id="go">Filter
+                        </button>
+                    </div>
+                </form>
+            </div>
+
                 <div class="form-body">
                     <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data"
                             {% comment %}action="{% url 'partner:change_application_status' %}"{% endcomment %}>
