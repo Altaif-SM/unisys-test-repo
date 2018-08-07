@@ -149,6 +149,7 @@ def save_update_applicant_personal_info(request):
                         address_obj.is_same = True
                         application_obj.permanent_address = address_obj
                         address_obj.save()
+                        redirect_flag = True
                     else:
                         if application_obj.permanent_address.is_same:
                             address_obj.is_same = False
@@ -271,7 +272,7 @@ def save_update_applicant_personal_info(request):
                     messages.warning(request, "Form have some error" + str(e))
             else:
                 messages.success(request, "Please fill mandatory fields")
-            return redirect('/student/applicant_personal_info/')
+                return redirect('/student/applicant_personal_info/')
 
 
     if redirect_flag:
