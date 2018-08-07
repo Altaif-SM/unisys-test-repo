@@ -60,17 +60,17 @@
 
             $(document).ready(function () {
 
-                $('#next').click(function () {
-                    {% comment %}var payload={};
+                {% comment %}$('#next').click(function () {
+                    var payload={};
                     var count = 0;
                     $('.value_check').each(function () {
                         count++;
                         payload[count]=$(this).val()
                     })
 
-                    $('#value_check').val(JSON.stringify(payload));{% endcomment %}
+                    $('#value_check').val(JSON.stringify(payload));
                     $('#form_save').submit()
-                })
+                }){% endcomment %}
 
 
                 {% comment %}$('#file-upload').change(function () {
@@ -640,7 +640,7 @@
                         <div class="row">
                             <div class="col-md-offset-10 col-md12">
                                 {#                                <button type="submit" class="btn green" id="save" style="float: left" >Save</button>#}
-                                <button type="button" class="btn green" id="next" style="float: left"
+                                <button type="submit" class="btn green" id="next" style="float: left"
                                         {% comment %}onclick="window.location='{% url "student:applicant_family_info" %}'"{% endcomment %}>
                                     Save/Next
                                 </button>
