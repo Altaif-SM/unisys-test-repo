@@ -511,7 +511,7 @@ License: You must have a valid license purchased only from themeforest(the above
                         <li class="nav-item " id="personal_info">
                             <a href="{% url 'student:applicant_personal_info' %}" class="nav-link nav-toggle">
                                 <i class="fa fa-id-card"></i>
-                                <span class="title">Personal Info</span>{% if user.get_student_application.personal_info_flag %}<span class="title glyphicon glyphicon-ok" style="color: #41bc2c;font-size: 16px"></span>{% else %}<span class="title glyphicon glyphicon-remove" style="color: #dc302b; font-size: 16px"></span>{% endif %}
+                                <span class="title">Personal Info</span>{% if user.get_student_application.personal_info_flag %}<span class="title glyphicon glyphicon-ok" style="color: #41bc2c;font-size: 16px"></span>{% else %}<span class="title glyphicon glyphicon-exclamation-sign" style="color: #dc302b; font-size: 16px"></span>{% endif %}
                                 <span class="selected"></span>
                             </a>
                         </li>
@@ -523,7 +523,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             <a href="{% url 'student:applicant_family_info' %}" class="nav-link nav-toggle">
                                 <i class="fa fa-users"></i>
                                 {#                            <i class="glyphicon glyphicon-user"></i>#}
-                                <span class="title">Family Info</span>{% if user.get_student_application.my_application %}<span class="title glyphicon glyphicon-ok" style="color: #41bc2c;font-size: 16px"></span>{% endif %}
+                                <span class="title">Family Info</span>{% if user.get_student_application.my_application %}<span class="title glyphicon glyphicon-ok" style="color: #41bc2c;font-size: 16px"></span>{% else %}<span class="title glyphicon glyphicon-exclamation-sign" style="color: #cd7e1e; font-size: 16px"></span>{% endif %}
                                 <span class="selected"></span>
                             </a>
                         </li>
@@ -534,7 +534,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             <a href="{% url 'student:applicant_academic_english_qualification' %}"
                                class="nav-link nav-toggle">
                                 <i class="glyphicon glyphicon-education"></i>
-                                <span class="title">Academic Qualification</span>{% if user.get_student_application.english_qualification %}<span class="title glyphicon glyphicon-ok" style="color: #41bc2c;font-size: 16px"></span>{% else %}<span class="title glyphicon glyphicon-remove" style="color: #dc302b; font-size: 16px"></span>{% endif %}
+                                <span class="title">Academic Qualification</span>{% if user.get_student_application.english_qualification %}<span class="title glyphicon glyphicon-ok" style="color: #41bc2c;font-size: 16px"></span>{% else %}<span class="title glyphicon glyphicon-exclamation-sign" style="color: #dc302b; font-size: 16px"></span>{% endif %}
                                 <span class="selected"></span>
                             </a>
                         </li>
@@ -545,7 +545,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             <a href="{% url 'student:applicant_scholarship_about_yourself_info' %}"
                                class="nav-link nav-toggle">
                                 <i class="glyphicon glyphicon-star"></i>
-                                <span class="title">Scholarship Selection</span>{% if user.get_student_application.scholarship_selection %}<span class="title glyphicon glyphicon-ok" style="color: #41bc2c;font-size: 16px"></span>{% else %}<span class="title glyphicon glyphicon-remove" style="color: #dc302b; font-size: 16px"></span>{% endif %}
+                                <span class="title">Scholarship Selection</span>{% if user.get_student_application.scholarship_selection %}<span class="title glyphicon glyphicon-ok" style="color: #41bc2c;font-size: 16px"></span>{% else %}<span class="title glyphicon glyphicon-exclamation-sign" style="color: #dc302b; font-size: 16px"></span>{% endif %}
                                 <span class="selected"></span>
                             </a>
                         </li>
@@ -556,7 +556,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             <a href="{% url 'student:my_application' %}"
                                class="nav-link nav-toggle">
                                 <i class="glyphicon glyphicon-check"></i>
-                                <span class="title">My Application</span>{% if user.get_student_application.my_application %}<span class="title glyphicon glyphicon-ok" style="color: #41bc2c;font-size: 16px"></span>{% else %}<span class="title glyphicon glyphicon-remove" style="color: #dc302b; font-size: 16px"></span>{% endif %}
+                                <span class="title">My Application</span>{% if user.get_student_application.my_application %}<span class="title glyphicon glyphicon-ok" style="color: #41bc2c;font-size: 16px"></span>{% else %}<span class="title glyphicon glyphicon-exclamation-sign" style="color: #dc302b; font-size: 16px"></span>{% endif %}
                                 <span class="selected"></span>
                             </a>
                         </li>
