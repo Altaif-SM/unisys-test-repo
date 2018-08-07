@@ -375,3 +375,9 @@ def render_to_file(path: str, params: dict):
     with open(file_path, 'wb') as pdf:
         pisa.pisaDocument(BytesIO(html.encode("UTF-8")), pdf)
     return [file_name, file_path]
+
+def from_status_check(form_values):
+    for rec in form_values:
+        if rec == '':
+            return False
+    return True

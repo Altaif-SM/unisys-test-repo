@@ -69,6 +69,15 @@ License: You must have a valid license purchased only from themeforest(the above
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.5.1/chosen.min.css">
     {% block styleBlock %}
+        <style>
+            .dot {
+                height: 25px;
+                width: 25px;
+                background-color: #bbb;
+                border-radius: 50%;
+                display: inline-block;
+            }
+        </style>
     {% endblock %}
 </head>
 
@@ -129,7 +138,8 @@ License: You must have a valid license purchased only from themeforest(the above
                            data-close-others="true">
                             {% if user.is_student %}
                                 {% if user.get_application %}
-                                    <img alt="" class="img-circle" src="{{ user.get_application.report_path }}{{ user.get_application.image }}"/>
+                                    <img alt="" class="img-circle"
+                                         src="{{ user.get_application.report_path }}{{ user.get_application.image }}"/>
                                     <span class="username username-hide-on-mobile"> {{ user.get_application.first_name }} {{ user.get_application.last_name }} </span>
                                     -<b><span
                                         class="username username-hide-on-mobile"> {{ user.get_application_id }}</span></b>
@@ -176,22 +186,22 @@ License: You must have a valid license purchased only from themeforest(the above
 
                 <ul class="nav navbar-nav pull-right">
 
-                {% if user.is_super_admin %}
-                    <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
-                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
-                           data-close-others="true">
-                            <i class="icon-settings"></i>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                {% for year in user.year_list %}
-                                    <a href="javascript:;" class="action" id="{{ year.id }}"> {{ year.year_name }}</a>
-                                {% endfor %}
-                            </li>
-                        </ul>
-                    </li>
-                {% endif %}
-
+                    {% if user.is_super_admin %}
+                        <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
+                            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
+                               data-close-others="true">
+                                <i class="icon-settings"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    {% for year in user.year_list %}
+                                        <a href="javascript:;" class="action"
+                                           id="{{ year.id }}"> {{ year.year_name }}</a>
+                                    {% endfor %}
+                                </li>
+                            </ul>
+                        </li>
+                    {% endif %}
 
                     <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
                         {% if user.notifications.flag %}
@@ -215,7 +225,6 @@ License: You must have a valid license purchased only from themeforest(the above
                                         {% else %}
                                             <a>{{ notification.message|truncatechars:30 }}</a>
                                         {% endif %}
-
                                     {% endfor %}
                                 </li>
                             </ul>
@@ -502,10 +511,9 @@ License: You must have a valid license purchased only from themeforest(the above
                         <li class="nav-item " id="personal_info">
                             <a href="{% url 'student:applicant_personal_info' %}" class="nav-link nav-toggle">
                                 <i class="fa fa-id-card"></i>
-                                <span class="title">Personal Info</span>
+                                <span class="title">Personal Info</span>{% if user.get_student_application.personal_info_flag %}<span class="title glyphicon glyphicon-ok" style="color: #41bc2c;font-size: 16px"></span>{% else %}<span class="title glyphicon glyphicon-remove" style="color: #dc302b; font-size: 16px"></span>{% endif %}
                                 <span class="selected"></span>
                             </a>
-
                         </li>
                     {% endif %}
 
@@ -515,7 +523,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             <a href="{% url 'student:applicant_family_info' %}" class="nav-link nav-toggle">
                                 <i class="fa fa-users"></i>
                                 {#                            <i class="glyphicon glyphicon-user"></i>#}
-                                <span class="title">Family Info</span>
+                                <span class="title">Family Info</span>{% if user.get_student_application.my_application %}<span class="title glyphicon glyphicon-ok" style="color: #41bc2c;font-size: 16px"></span>{% endif %}
                                 <span class="selected"></span>
                             </a>
                         </li>
@@ -526,7 +534,29 @@ License: You must have a valid license purchased only from themeforest(the above
                             <a href="{% url 'student:applicant_academic_english_qualification' %}"
                                class="nav-link nav-toggle">
                                 <i class="glyphicon glyphicon-education"></i>
-                                <span class="title">Academic Qualification</span>
+                                <span class="title">Academic Qualification</span>{% if user.get_student_application.english_qualification %}<span class="title glyphicon glyphicon-ok" style="color: #41bc2c;font-size: 16px"></span>{% else %}<span class="title glyphicon glyphicon-remove" style="color: #dc302b; font-size: 16px"></span>{% endif %}
+                                <span class="selected"></span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% if 'student.can_view_scholarship_selection' in perms %}
+                        <li class="nav-item " id="acd_qli">
+                            <a href="{% url 'student:applicant_scholarship_about_yourself_info' %}"
+                               class="nav-link nav-toggle">
+                                <i class="glyphicon glyphicon-star"></i>
+                                <span class="title">Scholarship Selection</span>{% if user.get_student_application.scholarship_selection %}<span class="title glyphicon glyphicon-ok" style="color: #41bc2c;font-size: 16px"></span>{% else %}<span class="title glyphicon glyphicon-remove" style="color: #dc302b; font-size: 16px"></span>{% endif %}
+                                <span class="selected"></span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% if 'student.can_view_my_application' in perms %}
+                        <li class="nav-item " id="acd_qli">
+                            <a href="{% url 'student:my_application' %}"
+                               class="nav-link nav-toggle">
+                                <i class="glyphicon glyphicon-check"></i>
+                                <span class="title">My Application</span>{% if user.get_student_application.my_application %}<span class="title glyphicon glyphicon-ok" style="color: #41bc2c;font-size: 16px"></span>{% else %}<span class="title glyphicon glyphicon-remove" style="color: #dc302b; font-size: 16px"></span>{% endif %}
                                 <span class="selected"></span>
                             </a>
                         </li>

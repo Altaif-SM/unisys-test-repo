@@ -60,6 +60,19 @@
 
             $(document).ready(function () {
 
+                $('#next').click(function () {
+                    {% comment %}var payload={};
+                    var count = 0;
+                    $('.value_check').each(function () {
+                        count++;
+                        payload[count]=$(this).val()
+                    })
+
+                    $('#value_check').val(JSON.stringify(payload));{% endcomment %}
+                    $('#form_save').submit()
+                })
+
+
                 {% comment %}$('#file-upload').change(function () {
                     var i = $(this).prev('label').clone();
                     var file = $('#file-upload')[0].files[0].name;
@@ -85,6 +98,10 @@
                         $(this).val('');
                         return false;
                     }
+
+                    $(this).prev().val($(this).val());
+
+                    {#alert($(this).val())#}
                 });
 
                 $('#same_as').click(function (e) {
@@ -164,19 +181,20 @@
         <div class="portlet-body">
             <div class="form-body">
                 <form action="{% url 'student:save_update_applicant_personal_info' %}"
-                      id="form_sample_1"
+                      id="form_save"
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
                     <div class="form-body">
                         <div class="row">
+                        <input hidden id="value_check" name="value_check">
                             <div class="">
                                 <label class="col-md-2 control-label">First Name: <span
                                         style="color: red">*</span></label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter First Name" id="first_name" name="first_name"
-                                           class="form-control" required {% if application_obj %}
+                                           class="form-control value_check" required {% if application_obj %}
                                            value="{{ application_obj.first_name }}"
                                     {% else %} value="{{ user.first_name }}" {% endif %} readonly>
                                 </div>
@@ -186,7 +204,7 @@
                                 <label class="col-md-1 control-label">Middle Name:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Middle Name" id="middle_name" name="middle_name"
-                                           value="{{ application_obj.middle_name }}" class="form-control">
+                                           value="{{ application_obj.middle_name }}" class="form-control value_check">
                                 </div>
                             </div>
 
@@ -196,7 +214,7 @@
                                     <input type="text" title="Enter Last Name" id="last_name" name="last_name"
                                             {% if application_obj %} value="{{ application_obj.last_name }}"
                                             {% else %} value="{{ user.last_name }}" {% endif %}
-                                           class="form-control" readonly>
+                                           class="form-control value_check" readonly>
                                 </div>
                             </div>
                         </div>
@@ -209,7 +227,7 @@
                                         style="color: red">*</span></label>
                                 <div class="col-md-2">
                                     <input type="date" title="Enter DOB" id="birth_date" name="birth_date"
-                                           value="{{ application_obj.birth_date|date:"Y-m-d" }}" class="form-control"
+                                           value="{{ application_obj.birth_date|date:"Y-m-d" }}" class="form-control value_check"
                                            max="2999-12-31" required>
                                 </div>
                             </div>
@@ -218,7 +236,7 @@
                                 <label class="col-md-1 control-label">Gender: <span style="color: red">*</span></label>
                                 <div class="col-md-2">
                                     <select id='gender' title="Select gender" name="gender"
-                                            class="form-control" required>
+                                            class="form-control value_check" required>
                                         {% if application_obj %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ application_obj.gender }}"
@@ -239,7 +257,7 @@
                                         style="color: red">*</span></label>
                                 <div class="col-md-2">
                                     <select id='nationality' title="Select nationality" name="nationality"
-                                            class="form-control" required>
+                                            class="form-control value_check" required>
                                         {% if application_obj %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ application_obj.nationality.id }}"
@@ -265,7 +283,7 @@
                                 <label class="col-md-2 control-label">ID no:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter ID number" id="id_number" name="id_number"
-                                           value="{{ application_obj.id_number }}" class="form-control">
+                                           value="{{ application_obj.id_number }}" class="form-control value_check">
                                 </div>
                             </div>
 
@@ -274,7 +292,7 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Passport number" id="passport_number"
                                            value="{{ application_obj.passport_number }}" name="passport_number"
-                                           class="form-control">
+                                           class="form-control value_check">
                                 </div>
                             </div>
 
@@ -282,7 +300,7 @@
                                 <label class="col-md-1 control-label">Country of Issuer:</label>
                                 <div class="col-md-2">
                                     <select id='issue_country' title="Select Country of Issuer" name="issue_country"
-                                            class="form-control">
+                                            class="form-control value_check">
                                         {% if application_obj %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ application_obj.passport_issue_country.id }}"
@@ -308,7 +326,7 @@
                                 <label class="col-md-2 control-label">E-mail:<span style="color: red">*</span></label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter E-mail ID" id="email" name="email"
-                                           value="{{ application_obj.email }}" class="form-control" required>
+                                           value="{{ application_obj.email }}" class="form-control value_check" required>
                                 </div>
                             </div>
 
@@ -318,7 +336,7 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Telephone number (HP)" id="telephone_hp"
                                            value="{{ application_obj.telephone_hp }}" name="telephone_hp"
-                                           class="form-control" required>
+                                           class="form-control value_check" required>
                                 </div>
                             </div>
 
@@ -328,7 +346,7 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Telephone number (Home)" id="telephone_home"
                                            value="{{ application_obj.telephone_home }}" name="telephone_home"
-                                           class="form-control" required>
+                                           class="form-control value_check" required>
                                 </div>
                             </div>
                         </div>
@@ -339,7 +357,7 @@
                                 <label class="col-md-2 control-label">Religion:</label>
                                 <div class="col-md-2">
                                     <select id='issue_country' title="Select Religion" name="religion"
-                                            class="form-control">
+                                            class="form-control value_check">
                                         {% if application_obj %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ application_obj.religion.id }}"
@@ -359,7 +377,7 @@
                             <div class="">
                                 <label class="col-md-1 control-label">Face Photo:</label>
                                 <div class="col-md-2">
-                                    <input type="text" id="pic" name="pic" hidden>
+                                    <input type="text" class="value_check" id="pic" name="pic" value="{{ application_obj.image }}" hidden>
 
                                     <input name="photo" type="file" title="Select photo"
                                            id="applicant_photo"
@@ -372,14 +390,13 @@
                             <div class="">
                                 <label class="col-md-1 control-label">Passport Photo:</label>
                                 <div class="col-md-2">
-                                    <input type="text" id="passport_pic" name="passport_pic" hidden>
+                                    <input type="text" id="passport_pic" class="value_check" name="passport_pic" value="{{ application_obj.passport_image }}" hidden>
 
                                     <input name="passport_photo" type="file" title="Select photo"
                                            id="passport_photo"
                                            class="form-control photo">{% if application_obj.passport_image %}
                                     <img width="100px" height="120px"
-                                         src="
-                                                 {{ application_obj.report_path }}{{ application_obj.passport_image }}">{% endif %}
+                                         src="{{ application_obj.report_path }}{{ application_obj.passport_image }}">{% endif %}
                                 </div>
                             </div>
                         </div>
@@ -399,7 +416,7 @@
                                 <label class="col-md-2 control-label">Country: <span style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <select id='address_country' title="Select Country" name="country"
-                                            class="form-control" required>
+                                            class="form-control value_check" required>
 
                                         {% if application_obj %}
                                             <option style="display:none" selected="selected"
@@ -426,7 +443,7 @@
                                     <input type="text" title="Enter Residential/Postal Address" id="residential_address"
                                            value="{{ application_obj.address.residential_address }}"
                                            name="residential_address"
-                                           class="form-control" required>
+                                           class="form-control value_check" required>
                                 </div>
                             </div>
                         </div>
@@ -441,7 +458,7 @@
                                 <div class="col-md-3">
                                     <input type="text" title="Enter Premise/Sub-Locality-2" id="street"
                                            value="{{ application_obj.address.street }}" name="street"
-                                           class="form-control" required>
+                                           class="form-control value_check" required>
                                 </div>
                             </div>
 
@@ -451,7 +468,7 @@
                                 <div class="col-md-3">
                                     <input type="text" title="Enter Sub-Locality " id="sub_locality"
                                            value="{{ application_obj.address.sub_locality }}" name="sub_locality"
-                                           class="form-control" required>
+                                           class="form-control value_check" required>
                                 </div>
                             </div>
                         </div>
@@ -466,7 +483,7 @@
                                 <div class="col-md-3">
                                     <input type="text" title="Enter Postcode" id="post_code"
                                            value="{{ application_obj.address.post_code }}" name="post_code"
-                                           class="form-control" required>
+                                           class="form-control value_check" required>
                                 </div>
                             </div>
 
@@ -476,7 +493,7 @@
                                 <div class="col-md-3">
                                     <input type="text" title="Enter District " id="district"
                                            value="{{ application_obj.address.district|title }}" name="district"
-                                           class="form-control" required>
+                                           class="form-control value_check" required>
                                 </div>
                             </div>
                         </div>
@@ -491,7 +508,7 @@
                                 <div class="col-md-3">
                                     <input type="text" title="Enter State/Province" id="state"
                                            value="{{ application_obj.address.state|title }}" name="state"
-                                           class="form-control" required>
+                                           class="form-control value_check" required>
                                 </div>
                             </div>
                         </div>
@@ -514,7 +531,7 @@
                                 <label class="col-md-2 control-label">Country: <span style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <select id='permanent_country' title="Select Country" name="permanent_country"
-                                            class="form-control emp" required>
+                                            class="form-control value_check emp" required>
 
                                         {% if application_obj %}
                                             <option style="display:none" selected="selected"
@@ -542,7 +559,7 @@
                                            id="permanent_residential_address"
                                            value="{{ application_obj.permanent_address.residential_address }}"
                                            name="permanent_residential_address"
-                                           class="form-control emp" required>
+                                           class="form-control value_check emp" required>
                                 </div>
                             </div>
                         </div>
@@ -558,7 +575,7 @@
                                     <input type="text" title="Enter Premise/Sub-Locality-2" id="permanent_street"
                                            value="{{ application_obj.permanent_address.street }}"
                                            name="permanent_street"
-                                           class="form-control emp" required>
+                                           class="form-control value_check emp" required>
                                 </div>
                             </div>
 
@@ -569,7 +586,7 @@
                                     <input type="text" title="Enter Sub-Locality " id="permanent_sub_locality"
                                            value="{{ application_obj.permanent_address.sub_locality }}"
                                            name="permanent_sub_locality"
-                                           class="form-control emp" required>
+                                           class="form-control value_check emp" required>
                                 </div>
                             </div>
                         </div>
@@ -585,7 +602,7 @@
                                     <input type="text" title="Enter Postcode" id="permanent_post_code"
                                            value="{{ application_obj.permanent_address.post_code }}"
                                            name="permanent_post_code"
-                                           class="form-control emp" required>
+                                           class="form-control value_check emp" required>
                                 </div>
                             </div>
 
@@ -596,7 +613,7 @@
                                     <input type="text" title="Enter District " id="permanent_district"
                                            value="{{ application_obj.permanent_address.district|title }}"
                                            name="permanent_district"
-                                           class="form-control emp" required>
+                                           class="form-control value_check emp" required>
                                 </div>
                             </div>
                         </div>
@@ -612,7 +629,7 @@
                                     <input type="text" title="Enter State/Province" id="permanent_state"
                                            value="{{ application_obj.permanent_address.state|title }}"
                                            name="permanent_state"
-                                           class="form-control emp" required>
+                                           class="form-control value_check emp" required>
                                 </div>
                             </div>
                         </div>
@@ -623,7 +640,7 @@
                         <div class="row">
                             <div class="col-md-offset-10 col-md12">
                                 {#                                <button type="submit" class="btn green" id="save" style="float: left" >Save</button>#}
-                                <button type="submit" class="btn green" id="next" style="float: left"
+                                <button type="button" class="btn green" id="next" style="float: left"
                                         {% comment %}onclick="window.location='{% url "student:applicant_family_info" %}'"{% endcomment %}>
                                     Save/Next
                                 </button>

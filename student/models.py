@@ -79,6 +79,8 @@ class StudentDetails(BaseModel):
             ('can_view_student_personal_info', 'can view student personal info'),
             ('can_view_student_family_info', 'can view student family info'),
             ('can_view_student_academic_qualification', 'can view student academic qualification'),
+            ('can_view_scholarship_selection', 'can view scholarship selection'),
+            ('can_view_my_application', 'can view my application'),
             ('can_view_student_psychometric_test', 'can view student psychometric test'),
             ('can_view_student_agreements', 'can view student agreements'),
             ('can_view_student_development_program', 'can view student development program certificate'),
@@ -198,6 +200,10 @@ class ApplicationDetails(BaseModel):
     interview_time = models.CharField(max_length=30, blank=True, null=True)
     interview_date = models.CharField(max_length=50, blank=True, null=True)
     interview_venue = models.CharField(max_length=100, blank=True, null=True)
+
+    personal_info_flag = models.BooleanField(default=True)
+    # family_info_flag = models.BooleanField(default=False)
+    # mother_sibling_info_flag = models.BooleanField(default=False)
 
     def get_full_name(self):
         """
@@ -353,6 +359,7 @@ class EnglishQualificationDetails(BaseModel):
     english_test_two_result_document = models.FileField(upload_to=content_file_name_report)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='english_applicant_rel',
                                      on_delete=models.PROTECT)
+    english_qualification = models.BooleanField(default=True)
 
 
 class CurriculumDetails(BaseModel):
@@ -373,6 +380,8 @@ class CurriculumDetails(BaseModel):
 
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='curriculum_applicant_rel',
                                      on_delete=models.PROTECT)
+
+    academic_qualification = models.BooleanField(default=True)
 
 
 class ExperienceDetails(BaseModel):
@@ -411,11 +420,14 @@ class ScholarshipSelectionDetails(BaseModel):
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_scholarship_rel',
                                      on_delete=models.PROTECT)
 
+    scholarship_selection = models.BooleanField(default=True)
+
 
 class ApplicantAboutDetails(BaseModel):
     about_yourself = models.CharField(max_length=255, blank=True, null=True)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_about_rel',
                                      on_delete=models.PROTECT)
+    # my_application = models.BooleanField(default=True)
 
 
 class ApplicantPsychometricTestDetails(BaseModel):

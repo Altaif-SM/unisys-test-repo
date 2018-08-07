@@ -36,7 +36,7 @@ def student_home(request):
 
     return render(request, 'student_home.html',
                   {'username': username, 'application_history_obj': application_history_obj,
-                   'application_id': application_id,'application':application})
+                   'application_id': application_id, 'application': application})
 
 
 def delete_application(request, app_id):
@@ -85,92 +85,98 @@ def save_update_applicant_personal_info(request):
     passport_photo = request.FILES.get('passport_photo')
     pic = request.FILES.get('photo')
     same_as = request.POST.get('same_as')
+    # value_check = json.loads(request.POST.get('value_check'))
     redirect_flag = False
+    # from_status = from_status_check(list(value_check.values()))
 
     if request.POST:
         if StudentDetails.objects.filter(user=request.user):
             student = StudentDetails.objects.get(user=request.user)
 
-            if ApplicationDetails.objects.filter(application_id=request.user.get_application_id,
-                                                 is_submitted=False).exists():
+            if request.POST['first_name'] and request.POST['last_name'] and request.POST['gender'] and request.POST[
+                'nationality'] and request.POST['telephone_hp'] and request.POST['telephone_home'] and request.POST[
+                'telephone_home'] and request.POST['email'] != '':
 
-                ApplicationDetails.objects.filter(application_id=request.user.get_application_id,
-                                                  is_submitted=False).update(
-                    first_name=request.POST['first_name'],
-                    middle_name=request.POST['middle_name'],
-                    last_name=request.POST['last_name'],
-                    birth_date=request.POST['birth_date'] if request.POST['birth_date'] else None,
-                    gender=request.POST['gender'],
-                    nationality_id=request.POST[
-                        'nationality'],
-                    religion_id=request.POST['religion'],
-                    id_number=request.POST['id_number'],
-                    passport_number=request.POST[
-                        'passport_number'],
-                    passport_issue_country_id=request.POST[
-                        'issue_country'],
-                    telephone_hp=request.POST[
-                        'telephone_hp'],
-                    telephone_home=request.POST[
-                        'telephone_home'],
-                    email=request.POST['email'])
+                if ApplicationDetails.objects.filter(application_id=request.user.get_application_id,
+                                                     is_submitted=False).exists():
 
-                application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id,
-                                                                 is_submitted=False)
+                    ApplicationDetails.objects.filter(application_id=request.user.get_application_id,
+                                                      is_submitted=False).update(
+                        first_name=request.POST['first_name'],
+                        middle_name=request.POST['middle_name'],
+                        last_name=request.POST['last_name'],
+                        birth_date=request.POST['birth_date'] if request.POST['birth_date'] else None,
+                        gender=request.POST['gender'],
+                        nationality_id=request.POST[
+                            'nationality'],
+                        religion_id=request.POST['religion'],
+                        id_number=request.POST['id_number'],
+                        passport_number=request.POST[
+                            'passport_number'],
+                        passport_issue_country_id=request.POST[
+                            'issue_country'],
+                        telephone_hp=request.POST[
+                            'telephone_hp'],
+                        telephone_home=request.POST[
+                            'telephone_home'],
+                        email=request.POST['email'])
 
-                AddressDetails.objects.filter(id=application_obj.address.id).update(
-                    country_id=request.POST['country'],
-                    street=request.POST['street'],
-                    state=request.POST['state'],
-                    district=request.POST['district'],
-                    post_code=request.POST['post_code'],
-                    sub_locality=request.POST['sub_locality'],
-                    residential_address=request.POST['residential_address'])
+                    application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id,
+                                                                     is_submitted=False)
 
-                address_obj = AddressDetails.objects.get(id=application_obj.address.id)
+                    AddressDetails.objects.filter(id=application_obj.address.id).update(
+                        country_id=request.POST['country'],
+                        street=request.POST['street'],
+                        state=request.POST['state'],
+                        district=request.POST['district'],
+                        post_code=request.POST['post_code'],
+                        sub_locality=request.POST['sub_locality'],
+                        residential_address=request.POST['residential_address'])
 
-                if same_as:
-                    try:
-                        if not address_obj.is_same:
-                            address_id = application_obj.permanent_address.id
-                            application_obj.permanent_address = None
-                            application_obj.save()
-                            AddressDetails.objects.filter(id=address_id).delete()
+                    address_obj = AddressDetails.objects.get(id=application_obj.address.id)
 
-                    except Exception as e:
-                        pass
+                    if same_as:
+                        try:
+                            if not address_obj.is_same:
+                                address_id = application_obj.permanent_address.id
+                                application_obj.permanent_address = None
+                                application_obj.save()
+                                AddressDetails.objects.filter(id=address_id).delete()
 
-                    address_obj.is_same = True
-                    application_obj.permanent_address = address_obj
-                    address_obj.save()
-                else:
-                    if application_obj.permanent_address.is_same:
-                        address_obj.is_same = False
+                        except Exception as e:
+                            pass
+
+                        address_obj.is_same = True
+                        application_obj.permanent_address = address_obj
                         address_obj.save()
-
-                        permanent_address_obj = AddressDetails.objects.create(
-                            country_id=request.POST['permanent_country'],
-                            street=request.POST['permanent_street'],
-                            state=request.POST['permanent_state'],
-                            district=request.POST['permanent_district'],
-                            post_code=request.POST['permanent_post_code'],
-                            sub_locality=request.POST['permanent_sub_locality'],
-                            residential_address=request.POST['permanent_residential_address'])
-
-                        application_obj.permanent_address = permanent_address_obj
-
                     else:
-                        AddressDetails.objects.filter(id=application_obj.permanent_address.id).update(
-                            country_id=request.POST['permanent_country'],
-                            street=request.POST['permanent_street'],
-                            state=request.POST['permanent_state'],
-                            district=request.POST['permanent_district'],
-                            post_code=request.POST['permanent_post_code'],
-                            sub_locality=request.POST['permanent_sub_locality'],
-                            residential_address=request.POST['permanent_residential_address'])
-                application_obj.save()
+                        if application_obj.permanent_address.is_same:
+                            address_obj.is_same = False
+                            address_obj.save()
 
-                redirect_flag = True
+                            permanent_address_obj = AddressDetails.objects.create(
+                                country_id=request.POST['permanent_country'],
+                                street=request.POST['permanent_street'],
+                                state=request.POST['permanent_state'],
+                                district=request.POST['permanent_district'],
+                                post_code=request.POST['permanent_post_code'],
+                                sub_locality=request.POST['permanent_sub_locality'],
+                                residential_address=request.POST['permanent_residential_address'])
+
+                            application_obj.permanent_address = permanent_address_obj
+
+                        else:
+                            AddressDetails.objects.filter(id=application_obj.permanent_address.id).update(
+                                country_id=request.POST['permanent_country'],
+                                street=request.POST['permanent_street'],
+                                state=request.POST['permanent_state'],
+                                district=request.POST['permanent_district'],
+                                post_code=request.POST['permanent_post_code'],
+                                sub_locality=request.POST['permanent_sub_locality'],
+                                residential_address=request.POST['permanent_residential_address'])
+                    application_obj.save()
+
+                    redirect_flag = True
             else:
                 try:
                     current_year = YearDetails.objects.get(active_year=True)
@@ -263,6 +269,10 @@ def save_update_applicant_personal_info(request):
                 #     application_obj.save()
             except Exception as e:
                 messages.warning(request, "Form have some error" + str(e))
+        else:
+            messages.success(request, "Please fill mandatory fields")
+        return redirect('/student/applicant_personal_info/')
+
 
     if redirect_flag:
         messages.success(request, "Record saved")
@@ -870,13 +880,15 @@ def save_update_applicant_curriculum_experience_info(request):
                                     from_date_one=request.POST['from_date_one'] if request.POST[
                                         'from_date_one'] else None,
                                     to_date_one=request.POST['to_date_one'] if request.POST['to_date_one'] else None,
-                                    experience_one_current=True if request.POST.get('experience_one_current') else False,
+                                    experience_one_current=True if request.POST.get(
+                                        'experience_one_current') else False,
 
                                     work_experience_two=request.POST['work_experience_two'],
                                     from_date_two=request.POST['from_date_two'] if request.POST[
                                         'from_date_two'] else None,
                                     to_date_two=request.POST['to_date_two'] if request.POST['to_date_two'] else None,
-                                    experience_two_current=True if request.POST.get('experience_two_current') else False,
+                                    experience_two_current=True if request.POST.get(
+                                        'experience_two_current') else False,
                                     applicant_id=request.user.get_application)
 
                             if work_experience_document_one:
