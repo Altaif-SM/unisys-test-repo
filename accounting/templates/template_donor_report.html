@@ -12,27 +12,31 @@
     <script>
         window.onload = function () {
             $(document).ready(function () {
-                 $('#export_button').attr('disabled', true);
+                $('#export_button').attr('disabled', true);
 
-                  $("#id_donor_id").chosen();
+                $("#id_donor_id").chosen();
 
                 $("#id_donor_id").change(function () {
 
                     var donor = $(this).val();
-                    var url = '/accounting/get_voucher_data_by_donor/';
-                    get_voucher_data(url, donor);
-                     $('#export_student_value').val(donor);
-                      $('#export_button').attr('disabled', false);
+                    //var url = '/accounting/get_voucher_data_by_donor/';
+
+                    $("#id_donar_name").val(donor);
+                    $("#form_sample_get").submit();
+
+                    {#get_voucher_data(url, donor);#}
+                    {% comment %} $('#export_student_value').val(donor);
+                      $('#export_button').attr('disabled', false);{% endcomment %}
 
                 });
-                $(document).on("click", "#export_button", function (e) {
+                {% comment %} $(document).on("click", "#export_button", function (e) {
 
-                        $('#form_sample_export').submit();
+                         $('#form_sample_export').submit();
 
-                });
+                 });{% endcomment %}
 
 
-                function get_voucher_data(url, donor) {
+                {% comment %}function get_voucher_data(url, donor) {
                     $.ajax({
                         type: 'POST',
                         url: url,
@@ -70,16 +74,36 @@
                             alert(xhr.responseJSON.error);
                         }
                     });
-                }
+                }{% endcomment %}
             });
 
 
             $('#sample_1').dataTable().fnDestroy();
             $('#sample_1').dataTable({
-                "bFilter": false,
+                "bFilter": true,
+                "paging": true,
+                "info": true,
                 "aoColumnDefs": [
                     {'bSortable': false}
-                ]
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+                    //'print',
+                    {
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: ':visible'
+                            //columns: [ 1,2, 3,4, 5, 6, 7 ]
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        exportOptions: {
+                            //columns: [ 2, 3,4, 5, 6, 7 ]
+                            columns: ':visible'
+                        }
+                    },
+                ],
             });
         }
     </script>
@@ -137,9 +161,15 @@
                                     <select id='id_donor_id' title="Select Donor" name="donor"
                                             autocomplete="off" class="form-control" data-live-search="true"
                                             required>
+                                    {% if student_main_list.0.selected_donor %}
+                                        <option style="display:none" selected="selected" id=""
+                                                value="{{ student_main_list.0.selected_donor.id }}">{{ student_main_list.0.selected_donor.user.get_full_name|title }}
+                                        </option>
+                                    {% else %}
                                         <option style="display:none" selected="selected" id=""
                                                 value="">Please Select
                                         </option>
+                                    {% endif %}
 
                                         {% for rec in donor_list %}
                                             <option value='{{ rec.id }}'>{{ rec.user.get_full_name|title }}</option>
@@ -147,45 +177,113 @@
                                     </select>
                                 </div>
                             </div>
-                        <div class="col-md-2">
+                            {% comment %}<div class="col-md-2">
                             <button style="width: 100%" type="button" id="export_button" class="btn blue">
                         Export
                     </button>
                              </div>
-
+{% endcomment %}
                         </div>
 
                         <br><br>
 
-                        <table class="table table-striped table-hover table-bordered" id="">
-                        <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Student</th>
-                            <th>Semester</th>
-                            <th>Scholorship Fee</th>
-                            <th>Credit</th>
-                            <th>Outstanding</th>
-                        </tr>
-                        </thead>
+                        <table class="table table-striped table-hover table-bordered" id="sample_1">
+                            <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Student</th>
+                                <th>Semester</th>
+                                <th>Scholorship Fee</th>
+                                <th>Credit</th>
+                                <th>Outstanding</th>
 
-                        <tbody id="tbody">
+                            </tr>
+                            </thead>
 
-                        </tbody>
-                    </table>
+                            <tbody id="tbody">
+                            {% for rec in student_main_list.0.voucher_records %}
+                                <tr id="{{ rec.voucher_rec.id }}" class="item">
+                                    <td>
+                                        <p hidden>{{ rec.voucher_rec.voucher_number }}</p>
+                                        <input id="id_voucher_number{{ forloop.counter }}"
+                                               class="form-control voucher_number"
+                                               value="{{ rec.voucher_rec.voucher_number }}" disabled>
+                                    </td>
+                                    <td>
+                                        <p hidden>{{rec.voucher_rec.student.get_all_name }}</p>
+                                        <input id="student{{ forloop.counter }}"
+                                               class="form-control student"
+                                               value="{{ rec.voucher_rec.student.get_all_name }}" disabled>
+                                    </td>
+                                    <td>
+                                        <p hidden>{{ rec.voucher_rec.semester.semester_name|title }}</p>
+                                        <input class="form-control semester_name" name="semester_name" type="text"
+                                               id="semester_name{{ forloop.counter }}"
+                                               value="{{ rec.voucher_rec.semester.semester_name|title }}"
+                                               required="True" title='{{ rec.voucher_rec.semester.semester_name}}' disabled>
+                                    </td>
+                                    <td>
+                                        <p hidden>{{ rec.approval_amount }}</p>
+                                        <input class="form-control approval_amount" name="approval_amount"
+                                               type="text"
+                                               id="approval_amount{{ forloop.counter }}"
+                                               value="{{ rec.approval_amount }}"
+                                               required="True" disabled>
+                                    </td>
+                                    <td>
+                                        <p hidden>{{ rec.credit_total }}</p>
+                                        <input class="form-control credit_total  data" name="credit_total" type="text"
+                                               id="id_credit_total{{ rec.id }}"
+                                               value="{{ rec.credit_total }}" required="True"
+                                               disabled>
+                                    </td>
+                                    <td>
+                                        <p hidden>{{ rec.outstanding_amount }}</p>
+                                        <input class="form-control outstanding_amount  data" name="outstanding_amount" type="text"
+                                               id="id_outstanding_amount{{ rec.id }}"
+                                               value="{{ rec.outstanding_amount }}" required="True"
+                                               disabled>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+
+
+                            </tbody>
+                            <tr>
+                                <td colspan="4"></td>
+                               <td>
+                                   <input id='id_total1' class='form-control data total_amount' value="{{ student_main_list.0.total_credit_amount }}" disabled>
+                               </td>
+                                <td>
+                                    <input id='id_total2' class='form-control data total_amount' value="{{ student_main_list.0.total_outstanding_amount }}" disabled>
+                                </td>
+                            </tr>
+                        </table>
 
                     </div>
                 </form>
             </div>
         </div>
-             <div class="col-md-2">
+
+        <form id="form_sample_get" class="form-horizontal" method="GET" enctype="multipart/form-data">{% csrf_token %}
+            <div class="row">
+                <div class="">
+
+                    <input type="text" id="id_donar_name" name="donor" hidden>
+
+                </div>
+            </div>
+        </form>
+
+
+        {% comment %}<div class="col-md-2">
                 <form method="post" action="{% url 'accounting:export_donor_receipt_report' %}" id="form_sample_export">
                     {% csrf_token %}
                     <input hidden name="donar_id" id="export_student_value" value="">
 
 
                 </form>
-            </div>
+            </div>{% endcomment %}
     </div>
 
 {% endblock %}

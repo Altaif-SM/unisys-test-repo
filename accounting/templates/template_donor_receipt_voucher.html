@@ -14,6 +14,7 @@
             $(document).ready(function () {
 
                 $("#id_donor_list").chosen();
+                $("#id_student").chosen();
                 var now = new Date();
                 var day = ("0" + now.getDate()).slice(-2);
                 var month = ("0" + (now.getMonth() + 1)).slice(-2);
@@ -165,11 +166,90 @@
                     $(".overlay").show();
                      $("#error_msg").hide();
                      $("#data_error_msg").hide();
-                    var student = $(this).val();
-                    var url = '/accounting/get_donor_recipt_for_org_payment/';
-                    get_voucher_data(url, student);
+                     var student = $(this).val();
+                     $("#id_student_details").val(student);
+                    var donar_name = $("#id_donor_list").val();
+                     $("#id_donar_name").val(donar_name);
+
+
+                     $("#form_sample_get").submit();
+
+
+
+
+                    {#var url = '/accounting/get_donor_recipt_for_org_payment/';#}
+                    {#get_voucher_data(url, student);#}
+                });
+                 $(document).on("click", ".edit", function (e) {
+                    var parent_id = $(this).closest('tr').attr('id');
+                    var id = $(this).attr('id');
+                    var i = id.split("edit")[1]
+
+                    $(".data").prop("disabled", true);
+                    $(".edit").show();
+                    $(".update").hide();
+
+                    $("#update" + i).show();
+                    $("#edit" + i).hide();
+
+
+                    $("#" + parent_id + " .data").prop("disabled", false);
+
                 });
 
+                  $(document).on("click", ".update", function (e) {
+                    var donar_id = $(this).closest('tr').attr('id');
+                    var donar_amount = $('#id_voucher_amount' + donar_id).val();
+                    var url = '/accounting/update_donar_receipt_voucher/';
+
+                    update_donar_receipt_voucher(url, donar_id, donar_amount)
+                });
+
+
+                  function update_donar_receipt_voucher(url, donar_id, donar_amount) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            donar_id: donar_id,
+                            donar_amount: donar_amount,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+                            location.reload(true)
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+
+                 $(document).on("click", ".delete", function (e) {
+                    var donar_id = $(this).closest('tr').attr('id');
+                    var url = '/accounting/delete_donar_receipt_voucher/';
+                    delete_donar_receipt_voucher(url, donar_id)
+                });
+
+                function delete_donar_receipt_voucher(url, donar_id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            voucher_id: donar_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+                            location.reload(true)
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+
+{% comment %}
 
                 function get_voucher_data(url, student) {
                     $.ajax({
@@ -257,18 +337,37 @@
                         }
                     });
                 }
+{% endcomment %}
 
             });
 
 
             $('#sample_1').dataTable().fnDestroy();
             $('#sample_1').dataTable({
-                "bFilter": false,
-                "paging": false,
-                "info": false,
+                "bFilter": true,
+                "paging": true,
+                "info": true,
                 "aoColumnDefs": [
                     {'bSortable': false}
-                ]
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+                    //'print',
+                    {
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: ':visible'
+                            //columns: [ 1,2, 3,4, 5, 6, 7 ]
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        exportOptions: {
+                            //columns: [ 2, 3,4, 5, 6, 7 ]
+                            columns: ':visible'
+                        }
+                    },
+                ],
             });
         }
     </script>
@@ -327,7 +426,7 @@
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <input type="hidden" id="id_app_id" name="application">
+                    <input type="hidden" id="id_app_id" name="application" value="{{ raw_dict.application_rec.id }}">
                     <input type="hidden" name="btn_type" id="id_btn_type">
                     <div class="form-body">
 
@@ -352,9 +451,15 @@
                                     <select id='id_donor_list' title="Select Donor" name="donor"
                                             autocomplete="off" class="form-control" data-live-search="true"
                                             required>
-                                        <option style="display:none" selected="selected" id=""
-                                                value="">Please Select
-                                        </option>
+                                        {%  if raw_dict.application_rec.donor  %}
+                                            <option style="display:none" selected="selected" id=""
+                                                value="{{ raw_dict.application_rec.donor.id }}">{{ raw_dict.application_rec.donor.user.first_name  }}
+                                            </option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id=""
+                                                    value="">Please Select
+                                            </option>
+                                        {% endif %}
 
                                         {% for rec in donor_list %}
                                             <option value='{{ rec.id }}'>{{ rec.user.get_full_name|title }}</option>
@@ -396,12 +501,18 @@
                                     <select id='id_student' title="Select country" name="student"
                                             autocomplete="off" class="form-control" data-live-search="true"
                                             required>
-                                        <option style="display:none" selected="selected" id=""
-                                                value="">Please Select
-                                        </option>
+                                        {% if raw_dict.application_rec.student %}
+                                            <option style="display:none" selected="selected" id=""
+                                                    value="{{ raw_dict.application_rec.student.id }}">{{ raw_dict.application_rec.student.get_all_name }}
+                                            </option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id=""
+                                                    value="">Please Select
+                                            </option>
+                                        {% endif %}
 
                                         {% for rec in student_list %}
-                                            <option value='{{ rec.id }}'>{{ rec.user.get_full_name|title }}</option>
+                                            <option value='{{ rec.id }}'>{{ rec.student.user.get_application.get_full_name|title }}</option>
                                         {% endfor %}
                                     </select>
                                     <span id="id_student_error_msg" style="display: none;color: red;"></span>
@@ -420,7 +531,7 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Scholarship Fee" placeholder="Scholarship Fee"
                                            id="id_scholarship_fee" name="scholarship_fee"
-                                           class="form-control" required disabled>
+                                           class="form-control" value="{{ raw_dict.application_rec.scholarship_fee }}" required  disabled>
 
                                     <input type="text" id="id_scholarship_fee_id" name="scholarship_fee" hidden>
                                 </div>
@@ -432,7 +543,7 @@
                                 <div class="col-md-2">
                                     <input type="number" title="Outstanding" placeholder="0.00"
                                            id="id_outstanding" name="outstanding"
-                                           class="form-control" required disabled>
+                                           class="form-control"value="{{ raw_dict.outstanding_amount }}" required disabled>
                                 </div>
                             </div>
 
@@ -477,13 +588,79 @@
                         <th>Donor Name</th>
                         <th>Description</th>
                         <th>Amount</th>
+                        <th></th>
                     </tr>
                     </thead>
 
                     <tbody id="tbody">
+                        {% for rec in raw_dict.voucher_rec %}
+                        <tr id="{{ rec.id }}" class="item">
+                            <td>
+                                <p hidden>{{ rec.voucher_number }}</p>
+                                <input id="id_voucher_number{{ forloop.counter }}" class="form-control voucher_number"
+                                       value="{{ rec.voucher_number }}" disabled>
+                            </td>
+                            <td>
+                                <p hidden>{{ rec.voucher_date }}</p>
+                                <input id="id_voucher_date{{ forloop.counter }}" class="form-control voucher_number"
+                                       value="{{ rec.voucher_date }}" disabled>
+                            </td>
+                            <td>
+                                <p hidden>{{ rec.donor.user.first_name|title }}</p>
+                                <input class="form-control donor" name="donor" type="text"
+                                       id="donor{{ forloop.counter }}"
+                                       value="{{ rec.donor.user.first_name|title }}"
+                                       required="True" title='{{ rec.donor.user.first_name|title }}' disabled>
+                            </td>
+                            <td>
+                                <p hidden>{{ rec.voucher_description  }}</p>
+                                <input class="form-control voucher_description" name="voucher_description" type="text"
+                                       id="voucher_description{{ forloop.counter }}"
+                                       value="{{ rec.voucher_description  }}"
+                                       required="True" disabled>
+                            </td>
+                            <td>
+                                <p hidden>{{ rec.voucher_amount }}</p>
+                                <input class="form-control start_date  data" name="voucher_amount" type="text"
+                                       id="id_voucher_amount{{  rec.id}}"
+                                       value="{{ rec.voucher_amount }}" required="True"
+                                       disabled>
+                            </td>
+                            <td>
+                                <span type="button" name="updt" id="update{{ forloop.counter }}"
+                                      class=" update btn green glyphicon glyphicon-ok" style="display:none;">
+                                </span>
+                                <span type="button" name="edit" id="edit{{ forloop.counter }}"
+                                      class=" edit btn blue glyphicon glyphicon-pencil">
+                                </span>
+                                <span type="button" name="delete" id="delete{{ forloop.counter }}"
+                                      class=" delete btn red glyphicon glyphicon-trash">
+                                </span>
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+
+
+
 
                     </tbody>
+                        <tr id='item_total' class='item'><td colspan='4'></td>
+                           <td style='width:150px;'><input id='id_total' class='form-control data total_amount' value="{{raw_dict.total_amount  }}" disabled> </td></tr>
+
+
+
                 </table>
+            </form>
+
+            <form id="form_sample_get" class="form-horizontal" method="GET" enctype="multipart/form-data">{% csrf_token %}
+                <div class="row" >
+                        <div class="">
+                            <input type="text" id="id_student_details" name="student"hidden >
+                            <input type="text" id="id_donar_name" name="donor" hidden>
+
+                        </div>
+                </div>
             </form>
 
 

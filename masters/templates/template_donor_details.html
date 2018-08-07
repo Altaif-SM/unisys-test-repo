@@ -163,10 +163,13 @@
 
                     <div class="">
                         <label class="col-md-2 control-label">Register Documents:</label>
+                         {% if donor_rec.reg_document != ""   %}
                         <div class="col-md-2">
+
                             <span class="">{{ donor_rec.reg_document |default_if_none:""}}</span>
 
                         </div>
+                        {% endif %}
                     </div>
 
                 </div>

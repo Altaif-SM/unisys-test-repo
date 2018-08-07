@@ -60,13 +60,14 @@ td {
                         <span>Email : {{ donar_rec.email |default_if_none:""}}</span>
                     </td>
                 </tr>
-
+                  {% if donar_rec.reg_document != ""   %}
                 <tr>
                     <td style="text-align: left; font-size: {{ x }}px">
                         <span >Register Documents: {{ donar_rec.reg_document|default_if_none:"" }}</span>
                     </td>
 
                 </tr>
+                {% endif %}
                 <tr>
                     <td style="text-align: left; font-size: {{ x }}px">
                         <span>Bank Account no: {{ donar_rec.bank_account_number|default_if_none:"" }}</span>

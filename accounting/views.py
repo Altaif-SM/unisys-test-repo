@@ -286,7 +286,33 @@ def get_approval_and_paid_total(request):
 def get_donor_receipt_voucher(request):
     donor_list = DonorDetails.objects.all()
 
-    return render(request, "template_donor_receipt_voucher.html", {'donor_list': donor_list})
+    query_student = request.GET.get('student')
+    donor = request.GET.get('donor')
+    student_list = []
+
+    if donor:
+        student_list = StudentDonorMapping.objects.filter(donor_id=donor,student__student_applicant_rel__is_sponsored=True)
+
+
+
+    raw_dict = {}
+    if query_student:
+
+        application_rec = ApplicationDetails.objects.get(student_id=query_student)
+        voucher_record = DonorReceiptVoucher.objects.filter(application_id=application_rec.id)
+        total_amount = DonorReceiptVoucher.objects.filter(voucher_type="debit", application=application_rec).values(
+            "voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
+
+
+        balance_total = DonorReceiptVoucher.objects.filter(voucher_type="debit", application=application_rec).values(
+            "voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
+        raw_dict['application_rec'] = application_rec.to_application_dict() if application_rec else ''
+        raw_dict['outstanding_amount'] = (float(application_rec.scholarship_fee) - float(
+            balance_total['total_credit'])) if application_rec.scholarship_fee and balance_total['total_credit'] else 0
+        raw_dict['total_amount'] = float(total_amount['total_credit']) if total_amount['total_credit'] else 0
+        raw_dict['voucher_rec'] = [obj.to_dict() for obj in voucher_record] if voucher_record else ''
+
+    return render(request, "template_donor_receipt_voucher.html", {'donor_list': donor_list,'raw_dict': raw_dict,'student_list':student_list})
 
 
 from django.forms.models import model_to_dict
@@ -301,7 +327,60 @@ def get_donors_student_list(request):
 
 def get_donor_report(request):
     donor_list = DonorDetails.objects.all()
-    return render(request, "template_donor_report.html", {'donor_list': donor_list})
+
+
+    debit_total = 0
+    outstanding_total = 0
+    query_donor = request.GET.get('donor') or None
+    student_main_list = []
+
+    if query_donor :
+
+        selected_donor = DonorDetails.objects.get(id=query_donor)
+        student_ids = StudentDonorMapping.objects.filter(donor_id=query_donor).values('student')
+
+        student_list = StudentDetails.objects.filter(id__in=student_ids).distinct()
+        student_list_rec = []
+
+        raw_dict_one = {}
+
+        for obj in student_list:
+
+            raw_dict = {}
+
+            approval_amount = 0
+            credit_total = 0
+            outstanding_amount = 0
+            application_list = []
+            for application_obj in obj.student_applicant_rel.filter(is_sponsored=True):
+                approval_amount = application_obj.scholarship_fee
+
+                for voucher_obj in application_obj.rel_donor_receipt_voucher.all():
+
+                    raw_dict['voucher_rec'] = voucher_obj.to_dict_short()
+                    if voucher_obj.voucher_type == "debit":
+                        credit_total += float(voucher_obj.voucher_amount)
+
+                outstanding_amount = float(approval_amount) - float(credit_total)
+
+                if application_obj.rel_donor_receipt_voucher.all():
+                    raw_dict['approval_amount'] = float(approval_amount) if approval_amount else 0
+                    raw_dict['credit_total'] = float(credit_total) if credit_total else 0
+                    raw_dict['outstanding_amount'] = float(outstanding_amount) if outstanding_amount else 0
+                    student_list_rec.append(raw_dict)
+
+            debit_total += float(credit_total) if credit_total else 0
+            outstanding_total += float(outstanding_amount) if outstanding_amount else 0
+
+        raw_dict = {}
+        raw_dict['voucher_records'] = student_list_rec
+        raw_dict['total_credit_amount'] = debit_total
+        raw_dict['total_outstanding_amount'] = outstanding_total
+        raw_dict['selected_donor'] = selected_donor
+
+        student_main_list.append(raw_dict)
+
+    return render(request, "template_donor_report.html", {'donor_list': donor_list,'student_main_list':student_main_list})
 
 
 def get_voucher_data_by_donor(request):
@@ -1134,3 +1213,27 @@ def save_and_send_payment_voucher_data_by_student(request):
         thread.start()
 
         return redirect("/accounting/get_student_payment_voucher/")
+
+
+
+def update_donar_receipt_voucher(request):
+    if request.method == "POST":
+        val_dict = request.POST
+        try:
+            voucher = DonorReceiptVoucher.objects.get(id=val_dict['donar_id'])
+            voucher.voucher_amount = float(val_dict['donar_amount'])
+            voucher.save()
+        except Exception as e:
+            return HttpResponseBadRequest(json.dumps({'error': str(e)}), content_type='application/json')
+        return HttpResponse(json.dumps({'success': "Record updated successfully."}), content_type='application/json')
+
+
+def delete_donar_receipt_voucher(request):
+    if request.method == "POST":
+        val_dict = request.POST
+        try:
+            DonorReceiptVoucher.objects.get(id=val_dict['voucher_id']).delete()
+        except Exception as e:
+            return HttpResponseBadRequest(json.dumps({'error': str(e)}), content_type='application/json')
+
+        return HttpResponse(json.dumps({'success': "Record deleted successfully."}), content_type='application/json')

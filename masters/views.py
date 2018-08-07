@@ -1227,12 +1227,7 @@ def partner_all_details_pdf(request,partner_id):
         year_recs = YearDetails.objects.all()
         curriculum_obj = ''
         experience_obj = ''
-
-
         x = 14
-
-
-
         if partner_id:
             partner_rec = PartnerDetails.objects.get(id=partner_id)
         template = get_template('template_partner_details_pdf.html')
@@ -1247,7 +1242,8 @@ def partner_all_details_pdf(request,partner_id):
         pdf = file.read()
         file.close()
         return HttpResponse(pdf, 'application/pdf')
-    except:
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
         return redirect('/masters/template_partner_details/'+str(partner_id))
 
 
@@ -1270,12 +1266,7 @@ def partner_all_details_pdf(request,partner_id):
         year_recs = YearDetails.objects.all()
         curriculum_obj = ''
         experience_obj = ''
-
-
         x = 14
-
-
-
         if partner_id:
             partner_rec = PartnerDetails.objects.get(id=partner_id)
         template = get_template('template_partner_details_pdf.html')
@@ -1289,7 +1280,8 @@ def partner_all_details_pdf(request,partner_id):
         pdf = file.read()
         file.close()
         return HttpResponse(pdf, 'application/pdf')
-    except:
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
         return redirect('/masters/template_partner_details/'+str(partner_id))
 
 
@@ -1322,4 +1314,5 @@ def donar_all_details_pdf(request,donor_id):
         file.close()
         return HttpResponse(pdf, 'application/pdf')
     except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
         return redirect('/masters/template_donar_details/'+str(donor_id))

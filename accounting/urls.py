@@ -41,6 +41,8 @@ urlpatterns = [
 
                   path('update_student_payment_voucher/', views.update_student_payment_voucher, name='update_student_payment_voucher'),
                   path('delete_student_payment_voucher/', views.delete_student_payment_voucher, name='delete_student_payment_voucher'),
+                  path('update_donar_receipt_voucher/', views.update_donar_receipt_voucher, name='update_donar_receipt_voucher'),
+                  path('delete_donar_receipt_voucher/', views.delete_donar_receipt_voucher, name='delete_donar_receipt_voucher'),
 
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -28,9 +28,30 @@
 
             $('#sample_1').dataTable().fnDestroy();
             $('#sample_1').dataTable({
+                "bFilter": true,
+                "paging": true,
+                "info": true,
                 "aoColumnDefs": [
                     {'bSortable': false}
-                ]
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+                    //'print',
+                    {
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: ':visible'
+                            //columns: [ 1,2, 3,4, 5, 6, 7 ]
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        exportOptions: {
+                            //columns: [ 2, 3,4, 5, 6, 7 ]
+                            columns: ':visible'
+                        }
+                    },
+                ],
             });
         }
     </script>
@@ -165,24 +186,13 @@
                                     <input type="submit" class="btn green" value="Filter">
                                 </div>
                             </div>
-                        <div class="col-md-2">
-
-
-                    <div class="col-md-2">
-                        <button style="width: 100px" type="button" id="export_button" class="btn blue">
-                            Export
-                        </button>
-                    </div>
 
 
                         </div>
 
+                        <br><br><br>
 
-                        </div>
-
-                        <br><br>
-
-                        <table class="table table-striped table-hover table-bordered" id="">
+                        <table class="table table-striped table-hover table-bordered" id="sample_1">
                         <thead>
                         <tr>
                             <th>No</th>
@@ -261,25 +271,25 @@
                                 </td>
                             </tr>
                         {% endfor %}
+                        </tbody>
                         <tr>
                             <td colspan="5" ></td>
                             <td><input class="form-control" value="{{ debit_total }}" disabled></td>
                             <td><input class="form-control" value="{{ outstanding_total }}" disabled></td>
                         </tr>
-                        </tbody>
                     </table>
 
                     </div>
                 </form>
             </div>
-          <form method="post" action="{% url 'accounting:export_student_receipt_payment_report' %}" id="form_sample_export">
-                    {% csrf_token %}
-                    <input hidden name="query_country" id="export_student_value" value="{{ selected_country.0.id }}">
-                    <input hidden name="query_scholarship" id="export_student_value" value="{{ selected_scholarship.0.id }}">
-                    <input hidden name="query_student" id="export_student_value" value="{{ selected_student.0.student.id }}">
-
-
-                </form>
+{#          <form method="post" action="{% url 'accounting:export_student_receipt_payment_report' %}" id="form_sample_export">#}
+{#                    {% csrf_token %}#}
+{#                    <input hidden name="query_country" id="export_student_value" value="{{ selected_country.0.id }}">#}
+{#                    <input hidden name="query_scholarship" id="export_student_value" value="{{ selected_scholarship.0.id }}">#}
+{#                    <input hidden name="query_student" id="export_student_value" value="{{ selected_student.0.student.id }}">#}
+{##}
+{##}
+{#                </form>#}
         </div>
     </div>
 

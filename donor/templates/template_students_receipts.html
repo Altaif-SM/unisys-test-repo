@@ -98,11 +98,32 @@
             });
 
 
-            $('#sample_1').dataTable().fnDestroy();
+          $('#sample_1').dataTable().fnDestroy();
             $('#sample_1').dataTable({
+                "bFilter": true,
+                "paging": true,
+                "info": true,
                 "aoColumnDefs": [
                     {'bSortable': false}
-                ]
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+                    //'print',
+                    {
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: ':visible'
+                            //columns: [ 1,2, 3,4, 5, 6, 7 ]
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        exportOptions: {
+                            //columns: [ 2, 3,4, 5, 6, 7 ]
+                            columns: ':visible'
+                        }
+                    },
+                ],
             });
         }
     </script>
@@ -142,6 +163,7 @@
                 <span class="caption-subject font-red sbold uppercase"> Donor Receipt Report </span>
             </div>
 
+{% comment %}
             <div style="float: right;">
                 <form method="post" action="{% url 'donor:donor_receipt_report_export' %}" id="form_sample_export">
                     {% csrf_token %}
@@ -151,12 +173,14 @@
                 </div>
                 </form>
              </div>
+{% endcomment %}
 
         </div>
 
         <div class="portlet-body">
             <div class="table-toolbar">
             </div>
+
             <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
@@ -175,6 +199,7 @@
                         {% for rec in voucher_record %}
                             <tr id="item{{ forloop.counter }}" class="item">
                                 <td>
+                                    <text hidden>{{ rec.application_rec.student.id }}</text>
                                     <input type="text" class="form-control" id="id_student{{ forloop.counter }}"
                                            value="{{ rec.application_rec.student.id }}"
                                            disabled>

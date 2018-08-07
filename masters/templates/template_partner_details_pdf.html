@@ -13,12 +13,14 @@ td {
 </style>
 
 {% block content %}
+             {% if partner_rec.photo != "" %}
 
                     <span style="margin-left: 550px">
                     <img style="width: 100px;" src={{  partner_rec.photo.path }}>
                     </span>
                     <hr>
                     <br>
+            {% endif %}
 
             <table>
 
