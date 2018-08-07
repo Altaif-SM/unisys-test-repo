@@ -121,7 +121,32 @@
             $('#sample_1').dataTable({
                 "aoColumnDefs": [
                     {'bSortable': false}
-                ]
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+                    /* {
+                         extend: 'copyHtml5',
+                         exportOptions: {
+                             columns: [ 0, ':visible' ]
+                         }
+                     },*/
+                    //'print',
+                    {
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            //columns: ':visible'
+                            columns: [ 0,1,2 ]
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        exportOptions: {
+                            columns: [ 0,1,2 ]
+                            //columns: ':visible'
+                        }
+                    },
+                    //'colvis'
+                ],
             });
         }
 
@@ -219,8 +244,9 @@
                 <table class="table table-striped table-hover table-bordered" id="sample_1">
                     <thead>
                     <tr>
-                        <th style="display: none">Id</th>
-                        <th>University</th>
+                        <th hidden>Sr. No </th>
+                        <th style="width: 50%">University</th>
+                        <th hidden style="width: 50%">Country</th>
                         <th>Country</th>
                         <th width="10%"></th>
                     </tr>
@@ -229,14 +255,20 @@
                     <tbody id="tbody">
                     {% for rec in university_recs %}
                         <tr id="item{{ forloop.counter }}" class="item">
-                            <td style="display: none"><input id="university_id" value="{{ rec.id }}"></td>
+                            <td style="display: none"><text hidden>{{ forloop.counter }}</text>
+                                <input id="university_id" value="{{ rec.id }}"></td>
                             <td>
                                 <text hidden>{{ rec.university_name|title }}</text>
                                 <input class="form-control data university_name" name="university_name_saved"
                                        type="text"
                                        id="university_name{{ forloop.counter }}" value="{{ rec.university_name|title }}"
                                        required pattern='[A-Za-z+-]+'
-                                       title='Please enter university name' disabled></td>
+                                       title='Please enter university name' disabled>
+                            </td>
+
+                            <td hidden>
+                                <text hidden>{{ rec.country.country_name|title }}</text>
+                            </td>
 
                             <td>
                                 <text hidden>{{ rec.country.country_name|title }}</text>
@@ -247,7 +279,9 @@
                                     {% for rec in country_recs %}
                                         <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
                                     {% endfor %}
-                                </select></td>
+                                </select>
+                            </td>
+
                             <td>
                                 <span type="button" name="updt" id="update{{ forloop.counter }}"
                                       class=" update btn green glyphicon glyphicon-ok" style="display:none;">

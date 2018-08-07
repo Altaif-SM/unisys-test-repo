@@ -34,7 +34,8 @@ urlpatterns = [
 
                   path('template_psychometric_test_report/', views.template_psychometric_test_report,
                        name='template_psychometric_test_report'),
-                  path('filter_psychometric_test_report/', views.filter_psychometric_test_report,name='filter_psychometric_test_report'),
+                  path('filter_psychometric_test_report/', views.filter_psychometric_test_report,
+                       name='filter_psychometric_test_report'),
 
                   path('template_link_student_program/', views.template_link_student_program,
                        name='template_link_student_program'),
@@ -69,7 +70,7 @@ urlpatterns = [
                   path('template_student_agreement/', views.template_student_agreement,
                        name='template_student_agreement'),
 
-                  path('filter_student_agreement/', views.filter_student_agreement,name='filter_student_agreement'),
+                  path('filter_student_agreement/', views.filter_student_agreement, name='filter_student_agreement'),
                   path('template_semester_result/', views.template_semester_result, name='template_semester_result'),
                   path('donar_student_linking_export/', views.donar_student_linking_export,
                        name='donar_student_linking_export'),
