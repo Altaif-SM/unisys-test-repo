@@ -211,7 +211,7 @@
         </div>
 
         <div class="portlet-body">
-            <form action="{% url 'masters:generate_PDF' %}" id="form_sample_1"
+            {% comment %}<form action="{% url 'masters:generate_PDF' %}" id="form_sample_1"
                   class="form-horizontal"
                   method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -220,7 +220,7 @@
                         <button type="submit" class="btn green" id="save">PDF</button>
                     </div>
                 </div>
-            </form>
+            </form>{% endcomment %}
 
             <!-- BEGIN FORM-->
             <div class="form-body">
