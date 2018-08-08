@@ -433,6 +433,9 @@ def change_application_status(request):
             # getting application object for flag validations
             application_obj = ApplicationDetails.objects.get(id=application)
 
+            if application_obj.application_rejection:
+                continue
+
             if interview_type == 'First Interview':
 
                 if not application_obj.first_interview:
