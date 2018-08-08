@@ -38,14 +38,48 @@
                      $("#error_msg").hide();
                      $("#data_error_msg").hide();
                     var student = $(this).val();
-                    var url = '/accounting/get_donor_recipt_for_org_payment/';
+                    $('#id_student_details').val(student)
+                    $('#form_sample_get').submit()
+                    {% comment %}var url = '/accounting/get_donor_recipt_for_org_payment/';
                     get_voucher_data(url, student);
                      $('#export_button').attr('disabled', false);
-                      $('#export_student_value').val(student);
+                      $('#export_student_value').val(student);{% endcomment %}
+
+
+                });
+
+                $('#sample_1').dataTable().fnDestroy();
+                $('#sample_1').dataTable({
+                    "bFilter": true,
+                    "paging": true,
+                    "info": true,
+
+                    "aoColumnDefs": [
+                        {'bSortable': false,
+                        "scrollX": true,}
+                    ],
+                    dom: 'Bfrtip',
+                    buttons: [
+                        //'print',
+                        {
+                            extend: 'excelHtml5',
+                            exportOptions: {
+                                columns: ':visible'
+                                //columns: [ 1,2, 3,4, 5, 6, 7 ]
+                            }
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            exportOptions: {
+                                //columns: [ 2, 3,4, 5, 6, 7 ]
+                                columns: ':visible'
+                            }
+                        },
+                    ],
                 });
 
 
-                function get_voucher_data(url, student) {
+                {% comment %}function get_voucher_data(url, student) {
                     $.ajax({
                         type: 'POST',
                         url: url,
@@ -128,19 +162,9 @@
                         }
                     });
                 }
-
+{% endcomment %}
             });
 
-
-            $('#sample_1').dataTable().fnDestroy();
-            $('#sample_1').dataTable({
-                "bFilter": false,
-                "paging": false,
-                "info": false,
-                "aoColumnDefs": [
-                    {'bSortable': false}
-                ]
-            });
         }
     </script>
 
@@ -196,9 +220,15 @@
                                     <select id='id_student' title="Select country" name="student"
                                             autocomplete="off" class="form-control" data-live-search="true"
                                             required>
-                                        <option style="display:none" selected="selected" id=""
-                                                value="">Please Select
-                                        </option>
+                                       {% if raw_dict.application_rec.student %}
+                                            <option style="display:none" selected="selected" id=""
+                                                    value="{{ raw_dict.application_rec.student.id }}">{{ raw_dict.application_rec.student.get_all_name }}
+                                            </option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id=""
+                                                    value="">Please Select
+                                            </option>
+                                        {% endif %}
 
                                         {% for rec in student_list %}
                                             <option value='{{ rec.student.id }}'>{{ rec.get_full_name|title }}</option>
@@ -211,7 +241,7 @@
                                 <label class="col-md-2 control-label">Country:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Country" placeholder="Country"
-                                           id="id_country" name="country"
+                                           id="id_country" name="country" value="{{ raw_dict.application_rec.country.country_name }}"
                                            class="form-control" required disabled>
 
                                     <input type="text" id="id_country_id" name="country" hidden>
@@ -222,7 +252,7 @@
                                 <label class="col-md-2 control-label">University:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="University" placeholder="University"
-                                           id="id_university" name="university"
+                                           id="id_university" name="university" value="{{ raw_dict.application_rec.university.university_name }}"
                                            class="form-control" required disabled>
 
                                     <input type="text" id="id_university_id" name="university" hidden>
@@ -239,7 +269,7 @@
                                 <label class="col-md-2 control-label">Scholarship:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Scholarship" placeholder="Scholarship"
-                                           id="id_scholarship" name="scholarship"
+                                           id="id_scholarship" name="scholarship" value="{{ raw_dict.application_rec.scholarship.scholarship_name }}"
                                            class="form-control" required disabled>
 
                                     <input type="text" id="id_scholarship_id" name="scholarship" hidden>
@@ -251,7 +281,7 @@
                                 <label class="col-md-2 control-label">Degree:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Degree" placeholder="Degree"
-                                           id="id_degree" name="degree"
+                                           id="id_degree" name="degree" value="{{ raw_dict.application_rec.degree.degree_name }}"
                                            class="form-control" required disabled>
 
                                      <input type="text" id="id_degree_id" name="Degree" hidden>
@@ -262,7 +292,7 @@
                                 <label class="col-md-2 control-label">Program:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Program" placeholder="Program"
-                                           id="id_program" name="program"
+                                           id="id_program" name="program" value="{{ raw_dict.application_rec.program.program_name }}"
                                            class="form-control" required disabled>
 
                                      <input type="text" id="id_program_id" name="program" hidden>
@@ -278,7 +308,7 @@
                                 <label class="col-md-2 control-label">Scholarship Fee:</label>
                                 <div class="col-md-2">
                                     <input type="number" title="Scholarship Fee" id="id_scholarship_fee"
-                                           name="scholarship_fee" placeholder="0.00"
+                                           name="scholarship_fee" placeholder="0.00" value="{{ raw_dict.application_rec.scholarship_fee }}"
                                            class="form-control" required disabled>
                                 </div>
                             </div>
@@ -287,7 +317,7 @@
                                 <label class="col-md-2 control-label">Balance:</label>
                                 <div class="col-md-2">
                                     <input type="number" title="Balance" placeholder="0.00"
-                                           id="id_balance" name="balance"
+                                           id="id_balance" name="balance"value="{{ raw_dict.application_rec.balance }}"
                                            class="form-control" required disabled>
                                 </div>
                             </div>
@@ -305,7 +335,7 @@
                     </div>
                 </form>
             </div>
-            <div class="col-md-2">
+            {% comment %}<div class="col-md-2">
                 <form method="post" action="{% url 'donor:student_payment_report_export' %}" id="">
                     {% csrf_token %}
                     <input hidden name="student_id" id="export_student_value" value="">
@@ -315,7 +345,7 @@
                     </button>
                 </form>
             </div>
-
+{% endcomment %}
 
 
         </div>
@@ -337,12 +367,65 @@
                     </thead>
 
                     <tbody id="tbody">
+                    {% for rec in raw_dict.voucher_rec %}
+                        <tr id="{{ rec.id }}" class="item">
+                            <td>
+                                <p hidden>{{ rec.voucher_number }}</p>
+                                <input id="id_voucher_number{{ forloop.counter }}" class="form-control voucher_number"
+                                       value="{{ rec.voucher_number }}" disabled>
+                            </td>
+                            <td>
+                                <p hidden>{{ rec.voucher_date }}</p>
+                                <input id="id_voucher_date{{ forloop.counter }}" class="form-control voucher_number"
+                                       value="{{ rec.voucher_date }}" disabled>
+                            </td>
+                            <td>
+                                <p hidden>{{ rec.voucher_description  }}</p>
+                                <input class="form-control voucher_description" name="voucher_description" type="text"
+                                       id="voucher_description{{ forloop.counter }}"
+                                       value="{{ rec.voucher_description  }}"
+                                       required="True" disabled>
+                            </td>
+                            <td>
+                                <p hidden>{{ rec.voucher_amount  }}</p>
+                                <input class="form-control voucher_amount" name="voucher_amount" type="text"
+                                       id="voucher_description{{ forloop.counter }}"
+                                       value="{{ rec.voucher_amount  }}"
+                                       required="True" disabled>
+
+                            </td>
+
+                        </tr>
+                    {% endfor %}
 
                     </tbody>
+                    <tr>
+                        <td colspan="3"></td><td>
+                            <input class="form-control data debit_total" name="debit_total"
+                                   type="text"
+                                   id="debit_total"
+                                   value="{{ raw_dict.total_amount }}"
+                                   required
+                                   disabled>
+                        </td>
+                    </tr>
+
+
                 </table>
             </form>
 
         </div>
+        <form id="form_sample_get" class="form-horizontal" method="GET" enctype="multipart/form-data">{% csrf_token %}
+            <div class="row">
+                <div class="">
+                    <input type="text" id="id_student_details" name="student" hidden>
+
+
+                </div>
+            </div>
+        </form>
+
+
     </div>
 
 {% endblock %}

@@ -246,8 +246,19 @@ def template_my_payments(request):
     stud = StudentDonorMapping.objects.filter(donor__user=request.user,applicant_id__year=get_current_year()).values("student")
     # student_list = StudentDetails.objects.filter(id__in=stud)
     student_list = ApplicationDetails.objects.filter(student_id__in=stud, is_sponsored=True)
+    query_student = request.GET.get('student')
+    raw_dict = {}
+    if query_student:
+        application_rec = ApplicationDetails.objects.get(student_id=query_student)
+        voucher_record = DonorReceiptVoucher.objects.filter(application_id=application_rec.id)
+        total_amount = DonorReceiptVoucher.objects.filter(voucher_type="debit", application=application_rec).values("voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
+        balance_total = DonorReceiptVoucher.objects.filter(voucher_type="debit", application=application_rec).values("voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
+        raw_dict['application_rec'] = application_rec.to_application_dict() if application_rec else ''
+        raw_dict['outstanding_amount'] = (float(application_rec.scholarship_fee) - float(balance_total['total_credit'])) if application_rec.scholarship_fee and balance_total['total_credit'] else 0
+        raw_dict['total_amount'] = float(total_amount['total_credit']) if total_amount['total_credit'] else 0
+        raw_dict['voucher_rec'] = [obj.to_dict() for obj in voucher_record] if voucher_record else ''
 
-    return render(request, "template_my_payments.html", {'student_list': student_list})
+    return render(request, "template_my_payments.html", {'student_list': student_list,'raw_dict':raw_dict})
 
 
 def template_students_receipts(request):

@@ -33,16 +33,42 @@
     <script>
         window.onload = function () {
             $(document).ready(function () {
+                $('#sample_1').dataTable().fnDestroy();
+                $('#sample_1').dataTable({
+                    "bFilter": true,
+                    "paging": true,
+                    "info": true,
+
+
+                    "aoColumnDefs": [
+                        {'bSortable': false,
+                            "scrollX": true,
+                       }
+                    ],
+                    dom: 'Bfrtip',
+                    buttons: [
+                        //'print',
+                        {
+                            extend: 'excelHtml5',
+                            exportOptions: {
+                                columns: ':visible'
+                                //columns: [ 1,2, 3,4, 5, 6, 7 ]
+                            }
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            exportOptions: {
+                                //columns: [ 2, 3,4, 5, 6, 7 ]
+                                columns: ':visible'
+                            }
+                        },
+                    ],
+                });
 
             });
 
 
-            $('#sample_1').dataTable().fnDestroy();
-            $('#sample_1').dataTable({
-                "aoColumnDefs": [
-                    {'bSortable': false}
-                ]
-            });
+
         }
     </script>
 
@@ -77,7 +103,7 @@
                 <span class="caption-subject font-red sbold uppercase"> Applicant Details - Register Applicant </span>
             </div>
         </div>
-    <div class="col-md-2">
+       {% comment %} <div class="col-md-2">
                 <form method="post" action="{% url 'donor:Register_Applicant_export' %}" id="">
                     {% csrf_token %}
                     <input hidden name="student_id" id="export_student_value" value="">
@@ -86,7 +112,7 @@
                         Export
                     </button>
                 </form>
-            </div>
+            </div>{% endcomment %}
 
 
         <div class="portlet-body">
