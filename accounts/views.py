@@ -93,7 +93,7 @@ def user_signup(request):
             try:
                 user = signup_form.save()
                 user.role.add(UserRole.objects.get(name=request.POST['role']))
-                if str(request.POST['role']) not in  ["Accountant"]:
+                if str(request.POST['role']) not in ["Accountant"]:
                     country = CountryDetails.objects.get(country_name=request.POST['country'])
                     address = AddressDetails.objects.create(country=country)
                     if request.POST['role'] == "Student":
@@ -124,12 +124,16 @@ def user_signup(request):
                 messages.success(request, str(e))
             return redirect('/')
         else:
-            print(signup_form.errors)
+            # print(signup_form.errors)
             for error_msg in signup_form.errors:
                 # form = signUpForm()
                 for msg in signup_form.errors[error_msg]:
                     messages.success(request, msg)
-        return render(request, 'template_login.html', {'form': signup_form})
+        if request.POST.get('admin_page'):
+            return redirect('/accounts/template_manage_user/')
+        return redirect('/')
+            # return render(request, 'template_manage_user.html', {'form': signup_form})
+        # return render(request, 'template_login.html', {'form': signup})
 
 # @csrf_exempt
 def user_signin(request):
