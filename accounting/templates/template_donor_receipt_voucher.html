@@ -168,7 +168,7 @@
                      $("#data_error_msg").hide();
                      var student = $(this).val();
                      $("#id_student_details").val(student);
-                    var donar_name = $("#id_donor_list").val();
+                        var donar_name = $("#id_donor_list").val();
                      $("#id_donar_name").val(donar_name);
 
 
@@ -498,9 +498,11 @@
                             <div class="">
                                 <label class="col-md-2 control-label">Student:</label>
                                 <div class="col-md-2">
+                                <input type="hidden" id="id_app_id" name="application" value="{{ raw_dict.application_rec.id }}">
                                     <select id='id_student' title="Select country" name="student"
                                             autocomplete="off" class="form-control" data-live-search="true"
                                             required>
+
                                         {% if raw_dict.application_rec.student %}
                                             <option style="display:none" selected="selected" id=""
                                                     value="{{ raw_dict.application_rec.student.id }}">{{ raw_dict.application_rec.student.get_all_name }}
@@ -512,7 +514,7 @@
                                         {% endif %}
 
                                         {% for rec in student_list %}
-                                            <option value='{{ rec.id }}'>{{ rec.student.user.get_application.get_full_name|title }}</option>
+                                            <option value='{{ rec.student.id }}'>{{ rec.student.user.get_application.get_full_name|title }}</option>
                                         {% endfor %}
                                     </select>
                                     <span id="id_student_error_msg" style="display: none;color: red;"></span>

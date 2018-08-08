@@ -85,9 +85,22 @@ def get_student_receipt_voucher(request):
 
 
 def get_student_payment_and_receipt_report(request):
+    query_student = request.GET.get('student')
+    raw_dict = {}
+    if query_student:
+        application_rec = ApplicationDetails.objects.get(student_id=query_student)
+        voucher_record = StudentPaymentReceiptVoucher.objects.filter(application_id=application_rec.id,application__year=get_current_year(request))
+        total_amount = StudentPaymentReceiptVoucher.objects.filter(voucher_type="credit", application=application_rec,application__year=get_current_year(request)).values("voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
+        total_debit_amount = StudentPaymentReceiptVoucher.objects.filter(voucher_type="debit",application=application_rec).values("voucher_amount").aggregate(total_debit=Sum('voucher_amount'))
+        raw_dict['total_amount'] = float(total_amount['total_credit']) if total_amount['total_credit'] else 0
+        raw_dict['total_debit_amount'] = float(total_debit_amount['total_debit']) if total_debit_amount['total_debit'] else 0
+        raw_dict['application_rec'] = application_rec.to_student_payment_application_dict()
+        raw_dict['voucher_rec'] = [obj.to_dict() for obj in voucher_record]
+
+
     # student_list = StudentDetails.objects.filter(student_applicant_rel__is_sponsored=True)
     student_list = ApplicationDetails.objects.filter(is_sponsored=True, year=get_current_year(request))
-    return render(request, "template_student_payment_and_receipt_report.html", {'student_list': student_list})
+    return render(request, "template_student_payment_and_receipt_report.html", {'student_list': student_list,'raw_dict':raw_dict})
 
 
 def get_student_report(request):

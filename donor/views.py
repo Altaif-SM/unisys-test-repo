@@ -305,7 +305,7 @@ def approve_sponsorship(request):
 
     StudentDonorMapping.objects.create(student=application_rec.student, donor=donor, applicant_id=application_rec)
 
-    return render(request, "template_student_details.html", {'application_rec': application_rec})
+    return render(request, "template_student_details.html", {'application_obj':application_rec})
 
 
 def donor_receipt_report_export(request):
