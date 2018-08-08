@@ -10,6 +10,8 @@ from django.db.models import Max, Q
 
 
 # Create your views here.
+from student.views import applicant_academic_english_qualification
+
 
 def partner_home(request):
     username = ''
@@ -545,27 +547,31 @@ def change_application_status(request):
                 if application_obj.first_interview_approval:
                     if not application_obj.psychometric_test:
 
-                        application_obj.psychometric_test = True
-                        application_obj.save()
+                        if ApplicantPsychometricTestDetails.objects.filter(applicant_id=application_obj).exists():
 
-                        try:
-                            email_rec = EmailTemplates.objects.get(template_for='Psychometric Test', is_active=True)
-                            context = {'first_name': application_obj.first_name}
-                            send_email_with_template(application_obj, context, email_rec.subject, email_rec.email_body,
-                                                     request)
-                        except:
-                            subject = 'Psychometric Test Update'
-                            message = 'You have submitted the Psychometric Test result.'
-                            send_email_to_applicant(request.user.email, application_obj.email, subject, message,
-                                                    application_obj.first_name)
+                            application_obj.psychometric_test = True
+                            application_obj.save()
 
-                        application_notification(application_obj.id, 'You have submitted Psychometric test result.')
+                            try:
+                                email_rec = EmailTemplates.objects.get(template_for='Psychometric Test', is_active=True)
+                                context = {'first_name': application_obj.first_name}
+                                send_email_with_template(application_obj, context, email_rec.subject, email_rec.email_body,
+                                                         request)
+                            except:
+                                subject = 'Psychometric Test Update'
+                                message = 'You have submitted the Psychometric Test result.'
+                                send_email_to_applicant(request.user.email, application_obj.email, subject, message,
+                                                        application_obj.first_name)
 
-                        if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
-                                                                        status='Psychometric Test').exists():
-                            ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
-                                                                     status='Psychometric Test',
-                                                                     remark='You have submitted Psychometric test result. Please wait for the further updates.')
+                            application_notification(application_obj.id, 'You have submitted Psychometric test result.')
+
+                            if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
+                                                                            status='Psychometric Test').exists():
+                                ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
+                                                                         status='Psychometric Test',
+                                                                         remark='You have submitted Psychometric test result. Please wait for the further updates.')
+                        else:
+                            continue
                     else:
                         continue
                 else:
