@@ -683,6 +683,11 @@ def change_application_status(request):
 
             elif interview_type == 'Reject':
                 if not application_obj.application_rejection:
+
+                    if application_obj.admin_approval:
+                        if not request.user.is_super_admin():
+                            continue
+
                     application_obj.application_rejection = True
                     application_obj.save()
 
