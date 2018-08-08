@@ -128,14 +128,13 @@
                     $("#" + parent_id + " .data").prop("disabled", false);
 
                 });
-            });
 
-
-            $('#sample_1').dataTable().fnDestroy();
-            $('#sample_1').dataTable({
+            $('#example').dataTable().fnDestroy();
+            $('#example').dataTable({
                 "aoColumnDefs": [
                     {'bSortable': false}
                 ],
+                "scrollX": true,
                 dom: 'Bfrtip',
                 buttons: [
                     /* {
@@ -146,24 +145,29 @@
                      },*/
                     //'print',
                     {
-                        orientation: 'landscape',
+                        {#orientation: 'landscape',#}
                         extend: 'excelHtml5',
                         exportOptions: {
                             //columns: ':visible'
-                            columns: [1, 2, 3, 5, 7, 9, 10, 11, 13, 15, 16,17]
+                            columns: [1, 2, 3, 5, 7, 9, 10, 11, 13, 15, 16, 17],
+                            pageSize: 'LEGAL'
                         }
                     },
                     {
                         orientation: 'landscape',
                         extend: 'pdfHtml5',
                         exportOptions: {
-                            columns: [1, 2, 3, 5, 7, 9, 10, 11, 13, 15, 16,17]
+                            columns: [1, 2, 3, 5, 7, 9, 10, 11, 13, 15, 16, 17]
                             //columns: ':visible'
                         }
                     },
                     //'colvis'
                 ],
             });
+            });
+
+
+
         }
 
 
@@ -245,8 +249,8 @@
                                 </div>
                             </div>
                         </div>
-                    <br>
-                    <br>
+                        <br>
+                        <br>
                         <div class="row">
                             <div class="">
                                 <label class="col-md-1 control-label">Year:
@@ -407,220 +411,227 @@
             </div>
 
             <br><br>
+        <div class="portlet-body">
+            <div class="form-body">
 
-            <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
+                <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
 
-                <table class="table table-striped table-hover table-bordered" id="sample_1">
-                    <thead>
-                    <tr>
-                        <th hidden>Id</th>
-                        <th>Name</th>
-                        <th>Code</th>
-                        <th hidden>Year</th>
-                        <th>Year</th>
-                        <th hidden>Semester</th>
-                        <th>Semester</th>
-                        <th hidden>Module</th>
+                    <table class="table table-striped table-hover table-bordered" id="example">
+                        <thead>
+                        <tr>
+                            <th hidden>Id</th>
+                            <th>Name</th>
+                            <th>Code</th>
+                            <th hidden>Year</th>
+                            <th>Year</th>
 
-                        <th>Module</th>
-                        <th>Activities</th>
-                        <th>Outcomes</th>
-                        <th hidden>Day Duration</th>
+                            <th hidden>Semester</th>
+                            <th>Semester</th>
+                            <th hidden>Module</th>
+                            <th>Module</th>
+                            <th>Activities</th>
 
-                        <th>Day Duration</th>
-                        <th hidden>Night Duration</th>
-                        <th>Night Duration</th>
-                        <th>Method</th>
+                            <th>Outcomes</th>
+                            <th hidden>Day Duration</th>
+                            <th>Day Duration</th>
+                            <th hidden>Night Duration</th>
+                            <th>Night Duration</th>
 
-                        <th>Mark</th>
-                        <th>Date</th>
-                        <th>Remark</th>
-                        <th width="10%"></th>
-                    </tr>
-                    </thead>
-
-                    <tbody id="tbody">
-                    {% for rec in development_program_recs %}
-                        <tr id="item{{ forloop.counter }}" class="item">
-                            <td hidden><input id="development_program_id" value="{{ rec.id }}"></td>
-
-                            <td>
-                                <text hidden>{{ rec.name|title }}</text>
-
-                                <input class="form-control data name" name="name_saved"
-                                       type="text"
-                                       id="name{{ forloop.counter }}" value="{{ rec.name|title }}"
-                                       required
-                                       title='Please enter name' disabled>
-                            </td>
-
-                            <td>
-                                <text hidden>{{ rec.code|title }}</text>
-                                <input class="form-control data code_name" name="code_name_saved"
-                                       type="text"
-                                       id="code{{ forloop.counter }}" value="{{ rec.code|title }}"
-                                       required
-                                       title='Please enter code' disabled>
-                            </td>
-
-                            <td hidden>
-                                <text hidden>{{ rec.year.year_name|title }}</text>
-                            </td>
-
-                            <td>
-                                <text hidden>{{ rec.year.year_name|title }}</text>
-                                <select id='year{{ forloop.counter }}' name="year_name{{ forloop.counter }}"
-                                        class="form-control data year" disabled required>
-                                    <option style="display:none" selected="selected" id=""
-                                            value="{{ rec.year.id }}">{{ rec.year.year_name|title }} </option>
-                                    {% for rec in year_recs %}
-                                        <option value='{{ rec.id }}'>{{ rec.year_name|title }}</option>
-                                    {% endfor %}
-                                </select>
-                            </td>
-
-                            <td hidden>
-                                <text hidden>{{ rec.semester.semester_name|title }}</text>
-                            </td>
-
-                            <td>
-                                <text hidden>{{ rec.semester.semester_name|title }}</text>
-                                <select id='semester{{ forloop.counter }}' name="semester_name{{ forloop.counter }}"
-                                        title='Please select semester' class="form-control data semester" disabled
-                                        required>
-                                    <option style="display:none" selected="selected" id=""
-                                            value="{{ rec.semester.id }}">{{ rec.semester.semester_name|title }} </option>
-                                    {% for rec in semester_recs %}
-                                        <option value='{{ rec.id }}'>{{ rec.semester_name|title }}</option>
-                                    {% endfor %}
-                                </select>
-                            </td>
-
-                            <td hidden>
-                                <text>{{ rec.module.module_name|title }}</text>
-                            </td>
-
-                            <td>
-                                <text hidden>{{ rec.module.module_name|title }}</text>
-                                <select id='module{{ forloop.counter }}' name="module_name{{ forloop.counter }}"
-                                        title='Please select module' class="form-control data module" disabled required>
-                                    <option style="display:none" selected="selected" id=""
-                                            value="{{ rec.module.id }}">{{ rec.module.module_name|title }} </option>
-                                    {% for rec in module_recs %}
-                                        <option value='{{ rec.id }}'>{{ rec.module_name|title }}</option>
-                                    {% endfor %}
-                                </select>
-                            </td>
-
-
-                            <td>
-                                <text hidden>{{ rec.activity|title }}</text>
-                                <textarea class="form-control data activity" name="activity_saved"
-                                          id="activity{{ forloop.counter }}"
-                                          required
-                                          title='Please enter activity' disabled> {{ rec.activity|title }}
-
-                                </textarea>
-                            </td>
-
-                            <td>
-                                <text hidden>{{ rec.outcome|title }}</text>
-                                <textarea class="form-control data outcome" name="outcome_saved"
-                                          id="outcome{{ forloop.counter }}"
-                                          required
-                                          title='Please enter outcome' disabled>{{ rec.outcome|title }}
-
-                                </textarea>
-                            </td>
-
-                            <td hidden>
-                                <text hidden>{{ rec.duration_day|title }}</text>
-                            </td>
-
-                            <td>
-                                <text hidden>{{ rec.duration_day|title }}</text>
-                                <select title='Please select days duration' id='duration_day{{ forloop.counter }}'
-                                        name="duration_day{{ forloop.counter }}" class="form-control data duration_day"
-                                        disabled required>
-                                    <option style="display:none" selected="selected" id=""
-                                            value="{{ rec.duration_day }}">{{ rec.duration_day }} </option>
-                                    <option id="1" value="1">1</option>
-                                    <option id="2" value="2">2</option>
-                                    <option id="3" value="3">3</option>
-                                    <option id="4" value="4">4</option>
-                                </select>
-                            </td>
-
-                            <td hidden>
-                                <text hidden>{{ rec.duration_night|title }}</text>
-                            </td>
-
-                            <td>
-                                <text hidden>{{ rec.duration_night|title }}</text>
-                                <select title='Please select night duration' id='duration_day{{ forloop.counter }}'
-                                        name="duration_night{{ forloop.counter }}"
-                                        class="form-control data duration_night"
-                                        disabled required>
-                                    <option style="display:none" selected="selected" id=""
-                                            value="{{ rec.duration_night }}">{{ rec.duration_night }} </option>
-                                    <option id="1" value="1">1</option>
-                                    <option id="2" value="2">2</option>
-                                    <option id="3" value="3">3</option>
-                                    <option id="4" value="4">4</option>
-                                </select>
-                            </td>
-
-                            <td>
-                                <text hidden>{{ rec.method|title }}</text>
-                                <input class="form-control data method" name="method_name_saved"
-                                       type="text"
-                                       id="method{{ forloop.counter }}" value="{{ rec.method|title }}"
-                                       required
-                                       title='Please enter method' disabled>
-                            </td>
-
-                            <td>
-                                <text hidden>{{ rec.marks|title }}</text>
-                                <input class="form-control data marks" name="marks_name_saved"
-                                       type="number" step="any" min="0" max="1000"
-                                       id="marks{{ forloop.counter }}" value="{{ rec.marks|title }}"
-                                       required
-                                       title='Please enter marks' disabled>
-                            </td>
-
-                            <td>
-                                <text hidden>{{ rec.date|date:"Y-m-d" }}</text>
-                                <input class="form-control data date" name="date_saved" type="date"
-                                       id="date{{ forloop.counter }}"
-                                       value="{{ rec.date|date:"Y-m-d" }}" required="required" disabled>
-                            </td>
-                            <td>
-                                <text hidden>{{ rec.remark|title }}</text>
-                                <textarea class="form-control data remark" name="remark_saved"
-                                          id="remark{{ forloop.counter }}"
-                                          required
-                                          title='Please enter remark' disabled>{{ rec.remark|title }}
-
-                                </textarea>
-                            </td>
-
-                            <td>
-                                <span type="button" name="updt" id="update{{ forloop.counter }}"
-                                      class=" update btn green glyphicon glyphicon-ok" style="display:none;">
-                                </span>
-                                <span type="button" name="edit" id="edit{{ forloop.counter }}"
-                                      class=" edit btn blue glyphicon glyphicon-pencil">
-                                </span>
-                                <span type="button" name="delete" id="delete{{ forloop.counter }}"
-                                      class=" delete btn red glyphicon glyphicon-trash">
-                                </span>
-                            </td>
+                            <th>Method</th>
+                            <th>Mark</th>
+                            <th>Date</th>
+                            <th>Remark</th>
+                            <th width="10%"></th>
                         </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </form>
+                        </thead>
+
+                        <tbody id="tbody">
+                        {% for rec in development_program_recs %}
+                            <tr id="item{{ forloop.counter }}" class="item">
+                                <td hidden><input id="development_program_id" value="{{ rec.id }}"></td>
+
+                                <td>
+                                    <text hidden>{{ rec.name|title }}</text>
+
+                                    <input class="form-control data name" name="name_saved"
+                                           type="text"
+                                           id="name{{ forloop.counter }}" value="{{ rec.name|title }}"
+                                           required
+                                           title='Please enter name' disabled>
+                                </td>
+
+                                <td>
+                                    <text hidden>{{ rec.code|title }}</text>
+                                    <input class="form-control data code_name" name="code_name_saved"
+                                           type="text"
+                                           id="code{{ forloop.counter }}" value="{{ rec.code|title }}"
+                                           required
+                                           title='Please enter code' disabled>
+                                </td>
+
+                                <td hidden>
+                                    <text hidden>{{ rec.year.year_name|title }}</text>
+                                </td>
+
+                                <td>
+                                    <text hidden>{{ rec.year.year_name|title }}</text>
+                                    <select id='year{{ forloop.counter }}' name="year_name{{ forloop.counter }}"
+                                            class="form-control data year" disabled required>
+                                        <option style="display:none" selected="selected" id=""
+                                                value="{{ rec.year.id }}">{{ rec.year.year_name|title }} </option>
+                                        {% for rec in year_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.year_name|title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+
+                                <td hidden>
+                                    <text hidden>{{ rec.semester.semester_name|title }}</text>
+                                </td>
+
+                                <td>
+                                    <text hidden>{{ rec.semester.semester_name|title }}</text>
+                                    <select id='semester{{ forloop.counter }}' name="semester_name{{ forloop.counter }}"
+                                            title='Please select semester' class="form-control data semester" disabled
+                                            required>
+                                        <option style="display:none" selected="selected" id=""
+                                                value="{{ rec.semester.id }}">{{ rec.semester.semester_name|title }} </option>
+                                        {% for rec in semester_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.semester_name|title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+
+                                <td hidden>
+                                    <text>{{ rec.module.module_name|title }}</text>
+                                </td>
+
+                                <td>
+                                    <text hidden>{{ rec.module.module_name|title }}</text>
+                                    <select id='module{{ forloop.counter }}' name="module_name{{ forloop.counter }}"
+                                            title='Please select module' class="form-control data module" disabled
+                                            required>
+                                        <option style="display:none" selected="selected" id=""
+                                                value="{{ rec.module.id }}">{{ rec.module.module_name|title }} </option>
+                                        {% for rec in module_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.module_name|title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+
+
+                                <td>
+{#                                    <text hidden>{{ rec.activity|title }}</text>#}
+                                    <textarea class="form-control data activity" name="activity_saved"
+                                              id="activity{{ forloop.counter }}"
+                                              required
+                                              title='Please enter activity' disabled> {{ rec.activity|title }}
+
+                                </textarea>
+                                </td>
+
+                                <td>
+{#                                    <text hidden>{{ rec.outcome|title }}</text>#}
+                                    <textarea class="form-control data outcome" name="outcome_saved"
+                                              id="outcome{{ forloop.counter }}"
+                                              required
+                                              title='Please enter outcome' disabled>{{ rec.outcome|title }}
+
+                                </textarea>
+                                </td>
+
+                                <td hidden>
+                                    <text hidden>{{ rec.duration_day|title }}</text>
+                                </td>
+
+                                <td>
+                                    <text hidden>{{ rec.duration_day|title }}</text>
+                                    <select title='Please select days duration' id='duration_day{{ forloop.counter }}'
+                                            name="duration_day{{ forloop.counter }}"
+                                            class="form-control data duration_day"
+                                            disabled required>
+                                        <option style="display:none" selected="selected" id=""
+                                                value="{{ rec.duration_day }}">{{ rec.duration_day }} </option>
+                                        <option id="1" value="1">1</option>
+                                        <option id="2" value="2">2</option>
+                                        <option id="3" value="3">3</option>
+                                        <option id="4" value="4">4</option>
+                                    </select>
+                                </td>
+
+                                <td hidden>
+                                    <text hidden>{{ rec.duration_night|title }}</text>
+                                </td>
+
+                                <td>
+                                    <text hidden>{{ rec.duration_night|title }}</text>
+                                    <select title='Please select night duration' id='duration_day{{ forloop.counter }}'
+                                            name="duration_night{{ forloop.counter }}"
+                                            class="form-control data duration_night"
+                                            disabled required>
+                                        <option style="display:none" selected="selected" id=""
+                                                value="{{ rec.duration_night }}">{{ rec.duration_night }} </option>
+                                        <option id="1" value="1">1</option>
+                                        <option id="2" value="2">2</option>
+                                        <option id="3" value="3">3</option>
+                                        <option id="4" value="4">4</option>
+                                    </select>
+                                </td>
+
+                                <td>
+                                    <text hidden>{{ rec.method|title }}</text>
+                                    <input class="form-control data method" name="method_name_saved"
+                                           type="text"
+                                           id="method{{ forloop.counter }}" value="{{ rec.method|title }}"
+                                           required
+                                           title='Please enter method' disabled>
+                                </td>
+
+                                <td>
+                                    <text hidden>{{ rec.marks|title }}</text>
+                                    <input class="form-control data marks" name="marks_name_saved"
+                                           type="number" step="any" min="0" max="1000"
+                                           id="marks{{ forloop.counter }}" value="{{ rec.marks|title }}"
+                                           required
+                                           title='Please enter marks' disabled>
+                                </td>
+
+                                <td>
+                                    <text hidden>{{ rec.date|date:"Y-m-d" }}</text>
+                                    <input class="form-control data date" name="date_saved" type="date"
+                                           id="date{{ forloop.counter }}"
+                                           value="{{ rec.date|date:"Y-m-d" }}" required="required" disabled>
+                                </td>
+
+                                <td>
+                                    <text hidden>{{ rec.remark|title }}</text>
+                                    <textarea class="form-control data remark" name="remark_saved"
+                                              id="remark{{ forloop.counter }}"
+                                              required
+                                              title='Please enter remark' disabled>{{ rec.remark|title }}
+
+                                </textarea>
+                                </td>
+
+                                <td>
+                                    <span type="button" name="updt" id="update{{ forloop.counter }}"
+                                          class=" update btn green glyphicon glyphicon-ok" style="display:none;">
+                                    </span>
+                                        <span type="button" name="edit" id="edit{{ forloop.counter }}"
+                                              class=" edit btn blue glyphicon glyphicon-pencil">
+                                    </span>
+                                        <span type="button" name="delete" id="delete{{ forloop.counter }}"
+                                              class=" delete btn red glyphicon glyphicon-trash">
+                                    </span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
         </div>
     </div>
 {% endblock %}
