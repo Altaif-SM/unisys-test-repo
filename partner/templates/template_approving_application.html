@@ -171,9 +171,10 @@
                         return false;
                     }
 
-                    var favorite = []
+                    var favorite = [];
                     if ($(this).attr('id') == 'First Interview') {
                         $('#id_accept_student_model').modal();
+                        return false;
                     }
                     else {
                         if (!checked)
@@ -336,18 +337,12 @@
                                         <i class="fa fa-angle-down"></i>
                                     </a>
                                     <ul class="dropdown-menu pull-right" id="action">
-                                        <li><a href="javascript:;" class="action" id="First Interview"> First
-                                            Interview</a></li>
-                                        <li><a href="javascript:;" class="action" id="First Interview attended">First
-                                            Interview attended</a></li>
-                                        <li><a href="javascript:;" class="action" id="First Interview approval">First
-                                            Interview approval</a></li>
-                                        <li><a href="javascript:;" class="action" id="Psychometric Test">Psychometric
-                                            Test</a></li>
-                                        <li><a href="javascript:;" class="action" id="Second Interview attended">Second
-                                            Interview attended</a></li>
-                                        <li><a href="javascript:;" class="action" id="Second Interview approval">Second
-                                            Interview approval</a></li>
+                                        <li><a href="javascript:;" class="action" id="First Interview"> FirstInterview</a></li>
+                                        <li><a href="javascript:;" class="action" id="First Interview attended">First Interview attended</a></li>
+                                        <li><a href="javascript:;" class="action" id="First Interview approval">First Interview approval</a></li>
+                                        <li><a href="javascript:;" class="action" id="Psychometric Test">Psychometric Test</a></li>
+                                        <li><a href="javascript:;" class="action" id="Second Interview attended">Second Interview attended</a></li>
+                                        <li><a href="javascript:;" class="action" id="Second Interview approval">Second Interview approval</a></li>
 {#                                        <li><a href="javascript:;" class="action" id="Admin approval">Admin approval</a></li>#}
                                         <li><a href="javascript:;" class="action" id="Reject">Reject</a></li>
                                     </ul>
