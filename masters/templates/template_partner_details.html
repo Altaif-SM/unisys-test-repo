@@ -91,7 +91,7 @@
             <div class="form-body">
 
             <form action="{% url 'masters:partner_all_details_pdf' partner_rec.id %}" id="form_pdf_id"
-                          class="form-horizontal"
+                          class="form-horizontal" target="_blank"
                           method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="row" style="margin-top: -20px">

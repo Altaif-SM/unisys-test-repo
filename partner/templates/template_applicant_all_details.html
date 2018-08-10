@@ -94,7 +94,7 @@
                     <i class="icon-settings font-red"></i>
                     <span class="caption-subject font-red sbold uppercase"> PERSONAL INFO</span>
                     <form action="{% url 'partner:application_all_details_pdf' application_obj.id %}" id="form_pdf_id"
-                          class="form-horizontal"
+                          class="form-horizontal"target="_blank"
                           method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                     </form>
