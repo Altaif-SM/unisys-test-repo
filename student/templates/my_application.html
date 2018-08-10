@@ -31,6 +31,10 @@
     <script>
         window.onload = function () {
             $(document).ready(function () {
+                 $(".pdf_class").on('click', function (e) {
+                window.open($(this).attr("data-href"), '_blank');
+            });
+
                 $(document).on("click", "#save_form", function () {
                     $('#id_accept_student_model').modal();
                     {#$("#form_sample_1").submit();#}
@@ -89,7 +93,7 @@
                 {% else %}
                     <button type="button"
                             onclick="window.location='{% url 'partner:application_all_details_pdf' application_obj.id %}'"
-                            class="btn green" id="" style="margin-left: 800px">See as PDF
+                            class="btn green pdf_class" id=""style="margin-left: 800px">See as PDF
                     </button>
                 {% endif %}
             </div>

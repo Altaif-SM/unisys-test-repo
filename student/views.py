@@ -1160,21 +1160,25 @@ def save_update_applicant_scholarship_about_yourself_info(request):
 
 
 def my_application(request):
-    application_obj = request.user.get_application
-    siblings_obj = application_obj.sibling_applicant_rel.all()
-    qualification_obj = application_obj.academic_applicant_rel.get()
-    english_obj = application_obj.english_applicant_rel.get()
-    curriculum_obj = application_obj.curriculum_applicant_rel.get()
-    applicant_experience_obj = application_obj.applicant_experience_rel.get()
-    scholarship_obj = application_obj.applicant_scholarship_rel.get()
+    try:
+        application_obj = request.user.get_application
+        siblings_obj = application_obj.sibling_applicant_rel.all()
+        qualification_obj = application_obj.academic_applicant_rel.get()
+        english_obj = application_obj.english_applicant_rel.get()
+        curriculum_obj = application_obj.curriculum_applicant_rel.get()
+        applicant_experience_obj = application_obj.applicant_experience_rel.get()
+        scholarship_obj = application_obj.applicant_scholarship_rel.get()
 
-    # path = str(settings.MEDIA_URL) + str('reports/Donors.pdf')
-    # path =str('/home/redbytes/scholarship_proj/scholarship_mgmt/media/reports/Donors.pdf')
-    return render(request, 'my_application.html', {'siblings_obj': siblings_obj, 'application_obj': application_obj,
-                                                   'qualification_obj': qualification_obj, 'english_obj': english_obj,
-                                                   'curriculum_obj': curriculum_obj,
-                                                   'applicant_experience_obj': applicant_experience_obj,
-                                                   'scholarship_obj': scholarship_obj})
+        # path = str(settings.MEDIA_URL) + str('reports/Donors.pdf')
+        # path =str('/home/redbytes/scholarship_proj/scholarship_mgmt/media/reports/Donors.pdf')
+        return render(request, 'my_application.html', {'siblings_obj': siblings_obj, 'application_obj': application_obj,
+                                                       'qualification_obj': qualification_obj, 'english_obj': english_obj,
+                                                       'curriculum_obj': curriculum_obj,
+                                                       'applicant_experience_obj': applicant_experience_obj,
+                                                       'scholarship_obj': scholarship_obj})
+    except Exception as e:
+        messages.warning(request, "Please Fill The Application Form First ... ")
+        return redirect('/')
 
 
 def submit_application(request):

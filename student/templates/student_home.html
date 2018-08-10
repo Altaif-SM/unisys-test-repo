@@ -93,7 +93,7 @@
         </div>
 
         <div class="form-body">
-            <form id="form_sample_1" {% if application %} action="{% url 'partner:application_all_details_pdf' application.id %}" {% endif %} class="form-horizontal" method="POST" enctype="multipart/form-data">
+            <form id="form_sample_1" {% if application %} action="{% url 'partner:application_all_details_pdf' application.id %}" {% endif %} class="form-horizontal" target="_blank" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
 
                 <br>
