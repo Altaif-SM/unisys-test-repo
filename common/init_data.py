@@ -23,5 +23,5 @@ def import_world_all_countries():
 
 
 def load_initial_data():
-    # import_years()
+    import_years()
     import_world_all_countries()
