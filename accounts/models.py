@@ -164,14 +164,14 @@ class User(AbstractUser):
         try:
             return self.student_user_rel.get().student_applicant_rel.get(year__active_year=True).application_id
         except:
-            return ''
+            return None
 
     @property
     def get_application(self):
         try:
             return self.student_user_rel.get().student_applicant_rel.get(year__active_year=True)
         except:
-            return ''
+            return None
 
     @property
     def get_student_application(self):

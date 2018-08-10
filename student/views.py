@@ -1178,7 +1178,7 @@ def my_application(request):
                                                        'scholarship_obj': scholarship_obj})
     except Exception as e:
         messages.warning(request, "Please Fill The Application Form First ... ")
-        return redirect('/')
+    return redirect('/')
 
 
 def submit_application(request):
