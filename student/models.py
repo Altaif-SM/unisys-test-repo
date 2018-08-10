@@ -152,8 +152,9 @@ class ApplicationDetails(BaseModel):
     wife_name = models.CharField(max_length=255, blank=True, null=True)
     wife_income = models.CharField(max_length=10, blank=True, null=True)
     wife_pay_slip = models.FileField(upload_to=content_file_name_report)
-    wife_nationality = models.ForeignKey('masters.CountryDetails', null=True, related_name='wife_nationality_rel',
-                                         on_delete=models.PROTECT)
+    wife_nationality = models.CharField(max_length=50, blank=True, null=True)
+    # wife_nationality = models.ForeignKey('masters.CountryDetails', null=True, related_name='wife_nationality_rel',on_delete=models.PROTECT)
+
     wife_occupation = models.CharField(max_length=255, blank=True, null=True)
     wife_telephone_home = models.CharField(max_length=16, blank=True, null=True)
     wife_dob = models.DateField(blank=True, null=True)
@@ -162,9 +163,9 @@ class ApplicationDetails(BaseModel):
     father_name = models.CharField(max_length=255, blank=True, null=True)
     father_income = models.CharField(max_length=10, blank=True, null=True)
     father_pay_slip = models.FileField(upload_to=content_file_name_report)
-    father_nationality = models.ForeignKey('masters.CountryDetails', blank=True, null=True,
-                                           related_name='father_nationality_rel',
-                                           on_delete=models.PROTECT)
+    father_nationality = models.CharField(max_length=50, blank=True, null=True)
+    # father_nationality = models.ForeignKey('masters.CountryDetails', blank=True, null=True, related_name='father_nationality_rel', on_delete=models.PROTECT)
+
     father_occupation = models.CharField(max_length=255, blank=True, null=True)
     father_telephone_home = models.CharField(max_length=16, blank=True, null=True)
     father_dob = models.DateField(blank=True, null=True)
@@ -173,8 +174,9 @@ class ApplicationDetails(BaseModel):
     mother_name = models.CharField(max_length=255, blank=True, null=True)
     mother_income = models.CharField(max_length=10, blank=True, null=True)
     mother_pay_slip = models.FileField(upload_to=content_file_name_report)
-    mother_nationality = models.ForeignKey('masters.CountryDetails', null=True, related_name='mother_nationality_rel',
-                                           on_delete=models.PROTECT)
+    mother_nationality = models.CharField(max_length=50, blank=True, null=True)
+    # mother_nationality = models.ForeignKey('masters.CountryDetails', null=True, related_name='mother_nationality_rel',on_delete=models.PROTECT)
+
     mother_occupation = models.CharField(max_length=255, blank=True, null=True)
     mother_telephone_home = models.CharField(max_length=16, blank=True, null=True)
     mother_dob = models.DateField(blank=True, null=True)
@@ -199,11 +201,14 @@ class ApplicationDetails(BaseModel):
 
     interview_time = models.CharField(max_length=30, blank=True, null=True)
     interview_date = models.CharField(max_length=50, blank=True, null=True)
-    interview_venue = models.CharField(max_length=100, blank=True, null=True)
+    interview_venue = models.CharField(max_length=500, blank=True, null=True)
 
     personal_info_flag = models.BooleanField(default=True)
     # family_info_flag = models.BooleanField(default=False)
     # mother_sibling_info_flag = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ('-created_on',)
 
     def get_full_name(self):
         """

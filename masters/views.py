@@ -1189,25 +1189,34 @@ from django.template.loader import get_template
 import datetime
 from xhtml2pdf import pisa
 
+# from io import StringIO
 
 def generate_PDF(request):
-    year_recs = YearDetails.objects.all()
-    curriculum_obj = ''
-    experience_obj = ''
 
+    program_list = DevelopmentProgram.objects.all()[0:4]
 
     template = get_template('development_program_pdf_template.html')
-    Context = ({})
-    html = template.render(Context)
+
+    arr = []
 
     file = open('test.pdf', "w+b")
-    pisaStatus = pisa.CreatePDF(html.encode('utf-8'), dest=file,
-            encoding='utf-8')
+    # for rec in program_list:
+
+    # program_rec = DevelopmentProgram.objects.get(id=rec)
+
+    Context = ({'x':16,'program_list':program_list})
+    html = template.render(Context)
+
+    # pisa.pisaDocument(StringIO.StringIO(html), dest=file)
+
+
+    pisa.CreatePDF(html.encode('utf-8'), dest=file, encoding='utf-8')
 
     file.seek(0)
     pdf = file.read()
+    arr.append(pdf)
     file.close()
-    return HttpResponse(pdf, 'application/pdf')
+    return HttpResponse([obj for obj in arr], 'application/pdf')
 
 
 def get_table_data(request):

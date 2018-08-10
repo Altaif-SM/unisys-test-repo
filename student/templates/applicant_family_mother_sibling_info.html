@@ -33,6 +33,7 @@
 
 
             $(document).ready(function () {
+                $("#mother_nationality").chosen();
 
                 {% comment %}$(document).on("change", ".doc", function (e) {
                     var files = !!this.files ? this.files : [];
@@ -278,12 +279,12 @@
                             <div class="">
                                 <label class="col-md-2 control-label">Country:</label>
                                 <div class="col-md-2">
-                                    <select id='country' title="Select Country" name="mother_nationality"
+                                    <select id='mother_nationality' title="Select Country" name="mother_nationality"
                                             class="form-control">
                                         {% if application_obj.mother_nationality %}
                                             <option style="display:none" selected="selected"
-                                                    value="{{ application_obj.mother_nationality.id }}"
-                                                    value="">{{ application_obj.mother_nationality.country_name|title }}</option>
+                                                    value="{{ application_obj.mother_nationality }}"
+                                                    value="">{{ application_obj.mother_nationality|title }}</option>
                                         {% else %}
                                             <option style="display:none" selected="selected" id="" value="">Please
                                                 Select
@@ -291,7 +292,7 @@
                                         {% endif %}
 
                                         {% for rec in country_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
+                                            <option value='{{ rec.country_name }}'>{{ rec.country_name|title }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>

@@ -3,7 +3,7 @@
 
 {% block styleBlock %}
     <style type="text/css">
-                .s-switch input[type='checkbox'] {
+        .s-switch input[type='checkbox'] {
             display: none
         }
 
@@ -84,9 +84,9 @@
                 {{ raw_list }}//[50, 90, 60, 40, 30, 100, 70, 50];
 
                 var chartData = [{
-                        AttendanceStatus: "Applicants",
-                        categrory: data[0],
-                    },
+                    AttendanceStatus: "Applicants",
+                    categrory: data[0],
+                },
                     {
                         AttendanceStatus: "Interview1",
                         categrory: data[1],
@@ -247,7 +247,7 @@
                     }
                 });
 
-                 $("#id_program_switch").Sswitch({
+                $("#id_program_switch").Sswitch({
                     onSwitchChange: function (event) {
                         var mode = $(this).prop('checked');
                         toggle_switch('is_program_switch', mode);
@@ -259,8 +259,8 @@
                         type: "POST",
                         cache: false,
                         url: '/accounts/update_switch/',
-                        data:{
-                            'switch':switch_mode,
+                        data: {
+                            'switch': switch_mode,
                             'switch_type': switch_type,
                             'csrfmiddlewaretoken': '{{ csrf_token }}'
                         },
@@ -324,69 +324,81 @@
                     <!-- END PORTLET-->
                 </div>
 
+                {% if user.is_super_admin %}
+                    <div class="col-md-4 col-sm-4" style="float: right;">
+                        <!-- BEGIN PORTLET-->
+                        <div class="portlet light ">
+                            <div class="portlet-title">
+                                <div class="caption">
+                                    <i class="icon-bar-chart font-dark hide"></i>
+                                    <span class="caption-subject font-dark bold uppercase">Quick Controls </span>
+                                </div>
+                            </div>
+                            <div class="portlet-body">
 
-                <div class="col-md-4 col-sm-4" style="float: right;">
-                    <!-- BEGIN PORTLET-->
-                    <div class="portlet light ">
-                        <div class="portlet-title">
-                            <div class="caption">
-                                <i class="icon-bar-chart font-dark hide"></i>
-                                <span class="caption-subject font-dark bold uppercase">Quick Controls </span>
+
+                                <div class="row ">
+                                    <label class="col-md-3 control-label">Registration:</label>
+                                    <div class="col-md-offset-6" style="">
+                                        <input type="checkbox" id="id_registration_switch"
+                                                {% if user.registration_switch == True %} checked {% endif %}/>
+                                    </div>
+                                </div>
+                                <br>
+
+                                <div class="row">
+                                    <label class="col-md-3 control-label">Submission:</label>
+                                    <div class="col-md-offset-6">
+                                        <input type="checkbox" id="id_submission_switch"
+                                                {% if user.submission_switch == True %} checked {% endif %}/>
+                                    </div>
+                                </div>
+                                <br>
+
+                                <div class="row">
+                                    <label class="col-md-3 control-label">Psyc Test:</label>
+                                    <div class="col-md-offset-6">
+                                        <input type="checkbox" id="id_psyc_switch" {% if user.psyc_switch == True %}
+                                               checked {% endif %}/>
+                                    </div>
+                                </div>
+                                <br>
+
+                                <div class="row">
+                                    <label class="col-md-3 control-label">Agreements:</label>
+                                    <div class="col-md-offset-6">
+                                        <input type="checkbox" id="id_agreements_switch"
+                                                {% if user.agreements_switch == True %} checked {% endif %}/>
+                                    </div>
+                                </div>
+                                <br>
+
+                                <div class="row">
+                                    <label class="col-md-3 control-label">Semester:</label>
+                                    <div class="col-md-offset-6">
+                                        <input type="checkbox" id="id_semester_switch"
+                                                {% if user.semester_switch == True %} checked {% endif %}/>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <label class="col-md-3 control-label">Dev Program:</label>
+                                    <div class="col-md-offset-6">
+                                        <input type="checkbox" id="id_program_switch"
+                                                {% if user.program_switch == True %} checked {% endif %}/>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
-                        <div class="portlet-body">
-
-
-                            <div class="row ">
-                                <label class="col-md-3 control-label">Registration:</label>
-                                <div class="col-md-offset-6" style="">
-                                    <input type="checkbox" id="id_registration_switch" {% if user.registration_switch == True %} checked {% endif %}/>
-                                </div>
-                            </div><br>
-
-                            <div class="row">
-                                <label class="col-md-3 control-label">Submission:</label>
-                                <div class="col-md-offset-6">
-                                    <input type="checkbox" id="id_submission_switch" {% if user.submission_switch == True %} checked {% endif %}/>
-                                </div>
-                            </div><br>
-
-                            <div class="row">
-                                <label class="col-md-3 control-label">Psyc Test:</label>
-                                <div class="col-md-offset-6">
-                                    <input type="checkbox" id="id_psyc_switch" {% if user.psyc_switch == True %} checked {% endif %}/>
-                                </div>
-                            </div><br>
-
-                            <div class="row">
-                                <label class="col-md-3 control-label">Agreements:</label>
-                                <div class="col-md-offset-6">
-                                    <input type="checkbox" id="id_agreements_switch" {% if user.agreements_switch == True %} checked {% endif %}/>
-                                </div>
-                            </div><br>
-
-                            <div class="row">
-                                <label class="col-md-3 control-label">Semester:</label>
-                                <div class="col-md-offset-6">
-                                    <input type="checkbox" id="id_semester_switch" {% if user.semester_switch == True %} checked {% endif %}/>
-                                </div>
-                            </div>
-                            <br>
-                            <div class="row">
-                                <label class="col-md-3 control-label">Dev Program:</label>
-                                <div class="col-md-offset-6">
-                                    <input type="checkbox" id="id_program_switch" {% if user.program_switch == True %} checked {% endif %}/>
-                                </div>
-                            </div>
-
-                        </div>
+                        <!-- END PORTLET-->
                     </div>
-                    <!-- END PORTLET-->
-                </div>
+                {% endif %}
 
             </div>
 
-            <div class="row">
+            {% if user.is_super_admin %}
+                <div class="row">
                 <div class="col-md-6 col-sm-6">
                     <div class="portlet light ">
                         <div class="portlet-body">
@@ -395,6 +407,7 @@
                     </div>
                 </div>
 
+
                 <div class="col-md-6 col-sm-6">
                     <div class="portlet light ">
                         <div class="portlet-body">
@@ -402,6 +415,7 @@
                         </div>
                     </div>
                 </div>
+            {% endif %}
 
             </div>
 

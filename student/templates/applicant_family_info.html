@@ -32,6 +32,8 @@
         window.onload = function () {
 
             $(document).ready(function () {
+                $("#wife_nationality").chosen();
+                $("#father_nationality").chosen();
 
                 $(document).on("click", ".remove_doc", function (e) {
                     var parent_id = $(this).closest('div').attr('id');
@@ -221,8 +223,8 @@
                                             class="form-control">
                                         {% if application_obj.wife_nationality %}
                                             <option style="display:none" selected="selected"
-                                                    value="{{ application_obj.wife_nationality.id }}"
-                                                    value="">{{ application_obj.wife_nationality.country_name|title }}</option>
+                                                    value="{{ application_obj.wife_nationality }}"
+                                                    value="">{{ application_obj.wife_nationality|title }}</option>
                                         {% else %}
                                             <option style="display:none" selected="selected" id="" value="">Please
                                                 Select
@@ -230,7 +232,7 @@
                                         {% endif %}
 
                                         {% for rec in country_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
+                                            <option value='{{ rec.country_name }}'>{{ rec.country_name|title }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -355,8 +357,8 @@
                                             class="form-control">
                                         {% if application_obj.father_nationality %}
                                             <option style="display:none" selected="selected"
-                                                    value="{{ application_obj.father_nationality.id }}"
-                                                    value="">{{ application_obj.father_nationality.country_name|title }}</option>
+                                                    value="{{ application_obj.father_nationality }}"
+                                                    value="">{{ application_obj.father_nationality|title }}</option>
                                         {% else %}
                                             <option style="display:none" selected="selected" id="" value="">Please
                                                 Select
@@ -364,7 +366,7 @@
                                         {% endif %}
 
                                         {% for rec in country_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
+                                            <option value='{{ rec.country_name }}'>{{ rec.country_name|title }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>

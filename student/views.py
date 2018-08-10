@@ -284,7 +284,7 @@ def save_update_applicant_personal_info(request):
 
 
 def applicant_family_info(request):
-    country_recs = CountryDetails.objects.all()
+    country_recs = AllCountries.objects.all()
     path = ''
 
     application_obj = ''
@@ -326,7 +326,7 @@ def save_update_applicant_family_info(request):
                         wife_name=request.POST['wife_name'],
                         wife_income=request.POST[
                             'wife_income'],
-                        wife_nationality_id=request.POST[
+                        wife_nationality=request.POST[
                             'wife_nationality'],
                         wife_occupation=request.POST[
                             'wife_occupation'],
@@ -340,7 +340,7 @@ def save_update_applicant_family_info(request):
                             'father_name'],
                         father_income=request.POST[
                             'father_income'],
-                        father_nationality_id=request.POST[
+                        father_nationality=request.POST[
                             'father_nationality'],
                         father_occupation=request.POST[
                             'father_occupation'],
@@ -388,7 +388,7 @@ def save_update_applicant_family_info(request):
 
 
 def applicant_family_mother_sibling_info(request):
-    country_recs = CountryDetails.objects.all()
+    country_recs = AllCountries.objects.all()
     application_obj = ''
     sibling_obj = ''
 
@@ -423,7 +423,7 @@ def save_update_applicant_family_mother_sibling_info(request):
                         mother_name=request.POST['mother_name'],
                         mother_income=request.POST[
                             'mother_income'],
-                        mother_nationality_id=request.POST[
+                        mother_nationality=request.POST[
                             'mother_nationality'],
                         mother_occupation=request.POST[
                             'mother_occupation'],

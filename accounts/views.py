@@ -10,16 +10,20 @@ from accounts.forms import loginForm, signUpForm
 from accounts.service import *
 from accounts.models import UserRole
 from student.models import StudentDetails, ApplicationDetails, ScholarshipSelectionDetails
-from masters.models import AddressDetails, CountryDetails, ScholarshipDetails, GuardianDetails, EmailTemplates,YearDetails
+from masters.models import AddressDetails, CountryDetails, ScholarshipDetails, GuardianDetails, EmailTemplates, \
+    YearDetails
 from partner.models import PartnerDetails
 from donor.models import DonorDetails
 import json
-from common.utils import application_notification,get_current_year,send_email_with_template,send_email_to_applicant
+from common.utils import application_notification, get_current_year, send_email_with_template, send_email_to_applicant
 from accounts.service import UserService
+
+
 # Create your views here.
 
 def index(request):
     return render(request, "index.html")
+
 
 @user_login_required
 def home(request):
@@ -28,51 +32,157 @@ def home(request):
 
         raw_list = []
 
-        raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=False,
-                                                          second_interview_approval=False, psychometric_test=False,
-                                                          admin_approval=False, is_sponsored=False).count())
-        raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
-                                                          second_interview_approval=False, psychometric_test=False,
-                                                          admin_approval=False, is_sponsored=False).count())
-        raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
-                                                          second_interview_approval=True, psychometric_test=False,
-                                                          admin_approval=False, is_sponsored=False).count())
-        raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
-                                                          second_interview_approval=True, psychometric_test=True,
-                                                          admin_approval=False, is_sponsored=False).count())
-        raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
-                                                          second_interview_approval=True, psychometric_test=True,
-                                                          admin_approval=True, is_sponsored=False).count())
-        raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
-                                                          second_interview_approval=True, psychometric_test=True,
-                                                          admin_approval=True, is_sponsored=True).count())
-        raw_list.append(ApplicationDetails.objects.filter().count())
+        if request.user.is_super_admin():
 
-        scholarship_list = []
-        country_list = []
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=False,
+                                                              second_interview_approval=False, psychometric_test=False,
+                                                              admin_approval=False, is_sponsored=False).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
+                                                              second_interview_approval=False, psychometric_test=False,
+                                                              admin_approval=False, is_sponsored=False).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
+                                                              second_interview_approval=True, psychometric_test=False,
+                                                              admin_approval=False, is_sponsored=False).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
+                                                              second_interview_approval=True, psychometric_test=True,
+                                                              admin_approval=False, is_sponsored=False).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
+                                                              second_interview_approval=True, psychometric_test=True,
+                                                              admin_approval=True, is_sponsored=False).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
+                                                              second_interview_approval=True, psychometric_test=True,
+                                                              admin_approval=True, is_sponsored=True).count())
+            raw_list.append(ApplicationDetails.objects.filter().count())
 
-        for scholarship in ScholarshipDetails.objects.all():
-            raw_dict = {}
-            raw_dict['scholarship_name'] = scholarship.scholarship_name
-            raw_dict['scholarship_count'] = ApplicationDetails.objects.filter(applicant_scholarship_rel__scholarship=scholarship).count()
+            scholarship_list = []
+            country_list = []
 
-            scholarship_list.append(raw_dict)
+            for scholarship in ScholarshipDetails.objects.all():
+                raw_dict = {}
+                raw_dict['scholarship_name'] = scholarship.scholarship_name
+                raw_dict['scholarship_count'] = ApplicationDetails.objects.filter(
+                    applicant_scholarship_rel__scholarship=scholarship).count()
 
-        for country in CountryDetails.objects.all():
-            raw_dict = {}
-            raw_dict['country_name'] = country.country_name
-            raw_dict['country_count'] = ApplicationDetails.objects.filter(address__country=country).count()
+                scholarship_list.append(raw_dict)
 
-            country_list.append(raw_dict)
+            for country in CountryDetails.objects.all():
+                raw_dict = {}
+                raw_dict['country_name'] = country.country_name
+                raw_dict['country_count'] = ApplicationDetails.objects.filter(address__country=country).count()
+
+                country_list.append(raw_dict)
+
+        elif request.user.is_partner():
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=False,
+                                                              second_interview_approval=False, psychometric_test=False,
+                                                              admin_approval=False, is_sponsored=False,
+                                                              nationality=request.user.partner_user_rel.get().address.country,
+                                                              year=get_current_year(request)).count())
+
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
+                                                              second_interview_approval=False, psychometric_test=False,
+                                                              admin_approval=False, is_sponsored=False,
+                                                              nationality=request.user.partner_user_rel.get().address.country,
+                                                              year=get_current_year(request)).count())
+
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
+                                                              second_interview_approval=True, psychometric_test=False,
+                                                              admin_approval=False, is_sponsored=False,
+                                                              nationality=request.user.partner_user_rel.get().address.country,
+                                                              year=get_current_year(request)).count())
+
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
+                                                              second_interview_approval=True, psychometric_test=True,
+                                                              admin_approval=False, is_sponsored=False,
+                                                              nationality=request.user.partner_user_rel.get().address.country,
+                                                              year=get_current_year(request)).count())
+
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
+                                                              second_interview_approval=True, psychometric_test=True,
+                                                              admin_approval=True, is_sponsored=False,
+                                                              nationality=request.user.partner_user_rel.get().address.country,
+                                                              year=get_current_year(request)).count())
+
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
+                                                              second_interview_approval=True, psychometric_test=True,
+                                                              admin_approval=True, is_sponsored=True,
+                                                              nationality=request.user.partner_user_rel.get().address.country,
+                                                              year=get_current_year(request)).count())
+
+            raw_list.append(ApplicationDetails.objects.filter(nationality=request.user.partner_user_rel.get().address.country,
+                            year=get_current_year(request)).count())
+
+            scholarship_list = []
+            country_list = []
+
+            for scholarship in ScholarshipDetails.objects.all():
+                raw_dict = {}
+                raw_dict['scholarship_name'] = scholarship.scholarship_name
+                raw_dict['scholarship_count'] = ApplicationDetails.objects.filter(
+                    applicant_scholarship_rel__scholarship=scholarship,
+                    nationality=request.user.partner_user_rel.get().address.country,
+                    year=get_current_year(request)).count()
+
+                scholarship_list.append(raw_dict)
+
+            for country in CountryDetails.objects.all():
+                raw_dict = {}
+                raw_dict['country_name'] = country.country_name
+                raw_dict['country_count'] = ApplicationDetails.objects.filter(address__country=country,
+                                                                              nationality=request.user.partner_user_rel.get().address.country,
+                                                                              year=get_current_year(request)).count()
+
+                country_list.append(raw_dict)
+
+        else:
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=False,
+                                                              second_interview_approval=False, psychometric_test=False,
+                                                              admin_approval=False, is_sponsored=False).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
+                                                              second_interview_approval=False, psychometric_test=False,
+                                                              admin_approval=False, is_sponsored=False).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
+                                                              second_interview_approval=True, psychometric_test=False,
+                                                              admin_approval=False, is_sponsored=False).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
+                                                              second_interview_approval=True, psychometric_test=True,
+                                                              admin_approval=False, is_sponsored=False).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
+                                                              second_interview_approval=True, psychometric_test=True,
+                                                              admin_approval=True, is_sponsored=False).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
+                                                              second_interview_approval=True, psychometric_test=True,
+                                                              admin_approval=True, is_sponsored=True).count())
+            raw_list.append(ApplicationDetails.objects.filter().count())
+
+            scholarship_list = []
+            country_list = []
+
+            for scholarship in ScholarshipDetails.objects.all():
+                raw_dict = {}
+                raw_dict['scholarship_name'] = scholarship.scholarship_name
+                raw_dict['scholarship_count'] = ApplicationDetails.objects.filter(
+                    applicant_scholarship_rel__scholarship=scholarship).count()
+
+                scholarship_list.append(raw_dict)
+
+            for country in CountryDetails.objects.all():
+                raw_dict = {}
+                raw_dict['country_name'] = country.country_name
+                raw_dict['country_count'] = ApplicationDetails.objects.filter(address__country=country).count()
+
+                country_list.append(raw_dict)
 
         # if user.is_superuser:
-        return render(request, "template_admin_dashboard.html", {'user': user, 'raw_list': raw_list, 'scholarship_list': json.dumps(scholarship_list), 'country_list': json.dumps(country_list)})
-
+        return render(request, "template_admin_dashboard.html",
+                      {'user': user, 'raw_list': raw_list, 'scholarship_list': json.dumps(scholarship_list),
+                       'country_list': json.dumps(country_list)})
 
 
 def template_signup(request):
     form = signUpForm()
     return render(request, 'signup.html', {'form': form})
+
 
 def template_signin(request):
     country_list = CountryDetails.objects.all()
@@ -84,6 +194,7 @@ def template_signin(request):
 
     # return render(request, "template_login.html", {'form': form})
     return render(request, "template_login.html", {'form': form, 'country_list': country_list})
+
 
 @transaction.atomic
 def user_signup(request):
@@ -97,13 +208,13 @@ def user_signup(request):
                     country = CountryDetails.objects.get(country_name=request.POST['country'])
                     address = AddressDetails.objects.create(country=country)
                     if request.POST['role'] == "Student":
-                        student_obj = StudentDetails.objects.create(user=user,address=address)
+                        student_obj = StudentDetails.objects.create(user=user, address=address)
 
                         try:
                             email_rec = EmailTemplates.objects.get(template_for='Student Signup', is_active=True)
                             context = {'first_name': student_obj.user.first_name}
                             send_email_with_template(student_obj, context, email_rec.subject, email_rec.email_body,
-                                                     request,True)
+                                                     request, True)
                         except:
                             subject = 'Signup Completed'
                             message = 'Your signup completed in NAMA.'
@@ -111,14 +222,14 @@ def user_signup(request):
                                                     student_obj.user.first_name)
 
                     if request.POST['role'] == "Partner":
-                        PartnerDetails.objects.create(user=user,address=address)
+                        PartnerDetails.objects.create(user=user, address=address)
 
                     if request.POST['role'] == "Parent":
-                        GuardianDetails.objects.create(user=user,address=address)
+                        GuardianDetails.objects.create(user=user, address=address)
 
                     if request.POST['role'] == "Donor":
                         organisation = request.POST.get('organisation')
-                        DonorDetails.objects.create(user=user,address=address, organisation=organisation)
+                        DonorDetails.objects.create(user=user, address=address, organisation=organisation)
 
             except Exception as e:
                 messages.success(request, str(e))
@@ -132,12 +243,13 @@ def user_signup(request):
         if request.POST.get('admin_page'):
             return redirect('/accounts/template_manage_user/')
         return redirect('/')
-            # return render(request, 'template_manage_user.html', {'form': signup_form})
+        # return render(request, 'template_manage_user.html', {'form': signup_form})
         # return render(request, 'template_login.html', {'form': signup})
+
 
 # @csrf_exempt
 def user_signin(request):
-    form_data=request.POST
+    form_data = request.POST
     if request.POST:
         form = loginForm(request.POST or None)
         request.session['form_data'] = form_data
@@ -147,7 +259,7 @@ def user_signin(request):
         except:
             request.session['selected_year'] = ''
     else:
-        form=loginForm(request.session.get('form_data'))
+        form = loginForm(request.session.get('form_data'))
 
     if form.is_valid():
         user = form.login(request)
@@ -160,11 +272,11 @@ def user_signin(request):
             messages.success(request, "Enter Valid User Name and Password.")
             return redirect('/')
 
+
 @user_login_required
 def user_signout(request):
     logout(request)
     return redirect('/')
-
 
 
 def template_manage_user(request):
@@ -188,7 +300,8 @@ def update_switch(request):
                 User.objects.filter().update(psyc_switch=(json.loads(val_dict['switch'])))
 
                 if val_dict['switch'] == 'true':
-                    application_ids = ApplicationDetails.objects.filter(year=get_current_year(),is_submitted=True).values_list('id')
+                    application_ids = ApplicationDetails.objects.filter(year=get_current_year(),
+                                                                        is_submitted=True).values_list('id')
                     application_notification(application_ids,
                                              'Now you can take your psychometric test.')
 
@@ -199,6 +312,6 @@ def update_switch(request):
                 User.objects.filter().update(semester_switch=(json.loads(val_dict['switch'])))
 
             if 'switch_type' in val_dict and val_dict['switch_type'] == 'is_program_switch':
-                            User.objects.filter().update(program_switch=(json.loads(request.POST['switch'])))
+                User.objects.filter().update(program_switch=(json.loads(request.POST['switch'])))
 
     return HttpResponse(json.dumps({'flag': json.loads(request.POST['switch'])}))

@@ -8,7 +8,6 @@ from django.http import JsonResponse
 from common.utils import *
 from django.db.models import Max, Q
 
-
 # Create your views here.
 from student.views import applicant_academic_english_qualification
 
@@ -30,8 +29,8 @@ def template_registered_application(request):
         university_recs = UniversityDetails.objects.all()
     else:
         applicant_recs = ApplicationDetails.objects.filter(
-            nationality=request.user.partner_user_rel.get().address.country,
-            is_submitted=True, year=get_current_year(request))
+            nationality=request.user.partner_user_rel.get().address.country,year=get_current_year(request),
+            is_submitted=True)
         university_recs = UniversityDetails.objects.filter(country=request.user.partner_user_rel.get().address.country)
     country_recs = CountryDetails.objects.all()
     degree_recs = DegreeDetails.objects.all()
@@ -434,7 +433,11 @@ def change_application_status(request):
             application_obj = ApplicationDetails.objects.get(id=application)
 
             if application_obj.application_rejection:
-                continue
+                if request.user.is_partner():
+                    continue
+                else:
+                    application_obj.application_rejection = False
+                    application_obj.save()
 
             if interview_type == 'First Interview':
 
@@ -529,7 +532,11 @@ def change_application_status(request):
                                                      request)
                         except:
                             subject = 'First Interview Approval'
-                            message = 'You have cleared the first round of interview. Please Upload the Psychometric test result. For test please visit at https://www.surveymonkey.com/ and perform test.'
+                            message = 'Your first interview has been approved which was held on ' + str(
+                                application_obj.interview_time) + ' - ' + str(
+                                application_obj.interview_date) + ' - ' + str(
+                                application_obj.interview_venue) + '. Congratualtions!!!. \n \n Please Upload the Psychometric test result. For test please visit at https://www.surveymonkey.com/ and perform test.'
+                            # message = 'Your first interview has been approved which was held on . Please Upload the Psychometric test result. For test please visit at https://www.surveymonkey.com/ and perform test.'
                             send_email_to_applicant(request.user.email, application_obj.email, subject, message,
                                                     application_obj.first_name)
 
@@ -558,7 +565,8 @@ def change_application_status(request):
                             try:
                                 email_rec = EmailTemplates.objects.get(template_for='Psychometric Test', is_active=True)
                                 context = {'first_name': application_obj.first_name}
-                                send_email_with_template(application_obj, context, email_rec.subject, email_rec.email_body,
+                                send_email_with_template(application_obj, context, email_rec.subject,
+                                                         email_rec.email_body,
                                                          request)
                             except:
                                 subject = 'Psychometric Test Update'
@@ -1056,6 +1064,9 @@ def filter_application_status(request):
             elif application_status == 'Admin approval':
                 applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, admin_approval=True,
                                                                    year=get_current_year(request))
+            elif application_status == 'Rejected':
+                applicant_recs = ApplicationDetails.objects.filter(application_rejection=True,
+                                                                   year=get_current_year(request))
             else:
                 applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, year=get_current_year(request))
 
@@ -1095,6 +1106,11 @@ def filter_application_status(request):
                 applicant_recs = ApplicationDetails.objects.filter(
                     nationality=request.user.partner_user_rel.get().address.country,
                     is_submitted=True, admin_approval=True, year=get_current_year(request))
+
+            elif application_status == 'Rejected':
+                applicant_recs = ApplicationDetails.objects.filter(application_rejection=True,
+                                                                   year=get_current_year(request),
+                                                                   nationality=request.user.partner_user_rel.get().address.country, )
             else:
                 applicant_recs = ApplicationDetails.objects.filter(
                     nationality=request.user.partner_user_rel.get().address.country,

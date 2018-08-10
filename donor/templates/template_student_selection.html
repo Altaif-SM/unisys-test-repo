@@ -89,11 +89,11 @@
                       action="{% url 'donor:filter_student_selection' %}">
                     {% csrf_token %}
 
-                    <div class="row">
+                    {% comment %}<div class="row">
                         <div class="col-md-offset-11">
                             <button type="submit" class="btn green" id="save" style="">Filter</button>
                         </div>
-                    </div>
+                    </div>{% endcomment %}
 
                     <div class="row">
                         <div class="">
@@ -103,7 +103,8 @@
                                     <th style="display: none"></th>
                                     <th>Student Name</th>
                                     <th>
-                                        <select id='id_nationality' title="Select Nationality"
+                                        Nationality
+                                        {% comment %}<select id='id_nationality' title="Select Nationality"
                                                 name="nationality"
                                                 class="form-control">
                                             {% if curriculum_obj %}
@@ -119,10 +120,11 @@
                                             {% for rec in country_recs %}
                                                 <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
                                             {% endfor %}
-                                        </select>
+                                        </select>{% endcomment %}
                                     </th>
                                     <th>
-                                        <select id='id_country' title="Select Country"
+                                        Country
+                                        {% comment %}<select id='id_country' title="Select Country"
                                                 name="country"
                                                 class="form-control">
                                             {% if curriculum_obj %}
@@ -137,10 +139,11 @@
                                             {% for rec in country_recs %}
                                                 <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
                                             {% endfor %}
-                                        </select>
+                                        </select>{% endcomment %}
                                     </th>
                                     <th>
-                                        <select id='id_university' title="Select University"
+                                        University
+                                        {% comment %}<select id='id_university' title="Select University"
                                                 name="university"
                                                 class="form-control">
                                             {% if curriculum_obj %}
@@ -156,10 +159,11 @@
                                             {% for rec in university_recs %}
                                                 <option value='{{ rec.id }}'>{{ rec.university_name|title }}</option>
                                             {% endfor %}
-                                        </select>
+                                        </select>{% endcomment %}
                                     </th>
                                     <th>
-                                        <select id='id_degree' title="Select Degree"
+                                        Degree
+                                        {% comment %}<select id='id_degree' title="Select Degree"
                                                 name="degree"
                                                 class="form-control">
                                             {% if curriculum_obj %}
@@ -175,10 +179,11 @@
                                             {% for rec in degree_recs %}
                                                 <option value='{{ rec.id }}'>{{ rec.degree_name|title }}</option>
                                             {% endfor %}
-                                        </select>
+                                        </select>{% endcomment %}
                                     </th>
                                     <th>
-                                        <select id='id_program' title="Select Degree"
+                                        Program
+                                        {% comment %}<select id='id_program' title="Select Degree"
                                                 name="program"
                                                 class="form-control">
                                             {% if curriculum_obj %}
@@ -194,7 +199,7 @@
                                             {% for rec in program_recs %}
                                                 <option value='{{ rec.id }}'>{{ rec.program_name|title }}</option>
                                             {% endfor %}
-                                        </select>
+                                        </select>{% endcomment %}
                                     </th>
                                     <th>Scholarship Fee</th>
                                 </tr>

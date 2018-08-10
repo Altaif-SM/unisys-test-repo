@@ -40,6 +40,16 @@ class CountryDetails(BaseModel):
         return res
 
 
+class AllCountries(BaseModel):
+    country_name = models.CharField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        ordering = ('country_name',)
+
+    def __str__(self):
+        return self.country_name
+
+
 class AddressDetails(BaseModel):
     residential_address = models.CharField(max_length=255, blank=True, null=True)
     sub_locality = models.CharField(max_length=255, blank=True, null=True)

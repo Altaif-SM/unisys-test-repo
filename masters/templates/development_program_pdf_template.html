@@ -1,149 +1,123 @@
-{#{% extends "template_base_page.html" %}#}
-
 {% block content %}
-{#    <div class="portlet light portlet-fit portlet-form ">#}
-{#        <div class="portlet-body">#}
-{#            <div class="form-body">#}
-            {% comment %}<div class="form-body">
-                <div class="row">
-                    <div class="">
-                        <label class="col-md-1 control-label">Name:</label>
-                        <div class="col-md-2">
-                            <p>Name.......</p>
-                        </div>
-                    </div>
-
-                    <div class="">
-                        <label class="col-md-1 control-label">Code:</label>
-                        <div class="col-md-2">
-                            <p>Code.......</p>
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <br>
-                <div class="row">
-                    <div class="">
-                        <label class="col-md-1 control-label">Year:
-
-                        </label>
-                        <div class="col-md-2">
-                            <p>2018-2109</p>
-                        </div>
-                    </div>
-
-                    <div class="">
-                        <label class="col-md-1 control-label">Semester:
-
-                        </label>
-                        <div class="col-md-2">
-                            <p>Session-Sem</p>
-                        </div>
-                    </div>
-
-                    <div class="">
-                        <label class="col-md-1 control-label">Module:</label>
-                        <div class="col-md-2">
-                            <p>Module Program</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="">
-                        <label class="col-md-1 control-label">Duration Day:</label>
-                        <div class="col-md-1">
-                            <p>2</p>
-                        </div>
-                    </div>
-
-                    <div class="">
-                        <label class="col-md-1 control-label">Night:</label>
-                        <div class="col-md-1">
-                            <p>2</p>
-                        </div>
-                    </div>
-
-                    <div class="">
-                        <label class="col-md-1 control-label">Method:</label>
-                        <div class="col-md-2">
-                            <p>Class Program</p>
-                        </div>
-                    </div>
-                </div>
-
-                <br><br>
-
-                <div class="row">
-                    <div class="">
-                        <label class="col-md-1 control-label">Mark:</label>
-                        <div class="col-md-2">
-                            <p>35</p>
-                        </div>
-                    </div>
-
-                    <div class="">
-                        <label class="col-md-2 control-label">Date:</label>
-                        <div class="col-md-2">
-                            <p>12/12/12</p>
-                        </div>
-                    </div>
-                </div>
-
-                <br><br>
-                <div class="row">
-                    <div class="">
-                        <label class="col-md-1 control-label">Activities:</label>
-                        <div class="col-md-6">
-                            <p>Hello friends, Its activities.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <br><br>
-
-                <div class="row">
-                    <div class="">
-                        <label class="col-md-1 control-label">Outcomes:</label>
-                        <div class="col-md-6">
-                            <p>Hello friends, Its Outcomes.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <br><br>
-
-
-                <br><br>
-                <div class="row">
-                    <div class="">
-                        <label class="col-md-1 control-label">Remark:</label>
-                        <div class="col-md-6">
-                            <p>Hello friends, Its Remark.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>{% endcomment %}
-            <br>
-            <br>
-            <br>
-
-
+    {% for program_rec in program_list %}
+        <div style="page-break-after: always;">
             <table>
-                <tbody id="tbody">
+                <tbody>
+                <tr></tr>
+
                 <tr>
-                    <td style="text-align: center">Name: Development Program</td>
-                    <td style="text-align: center">Code: 00C-1231</td>
+                    <td colspan="3">
+                        <hr>
+                    </td>
                 </tr>
-                <br>
+                <tr></tr>
                 <tr>
-                    <td style="text-align: center">Year: 218-2019</td>
-                    <td style="text-align: center">Semester: July-Aug</td>
-                    <td style="text-align: center">Module: Dev-Module</td>
+                    <td colspan="2" style="text-align: center;font-size: {{ x }}px"><b>Development Program Name:</b>
+                        <i>{{ program_rec.name|title }}</i></td>
+                    <td style="text-align: center;font-size: {{ x }}px"><b>Code</b>: <i>{{ program_rec.code|title }}</i>
+                    </td>
+                </tr>
+                <tr></tr>
+                <tr></tr>
+
+                <tr>
+                    <td colspan="3">
+                        <hr>
+                    </td>
+                </tr>
+                <tr></tr>
+                <tr></tr>
+                <tr>
+                    <td style="text-align: center;font-size: {{ x }}px"><b>Year:</b>:
+                        <i>{{ program_rec.year.year_name|title }}</i></td>
+                    <td style="text-align: center;font-size: {{ x }}px"><b>Semester:</b>:
+                        <i> {{ program_rec.semester.semester_name|title }}</i></td>
+                    <td style="text-align: center;font-size: {{ x }}px"><b>Module:</b>
+                        <i>{{ program_rec.module.module_name|title }}</i></td>
+                </tr>
+
+                <tr></tr>
+                <tr></tr>
+
+                <tr>
+                    <td colspan="3">
+                        <hr>
+                    </td>
+                </tr>
+                <tr></tr>
+                <tr></tr>
+                <tr>
+                    <td colspan="3" style="text-align: justify;font-size: {{ x }}px"><b>Activities: </b>
+                        <i>{{ program_rec.activity }}</i></td>
+                </tr>
+
+                <tr></tr>
+                <tr></tr>
+
+                <tr>
+                    <td colspan="3">
+                        <hr>
+                    </td>
+                </tr>
+                <tr></tr>
+                <tr></tr>
+                <tr>
+                    <td colspan="3" style="text-align: justify;font-size: {{ x }}px"><b>Outcomes: </b>
+                        <i>{{ program_rec.outcome }}</i></td>
+                </tr>
+
+
+                <tr></tr>
+                <tr></tr>
+
+                <tr>
+                    <td colspan="3">
+                        <hr>
+                    </td>
+                </tr>
+                <tr></tr>
+                <tr></tr>
+                <tr>
+                    <td style="text-align: center;font-size: {{ x }}px"><b>Day Duration:</b>
+                        <i>{{ program_rec.duration_day }}</i></td>
+                    <td style="text-align: center;font-size: {{ x }}px"><b>Night Duration:</b>
+                        <i>{{ program_rec.duration_night }}</i></td>
+                    <td style="text-align: center;font-size: {{ x }}px"><b>Method:</b>
+                        <i>{{ program_rec.method|title }}</i>
+                    </td>
+                </tr>
+                <tr></tr>
+
+                <tr>
+                    <td colspan="3">
+                        <hr>
+                    </td>
+                </tr>
+                <tr></tr>
+                <tr></tr>
+
+                <tr>
+                    <td colspan="2" style="margin-left: 65px;font-size: {{ x }}px">
+                        <b>Mark:</b><i>{{ program_rec.marks }}</i></td>
+                    <td style="text-align: center;font-size: {{ x }}px"><b>Date:</b>
+                        <i>{{ program_rec.date|date:"Y-m-d" }}</i></td>
+                </tr>
+
+                <tr></tr>
+
+                <tr>
+                    <td colspan="3">
+                        <hr>
+                    </td>
+                </tr>
+                <tr></tr>
+
+                <tr>
+                    <td colspan="3" style="text-align: justify;font-size: {{ x }}px"><b>Remark: </b>
+                        <i>{{ program_rec.remark }}</i></td>
                 </tr>
                 </tbody>
             </table>
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
+        </div>
+    {% endfor %}
 {% endblock %}

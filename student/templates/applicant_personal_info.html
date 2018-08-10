@@ -188,7 +188,7 @@
 
                     <div class="form-body">
                         <div class="row">
-                        <input hidden id="value_check" name="value_check">
+                            <input hidden id="value_check" name="value_check">
                             <div class="">
                                 <label class="col-md-2 control-label">First Name: <span
                                         style="color: red">*</span></label>
@@ -227,7 +227,8 @@
                                         style="color: red">*</span></label>
                                 <div class="col-md-2">
                                     <input type="date" title="Enter DOB" id="birth_date" name="birth_date"
-                                           value="{{ application_obj.birth_date|date:"Y-m-d" }}" class="form-control value_check"
+                                           value="{{ application_obj.birth_date|date:"Y-m-d" }}"
+                                           class="form-control value_check"
                                            max="2999-12-31" required>
                                 </div>
                             </div>
@@ -288,11 +289,11 @@
                             </div>
 
                             <div class="">
-                                <label class="col-md-1 control-label">Passport no:</label>
+                                <label class="col-md-1 control-label">Passport no:<span style="color: red">*</span></label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Passport number" id="passport_number"
                                            value="{{ application_obj.passport_number }}" name="passport_number"
-                                           class="form-control value_check">
+                                           class="form-control value_check" required>
                                 </div>
                             </div>
 
@@ -326,7 +327,9 @@
                                 <label class="col-md-2 control-label">E-mail:<span style="color: red">*</span></label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter E-mail ID" id="email" name="email"
-                                           value="{{ application_obj.email }}" class="form-control value_check" required>
+                                            {% if application_obj %} value="{{ application_obj.email }}"
+                                            {% else %} value="{{ user.email }}" {% endif %}
+                                           class="form-control value_check" readonly>
                                 </div>
                             </div>
 
@@ -341,12 +344,11 @@
                             </div>
 
                             <div class="">
-                                <label class="col-md-1 control-label">Telephone no (Home):<span
-                                        style="color: red">*</span></label>
+                                <label class="col-md-1 control-label">Telephone no (Home):</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Telephone number (Home)" id="telephone_home"
                                            value="{{ application_obj.telephone_home }}" name="telephone_home"
-                                           class="form-control value_check" required>
+                                           class="form-control value_check">
                                 </div>
                             </div>
                         </div>
@@ -375,28 +377,34 @@
                                 </div>
                             </div>
                             <div class="">
-                                <label class="col-md-1 control-label">Face Photo:</label>
+                                <label class="col-md-1 control-label">Face Photo:<span style="color: red">*</span></label>
                                 <div class="col-md-2">
-                                    <input type="text" class="value_check" id="pic" name="pic" value="{{ application_obj.image }}" hidden>
+                                    <input type="text" class="value_check" id="pic" name="pic"
+                                           value="{{ application_obj.image }}" hidden>
 
                                     <input name="photo" type="file" title="Select photo"
                                            id="applicant_photo"
-                                           class="form-control photo">{% if application_obj.image %}
+                                           class="form-control photo" {% if not application_obj.image %}required{% endif %}>
+                                    {% if application_obj.image %}
                                     <img width="100px" height="120px"
                                          src="{{ application_obj.report_path }}{{ application_obj.image }}">{% endif %}
                                 </div>
                             </div>
 
                             <div class="">
-                                <label class="col-md-1 control-label">Passport Photo:</label>
+                                <label class="col-md-1 control-label">Passport Photo:<span style="color: red">*</span></label>
                                 <div class="col-md-2">
-                                    <input type="text" id="passport_pic" class="value_check" name="passport_pic" value="{{ application_obj.passport_image }}" hidden>
+                                    <input type="text" id="passport_pic" class="value_check" name="passport_pic"
+                                           value="{{ application_obj.passport_image }}" hidden>
 
                                     <input name="passport_photo" type="file" title="Select photo"
                                            id="passport_photo"
-                                           class="form-control photo">{% if application_obj.passport_image %}
+                                           class="form-control photo" {% if not application_obj.image %}required{% endif %}>
+
+                                    {% if application_obj.passport_image %}
                                     <img width="100px" height="120px"
-                                         src="{{ application_obj.report_path }}{{ application_obj.passport_image }}">{% endif %}
+                                         src="
+                                                 {{ application_obj.report_path }}{{ application_obj.passport_image }}">{% endif %}
                                 </div>
                             </div>
                         </div>

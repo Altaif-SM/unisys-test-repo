@@ -33,6 +33,7 @@
     <script>
         window.onload = function () {
             $(document).ready(function () {
+                {#$("#application_status").chosen();#}
             });
 
 
@@ -305,6 +306,7 @@
                                         </option>
                                     {% endif %}
 
+                                    <option value="All">All</option>
                                     <option value="First Interview">First Interview</option>
                                     <option value="First Interview attended">First Interview attended</option>
                                     <option value="First Interview approval">First Interview approval</option>
@@ -312,6 +314,7 @@
                                     <option value="Second Interview attended">Second Interview attended</option>
                                     <option value="Second Interview approval">Second Interview approval</option>
                                     <option value="Admin approval">Admin approval</option>
+                                    <option value="Rejected">Rejected</option>
                                 </select>
                             </div>
                         </div>
@@ -337,7 +340,7 @@
                                         <i class="fa fa-angle-down"></i>
                                     </a>
                                     <ul class="dropdown-menu pull-right" id="action">
-                                        <li><a href="javascript:;" class="action" id="First Interview"> FirstInterview</a></li>
+                                        <li><a href="javascript:;" class="action" id="First Interview"> First Interview</a></li>
                                         <li><a href="javascript:;" class="action" id="First Interview attended">First Interview attended</a></li>
                                         <li><a href="javascript:;" class="action" id="First Interview approval">First Interview approval</a></li>
                                         <li><a href="javascript:;" class="action" id="Psychometric Test">Psychometric Test</a></li>
@@ -405,6 +408,7 @@
                                             </td>
 
                                             <td>
+                                            <p hidden>{% if rec.first_interview == True %}True{% else %}False{% endif %}</p>
                                                 <input class="app class_detail" type="checkbox" name="first"
                                                        id="id_first"
                                                        {% if rec.first_interview == True %}checked{% endif %} disabled>
@@ -414,6 +418,7 @@
                                             </td>
 
                                             <td>
+                                            <p hidden>{% if rec.first_interview_attend == True %}True{% else %}False{% endif %}</p>
                                                 <input class="app" type="checkbox"
                                                        name="first_interview_attend"
                                                        {% if rec.first_interview_attend == True %}checked{% endif %}
@@ -425,18 +430,21 @@
                                             </td>
 
                                             <td>
+                                            <p hidden>{% if rec.first_interview_approval == True %}True{% else %}False{% endif %}</p>
                                                 <input class="app" type="checkbox" name="first_interview_approval"
                                                        {% if rec.first_interview_approval == True %}checked{% endif %}
                                                        id="id_first_interview_approval" disabled>
                                             </td>
 
                                             <td>
+                                            <p hidden>{% if rec.psychometric_test == True %}True{% else %}False{% endif %}</p>
                                                 <input class="app" type="checkbox" name="id_test" id="id_test"
                                                        {% if rec.psychometric_test == True %}checked{% endif %}
                                                        disabled>
                                             </td>
 
                                             <td>
+                                            <p hidden>{% if rec.second_interview_attend == True %}True{% else %}False{% endif %}</p>
                                                 <input class="app" type="checkbox"
                                                        name="second_interview_attend"
                                                        {% if rec.second_interview_attend == True %}checked{% endif %}
@@ -448,12 +456,14 @@
                                             </td>
 
                                             <td>
+                                            <p hidden>{% if rec.second_interview_approval == True %}True{% else %}False{% endif %}</p>
                                                 <input class="app" type="checkbox" name="second_interview_approval"
                                                        {% if rec.second_interview_approval == True %}checked{% endif %}
                                                        id="id_second_interview_approval" disabled>
                                             </td>
 
                                             <td>
+                                            <p hidden>{% if rec.admin_approval == True %}True{% else %}False{% endif %}</p>
                                                 <input class="app class_admin" type="checkbox" name="admin"
                                                        id="id_admin"
                                                        {% if rec.admin_approval == True %}checked{% endif %}
@@ -529,7 +539,8 @@
                                             <div class="">
                                                 <label class="col-md-2 control-label">Venue:</label>
                                                 <div class="col-md-3">
-                                                    <input type="text" class="emp" id="first_venue"> <br> <br>
+                                                    <textarea class="emp" id="first_venue"> </textarea>
+{#                                                    <input type="text" class="emp" id="first_venue"> <br> <br>#}
                                                 </div>
                                             </div>
                                         </div>
