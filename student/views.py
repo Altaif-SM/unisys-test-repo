@@ -95,7 +95,7 @@ def save_update_applicant_personal_info(request):
 
             if request.POST['first_name'] and request.POST['last_name'] and request.POST['gender'] and request.POST[
                 'nationality'] and request.POST['telephone_hp'] and request.POST['telephone_home'] and request.POST[
-                'telephone_home'] and request.POST['email'] != '':
+                'passport_number'] and request.POST['email'] != '':
 
                 if ApplicationDetails.objects.filter(application_id=request.user.get_application_id,
                                                      is_submitted=False).exists():
