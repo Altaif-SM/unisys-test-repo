@@ -110,6 +110,12 @@
                 {% endif %}
                 <i class="fa fa-angle-right"></i>
             </li>
+        {% if user.is_donor %}
+            <li>
+                <span>Report </span>
+             <i class="fa fa-angle-right"></i>
+        </li>
+        {% endif %}
 
             <li>
                 <span> Applicant Progress History </span>

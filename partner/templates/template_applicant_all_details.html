@@ -41,10 +41,25 @@
             </li>
             {% if user.is_donor %}
                 <li>
-                    <a href="{% url 'donor:template_student_reports' %}">Applicant Details - Register Applicant</a>
+                <span> Report </span>
+                 <i class="fa fa-angle-right"></i>
+
+                </li>
+                <li>
+                    <a href="{% url 'donor:template_student_reports' %}">Student Report </a>
                     <i class="fa fa-angle-right"></i>
                 </li>
-            {% endif %}
+            {% elif user.is_partner %}
+                <li>
+                    <a href="{% url 'partner:template_approving_application' %}">Approving Applications</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                {% else %}
+                <li>
+                    <a href="{% url 'partner:template_approving_application' %}">Applicant Details</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                {% endif %}
 
             <li>
                 <span> Applications Details</span>

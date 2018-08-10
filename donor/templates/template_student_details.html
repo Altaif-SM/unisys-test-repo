@@ -57,9 +57,22 @@
             </li>
             {% if user.is_donor %}
                 <li>
-                     <a href="{% url 'donor:template_student_selection' %}">Scholarship</a>
+                <span> Scholarship</span>
+                <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                     <a href="{% url 'donor:template_student_selection' %}"> Student Selection </a>
                     <i class="fa fa-angle-right"></i>
                 </li>
+
+                {% else%}
+                <li>
+                     <a href="{% url 'donor:template_student_selection' %}">Student Selection</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+
+
+
             {% endif %}
 
             <li>
