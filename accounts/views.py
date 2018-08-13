@@ -203,6 +203,20 @@ def user_signup(request):
         if signup_form.is_valid():
             try:
                 user = signup_form.save()
+
+                try:
+                    admin_rec = User.objects.filter(role__name='Admin')[0]
+
+                    user.registration_switch = admin_rec.registration_switch
+                    user.submission_switch = admin_rec.submission_switch
+                    user.psyc_switch = admin_rec.psyc_switch
+                    user.agreements_switch = admin_rec.agreements_switch
+                    user.semester_switch = admin_rec.semester_switch
+                    user.program_switch = admin_rec.program_switch
+                    user.save()
+                except:
+                    pass
+
                 user.role.add(UserRole.objects.get(name=request.POST['role']))
                 if str(request.POST['role']) not in ["Accountant"]:
                     country = CountryDetails.objects.get(country_name=request.POST['country'])
