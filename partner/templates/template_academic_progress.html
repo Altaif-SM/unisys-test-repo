@@ -171,13 +171,12 @@
                                         <td>
                                             <p>{{ rec.applicant_id.applicant_scholarship_rel.all.0.degree.degree_name|title }}</p>
                                         </td>
-                                        <td><p><p>{{ rec.applicant_id.applicant_scholarship_rel.all.0.course_applied.program_name|title }}</p></p></td>
+                                        <td><p>{{ rec.applicant_id.applicant_scholarship_rel.all.0.course_applied.program_name|title }}</p></td>
                                         <td><p>{{ rec.semester.semester_name|title }}</p></td>
                                         <td><p>{{ rec.gpa_scored }}</p></td>
                                         <td><p>{{ rec.cgpa_scored }}</p></td>
                                         <td><p>{{ rec.date }}</p></td>
-                                        <td><p>
-                                            <a href="{{ rec.applicant_id.report_path}}{{ rec.transcript_document}}">{{ rec.transcript_document|default:"" }}</a>
+                                        <td><p><a href="{{ rec.applicant_id.report_path}}{{ rec.transcript_document}}">{{ rec.transcript_document|default:"" }}</a>
                                             {% comment %}{{ rec.transcript_document }}{% endcomment %}</p></td>
                                     </tr>
                                 {% endfor %}

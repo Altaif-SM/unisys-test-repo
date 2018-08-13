@@ -1421,6 +1421,9 @@ def save_student_program(request):
                     application_notification(application['applicant_id'],
                                              'Some modules have assigned to your.')
 
+            messages.warning(request,
+                             "Module assigned to the selected students and mail sent with detailed module description.")
+
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
     return redirect('/partner/template_link_student_program/')
@@ -1544,7 +1547,7 @@ def export_academic_progress_details(request):
                                                                        applicant_id__year=get_current_year(request))
         for rec in progress_rec:
             temp_list = []
-            temp_list.append(str(rec.applicant_id.applicant_id.get_full_name()))
+            temp_list.append(str(rec.applicant_id.get_full_name()))
             temp_list.append(str(rec.year.year_name))
             temp_list.append(str(rec.date))
             temp_list.append(str(rec.semester.semester_name))
