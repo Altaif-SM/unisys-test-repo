@@ -434,6 +434,7 @@ def change_application_status(request):
 
             if application_obj.application_rejection:
                 if request.user.is_partner():
+                    messages.warning(request, "You don't have permission to change rejected application status.")
                     continue
                 else:
                     application_obj.application_rejection = False
@@ -481,8 +482,10 @@ def change_application_status(request):
                                                                      remark='You are requested to come down for the first interview.')
 
                     else:
+                        messages.warning(request, "For applicant "+application_obj.first_name.title()+" First interview Time, Date and Venue should not be empty.")
                         continue
                 else:
+                    messages.warning(request,"Applicant " + application_obj.first_name.title() + " has already got first interview call.")
                     continue
 
             elif interview_type == 'First Interview attended':
@@ -514,8 +517,10 @@ def change_application_status(request):
                                                                      status='First Interview Attended',
                                                                      remark='You have attended first interview. Please wait for the further updates.')
                     else:
+                        messages.warning(request,"Applicant " + application_obj.first_name.title() + " has already attended first interview.")
                         continue
                 else:
+                    messages.warning(request,"For applicant " + application_obj.first_name.title() + " please change his/her previous application status then try this.")
                     continue
 
             elif interview_type == 'First Interview approval':
@@ -549,14 +554,17 @@ def change_application_status(request):
                                                                      status='First Interview Approval',
                                                                      remark='You have cleared your first interview. Please wait for the further updates.')
                     else:
+                        messages.warning(request,
+                                         "First interview is already approved for applicant " + application_obj.first_name.title() + " .")
                         continue
                 else:
+                    messages.warning(request,
+                                     "For applicant " + application_obj.first_name.title() + " please change his/her previous application status then try this.")
                     continue
 
             elif interview_type == 'Psychometric Test':
                 if application_obj.first_interview_approval:
                     if not application_obj.psychometric_test:
-
                         if ApplicantPsychometricTestDetails.objects.filter(applicant_id=application_obj).exists():
 
                             application_obj.psychometric_test = True
@@ -582,10 +590,16 @@ def change_application_status(request):
                                                                          status='Psychometric Test',
                                                                          remark='You have submitted Psychometric test result. Please wait for the further updates.')
                         else:
+                            messages.warning(request,
+                                             "Applicant " + application_obj.first_name.title() + " has not submitted the psychometric test yet.")
                             continue
                     else:
+                        messages.warning(request,
+                                         "Psychometric test for applicant " + application_obj.first_name.title() + " is already active.")
                         continue
                 else:
+                    messages.warning(request,
+                                     "For applicant " + application_obj.first_name.title() + " please change his/her previous application status then try this.")
                     continue
 
             elif interview_type == 'Second Interview attended':
@@ -617,8 +631,11 @@ def change_application_status(request):
                                                                      status='Second Interview Attended',
                                                                      remark='You have attended second interview. Please wait for the further updates.')
                     else:
+                        messages.warning(request,"Second Interview attended For applicant " + application_obj.first_name.title() + " is already active.")
                         continue
                 else:
+                    messages.warning(request,
+                                     "For applicant " + application_obj.first_name.title() + " please change his/her previous application status then try this.")
                     continue
 
             elif interview_type == 'Second Interview approval':
@@ -646,8 +663,12 @@ def change_application_status(request):
                                                                      status='Second Interview Approval',
                                                                      remark='You have cleared your second interview. Please wait for the further updates.')
                     else:
+                        messages.warning(request,
+                                         "Second Interview approval is already active for applicant " + application_obj.first_name.title() + " .")
                         continue
                 else:
+                    messages.warning(request,
+                                     "For applicant " + application_obj.first_name.title() + " please change his/her previous application status then try this.")
                     continue
 
             elif interview_type == 'Admin approval':
@@ -684,12 +705,19 @@ def change_application_status(request):
                                                                              status='Admin Approval',
                                                                              remark='Your application have been approved by the admin. Please wait for the further updates.')
                             else:
+                                messages.warning(request,
+                                                 "Scholarship fee cannot be empty for Applicant " + application_obj.first_name.title() + " .")
                                 continue
                         else:
+                            messages.warning(request,
+                                             "For applicant " + application_obj.first_name.title() + " admin approval is already done .")
                             continue
                     else:
+                        messages.warning(request,
+                                         "For applicant " + application_obj.first_name.title() + " please change his/her previous application status then try this.")
                         continue
                 else:
+                    messages.warning(request,"Only admin has permission for final approval.")
                     continue
 
             elif interview_type == 'Reject':
@@ -720,6 +748,7 @@ def change_application_status(request):
                                                              status='Application Rejected',
                                                              remark='Your application has rejected.')
                 else:
+                    messages.warning(request,"Applicant " + application_obj.first_name.title() + " is already rejected.")
                     continue
             else:
                 continue
