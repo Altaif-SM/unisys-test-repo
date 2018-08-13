@@ -1353,6 +1353,9 @@ def get_semester_modules(request):
     return JsonResponse(finalDict, safe=False)
 
 
+from threading import Thread, activeCount
+from accounting.views import send_email
+
 def save_student_program(request):
     try:
         data_value = json.loads(request.POST.get('data_value'))
@@ -1369,8 +1372,23 @@ def save_student_program(request):
                                                         degree_id=application['degree'],
                                                         applicant_id_id=application['applicant_id'],
                                                         module_id=module)
+
                     flag_module_assigned = True
+
                 if flag_module_assigned:
+
+                    program_list = DevelopmentProgram.objects.filter(id__in=application['applicant_module'])
+                    application_obj = ApplicationDetails.objects.get(id=application['applicant_id'])
+
+                    params = {'x': 16, 'program_list': program_list, 'request': request}
+
+                    subject, from_email, to = 'Scholarship Module Details', settings.EMAIL_HOST_USER, application_obj.email
+                    text_content = 'Following module has been assigned to you. Please Find The Attachment'
+
+                    file = render_to_file('development_program_pdf_template.html', params)
+                    thread = Thread(target=send_email, args=(file, subject, text_content, from_email, to))
+                    thread.start()
+
                     application_notification(application['applicant_id'],
                                              'Some modules have assigned to your.')
 
@@ -1431,8 +1449,7 @@ def filter_academic_progress(request):
         if request.user.is_super_admin():
             application_recs = ApplicantAcademicProgressDetails.objects.filter(applicant_id__in=applicant_ids,
                                                                                applicant_id__year=get_current_year(
-                                                                                   request)).order_by(
-                '-last_updated')
+                                                                                   request)).order_by('-last_updated')
             # for application in application_recs:
             #     if application.applicant_id.id not in application_id:
             #         application_list.append(application)

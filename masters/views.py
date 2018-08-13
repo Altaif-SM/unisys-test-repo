@@ -1188,6 +1188,7 @@ from django.template import Context
 from django.template.loader import get_template
 import datetime
 from xhtml2pdf import pisa
+from threading import Thread, activeCount
 
 # from io import StringIO
 
@@ -1195,28 +1196,42 @@ def generate_PDF(request):
 
     program_list = DevelopmentProgram.objects.all()[0:4]
 
-    template = get_template('development_program_pdf_template.html')
 
-    arr = []
+    #####---- PDF Generation code  ---------------######33
 
-    file = open('test.pdf', "w+b")
+    # template = get_template('development_program_pdf_template.html')
+
+    # file = open('test.pdf', "w+b")
     # for rec in program_list:
 
     # program_rec = DevelopmentProgram.objects.get(id=rec)
 
-    Context = ({'x':16,'program_list':program_list})
-    html = template.render(Context)
+    # Context = ({'x':16,'program_list':program_list})
+    # html = template.render(Context)
+    #
+    # # pisa.pisaDocument(StringIO.StringIO(html), dest=file)
+    #
+    #
+    # pisa.CreatePDF(html.encode('utf-8'), dest=file, encoding='utf-8')
+    #
+    # file.seek(0)
+    # pdf = file.read()
+    # # arr.append(pdf)
+    # file.close()
 
-    # pisa.pisaDocument(StringIO.StringIO(html), dest=file)
+    ###--------------********************
 
+    # params = {'x':16,'program_list':program_list,'request':request}
+    #
+    # subject, from_email, to = 'Scholarship Module Details', settings.EMAIL_HOST_USER, 'javedalam113@gmail.com'
+    # text_content = 'Following module has been assigned to you. Please Find The Attachment'
+    #
+    # from accounting.views import send_email
+    # file = render_to_file('development_program_pdf_template.html', params)
+    # thread = Thread(target=send_email, args=(file, subject, text_content, from_email, to))
+    # thread.start()
 
-    pisa.CreatePDF(html.encode('utf-8'), dest=file, encoding='utf-8')
-
-    file.seek(0)
-    pdf = file.read()
-    arr.append(pdf)
-    file.close()
-    return HttpResponse([obj for obj in arr], 'application/pdf')
+    return redirect('/masters/template_manage_partner_master/')
 
 
 def get_table_data(request):

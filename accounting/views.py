@@ -1180,9 +1180,14 @@ from django.core.mail import EmailMultiAlternatives
 
 def send_email(file: list, subject, text_content, from_email, to):
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-    attachment = open('/home/redbytes/scholarship_mgmt_system/scholarship_mgmt/store/' + file[0], 'rb')
+    # attachment = open('/home/redbytes/scholarship_mgmt_system/scholarship_mgmt/store/' + file[0], 'rb')
+    path=os.path.join(os.path.abspath(os.path.dirname("__file__")), "store/") + file[0]
+    attachment = open(os.path.join(os.path.abspath(os.path.dirname("__file__")), "store/") + file[0], 'rb')
     msg.attach(file[0], attachment.read(), 'application/pdf')
     msg.send()
+
+    if os.path.exists(path):
+        os.remove(path)
 
 
 def get_report(request):
