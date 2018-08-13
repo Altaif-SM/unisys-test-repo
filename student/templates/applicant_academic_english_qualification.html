@@ -48,6 +48,14 @@
 
             $(document).ready(function () {
 
+                {% if user.get_application %}
+                    {% if user.get_application.is_submitted %}
+                        $('input').prop('disabled', 'true')
+                        $('select').prop('disabled', 'true')
+                        $('label').prop('readonly', 'true')
+                    {% endif %}
+                {% endif %}
+
                 {% comment %}$(document).on("change", ".doc", function (e) {
                     var files = !!this.files ? this.files : [];
                     if (!files.length || !window.FileReader) return;
@@ -92,7 +100,8 @@
                     $('.item').each(function () {
                         var parent_id = $(this).attr('id');
 
-                        var empty_flag = false;;
+                        var empty_flag = false;
+                        ;
                         var check_flag = false;
                         $('#' + parent_id + ' .chk').each(function (e) {
                             if ($(this).val() != '') {
@@ -271,6 +280,8 @@
 
 
 
+
+
                                                             {{ qualification_obj.applicant_id.report_path }}{{ qualification_obj.a_level_result_document }}"><input
                                                     readonly
                                                     class="file_value emp chk"
@@ -365,6 +376,8 @@
                                                     style="width: 50%"
                                                     type='button' class="file" value='Choose File:'><a
                                                     href="
+
+
                                                             {{ qualification_obj.applicant_id.report_path }}{{ qualification_obj.o_level_result_document }}"><input
                                                     readonly
                                                     class="file_value emp chk"
@@ -460,6 +473,8 @@
                                                     style="width: 50%"
                                                     type='button' class="file" value='Choose File:'><a
                                                     href="
+
+
 
 
 
@@ -564,6 +579,8 @@
 
 
 
+
+
                                                         {{ english_obj.applicant_id.report_path }}{{ english_obj.english_test_one_result_document }}"><input
                                                 readonly
                                                 class="file_value emp eng_emp"
@@ -658,6 +675,8 @@
 
 
 
+
+
                                                         {{ english_obj.applicant_id.report_path }}{{ english_obj.english_test_two_result_document }}"><input
                                                 readonly
                                                 class="file_value emp"
@@ -694,8 +713,11 @@
                                         onclick="window.location='{% url "student:applicant_family_mother_sibling_info" %}'">
                                     Back
                                 </button>
-                                <button type="button" class="btn green" id="save_form" style="">Save/Next
-                                </button>
+                                {% if application_obj %}
+                                    {% if not application_obj.is_submitted %}
+                                        <button type="button" class="btn green" id="save_form" style="">Save/Next</button>
+                                    {% endif %}
+                                {% endif %}
                                 {% comment %}<button type="button" class="btn blue" id="next"
                                         onclick="window.location='{% url "student:applicant_curriculum_experience_info" %}'">
                                     Next

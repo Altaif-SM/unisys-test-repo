@@ -73,9 +73,8 @@ def applicant_personal_info(request):
 
     application_obj = ''
 
-    if ApplicationDetails.objects.filter(application_id=request.user.get_application_id, is_submitted=False).exists():
-        application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id,
-                                                         is_submitted=False)
+    if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
+        application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
 
     return render(request, 'applicant_personal_info.html',
                   {'country_recs': country_recs, 'religion_recs': religion_recs, 'application_obj': application_obj})
@@ -97,11 +96,9 @@ def save_update_applicant_personal_info(request):
                 'nationality'] and request.POST['telephone_hp'] and request.POST[
                 'passport_number'] and request.POST['email'] != '':
 
-                if ApplicationDetails.objects.filter(application_id=request.user.get_application_id,
-                                                     is_submitted=False).exists():
+                if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
 
-                    ApplicationDetails.objects.filter(application_id=request.user.get_application_id,
-                                                      is_submitted=False).update(
+                    ApplicationDetails.objects.filter(application_id=request.user.get_application_id).update(
                         first_name=request.POST['first_name'],
                         middle_name=request.POST['middle_name'],
                         last_name=request.POST['last_name'],
@@ -121,8 +118,7 @@ def save_update_applicant_personal_info(request):
                             'telephone_home'],
                         email=request.POST['email'])
 
-                    application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id,
-                                                                     is_submitted=False)
+                    application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
 
                     AddressDetails.objects.filter(id=application_obj.address.id).update(
                         country_id=request.POST['country'],
@@ -289,10 +285,8 @@ def applicant_family_info(request):
 
     application_obj = ''
 
-    if ApplicationDetails.objects.filter(application_id=request.user.get_application_id,
-                                         is_submitted=False).exists():
-        application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id,
-                                                         is_submitted=False)
+    if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
+        application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
         path = base_path(application_obj)
 
     return render(request, 'applicant_family_info.html',
@@ -320,7 +314,7 @@ def save_update_applicant_family_info(request):
             wife_pay_slip_text = request.POST.get('wife_pay_slip_text')
 
             if StudentDetails.objects.filter(user=request.user):
-                if not request.user.get_application.is_submitted:
+                # if not request.user.get_application.is_submitted:
 
                     ApplicationDetails.objects.filter(application_id=request.user.get_application_id).update(
                         wife_name=request.POST['wife_name'],
@@ -392,10 +386,8 @@ def applicant_family_mother_sibling_info(request):
     application_obj = ''
     sibling_obj = ''
 
-    if ApplicationDetails.objects.filter(application_id=request.user.get_application_id,
-                                         is_submitted=False).exists():
-        application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id,
-                                                         is_submitted=False)
+    if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
+        application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
         if SiblingDetails.objects.filter(applicant_id=application_obj).exists():
             sibling_obj = SiblingDetails.objects.filter(applicant_id=application_obj)
 
@@ -415,11 +407,9 @@ def save_update_applicant_family_mother_sibling_info(request):
             except Exception as e:
                 mother_pay_slip = ''
             if StudentDetails.objects.filter(user=request.user):
-                if ApplicationDetails.objects.filter(application_id=request.user.get_application_id,
-                                                     is_submitted=False).exists():
+                if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
 
-                    ApplicationDetails.objects.filter(application_id=request.user.get_application_id,
-                                                      is_submitted=False).update(
+                    ApplicationDetails.objects.filter(application_id=request.user.get_application_id).update(
                         mother_name=request.POST['mother_name'],
                         mother_income=request.POST[
                             'mother_income'],
@@ -481,9 +471,11 @@ def applicant_academic_english_qualification(request):
     english_obj = ''
     passing_year_recs = PassingYear.objects.all()
 
+    application_obj = request.user.get_application
+
     try:
         if request.user.get_application:
-            if not request.user.get_application.is_submitted:
+            # if not request.user.get_application.is_submitted:
                 # application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id,
                 #                                           is_submitted=False)
                 if AcademicQualificationDetails.objects.filter(applicant_id=request.user.get_application).exists():
@@ -498,7 +490,7 @@ def applicant_academic_english_qualification(request):
 
     return render(request, 'applicant_academic_english_qualification.html',
                   {'year_recs': year_recs, 'qualification_obj': qualification_obj, 'english_obj': english_obj,
-                   'passing_year_recs': passing_year_recs})
+                   'passing_year_recs': passing_year_recs,'application_obj':application_obj})
 
 
 def save_update_applicant_academic_english_qualification(request):
@@ -754,11 +746,15 @@ def applicant_curriculum_experience_info(request):
     year_recs = YearDetails.objects.all()
     curriculum_obj = ''
     experience_obj = ''
+    application_obj=''
+
+
 
     passing_year_recs = PassingYear.objects.all()
     try:
+        application_obj = request.user.get_application
         if request.user.get_application:
-            if not request.user.get_application.is_submitted:
+            # if not request.user.get_application.is_submitted:
                 # application_obj = ApplicationDetails.objects.get(student=student, is_submitted=False)
                 if CurriculumDetails.objects.filter(applicant_id=request.user.get_application).exists():
                     curriculum_obj = CurriculumDetails.objects.get(applicant_id=request.user.get_application)
@@ -771,7 +767,7 @@ def applicant_curriculum_experience_info(request):
         return redirect('/student/applicant_personal_info/')
     return render(request, 'applicant_curriculum_experience_info.html',
                   {'year_recs': year_recs, 'experience_obj': experience_obj, 'curriculum_obj': curriculum_obj,
-                   'passing_year_recs': passing_year_recs})
+                   'passing_year_recs': passing_year_recs,'application_obj':application_obj})
 
 
 def save_update_applicant_curriculum_experience_info(request):
@@ -1039,7 +1035,7 @@ def applicant_scholarship_about_yourself_info(request):
 
     try:
         if request.user.get_application:
-            if not request.user.get_application.is_submitted:
+            # if not request.user.get_application.is_submitted:
                 application_obj = request.user.get_application
 
                 if ScholarshipSelectionDetails.objects.filter(applicant_id=request.user.get_application).exists():
@@ -1463,7 +1459,7 @@ def applicant_progress_history(request):
     username = ''
     application_history_obj = ''
     try:
-        username = request.user.get_application.get_full_name()
+        username = request.user.get_full_name()
         if ApplicationDetails.objects.filter(application_id=request.user.get_application_id,
                                              is_submitted=True).exists():
             application_history_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id,

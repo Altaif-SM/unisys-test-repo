@@ -215,11 +215,13 @@
                                                style="border-color: #b1ad9f; text-align: left;"><input
                                                 class="file"
                                                 type='button' value='Choose File:' style="width: 50%"><a
-                                                href="{{ application_obj.report_path }}{{ application_obj.mother_pay_slip }}"><input type="text"
-                                                                                                            readonly name="mother_pay_slip_text"
-                                                                                                            class="file_value emp"
-                                                                                                            style="cursor: pointer;border: none; width: 50%"
-                                                                                                            value="{{ application_obj.mother_pay_slip }}"></a></label>
+                                                href="
+                                                        {{ application_obj.report_path }}{{ application_obj.mother_pay_slip }}"><input
+                                                type="text"
+                                                readonly name="mother_pay_slip_text"
+                                                class="file_value emp"
+                                                style="cursor: pointer;border: none; width: 50%"
+                                                value="{{ application_obj.mother_pay_slip }}"></a></label>
 
 
                                     {% else %}
@@ -227,7 +229,8 @@
                                                style="border-color: #b1ad9f; text-align: left;"><input
                                                 class="file"
                                                 type='button' value='Choose File:'><a><input type="text"
-                                                                                             readonly name="mother_pay_slip_text"
+                                                                                             readonly
+                                                                                             name="mother_pay_slip_text"
                                                                                              class="file_value emp"
                                                                                              style="cursor: pointer;border: none; width: 100px; color: #292328"></a></label>
                                     {% endif %}
@@ -235,7 +238,7 @@
                                            id="mother_pay_slip"
                                            name="mother_pay_slip"
                                            class="file_type">
-                                <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
                                           class="remove_doc fa fa-close"></span>
                                 </div>
                             </div>
@@ -424,7 +427,10 @@
                                 <button type="button" class="btn blue" id="back" style="margin-left: 70%"
                                         onclick="window.location='{% url "student:applicant_family_info" %}'">Back
                                 </button>
-                                <button type="submit" class="btn green" id="save">Save/Next</button>
+
+                                {% if application_obj %}
+                                    <button type="submit" class="btn green" id="save">Save/Next</button>
+                                {% endif %}
                                 {% comment %}<button type="button" class="btn blue" id="next"
                                         onclick="window.location='{% url "student:applicant_academic_english_qualification" %}'">
                                     Next

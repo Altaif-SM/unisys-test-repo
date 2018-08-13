@@ -159,7 +159,8 @@
                                                 class="file"
                                                 type='button' value='Choose File:'><a
                                                 href="{{ path }}{{ application_obj.wife_pay_slip }}"><input type="text"
-                                                                                                            readonly name="wife_pay_slip_text"
+                                                                                                            readonly
+                                                                                                            name="wife_pay_slip_text"
                                                                                                             class="file_value emp"
                                                                                                             style="cursor: pointer;border: none; width: 100px"
                                                                                                             value="{{ application_obj.wife_pay_slip }}"></a>
@@ -169,7 +170,8 @@
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
                                                 class="file" style="width: 50%"
                                                 type='button' value='Choose File:'><a><input type="text"
-                                                                                             readonly name="wife_pay_slip_text"
+                                                                                             readonly
+                                                                                             name="wife_pay_slip_text"
                                                                                              class="file_value emp"
                                                                                              style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
                                     {% endif %}
@@ -295,14 +297,16 @@
                                                 type='button' value='Choose File:' style="width: 50%"><a
                                                 href="{{ path }}{{ application_obj.father_pay_slip }}"><input readonly
                                                                                                               class="file_value emp"
-                                                                                                              style="border: red; width: 50%" name="father_pay_slip_text"
+                                                                                                              style="border: red; width: 50%"
+                                                                                                              name="father_pay_slip_text"
                                                                                                               value="{{ application_obj.father_pay_slip }}"></a></label>
                                     {% else %}
                                         <label class="form-control"
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
                                                 class="file" style="width: 50%"
                                                 type='button' value='Choose File:'><a><input type="text"
-                                                                                             readonly name="father_pay_slip_text"
+                                                                                             readonly
+                                                                                             name="father_pay_slip_text"
                                                                                              class="file_value emp"
                                                                                              style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
                                     {% endif %}
@@ -381,7 +385,9 @@
                                 <button type="button" class="btn blue" id="save" style="margin-left: 70%"
                                         onclick="window.location='{% url "student:applicant_personal_info" %}'">Back
                                 </button>
-                                <button type="submit" class="btn green" id="save" style="">Save/Next</button>
+                                {% if application_obj %}
+                                    <button type="submit" class="btn green" id="save" style="">Save/Next</button>
+                                {% endif %}
                                 {% comment %}<button type="button" class="btn blue" id="next"
                                         onclick="window.location='{% url "student:applicant_family_mother_sibling_info" %}'">
                                     Next

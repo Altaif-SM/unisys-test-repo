@@ -33,12 +33,20 @@
 
             $(document).ready(function () {
 
+                {% if user.get_application %}
+                    {% if user.get_application.is_submitted %}
+                        $('input').prop('disabled', 'true')
+                        $('select').prop('disabled', 'true')
+                        $('label').prop('readonly', 'true')
+                    {% endif %}
+                {% endif %}
+
                 $(document).on("click", ".current", function (e) {
                     $('.current').prop('checked', false);
-                    $('.end_date').prop('readonly','')
+                    $('.end_date').prop('readonly', '')
 
                     $(this).prop('checked', true);
-                    $(this).prevAll('input').prop('readonly','true');
+                    $(this).prevAll('input').prop('readonly', 'true');
                 });
 
                 $(document).on("click", ".remove_doc", function (e) {
@@ -167,6 +175,8 @@
                                                 style="width: 50%"
                                                 type='button' class="file" value='Choose File:'><a
                                                 href="
+
+
                                                         {{ curriculum_obj.applicant_id.report_path }}{{ curriculum_obj.curriculum_result_document_one }}"><input
                                                 readonly name="curriculum_result_document_one_text"
                                                 class="file_value emp"
@@ -177,7 +187,8 @@
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
                                                 class="file" style="width: 50%"
                                                 type='button' value='Choose File:'><a><input type="text"
-                                                                                             readonly name="curriculum_result_document_one_text"
+                                                                                             readonly
+                                                                                             name="curriculum_result_document_one_text"
                                                                                              class="file_value emp"
                                                                                              style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
                                     {% endif %}
@@ -237,17 +248,21 @@
                                                 style="width: 50%"
                                                 type='button' class="file" value='Choose File:'><a
                                                 href="
+
+
                                                         {{ curriculum_obj.applicant_id.report_path }}{{ curriculum_obj.curriculum_result_document_two }}"><input
                                                 readonly
                                                 class="file_value emp"
-                                                style="border: red; width: 50%" name="curriculum_result_document_two_text"
+                                                style="border: red; width: 50%"
+                                                name="curriculum_result_document_two_text"
                                                 value="{{ curriculum_obj.curriculum_result_document_two }}"></a></label>
                                     {% else %}
                                         <label class="form-control"
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
                                                 class="file" style="width: 50%"
                                                 type='button' value='Choose File:'><a><input type="text"
-                                                                                             readonly name="curriculum_result_document_two_text"
+                                                                                             readonly
+                                                                                             name="curriculum_result_document_two_text"
                                                                                              class="file_value emp"
                                                                                              style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
                                     {% endif %}
@@ -305,17 +320,21 @@
                                                 style="width: 50%"
                                                 type='button' class="file" value='Choose File:'><a
                                                 href="
+
+
                                                         {{ curriculum_obj.applicant_id.report_path }}{{ curriculum_obj.curriculum_result_document_three }}"><input
                                                 readonly
                                                 class="file_value emp"
-                                                style="border: red; width: 50%" name="curriculum_result_document_three_text"
+                                                style="border: red; width: 50%"
+                                                name="curriculum_result_document_three_text"
                                                 value="{{ curriculum_obj.curriculum_result_document_three }}"></a></label>
                                     {% else %}
                                         <label class="form-control"
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
                                                 class="file" style="width: 50%"
                                                 type='button' value='Choose File:'><a><input type="text"
-                                                                                             readonly name="curriculum_result_document_three_text"
+                                                                                             readonly
+                                                                                             name="curriculum_result_document_three_text"
                                                                                              class="file_value emp"
                                                                                              style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
                                     {% endif %}
@@ -363,6 +382,8 @@
                                                 style="width: 50%"
                                                 type='button' class="file" value='Choose File:'><a
                                                 href="
+
+
                                                         {{ experience_obj.applicant_id.report_path }}{{ experience_obj.work_experience_document_one }}"><input
                                                 readonly
                                                 class="file_value emp"
@@ -373,7 +394,8 @@
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
                                                 class="file" style="width: 50%"
                                                 type='button' value='Choose File:'><a><input type="text"
-                                                                                             readonly name="work_experience_document_one_text"
+                                                                                             readonly
+                                                                                             name="work_experience_document_one_text"
                                                                                              class="file_value emp"
                                                                                              style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
                                     {% endif %}
@@ -407,10 +429,12 @@
                                 <div class="col-md-3" id="EndDate">
                                     <input type="date" id="to_date_one" name="to_date_one" max="2999-12-31"
                                            {% if experience_obj.experience_one_current %}readonly{% endif %}
-                                           value="{{ experience_obj.to_date_one|date:"Y-m-d" }}" class="form-control end_date">
+                                           value="{{ experience_obj.to_date_one|date:"Y-m-d" }}"
+                                           class="form-control end_date">
                                     <br><span>Currently Working </span>
-                                    <input class="current" type="checkbox" name="experience_one_current" id="experience_one_current"
-                                    {% if experience_obj.experience_one_current %}checked{% endif %}>
+                                    <input class="current" type="checkbox" name="experience_one_current"
+                                           id="experience_one_current"
+                                           {% if experience_obj.experience_one_current %}checked{% endif %}>
                                 </div>
                             </div>
                         </div>
@@ -439,6 +463,8 @@
                                                 style="width: 50%"
                                                 type='button' class="file" value='Choose File:'><a
                                                 href="
+
+
                                                         {{ experience_obj.applicant_id.report_path }}{{ experience_obj.work_experience_document_two }}"><input
                                                 readonly name="work_experience_document_two_text"
                                                 class="file_value emp"
@@ -449,7 +475,8 @@
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
                                                 class="file" style="width: 50%"
                                                 type='button' value='Choose File:'><a><input type="text"
-                                                                                             readonly name="work_experience_document_two_text"
+                                                                                             readonly
+                                                                                             name="work_experience_document_two_text"
                                                                                              class="file_value emp"
                                                                                              style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
                                     {% endif %}
@@ -481,10 +508,12 @@
                                 <div class="col-md-3" id="EndDate">
                                     <input type="date" id="to_date_two" name="to_date_two" max="2999-12-31"
                                            {% if experience_obj.experience_two_current %}readonly{% endif %}
-                                           value="{{ experience_obj.to_date_two|date:"Y-m-d" }}" class="form-control end_date">
+                                           value="{{ experience_obj.to_date_two|date:"Y-m-d" }}"
+                                           class="form-control end_date">
                                     <br><span>Currently Working </span>
-                                    <input class="current" type="checkbox" name="experience_two_current" id="experience_two_current"
-                                    {% if experience_obj.experience_two_current %}checked{% endif %}>
+                                    <input class="current" type="checkbox" name="experience_two_current"
+                                           id="experience_two_current"
+                                           {% if experience_obj.experience_two_current %}checked{% endif %}>
                                 </div>
                             </div>
                         </div>
@@ -498,7 +527,16 @@
                                         onclick="window.location='{% url "student:applicant_academic_english_qualification" %}'">
                                     Back
                                 </button>
-                                <button type="submit" class="btn green" id="save" style="">Save/Next</button>
+
+                                {% if application_obj %}
+                                    {% if not application_obj.is_submitted %}
+                                        <button type="submit" class="btn green" id="save" style="">Save/Next</button>
+                                    {% endif %}
+                                {% endif %}
+
+                                {% comment %}{% if application_obj %}
+                                    <button type="submit" class="btn green" id="save" style="">Save/Next</button>
+                                {% endif %}{% endcomment %}
                             </div>
                         </div>
                     </div>

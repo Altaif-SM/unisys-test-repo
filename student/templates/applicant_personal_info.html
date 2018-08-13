@@ -60,6 +60,12 @@
 
             $(document).ready(function () {
 
+                {% if user.get_application %}
+                    {% if user.get_application.is_submitted %}
+                        $('.submitted').prop('readonly','True')
+                    {% endif %}
+                {% endif %}
+
                 {% comment %}$('#next').click(function () {
                     var payload={};
                     var count = 0;
@@ -194,7 +200,7 @@
                                         style="color: red">*</span></label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter First Name" id="first_name" name="first_name"
-                                           class="form-control value_check" required {% if application_obj %}
+                                           class="form-control value_check submitted" required {% if application_obj %}
                                            value="{{ application_obj.first_name }}"
                                     {% else %} value="{{ user.first_name }}" {% endif %} readonly>
                                 </div>
@@ -254,11 +260,14 @@
                             </div>
 
                             <div class="">
+                                {% if user.get_application.is_submitted %}
+                                    <input hidden name="nationality" value="{{ application_obj.nationality.id }}">
+                                {% endif %}
                                 <label class="col-md-1 control-label">Nationality:<span
                                         style="color: red">*</span></label>
                                 <div class="col-md-2">
                                     <select id='nationality' title="Select nationality" name="nationality"
-                                            class="form-control value_check" required>
+                                            class="form-control value_check" {% if user.get_application.is_submitted %} disabled{% endif %} required>
                                         {% if application_obj %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ application_obj.nationality.id }}"
@@ -293,7 +302,7 @@
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Passport number" id="passport_number"
                                            value="{{ application_obj.passport_number }}" name="passport_number"
-                                           class="form-control value_check" required>
+                                           class="form-control value_check submitted" required>
                                 </div>
                             </div>
 
@@ -329,7 +338,7 @@
                                     <input type="text" title="Enter E-mail ID" id="email" name="email"
                                             {% if application_obj %} value="{{ application_obj.email }}"
                                             {% else %} value="{{ user.email }}" {% endif %}
-                                           class="form-control value_check" readonly>
+                                           class="form-control value_check submitted" readonly>
                                 </div>
                             </div>
 

@@ -198,7 +198,12 @@
 
                         <div class="row">
                             <div class="col-md-offset-5 col-md-7">
-                                <button type="submit" class="btn green" id="save">Submit</button>
+                                {% if user.get_application %}
+                                    {% if user.get_application.is_submitted %}
+                                        <button type="submit" class="btn green" id="save">Submit</button>
+                                        {#                                    <button type="submit" class="btn green" id="save" style="">Submit</button>#}
+                                    {% endif %}
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -234,7 +239,8 @@
 
                             <td>
                                 <p>
-                                    <a href="{{ rec.applicant_id.report_path}}{{ rec.certificate_document }}">{{ rec.certificate_document|default:"" }}</a>
+                                    <a href="
+                                            {{ rec.applicant_id.report_path }}{{ rec.certificate_document }}">{{ rec.certificate_document|default:"" }}</a>
                                     {% comment %}{{ rec.certificate_document }}{% endcomment %}
                                 </p>
                             </td>

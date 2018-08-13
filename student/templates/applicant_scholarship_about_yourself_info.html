@@ -31,6 +31,15 @@
     <script>
         window.onload = function () {
             $(document).ready(function () {
+                {% if user.get_application %}
+                    {% if user.get_application.is_submitted %}
+                        $('input').prop('disabled', 'true')
+                        $('select').prop('disabled', 'true')
+                        $('label').prop('readonly', 'true')
+                        $('textarea').prop('readonly', 'true')
+                    {% endif %}
+                {% endif %}
+
                 $(document).on("change", ".doc", function (e) {
                     var files = !!this.files ? this.files : [];
                     if (!files.length || !window.FileReader) return;
@@ -340,6 +349,8 @@
                                                 href="
 
 
+
+
                                                         {{ scholarship_obj.applicant_id.report_path }}{{ scholarship_obj.admission_letter_document }}"><input
                                                 readonly
                                                 class="file_value emp eng_emp" name="admission_letter_document_text"
@@ -399,7 +410,16 @@
                                         onclick="window.location='{% url "student:applicant_curriculum_experience_info" %}'">
                                     Back
                                 </button>
-                                <button type="button" class="btn green" id="save_id" style="">Save/Next</button>
+
+                                {% if application_obj %}
+                                    {% if not application_obj.is_submitted %}
+                                        <button type="button" class="btn green" id="save_id" style="">Save/Next</button>
+                                    {% endif %}
+                                {% endif %}
+
+                                {% comment %}{% if application_obj %}
+                                    <button type="button" class="btn green" id="save_id" style="">Save/Next</button>
+                                {% endif %}{% endcomment %}
                             </div>
                         </div>
                     </div>

@@ -136,18 +136,21 @@
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
                                                 class="file" style="width: 50%"
                                                 type='button' value='Choose File:'><a
-                                                href="{{ agreement_submission_obj.applicant_id.report_path }}{{ agreement_submission_obj.four_parties_agreement_document }}"><input type="text"
-                                                                                                            readonly name="four_parties_agreements_text"
-                                                                                                            class="file_value emp"
-                                                                                                            style="cursor: pointer;border: none; width: 50%"
-                                                                                                            value="{{ agreement_submission_obj.four_parties_agreement_document }}"></a>
+                                                href="
+                                                        {{ agreement_submission_obj.applicant_id.report_path }}{{ agreement_submission_obj.four_parties_agreement_document }}"><input
+                                                type="text"
+                                                readonly name="four_parties_agreements_text"
+                                                class="file_value emp"
+                                                style="cursor: pointer;border: none; width: 50%"
+                                                value="{{ agreement_submission_obj.four_parties_agreement_document }}"></a>
                                         </label>
                                     {% else %}
                                         <label class="form-control"
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
                                                 class="file" style="width: 50%"
                                                 type='button' value='Choose File:'><a><input type="text"
-                                                                                             readonly name="four_parties_agreements_text"
+                                                                                             readonly
+                                                                                             name="four_parties_agreements_text"
                                                                                              class="file_value emp"
                                                                                              style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
                                     {% endif %}
@@ -178,18 +181,21 @@
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
                                                 class="file" style="width: 50%"
                                                 type='button' value='Choose File:'><a
-                                                href="{{ agreement_submission_obj.applicant_id.report_path }}{{ agreement_submission_obj.education_loan_agreement_document }}"><input type="text"
-                                                                                                            readonly name="education_loan_agreements_text"
-                                                                                                            class="file_value emp"
-                                                                                                            style="cursor: pointer;border: none; width: 50%"
-                                                                                                            value="{{ agreement_submission_obj.education_loan_agreement_document }}"></a>
+                                                href="
+                                                        {{ agreement_submission_obj.applicant_id.report_path }}{{ agreement_submission_obj.education_loan_agreement_document }}"><input
+                                                type="text"
+                                                readonly name="education_loan_agreements_text"
+                                                class="file_value emp"
+                                                style="cursor: pointer;border: none; width: 50%"
+                                                value="{{ agreement_submission_obj.education_loan_agreement_document }}"></a>
                                         </label>
                                     {% else %}
                                         <label class="form-control"
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
                                                 class="file" style="width: 50%"
                                                 type='button' value='Choose File:'><a><input type="text"
-                                                                                             readonly name="education_loan_agreements_text"
+                                                                                             readonly
+                                                                                             name="education_loan_agreements_text"
                                                                                              class="file_value emp"
                                                                                              style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
                                     {% endif %}
@@ -213,7 +219,12 @@
 
                         <div class="row">
                             <div class="col-md-offset-4 col-md-7">
-                                <button type="submit" class="btn green" id="save" style="">Submit</button>
+                                {% if user.get_application %}
+                                    {% if user.get_application.is_submitted %}
+                                        <button type="submit" class="btn green" id="save" style="">Submit</button>
+                                        {#                                    <button type="submit" class="btn green" id="save" style="">Submit</button>#}
+                                    {% endif %}
+                                {% endif %}
                             </div>
                         </div>
                     </div>
