@@ -19,6 +19,8 @@ import os
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.conf import settings
+# from Crypto.Cipher import AES
+# import base64
 
 
 def random_string_generator(size, include_lowercase=True, include_uppercase=True, include_number=True):
@@ -56,6 +58,21 @@ def send_email_to_applicant(from_email, to_mail, subject, message, first_name):
     template = get_template('mail_template_approving_student_application.html')
     html_content = render_to_string('mail_template_approving_student_application.html',
                                     {'first_name': first_name, 'message': message})
+
+    try:
+        send_mail(subject, message, from_email, to, fail_silently=True, html_message=html_content)
+    except:
+        messages.warning('Network Error Occur Please Try Later')
+    return to_mail
+
+def send_signup_email_to_applicant(from_email, to_mail, subject, message, first_name,user_id):
+    # from_email = settings.EMAIL_HOST_USER
+    to = [to_mail, from_email]
+    host_name = settings.SERVER_HOST_NAME+'accounts/account_activate/'+str(user_id)
+
+    template = get_template('student_signup_mail_template.html')
+    html_content = render_to_string('student_signup_mail_template.html',
+                                    {'first_name': first_name, 'message': message,'user_id':user_id,'host_name':host_name})
 
     try:
         send_mail(subject, message, from_email, to, fail_silently=True, html_message=html_content)
@@ -381,3 +398,14 @@ def from_status_check(form_values):
         if rec == '':
             return False
     return True
+
+
+# def encode_url(url):
+#     cipher = AES.new(settings.HASHING_SECRET_KEY, AES.MODE_ECB)  #secret key is from settings file and Aes is for encreption
+#     encoded_url = base64.b64encode(cipher.encrypt(url))
+#     return encoded_url
+#
+# def decode_url(url):
+#     cipher = AES.new(settings.HASHING_SECRET_KEY, AES.MODE_ECB)
+#     decoded_url = (cipher.decrypt(base64.b64decode(url))).strip()
+#     return decoded_url

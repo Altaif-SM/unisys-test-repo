@@ -21,6 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'gchy7$_ctk45##d%(p*+*v6ciju3&#h72dwfz2ugx%u11q1)c&'
+#HASHING_SECRET_KEY = 'ctk45##d%(p*+*v6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -161,3 +162,5 @@ EMAIL_HOST = 'smtp.gmail.com'
 
 EMAIL_HOST_USER = 'redbytes.test@gmail.com'
 EMAIL_HOST_PASSWORD = 'redbytes@123'
+
+SERVER_HOST_NAME = "http://139.59.24.38:82/"

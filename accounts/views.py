@@ -15,7 +15,7 @@ from masters.models import AddressDetails, CountryDetails, ScholarshipDetails, G
 from partner.models import PartnerDetails
 from donor.models import DonorDetails
 import json
-from common.utils import application_notification, get_current_year, send_email_with_template, send_email_to_applicant
+from common.utils import *
 from accounts.service import UserService
 
 
@@ -109,8 +109,9 @@ def home(request):
                                                               nationality=request.user.partner_user_rel.get().address.country,
                                                               year=get_current_year(request)).count())
 
-            raw_list.append(ApplicationDetails.objects.filter(nationality=request.user.partner_user_rel.get().address.country,
-                            year=get_current_year(request)).count())
+            raw_list.append(
+                ApplicationDetails.objects.filter(nationality=request.user.partner_user_rel.get().address.country,
+                                                  year=get_current_year(request)).count())
 
             scholarship_list = []
             country_list = []
@@ -228,18 +229,22 @@ def user_signup(request):
 
                     if request.POST['role'] == "Student":
                         # student_obj = StudentDetails.objects.create(user=user, address=address)
+                        user.is_active = False
+                        user.save()
                         student_obj = StudentDetails.objects.create(user=user)
 
-                        try:
-                            email_rec = EmailTemplates.objects.get(template_for='Student Signup', is_active=True)
-                            context = {'first_name': student_obj.user.first_name}
-                            send_email_with_template(student_obj, context, email_rec.subject, email_rec.email_body,
-                                                     request, True)
-                        except:
-                            subject = 'Signup Completed'
-                            message = 'Your signup completed in NAMA.'
-                            send_email_to_applicant(student_obj.user.email, student_obj.user.email, subject, message,
-                                                    student_obj.user.first_name)
+                        # try:
+                        #     email_rec = EmailTemplates.objects.get(template_for='Student Signup', is_active=True)
+                        #     context = {'first_name': student_obj.user.first_name}
+                        #     send_email_with_template(student_obj, context, email_rec.subject, email_rec.email_body,
+                        #                              request, True)
+                        # except:
+
+                        subject = 'Signup Completed'
+                        message = 'Your signup completed in NAMA. Please click on the given button to activate your account.'
+                        send_signup_email_to_applicant(student_obj.user.email, student_obj.user.email, subject,
+                                                           message,
+                                                           student_obj.user.first_name, user.id)
 
                     if request.POST['role'] == "Partner":
                         PartnerDetails.objects.create(user=user, address=address)
@@ -295,6 +300,21 @@ def user_signin(request):
             return redirect('/')
 
 
+        # if user:
+        #     if user.is_active:
+        #         login(request, user)
+        #         dashboard_path = user.get_dashboard_path()
+        #         return redirect(dashboard_path)
+        #     else:
+        #         messages.success(request,
+        #                          "Please activate your account first. Activation link has been sent to your email " + str(
+        #                              user.email) + '.')
+        #         return redirect('/')
+        # else:
+        #     messages.success(request, "Enter Valid User Name and Password.")
+        #     return redirect('/')
+
+
 @user_login_required
 def user_signout(request):
     logout(request)
@@ -306,6 +326,23 @@ def template_manage_user(request):
     user_recs = User.objects.filter().exclude(role__name='Admin')
     return render(request, 'template_manage_user.html',
                   {'country_list': country_list, 'user_recs': user_recs})
+
+
+def account_activate(request,user_id):
+    # user_id = request.POST.get('user_id')
+
+    try:
+        user_rec = User.objects.get(id=user_id)
+
+        if not user_rec.is_active:
+
+            User.objects.filter(id=user_id).update(is_active=True)
+            messages.success(request, "Account activated. You can login now.")
+        else:
+            messages.warning(request, "Account already activated. You can login now.")
+    except:
+        messages.warning(request, "Invalid operation.")
+    return redirect('/')
 
 
 def update_switch(request):

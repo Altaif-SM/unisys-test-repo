@@ -13,6 +13,7 @@ urlpatterns = [
     path('user_signout/', views.user_signout, name='user_signout'),
     # path('forget_password/', views.forget_password, name='forget_password'),
     path('template_manage_user/', views.template_manage_user,name='template_manage_user'),
+    path('account_activate/<int:user_id>/', views.account_activate,name='account_activate'),
 
     path('update_switch/', views.update_switch,name='update_switch'),
 ]
