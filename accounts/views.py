@@ -201,6 +201,7 @@ def user_signup(request):
     signup_form = signUpForm(request.POST)
     if request.method == 'POST':
         if signup_form.is_valid():
+            user = ''
             try:
                 user = signup_form.save()
 
@@ -219,10 +220,15 @@ def user_signup(request):
 
                 user.role.add(UserRole.objects.get(name=request.POST['role']))
                 if str(request.POST['role']) not in ["Accountant"]:
-                    country = CountryDetails.objects.get(country_name=request.POST['country'])
-                    address = AddressDetails.objects.create(country=country)
+                    try:
+                        country = CountryDetails.objects.get(id=request.POST['country'])
+                        address = AddressDetails.objects.create(country=country)
+                    except:
+                        pass
+
                     if request.POST['role'] == "Student":
-                        student_obj = StudentDetails.objects.create(user=user, address=address)
+                        # student_obj = StudentDetails.objects.create(user=user, address=address)
+                        student_obj = StudentDetails.objects.create(user=user)
 
                         try:
                             email_rec = EmailTemplates.objects.get(template_for='Student Signup', is_active=True)
@@ -246,6 +252,8 @@ def user_signup(request):
                         DonorDetails.objects.create(user=user, address=address, organisation=organisation)
 
             except Exception as e:
+                if user:
+                    user.delete()
                 messages.success(request, str(e))
             return redirect('/')
         else:

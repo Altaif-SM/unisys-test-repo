@@ -472,14 +472,15 @@ def change_application_status(request):
                             send_email_to_applicant(request.user.email, application_obj.email, subject, message,
                                                     application_obj.first_name)
 
-                        application_notification(application_obj.id,
-                                                 'You are requested to come down for the first interview. Check your mail for more updates.')
+                        application_notification(application_obj.id,'You are requested to come down for the first interview. Check your mail for more updates.')
 
                         if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
                                                                         status='First Interview Call').exists():
                             ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
                                                                      status='First Interview Call',
                                                                      remark='You are requested to come down for the first interview.')
+
+                        messages.success(request,application_obj.first_name.title() + " application status changed.")
 
                     else:
                         messages.warning(request, "For applicant "+application_obj.first_name.title()+" First interview Time, Date and Venue should not be empty.")
@@ -516,6 +517,8 @@ def change_application_status(request):
                             ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
                                                                      status='First Interview Attended',
                                                                      remark='You have attended first interview. Please wait for the further updates.')
+
+                        messages.success(request, application_obj.first_name.title() + " application status changed.")
                     else:
                         messages.warning(request,"Applicant " + application_obj.first_name.title() + " has already attended first interview.")
                         continue
@@ -553,6 +556,8 @@ def change_application_status(request):
                             ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
                                                                      status='First Interview Approval',
                                                                      remark='You have cleared your first interview. Please wait for the further updates.')
+
+                        messages.success(request, application_obj.first_name.title() + " application status changed.")
                     else:
                         messages.warning(request,
                                          "First interview is already approved for applicant " + application_obj.first_name.title() + " .")
@@ -589,6 +594,9 @@ def change_application_status(request):
                                 ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
                                                                          status='Psychometric Test',
                                                                          remark='You have submitted Psychometric test result. Please wait for the further updates.')
+
+                            messages.success(request,
+                                             application_obj.first_name.title() + " application status changed.")
                         else:
                             messages.warning(request,
                                              "Applicant " + application_obj.first_name.title() + " has not submitted the psychometric test yet.")
@@ -630,6 +638,8 @@ def change_application_status(request):
                             ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
                                                                      status='Second Interview Attended',
                                                                      remark='You have attended second interview. Please wait for the further updates.')
+
+                        messages.success(request, application_obj.first_name.title() + " application status changed.")
                     else:
                         messages.warning(request,"Second Interview attended For applicant " + application_obj.first_name.title() + " is already active.")
                         continue
@@ -662,6 +672,8 @@ def change_application_status(request):
                             ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
                                                                      status='Second Interview Approval',
                                                                      remark='You have cleared your second interview. Please wait for the further updates.')
+
+                        messages.success(request, application_obj.first_name.title() + " application status changed.")
                     else:
                         messages.warning(request,
                                          "Second Interview approval is already active for applicant " + application_obj.first_name.title() + " .")
@@ -704,6 +716,9 @@ def change_application_status(request):
                                     ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
                                                                              status='Admin Approval',
                                                                              remark='Your application have been approved by the admin. Please wait for the further updates.')
+
+                                messages.success(request,
+                                                 application_obj.first_name.title() + " application status changed.")
                             else:
                                 messages.warning(request,
                                                  "Scholarship fee cannot be empty for Applicant " + application_obj.first_name.title() + " .")
@@ -747,6 +762,7 @@ def change_application_status(request):
                     ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
                                                              status='Application Rejected',
                                                              remark='Your application has rejected.')
+                    messages.success(request, application_obj.first_name.title() + " application rejected.")
                 else:
                     messages.warning(request,"Applicant " + application_obj.first_name.title() + " is already rejected.")
                     continue

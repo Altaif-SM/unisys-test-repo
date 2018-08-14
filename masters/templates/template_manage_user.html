@@ -38,6 +38,16 @@
                     } else {
                         $("#id_org_display").hide();
                     }
+
+                    if ($(this).val() == "Student") {
+                        $("#hide_country").hide();
+                        document.getElementById("country_name").required = false;
+                    } else {
+                        $("#hide_country").show();
+                        document.getElementById("country_name").required = true;
+
+                        {#$("#country_name").attr('required','false');#}
+                    }
                 });
 
 
@@ -145,7 +155,7 @@
                                 </div>
                             </div>
 
-                            <div class="">
+                            <div class="" id="hide_country">
                                 <label class="col-md-2 control-label">Country:
 
                                 </label>
@@ -158,7 +168,7 @@
                                         </option>
 
                                         {% for rec in country_list %}
-                                            <option value='{{ rec.country_name }}'>{{ rec.country_name|title }}</option>
+                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -269,7 +279,7 @@
                                 <text hidden>{{ rec.partner_user_rel.all.0.address.country.country_name|title }}</text>
                                 <input class="form-control data person" name="person"
                                        type="text"
-                                       id="person{{ forloop.counter }}" value="{{ rec.person|title }}"
+                                       id="person{{ forloop.counter }}" value="{{ rec.partner_user_rel.all.0.address.country.country_name|title }}"
                                        required
                                        disabled>
                                 {% elif rec.donor_user_rel.all %}

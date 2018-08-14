@@ -130,14 +130,15 @@
 {#                <div class="form-group">#}
 {#                    <label class="control-label visible-ie8 visible-ie9">City/Town</label>#}
 {#                    <input class="form-control placeholder-no-fix" type="text" placeholder="City/Town" name="city" /> </div>#}
-                <div class="form-group">
+
+                {% comment %}<div class="form-group">
                     <label class="control-label visible-ie8 visible-ie9">Country</label>
                     <select name="country" class="form-control">
                         {% for country in country_list %}
                             <option value="{{ country.country_name }}">{{ country.country_name }}</option>
                         {% endfor %}
                     </select>
-                </div>
+                </div>{% endcomment %}
                 <p class="hint"> Enter your account details below: </p>
                 <div class="form-group">
                     <input type="hidden" name="role" value="Student" class="form-control"/>
