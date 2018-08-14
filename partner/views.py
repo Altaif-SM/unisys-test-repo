@@ -29,7 +29,7 @@ def template_registered_application(request):
         university_recs = UniversityDetails.objects.all()
     else:
         applicant_recs = ApplicationDetails.objects.filter(
-            nationality=request.user.partner_user_rel.get().address.country,year=get_current_year(request),
+            nationality=request.user.partner_user_rel.get().address.country, year=get_current_year(request),
             is_submitted=True)
         university_recs = UniversityDetails.objects.filter(country=request.user.partner_user_rel.get().address.country)
     country_recs = CountryDetails.objects.all()
@@ -72,13 +72,14 @@ def template_applicant_all_details(request, app_id):
     curriculum_obj = application_obj.curriculum_applicant_rel.get() if application_obj.curriculum_applicant_rel.all() else ''
     applicant_experience_obj = application_obj.applicant_experience_rel.get() if application_obj.applicant_experience_rel.all() else ''
     scholarship_obj = application_obj.applicant_scholarship_rel.get() if application_obj.applicant_scholarship_rel.all() else ''
+    about_obj = application_obj.applicant_about_rel.get()
 
     return render(request, 'template_applicant_all_details.html',
                   {'siblings_obj': siblings_obj, 'application_obj': application_obj,
                    'qualification_obj': qualification_obj, 'english_obj': english_obj,
                    'curriculum_obj': curriculum_obj,
                    'applicant_experience_obj': applicant_experience_obj,
-                   'scholarship_obj': scholarship_obj})
+                   'scholarship_obj': scholarship_obj, 'about_obj': about_obj})
 
 
 def filter_nationality(field):
@@ -472,7 +473,8 @@ def change_application_status(request):
                             send_email_to_applicant(request.user.email, application_obj.email, subject, message,
                                                     application_obj.first_name)
 
-                        application_notification(application_obj.id,'You are requested to come down for the first interview. Check your mail for more updates.')
+                        application_notification(application_obj.id,
+                                                 'You are requested to come down for the first interview. Check your mail for more updates.')
 
                         if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
                                                                         status='First Interview Call').exists():
@@ -480,13 +482,15 @@ def change_application_status(request):
                                                                      status='First Interview Call',
                                                                      remark='You are requested to come down for the first interview.')
 
-                        messages.success(request,application_obj.first_name.title() + " application status changed.")
+                        messages.success(request, application_obj.first_name.title() + " application status changed.")
 
                     else:
-                        messages.warning(request, "For applicant "+application_obj.first_name.title()+" First interview Time, Date and Venue should not be empty.")
+                        messages.warning(request,
+                                         "For applicant " + application_obj.first_name.title() + " First interview Time, Date and Venue should not be empty.")
                         continue
                 else:
-                    messages.warning(request,"Applicant " + application_obj.first_name.title() + " has already got first interview call.")
+                    messages.warning(request,
+                                     "Applicant " + application_obj.first_name.title() + " has already got first interview call.")
                     continue
 
             elif interview_type == 'First Interview attended':
@@ -520,10 +524,12 @@ def change_application_status(request):
 
                         messages.success(request, application_obj.first_name.title() + " application status changed.")
                     else:
-                        messages.warning(request,"Applicant " + application_obj.first_name.title() + " has already attended first interview.")
+                        messages.warning(request,
+                                         "Applicant " + application_obj.first_name.title() + " has already attended first interview.")
                         continue
                 else:
-                    messages.warning(request,"For applicant " + application_obj.first_name.title() + " please change his/her previous application status then try this.")
+                    messages.warning(request,
+                                     "For applicant " + application_obj.first_name.title() + " please change his/her previous application status then try this.")
                     continue
 
             elif interview_type == 'First Interview approval':
@@ -641,7 +647,8 @@ def change_application_status(request):
 
                         messages.success(request, application_obj.first_name.title() + " application status changed.")
                     else:
-                        messages.warning(request,"Second Interview attended For applicant " + application_obj.first_name.title() + " is already active.")
+                        messages.warning(request,
+                                         "Second Interview attended For applicant " + application_obj.first_name.title() + " is already active.")
                         continue
                 else:
                     messages.warning(request,
@@ -732,7 +739,7 @@ def change_application_status(request):
                                          "For applicant " + application_obj.first_name.title() + " please change his/her previous application status then try this.")
                         continue
                 else:
-                    messages.warning(request,"Only admin has permission for final approval.")
+                    messages.warning(request, "Only admin has permission for final approval.")
                     continue
 
             elif interview_type == 'Reject':
@@ -764,7 +771,8 @@ def change_application_status(request):
                                                              remark='Your application has rejected.')
                     messages.success(request, application_obj.first_name.title() + " application rejected.")
                 else:
-                    messages.warning(request,"Applicant " + application_obj.first_name.title() + " is already rejected.")
+                    messages.warning(request,
+                                     "Applicant " + application_obj.first_name.title() + " is already rejected.")
                     continue
             else:
                 continue
@@ -1401,6 +1409,7 @@ def get_semester_modules(request):
 from threading import Thread, activeCount
 from accounting.views import send_email
 
+
 def save_student_program(request):
     try:
         data_value = json.loads(request.POST.get('data_value'))
@@ -1421,7 +1430,6 @@ def save_student_program(request):
                     flag_module_assigned = True
 
                 if flag_module_assigned:
-
                     program_list = DevelopmentProgram.objects.filter(id__in=application['applicant_module'])
                     application_obj = ApplicationDetails.objects.get(id=application['applicant_id'])
 
@@ -2169,12 +2177,13 @@ def application_all_details_pdf(request, app_id):
         curriculum_obj = application_obj.curriculum_applicant_rel.get() if application_obj.curriculum_applicant_rel.all() else ''
         applicant_experience_obj = application_obj.applicant_experience_rel.get() if application_obj.applicant_experience_rel.all() else ''
         scholarship_obj = application_obj.applicant_scholarship_rel.get() if application_obj.applicant_scholarship_rel.all() else ''
+        about_obj = application_obj.applicant_about_rel.get()
 
         template = get_template('application_all_details_pdf.html')
         Context = ({'report_path': report_path, 'application_obj': application_obj, 'siblings_obj': siblings_obj,
                     'qualification_obj': qualification_obj, 'english_obj': english_obj,
                     'curriculum_obj': curriculum_obj, 'applicant_experience_obj': applicant_experience_obj,
-                    'scholarship_obj': scholarship_obj, 'x': x})
+                    'scholarship_obj': scholarship_obj, 'x': x, 'about_obj': about_obj})
         html = template.render(Context)
 
         file = open('test.pdf', "w+b")

@@ -1164,6 +1164,7 @@ def my_application(request):
         curriculum_obj = application_obj.curriculum_applicant_rel.get()
         applicant_experience_obj = application_obj.applicant_experience_rel.get()
         scholarship_obj = application_obj.applicant_scholarship_rel.get()
+        about_obj = application_obj.applicant_about_rel.get()
 
         # path = str(settings.MEDIA_URL) + str('reports/Donors.pdf')
         # path =str('/home/redbytes/scholarship_proj/scholarship_mgmt/media/reports/Donors.pdf')
@@ -1171,7 +1172,7 @@ def my_application(request):
                                                        'qualification_obj': qualification_obj, 'english_obj': english_obj,
                                                        'curriculum_obj': curriculum_obj,
                                                        'applicant_experience_obj': applicant_experience_obj,
-                                                       'scholarship_obj': scholarship_obj})
+                                                       'scholarship_obj': scholarship_obj,'about_obj':about_obj})
     except Exception as e:
         messages.warning(request, "Please Fill The Application Form First ... ")
     return redirect('/')

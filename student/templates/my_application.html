@@ -972,6 +972,16 @@
                         </div>
                     </div>
                 </div>
+            <br>
+
+            <div class="row">
+                    <div class="">
+                        <label class="col-md-1 control-label">About Myself :</label>
+                        <div class="col-md-2">
+                            <span class="">{{ about_obj.about_yourself }}</span>
+                        </div>
+                    </div>
+            </div>
 
                 <form action="{% url 'student:submit_application' %}" id="form_sample_1" class="form-horizontal"
                       method="POST" enctype="multipart/form-data">{% csrf_token %}

@@ -9,30 +9,30 @@
             });
         }, 4000);
 
-         window.onload = function () {
+        window.onload = function () {
 
-             $(document).ready(function () {
-                  $(document).on("click", "#button_pdf_id", function (e) {
-                 $('#form_pdf_id').submit();
-             });
+            $(document).ready(function () {
+                $(document).on("click", "#button_pdf_id", function (e) {
+                    $('#form_pdf_id').submit();
+                });
 
-                 $(document).on("change", "#id_accept_student", function (e) {
+                $(document).on("change", "#id_accept_student", function (e) {
 
-                     if (e.target.checked) {
-                         $('#id_accept_student_model').modal();
-                     } else {
-                         $('#id_accept_student').prop('checked', false);
-                     }
+                    if (e.target.checked) {
+                        $('#id_accept_student_model').modal();
+                    } else {
+                        $('#id_accept_student').prop('checked', false);
+                    }
 
-                 });
+                });
 
-                 $(document).on("click", "#cancel_model", function (e) {
+                $(document).on("click", "#cancel_model", function (e) {
 
-                     $('#id_accept_student').prop('checked', false);
+                    $('#id_accept_student').prop('checked', false);
 
-                 });
-             });
-         }
+                });
+            });
+        }
 
 
     </script>
@@ -57,17 +57,17 @@
             </li>
             {% if user.is_donor %}
                 <li>
-                <span> Scholarship</span>
-                <i class="fa fa-angle-right"></i>
+                    <span> Scholarship</span>
+                    <i class="fa fa-angle-right"></i>
                 </li>
                 <li>
-                     <a href="{% url 'donor:template_student_selection' %}"> Student Selection </a>
+                    <a href="{% url 'donor:template_student_selection' %}"> Student Selection </a>
                     <i class="fa fa-angle-right"></i>
                 </li>
 
-                {% else%}
+            {% else %}
                 <li>
-                     <a href="{% url 'donor:template_student_selection' %}">Student Selection</a>
+                    <a href="{% url 'donor:template_student_selection' %}">Student Selection</a>
                     <i class="fa fa-angle-right"></i>
                 </li>
 
@@ -93,7 +93,7 @@
             <div class="caption">
                 <i class="icon-settings font-red"></i>
                 <span class="caption-subject font-red sbold uppercase"> Applications Details</span>
-                 <span style="margin-left: 800px">
+                <span style="margin-left: 800px">
                 <button type="button" id="button_pdf_id" class="btn green" id="save">PDF</button>
                     </span>
 
@@ -106,14 +106,14 @@
                     <i class="icon-settings font-red"></i>
                     <span class="caption-subject font-red sbold uppercase"> PERSONAL INFO</span>
                 </div>
-            <form action="{% url 'partner:application_all_details_pdf' application_obj.id %}" id="form_pdf_id"
-                          class="form-horizontal"target="_blank"
-                          method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="row" style="margin-top: -20px">
+                <form action="{% url 'partner:application_all_details_pdf' application_obj.id %}" id="form_pdf_id"
+                      class="form-horizontal" target="_blank"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row" style="margin-top: -20px">
 
-                        </div>
-            </form>
+                    </div>
+                </form>
                 <div class="row">
                     <div class="">
                         <label class="col-md-1 control-label">First Name:</label>
@@ -348,6 +348,7 @@
                         <label class="col-md-1 control-label">Pay Slip:</label>
                         <div class="col-md-2">
                             <a href="
+
                                     {{ application_obj.report_path }}{{ application_obj.wife_pay_slip }}">{{ application_obj.wife_pay_slip|default:"" }}</a>
                             {#                            <span class="">{{ application_obj.wife_pay_slip|default:"" }}</span>#}
                         </div>
@@ -428,6 +429,7 @@
                         <label class="col-md-1 control-label">Pay Slip:</label>
                         <div class="col-md-2">
                             <a href="
+
                                     {{ application_obj.report_path }}{{ application_obj.father_pay_slip }}">{{ application_obj.father_pay_slip|default:"" }}</a>
                             {#                            <span class="">{{ application_obj.father_pay_slip }}</span>#}
                         </div>
@@ -513,6 +515,7 @@
                         <label class="col-md-1 control-label">Pay Slip:</label>
                         <div class="col-md-2">
                             <a href="
+
                                     {{ application_obj.report_path }}{{ application_obj.mother_pay_slip }}">{{ application_obj.mother_pay_slip|default:"" }}</a>
                             {#                            <span class="">{{ application_obj.mother_pay_slip }}</span>#}
                         </div>
@@ -633,6 +636,7 @@
                         <label class="col-md-1 control-label">Result Doc:</label>
                         <div class="col-md-2">
                             <a href="
+
                                     {{ qualification_obj.applicant_id.report_path }}{{ qualification_obj.a_level_result_document }}">{{ qualification_obj.a_level_result_document|default:"" }}</a>
                             {#                            <span class="">{{ qualification_obj.a_level_result_document }}</span>#}
                         </div>
@@ -666,6 +670,7 @@
                         <label class="col-md-1 control-label">Result Doc:</label>
                         <div class="col-md-2">
                             <a href="
+
                                     {{ qualification_obj.applicant_id.report_path }}{{ qualification_obj.o_level_result_document }}">{{ qualification_obj.o_level_result_document|default:"" }}</a>
                             {#                            <span class="">{{ qualification_obj.o_level_result_document }}</span>#}
                         </div>
@@ -699,6 +704,7 @@
                         <label class="col-md-1 control-label">Result Doc:</label>
                         <div class="col-md-2">
                             <a href="
+
                                     {{ qualification_obj.applicant_id.report_path }}{{ qualification_obj.high_school_result_document }}">{{ qualification_obj.high_school_result_document|default:"" }}</a>
                             {#                            <span class="">{{ qualification_obj.high_school_result_document }}</span>#}
                         </div>
@@ -738,6 +744,7 @@
                         <label class="col-md-1 control-label">Result Doc:</label>
                         <div class="col-md-2">
                             <a href="
+
                                     {{ english_obj.applicant_id.report_path }}{{ english_obj.english_test_one_result_document }}">{{ english_obj.english_test_one_result_document|default:"" }}</a>
                             {#                            <span class="">{{ english_obj.english_test_one_result_document }}</span>#}
                         </div>
@@ -771,6 +778,7 @@
                         <label class="col-md-1 control-label">Result Doc:</label>
                         <div class="col-md-2">
                             <a href="
+
                                     {{ english_obj.applicant_id.report_path }}{{ english_obj.english_test_two_result_document }}">{{ english_obj.english_test_two_result_document|default:"" }}</a>
                             {#                            <span class="">{{ english_obj.english_test_two_result_document }}</span>#}
                         </div>
@@ -801,6 +809,7 @@
                         <label class="col-md-1 control-label"> Result:</label>
                         <div class="col-md-2">
                             <a href="
+
                                     {{ curriculum_obj.applicant_id.report_path }}{{ curriculum_obj.curriculum_result_document_one }}">{{ curriculum_obj.curriculum_result_document_one|default:"" }}</a>
                             {#                            <span class="">{{ curriculum_obj.curriculum_result_document_one }}</span>#}
                         </div>
@@ -827,6 +836,7 @@
                         <label class="col-md-1 control-label"> Result:</label>
                         <div class="col-md-2">
                             <a href="
+
                                     {{ curriculum_obj.applicant_id.report_path }}{{ curriculum_obj.curriculum_result_document_two }}">{{ curriculum_obj.curriculum_result_document_two|default:"" }}</a>
                             {#                            <span class="">{{ curriculum_obj.curriculum_result_document_two }}</span>#}
                         </div>
@@ -853,6 +863,7 @@
                         <label class="col-md-1 control-label"> Result:</label>
                         <div class="col-md-2">
                             <a href="
+
                                     {{ curriculum_obj.applicant_id.report_path }}{{ curriculum_obj.curriculum_result_document_three }}">{{ curriculum_obj.curriculum_result_document_three|default:"" }}</a>
                             {#                            <span class="">{{ curriculum_obj.curriculum_result_document_three }}</span>#}
                         </div>
@@ -889,6 +900,7 @@
                         <label class="col-md-1 control-label">Result Doc:</label>
                         <div class="col-md-2">
                             <a href="
+
                                     {{ applicant_experience_obj.applicant_id.report_path }}{{ applicant_experience_obj.work_experience_document_one }}">{{ applicant_experience_obj.work_experience_document_one|default:"" }}</a>
                             {#                            <span class="">{{ applicant_experience_obj.work_experience_document_one }}</span>#}
                         </div>
@@ -922,6 +934,7 @@
                         <label class="col-md-1 control-label">Result Doc:</label>
                         <div class="col-md-2">
                             <a href="
+
                                     {{ applicant_experience_obj.applicant_id.report_path }}{{ applicant_experience_obj.work_experience_document_two }}">{{ applicant_experience_obj.work_experience_document_two|default:"" }}</a>
                             {#                            <span class="">{{ applicant_experience_obj.work_experience_document_two }}</span>#}
                         </div>
@@ -960,29 +973,43 @@
                         <label class="col-md-1 control-label">Admission Letter:</label>
                         <div class="col-md-2">
                             <a href="
+
                                     {{ scholarship_obj.applicant_id.report_path }}{{ scholarship_obj.admission_letter_document }}">{{ scholarship_obj.admission_letter_document|default:"" }}</a>
                             {#                            <span class="">{{ scholarship_obj.admission_letter_document }}</span>#}
                         </div>
                     </div>
                 </div>
-
-                    <br><br>
-
-                    <div class="row">
-                        <div class="">
-                            <div class=" col-md-1" style="margin-left: 25%">
-                           {% if application_obj.is_sponsored %}<input type="checkbox" class="form-control" checked disabled>{% else %}<input type="checkbox" class="form-control" id="id_accept_student">{% endif %}
+                <br>
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-1 control-label">About Myself :</label>
+                        <div class="col-md-2">
+                            <span class="">{{ about_obj.about_yourself }}</span>
                         </div>
+                    </div>
+                </div>
+
+
+                <br><br>
+
+                <div class="row">
+                    <div class="">
+                        <div class=" col-md-1" style="margin-left: 25%">
+                            {% if application_obj.is_sponsored %}
+                                <input type="checkbox" class="form-control" checked disabled>{% else %}
+                                <input type="checkbox" class="form-control" id="id_accept_student">{% endif %}
                         </div>
+                    </div>
 
 
                     <div class="">
-                        <div class=" col-md-3"><b>Accept student for Scholarship.</b></div></div>
+                        <div class=" col-md-3"><b>Accept student for Scholarship.</b></div>
                     </div>
-
                 </div>
+
             </div>
         </div>
+    </div>
     </div>
 
     <div id="id_accept_student_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
@@ -1002,8 +1029,10 @@
                         <input type="hidden" name="app_id" value="{{ application_obj.id }}">
                     </div>
                     <div class="modal-footer">
-                        <button type="button" id="cancel_model" data-dismiss="modal" class="btn dark btn-outline">Cancel</button>
-                        <button type="submit"  class="btn green">Confirm</button>
+                        <button type="button" id="cancel_model" data-dismiss="modal" class="btn dark btn-outline">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn green">Confirm</button>
                     </div>
                 </form>
             </div>
