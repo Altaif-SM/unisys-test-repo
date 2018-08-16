@@ -203,6 +203,10 @@ class ApplicationDetails(BaseModel):
     interview_date = models.CharField(max_length=50, blank=True, null=True)
     interview_venue = models.CharField(max_length=500, blank=True, null=True)
 
+    second_interview_time = models.CharField(max_length=30, blank=True, null=True)
+    second_interview_date = models.CharField(max_length=50, blank=True, null=True)
+    second_interview_venue = models.CharField(max_length=500, blank=True, null=True)
+
     personal_info_flag = models.BooleanField(default=True)
     # family_info_flag = models.BooleanField(default=False)
     # mother_sibling_info_flag = models.BooleanField(default=False)

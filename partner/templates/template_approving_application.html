@@ -173,8 +173,15 @@
                     }
 
                     var favorite = [];
-                    if ($(this).attr('id') == 'First Interview') {
+                    if ($(this).attr('id') == 'First Interview'){
                         $('#id_accept_student_model').modal();
+                        $('#second_interview_time').val('');
+                        return false;
+                    }
+
+                    if ($(this).attr('id') == 'Second Interview attended'){
+                        $('#id_accept_student_model').modal();
+                        $('#second_interview_time').val('True');
                         return false;
                     }
                     else {
@@ -224,7 +231,12 @@
 
                             {#alert(JSON.stringify(favorite));#}
                             $("#check_ids").val(JSON.stringify(favorite));
-                            $("#interview_type").val('First Interview');
+                            if($('#second_interview_time').val() !== ''){
+                                $("#interview_type").val('Second Interview attended');
+                            }
+                            else{
+                                $("#interview_type").val('First Interview');
+                            }
 
                             $("#time").val($('#first_time').val());
                             $("#venue").val($('#first_venue').val());
@@ -521,6 +533,7 @@
                                             <div class="">
                                                 <label class="col-md-2 control-label">Time:</label>
                                                 <div class="col-md-3">
+                                                    <input type="text" hidden id="second_interview_time"> <br> <br>
                                                     <input type="time" class="emp" id="first_time"> <br> <br>
                                                 </div>
                                             </div>
