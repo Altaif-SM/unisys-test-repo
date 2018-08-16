@@ -12,7 +12,7 @@
     <!-- END HEAD -->
     <style type="text/css">
 
-        div.dataTables_wrapper div.dataTables_filter label {
+        {% comment %}div.dataTables_wrapper div.dataTables_filter label {
             font-weight: normal;
             white-space: nowrap;
             text-align: left;
@@ -23,6 +23,15 @@
         div.dataTables_wrapper div.dataTables_length {
             padding-right: 40px;
             padding-top: 10px;
+        }{% endcomment %}
+
+        #div {
+            display: flex;
+            justify-content: center;
+        }
+
+        #table {
+            align-self: center;
         }
 
 
@@ -92,8 +101,49 @@
             </div>
         </div>
 
+        {% if application %}
+            <div class="portlet-body">
+                <div class="form-body">
+                    <div id="div">
+                        <table id="table" class="table table-striped table-hover table-bordered"
+                               style="width: 400px; text-align: center">
+                            <thead>
+                            <tr>
+                                <th style="display: none"></th>
+                                <th>Status</th>
+                                <th>Amount of scholarship</th>
+                                <th>Term</th>
+                            </tr>
+                            </thead>
+
+                            <tbody id="tbody">
+                            <tr id="item{{ forloop.counter }}" class="item">
+                                <td style="display: none"></td>
+
+                                <td>
+                                    <p>{% if application.is_sponsored %} Received Scholarship {% else %} Under
+                                        process {% endif %}</p>
+                                </td>
+
+                                <td>
+                                    <p>RM/ Euro {{ application.scholarship_fee }} </p>
+                                </td>
+
+                                <td>
+                                    <p>{{ application.year.year_name|title }}</p>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
         <div class="form-body">
-            <form id="form_sample_1" {% if application %} action="{% url 'partner:application_all_details_pdf' application.id %}" {% endif %} class="form-horizontal" target="_blank" method="POST" enctype="multipart/form-data">
+            <form id="form_sample_1" {% if application %}
+                  action="{% url 'partner:application_all_details_pdf' application.id %}" {% endif %}
+                  class="form-horizontal" target="_blank" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
 
                 <br>

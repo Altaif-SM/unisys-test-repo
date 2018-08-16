@@ -229,8 +229,8 @@
                                             class="form-control eng_emp">
                                         {% if scholarship_obj %}
                                             <option style="display:none" selected="selected"
-                                                    value="{{ scholarship_obj.scholarship.id }}"
-                                                    value="">{{ scholarship_obj.scholarship.scholarship_name|title }}</option>
+                                                    value="{{ scholarship_obj.scholarship.id }}">
+                                                {{ scholarship_obj.scholarship.scholarship_name|title }}</option>
                                         {% else %}
                                             <option style="display:none" selected="selected" id="" value="">Please
                                                 Select

@@ -40,6 +40,32 @@ def template_registered_application(request):
                    'degree_recs': degree_recs})
 
 
+def template_applicant_scholarship(request):
+    scholarship_recs = ScholarshipDetails.objects.all()
+    if request.user.is_super_admin():
+        applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, year=get_current_year(request))
+        university_recs = UniversityDetails.objects.all()
+    else:
+        applicant_recs = ApplicationDetails.objects.filter(
+            nationality=request.user.partner_user_rel.get().address.country, year=get_current_year(request),
+            is_submitted=True)
+        university_recs = UniversityDetails.objects.filter(country=request.user.partner_user_rel.get().address.country)
+    country_recs = CountryDetails.objects.all()
+    degree_recs = DegreeDetails.objects.all()
+
+    if request.POST:
+        applicant_rec = request.POST.get('applicant_rec')
+        scholarship_rec = request.POST.get('scholarship')
+
+        # ApplicationDetails.objects.get(id=applicant_rec)
+        ScholarshipSelectionDetails.objects.filter(applicant_id_id=applicant_rec).update(scholarship_id=scholarship_rec)
+        messages.success(request, 'Record updated successfully.')
+
+    return render(request, 'template_applicant_scholarship.html',
+                  {'applicant_recs': applicant_recs, 'country_recs': country_recs, 'university_recs': university_recs,
+                   'degree_recs': degree_recs, 'scholarship_recs': scholarship_recs})
+
+
 def export_registered_application(request):
     if request.user.is_super_admin():
         applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, year=get_current_year(request))

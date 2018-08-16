@@ -39,7 +39,7 @@
                         $("#id_org_display").hide();
                     }
 
-                    if ($(this).val() == "Student") {
+                    if ($(this).val() == "Student" || $(this).val() == "Accountant") {
                         $("#hide_country").hide();
                         document.getElementById("country_name").required = false;
                     } else {
@@ -247,6 +247,7 @@
                         <th>Email</th>
                         <th>Country</th>
                         <th>Account Type</th>
+                        <th></th>
                     </tr>
                     </thead>
 
@@ -313,6 +314,10 @@
                                        id="role{{ forloop.counter }}" value="{{ rec.role.all.0.name|title }}"
                                        required
                                        disabled>
+                            </td>
+
+                            <td>
+                                <button type="button" onclick="window.location='{% url "accounts:delete_user" rec.id %}'" {% comment %}onclick="window.location={% url 'accounts:delete_user' rec.id %}"{% endcomment %}>Delete</button>
                             </td>
 
                         </tr>

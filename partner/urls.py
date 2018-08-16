@@ -10,6 +10,9 @@ urlpatterns = [
 
                   path('template_registered_application/', views.template_registered_application,
                        name='template_registered_application'),
+                  path('template_applicant_scholarship/', views.template_applicant_scholarship,
+                       name='template_applicant_scholarship'),
+
                   path('filter_registered_application/', views.filter_registered_application,
                        name='filter_registered_application'),
                   path('export_registered_application/', views.export_registered_application,

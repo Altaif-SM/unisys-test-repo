@@ -37,12 +37,41 @@
 
 
                 $('#sample_1').dataTable().fnDestroy();
-                $('#sample_1').dataTable({
-                    "aoColumnDefs": [
-                        {'bSortable': false}
-                    ]
-                });
+            $('#sample_1').dataTable({
+                "aoColumnDefs": [
+                    {'bSortable': false}
+                ],
+                "scrollX": true,
+                dom: 'Bfrtip',
+                buttons: [
+                    /* {
+                         extend: 'copyHtml5',
+                         exportOptions: {
+                             columns: [ 0, ':visible' ]
+                         }
+                     },*/
+                    //'print',
+                    {
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            //columns: ':visible'
+                            columns: [ 1,2,3,4,5,6,7,8, ]
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        orientation: 'landscape',
+                        exportOptions: {
+                            columns: [ 1,2,3,4,5,6,7,8, ]
+                            //columns: ':visible'
+                        }
+                    },
+                    //'colvis'
+                ],
             });
+        });
+
+
         }
 
         window.setTimeout(function () {

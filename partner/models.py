@@ -35,6 +35,7 @@ class PartnerDetails(BaseModel):
     class Meta:
         permissions = (
             ('can_view_applicant_details', 'can view applicant details'),
+            ('can_view_applicant_scholarship', 'can view applicant scholarship'),
             ('can_view_approving_application', 'can view approving application'),
             ('can_view_progress_history', 'can view progress history'),
             ('can_view_psychometric_test_report', 'can view psychometric test report'),

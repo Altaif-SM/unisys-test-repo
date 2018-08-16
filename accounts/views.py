@@ -243,8 +243,8 @@ def user_signup(request):
                         subject = 'Signup Completed'
                         message = 'Your signup completed in NAMA. Please click on the given button to activate your account.'
                         send_signup_email_to_applicant(student_obj.user.email, student_obj.user.email, subject,
-                                                           message,
-                                                           student_obj.user.first_name, user.id)
+                                                       message,
+                                                       student_obj.user.first_name, user.id)
 
                     if request.POST['role'] == "Partner":
                         PartnerDetails.objects.create(user=user, address=address)
@@ -299,7 +299,6 @@ def user_signin(request):
             messages.success(request, "Enter Valid User Name and Password.")
             return redirect('/')
 
-
         # if user:
         #     if user.is_active:
         #         login(request, user)
@@ -328,9 +327,7 @@ def template_manage_user(request):
                   {'country_list': country_list, 'user_recs': user_recs})
 
 
-def account_activate(request,user_id):
-    # user_id = request.POST.get('user_id')
-
+def account_activate(request, user_id):
     try:
         user_rec = User.objects.get(id=user_id)
 
@@ -343,6 +340,101 @@ def account_activate(request,user_id):
     except:
         messages.warning(request, "Invalid operation.")
     return redirect('/')
+
+
+import shutil
+from student.models import *
+
+
+@transaction.atomic
+def delete_user(request, user_id):
+    try:
+        user_rec = User.objects.get(id=user_id)
+
+        if user_rec.is_student():
+            if user_rec.get_application:
+                app_id = user_rec.get_application.id
+                if not user_rec.get_application.is_submitted:
+                    try:
+                        application_obj = ApplicationDetails.objects.get(id=app_id)
+
+                        object_path = str(application_obj.first_name) + '_' + str(application_obj.id)
+                        object_path = settings.MEDIA_ROOT + os.path.join('reports/' + str(object_path))
+                        if os.path.exists(str(object_path)):
+                            shutil.rmtree(object_path)
+
+                        AddressDetails.objects.filter(id=application_obj.address.id).delete()
+                        AddressDetails.objects.filter(id=application_obj.permanent_address.id).delete()
+
+                        ApplicationHistoryDetails.objects.filter(applicant_id=app_id).delete()
+                        SiblingDetails.objects.filter(applicant_id=app_id).delete()
+                        AcademicQualificationDetails.objects.filter(applicant_id=app_id).delete()
+                        EnglishQualificationDetails.objects.filter(applicant_id=app_id).delete()
+                        CurriculumDetails.objects.filter(applicant_id=app_id).delete()
+                        ExperienceDetails.objects.filter(applicant_id=app_id).delete()
+                        ScholarshipSelectionDetails.objects.filter(applicant_id=app_id).delete()
+                        ApplicantAboutDetails.objects.filter(applicant_id=app_id).delete()
+                        StudentNotifications.objects.filter(applicant_id=app_id).delete()
+                        ApplicationDetails.objects.filter(id=app_id).delete()
+
+                        StudentDetails.objects.filter(user=user_rec).delete()
+                        User.objects.filter(id=user_rec.id).delete()
+                        messages.success(request, "Student deleted successfully.")
+                    except:
+                        messages.warning(request,
+                                         "This student cannot be deleted.")
+                else:
+                    messages.warning(request,
+                                     "This student cannot be deleted as his/her application is already submitted.")
+
+            else:
+                try:
+                    StudentDetails.objects.filter(user=user_rec).delete()
+                    User.objects.filter(id=user_rec.id).delete()
+                    messages.success(request, "Student deleted successfully.")
+                except:
+                    messages.warning(request, "This student cannot be deleted.")
+
+        elif user_rec.is_partner():
+            try:
+                PartnerDetails.objects.filter(user=user_rec).delete()
+                User.objects.filter(id=user_rec.id).delete()
+                messages.success(request, "Partner deleted successfully.")
+            except:
+                messages.warning(request, "This parent cannot be deleted. Its instance is used in other tables")
+
+        elif user_rec.is_donor():
+            try:
+                DonorDetails.objects.filter(user=user_rec).delete()
+                User.objects.filter(id=user_rec.id).delete()
+                messages.success(request, "Donor deleted successfully.")
+            except:
+                messages.warning(request, "This donor cannot be deleted.  As students are mapped to this donor")
+
+        elif user_rec.is_parent():
+            try:
+                GuardianDetails.objects.filter(user=user_rec).delete()
+                User.objects.filter(id=user_rec.id).delete()
+                messages.success(request, "Parent deleted successfully.")
+            except:
+                messages.warning(request, "This parent cannot be deleted. As students are mapped to this parent")
+
+        elif user_rec.is_accountant():
+            try:
+                User.objects.filter(id=user_rec.id).delete()
+                messages.success(request, "Accountant deleted successfully.")
+            except:
+                messages.warning(request, "This accountant cannot be deleted. Its instance is used in other tables.")
+
+        else:
+            try:
+                User.objects.filter(id=user_rec.id).delete()
+                messages.success(request, "User deleted successfully.")
+            except:
+                messages.warning(request, "Record not deleted.")
+    except:
+        messages.warning(request, "Record not deleted.")
+    return redirect('/accounts/template_manage_user')
 
 
 def update_switch(request):

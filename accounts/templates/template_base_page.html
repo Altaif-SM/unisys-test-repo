@@ -644,6 +644,17 @@ License: You must have a valid license purchased only from themeforest(the above
                         </li>
                     {% endif %}
 
+                    {% if 'partner.can_view_applicant_scholarship' in perms %}
+                        <li class="nav-item " id="acd_qli">
+                            <a href="{% url 'partner:template_applicant_scholarship' %}"
+                               class="nav-link nav-toggle">
+                                <i class="glyphicon glyphicon-list-alt"></i>
+                                <span class="title">Applicant Scholarship</span>
+                                <span class="selected"></span>
+                            </a>
+                        </li>
+                    {% endif %}
+
                     {% if 'partner.can_view_approving_application' in perms %}
                         <li class="nav-item " id="acd_qli">
                             <a href="{% url 'partner:template_approving_application' %}"
