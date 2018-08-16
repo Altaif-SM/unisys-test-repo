@@ -1204,6 +1204,7 @@ def filter_application_status(request):
 
 def template_student_progress_history(request):
     applicant_recs = ''
+    country_recs = CountryDetails.objects.all()
     try:
         if request.user.is_super_admin():
             applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, year=get_current_year(request))
@@ -1216,7 +1217,20 @@ def template_student_progress_history(request):
         messages.warning(request, "Form have some error" + str(e))
 
     return render(request, 'template_student_progress_history.html',
-                  {'applicant_recs': applicant_recs})
+                  {'applicant_recs': applicant_recs,'country_recs':country_recs})
+
+
+def get_country_applications(request):
+    finalDict = []
+    country_rec = request.POST.get('country', None)
+
+    application_recs = ApplicationDetails.objects.filter(nationality=country_rec,is_submitted=True, year=get_current_year(request))
+
+    for rec in application_recs:
+        student_data = {'name': str(rec.get_full_name()).title(), 'id': rec.id}
+        finalDict.append(student_data)
+
+    return JsonResponse(finalDict, safe=False)
 
 
 def filter_application_history(request):
@@ -1226,6 +1240,8 @@ def filter_application_history(request):
     else:
         form_data = request.session.get('application_history_form_data')
         application = form_data.get('application')
+
+    country_recs = CountryDetails.objects.all()
 
     try:
         if request.user.is_super_admin():
@@ -1246,7 +1262,7 @@ def filter_application_history(request):
 
     return render(request, 'template_student_progress_history.html',
                   {'applicant_recs': applicant_recs, 'application_history_recs': application_history_recs,
-                   'application_obj': application_obj})
+                   'application_obj': application_obj,'country_recs':country_recs})
 
 
 def template_psychometric_test_report(request):
@@ -1482,6 +1498,7 @@ def save_student_program(request):
 def template_academic_progress(request):
     try:
         scholarship_type = ScholarshipDetails.objects.all()
+        country_recs = CountryDetails.objects.all()
         application_list = []
         application_id = []
         if request.user.is_super_admin():
@@ -1507,41 +1524,62 @@ def template_academic_progress(request):
         return redirect('/partner/template_academic_progress/')
 
     return render(request, 'template_academic_progress.html',
-                  {'application_recs': application_list, 'scholarship_type': scholarship_type})
+                  {'application_recs': application_list, 'scholarship_type': scholarship_type,
+                   'country_recs': country_recs})
+
+
+def filter_applicant_scholarship_nationality(field):
+    if field != '':
+        return Q(applicant_id__nationality_id=field)
+        # return Q(applicant_id__address__country_id=field)
+    else:
+        return Q()  # Dummy filter
+
+def filter_applicant_scholarship(field):
+    if field != '':
+        return Q(scholarship_id=field)
+    else:
+        return Q()  # Dummy filter
+
 
 
 def filter_academic_progress(request):
     if request.POST:
         request.session['academic_progress_form_data'] = request.POST
         scholarship = request.POST.get('scholarship')
+        country = request.POST.get('country')
         export = request.POST.get('export')
     else:
         form_data = request.session.get('academic_progress_form_data')
         scholarship = form_data.get('scholarship')
+        country = form_data.get('country')
         export = form_data.get('export')
 
     try:
+        scholarship_obj = ''
+        country_obj = ''
+
         scholarship_type = ScholarshipDetails.objects.all()
-        scholarship_obj = ScholarshipDetails.objects.get(id=scholarship)
+        country_recs = CountryDetails.objects.all()
+
+        if scholarship:
+            scholarship_obj = ScholarshipDetails.objects.get(id=scholarship)
+
+        if country:
+            country_obj = CountryDetails.objects.get(id=country)
+
         application_list = []
         application_id = []
 
-        applicant_ids = ScholarshipSelectionDetails.objects.filter(scholarship_id=scholarship).values_list(
-            'applicant_id')
+        applicant_ids = ScholarshipSelectionDetails.objects.filter(filter_applicant_scholarship(scholarship)).values_list('applicant_id')
         if request.user.is_super_admin():
-            application_recs = ApplicantAcademicProgressDetails.objects.filter(applicant_id__in=applicant_ids,
-                                                                               applicant_id__year=get_current_year(
-                                                                                   request)).order_by('-last_updated')
-            # for application in application_recs:
-            #     if application.applicant_id.id not in application_id:
-            #         application_list.append(application)
-            #         application_id.append(application.applicant_id.id)
+            # Q(filter_applicant_scholarship_nationality(country)),
+            application_recs = ApplicantAcademicProgressDetails.objects.filter(Q(filter_applicant_scholarship_nationality(country)),applicant_id__in=applicant_ids,
+                                                                               applicant_id__year=get_current_year(request)).order_by('-last_updated')
         else:
-            application_recs = ApplicantAcademicProgressDetails.objects.filter(applicant_id__in=applicant_ids,
-                                                                               applicant_id__year=get_current_year(
-                                                                                   request),
-                                                                               applicant_id__nationality=request.user.partner_user_rel.get().address.country).order_by(
-                '-last_updated')
+            application_recs = ApplicantAcademicProgressDetails.objects.filter(Q(filter_applicant_scholarship_nationality(country)),applicant_id__in=applicant_ids,
+                                                                               applicant_id__year=get_current_year(request),
+                                                                               applicant_id__nationality=request.user.partner_user_rel.get().address.country).order_by('-last_updated')
         for application in application_recs:
             if application.applicant_id.id not in application_id:
                 application_list.append(application)
@@ -1583,7 +1621,7 @@ def filter_academic_progress(request):
 
     return render(request, 'template_academic_progress.html',
                   {'application_recs': application_list, 'scholarship_type': scholarship_type,
-                   'scholarship_obj': scholarship_obj})
+                   'scholarship_obj': scholarship_obj,'country_recs':country_recs,'country_obj':country_obj})
 
 
 def export_academic_progress_details(request):
