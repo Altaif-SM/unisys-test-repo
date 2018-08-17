@@ -57,3 +57,29 @@ class signUpForm(forms.ModelForm):
         )
         return user
 
+
+class ChangePasswordForm(forms.Form):
+
+    current_password = forms.CharField(label=(u'Current Password'), widget=forms.PasswordInput(render_value=False))
+    current_password.widget.attrs['placeholder'] = 'Current Password'
+    current_password.widget.attrs['class'] = 'form-control'
+
+    password = forms.CharField(label=(u'Password'), widget=forms.PasswordInput(render_value=False))
+    password.widget.attrs['placeholder'] = 'Password'
+    password.widget.attrs['class'] = 'form-control'
+
+    password1 = forms.CharField(label=(u'Verify Password'), widget=forms.PasswordInput(render_value=False))
+    password1.widget.attrs['placeholder'] = 'Confirm Password'
+    password1.widget.attrs['class'] = 'form-control'
+
+    def clean(self):
+        if self.cleaned_data.get('current_password') is None:
+            raise forms.ValidationError("Current password is necessary")
+        if self.cleaned_data.get('password') is None:
+            raise forms.ValidationError("New password is necessary")
+        if self.cleaned_data.get('password1') is None:
+            raise forms.ValidationError("Confirm password is necessary")
+
+        if self.cleaned_data['password'] != self.cleaned_data['password1']:
+            raise forms.ValidationError("The passwords did not match.")
+        return self.cleaned_data

@@ -11,6 +11,7 @@ urlpatterns = [
     path('user_signup/', views.user_signup, name='user_signup'),
     path('user_signin/', views.user_signin, name='user_signin'),
     path('user_signout/', views.user_signout, name='user_signout'),
+    path('change_password/', views.change_password, name='change_password'),
     # path('forget_password/', views.forget_password, name='forget_password'),
     path('template_manage_user/', views.template_manage_user,name='template_manage_user'),
     path('account_activate/<int:user_id>/', views.account_activate,name='account_activate'),

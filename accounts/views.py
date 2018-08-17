@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.db import transaction
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.conf import settings
 from accounts.decoratars import user_login_required, registration_required
-from accounts.forms import loginForm, signUpForm
+from accounts.forms import loginForm, signUpForm, ChangePasswordForm
 from accounts.service import *
 from accounts.models import UserRole
 from student.models import StudentDetails, ApplicationDetails, ScholarshipSelectionDetails
@@ -16,6 +16,7 @@ from partner.models import PartnerDetails
 from donor.models import DonorDetails
 import json
 from common.utils import *
+from django.template.context_processors import csrf
 from accounts.service import UserService
 
 
@@ -318,6 +319,78 @@ def user_signin(request):
 def user_signout(request):
     logout(request)
     return redirect('/')
+
+
+@user_login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = ChangePasswordForm(data=request.POST)
+        password_data = {}
+        if form.is_valid():
+            password_data['current_password'] = form.cleaned_data['current_password']
+            password_data['password'] = form.cleaned_data['password']
+            password_data['password1'] = form.cleaned_data['password1']
+            user = authenticate(username=request.user.username, password=password_data['current_password'])
+            if user:
+                user.set_password(password_data['password1'])
+                user.encoded_pwd= None
+                user.is_active = True
+                user.save()
+                user = authenticate(username=user.username, password=password_data['password1'])
+                if user is not None:
+                    login(request, user)
+                    dashboard_path = user.get_dashboard_path()
+                    return HttpResponseRedirect(dashboard_path)
+            else:
+                context = {}
+                context['form'] = form
+                context['message'] = "Invalid Current Password"
+                return render(request, 'template_change_password.html', context)
+
+        elif not request.POST:
+            password_data = json.loads(request.body)
+            if 'current_password' in password_data:
+                if not 'password' in password_data or not 'password1' in password_data:
+                    return HttpResponse(json.dumps({'message': 'New Password is necessary'}),
+                                        content_type="application/json")
+                elif password_data['password'] != password_data['password1']:
+                    return HttpResponse(json.dumps({'message': 'The Passwords did not match'}),
+                                        content_type="application/json")
+
+                user = authenticate(username=request.user.username, password=password_data['current_password'])
+                if user:
+                    if user.is_blocked:
+                        return HttpResponseRedirect('/accounts/user_blocked/')
+                    user.set_password(password_data['password1'])
+                    user.is_active = True
+                    user.save()
+                    user = authenticate(username=user.username, password=password_data['password1'])
+                    if user is not None:
+                        login(request, user)
+                        dashboard_path = user.get_dashboard_path()
+                        return HttpResponseRedirect(dashboard_path)
+                else:
+                    return HttpResponse(json.dumps({'message': 'Invalid current password'}),
+                                        content_type="application/json")
+            elif not 'current_password' in password_data:
+                return HttpResponse(json.dumps({'message': 'Current Password is necessary'}),
+                                    content_type="application/json")
+
+            return HttpResponse(json.dumps({'message': 'Unknown error occurred'}), content_type="application/json")
+
+        else:
+            context = {}
+            context.update(csrf(request))
+            context['form'] = form
+            context['message'] = "Please correct the following field:"
+            ChangePasswordForm(data=request.GET)
+            return render(request, 'template_change_password.html', context)
+    else:
+        context = {}
+        context.update(csrf(request))
+        form = ChangePasswordForm()
+        context['form'] = form
+        return render(request, 'template_change_password.html', context)
 
 
 def template_manage_user(request):
