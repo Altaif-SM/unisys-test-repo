@@ -12,6 +12,14 @@
     <script>
         window.onload = function () {
             $(document).ready(function () {
+
+                webshims.setOptions('forms-ext', {
+                    replaceUI: 'auto',
+                    types: 'number'
+                });
+                webshims.polyfill('forms forms-ext');
+
+
                 $('#export_button').attr('disabled', true);
 
                 $("#id_donor_id").chosen();
@@ -121,7 +129,7 @@
                 <a href="{% url 'accounts:home' %}">Home</a>
                 <i class="fa fa-angle-right"></i>
             </li>
-             <li>
+            <li>
                 <span> Accounting </span>
                 <i class="fa fa-angle-right"></i>
             </li>
@@ -167,15 +175,15 @@
                                     <select id='id_donor_id' title="Select Donor" name="donor"
                                             autocomplete="off" class="form-control" data-live-search="true"
                                             required>
-                                    {% if student_main_list.0.selected_donor %}
-                                        <option style="display:none" selected="selected" id=""
-                                                value="{{ student_main_list.0.selected_donor.id }}">{{ student_main_list.0.selected_donor.user.get_full_name|title }}
-                                        </option>
-                                    {% else %}
-                                        <option style="display:none" selected="selected" id=""
-                                                value="">Please Select
-                                        </option>
-                                    {% endif %}
+                                        {% if student_main_list.0.selected_donor %}
+                                            <option style="display:none" selected="selected" id=""
+                                                    value="{{ student_main_list.0.selected_donor.id }}">{{ student_main_list.0.selected_donor.user.get_full_name|title }}
+                                            </option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id=""
+                                                    value="">Please Select
+                                            </option>
+                                        {% endif %}
 
                                         {% for rec in donor_list %}
                                             <option value='{{ rec.id }}'>{{ rec.user.get_full_name|title }}</option>
@@ -199,7 +207,7 @@
                                 <th>No</th>
                                 <th>Student</th>
                                 <th>Semester</th>
-                                <th>Scholorship Fee</th>
+                                <th>Scholarship Fee</th>
                                 <th>Credit</th>
                                 <th>Outstanding</th>
 
@@ -216,7 +224,7 @@
                                                value="{{ rec.voucher_rec.voucher_number }}" disabled>
                                     </td>
                                     <td>
-                                        <p hidden>{{rec.voucher_rec.student.get_all_name }}</p>
+                                        <p hidden>{{ rec.voucher_rec.student.get_all_name }}</p>
                                         <input id="student{{ forloop.counter }}"
                                                class="form-control student"
                                                value="{{ rec.voucher_rec.student.get_all_name }}" disabled>
@@ -226,26 +234,37 @@
                                         <input class="form-control semester_name" name="semester_name" type="text"
                                                id="semester_name{{ forloop.counter }}"
                                                value="{{ rec.voucher_rec.semester.semester_name|title }}"
-                                               required="True" title='{{ rec.voucher_rec.semester.semester_name}}' disabled>
+                                               required="True" title='{{ rec.voucher_rec.semester.semester_name }}'
+                                               disabled>
                                     </td>
+
                                     <td>
                                         <p hidden>{{ rec.approval_amount }}</p>
                                         <input class="form-control approval_amount" name="approval_amount"
-                                               type="text"
+                                               type="number"
+                                               data-number-to-fixed="2" data-number-stepfactor="100"
+                                               min="0" step="0.01"
                                                id="approval_amount{{ forloop.counter }}"
                                                value="{{ rec.approval_amount }}"
                                                required="True" disabled>
                                     </td>
+
                                     <td>
                                         <p hidden>{{ rec.credit_total }}</p>
-                                        <input class="form-control credit_total  data" name="credit_total" type="text"
+                                        <input class="form-control credit_total  data" name="credit_total" type="number"
+                                               data-number-to-fixed="2" data-number-stepfactor="100"
+                                               min="0" step="0.01"
                                                id="id_credit_total{{ rec.id }}"
                                                value="{{ rec.credit_total }}" required="True"
                                                disabled>
                                     </td>
+                                    
                                     <td>
                                         <p hidden>{{ rec.outstanding_amount }}</p>
-                                        <input class="form-control outstanding_amount  data" name="outstanding_amount" type="text"
+                                        <input class="form-control outstanding_amount  data" name="outstanding_amount"
+                                               type="number"
+                                               data-number-to-fixed="2" data-number-stepfactor="100"
+                                               min="0" step="0.01"
                                                id="id_outstanding_amount{{ rec.id }}"
                                                value="{{ rec.outstanding_amount }}" required="True"
                                                disabled>
@@ -257,11 +276,17 @@
                             </tbody>
                             <tr>
                                 <td colspan="4"></td>
-                               <td>
-                                   <input id='id_total1' class='form-control data total_amount' value="{{ student_main_list.0.total_credit_amount }}" disabled>
-                               </td>
                                 <td>
-                                    <input id='id_total2' class='form-control data total_amount' value="{{ student_main_list.0.total_outstanding_amount }}" disabled>
+                                    <input id='id_total1' type="number"
+                                           data-number-to-fixed="2" data-number-stepfactor="100"
+                                           min="0" step="0.01" class='form-control data total_amount'
+                                           value="{{ student_main_list.0.total_credit_amount }}" disabled>
+                                </td>
+                                <td>
+                                    <input id='id_total2' type="number"
+                                           data-number-to-fixed="2" data-number-stepfactor="100"
+                                           min="0" step="0.01" class='form-control data total_amount'
+                                           value="{{ student_main_list.0.total_outstanding_amount }}" disabled>
                                 </td>
                             </tr>
                         </table>

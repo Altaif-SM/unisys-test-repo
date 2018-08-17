@@ -33,9 +33,9 @@
     <script>
         window.onload = function () {
             $(document).ready(function () {
-                 $(document).on("click", "#export_button", function (e) {
-                        $('#form_sample_export').submit();
-                 });
+                $(document).on("click", "#export_button", function (e) {
+                    $('#form_sample_export').submit();
+                });
                 $("#id_scholarship").chosen();
 
 
@@ -129,7 +129,8 @@
                                                     selected="selected">{{ donor_obj.organisation|title }}</option>
                                             <option value="All">All</option>
                                         {% else %}
-                                            <option value="" style="display: none" selected="selected">Select Donor</option>
+                                            <option value="" style="display: none" selected="selected">Select Donor
+                                            </option>
                                             <option value="All">All</option>
                                         {% endif %}
 
@@ -144,11 +145,11 @@
                                 <button type="submit" class="btn blue btn-block" id="go">Filter
                                 </button>
                             </div>
-                        <div class="col-md-2">
-                        <button style="width: 100px" type="button" id="export_button" class="btn blue">
-                            Export
-                        </button>
-                        </div>
+                            <div class="col-md-2">
+                                <button style="width: 100px" type="button" id="export_button" class="btn blue">
+                                    Export
+                                </button>
+                            </div>
 
 
                         </form>
@@ -168,7 +169,7 @@
 
 
                     <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data"
-                          action="{% url 'partner:save_students_donor_linking' %}">
+                            {% comment %}action="{% url 'partner:save_students_donor_linking' %}"{% endcomment %}>
                         {% csrf_token %}
 
                         <div class="row">
@@ -207,27 +208,27 @@
                                             </td>
 
                                             <td>
-                                                <p>{{ rec.course_applied.degree_name|title }}</p>
+                                                <p>{{ rec.degree.degree_name|title }}</p>
                                             </td>
-                                            <td><p></p></td>
+                                            <td>
+                                                <p>{{ rec.course_applied.program_name|title }}</p>
+                                            </td>
                                         </tr>
                                     {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="">
+                            {% comment %}<div class="">
                                 <div class="col-md-offset-5">
                                     <button type="submit" class="btn green" id="save_rec" style="">Save</button>
                                 </div>
-                            </div>
+                            </div>{% endcomment %}
                         </div>
                     </form>
                 </div>
-             <form method="post" action="{% url 'partner:donar_student_linking_export' %}" id="form_sample_export">
+                <form method="post" action="{% url 'partner:donar_student_linking_export' %}" id="form_sample_export">
                     {% csrf_token %}
-                    <input hidden name="donor" id="export_student_value" value="{{ donor_obj.id}}">
-
-
+                    <input hidden name="donor" id="export_student_value" value="{{ donor_obj.id }}">
                 </form>
             </div>
         </div>

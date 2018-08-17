@@ -2192,14 +2192,11 @@ def donar_student_linking_export(request):
             for rec in scholarship_recs:
                 rec_list = []
                 rec_list.append(rec.applicant_id.get_full_name())
-                rec_list.append(rec.applicant_id.nationality.country_name)
-                rec_list.append(rec.applicant_id.address.country.country_name)
-                rec_list.append(rec.university.university_name)
-                rec_list.append(rec.course_applied.degree_name)
-                if rec.applicant_id.applicant_module_rel.all():
-                    rec.append(rec.applicant_id.applicant_module_rel.all()[0].program.program_name)
-                else:
-                    rec_list.append("")
+                rec_list.append(rec.applicant_id.nationality.country_name.title()) if rec.applicant_id.nationality else rec_list.append('')
+                rec_list.append(rec.applicant_id.address.country.country_name.title())
+                rec_list.append(rec.university.university_name.title()) if rec.university else rec_list.append('')
+                rec_list.append(rec.degree.degree_name.title()) if rec.degree else rec_list.append('')
+                rec_list.append(rec.course_applied.program_name.title()) if rec.course_applied else rec_list.append('')
 
                 rows.append(rec_list)
 
