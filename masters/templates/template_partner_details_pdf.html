@@ -1,5 +1,30 @@
 {#{% extends "template_base_page.html" %}#}
 <style>
+
+    @page {
+        margin: 1cm;
+        margin-top: 3cm;
+
+        @frame header {
+        -pdf-frame-content: header;
+    {#font-size: 20px;#}
+    {#font-weight: 100;#}
+    {#text-align: center;#}
+    {#color: #007cae;#}
+    {#font-size: 50px;#}
+    {#background-color: red;#}
+    }
+    margin-bottom: 2.5cm;
+
+    @frame footer {
+    -pdf-frame-content:footerContent;
+    bottom: 1cm;
+    margin-left: 1cm;
+    margin-right: 1cm;
+    height: 2cm;
+    }
+    }
+
     table {
         border-collapse: collapse;
     }
@@ -13,14 +38,22 @@
 </style>
 
 {% block content %}
+    <div class='header' id="header" style="text-align: center;">
+        <img src="{{ logo_path }}" alt="logo"
+             style="width: 120px;height: 80px;margin-top: 5px; text-align: center" class="logo-default"/><br>
+        <span class='title' style="font-size: 16px;color: #13084e"><b>Partner Details </b></span>
+        <hr>
+    </div>
+    <br>
+    <br>
+    <br>
     {% if partner_rec.photo != "" %}
 
-        <span style="margin-left: 550px">
-                    <img style="width: 100px;" src={{ partner_rec.photo.path }}>
-                    </span>
-        <hr>
+        <span style="margin-left: 550px"><img style="width: 100px;" src={{ partner_rec.photo.path }}></span>
+{#        <hr>#}
         <br>
     {% endif %}
+
 
     <table>
 
@@ -86,7 +119,33 @@
 
         </tbody>
     </table>
-    {#            </div>#}
-    {#        </div>#}
-    {#    </div>#}
+    <div id="footerContent" style="font-size: 12px">
+        <hr>
+        <table>
+            {#                <td colspan="3" style="font-size: 16px;font-weight:bold">PERSONAL INFO:</td>#}
+            <tr>
+                <td style="font-size: 11px;">
+                        <span class="">Level 13.2, Menara Tokio Marine Life,
+            No. 189, Jalan Tun Razak,
+            Kuala Lumpur, Malaysia
+                        </span>
+                </td>
+
+                <td style="text-align: left;font-size: 12px">
+                        <span class="">
+                             T: +603.2181.6646 <br>F: +603.2181.6643 50400
+                        </span>
+                </td>
+
+                <td style="text-align: left;font-size: 12px">
+                        <span class="">
+                            Email: partnership1@namafoundation.org
+                            Website: www.namafoundation.org
+                        </span>
+                </td>
+
+            </tr>
+        </table>
+        {#                        <pdf:pagenumber>#}
+    </div>
 {% endblock %}

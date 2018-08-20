@@ -2247,6 +2247,8 @@ def application_all_details_pdf(request, app_id):
 
         x = 14
 
+        logo_path = settings.MEDIA_ROOT+'logo.png'
+
         application_obj = ApplicationDetails.objects.get(id=app_id)
         report_path = settings.MEDIA_ROOT + str('reports/') + str(application_obj.first_name) + '_' + str(
             application_obj.id) + '/'
@@ -2263,7 +2265,7 @@ def application_all_details_pdf(request, app_id):
         Context = ({'report_path': report_path, 'application_obj': application_obj, 'siblings_obj': siblings_obj,
                     'qualification_obj': qualification_obj, 'english_obj': english_obj,
                     'curriculum_obj': curriculum_obj, 'applicant_experience_obj': applicant_experience_obj,
-                    'scholarship_obj': scholarship_obj, 'x': x, 'about_obj': about_obj})
+                    'scholarship_obj': scholarship_obj, 'x': x, 'about_obj': about_obj,'logo_path':logo_path})
         html = template.render(Context)
 
         file = open('test.pdf', "w+b")

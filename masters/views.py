@@ -1290,11 +1290,12 @@ def partner_all_details_pdf(request,partner_id):
         year_recs = YearDetails.objects.all()
         curriculum_obj = ''
         experience_obj = ''
+        logo_path = settings.MEDIA_ROOT + 'logo.png'
         x = 14
         if partner_id:
             partner_rec = PartnerDetails.objects.get(id=partner_id)
         template = get_template('template_partner_details_pdf.html')
-        Context = ({'partner_rec':partner_rec,'x':x})
+        Context = ({'partner_rec':partner_rec,'x':x,'logo_path':logo_path})
         html = template.render(Context)
 
         file = open('test.pdf', "w+b")
@@ -1325,11 +1326,12 @@ def donar_all_details_pdf(request,donor_id):
         year_recs = YearDetails.objects.all()
         curriculum_obj = ''
         experience_obj = ''
+        logo_path = settings.MEDIA_ROOT + 'logo.png'
         x = 14
         if donor_id:
             donar_rec = DonorDetails.objects.get(id=donor_id)
         template = get_template('template_donar_details_PDF.html')
-        Context = ({'donar_rec':donar_rec,'x':x})
+        Context = ({'donar_rec':donar_rec,'x':x,'logo_path':logo_path})
         html = template.render(Context)
         file = open('test.pdf', "w+b")
         pisaStatus = pisa.CreatePDF(html.encode('utf-8'), dest=file,encoding='utf-8')
