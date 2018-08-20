@@ -37,16 +37,14 @@
             });
 
 
-            $('#sample_1').dataTable().fnDestroy();
-            $('#sample_1').dataTable({
-                "aoColumnDefs": [
-                    {'bSortable': false}
-                ]
-            });
 
 
 
-            function updateDataTableSelectAllCtrl(table) {
+
+
+
+            $(document).ready(function () {
+                function updateDataTableSelectAllCtrl(table) {
                 var $table = table.table().node();
                 var $chkbox_all = $('tbody input[type="checkbox"]', $table);
                 var $chkbox_checked = $('tbody input[type="checkbox"]:checked', $table);
@@ -75,7 +73,6 @@
                 }
             }
 
-            $(document).ready(function () {
                 // Array holding selected row IDs
                 var rows_selected = [];
                 var table = $('#example').DataTable({
@@ -163,7 +160,7 @@
                 });
 
 
-                $('.action').click(function () {
+                $('.status_change').click(function () {
 
                     var checked = $('#example').find('input[name="check"]:checked').length;
 
@@ -245,13 +242,21 @@
                             $('#form_submit').submit()
                         }
                 })
+
+            });
+
+            $('#sample_1').dataTable().fnDestroy();
+            $('#sample_1').dataTable({
+                "aoColumnDefs": [
+                    {'bSortable': false}
+                ]
             });
 
             window.setTimeout(function () {
                 $(".alert").fadeTo(500, 0).slideUp(500, function () {
                     $(this).remove();
                 });
-            }, 8000);
+            }, 4000);
         }
     </script>
 
@@ -304,7 +309,7 @@
                         </div>
                     </form>
 
-                    <form method="post" action="{% url 'partner:filter_application_status' %}" id="form_sample_1">
+                    <form method="post" action="{% url 'partner:filter_application_status' %}">
                         {% csrf_token %}
                         <div class="col-md-4">
                             <div class="">
@@ -336,30 +341,27 @@
                             </button>
                         </div>
                     </form>
+
                 </div>
                 <div class="form-body">
-                    <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data"
-                          action="{% url 'partner:change_application_status' %}">
+                    <form class="form-horizontal" method="POST" enctype="multipart/form-data" {% comment %}action="{% url 'partner:change_application_status' %}"{% endcomment %}>
                         {% csrf_token %}
 
                         <div class="row">
                             <div class="actions" style="margin-left: 150px">
                                 <div class="btn-group">
-                                    <a class="btn green-haze btn-outline btn-circle btn-sm"
-                                       href="javascript:;"
-                                       data-toggle="dropdown"
-                                       data-hover="dropdown" data-close-others="true"> Actions
+                                    <a class="btn green-haze btn-outline btn-circle btn-sm" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"> Actions
                                         <i class="fa fa-angle-down"></i>
                                     </a>
                                     <ul class="dropdown-menu pull-right" id="action">
-                                        <li><a href="javascript:;" class="action" id="First Interview"> First Interview</a></li>
-                                        <li><a href="javascript:;" class="action" id="First Interview attended">First Interview attended</a></li>
-                                        <li><a href="javascript:;" class="action" id="First Interview approval">First Interview approval</a></li>
-                                        <li><a href="javascript:;" class="action" id="Psychometric Test">Psychometric Test</a></li>
-                                        <li><a href="javascript:;" class="action" id="Second Interview attended">Second Interview attended</a></li>
-                                        <li><a href="javascript:;" class="action" id="Second Interview approval">Second Interview approval</a></li>
+                                        <li><a class="status_change" id="First Interview"> First Interview</a></li>
+                                        <li><a class="status_change" id="First Interview attended">First Interview attended</a></li>
+                                        <li><a class="status_change" id="First Interview approval">First Interview approval</a></li>
+                                        <li><a class="status_change" id="Psychometric Test">Psychometric Test</a></li>
+                                        <li><a class="status_change" id="Second Interview attended">Second Interview attended</a></li>
+                                        <li><a class="status_change" id="Second Interview approval">Second Interview approval</a></li>
 {#                                        <li><a href="javascript:;" class="action" id="Admin approval">Admin approval</a></li>#}
-                                        <li><a href="javascript:;" class="action" id="Reject">Reject</a></li>
+                                        <li><a class="status_change" id="Reject">Reject</a></li>
                                     </ul>
                                 </div>
                             </div>

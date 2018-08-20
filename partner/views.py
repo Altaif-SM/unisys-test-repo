@@ -185,6 +185,7 @@ def filter_registered_application(request):
 
 def template_approving_application(request):
     applicant_recs = ''
+    # messages.success(request, "Records are.... ")
     try:
         if request.user.is_super_admin():
             applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, year=get_current_year(request))
@@ -824,6 +825,20 @@ def change_application_status(request):
 
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
+
+    # applicant_recs = ''
+    # try:
+    #     if request.user.is_super_admin():
+    #         applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, year=get_current_year(request))
+    #     else:
+    #         applicant_recs = ApplicationDetails.objects.filter(
+    #             nationality=request.user.partner_user_rel.get().address.country,
+    #             is_submitted=True, year=get_current_year(request))
+    # except Exception as e:
+    #     messages.warning(request, "Form have some error" + str(e))
+    # messages.warning(request, "Bye.........")
+    # return render(request, 'template_approving_application.html',
+    #               {'applicant_recs': applicant_recs})
     return redirect('/partner/template_approving_application/')
 
 
@@ -1216,6 +1231,13 @@ def filter_application_status(request):
 
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
+
+    # for x in range(5):
+    #     messages.warning(request, "Filtered  Records are...")
+    #     if x is 2:
+    #         messages.warning(request, "Filtered  Records 555555...")
+    #         continue
+
 
     return render(request, 'template_approving_application.html',
                   {'applicant_recs': applicant_recs, 'application_status': application_status})
