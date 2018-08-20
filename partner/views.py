@@ -665,7 +665,8 @@ def change_application_status(request):
                                 email_rec = EmailTemplates.objects.get(template_for='Second Interview Attend',
                                                                        is_active=True)
                                 context = {'first_name': application_obj.first_name}
-                                send_email_with_template(application_obj, context, email_rec.subject, email_rec.email_body,
+                                send_email_with_template(application_obj, context, email_rec.subject,
+                                                         email_rec.email_body,
                                                          request)
                             except:
                                 subject = 'Second Interview Attended'
@@ -687,7 +688,8 @@ def change_application_status(request):
                                                                          status='Second Interview Attended',
                                                                          remark='You have attended second interview. Please wait for the further updates.')
 
-                            messages.success(request, application_obj.first_name.title() + " application status changed.")
+                            messages.success(request,
+                                             application_obj.first_name.title() + " application status changed.")
                         else:
                             messages.warning(request,
                                              "For applicant " + application_obj.first_name.title() + " Second interview Time, Date and Venue should not be empty.")
@@ -1238,7 +1240,6 @@ def filter_application_status(request):
     #         messages.warning(request, "Filtered  Records 555555...")
     #         continue
 
-
     return render(request, 'template_approving_application.html',
                   {'applicant_recs': applicant_recs, 'application_status': application_status})
 
@@ -1258,14 +1259,15 @@ def template_student_progress_history(request):
         messages.warning(request, "Form have some error" + str(e))
 
     return render(request, 'template_student_progress_history.html',
-                  {'applicant_recs': applicant_recs,'country_recs':country_recs})
+                  {'applicant_recs': applicant_recs, 'country_recs': country_recs})
 
 
 def get_country_applications(request):
     finalDict = []
     country_rec = request.POST.get('country', None)
 
-    application_recs = ApplicationDetails.objects.filter(nationality=country_rec,is_submitted=True, year=get_current_year(request))
+    application_recs = ApplicationDetails.objects.filter(nationality=country_rec, is_submitted=True,
+                                                         year=get_current_year(request))
 
     for rec in application_recs:
         student_data = {'name': str(rec.get_full_name()).title(), 'id': rec.id}
@@ -1303,7 +1305,7 @@ def filter_application_history(request):
 
     return render(request, 'template_student_progress_history.html',
                   {'applicant_recs': applicant_recs, 'application_history_recs': application_history_recs,
-                   'application_obj': application_obj,'country_recs':country_recs})
+                   'application_obj': application_obj, 'country_recs': country_recs})
 
 
 def template_psychometric_test_report(request):
@@ -1576,12 +1578,12 @@ def filter_applicant_scholarship_nationality(field):
     else:
         return Q()  # Dummy filter
 
+
 def filter_applicant_scholarship(field):
     if field != '':
         return Q(scholarship_id=field)
     else:
         return Q()  # Dummy filter
-
 
 
 def filter_academic_progress(request):
@@ -1612,15 +1614,18 @@ def filter_academic_progress(request):
         application_list = []
         application_id = []
 
-        applicant_ids = ScholarshipSelectionDetails.objects.filter(filter_applicant_scholarship(scholarship)).values_list('applicant_id')
+        applicant_ids = ScholarshipSelectionDetails.objects.filter(
+            filter_applicant_scholarship(scholarship)).values_list('applicant_id')
         if request.user.is_super_admin():
             # Q(filter_applicant_scholarship_nationality(country)),
-            application_recs = ApplicantAcademicProgressDetails.objects.filter(Q(filter_applicant_scholarship_nationality(country)),applicant_id__in=applicant_ids,
-                                                                               applicant_id__year=get_current_year(request)).order_by('-last_updated')
+            application_recs = ApplicantAcademicProgressDetails.objects.filter(
+                Q(filter_applicant_scholarship_nationality(country)), applicant_id__in=applicant_ids,
+                applicant_id__year=get_current_year(request)).order_by('-last_updated')
         else:
-            application_recs = ApplicantAcademicProgressDetails.objects.filter(Q(filter_applicant_scholarship_nationality(country)),applicant_id__in=applicant_ids,
-                                                                               applicant_id__year=get_current_year(request),
-                                                                               applicant_id__nationality=request.user.partner_user_rel.get().address.country).order_by('-last_updated')
+            application_recs = ApplicantAcademicProgressDetails.objects.filter(
+                Q(filter_applicant_scholarship_nationality(country)), applicant_id__in=applicant_ids,
+                applicant_id__year=get_current_year(request),
+                applicant_id__nationality=request.user.partner_user_rel.get().address.country).order_by('-last_updated')
         for application in application_recs:
             if application.applicant_id.id not in application_id:
                 application_list.append(application)
@@ -1662,7 +1667,7 @@ def filter_academic_progress(request):
 
     return render(request, 'template_academic_progress.html',
                   {'application_recs': application_list, 'scholarship_type': scholarship_type,
-                   'scholarship_obj': scholarship_obj,'country_recs':country_recs,'country_obj':country_obj})
+                   'scholarship_obj': scholarship_obj, 'country_recs': country_recs, 'country_obj': country_obj})
 
 
 def export_academic_progress_details(request):
@@ -1702,6 +1707,37 @@ def template_academic_progress_details(request, app_id):
 
     return render(request, "template_academic_progress_details.html",
                   {'progress_recs': progress_rec})
+
+
+def approve_applicant_semester_result(request, app_id):
+    try:
+        next_semester_rec = ''
+        # ApplicantAcademicProgressDetails.objects.filter(id=app_id).update(is_approved=True)
+
+        all_semester = SemesterDetails.objects.all()
+        application_rec = ApplicantAcademicProgressDetails.objects.get(id=app_id).applicant_id
+
+        next_semester_data = (application_rec.semester.end_date - all_semester[0].start_date).days
+
+        for semester_rec in all_semester:
+            if semester_rec:
+                semester_data = semester_rec.start_date - application_rec.semester.end_date
+                if semester_data.days > 0:
+                    if next_semester_data > semester_data.days:
+                        next_semester_data = semester_data.days
+                        next_semester_rec = semester_rec
+
+        if next_semester_rec:
+            ApplicantAcademicProgressDetails.objects.filter(id=app_id).update(is_approved=True)
+            ApplicationDetails.objects.filter(id=application_rec.id).update(semester=next_semester_rec)
+            messages.success(request,
+                             application_rec.first_name + ' semester result is approved the applicant is promoted to next semester')
+        else:
+            messages.success(request, 'Please create next semester and try to approve the semester result again.')
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+    return redirect('/partner/template_academic_progress/')
 
 
 def template_attendance_report(request):
@@ -2214,7 +2250,9 @@ def donar_student_linking_export(request):
             for rec in scholarship_recs:
                 rec_list = []
                 rec_list.append(rec.applicant_id.get_full_name())
-                rec_list.append(rec.applicant_id.nationality.country_name.title()) if rec.applicant_id.nationality else rec_list.append('')
+                rec_list.append(
+                    rec.applicant_id.nationality.country_name.title()) if rec.applicant_id.nationality else rec_list.append(
+                    '')
                 rec_list.append(rec.applicant_id.address.country.country_name.title())
                 rec_list.append(rec.university.university_name.title()) if rec.university else rec_list.append('')
                 rec_list.append(rec.degree.degree_name.title()) if rec.degree else rec_list.append('')
@@ -2269,7 +2307,7 @@ def application_all_details_pdf(request, app_id):
 
         x = 14
 
-        logo_path = settings.MEDIA_ROOT+'logo.png'
+        logo_path = settings.MEDIA_ROOT + 'logo.png'
 
         application_obj = ApplicationDetails.objects.get(id=app_id)
         report_path = settings.MEDIA_ROOT + str('reports/') + str(application_obj.first_name) + '_' + str(
@@ -2287,7 +2325,7 @@ def application_all_details_pdf(request, app_id):
         Context = ({'report_path': report_path, 'application_obj': application_obj, 'siblings_obj': siblings_obj,
                     'qualification_obj': qualification_obj, 'english_obj': english_obj,
                     'curriculum_obj': curriculum_obj, 'applicant_experience_obj': applicant_experience_obj,
-                    'scholarship_obj': scholarship_obj, 'x': x, 'about_obj': about_obj,'logo_path':logo_path})
+                    'scholarship_obj': scholarship_obj, 'x': x, 'about_obj': about_obj, 'logo_path': logo_path})
         html = template.render(Context)
 
         file = open('test.pdf', "w+b")

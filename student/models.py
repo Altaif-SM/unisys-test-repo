@@ -120,9 +120,8 @@ class ApplicationDetails(BaseModel):
     middle_name = models.CharField(max_length=255, blank=True, null=True)
     last_name = models.CharField(max_length=255, blank=True, null=True)
 
-    year = models.ForeignKey('masters.YearDetails', blank=True, null=True,
-                             related_name='applicant_year_rel',
-                             on_delete=models.PROTECT)
+    year = models.ForeignKey('masters.YearDetails', blank=True, null=True,related_name='applicant_year_rel',on_delete=models.PROTECT)
+    semester = models.ForeignKey('masters.SemesterDetails', blank=True, null=True,related_name='applicant_semester_rel',on_delete=models.PROTECT)
 
     birth_date = models.DateField(blank=True, null=True)
     gender = models.CharField(max_length=25, blank=True, null=True, )
@@ -465,6 +464,7 @@ class ApplicantAcademicProgressDetails(BaseModel):
     cgpa_scored = models.CharField(max_length=255, blank=True, null=True)
     cgpa_from = models.CharField(max_length=255, blank=True, null=True)
     transcript_document = models.FileField(upload_to=content_file_name_report)
+    is_approved = models.BooleanField(default=False)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_progress_rel',
                                      on_delete=models.PROTECT)
 

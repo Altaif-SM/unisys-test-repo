@@ -88,58 +88,58 @@
         <div class="portlet-body">
             {#        <div class="form-body">#}
             <div class="form-body">
-             <form method="post" action="{% url 'partner:filter_academic_progress' %}" id="form_sample_1">
-                        {% csrf_token %}
-                <div class="row col-md-offset-2">
-                    <div class="">
-{#                        <label style="margin-left: 3%" class="col-md-1 control-label">Country:</label>#}
-                        <div class="col-md-2">
-                            <select autocomplete="off" class="form-control" data-live-search="true"
-                                    id="id_country" name="country">
-                                {% if country_obj %}
-                                    <option style="display: none" value="{{ country_obj.id }}"
-                                            selected="selected">{{ country_obj.country_name|title }}</option>
-                                {% else %}
-                                    <option value="" style="display: none" selected="selected">Country</option>
-                                {% endif %}
-{#                            <option value="" style="display: none" >All</option>#}
+                <form method="post" action="{% url 'partner:filter_academic_progress' %}" id="form_sample_1">
+                    {% csrf_token %}
+                    <div class="row col-md-offset-2">
+                        <div class="">
+                            {#                        <label style="margin-left: 3%" class="col-md-1 control-label">Country:</label>#}
+                            <div class="col-md-2">
+                                <select autocomplete="off" class="form-control" data-live-search="true"
+                                        id="id_country" name="country">
+                                    {% if country_obj %}
+                                        <option style="display: none" value="{{ country_obj.id }}"
+                                                selected="selected">{{ country_obj.country_name|title }}</option>
+                                    {% else %}
+                                        <option value="" style="display: none" selected="selected">Country</option>
+                                    {% endif %}
+                                    {#                            <option value="" style="display: none" >All</option>#}
 
-                                {% for rec in country_recs %}
-                                    <option value="{{ rec.id }}">{{ rec.country_name|title }}</option>
-                                {% endfor %}
-                            </select>
+                                    {% for rec in country_recs %}
+                                        <option value="{{ rec.id }}">{{ rec.country_name|title }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="">
+                            {#                        <label class="col-md-1 control-label">Scholarship:</label>#}
+                            <div class="col-md-2">
+                                <select autocomplete="off" class="form-control" data-live-search="true"
+                                        id="id_scholarship" name="scholarship">
+                                    {% if scholarship_obj %}
+                                        <option style="display: none" value="{{ scholarship_obj.id }}"
+                                                selected="selected">{{ scholarship_obj.scholarship_name|title }}</option>
+                                    {% else %}
+                                        <option value="" style="display: none" selected="selected">Scholarship Type
+                                        </option>
+                                    {% endif %}
+
+                                    {#                            <option value="" style="display: none" >All</option>#}
+
+                                    {% for rec in scholarship_type %}
+                                        <option value="{{ rec.id }}">{{ rec.scholarship_name|title }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="">
+                            <div class="col-md-1">
+                                <button type="submit" class="btn blue btn-block" id="go">Search</button>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="">
-{#                        <label class="col-md-1 control-label">Scholarship:</label>#}
-                        <div class="col-md-2">
-                            <select autocomplete="off" class="form-control" data-live-search="true"
-                                    id="id_scholarship" name="scholarship">
-                                {% if scholarship_obj %}
-                                    <option style="display: none" value="{{ scholarship_obj.id }}"
-                                            selected="selected">{{ scholarship_obj.scholarship_name|title }}</option>
-                                {% else %}
-                                    <option value="" style="display: none" selected="selected">Scholarship Type
-                                    </option>
-                                {% endif %}
-
-{#                            <option value="" style="display: none" >All</option>#}
-
-                                {% for rec in scholarship_type %}
-                                    <option value="{{ rec.id }}">{{ rec.scholarship_name|title }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="">
-                        <div class="col-md-1">
-                            <button type="submit" class="btn blue btn-block" id="go">Search</button>
-                        </div>
-                    </div>
-                </div>
-             </form>
+                </form>
 
                 {% comment %}<div>
                     <form method="post" action="{% url 'partner:filter_academic_progress' %}" id="form_sample_1">
@@ -220,6 +220,7 @@
                                     <th>CGPA</th>
                                     <th>Date</th>
                                     <th>PDF</th>
+                                    <th></th>
                                 </tr>
                                 </thead>
 
@@ -250,11 +251,18 @@
                                         <td><p>{{ rec.cgpa_scored }}</p></td>
                                         <td><p>{{ rec.date }}</p></td>
                                         <td><p><a href="
-
-
-
                                                 {{ rec.applicant_id.report_path }}{{ rec.transcript_document }}">{{ rec.transcript_document|default:"" }}</a>
-                                            {% comment %}{{ rec.transcript_document }}{% endcomment %}</p></td>
+                                        </p></td>
+                                        <td>
+                                            {% if rec.is_approved %}
+                                                <button type="button" class="btn green">Approved</button>
+                                            {% else %}
+                                                <button type="button" class="btn red" id="next"
+                                                        onclick="window.location='{% url "partner:approve_applicant_semester_result" rec.id %}'">
+                                                    Approval Pending
+                                                </button>
+                                            {% endif %}
+                                        </td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>

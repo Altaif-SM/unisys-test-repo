@@ -67,6 +67,7 @@ urlpatterns = [
 
                   path('applicant_academic_progress/', views.applicant_academic_progress,
                        name='applicant_academic_progress'),
+
                   path('save_applicant_academic_progress/', views.save_applicant_academic_progress,
                        name='save_applicant_academic_progress'),
 

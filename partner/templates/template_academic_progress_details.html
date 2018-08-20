@@ -62,7 +62,7 @@
             </li>
 
             <li>
-            <a href="{% url 'partner:template_semester_result' %}">Semester Result</a>
+                <a href="{% url 'partner:template_semester_result' %}">Semester Result</a>
                 <i class="fa fa-angle-right"></i>
 
             </li>
@@ -113,6 +113,7 @@
                             <th>GPA Maximum</th>
                             <th>Grade Minimum</th>
                             <th>Grade Maximum</th>
+                            <th></th>
                             {#                        <th width="10%"></th>#}
                         </tr>
                         </thead>
@@ -151,7 +152,9 @@
                                 </td>
 
                                 <td>
-                                    <p><a href="{{ rec.applicant_id.report_path }}{{ rec.transcript_document }}">{{ rec.transcript_document }}</a></p>
+                                    <p><a href="
+                                            {{ rec.applicant_id.report_path }}{{ rec.transcript_document }}">{{ rec.transcript_document }}</a>
+                                    </p>
                                     <input style="display: none" class="form-control data transcript_document"
                                            name="transcript_document_name_saved"
                                            type="text"
@@ -199,6 +202,17 @@
                                            id="cgpa_from{{ forloop.counter }}" value="{{ rec.cgpa_from }}"
                                            required
                                            title='Please enter max cgpa' disabled></td>
+
+                                <td>
+                                    {% if rec.is_approved %}
+                                        <button type="button" class="btn green">Approved</button>
+                                    {% else %}
+                                        <button type="button" class="btn red" id="next"
+                                                onclick="window.location='{% url "partner:approve_applicant_semester_result" rec.id %}'">
+                                            Approval Pending
+                                        </button>
+                                    {% endif %}
+                                </td>
                             </tr>
                         {% endfor %}
                         </tbody>

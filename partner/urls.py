@@ -30,9 +30,11 @@ urlpatterns = [
                   path('template_application_approval_details/<int:app_id>/',
                        views.template_application_approval_details, name='template_application_approval_details'),
 
-                  path('template_student_progress_history/', views.template_student_progress_history,name='template_student_progress_history'),
-                  path('get_country_applications/', views.get_country_applications,name='get_country_applications'),
-                  path('filter_application_history/', views.filter_application_history,name='filter_application_history'),
+                  path('template_student_progress_history/', views.template_student_progress_history,
+                       name='template_student_progress_history'),
+                  path('get_country_applications/', views.get_country_applications, name='get_country_applications'),
+                  path('filter_application_history/', views.filter_application_history,
+                       name='filter_application_history'),
 
                   path('template_psychometric_test_report/', views.template_psychometric_test_report,
                        name='template_psychometric_test_report'),
@@ -51,6 +53,8 @@ urlpatterns = [
 
                   path('template_academic_progress_details/<int:app_id>/', views.template_academic_progress_details,
                        name='template_academic_progress_details'),
+                  path('approve_applicant_semester_result/<int:app_id>/', views.approve_applicant_semester_result,
+                       name='approve_applicant_semester_result'),
                   path('export_academic_progress_details/', views.export_academic_progress_details,
                        name='export_academic_progress_details'),
                   path('template_attendance_report/', views.template_attendance_report,

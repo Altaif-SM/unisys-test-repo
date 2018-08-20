@@ -1401,10 +1401,14 @@ def applicant_academic_progress(request):
         semester_recs = ''
         year_recs = ''
         progress_recs = ''
+        applicant_semester = ''
+
         if request.user.get_application:
             if request.user.get_application.is_submitted:
                 year_recs = YearDetails.objects.all()
                 semester_recs = SemesterDetails.objects.all()
+
+                applicant_semester = request.user.get_application.semester.id
 
                 progress_recs = ApplicantAcademicProgressDetails.objects.filter(
                     applicant_id=request.user.get_application)
@@ -1413,7 +1417,7 @@ def applicant_academic_progress(request):
         messages.warning(request, "Form have some error" + str(e))
         return redirect('/student/student_home/')
     return render(request, 'applicant_academic_progress.html',
-                  {'semester_recs': semester_recs, 'year_recs': year_recs, 'progress_recs': progress_recs})
+                  {'semester_recs': semester_recs, 'year_recs': year_recs, 'progress_recs': progress_recs,'applicant_semester':applicant_semester})
 
 
 @semester_required

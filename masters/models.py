@@ -144,12 +144,27 @@ class DegreeFormula(BaseModel):
     repayment = models.CharField(max_length=10, blank=True, null=True)
     is_cgpa_or_grade = models.BooleanField(default=True)
 
+    def __str__(self):
+        cgpa_min = self.cgpa_min if self.cgpa_min else ''
+        cgpa_max = self.cgpa_max if self.cgpa_max else ''
+        scholarship = self.scholarship.scholarship_name if self.scholarship else ''
+        repayment = self.repayment if self.repayment else ''
+        res = 'scholarship = '+scholarship+',cgpa_min = '+cgpa_min+', cgpa_max = '+cgpa_max + ', repayment = '+repayment
+        return res
+
 
 class MasterAndPhdFormula(BaseModel):
     scholarship = models.ForeignKey(ScholarshipDetails, null=True, related_name='phd_scholarship_formula_relation',
                                     on_delete=models.PROTECT)
     result = models.CharField(max_length=10, blank=True, null=True)
     repayment = models.FloatField(max_length=10, blank=True, null=True)
+
+    def __str__(self):
+        result = self.result if self.result else ''
+        repayment = self.repayment if self.repayment else ''
+        scholarship = self.scholarship.scholarship_name if self.scholarship else ''
+        res = 'scholarship = '+scholarship+', result = '+result+', repayment = '+repayment
+        return res
 
 
 class MasterAndCourseFormula(BaseModel):
@@ -158,6 +173,14 @@ class MasterAndCourseFormula(BaseModel):
     result_min = models.CharField(max_length=10, blank=True, null=True)
     result_max = models.CharField(max_length=10, blank=True, null=True)
     repayment = models.CharField(max_length=10, blank=True, null=True)
+
+    def __str__(self):
+        result_min = self.result_min if self.result_min else ''
+        result_max = self.result_max if self.result_max else ''
+        repayment = self.repayment if self.repayment else ''
+        scholarship = self.scholarship.scholarship_name if self.scholarship else ''
+        res = 'scholarship = '+scholarship+',result_min = '+result_min+', result_max = '+result_max + 'repayment = '+repayment
+        return res
 
 
 class StudentDonorMapping(BaseModel):

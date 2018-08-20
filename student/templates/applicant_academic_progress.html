@@ -238,14 +238,16 @@
                             <div class="">
                                 <label class="col-md-2 control-label">Semester:</label>
                                 <div class="col-md-2">
-                                    <select id='id_semester' name="semester" class="form-control" required>
-                                        <option style="display:none" selected="selected" id="" value="">Please Select
-                                        </option>
+                                    <select id='id_semester'  class="form-control" required
+                                            {% if applicant_semester %}disabled {% endif %}>
+                                        <option style="display:none" selected="selected" id="" value="">Please Select</option>
 
                                         {% for rec in semester_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.semester_name|title }}</option>
+                                            <option value='{{ rec.id }}' {% if applicant_semester == rec.id %}
+                                                    selected {% endif %}>{{ rec.semester_name|title }}</option>
                                         {% endfor %}
                                     </select>
+                                <input hidden value='{{ applicant_semester }}'  name="semester">
                                 </div>
 
                                 <div class="">
@@ -352,6 +354,7 @@
                             <th>GPA Maximum</th>
                             <th>Grade Minimum</th>
                             <th>Grade Maximum</th>
+                            <th>Admin Approval</th>
                             {#                        <th width="10%"></th>#}
                         </tr>
                         </thead>
@@ -389,6 +392,7 @@
 
                                 <td>
                                     <p><a href="
+
                                             {{ rec.applicant_id.report_path }}{{ rec.transcript_document }}">{{ rec.transcript_document|default:"" }}</a>
                                     </p>
                                     <input style="display: none" class="form-control data transcript_document"
@@ -438,6 +442,10 @@
                                            id="cgpa_from{{ forloop.counter }}" value="{{ rec.cgpa_from }}"
                                            required
                                            title='Please enter max cgpa' disabled></td>
+
+                                <td>
+                                    <p>{% if rec.is_approved %} Approved {% else %} Under review {% endif %}</p>
+                                </td>
 
 
                                 {% comment %}<td>
