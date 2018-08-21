@@ -188,9 +188,9 @@
                                             </td>
 
                                             <td>
-                                                <p>{{ rec.course_applied.degree_name|title }}</p>
+                                                <p>{{ rec.degree.degree_name|title }}</p>
                                             </td>
-                                            <td><p></p></td>
+                                            <td><p>{{ rec.course_applied.program_name|title }}</p></td>
                                             <td>
                                                 <select id='id_donor'
                                                         name="donor_name{{ forloop.counter }}"
