@@ -1158,13 +1158,13 @@ def save_update_applicant_scholarship_about_yourself_info(request):
 def my_application(request):
     try:
         application_obj = request.user.get_application
-        siblings_obj = application_obj.sibling_applicant_rel.all()
-        qualification_obj = application_obj.academic_applicant_rel.get()
-        english_obj = application_obj.english_applicant_rel.get()
-        curriculum_obj = application_obj.curriculum_applicant_rel.get()
-        applicant_experience_obj = application_obj.applicant_experience_rel.get()
-        scholarship_obj = application_obj.applicant_scholarship_rel.get()
-        about_obj = application_obj.applicant_about_rel.get()
+        siblings_obj = application_obj.sibling_applicant_rel.all() if application_obj.sibling_applicant_rel.all() else ''
+        qualification_obj = application_obj.academic_applicant_rel.get() if application_obj.academic_applicant_rel.get() else ''
+        english_obj = application_obj.english_applicant_rel.get() if application_obj.english_applicant_rel.all() else ''
+        curriculum_obj = application_obj.curriculum_applicant_rel.get() if application_obj.curriculum_applicant_rel.all() else ''
+        applicant_experience_obj = application_obj.applicant_experience_rel.get() if application_obj.applicant_experience_rel.all() else ''
+        scholarship_obj = application_obj.applicant_scholarship_rel.get() if application_obj.applicant_scholarship_rel.all() else ''
+        about_obj = application_obj.applicant_about_rel.get() if application_obj.applicant_about_rel.all() else ''
 
         # path = str(settings.MEDIA_URL) + str('reports/Donors.pdf')
         # path =str('/home/redbytes/scholarship_proj/scholarship_mgmt/media/reports/Donors.pdf')
@@ -1402,9 +1402,22 @@ def applicant_academic_progress(request):
         year_recs = ''
         progress_recs = ''
         applicant_semester = ''
+        application_degree_type = ''
+        degree_name=''
 
         if request.user.get_application:
             if request.user.get_application.is_submitted:
+                application_degree_type = request.user.get_application.applicant_scholarship_rel.get().degree.degree_type.degree_name
+                if application_degree_type == 'masters (course work)':
+                    degree_name = 'course_work'
+
+                elif application_degree_type == 'phd':
+                    degree_name = 'phd'
+
+                else:
+                    degree_name = 'degree'
+
+
                 year_recs = YearDetails.objects.all()
                 semester_recs = SemesterDetails.objects.all()
 
@@ -1417,7 +1430,7 @@ def applicant_academic_progress(request):
         messages.warning(request, "Form have some error" + str(e))
         return redirect('/student/student_home/')
     return render(request, 'applicant_academic_progress.html',
-                  {'semester_recs': semester_recs, 'year_recs': year_recs, 'progress_recs': progress_recs,'applicant_semester':applicant_semester})
+                  {'degree_name':degree_name,'semester_recs': semester_recs, 'year_recs': year_recs, 'progress_recs': progress_recs,'applicant_semester':applicant_semester})
 
 
 @semester_required
@@ -1436,6 +1449,8 @@ def save_applicant_academic_progress(request):
 
     cgpa_scored = request.POST.get('cgpa_scored')
     cgpa_from = request.POST.get('cgpa_from')
+
+    result = request.POST.get('result')
     try:
         progress_obj = ApplicantAcademicProgressDetails.objects.create(year_id=year,
                                                                        date=date if date else None,
@@ -1444,7 +1459,8 @@ def save_applicant_academic_progress(request):
                                                                        gpa_from=gpa_from,
                                                                        cgpa_scored=cgpa_scored,
                                                                        cgpa_from=cgpa_from,
-                                                                       applicant_id=request.user.get_application)
+                                                                       applicant_id=request.user.get_application,
+                                                                       result= result)
 
         if transcript_document:
             transcript = str(transcript_document)

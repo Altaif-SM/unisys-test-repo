@@ -477,11 +477,6 @@
                                 </div>
                             </div>
                             <span id="data_error_msg" style="display: none;color: red;"></span>
-                        </div>
-
-                        <br><br>
-
-                        <div class="row">
 
                             <div class="">
                                 <label class="col-md-2 control-label">Country:</label>
@@ -492,6 +487,24 @@
                                            value="{{ raw_dict.application_rec.country.country_name }}">
 
                                     <input type="text" id="id_country_id" name="country" hidden>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br><br>
+
+                        <div class="row">
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Program:</label>
+                                <div class="col-md-2">
+                                    <input type="text" title="Program" placeholder="Program"
+                                           id="id_program" name="program"
+                                           class="form-control" required disabled
+                                           value="{{ raw_dict.application_rec.program.program_name }}">
+
+                                    <input type="text" id="id_program_id" name="program" hidden>
                                 </div>
                             </div>
 
@@ -525,15 +538,16 @@
 
                         <div class="row">
 
-                            <div class="">
-                                <label class="col-md-2 control-label">Program:</label>
-                                <div class="col-md-2">
-                                    <input type="text" title="Program" placeholder="Program"
-                                           id="id_program" name="program"
-                                           class="form-control" required disabled
-                                           value="{{ raw_dict.application_rec.program.program_name }}">
 
-                                    <input type="text" id="id_program_id" name="program" hidden>
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Repayment Fee:</label>
+                                <div class="col-md-2">
+                                    <input type="number" title="Repayment Fee" id="id_repayment_fee"
+                                           name="repayment_fee" placeholder="0.00"
+                                           data-number-to-fixed="2" data-number- stepfactor="100"
+                                           class="form-control " required disabled
+                                           value="{{ raw_dict.application_rec.repayment_amount }}">
                                 </div>
                             </div>
 
@@ -556,7 +570,7 @@
                                            min="0" step="0.01"
                                            data-number-to-fixed="2" data-number- stepfactor="100"
                                            class="form-control" required disabled
-                                           value="{{ raw_dict.application_rec.balance }}">
+                                           value="{{ raw_dict.application_rec.repayment_balance }}">
                                 </div>
                             </div>
 
@@ -691,10 +705,10 @@
                                        required="True" disabled>
                             </td>
                             <td>
-                                <p hidden>{{ rec.application.applicant_module_rel.all.0.program.program_name }}</p>
+                                <p hidden>{{ rec.application.applicant_scholarship_rel.get.course_applied.program_name }}</p>
                                 <input class="form-control end_date" name="program" type="text"
                                        id="end_date{{ forloop.counter }}"
-                                       value="{{ rec.application.applicant_module_rel.all.0.program.program_name }}"
+                                       value="{{ rec.application.applicant_scholarship_rel.get.course_applied.program_name }}"
                                        required="True" disabled>
                             </td>
                             <td>

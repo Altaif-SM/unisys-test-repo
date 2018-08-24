@@ -62,6 +62,7 @@ urlpatterns = [
     path('save_master_and_phd/', views.save_master_and_phd, name='save_master_and_phd'),
     path('update_master_and_phd/', views.update_master_and_phd, name='update_master_and_phd'),
     path('delete_master_and_phd/', views.delete_master_and_phd, name='delete_master_and_phd'),
+    path('formula_type_master/', views.formula_type_master, name='formula_type_master'),
 
     # ********------ master and course work Master --------****************************
     path('template_master_course_work_master/', views.template_master_course_work_master,

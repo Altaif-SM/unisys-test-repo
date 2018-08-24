@@ -198,7 +198,7 @@
 
                                                         {% if rec.applicant_id.donor_applicant_rel.all %}
                                                         <option style="display:none" selected="selected" id=""
-                                                                value="{{ rec.applicant_id.donor_applicant_rel.get.donor.id }}">{{ rec.applicant_id.donor_applicant_rel.get.donor.organisation|title }} </option>
+                                                                value="{{ rec.applicant_id.donor_applicant_rel.all.0.donor.id }}">{{ rec.applicant_id.donor_applicant_rel.all.0.donor.organisation|title }} </option>
                                                     {% else %}
                                                         <option selected="selected" value="">Please Select</option>
                                                     {% endif %}

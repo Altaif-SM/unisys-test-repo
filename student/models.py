@@ -120,8 +120,10 @@ class ApplicationDetails(BaseModel):
     middle_name = models.CharField(max_length=255, blank=True, null=True)
     last_name = models.CharField(max_length=255, blank=True, null=True)
 
-    year = models.ForeignKey('masters.YearDetails', blank=True, null=True,related_name='applicant_year_rel',on_delete=models.PROTECT)
-    semester = models.ForeignKey('masters.SemesterDetails', blank=True, null=True,related_name='applicant_semester_rel',on_delete=models.PROTECT)
+    year = models.ForeignKey('masters.YearDetails', blank=True, null=True, related_name='applicant_year_rel',
+                             on_delete=models.PROTECT)
+    semester = models.ForeignKey('masters.SemesterDetails', blank=True, null=True,
+                                 related_name='applicant_semester_rel', on_delete=models.PROTECT)
 
     birth_date = models.DateField(blank=True, null=True)
     gender = models.CharField(max_length=25, blank=True, null=True, )
@@ -207,6 +209,7 @@ class ApplicationDetails(BaseModel):
     second_interview_venue = models.CharField(max_length=500, blank=True, null=True)
 
     personal_info_flag = models.BooleanField(default=True)
+
     # family_info_flag = models.BooleanField(default=False)
     # mother_sibling_info_flag = models.BooleanField(default=False)
 
@@ -242,6 +245,110 @@ class ApplicationDetails(BaseModel):
         for obj in self.rel_student_payment_receipt_voucher.all():
             if obj.voucher_type == "debit":
                 voucher_amount -= float(obj.voucher_amount)
+
+        return float(voucher_amount)
+
+    def calculate_student_repayment_balance(self):
+        from masters.models import DegreeFormula
+        # voucher_amount = float(self.scholarship_fee)
+        repayment_percent = 0
+
+        try:
+
+            if self.applicant_scholarship_rel.get().degree.degree_type.degree_name == 'phd':
+                if self.applicant_scholarship_rel.get().degree.degree_type.degree_formula_degree_type_relation.filter(
+                        result=self.applicant_progress_rel.all()[0].result,
+                        scholarship_id=self.applicant_scholarship_rel.all()[0].scholarship.id).exists():
+
+                    repayment_percent = self.applicant_scholarship_rel.get().degree.degree_type.degree_formula_degree_type_relation.filter(
+                        result=self.applicant_progress_rel.all()[0].result,
+                        scholarship_id=self.applicant_scholarship_rel.all()[0].scholarship.id)[0].repayment
+
+
+            elif self.applicant_scholarship_rel.get().degree.degree_type.degree_name == 'masters (course work)':
+                if self.applicant_scholarship_rel.get().degree.degree_type.degree_formula_degree_type_relation.filter(
+                        cgpa_min__lte=int(self.applicant_progress_rel.all()[0].cgpa_scored),
+                        cgpa_max__gte=int(self.applicant_progress_rel.all()[0].cgpa_from),
+                        scholarship_id=self.applicant_scholarship_rel.all()[0].scholarship.id).exists():
+                    repayment_percent = self.applicant_scholarship_rel.get().degree.degree_type.degree_formula_degree_type_relation.filter(
+                        cgpa_min__lte=int(self.applicant_progress_rel.all()[0].cgpa_scored),
+                        cgpa_max__gte=int(self.applicant_progress_rel.all()[0].cgpa_from),
+                        scholarship_id=self.applicant_scholarship_rel.all()[0].scholarship.id)[0].repayment
+
+            else:
+                if self.applicant_scholarship_rel.get().degree.degree_type.degree_formula_degree_type_relation.filter(
+                        cgpa_min__lte=int(self.applicant_progress_rel.all()[0].cgpa_scored),
+                        cgpa_max__gte=int(self.applicant_progress_rel.all()[0].cgpa_from),
+                        scholarship_id=self.applicant_scholarship_rel.all()[0].scholarship.id).exists():
+
+                    repayment_percent = self.applicant_scholarship_rel.get().degree.degree_type.degree_formula_degree_type_relation.filter(
+                        cgpa_min__lte=int(self.applicant_progress_rel.all()[0].cgpa_scored),
+                        cgpa_max__gte=int(self.applicant_progress_rel.all()[0].cgpa_from),
+                        scholarship_id=self.applicant_scholarship_rel.all()[0].scholarship.id)[0].repayment
+        except:
+            pass
+
+        if repayment_percent:
+            voucher_amount = (
+                    (int(self.scholarship_fee) * int(repayment_percent)) / float(100))
+        else:
+            voucher_amount = float(self.scholarship_fee)
+
+        for obj in self.rel_student_payment_receipt_voucher.all():
+            if obj.voucher_type == "credit":
+                voucher_amount -= float(obj.voucher_amount)
+
+
+        # for obj in self.rel_student_payment_receipt_voucher.all():
+        #     if obj.voucher_type == "debit":
+        #         voucher_amount -= float(obj.voucher_amount)
+
+        return float(voucher_amount)
+
+    def calculate_student_repayment_amount(self):
+        from masters.models import DegreeFormula, MasterAndPhdFormula, MasterAndCourseFormula
+
+        repayment_percent = 0
+
+        try:
+            if self.applicant_scholarship_rel.get().degree.degree_type.degree_name == 'phd':
+                if self.applicant_scholarship_rel.get().degree.degree_type.degree_formula_degree_type_relation.filter(
+                        result=self.applicant_progress_rel.all()[0].result,
+                        scholarship_id=self.applicant_scholarship_rel.all()[0].scholarship.id).exists():
+
+                    repayment_percent = self.applicant_scholarship_rel.get().degree.degree_type.degree_formula_degree_type_relation.filter(
+                        result=self.applicant_progress_rel.all()[0].result,
+                        scholarship_id=self.applicant_scholarship_rel.all()[0].scholarship.id)[0].repayment
+
+
+            elif self.applicant_scholarship_rel.get().degree.degree_type.degree_name == 'masters (course work)':
+                if self.applicant_scholarship_rel.get().degree.degree_type.degree_formula_degree_type_relation.filter(
+                        cgpa_min__lte=int(self.applicant_progress_rel.all()[0].cgpa_scored),
+                        cgpa_max__gte=int(self.applicant_progress_rel.all()[0].cgpa_from),
+                        scholarship_id=self.applicant_scholarship_rel.all()[0].scholarship.id).exists():
+                    repayment_percent = self.applicant_scholarship_rel.get().degree.degree_type.degree_formula_degree_type_relation.filter(
+                        cgpa_min__lte=int(self.applicant_progress_rel.all()[0].cgpa_scored),
+                        cgpa_max__gte=int(self.applicant_progress_rel.all()[0].cgpa_from),
+                        scholarship_id=self.applicant_scholarship_rel.all()[0].scholarship.id)[0].repayment
+
+            else:
+                if self.applicant_scholarship_rel.get().degree.degree_type.degree_formula_degree_type_relation.filter(
+                        cgpa_min__lte=int(self.applicant_progress_rel.all()[0].cgpa_scored),
+                        cgpa_max__gte=int(self.applicant_progress_rel.all()[0].cgpa_from),
+                        scholarship_id=self.applicant_scholarship_rel.all()[0].scholarship.id).exists():
+
+                    repayment_percent = self.applicant_scholarship_rel.get().degree.degree_type.degree_formula_degree_type_relation.filter(
+                        cgpa_min__lte=int(self.applicant_progress_rel.all()[0].cgpa_scored),
+                        cgpa_max__gte=int(self.applicant_progress_rel.all()[0].cgpa_from),
+                        scholarship_id=self.applicant_scholarship_rel.all()[0].scholarship.id)[0].repayment
+        except:
+            pass
+
+        if repayment_percent:
+            voucher_amount = (
+                    (int(self.scholarship_fee) * int(repayment_percent)) / float(100))
+        else:
+            voucher_amount = float(self.scholarship_fee)
 
         return float(voucher_amount)
 
@@ -283,6 +390,10 @@ class ApplicationDetails(BaseModel):
             'degree': self.applicant_scholarship_rel.all()[
                 0].degree.to_dict() if self.applicant_scholarship_rel.all() else '',
             'student': self.to_dict_student_application() if self.first_name else '',
+            'repayment_balance': self.calculate_student_repayment_balance() if self.applicant_scholarship_rel.all() else self.scholarship_fee if self.scholarship_fee else 0,
+            'repayment_amount': self.calculate_student_repayment_amount() if self.applicant_scholarship_rel.all() else self.scholarship_fee if self.scholarship_fee else 0,
+            'application_progress': self.applicant_progress_rel.all()[
+                0].to_dict() if self.applicant_progress_rel.all() else '',
         }
         return res
 
@@ -430,6 +541,13 @@ class ScholarshipSelectionDetails(BaseModel):
 
     scholarship_selection = models.BooleanField(default=True)
 
+    def __str__(self):
+        degree = self.degree.degree_name if self.degree else ''
+        course_applied = self.course_applied.program_name if self.course_applied else ''
+        scholarship_selection = self.scholarship.scholarship_name if self.scholarship else ''
+        res = degree + ' - ' + course_applied + ' - ' + scholarship_selection
+        return res
+
 
 class ApplicantAboutDetails(BaseModel):
     about_yourself = models.CharField(max_length=255, blank=True, null=True)
@@ -465,8 +583,27 @@ class ApplicantAcademicProgressDetails(BaseModel):
     cgpa_from = models.CharField(max_length=255, blank=True, null=True)
     transcript_document = models.FileField(upload_to=content_file_name_report)
     is_approved = models.BooleanField(default=False)
+    result = models.CharField(max_length=255, blank=True, null=True)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_progress_rel',
                                      on_delete=models.PROTECT)
+
+    def __str__(self):
+        return self.semester.semester_name
+
+    class Meta:
+        ordering = ('-created_on',)
+
+    def to_dict(self):
+        res = {
+            'id': self.id if self.id else '',
+            'gpa_from': self.gpa_from if self.gpa_from else '',
+            'cgpa_scored': self.cgpa_scored if self.cgpa_scored else '',
+            'cgpa_from': self.cgpa_from if self.cgpa_from else '',
+            'is_approved': self.is_approved if self.is_approved else '',
+            'semester': self.semester.to_dict() if self.semester else '',
+            'year': self.year.to_dict() if self.year else '',
+        }
+        return res
 
 
 class ApplicantDevelopmentProgramDetails(BaseModel):

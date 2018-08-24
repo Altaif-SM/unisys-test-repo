@@ -10,6 +10,7 @@ from donor.models import DonorDetails
 from django.db.models import Q
 from common.utils import *
 from datetime import datetime
+from masters.models import DegreeFormula
 
 
 # Create your views here.
@@ -17,6 +18,7 @@ def get_student_payment_voucher(request):
     # student_list = StudentDetails.objects.filter(student_applicant_rel__is_sponsored=True)
 
     query_student = request.GET.get('student') or None
+    repayment_percent = 0
 
     myDate = datetime.now()
 
@@ -96,7 +98,6 @@ def get_student_payment_and_receipt_report(request):
         raw_dict['total_debit_amount'] = float(total_debit_amount['total_debit']) if total_debit_amount['total_debit'] else 0
         raw_dict['application_rec'] = application_rec.to_student_payment_application_dict()
         raw_dict['voucher_rec'] = [obj.to_dict() for obj in voucher_record]
-
 
     # student_list = StudentDetails.objects.filter(student_applicant_rel__is_sponsored=True)
     student_list = ApplicationDetails.objects.filter(is_sponsored=True, year=get_current_year(request))
@@ -304,18 +305,15 @@ def get_donor_receipt_voucher(request):
     student_list = []
 
     if donor:
-        student_list = StudentDonorMapping.objects.filter(donor_id=donor,student__student_applicant_rel__is_sponsored=True)
-
-
+        student_list = StudentDonorMapping.objects.filter(donor_id=donor,
+                                                          student__student_applicant_rel__is_sponsored=True)
 
     raw_dict = {}
     if query_student:
-
         application_rec = ApplicationDetails.objects.get(student_id=query_student)
         voucher_record = DonorReceiptVoucher.objects.filter(application_id=application_rec.id)
         total_amount = DonorReceiptVoucher.objects.filter(voucher_type="debit", application=application_rec).values(
             "voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
-
 
         balance_total = DonorReceiptVoucher.objects.filter(voucher_type="debit", application=application_rec).values(
             "voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
@@ -325,7 +323,8 @@ def get_donor_receipt_voucher(request):
         raw_dict['total_amount'] = float(total_amount['total_credit']) if total_amount['total_credit'] else 0
         raw_dict['voucher_rec'] = [obj.to_dict() for obj in voucher_record] if voucher_record else ''
 
-    return render(request, "template_donor_receipt_voucher.html", {'donor_list': donor_list,'raw_dict': raw_dict,'student_list':student_list})
+    return render(request, "template_donor_receipt_voucher.html",
+                  {'donor_list': donor_list, 'raw_dict': raw_dict, 'student_list': student_list})
 
 
 from django.forms.models import model_to_dict
@@ -341,13 +340,12 @@ def get_donors_student_list(request):
 def get_donor_report(request):
     donor_list = DonorDetails.objects.all()
 
-
     debit_total = 0
     outstanding_total = 0
     query_donor = request.GET.get('donor') or None
     student_main_list = []
 
-    if query_donor :
+    if query_donor:
 
         selected_donor = DonorDetails.objects.get(id=query_donor)
         student_ids = StudentDonorMapping.objects.filter(donor_id=query_donor).values('student')
@@ -393,7 +391,8 @@ def get_donor_report(request):
 
         student_main_list.append(raw_dict)
 
-    return render(request, "template_donor_report.html", {'donor_list': donor_list,'student_main_list':student_main_list})
+    return render(request, "template_donor_report.html",
+                  {'donor_list': donor_list, 'student_main_list': student_main_list})
 
 
 def get_voucher_data_by_donor(request):
@@ -1181,7 +1180,7 @@ from django.core.mail import EmailMultiAlternatives
 def send_email(file: list, subject, text_content, from_email, to):
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     # attachment = open('/home/redbytes/scholarship_mgmt_system/scholarship_mgmt/store/' + file[0], 'rb')
-    path=os.path.join(os.path.abspath(os.path.dirname("__file__")), "store/") + file[0]
+    path = os.path.join(os.path.abspath(os.path.dirname("__file__")), "store/") + file[0]
     attachment = open(os.path.join(os.path.abspath(os.path.dirname("__file__")), "store/") + file[0], 'rb')
     msg.attach(file[0], attachment.read(), 'application/pdf')
     msg.send()
@@ -1231,7 +1230,6 @@ def save_and_send_payment_voucher_data_by_student(request):
         thread.start()
 
         return redirect("/accounting/get_student_payment_voucher/")
-
 
 
 def update_donar_receipt_voucher(request):

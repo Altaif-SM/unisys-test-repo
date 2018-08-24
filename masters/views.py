@@ -480,22 +480,35 @@ def delete_module(request):
 
 # *********------------ Master and PhD Master ----------***************
 
+# def template_master_and_phd_master(request):
+#     master_and_phd_recs = MasterAndPhdFormula.objects.all()
+#     scholarship_recs = ScholarshipDetails.objects.all()
+#     return render(request, 'template_master_and_phd_master.html',
+#                   {'master_and_phd_recs': master_and_phd_recs, 'scholarship_recs': scholarship_recs})
+
+
 def template_master_and_phd_master(request):
-    master_and_phd_recs = MasterAndPhdFormula.objects.all()
+    master_and_phd_recs = DegreeFormula.objects.filter(degree_type__degree_name='phd')
     scholarship_recs = ScholarshipDetails.objects.all()
+    degree_type_rec = ''
+
+    if DegreeTypeDetails.objects.filter(degree_name='phd').exists():
+        degree_type_rec = DegreeTypeDetails.objects.get(degree_name='phd')
     return render(request, 'template_master_and_phd_master.html',
-                  {'master_and_phd_recs': master_and_phd_recs, 'scholarship_recs': scholarship_recs})
+                  {'master_and_phd_recs': master_and_phd_recs, 'scholarship_recs': scholarship_recs,
+                   'degree_type_rec': degree_type_rec})
 
 
 def save_master_and_phd(request):
     scholarship_id = request.POST.get('scholarship')
     result = request.POST.get('result')
     repayment = request.POST.get('repayment')
+    degree_type = request.POST.get('degree_type')
     try:
-        if not MasterAndPhdFormula.objects.filter(scholarship_id=scholarship_id.lower(),
-                                                  result=result.lower()).exists():
-            MasterAndPhdFormula.objects.create(scholarship_id=scholarship_id,
-                                               result=result.lower(), repayment=repayment)
+        if not DegreeFormula.objects.filter(scholarship_id=scholarship_id.lower(),
+                                            result=result.lower(), degree_type_id=degree_type).exists():
+            DegreeFormula.objects.create(scholarship_id=scholarship_id,
+                                         result=result.lower(), repayment=repayment, degree_type_id=degree_type)
             messages.success(request, "Record saved.")
         else:
             messages.warning(request, "Formula already exists for this master. Record not saved.")
@@ -504,15 +517,32 @@ def save_master_and_phd(request):
     return redirect('/masters/template_master_and_phd_master/')
 
 
+# def save_master_and_phd(request):
+#     scholarship_id = request.POST.get('scholarship')
+#     result = request.POST.get('result')
+#     repayment = request.POST.get('repayment')
+#     try:
+#         if not MasterAndPhdFormula.objects.filter(scholarship_id=scholarship_id.lower(),
+#                                                   result=result.lower()).exists():
+#             MasterAndPhdFormula.objects.create(scholarship_id=scholarship_id,
+#                                                result=result.lower(), repayment=repayment)
+#             messages.success(request, "Record saved.")
+#         else:
+#             messages.warning(request, "Formula already exists for this master. Record not saved.")
+#     except:
+#         messages.warning(request, "Record not saved.")
+#     return redirect('/masters/template_master_and_phd_master/')
+
+
 def update_master_and_phd(request):
     master_and_phd_id = request.POST.get('master_and_phd_id')
     scholarship_id = request.POST.get('scholarship_id')
     result = request.POST.get('result')
     repayment = request.POST.get('repayment')
     try:
-        if not MasterAndPhdFormula.objects.filter(~Q(id=master_and_phd_id), scholarship_id=scholarship_id,
+        if not DegreeFormula.objects.filter(~Q(id=master_and_phd_id), scholarship_id=scholarship_id,
                                                   result=result.lower()).exists():
-            MasterAndPhdFormula.objects.filter(id=master_and_phd_id).update(scholarship_id=scholarship_id.lower(),
+            DegreeFormula.objects.filter(id=master_and_phd_id).update(scholarship_id=scholarship_id.lower(),
                                                                             result=result.lower(),
                                                                             repayment=repayment.lower())
             messages.success(request, "Record updated.")
@@ -533,7 +563,7 @@ def delete_master_and_phd(request):
     master_and_phd_id = request.POST.get('master_and_phd_id')
 
     try:
-        MasterAndPhdFormula.objects.filter(id=master_and_phd_id).delete()
+        DegreeFormula.objects.filter(id=master_and_phd_id).delete()
         messages.success(request, "Record deleted.")
         return HttpResponse(json.dumps({'success': 'Record deleted.'}), content_type="application/json")
     except:
@@ -541,13 +571,56 @@ def delete_master_and_phd(request):
     return HttpResponse(json.dumps({'error': 'Record not deleted.'}), content_type="application/json")
 
 
+def formula_type_master(request):
+    degree_type = DegreeTypeDetails.objects.all()
+    try:
+        if request.POST:
+            degree_type = request.POST.get('degree_type')
+
+            degree_type_name = DegreeTypeDetails.objects.get(id=degree_type).degree_name
+
+            if degree_type_name == 'masters (course work)':
+                return redirect('/masters/template_master_course_work_master/')
+
+            elif degree_type_name == 'phd':
+                return redirect('/masters/template_master_and_phd_master/')
+
+            else:
+                degree_recs = DegreeFormula.objects.filter(degree_type=degree_type)
+                scholarship_recs = ScholarshipDetails.objects.all()
+                degree_type_recs = DegreeTypeDetails.objects.get(id=degree_type)
+
+                return render(request, 'template_degree_formula_master.html',
+                              {'scholarship_recs': scholarship_recs,
+                               'degree_type_recs': degree_type_recs,'degree_recs':degree_recs})
+    except:
+        messages.warning(request, 'Some error occoured.')
+
+    return render(request, 'template_formula_type_master.html',
+                  {'degree_type_recs': degree_type})
+
+
 # *********------------ Master and course work Master ----------***************
 
+# def template_master_course_work_master(request):
+#     course_work_recs = MasterAndCourseFormula.objects.all()
+#     scholarship_recs = ScholarshipDetails.objects.all()
+#     return render(request, 'template_course_work_master.html',
+#                   {'course_work_recs': course_work_recs, 'scholarship_recs': scholarship_recs})
+
+
 def template_master_course_work_master(request):
-    course_work_recs = MasterAndCourseFormula.objects.all()
+    course_work_recs = DegreeFormula.objects.filter(degree_type__degree_name='masters (course work)')
     scholarship_recs = ScholarshipDetails.objects.all()
+
+    degree_type_rec = ''
+
+    if DegreeTypeDetails.objects.filter(degree_name='masters (course work)').exists():
+        degree_type_rec = DegreeTypeDetails.objects.get(degree_name='masters (course work)')
+
     return render(request, 'template_course_work_master.html',
-                  {'course_work_recs': course_work_recs, 'scholarship_recs': scholarship_recs})
+                  {'course_work_recs': course_work_recs, 'scholarship_recs': scholarship_recs,
+                   'degree_type_rec': degree_type_rec})
 
 
 def save_master_course_work(request):
@@ -555,18 +628,40 @@ def save_master_course_work(request):
     result_min = request.POST.get('result_min')
     result_max = request.POST.get('result_max')
     repayment = request.POST.get('repayment')
+    degree_type = request.POST.get('degree_type')
+
     try:
-        if not MasterAndCourseFormula.objects.filter(scholarship_id=scholarship_id.lower(),
-                                                     result_max=result_max.lower(),
-                                                     result_min=result_min.lower()).exists():
-            MasterAndCourseFormula.objects.create(scholarship_id=scholarship_id, result_max=result_max.lower(),
-                                                  result_min=result_min.lower(), repayment=repayment)
+        if not DegreeFormula.objects.filter(scholarship_id=scholarship_id.lower(),
+                                            cgpa_max=result_max.lower(),
+                                            cgpa_min=result_min.lower(), degree_type_id=degree_type).exists():
+
+            DegreeFormula.objects.create(scholarship_id=scholarship_id, cgpa_max=result_max,
+                                         cgpa_min=result_min, repayment=repayment, degree_type_id=degree_type)
             messages.success(request, "Record saved.")
         else:
             messages.warning(request, "Formula already exists for this master. Record not saved.")
     except:
         messages.warning(request, "Record not saved.")
     return redirect('/masters/template_master_course_work_master/')
+
+
+# def save_master_course_work(request):
+#     scholarship_id = request.POST.get('scholarship')
+#     result_min = request.POST.get('result_min')
+#     result_max = request.POST.get('result_max')
+#     repayment = request.POST.get('repayment')
+#     try:
+#         if not MasterAndCourseFormula.objects.filter(scholarship_id=scholarship_id.lower(),
+#                                                      result_max=result_max.lower(),
+#                                                      result_min=result_min.lower()).exists():
+#             MasterAndCourseFormula.objects.create(scholarship_id=scholarship_id, result_max=result_max.lower(),
+#                                                   result_min=result_min.lower(), repayment=repayment)
+#             messages.success(request, "Record saved.")
+#         else:
+#             messages.warning(request, "Formula already exists for this master. Record not saved.")
+#     except:
+#         messages.warning(request, "Record not saved.")
+#     return redirect('/masters/template_master_course_work_master/')
 
 
 def update_master_course_work(request):
@@ -576,13 +671,13 @@ def update_master_course_work(request):
     result_max = request.POST.get('result_max')
     repayment = request.POST.get('repayment')
     try:
-        if not MasterAndCourseFormula.objects.filter(~Q(id=course_work_id), scholarship_id=scholarship_id.lower(),
-                                                     result_max=result_max.lower(),
-                                                     result_min=result_min.lower()).exists():
+        if not DegreeFormula.objects.filter(~Q(id=course_work_id), scholarship_id=scholarship_id.lower(),
+                                            cgpa_max=result_max.lower(),
+                                            cgpa_min=result_min.lower()).exists():
 
-            MasterAndCourseFormula.objects.filter(id=course_work_id).update(scholarship_id=scholarship_id.lower(),
-                                                                            result_max=result_max.lower(),
-                                                                            result_min=result_min.lower(),
+            DegreeFormula.objects.filter(id=course_work_id).update(scholarship_id=scholarship_id.lower(),
+                                                                            cgpa_max=result_max.lower(),
+                                                                            cgpa_min=result_min.lower(),
                                                                             repayment=repayment.lower())
             messages.success(request, "Record updated.")
             return HttpResponse(json.dumps({'success': 'Record updated.'}), content_type="application/json")
@@ -610,17 +705,34 @@ def delete_master_course_work(request):
     return HttpResponse(json.dumps({'error': 'Record not deleted.'}), content_type="application/json")
 
 
-# *********------------ Master and course work Master ----------***************
+# *********------------ Degree formula Master ----------***************
+
+# def template_degree_formula_master(request):
+#     degree_recs = DegreeFormula.objects.all()
+#     scholarship_recs = ScholarshipDetails.objects.all()
+#     degree_type_recs = DegreeTypeDetails.objects.filter(degree_name='degree')
+#
+#     if degree_type_recs:
+#         degree_type_recs = degree_type_recs[0]
+#     return render(request, 'template_degree_formula_master.html',
+#                   {'degree_recs': degree_recs, 'scholarship_recs': scholarship_recs,
+#                    'degree_type_recs': degree_type_recs})
 
 def template_degree_formula_master(request):
     degree_recs = DegreeFormula.objects.all()
     scholarship_recs = ScholarshipDetails.objects.all()
+    degree_type_recs = DegreeTypeDetails.objects.filter(degree_name='degree')
+
+    if degree_type_recs:
+        degree_type_recs = degree_type_recs[0]
     return render(request, 'template_degree_formula_master.html',
-                  {'degree_recs': degree_recs, 'scholarship_recs': scholarship_recs})
+                  {'degree_recs': degree_recs, 'scholarship_recs': scholarship_recs,
+                   'degree_type_recs': degree_type_recs})
 
 
 def save_degree_formula_master(request):
     scholarship_id = request.POST.get('scholarship')
+    degree_type = request.POST.get('degree_type')
     cgpa_min = request.POST.get('cgpa_min')
     cgpa_max = request.POST.get('cgpa_max')
 
@@ -632,15 +744,25 @@ def save_degree_formula_master(request):
                                               cgpa_min=cgpa_min) or Q(grade_max=grade_max,
                                                                       grade_min=grade_min),
                                             scholarship_id=scholarship_id.lower()).exists():
-            DegreeFormula.objects.create(scholarship_id=scholarship_id, cgpa_max=cgpa_max,
+
+            DegreeFormula.objects.create(scholarship_id=scholarship_id, cgpa_max=cgpa_max, degree_type_id=degree_type,
                                          cgpa_min=cgpa_min, grade_max=grade_max,
                                          grade_min=grade_min, repayment=repayment)
+
             messages.success(request, "Record saved.")
         else:
             messages.warning(request, "Formula already exists for this master. Record not saved.")
     except:
         messages.warning(request, "Record not saved.")
-    return redirect('/masters/template_degree_formula_master/')
+
+    degree_recs = DegreeFormula.objects.filter(degree_type=degree_type)
+    scholarship_recs = ScholarshipDetails.objects.all()
+    degree_type_recs = DegreeTypeDetails.objects.get(id=degree_type)
+
+    return render(request, 'template_degree_formula_master.html',
+                  {'scholarship_recs': scholarship_recs,
+                   'degree_type_recs': degree_type_recs, 'degree_recs': degree_recs})
+    # return redirect('/masters/template_degree_formula_master/')
 
 
 def update_degree_formula_master(request):
@@ -1133,7 +1255,6 @@ def save_email_template(request):
     return redirect('/masters/email_templates_list/')
 
 
-
 # def development_program_pdf(request):
 #     pdf_recs = [['Development Program: ','AAAAA bbbbbbbbbbb dddddddddddddddd eeeeeeeeeeeee qqqqqqqqqqqqq eeeeeeeeeeeeee ffffffffffffffffffffff \n eeeeeeeeeeeeeeeeeee weeeeeeeeee'],['Name:','Javed Alam', 'Class','10']]
 #     return export_pdf1('test_pdf',pdf_recs)
@@ -1145,6 +1266,7 @@ from django.http import HttpResponse
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch
+
 
 def development_program_pdf(request):
     return export_pdf1()
@@ -1181,6 +1303,7 @@ def development_program_pdf(request):
 
     return render(request, 'development_program_pdf_template.html')
 
+
 import os
 from django.conf import settings
 from django.http import HttpResponse
@@ -1190,12 +1313,11 @@ import datetime
 from xhtml2pdf import pisa
 from threading import Thread, activeCount
 
+
 # from io import StringIO
 
 def generate_PDF(request):
-
     program_list = DevelopmentProgram.objects.all()[0:4]
-
 
     #####---- PDF Generation code  ---------------######33
 
@@ -1239,14 +1361,14 @@ def get_table_data(request):
 
     return HttpResponse(json.dumps(data), content_type="application/json")
 
+
 def template_partner_details(request, partner_id=None):
     if partner_id:
         partner_rec = PartnerDetails.objects.get(id=partner_id)
         return render(request, "template_partner_details.html", {'partner_rec': partner_rec})
 
 
-
-def partner_all_details_pdf(request,partner_id):
+def partner_all_details_pdf(request, partner_id):
     try:
         year_recs = YearDetails.objects.all()
         curriculum_obj = ''
@@ -1255,12 +1377,12 @@ def partner_all_details_pdf(request,partner_id):
         if partner_id:
             partner_rec = PartnerDetails.objects.get(id=partner_id)
         template = get_template('template_partner_details_pdf.html')
-        Context = ({'partner_rec':partner_rec,'x':x})
+        Context = ({'partner_rec': partner_rec, 'x': x})
         html = template.render(Context)
 
         file = open('test.pdf', "w+b")
         pisaStatus = pisa.CreatePDF(html.encode('utf-8'), dest=file,
-                encoding='utf-8')
+                                    encoding='utf-8')
 
         file.seek(0)
         pdf = file.read()
@@ -1268,7 +1390,7 @@ def partner_all_details_pdf(request,partner_id):
         return HttpResponse(pdf, 'application/pdf')
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
-        return redirect('/masters/template_partner_details/'+str(partner_id))
+        return redirect('/masters/template_partner_details/' + str(partner_id))
 
 
 def template_partner_details(request, partner_id=None):
@@ -1281,11 +1403,7 @@ def template_partner_details(request, partner_id=None):
         return redirect('/masters/template_manage_partner_master/')
 
 
-
-
-
-
-def partner_all_details_pdf(request,partner_id):
+def partner_all_details_pdf(request, partner_id):
     try:
         year_recs = YearDetails.objects.all()
         curriculum_obj = ''
@@ -1295,19 +1413,19 @@ def partner_all_details_pdf(request,partner_id):
         if partner_id:
             partner_rec = PartnerDetails.objects.get(id=partner_id)
         template = get_template('template_partner_details_pdf.html')
-        Context = ({'partner_rec':partner_rec,'x':x,'logo_path':logo_path})
+        Context = ({'partner_rec': partner_rec, 'x': x, 'logo_path': logo_path})
         html = template.render(Context)
 
         file = open('test.pdf', "w+b")
         pisaStatus = pisa.CreatePDF(html.encode('utf-8'), dest=file,
-                encoding='utf-8')
+                                    encoding='utf-8')
         file.seek(0)
         pdf = file.read()
         file.close()
         return HttpResponse(pdf, 'application/pdf')
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
-        return redirect('/masters/template_partner_details/'+str(partner_id))
+        return redirect('/masters/template_partner_details/' + str(partner_id))
 
 
 def template_donar_details(request, donor_id=None):
@@ -1315,13 +1433,12 @@ def template_donar_details(request, donor_id=None):
         if donor_id:
             donor_rec = DonorDetails.objects.get(id=donor_id)
             return render(request, "template_donor_details.html", {'donor_rec': donor_rec})
-    except Exception as e :
+    except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
         return redirect('/masters/template_manage_donor_master/')
 
 
-
-def donar_all_details_pdf(request,donor_id):
+def donar_all_details_pdf(request, donor_id):
     try:
         year_recs = YearDetails.objects.all()
         curriculum_obj = ''
@@ -1331,14 +1448,14 @@ def donar_all_details_pdf(request,donor_id):
         if donor_id:
             donar_rec = DonorDetails.objects.get(id=donor_id)
         template = get_template('template_donar_details_PDF.html')
-        Context = ({'donar_rec':donar_rec,'x':x,'logo_path':logo_path})
+        Context = ({'donar_rec': donar_rec, 'x': x, 'logo_path': logo_path})
         html = template.render(Context)
         file = open('test.pdf', "w+b")
-        pisaStatus = pisa.CreatePDF(html.encode('utf-8'), dest=file,encoding='utf-8')
+        pisaStatus = pisa.CreatePDF(html.encode('utf-8'), dest=file, encoding='utf-8')
         file.seek(0)
         pdf = file.read()
         file.close()
         return HttpResponse(pdf, 'application/pdf')
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
-        return redirect('/masters/template_donar_details/'+str(donor_id))
+        return redirect('/masters/template_donar_details/' + str(donor_id))

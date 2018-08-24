@@ -201,6 +201,19 @@
                                     </select>
                                 </div>
                             </div>
+
+                            <div class="">
+                                <label class="col-md-1 control-label">Degree Type:</label>
+                                <div class="col-md-2">
+                                    <select id='degree_type' name="degree_type" class="form-control" required>
+                                        <option style="display:none" selected="selected" id=""value="{{ degree_type_rec.id }}">{{ degree_type_rec.degree_name|title }}</option>
+
+{#                                        {% for rec in degree_type_recs %}#}
+{#                                            <option value='{{ rec.id }}'>{{ degree_type_recs.degree_name|title }}</option>#}
+{#                                        {% endfor %}#}
+                                    </select>
+                                </div>
+                            </div>
                         </div>
 
                     <br><br>

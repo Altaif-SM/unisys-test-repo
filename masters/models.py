@@ -42,6 +42,7 @@ class CountryDetails(BaseModel):
 
 class AllCountries(BaseModel):
     country_name = models.CharField(max_length=100, blank=True, null=True)
+    country_name = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         ordering = ('country_name',)
@@ -116,6 +117,24 @@ class ReligionDetails(BaseModel):
         return self.religion_name
 
 
+class DegreeTypeDetails(BaseModel):
+    degree_name = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        ordering = ('degree_name',)
+
+    def __str__(self):
+        return self.degree_name
+
+    def to_dict(self):
+        res = {
+            'id': self.id if self.id else '',
+            'degree_name': self.degree_name if self.degree_name else '',
+        }
+
+        return res
+
+
 class ScholarshipDetails(BaseModel):
     scholarship_name = models.CharField(max_length=255, blank=True, null=True)
 
@@ -137,19 +156,23 @@ class ScholarshipDetails(BaseModel):
 class DegreeFormula(BaseModel):
     scholarship = models.ForeignKey(ScholarshipDetails, null=True, related_name='degree_scholarship_formula_relation',
                                     on_delete=models.PROTECT)
-    cgpa_min = models.CharField(max_length=10, blank=True, null=True)
-    cgpa_max = models.CharField(max_length=10, blank=True, null=True)
+    cgpa_min = models.IntegerField(blank=True, null=True)
+    cgpa_max = models.IntegerField(blank=True, null=True)
     grade_min = models.CharField(max_length=10, blank=True, null=True)
     grade_max = models.CharField(max_length=10, blank=True, null=True)
-    repayment = models.CharField(max_length=10, blank=True, null=True)
+    repayment = models.IntegerField(blank=True, null=True)
+    result = models.CharField(max_length=10, blank=True, null=True)
     is_cgpa_or_grade = models.BooleanField(default=True)
+
+    degree_type = models.ForeignKey(DegreeTypeDetails, null=True, related_name='degree_formula_degree_type_relation',
+                                    on_delete=models.PROTECT)
 
     def __str__(self):
         cgpa_min = self.cgpa_min if self.cgpa_min else ''
         cgpa_max = self.cgpa_max if self.cgpa_max else ''
         scholarship = self.scholarship.scholarship_name if self.scholarship else ''
         repayment = self.repayment if self.repayment else ''
-        res = 'scholarship = '+scholarship+',cgpa_min = '+cgpa_min+', cgpa_max = '+cgpa_max + ', repayment = '+repayment
+        res = 'scholarship = '+scholarship+',cgpa_min = '+str(cgpa_min)+', cgpa_max = '+str(cgpa_max) + ', repayment = '+str(repayment)
         return res
 
 
@@ -158,6 +181,8 @@ class MasterAndPhdFormula(BaseModel):
                                     on_delete=models.PROTECT)
     result = models.CharField(max_length=10, blank=True, null=True)
     repayment = models.FloatField(max_length=10, blank=True, null=True)
+    degree_type = models.ForeignKey(DegreeTypeDetails, null=True, related_name='master_phd_formula_degree_type_relation',
+                                    on_delete=models.PROTECT)
 
     def __str__(self):
         result = self.result if self.result else ''
@@ -173,6 +198,9 @@ class MasterAndCourseFormula(BaseModel):
     result_min = models.CharField(max_length=10, blank=True, null=True)
     result_max = models.CharField(max_length=10, blank=True, null=True)
     repayment = models.CharField(max_length=10, blank=True, null=True)
+    degree_type = models.ForeignKey(DegreeTypeDetails, null=True,
+                                    related_name='master_course_formula_degree_type_relation',
+                                    on_delete=models.PROTECT)
 
     def __str__(self):
         result_min = self.result_min if self.result_min else ''
@@ -234,8 +262,8 @@ class SemesterDetails(BaseModel):
     start_date = models.DateField()
     end_date = models.DateField()
 
-    class Meta:
-        ordering = ('semester_name',)
+    # class Meta:
+    #     ordering = ('semester_name',)
 
     def __str__(self):
         return self.semester_name
@@ -248,23 +276,6 @@ class SemesterDetails(BaseModel):
 
         return res
 
-
-class DegreeTypeDetails(BaseModel):
-    degree_name = models.CharField(max_length=255, blank=True, null=True)
-
-    class Meta:
-        ordering = ('degree_name',)
-
-    def __str__(self):
-        return self.degree_name
-
-    def to_dict(self):
-        res = {
-            'id': self.id if self.id else '',
-            'degree_name': self.degree_name if self.degree_name else '',
-        }
-
-        return res
 
 
 class DegreeDetails(BaseModel):

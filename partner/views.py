@@ -1758,8 +1758,8 @@ def template_attendance_report(request):
             program_dict = {}
             if ApplicantDevelopmentProgramDetails.objects.filter(applicant_id=rec.applicant_id,
                                                                  module=rec.module).exists():
-                certificate_rec = ApplicantDevelopmentProgramDetails.objects.get(applicant_id=rec.applicant_id,
-                                                                                 module=rec.module)
+                certificate_rec = ApplicantDevelopmentProgramDetails.objects.filter(applicant_id=rec.applicant_id,
+                                                                 module=rec.module)[0]
                 program_dict[
                     'name'] = rec.applicant_id.get_full_name()
                 program_dict['country'] = rec.applicant_id.address.country.country_name
