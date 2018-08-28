@@ -186,11 +186,13 @@ def save_update_applicant_personal_info(request):
                                                                             nationality_id=request.POST['nationality'],
                                                                             religion_id=request.POST['religion'],
                                                                             id_number=request.POST['id_number'],
-                                                                            passport_number=request.POST['passport_number'],
+                                                                            passport_number=request.POST[
+                                                                                'passport_number'],
                                                                             passport_issue_country_id=request.POST[
                                                                                 'issue_country'],
                                                                             telephone_hp=request.POST['telephone_hp'],
-                                                                            telephone_home=request.POST['telephone_home'],
+                                                                            telephone_home=request.POST[
+                                                                                'telephone_home'],
                                                                             email=request.POST['email'],
                                                                             student=student,
                                                                             year=current_year)
@@ -201,7 +203,8 @@ def save_update_applicant_personal_info(request):
                                                                     district=request.POST['district'],
                                                                     post_code=request.POST['post_code'],
                                                                     sub_locality=request.POST['sub_locality'],
-                                                                    residential_address=request.POST['residential_address'])
+                                                                    residential_address=request.POST[
+                                                                        'residential_address'])
 
                         if same_as:
                             address_obj.is_same = True
@@ -270,7 +273,6 @@ def save_update_applicant_personal_info(request):
                 messages.success(request, "Please fill mandatory fields")
                 return redirect('/student/applicant_personal_info/')
 
-
     if redirect_flag:
         messages.success(request, "Record saved")
         return redirect('/student/applicant_family_info/')
@@ -316,60 +318,60 @@ def save_update_applicant_family_info(request):
             if StudentDetails.objects.filter(user=request.user):
                 # if not request.user.get_application.is_submitted:
 
-                    ApplicationDetails.objects.filter(application_id=request.user.get_application_id).update(
-                        wife_name=request.POST['wife_name'],
-                        wife_income=request.POST[
-                            'wife_income'],
-                        wife_nationality=request.POST[
-                            'wife_nationality'],
-                        wife_occupation=request.POST[
-                            'wife_occupation'],
-                        wife_telephone_home=request.POST[
-                            'wife_telephone_home'],
-                        wife_dob=request.POST['wife_dob'] if request.POST['wife_dob'] else None,
-                        wife_email=request.POST[
-                            'wife_email'],
+                ApplicationDetails.objects.filter(application_id=request.user.get_application_id).update(
+                    wife_name=request.POST['wife_name'],
+                    wife_income=request.POST[
+                        'wife_income'],
+                    wife_nationality=request.POST[
+                        'wife_nationality'],
+                    wife_occupation=request.POST[
+                        'wife_occupation'],
+                    wife_telephone_home=request.POST[
+                        'wife_telephone_home'],
+                    wife_dob=request.POST['wife_dob'] if request.POST['wife_dob'] else None,
+                    wife_email=request.POST[
+                        'wife_email'],
 
-                        father_name=request.POST[
-                            'father_name'],
-                        father_income=request.POST[
-                            'father_income'],
-                        father_nationality=request.POST[
-                            'father_nationality'],
-                        father_occupation=request.POST[
-                            'father_occupation'],
-                        father_telephone_home=request.POST[
-                            'father_telephone_home'],
-                        father_dob=request.POST[
-                            'father_dob'] if request.POST['father_dob'] else None,
-                        father_email=request.POST[
-                            'father_email'])
+                    father_name=request.POST[
+                        'father_name'],
+                    father_income=request.POST[
+                        'father_income'],
+                    father_nationality=request.POST[
+                        'father_nationality'],
+                    father_occupation=request.POST[
+                        'father_occupation'],
+                    father_telephone_home=request.POST[
+                        'father_telephone_home'],
+                    father_dob=request.POST[
+                        'father_dob'] if request.POST['father_dob'] else None,
+                    father_email=request.POST[
+                        'father_email'])
 
-                    application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
+                application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
 
-                    if wife_pay_slip:
-                        object_path = media_path(application_obj)
+                if wife_pay_slip:
+                    object_path = media_path(application_obj)
 
-                        wife_slip = str(wife_pay_slip)
-                        handle_uploaded_file(str(object_path) + '/' + wife_slip, wife_pay_slip)
-                        application_obj.wife_pay_slip = wife_slip
+                    wife_slip = str(wife_pay_slip)
+                    handle_uploaded_file(str(object_path) + '/' + wife_slip, wife_pay_slip)
+                    application_obj.wife_pay_slip = wife_slip
 
-                    if not wife_pay_slip_text:
-                        application_obj.wife_pay_slip = ''
+                if not wife_pay_slip_text:
+                    application_obj.wife_pay_slip = ''
 
-                    if father_pay_slip:
-                        object_path = media_path(application_obj)
-                        father_slip = str(father_pay_slip)
-                        # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + father_slip),father_pay_slip)
-                        handle_uploaded_file(str(object_path) + '/' + father_slip, father_pay_slip)
-                        application_obj.father_pay_slip = father_slip
+                if father_pay_slip:
+                    object_path = media_path(application_obj)
+                    father_slip = str(father_pay_slip)
+                    # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + father_slip),father_pay_slip)
+                    handle_uploaded_file(str(object_path) + '/' + father_slip, father_pay_slip)
+                    application_obj.father_pay_slip = father_slip
 
-                    if not father_pay_slip_text:
-                        application_obj.father_pay_slip = ''
+                if not father_pay_slip_text:
+                    application_obj.father_pay_slip = ''
 
-                    application_obj.save()
+                application_obj.save()
 
-                    redirect_flag = True
+                redirect_flag = True
 
             if redirect_flag:
                 messages.success(request, "Record saved")
@@ -476,21 +478,21 @@ def applicant_academic_english_qualification(request):
     try:
         if request.user.get_application:
             # if not request.user.get_application.is_submitted:
-                # application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id,
-                #                                           is_submitted=False)
-                if AcademicQualificationDetails.objects.filter(applicant_id=request.user.get_application).exists():
-                    qualification_obj = AcademicQualificationDetails.objects.get(
-                        applicant_id=request.user.get_application)
+            # application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id,
+            #                                           is_submitted=False)
+            if AcademicQualificationDetails.objects.filter(applicant_id=request.user.get_application).exists():
+                qualification_obj = AcademicQualificationDetails.objects.get(
+                    applicant_id=request.user.get_application)
 
-                if EnglishQualificationDetails.objects.filter(applicant_id=request.user.get_application).exists():
-                    english_obj = EnglishQualificationDetails.objects.get(applicant_id=request.user.get_application)
+            if EnglishQualificationDetails.objects.filter(applicant_id=request.user.get_application).exists():
+                english_obj = EnglishQualificationDetails.objects.get(applicant_id=request.user.get_application)
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
         return redirect('/student/applicant_personal_info/')
 
     return render(request, 'applicant_academic_english_qualification.html',
                   {'year_recs': year_recs, 'qualification_obj': qualification_obj, 'english_obj': english_obj,
-                   'passing_year_recs': passing_year_recs,'application_obj':application_obj})
+                   'passing_year_recs': passing_year_recs, 'application_obj': application_obj})
 
 
 def save_update_applicant_academic_english_qualification(request):
@@ -746,28 +748,26 @@ def applicant_curriculum_experience_info(request):
     year_recs = YearDetails.objects.all()
     curriculum_obj = ''
     experience_obj = ''
-    application_obj=''
-
-
+    application_obj = ''
 
     passing_year_recs = PassingYear.objects.all()
     try:
         application_obj = request.user.get_application
         if request.user.get_application:
             # if not request.user.get_application.is_submitted:
-                # application_obj = ApplicationDetails.objects.get(student=student, is_submitted=False)
-                if CurriculumDetails.objects.filter(applicant_id=request.user.get_application).exists():
-                    curriculum_obj = CurriculumDetails.objects.get(applicant_id=request.user.get_application)
+            # application_obj = ApplicationDetails.objects.get(student=student, is_submitted=False)
+            if CurriculumDetails.objects.filter(applicant_id=request.user.get_application).exists():
+                curriculum_obj = CurriculumDetails.objects.get(applicant_id=request.user.get_application)
 
-                if ExperienceDetails.objects.filter(applicant_id=request.user.get_application).exists():
-                    experience_obj = ExperienceDetails.objects.get(applicant_id=request.user.get_application)
+            if ExperienceDetails.objects.filter(applicant_id=request.user.get_application).exists():
+                experience_obj = ExperienceDetails.objects.get(applicant_id=request.user.get_application)
 
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
         return redirect('/student/applicant_personal_info/')
     return render(request, 'applicant_curriculum_experience_info.html',
                   {'year_recs': year_recs, 'experience_obj': experience_obj, 'curriculum_obj': curriculum_obj,
-                   'passing_year_recs': passing_year_recs,'application_obj':application_obj})
+                   'passing_year_recs': passing_year_recs, 'application_obj': application_obj})
 
 
 def save_update_applicant_curriculum_experience_info(request):
@@ -1036,13 +1036,13 @@ def applicant_scholarship_about_yourself_info(request):
     try:
         if request.user.get_application:
             # if not request.user.get_application.is_submitted:
-                application_obj = request.user.get_application
+            application_obj = request.user.get_application
 
-                if ScholarshipSelectionDetails.objects.filter(applicant_id=request.user.get_application).exists():
-                    scholarship_obj = ScholarshipSelectionDetails.objects.get(applicant_id=request.user.get_application)
+            if ScholarshipSelectionDetails.objects.filter(applicant_id=request.user.get_application).exists():
+                scholarship_obj = ScholarshipSelectionDetails.objects.get(applicant_id=request.user.get_application)
 
-                if ApplicantAboutDetails.objects.filter(applicant_id=request.user.get_application).exists():
-                    about_obj = ApplicantAboutDetails.objects.get(applicant_id=request.user.get_application)
+            if ApplicantAboutDetails.objects.filter(applicant_id=request.user.get_application).exists():
+                about_obj = ApplicantAboutDetails.objects.get(applicant_id=request.user.get_application)
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
     return render(request, 'applicant_scholarship_about_yourself_info.html',
@@ -1169,10 +1169,11 @@ def my_application(request):
         # path = str(settings.MEDIA_URL) + str('reports/Donors.pdf')
         # path =str('/home/redbytes/scholarship_proj/scholarship_mgmt/media/reports/Donors.pdf')
         return render(request, 'my_application.html', {'siblings_obj': siblings_obj, 'application_obj': application_obj,
-                                                       'qualification_obj': qualification_obj, 'english_obj': english_obj,
+                                                       'qualification_obj': qualification_obj,
+                                                       'english_obj': english_obj,
                                                        'curriculum_obj': curriculum_obj,
                                                        'applicant_experience_obj': applicant_experience_obj,
-                                                       'scholarship_obj': scholarship_obj,'about_obj':about_obj})
+                                                       'scholarship_obj': scholarship_obj, 'about_obj': about_obj})
     except Exception as e:
         messages.warning(request, "Please Fill The Application Form First ... ")
     return redirect('/')
@@ -1403,7 +1404,7 @@ def applicant_academic_progress(request):
         progress_recs = ''
         applicant_semester = ''
         application_degree_type = ''
-        degree_name=''
+        degree_name = ''
 
         if request.user.get_application:
             if request.user.get_application.is_submitted:
@@ -1417,7 +1418,6 @@ def applicant_academic_progress(request):
                 else:
                     degree_name = 'degree'
 
-
                 year_recs = YearDetails.objects.all()
                 semester_recs = SemesterDetails.objects.all()
 
@@ -1430,7 +1430,8 @@ def applicant_academic_progress(request):
         messages.warning(request, "Form have some error" + str(e))
         return redirect('/student/student_home/')
     return render(request, 'applicant_academic_progress.html',
-                  {'degree_name':degree_name,'semester_recs': semester_recs, 'year_recs': year_recs, 'progress_recs': progress_recs,'applicant_semester':applicant_semester})
+                  {'degree_name': degree_name, 'semester_recs': semester_recs, 'year_recs': year_recs,
+                   'progress_recs': progress_recs, 'applicant_semester': applicant_semester})
 
 
 @semester_required
@@ -1460,7 +1461,7 @@ def save_applicant_academic_progress(request):
                                                                        cgpa_scored=cgpa_scored,
                                                                        cgpa_from=cgpa_from,
                                                                        applicant_id=request.user.get_application,
-                                                                       result= result)
+                                                                       result=result)
 
         if transcript_document:
             transcript = str(transcript_document)

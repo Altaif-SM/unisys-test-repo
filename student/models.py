@@ -298,11 +298,6 @@ class ApplicationDetails(BaseModel):
             if obj.voucher_type == "credit":
                 voucher_amount -= float(obj.voucher_amount)
 
-
-        # for obj in self.rel_student_payment_receipt_voucher.all():
-        #     if obj.voucher_type == "debit":
-        #         voucher_amount -= float(obj.voucher_amount)
-
         return float(voucher_amount)
 
     def calculate_student_repayment_amount(self):

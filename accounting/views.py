@@ -91,17 +91,24 @@ def get_student_payment_and_receipt_report(request):
     raw_dict = {}
     if query_student:
         application_rec = ApplicationDetails.objects.get(student_id=query_student)
-        voucher_record = StudentPaymentReceiptVoucher.objects.filter(application_id=application_rec.id,application__year=get_current_year(request))
-        total_amount = StudentPaymentReceiptVoucher.objects.filter(voucher_type="credit", application=application_rec,application__year=get_current_year(request)).values("voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
-        total_debit_amount = StudentPaymentReceiptVoucher.objects.filter(voucher_type="debit",application=application_rec).values("voucher_amount").aggregate(total_debit=Sum('voucher_amount'))
+        voucher_record = StudentPaymentReceiptVoucher.objects.filter(application_id=application_rec.id,
+                                                                     application__year=get_current_year(request))
+        total_amount = StudentPaymentReceiptVoucher.objects.filter(voucher_type="credit", application=application_rec,
+                                                                   application__year=get_current_year(request)).values(
+            "voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
+        total_debit_amount = StudentPaymentReceiptVoucher.objects.filter(voucher_type="debit",
+                                                                         application=application_rec).values(
+            "voucher_amount").aggregate(total_debit=Sum('voucher_amount'))
         raw_dict['total_amount'] = float(total_amount['total_credit']) if total_amount['total_credit'] else 0
-        raw_dict['total_debit_amount'] = float(total_debit_amount['total_debit']) if total_debit_amount['total_debit'] else 0
+        raw_dict['total_debit_amount'] = float(total_debit_amount['total_debit']) if total_debit_amount[
+            'total_debit'] else 0
         raw_dict['application_rec'] = application_rec.to_student_payment_application_dict()
         raw_dict['voucher_rec'] = [obj.to_dict() for obj in voucher_record]
 
     # student_list = StudentDetails.objects.filter(student_applicant_rel__is_sponsored=True)
     student_list = ApplicationDetails.objects.filter(is_sponsored=True, year=get_current_year(request))
-    return render(request, "template_student_payment_and_receipt_report.html", {'student_list': student_list,'raw_dict':raw_dict})
+    return render(request, "template_student_payment_and_receipt_report.html",
+                  {'student_list': student_list, 'raw_dict': raw_dict})
 
 
 def get_student_report(request):
@@ -184,6 +191,91 @@ def get_student_report(request):
                    'selected_degree': DegreeDetails.objects.filter(id=query_degree),
                    'selected_semester': SemesterDetails.objects.filter(id=query_semester),
                    'selected_scholarship': ScholarshipDetails.objects.filter(id=query_scholarship)})
+
+
+def get_repayment_report(request):
+    query_country = request.GET.get("country") or None
+    query_scholarship = request.GET.get("scholarship") or None
+
+    query_degree = request.GET.get("degree") or None
+    query_semester = request.GET.get("semester") or None
+
+    student_list = ApplicationDetails.objects.filter(is_sponsored=True, year=get_current_year(request))
+    stud_pay_voucher_list = StudentPaymentReceiptVoucher.objects.filter(voucher_type='credit',
+                                                               application__year=get_current_year(request))
+
+    application_recs = ApplicationDetails.objects.filter(is_sponsored=True, year=get_current_year(request))
+
+
+
+
+
+    if query_country:
+        application_recs = application_recs.filter(address__country_id=query_country)
+
+    if query_scholarship:
+        application_recs = application_recs.filter(applicant_scholarship_rel__scholarship_id=query_scholarship)
+
+
+    if query_degree:
+        application_recs = application_recs.filter(applicant_scholarship_rel__degree_id=query_degree)
+
+    if query_semester:
+        ids_list = application_recs.filter(applicant_progress_rel__semester_id=query_semester).values("id").distinct()
+        application_recs = application_recs.filter(id__in=ids_list)
+
+    # voucher_record = {}
+    all_country_obj = type('', (object,), {"id": "", "country_name": "All"})()
+    country = [all_country_obj]
+    for co in CountryDetails.objects.all():
+        country.append(co)
+
+    all_scholarship_obj = type('', (object,), {"id": "", "scholarship_name": "All"})()
+    scholarship = [all_scholarship_obj]
+    for scho in ScholarshipDetails.objects.all():
+        scholarship.append(scho)
+
+    all_degree_obj = type('', (object,), {"id": "", "degree_name": "All"})()
+    degree = [all_degree_obj]
+    for scho in DegreeDetails.objects.all():
+        degree.append(scho)
+
+    all_semester_obj = type('', (object,), {"id": "", "semester_name": "All"})()
+    semester = [all_semester_obj]
+    for scho in SemesterDetails.objects.all():
+        semester.append(scho)
+
+    # --------------------------------------------------------------------------
+    raw_dict_list = []
+
+
+
+    for application_rec in application_recs:
+        raw_dict = {}
+        voucher_ids = stud_pay_voucher_list.filter(application_id=application_rec).values('id')
+        voucher_record = stud_pay_voucher_list.filter(id__in=voucher_ids)
+
+        balance_total = StudentPaymentReceiptVoucher.objects.filter(voucher_type="credit",
+                                                                    application=application_rec).values(
+            "voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
+
+        raw_dict['application_rec'] = application_rec.to_application_dict()
+        raw_dict['outstanding_amount'] = (
+                    float(application_rec.scholarship_fee) - float(balance_total['total_credit'])) if \
+            balance_total['total_credit'] else 0
+        raw_dict['voucher_rec'] = [obj.to_dict() for obj in voucher_record]
+        raw_dict_list.append(raw_dict)
+
+    # --------------------------------------------------------------------------
+
+    return render(request, "template_repayment_report.html",
+                  {'country_list': country, 'scholarship_list': scholarship,
+                   'degree_list': degree, 'semester_list': semester,
+                   'selected_country': CountryDetails.objects.filter(id=query_country),
+                   'selected_degree': DegreeDetails.objects.filter(id=query_degree),
+                   'selected_semester': SemesterDetails.objects.filter(id=query_semester),
+                   'selected_scholarship': ScholarshipDetails.objects.filter(id=query_scholarship),
+                   'student_list': student_list, 'voucher_recs': raw_dict_list})
 
 
 def get_filtered_student_report(request):

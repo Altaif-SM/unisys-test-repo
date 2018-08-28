@@ -210,6 +210,7 @@ def filter_student_report(request):
 
 def template_application_progress_history(request):
     applicant_recs = ''
+    country_recs = CountryDetails.objects.all()
     try:
         if request.user.is_super_admin():
             applicant_recs = ApplicationDetails.objects.filter(is_submitted=True,year=get_current_year(request))
@@ -224,7 +225,7 @@ def template_application_progress_history(request):
         messages.warning(request, "Form have some error" + str(e))
 
     return render(request, 'template_student_progress_history.html',
-                  {'applicant_recs': applicant_recs})
+                  {'applicant_recs': applicant_recs,'country_recs':country_recs})
 
 
 def filter_application_history(request):
