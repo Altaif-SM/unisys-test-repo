@@ -200,7 +200,7 @@
                                             <p>{{ rec.degree.degree_name|title }}</p>
                                         </td>
                                         <td><p>{{ rec.course_applied.program_name|title }}</p></td>
-                                        <td><p>{{ rec.applicant_id.donor_applicant_rel.get.donor.organisation }}</p></td>
+                                        <td><p>{{ rec.applicant_id.donor_applicant_rel.all.0.donor.organisation }}</p></td>
                                         <td><p>{{ rec.scholarship.scholarship_name|title }}</p></td>
                                     </tr>
                                 {% endfor %}

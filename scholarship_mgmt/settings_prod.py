@@ -95,7 +95,8 @@ MEDIA_URL = '/media/'
 DATABASES = {
      'default': {
           'ENGINE': 'django.db.backends.mysql',
-          'NAME': 'scholarship_mgmt',
+          # 'NAME': 'scholarship_mgmt',
+          'NAME': 'scholarship_mgmt_new',
           'USER':'root',
           'PASSWORD':'redbytes',
           'HOST': '127.0.0.1',

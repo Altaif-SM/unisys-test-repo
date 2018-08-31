@@ -250,23 +250,8 @@ def save_update_applicant_personal_info(request):
                         handle_uploaded_file(str(object_path) + '/' + photo, pic)
                         application_obj.image = photo
 
-                    # if not pic:
-                    #     application_obj.image = ''
-
                     application_obj.save()
 
-                    # if pic:
-                    #     dirname = datetime.now().strftime('%Y.%m.%d.%H.%M.%S')
-                    #     filename = "%s_%s.%s" % (str(application_obj.id), dirname, 'png')
-                    #     raw_file_path_and_name = os.path.join('images/' + filename)
-                    #     data = str(pic)
-                    #     temp_data = data.split('base64,')[1]
-                    #     raw_data = base64.b64decode(temp_data)
-                    #     f = open(settings.MEDIA_ROOT + raw_file_path_and_name, 'wb')
-                    #     f.write(raw_data)
-                    #     f.close()
-                    #     application_obj.image = raw_file_path_and_name
-                    #     application_obj.save()
                 except Exception as e:
                     messages.warning(request, "Form have some error" + str(e))
             else:
@@ -362,7 +347,6 @@ def save_update_applicant_family_info(request):
                 if father_pay_slip:
                     object_path = media_path(application_obj)
                     father_slip = str(father_pay_slip)
-                    # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + father_slip),father_pay_slip)
                     handle_uploaded_file(str(object_path) + '/' + father_slip, father_pay_slip)
                     application_obj.father_pay_slip = father_slip
 
@@ -432,7 +416,6 @@ def save_update_applicant_family_mother_sibling_info(request):
                         object_path = media_path(application_obj)
 
                         handle_uploaded_file(str(object_path) + '/' + mother_slip, mother_pay_slip)
-                        # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + mother_slip),mother_pay_slip)
                         application_obj.mother_pay_slip = mother_slip
 
                     if not mother_pay_slip_text:
@@ -481,255 +464,117 @@ def applicant_academic_english_qualification(request):
             # application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id,
             #                                           is_submitted=False)
             if AcademicQualificationDetails.objects.filter(applicant_id=request.user.get_application).exists():
-                qualification_obj = AcademicQualificationDetails.objects.get(
+                qualification_obj = AcademicQualificationDetails.objects.filter(
                     applicant_id=request.user.get_application)
 
             if EnglishQualificationDetails.objects.filter(applicant_id=request.user.get_application).exists():
-                english_obj = EnglishQualificationDetails.objects.get(applicant_id=request.user.get_application)
+                english_obj = EnglishQualificationDetails.objects.filter(applicant_id=request.user.get_application)
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
         return redirect('/student/applicant_personal_info/')
 
     return render(request, 'applicant_academic_english_qualification.html',
-                  {'year_recs': year_recs, 'qualification_obj': qualification_obj, 'english_obj': english_obj,
+                  {'year_recs': year_recs, 'qualification_recs': qualification_obj, 'english_recs': english_obj,
                    'passing_year_recs': passing_year_recs, 'application_obj': application_obj})
 
 
 def save_update_applicant_academic_english_qualification(request):
     redirect_flag = False
+    academic_count = request.POST.get('academic_count')
+    english_count = request.POST.get('english_count')
 
     if request.POST:
-        try:
-            a_level_result_document = request.FILES.get('a_level_result_document')
-        except Exception as e:
-            a_level_result_document = ''
-
-        try:
-            o_level_result_document = request.FILES.get('o_level_result_document')
-        except Exception as e:
-            o_level_result_document = ''
-
-        try:
-            high_school_result_document = request.FILES.get('high_school_result_document')
-        except Exception as e:
-            high_school_result_document = ''
-
-        try:
-            english_test_one_result_document = request.FILES.get('english_test_one_result_document')
-        except Exception as e:
-            english_test_one_result_document = ''
-
-        try:
-            english_test_two_result_document = request.FILES.get('english_test_two_result_document')
-        except Exception as e:
-            english_test_two_result_document = ''
-
-        a_level_result_document_text = request.POST.get('a_level_result_document_text')
-        o_level_result_document_text = request.POST.get('o_level_result_document_text')
-        high_school_result_document_text = request.POST.get('high_school_result_document_text')
-        english_test_one_result_document_text = request.POST.get('english_test_one_result_document_text')
-        english_test_two_result_document_text = request.POST.get('english_test_two_result_document_text')
 
         try:
             if StudentDetails.objects.filter(user=request.user):
                 if not request.user.get_application.is_submitted:
-                    if AcademicQualificationDetails.objects.filter(applicant_id=request.user.get_application).exists():
-                        try:
-                            AcademicQualificationDetails.objects.filter(
-                                applicant_id=request.user.get_application).update(
-                                a_level=request.POST['a_level'],
-                                a_level_year=request.POST['a_level_year'],
-                                a_level_institution=request.POST['a_level_institution'],
-                                a_level_result=request.POST['a_level_result'],
+                    try:
+                        for x in range(int(academic_count)):
+                            try:
+                                x = x + 1
 
-                                o_level=request.POST['o_level'],
-                                o_level_year=request.POST['o_level_year'],
-                                o_level_institution=request.POST['o_level_institution'],
-                                o_level_result=request.POST['o_level_result'],
+                                level_result_document = request.FILES.get('level_result_document' + str(x))
+                                level_result_document_text = request.POST.get('level_result_document_text' + str(x))
 
-                                high_school=request.POST['high_school'],
-                                high_school_year=request.POST['high_school_year'],
-                                high_school_institution=request.POST['high_school_institution'],
-                                high_school_result=request.POST['high_school_result'])
+                                if request.POST.get('academic_id_' + str(x)):
+                                    AcademicQualificationDetails.objects.filter(
+                                        id=request.POST['academic_id_' + str(x)]).update(
+                                        level=request.POST['level' + str(x)],
+                                        level_year=request.POST['level_year' + str(x)],
+                                        level_result=request.POST['level_result' + str(x)],
+                                        level_institution=request.POST['level_institution' + str(x)])
 
-                            qualification_obj = AcademicQualificationDetails.objects.get(
-                                applicant_id=request.user.get_application)
+                                    qualification_obj = AcademicQualificationDetails.objects.filter(
+                                        id=request.POST['academic_id_' + str(x)])[0]
 
-                            if a_level_result_document:
-                                a_level_result = str(a_level_result_document)
-                                object_path = media_path(qualification_obj.applicant_id)
-                                handle_uploaded_file(str(object_path) + '/' + a_level_result, a_level_result_document)
+                                else:
+                                    qualification_obj = AcademicQualificationDetails.objects.create(
+                                        level=request.POST['level' + str(x)],
+                                        level_year=request.POST['level_year' + str(x)],
+                                        level_result=request.POST['level_result' + str(x)],
+                                        level_institution=request.POST['level_institution' + str(x)],
+                                        applicant_id=request.user.get_application)
 
-                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + a_level_result),a_level_result_document)
-                                qualification_obj.a_level_result_document = a_level_result
+                                if level_result_document:
+                                    level_result = str(level_result_document)
 
-                            if not a_level_result_document_text:
-                                qualification_obj.a_level_result_document = ''
+                                    object_path = media_path(qualification_obj.applicant_id)
+                                    handle_uploaded_file(str(object_path) + '/' + level_result,
+                                                         level_result_document)
 
-                            if o_level_result_document:
-                                o_level_result = str(o_level_result_document)
-                                object_path = media_path(qualification_obj.applicant_id)
-                                handle_uploaded_file(str(object_path) + '/' + o_level_result, o_level_result_document)
+                                    qualification_obj.level_result_document = level_result
 
-                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + o_level_result),o_level_result_document)
-                                qualification_obj.o_level_result_document = o_level_result
+                                if not level_result_document_text:
+                                    qualification_obj.level_result_document = ''
 
-                            if not o_level_result_document_text:
-                                qualification_obj.o_level_result_document = ''
+                                qualification_obj.save()
+                            except Exception as e:
+                                pass
 
-                            if high_school_result_document:
-                                high_school_result = str(high_school_result_document)
-                                object_path = media_path(qualification_obj.applicant_id)
-                                handle_uploaded_file(str(object_path) + '/' + high_school_result,
-                                                     high_school_result_document)
+                        for count in range(int(english_count)):
+                            try:
+                                count = count + 1
 
-                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + high_school_result),high_school_result_document)
-                                qualification_obj.high_school_result_document = high_school_result
+                                english_test_result_document = request.FILES.get(
+                                    'english_test_result_document_' + str(count))
+                                english_test_result_document_text = request.POST.get(
+                                    'english_test_result_document_text_' + str(count))
 
-                            if not high_school_result_document_text:
-                                qualification_obj.high_school_result_document = ''
+                                if request.POST.get('english_obj_' + str(count)):
+                                    EnglishQualificationDetails.objects.filter(
+                                        id=request.POST['english_obj_' + str(count)]).update(
+                                        english_test=request.POST['english_test_' + str(count)],
+                                        english_test_year=request.POST['english_test_year_' + str(count)],
+                                        english_test_result=request.POST['english_test_result_' + str(count)])
 
-                            qualification_obj.save()
+                                    english_object = EnglishQualificationDetails.objects.filter(
+                                        id=request.POST['english_obj_' + str(count)])[0]
 
-                            EnglishQualificationDetails.objects.filter(
-                                applicant_id=request.user.get_application).update(
-                                english_test_one=request.POST['english_test_one'],
-                                english_test_one_year=request.POST['english_test_one_year'],
-                                english_test_one_result=request.POST['english_test_one_result'],
+                                else:
+                                    english_object = EnglishQualificationDetails.objects.create(
+                                        english_test=request.POST['english_test_' + str(count)],
+                                        english_test_year=request.POST['english_test_year_' + str(count)],
+                                        english_test_result=request.POST['english_test_result_' + str(count)],
+                                        applicant_id=request.user.get_application)
 
-                                english_test_two=request.POST['english_test_two'],
-                                english_test_two_year=request.POST['english_test_two_year'],
-                                english_test_two_result=request.POST['english_test_two_result'])
+                                if english_test_result_document:
+                                    english_test_result = str(english_test_result_document)
+                                    object_path = media_path(english_object.applicant_id)
+                                    handle_uploaded_file(str(object_path) + '/' + english_test_result,
+                                                         english_test_result_document)
 
-                            english_object = EnglishQualificationDetails.objects.get(
-                                applicant_id=request.user.get_application)
+                                    english_object.english_test_result_document = english_test_result
 
-                            english_test_one_result = str(english_test_one_result_document)
-                            english_test_two_result = str(english_test_two_result_document)
+                                if not english_test_result_document_text:
+                                    english_object.english_test_result_document = ''
 
-                            if english_test_one_result_document:
-                                object_path = media_path(english_object.applicant_id)
-                                handle_uploaded_file(str(object_path) + '/' + english_test_one_result,
-                                                     english_test_one_result_document)
+                                english_object.save()
+                            except Exception as e:
+                                pass
 
-                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + english_test_one_result),english_test_one_result_document)
-                                english_object.english_test_one_result_document = english_test_one_result
-
-                            if not english_test_one_result_document_text:
-                                english_object.english_test_one_result_document = ''
-
-                            if english_test_two_result_document:
-                                object_path = media_path(english_object.applicant_id)
-                                handle_uploaded_file(str(object_path) + '/' + english_test_two_result,
-                                                     english_test_two_result_document)
-
-                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + english_test_two_result),english_test_two_result_document)
-                                english_object.english_test_two_result_document = english_test_two_result
-
-                            if not english_test_two_result_document_text:
-                                english_object.english_test_two_result_document = ''
-
-                            english_object.save()
-
-                            redirect_flag = True
-                        except Exception as e:
-                            messages.warning(request, "Form have some error" + str(e))
-                    else:
-                        try:
-                            qualification_obj = AcademicQualificationDetails.objects.create(
-                                a_level=request.POST['a_level'],
-                                a_level_year=request.POST['a_level_year'],
-                                a_level_result=request.POST['a_level_result'],
-                                a_level_institution=request.POST['a_level_institution'],
-
-                                o_level=request.POST['o_level'],
-                                o_level_year=request.POST['o_level_year'],
-                                o_level_result=request.POST['o_level_result'],
-                                o_level_institution=request.POST['o_level_institution'],
-
-                                high_school=request.POST['high_school'],
-                                high_school_year=request.POST['high_school_year'],
-                                high_school_result=request.POST['high_school_result'],
-                                high_school_institution=request.POST['high_school_institution'],
-                                applicant_id=request.user.get_application)
-
-                            if a_level_result_document:
-                                a_level_result = str(a_level_result_document)
-
-                                object_path = media_path(qualification_obj.applicant_id)
-                                handle_uploaded_file(str(object_path) + '/' + a_level_result, a_level_result_document)
-
-                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + a_level_result),a_level_result_document)
-                                qualification_obj.a_level_result_document = a_level_result
-
-                            if not a_level_result_document_text:
-                                qualification_obj.a_level_result_document = ''
-
-                            if o_level_result_document:
-                                o_level_result = str(o_level_result_document)
-                                object_path = media_path(qualification_obj.applicant_id)
-                                handle_uploaded_file(str(object_path) + '/' + o_level_result, o_level_result_document)
-
-                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + o_level_result),o_level_result_document)
-                                qualification_obj.o_level_result_document = o_level_result
-
-                            if not o_level_result_document_text:
-                                qualification_obj.o_level_result_document = ''
-
-                            if high_school_result_document:
-                                high_school_result = str(high_school_result_document)
-                                object_path = media_path(qualification_obj.applicant_id)
-                                handle_uploaded_file(str(object_path) + '/' + high_school_result,
-                                                     high_school_result_document)
-
-                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + high_school_result),high_school_result_document)
-                                qualification_obj.high_school_result_document = high_school_result
-
-                            if not high_school_result_document_text:
-                                qualification_obj.high_school_result_document = ''
-
-                            qualification_obj.save()
-
-                            english_object = EnglishQualificationDetails.objects.create(
-                                english_test_one=request.POST['english_test_one'],
-                                english_test_one_year=request.POST['english_test_one_year'],
-                                english_test_one_result=request.POST['english_test_one_result'],
-
-                                english_test_two=request.POST['english_test_two'],
-                                english_test_two_year=request.POST['english_test_two_year'],
-                                english_test_two_result=request.POST['english_test_two_result'],
-                                applicant_id=request.user.get_application,
-                            )
-
-                            if english_test_one_result_document:
-                                english_test_one_result = str(english_test_one_result_document)
-                                object_path = media_path(english_object.applicant_id)
-                                handle_uploaded_file(str(object_path) + '/' + english_test_one_result,
-                                                     english_test_one_result_document)
-                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + english_test_one_result),english_test_two_result_document)
-
-                                english_object.english_test_one_result_document = english_test_one_result
-
-                            if not english_test_one_result_document_text:
-                                english_object.english_test_one_result_document = ''
-
-                            if english_test_two_result_document:
-                                english_test_two_result = str(english_test_two_result_document)
-                                object_path = media_path(english_object.applicant_id)
-                                handle_uploaded_file(str(object_path) + '/' + english_test_two_result,
-                                                     english_test_two_result_document)
-
-                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + english_test_two_result),english_test_two_result_document)
-                                english_object.english_test_two_result_document = english_test_two_result
-
-                            if not english_test_two_result_document_text:
-                                english_object.english_test_two_result_document = ''
-
-                            english_object.save()
-
-                            redirect_flag = True
-                        except Exception as e:
-                            messages.warning(request, "Form have some error" + str(e))
+                        redirect_flag = True
+                    except Exception as e:
+                        messages.warning(request, "Form have some error" + str(e))
                 else:
                     messages.success(request, "Please fill the record.")
                     return redirect('/student/applicant_personal_info/')
@@ -742,6 +587,257 @@ def save_update_applicant_academic_english_qualification(request):
 
         messages.warning(request, "Please fill proper form")
     return redirect('/student/applicant_academic_english_qualification/')
+
+
+#------ BACKUP Academic Qalification----------------
+
+# def save_update_applicant_academic_english_qualification(request):
+#     redirect_flag = False
+#
+#     if request.POST:
+#         try:
+#             a_level_result_document = request.FILES.get('a_level_result_document')
+#         except Exception as e:
+#             a_level_result_document = ''
+#
+#         try:
+#             o_level_result_document = request.FILES.get('o_level_result_document')
+#         except Exception as e:
+#             o_level_result_document = ''
+#
+#         try:
+#             high_school_result_document = request.FILES.get('high_school_result_document')
+#         except Exception as e:
+#             high_school_result_document = ''
+#
+#         try:
+#             english_test_one_result_document = request.FILES.get('english_test_one_result_document')
+#         except Exception as e:
+#             english_test_one_result_document = ''
+#
+#         try:
+#             english_test_two_result_document = request.FILES.get('english_test_two_result_document')
+#         except Exception as e:
+#             english_test_two_result_document = ''
+#
+#         a_level_result_document_text = request.POST.get('a_level_result_document_text')
+#         o_level_result_document_text = request.POST.get('o_level_result_document_text')
+#         high_school_result_document_text = request.POST.get('high_school_result_document_text')
+#         english_test_one_result_document_text = request.POST.get('english_test_one_result_document_text')
+#         english_test_two_result_document_text = request.POST.get('english_test_two_result_document_text')
+#
+#         try:
+#             if StudentDetails.objects.filter(user=request.user):
+#                 if not request.user.get_application.is_submitted:
+#                     if AcademicQualificationDetails.objects.filter(applicant_id=request.user.get_application).exists():
+#                         try:
+#                             AcademicQualificationDetails.objects.filter(
+#                                 applicant_id=request.user.get_application).update(
+#                                 a_level=request.POST['a_level'],
+#                                 a_level_year=request.POST['a_level_year'],
+#                                 a_level_institution=request.POST['a_level_institution'],
+#                                 a_level_result=request.POST['a_level_result'],
+#
+#                                 o_level=request.POST['o_level'],
+#                                 o_level_year=request.POST['o_level_year'],
+#                                 o_level_institution=request.POST['o_level_institution'],
+#                                 o_level_result=request.POST['o_level_result'],
+#
+#                                 high_school=request.POST['high_school'],
+#                                 high_school_year=request.POST['high_school_year'],
+#                                 high_school_institution=request.POST['high_school_institution'],
+#                                 high_school_result=request.POST['high_school_result'])
+#
+#                             qualification_obj = AcademicQualificationDetails.objects.get(
+#                                 applicant_id=request.user.get_application)
+#
+#                             if a_level_result_document:
+#                                 a_level_result = str(a_level_result_document)
+#                                 object_path = media_path(qualification_obj.applicant_id)
+#                                 handle_uploaded_file(str(object_path) + '/' + a_level_result, a_level_result_document)
+#
+#                                 # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + a_level_result),a_level_result_document)
+#                                 qualification_obj.a_level_result_document = a_level_result
+#
+#                             if not a_level_result_document_text:
+#                                 qualification_obj.a_level_result_document = ''
+#
+#                             if o_level_result_document:
+#                                 o_level_result = str(o_level_result_document)
+#                                 object_path = media_path(qualification_obj.applicant_id)
+#                                 handle_uploaded_file(str(object_path) + '/' + o_level_result, o_level_result_document)
+#
+#                                 # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + o_level_result),o_level_result_document)
+#                                 qualification_obj.o_level_result_document = o_level_result
+#
+#                             if not o_level_result_document_text:
+#                                 qualification_obj.o_level_result_document = ''
+#
+#                             if high_school_result_document:
+#                                 high_school_result = str(high_school_result_document)
+#                                 object_path = media_path(qualification_obj.applicant_id)
+#                                 handle_uploaded_file(str(object_path) + '/' + high_school_result,
+#                                                      high_school_result_document)
+#
+#                                 # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + high_school_result),high_school_result_document)
+#                                 qualification_obj.high_school_result_document = high_school_result
+#
+#                             if not high_school_result_document_text:
+#                                 qualification_obj.high_school_result_document = ''
+#
+#                             qualification_obj.save()
+#
+#                             EnglishQualificationDetails.objects.filter(
+#                                 applicant_id=request.user.get_application).update(
+#                                 english_test_one=request.POST['english_test_one'],
+#                                 english_test_one_year=request.POST['english_test_one_year'],
+#                                 english_test_one_result=request.POST['english_test_one_result'],
+#
+#                                 english_test_two=request.POST['english_test_two'],
+#                                 english_test_two_year=request.POST['english_test_two_year'],
+#                                 english_test_two_result=request.POST['english_test_two_result'])
+#
+#                             english_object = EnglishQualificationDetails.objects.get(
+#                                 applicant_id=request.user.get_application)
+#
+#                             english_test_one_result = str(english_test_one_result_document)
+#                             english_test_two_result = str(english_test_two_result_document)
+#
+#                             if english_test_one_result_document:
+#                                 object_path = media_path(english_object.applicant_id)
+#                                 handle_uploaded_file(str(object_path) + '/' + english_test_one_result,
+#                                                      english_test_one_result_document)
+#
+#                                 # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + english_test_one_result),english_test_one_result_document)
+#                                 english_object.english_test_one_result_document = english_test_one_result
+#
+#                             if not english_test_one_result_document_text:
+#                                 english_object.english_test_one_result_document = ''
+#
+#                             if english_test_two_result_document:
+#                                 object_path = media_path(english_object.applicant_id)
+#                                 handle_uploaded_file(str(object_path) + '/' + english_test_two_result,
+#                                                      english_test_two_result_document)
+#
+#                                 # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + english_test_two_result),english_test_two_result_document)
+#                                 english_object.english_test_two_result_document = english_test_two_result
+#
+#                             if not english_test_two_result_document_text:
+#                                 english_object.english_test_two_result_document = ''
+#
+#                             english_object.save()
+#
+#                             redirect_flag = True
+#                         except Exception as e:
+#                             messages.warning(request, "Form have some error" + str(e))
+#                     else:
+#                         try:
+#                             qualification_obj = AcademicQualificationDetails.objects.create(
+#                                 a_level=request.POST['a_level'],
+#                                 a_level_year=request.POST['a_level_year'],
+#                                 a_level_result=request.POST['a_level_result'],
+#                                 a_level_institution=request.POST['a_level_institution'],
+#
+#                                 o_level=request.POST['o_level'],
+#                                 o_level_year=request.POST['o_level_year'],
+#                                 o_level_result=request.POST['o_level_result'],
+#                                 o_level_institution=request.POST['o_level_institution'],
+#
+#                                 high_school=request.POST['high_school'],
+#                                 high_school_year=request.POST['high_school_year'],
+#                                 high_school_result=request.POST['high_school_result'],
+#                                 high_school_institution=request.POST['high_school_institution'],
+#                                 applicant_id=request.user.get_application)
+#
+#                             if a_level_result_document:
+#                                 a_level_result = str(a_level_result_document)
+#
+#                                 object_path = media_path(qualification_obj.applicant_id)
+#                                 handle_uploaded_file(str(object_path) + '/' + a_level_result, a_level_result_document)
+#
+#                                 # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + a_level_result),a_level_result_document)
+#                                 qualification_obj.a_level_result_document = a_level_result
+#
+#                             if not a_level_result_document_text:
+#                                 qualification_obj.a_level_result_document = ''
+#
+#                             if o_level_result_document:
+#                                 o_level_result = str(o_level_result_document)
+#                                 object_path = media_path(qualification_obj.applicant_id)
+#                                 handle_uploaded_file(str(object_path) + '/' + o_level_result, o_level_result_document)
+#
+#                                 # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + o_level_result),o_level_result_document)
+#                                 qualification_obj.o_level_result_document = o_level_result
+#
+#                             if not o_level_result_document_text:
+#                                 qualification_obj.o_level_result_document = ''
+#
+#                             if high_school_result_document:
+#                                 high_school_result = str(high_school_result_document)
+#                                 object_path = media_path(qualification_obj.applicant_id)
+#                                 handle_uploaded_file(str(object_path) + '/' + high_school_result,
+#                                                      high_school_result_document)
+#
+#                                 # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + high_school_result),high_school_result_document)
+#                                 qualification_obj.high_school_result_document = high_school_result
+#
+#                             if not high_school_result_document_text:
+#                                 qualification_obj.high_school_result_document = ''
+#
+#                             qualification_obj.save()
+#
+#                             english_object = EnglishQualificationDetails.objects.create(
+#                                 english_test_one=request.POST['english_test_one'],
+#                                 english_test_one_year=request.POST['english_test_one_year'],
+#                                 english_test_one_result=request.POST['english_test_one_result'],
+#
+#                                 english_test_two=request.POST['english_test_two'],
+#                                 english_test_two_year=request.POST['english_test_two_year'],
+#                                 english_test_two_result=request.POST['english_test_two_result'],
+#                                 applicant_id=request.user.get_application,
+#                             )
+#
+#                             if english_test_one_result_document:
+#                                 english_test_one_result = str(english_test_one_result_document)
+#                                 object_path = media_path(english_object.applicant_id)
+#                                 handle_uploaded_file(str(object_path) + '/' + english_test_one_result,
+#                                                      english_test_one_result_document)
+#                                 # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + english_test_one_result),english_test_two_result_document)
+#
+#                                 english_object.english_test_one_result_document = english_test_one_result
+#
+#                             if not english_test_one_result_document_text:
+#                                 english_object.english_test_one_result_document = ''
+#
+#                             if english_test_two_result_document:
+#                                 english_test_two_result = str(english_test_two_result_document)
+#                                 object_path = media_path(english_object.applicant_id)
+#                                 handle_uploaded_file(str(object_path) + '/' + english_test_two_result,
+#                                                      english_test_two_result_document)
+#
+#                                 # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + english_test_two_result),english_test_two_result_document)
+#                                 english_object.english_test_two_result_document = english_test_two_result
+#
+#                             if not english_test_two_result_document_text:
+#                                 english_object.english_test_two_result_document = ''
+#
+#                             english_object.save()
+#
+#                             redirect_flag = True
+#                         except Exception as e:
+#                             messages.warning(request, "Form have some error" + str(e))
+#                 else:
+#                     messages.success(request, "Please fill the record.")
+#                     return redirect('/student/applicant_personal_info/')
+#
+#                 if redirect_flag:
+#                     messages.success(request, "Record saved")
+#                     return redirect('/student/applicant_curriculum_experience_info/')
+#         except Exception as e:
+#             messages.warning(request, "Form have some error" + str(e))
+#
+#         messages.warning(request, "Please fill proper form")
+#     return redirect('/student/applicant_academic_english_qualification/')
 
 
 def applicant_curriculum_experience_info(request):
@@ -757,258 +853,122 @@ def applicant_curriculum_experience_info(request):
             # if not request.user.get_application.is_submitted:
             # application_obj = ApplicationDetails.objects.get(student=student, is_submitted=False)
             if CurriculumDetails.objects.filter(applicant_id=request.user.get_application).exists():
-                curriculum_obj = CurriculumDetails.objects.get(applicant_id=request.user.get_application)
+                curriculum_obj = CurriculumDetails.objects.filter(applicant_id=request.user.get_application)
 
             if ExperienceDetails.objects.filter(applicant_id=request.user.get_application).exists():
-                experience_obj = ExperienceDetails.objects.get(applicant_id=request.user.get_application)
+                experience_obj = ExperienceDetails.objects.filter(applicant_id=request.user.get_application)
 
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
         return redirect('/student/applicant_personal_info/')
     return render(request, 'applicant_curriculum_experience_info.html',
-                  {'year_recs': year_recs, 'experience_obj': experience_obj, 'curriculum_obj': curriculum_obj,
+                  {'year_recs': year_recs, 'experience_recs': experience_obj, 'curriculum_recs': curriculum_obj,
                    'passing_year_recs': passing_year_recs, 'application_obj': application_obj})
 
 
 def save_update_applicant_curriculum_experience_info(request):
     redirect_flag = False
 
+    curriculum_count = request.POST.get('curriculum_count')
+    experience_count = request.POST.get('experience_count')
+
     if request.POST:
         try:
-            try:
-                curriculum_result_document_one = request.FILES.get('curriculum_result_document_one')
-                curriculum_result_document_two = request.FILES.get('curriculum_result_document_two')
-                curriculum_result_document_three = request.FILES.get('curriculum_result_document_three')
-
-                work_experience_document_one = request.FILES.get('work_experience_document_one')
-                work_experience_document_two = request.FILES.get('work_experience_document_two')
-
-            except Exception as e:
-                curriculum_result_document_one = ''
-                curriculum_result_document_two = ''
-                curriculum_result_document_three = ''
-
-                work_experience_document_one = ''
-                work_experience_document_two = ''
-
-            curriculum_result_document_one_text = request.POST.get('curriculum_result_document_one_text')
-            curriculum_result_document_two_text = request.POST.get('curriculum_result_document_two_text')
-            curriculum_result_document_three_text = request.POST.get('curriculum_result_document_three_text')
-
-            work_experience_document_one_text = request.POST.get('work_experience_document_one_text')
-            work_experience_document_two_text = request.POST.get('work_experience_document_two_text')
-
             if StudentDetails.objects.filter(user=request.user):
                 student = StudentDetails.objects.filter(user=request.user)[0]
                 if not request.user.get_application.is_submitted:
                     # application_obj = ApplicationDetails.objects.get(student=student, is_submitted=False)
-                    if CurriculumDetails.objects.filter(applicant_id=request.user.get_application).exists():
+
+                    for x in range(int(curriculum_count)):
                         try:
-                            CurriculumDetails.objects.filter(applicant_id=request.user.get_application).update(
-                                curriculum_name_one=request.POST['curriculum_name_one'],
-                                curriculum_year_one=request.POST['curriculum_year_one'],
+                            x = x + 1
 
-                                curriculum_name_two=request.POST['curriculum_name_two'],
-                                curriculum_year_two=request.POST['curriculum_year_two'],
+                            curriculum_result_document = request.FILES.get('curriculum_result_document_' + str(x))
+                            curriculum_result_document_text = request.POST.get(
+                                'curriculum_result_document_text_' + str(x))
 
-                                curriculum_name_three=request.POST['curriculum_name_three'],
-                                curriculum_year_three=request.POST['curriculum_year_three'])
+                            if request.POST.get('curriculum_obj_' + str(x)):
+                                CurriculumDetails.objects.filter(
+                                    id=request.POST['curriculum_obj_' + str(x)]).update(
+                                    curriculum_name=request.POST['curriculum_name_' + str(x)],
+                                    curriculum_year=request.POST['curriculum_year_' + str(x)])
 
-                            curriculum_obj = CurriculumDetails.objects.get(
-                                applicant_id=request.user.get_application)
+                                curriculum_obj = CurriculumDetails.objects.filter(
+                                    id=request.POST['curriculum_obj_' + str(x)])[0]
 
-                            if curriculum_result_document_one:
-                                curriculum_result_one = str(curriculum_result_document_one)
+                            else:
+                                curriculum_obj = CurriculumDetails.objects.create(
+                                    curriculum_name=request.POST['curriculum_name_' + str(x)],
+                                    curriculum_year=request.POST['curriculum_year_' + str(x)],
+                                    applicant_id=request.user.get_application)
+
+                            if curriculum_result_document:
+                                result_document = str(curriculum_result_document)
+
                                 object_path = media_path(curriculum_obj.applicant_id)
-                                handle_uploaded_file(str(object_path) + '/' + curriculum_result_one,
-                                                     curriculum_result_document_one)
+                                handle_uploaded_file(str(object_path) + '/' + result_document,
+                                                     curriculum_result_document)
 
-                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + curriculum_result_one),curriculum_result_document_one)
-                                curriculum_obj.curriculum_result_document_one = curriculum_result_one
+                                curriculum_obj.curriculum_result_document = result_document
 
-                            if not curriculum_result_document_one_text:
-                                curriculum_obj.curriculum_result_document_one = ''
-
-                            if curriculum_result_document_two:
-                                curriculum_result_two = str(curriculum_result_document_two)
-                                object_path = media_path(curriculum_obj.applicant_id)
-                                handle_uploaded_file(str(object_path) + '/' + curriculum_result_two,
-                                                     curriculum_result_document_two)
-
-                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + curriculum_result_two),curriculum_result_document_two)
-                                curriculum_obj.curriculum_result_document_two = curriculum_result_two
-
-                            if not curriculum_result_document_two_text:
-                                curriculum_obj.curriculum_result_document_two = ''
-
-                            if curriculum_result_document_three:
-                                curriculum_result_three = str(curriculum_result_document_three)
-                                object_path = media_path(curriculum_obj.applicant_id)
-                                handle_uploaded_file(str(object_path) + '/' + curriculum_result_three,
-                                                     curriculum_result_document_three)
-
-                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + curriculum_result_three),curriculum_result_document_three)
-                                curriculum_obj.curriculum_result_document_three = curriculum_result_three
-
-                            if not curriculum_result_document_three_text:
-                                curriculum_obj.curriculum_result_document_three = ''
+                            if not curriculum_result_document_text:
+                                curriculum_obj.curriculum_result_document = ''
 
                             curriculum_obj.save()
+                        except Exception as e:
+                            pass
 
-                            ExperienceDetails.objects.filter(applicant_id=request.user.get_application).update(
-                                work_experience_one=request.POST['work_experience_one'],
-                                from_date_one=request.POST['from_date_one'] if request.POST['from_date_one'] else None,
-                                to_date_one=request.POST['to_date_one'] if request.POST['to_date_one'] else None,
-                                experience_one_current=True if request.POST.get('experience_one_current') else False,
+                    for count in range(int(experience_count)):
+                        try:
+                            count = count + 1
 
-                                work_experience_two=request.POST['work_experience_two'],
-                                from_date_two=request.POST['from_date_two'] if request.POST['from_date_two'] else None,
-                                to_date_two=request.POST['to_date_two'] if request.POST['to_date_two'] else None,
-                                experience_two_current=True if request.POST.get('experience_two_current') else False,
-                            )
+                            work_experience_document = request.FILES.get('work_experience_document_' + str(count))
+                            work_experience_document_text = request.POST.get(
+                                'work_experience_document_text_' + str(count))
 
-                            try:
+                            if request.POST.get('experience_obj_' + str(count)):
 
-                                experience_object = ExperienceDetails.objects.get(
-                                    applicant_id=request.user.get_application)
-                            except:
+                                ExperienceDetails.objects.filter(id=request.POST['experience_obj_' + str(count)]).update(
+                                    work_experience=request.POST['work_experience_' + str(count)],
+                                    from_date=request.POST['from_date_' + str(count)] if request.POST[
+                                        'from_date_' + str(count)] else None,
+                                    to_date=request.POST['to_date_' + str(count)] if request.POST[
+                                        'to_date_' + str(count)] else None,
+                                    experience_current=True if request.POST.get(
+                                        'experience_current_' + str(count)) else False,
+                                )
+
+                                experience_object = ExperienceDetails.objects.filter(
+                                    id=request.POST['experience_obj_' + str(count)])[0]
+
+                            else:
                                 experience_object = ExperienceDetails.objects.create(
-                                    work_experience_one=request.POST['work_experience_one'],
-                                    from_date_one=request.POST['from_date_one'] if request.POST[
-                                        'from_date_one'] else None,
-                                    to_date_one=request.POST['to_date_one'] if request.POST['to_date_one'] else None,
-                                    experience_one_current=True if request.POST.get(
-                                        'experience_one_current') else False,
-
-                                    work_experience_two=request.POST['work_experience_two'],
-                                    from_date_two=request.POST['from_date_two'] if request.POST[
-                                        'from_date_two'] else None,
-                                    to_date_two=request.POST['to_date_two'] if request.POST['to_date_two'] else None,
-                                    experience_two_current=True if request.POST.get(
-                                        'experience_two_current') else False,
+                                    work_experience=request.POST['work_experience_' + str(count)],
+                                    from_date=request.POST['from_date_' + str(count)] if request.POST[
+                                        'from_date_' + str(count)] else None,
+                                    to_date=request.POST['to_date_' + str(count)] if request.POST[
+                                        'to_date_' + str(count)] else None,
+                                    experience_current=True if request.POST.get(
+                                        'experience_current_' + str(count)) else False,
                                     applicant_id=request.user.get_application)
 
-                            if work_experience_document_one:
-                                work_experience_one = str(work_experience_document_one)
+                            if work_experience_document:
+                                work_experience = str(work_experience_document)
                                 object_path = media_path(experience_object.applicant_id)
-                                handle_uploaded_file(str(object_path) + '/' + work_experience_one,
-                                                     work_experience_document_one)
+                                handle_uploaded_file(str(object_path) + '/' + work_experience,
+                                                     work_experience_document)
 
-                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + work_experience_one),work_experience_document_one)
-                                experience_object.work_experience_document_one = work_experience_one
+                                experience_object.work_experience_document = work_experience
 
-                            if not work_experience_document_one_text:
+                            if not work_experience_document_text:
                                 experience_object.work_experience_document_one = ''
 
-                            if work_experience_document_two:
-                                work_experience_two = str(work_experience_document_two)
-                                object_path = media_path(experience_object.applicant_id)
-                                handle_uploaded_file(str(object_path) + '/' + work_experience_two,
-                                                     work_experience_document_two)
-
-                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + work_experience_two),work_experience_document_two)
-                                experience_object.work_experience_document_two = work_experience_two
-
-                            if not work_experience_document_two_text:
-                                experience_object.work_experience_document_two = ''
-
                             experience_object.save()
-
-                            redirect_flag = True
                         except Exception as e:
-                            messages.warning(request, "Form have some error" + str(e))
-                    else:
-                        try:
-                            curriculum_obj = CurriculumDetails.objects.create(
-                                curriculum_name_one=request.POST['curriculum_name_one'],
-                                curriculum_year_one=request.POST['curriculum_year_one'],
+                            pass
 
-                                curriculum_name_two=request.POST['curriculum_name_two'],
-                                curriculum_year_two=request.POST['curriculum_year_two'],
+                    redirect_flag = True
 
-                                curriculum_name_three=request.POST['curriculum_name_three'],
-                                curriculum_year_three=request.POST['curriculum_year_three'],
-                                applicant_id=request.user.get_application)
-
-                            if curriculum_result_document_one:
-                                curriculum_result_one = str(curriculum_result_document_one)
-                                object_path = media_path(curriculum_obj.applicant_id)
-                                handle_uploaded_file(str(object_path) + '/' + curriculum_result_one,
-                                                     curriculum_result_document_one)
-
-                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + curriculum_result_one),curriculum_result_document_one)
-                                curriculum_obj.curriculum_result_document_one = curriculum_result_one
-
-                            if not curriculum_result_document_one_text:
-                                curriculum_obj.curriculum_result_document_one = ''
-
-                            if curriculum_result_document_two:
-                                curriculum_result_two = str(curriculum_result_document_two)
-                                object_path = media_path(curriculum_obj.applicant_id)
-                                handle_uploaded_file(str(object_path) + '/' + curriculum_result_two,
-                                                     curriculum_result_document_two)
-
-                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + curriculum_result_two),curriculum_result_document_two)
-                                curriculum_obj.curriculum_result_document_two = curriculum_result_two
-
-                            if not curriculum_result_document_two_text:
-                                curriculum_obj.curriculum_result_document_two = ''
-
-                            if curriculum_result_document_three:
-                                curriculum_result_three = str(curriculum_result_document_three)
-                                object_path = media_path(curriculum_obj.applicant_id)
-                                handle_uploaded_file(str(object_path) + '/' + curriculum_result_three,
-                                                     curriculum_result_document_three)
-
-                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + curriculum_result_three),curriculum_result_document_three)
-                                curriculum_obj.curriculum_result_document_three = curriculum_result_three
-
-                            if not curriculum_result_document_three_text:
-                                curriculum_obj.curriculum_result_document_three = ''
-
-                            curriculum_obj.save()
-
-                            experience_object = ExperienceDetails.objects.create(
-                                work_experience_one=request.POST['work_experience_one'],
-                                from_date_one=request.POST['from_date_one'] if request.POST['from_date_one'] else None,
-                                to_date_one=request.POST['to_date_one'] if request.POST['to_date_one'] else None,
-                                experience_one_current=True if request.POST.get('experience_one_current') else False,
-
-                                work_experience_two=request.POST['work_experience_two'],
-                                from_date_two=request.POST['from_date_two'] if request.POST['from_date_two'] else None,
-                                to_date_two=request.POST['to_date_two'] if request.POST['to_date_two'] else None,
-                                experience_two_current=True if request.POST.get('experience_two_current') else False,
-                                applicant_id=request.user.get_application)
-
-                            if work_experience_document_one:
-                                work_experience_one = str(work_experience_document_one)
-                                object_path = media_path(experience_object.applicant_id)
-                                handle_uploaded_file(str(object_path) + '/' + work_experience_one,
-                                                     work_experience_document_one)
-
-                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + work_experience_one),work_experience_document_one)
-                                experience_object.work_experience_document_one = work_experience_one
-
-                            if not work_experience_document_one_text:
-                                experience_object.work_experience_document_one = ''
-
-                            if work_experience_document_two:
-                                work_experience_two = str(work_experience_document_two)
-                                object_path = media_path(experience_object.applicant_id)
-                                handle_uploaded_file(str(object_path) + '/' + work_experience_two,
-                                                     work_experience_document_two)
-
-                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + work_experience_two),work_experience_document_two)
-                                experience_object.work_experience_document_two = work_experience_two
-
-                            if not work_experience_document_two_text:
-                                experience_object.work_experience_document_two = ''
-
-                            experience_object.save()
-
-                            redirect_flag = True
-                        except Exception as e:
-                            messages.warning(request, "Form have some error" + str(e))
                 else:
                     messages.success(request, "Please fill the record.")
                     return redirect('/student/applicant_personal_info/')
@@ -1021,6 +981,263 @@ def save_update_applicant_curriculum_experience_info(request):
 
         messages.warning(request, "Please fill proper form")
     return redirect('/student/applicant_scholarship_about_yourself_info/')
+
+
+
+
+#------------ Backup for static save of Experiance and Curriculam ---------------------
+
+# def save_update_applicant_curriculum_experience_info(request):
+#     redirect_flag = False
+#
+#     if request.POST:
+#         try:
+#             try:
+#                 curriculum_result_document_one = request.FILES.get('curriculum_result_document_one')
+#                 curriculum_result_document_two = request.FILES.get('curriculum_result_document_two')
+#                 curriculum_result_document_three = request.FILES.get('curriculum_result_document_three')
+#
+#                 work_experience_document_one = request.FILES.get('work_experience_document_one')
+#                 work_experience_document_two = request.FILES.get('work_experience_document_two')
+#
+#             except Exception as e:
+#                 curriculum_result_document_one = ''
+#                 curriculum_result_document_two = ''
+#                 curriculum_result_document_three = ''
+#
+#                 work_experience_document_one = ''
+#                 work_experience_document_two = ''
+#
+#             curriculum_result_document_one_text = request.POST.get('curriculum_result_document_one_text')
+#             curriculum_result_document_two_text = request.POST.get('curriculum_result_document_two_text')
+#             curriculum_result_document_three_text = request.POST.get('curriculum_result_document_three_text')
+#
+#             work_experience_document_one_text = request.POST.get('work_experience_document_one_text')
+#             work_experience_document_two_text = request.POST.get('work_experience_document_two_text')
+#
+#             if StudentDetails.objects.filter(user=request.user):
+#                 student = StudentDetails.objects.filter(user=request.user)[0]
+#                 if not request.user.get_application.is_submitted:
+#                     # application_obj = ApplicationDetails.objects.get(student=student, is_submitted=False)
+#                     if CurriculumDetails.objects.filter(applicant_id=request.user.get_application).exists():
+#                         try:
+#                             CurriculumDetails.objects.filter(applicant_id=request.user.get_application).update(
+#                                 curriculum_name_one=request.POST['curriculum_name_one'],
+#                                 curriculum_year_one=request.POST['curriculum_year_one'],
+#
+#                                 curriculum_name_two=request.POST['curriculum_name_two'],
+#                                 curriculum_year_two=request.POST['curriculum_year_two'],
+#
+#                                 curriculum_name_three=request.POST['curriculum_name_three'],
+#                                 curriculum_year_three=request.POST['curriculum_year_three'])
+#
+#                             curriculum_obj = CurriculumDetails.objects.get(
+#                                 applicant_id=request.user.get_application)
+#
+#                             if curriculum_result_document_one:
+#                                 curriculum_result_one = str(curriculum_result_document_one)
+#                                 object_path = media_path(curriculum_obj.applicant_id)
+#                                 handle_uploaded_file(str(object_path) + '/' + curriculum_result_one,
+#                                                      curriculum_result_document_one)
+#
+#                                 # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + curriculum_result_one),curriculum_result_document_one)
+#                                 curriculum_obj.curriculum_result_document_one = curriculum_result_one
+#
+#                             if not curriculum_result_document_one_text:
+#                                 curriculum_obj.curriculum_result_document_one = ''
+#
+#                             if curriculum_result_document_two:
+#                                 curriculum_result_two = str(curriculum_result_document_two)
+#                                 object_path = media_path(curriculum_obj.applicant_id)
+#                                 handle_uploaded_file(str(object_path) + '/' + curriculum_result_two,
+#                                                      curriculum_result_document_two)
+#
+#                                 # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + curriculum_result_two),curriculum_result_document_two)
+#                                 curriculum_obj.curriculum_result_document_two = curriculum_result_two
+#
+#                             if not curriculum_result_document_two_text:
+#                                 curriculum_obj.curriculum_result_document_two = ''
+#
+#                             if curriculum_result_document_three:
+#                                 curriculum_result_three = str(curriculum_result_document_three)
+#                                 object_path = media_path(curriculum_obj.applicant_id)
+#                                 handle_uploaded_file(str(object_path) + '/' + curriculum_result_three,
+#                                                      curriculum_result_document_three)
+#
+#                                 # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + curriculum_result_three),curriculum_result_document_three)
+#                                 curriculum_obj.curriculum_result_document_three = curriculum_result_three
+#
+#                             if not curriculum_result_document_three_text:
+#                                 curriculum_obj.curriculum_result_document_three = ''
+#
+#                             curriculum_obj.save()
+#
+#                             ExperienceDetails.objects.filter(applicant_id=request.user.get_application).update(
+#                                 work_experience_one=request.POST['work_experience_one'],
+#                                 from_date_one=request.POST['from_date_one'] if request.POST['from_date_one'] else None,
+#                                 to_date_one=request.POST['to_date_one'] if request.POST['to_date_one'] else None,
+#                                 experience_one_current=True if request.POST.get('experience_one_current') else False,
+#
+#                                 work_experience_two=request.POST['work_experience_two'],
+#                                 from_date_two=request.POST['from_date_two'] if request.POST['from_date_two'] else None,
+#                                 to_date_two=request.POST['to_date_two'] if request.POST['to_date_two'] else None,
+#                                 experience_two_current=True if request.POST.get('experience_two_current') else False,
+#                             )
+#
+#                             try:
+#
+#                                 experience_object = ExperienceDetails.objects.get(
+#                                     applicant_id=request.user.get_application)
+#                             except:
+#                                 experience_object = ExperienceDetails.objects.create(
+#                                     work_experience_one=request.POST['work_experience_one'],
+#                                     from_date_one=request.POST['from_date_one'] if request.POST[
+#                                         'from_date_one'] else None,
+#                                     to_date_one=request.POST['to_date_one'] if request.POST['to_date_one'] else None,
+#                                     experience_one_current=True if request.POST.get(
+#                                         'experience_one_current') else False,
+#
+#                                     work_experience_two=request.POST['work_experience_two'],
+#                                     from_date_two=request.POST['from_date_two'] if request.POST[
+#                                         'from_date_two'] else None,
+#                                     to_date_two=request.POST['to_date_two'] if request.POST['to_date_two'] else None,
+#                                     experience_two_current=True if request.POST.get(
+#                                         'experience_two_current') else False,
+#                                     applicant_id=request.user.get_application)
+#
+#                             if work_experience_document_one:
+#                                 work_experience_one = str(work_experience_document_one)
+#                                 object_path = media_path(experience_object.applicant_id)
+#                                 handle_uploaded_file(str(object_path) + '/' + work_experience_one,
+#                                                      work_experience_document_one)
+#
+#                                 # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + work_experience_one),work_experience_document_one)
+#                                 experience_object.work_experience_document_one = work_experience_one
+#
+#                             if not work_experience_document_one_text:
+#                                 experience_object.work_experience_document_one = ''
+#
+#                             if work_experience_document_two:
+#                                 work_experience_two = str(work_experience_document_two)
+#                                 object_path = media_path(experience_object.applicant_id)
+#                                 handle_uploaded_file(str(object_path) + '/' + work_experience_two,
+#                                                      work_experience_document_two)
+#
+#                                 # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + work_experience_two),work_experience_document_two)
+#                                 experience_object.work_experience_document_two = work_experience_two
+#
+#                             if not work_experience_document_two_text:
+#                                 experience_object.work_experience_document_two = ''
+#
+#                             experience_object.save()
+#
+#                             redirect_flag = True
+#                         except Exception as e:
+#                             messages.warning(request, "Form have some error" + str(e))
+#                     else:
+#                         try:
+#                             curriculum_obj = CurriculumDetails.objects.create(
+#                                 curriculum_name_one=request.POST['curriculum_name_one'],
+#                                 curriculum_year_one=request.POST['curriculum_year_one'],
+#
+#                                 curriculum_name_two=request.POST['curriculum_name_two'],
+#                                 curriculum_year_two=request.POST['curriculum_year_two'],
+#
+#                                 curriculum_name_three=request.POST['curriculum_name_three'],
+#                                 curriculum_year_three=request.POST['curriculum_year_three'],
+#                                 applicant_id=request.user.get_application)
+#
+#                             if curriculum_result_document_one:
+#                                 curriculum_result_one = str(curriculum_result_document_one)
+#                                 object_path = media_path(curriculum_obj.applicant_id)
+#                                 handle_uploaded_file(str(object_path) + '/' + curriculum_result_one,
+#                                                      curriculum_result_document_one)
+#
+#                                 # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + curriculum_result_one),curriculum_result_document_one)
+#                                 curriculum_obj.curriculum_result_document_one = curriculum_result_one
+#
+#                             if not curriculum_result_document_one_text:
+#                                 curriculum_obj.curriculum_result_document_one = ''
+#
+#                             if curriculum_result_document_two:
+#                                 curriculum_result_two = str(curriculum_result_document_two)
+#                                 object_path = media_path(curriculum_obj.applicant_id)
+#                                 handle_uploaded_file(str(object_path) + '/' + curriculum_result_two,
+#                                                      curriculum_result_document_two)
+#
+#                                 # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + curriculum_result_two),curriculum_result_document_two)
+#                                 curriculum_obj.curriculum_result_document_two = curriculum_result_two
+#
+#                             if not curriculum_result_document_two_text:
+#                                 curriculum_obj.curriculum_result_document_two = ''
+#
+#                             if curriculum_result_document_three:
+#                                 curriculum_result_three = str(curriculum_result_document_three)
+#                                 object_path = media_path(curriculum_obj.applicant_id)
+#                                 handle_uploaded_file(str(object_path) + '/' + curriculum_result_three,
+#                                                      curriculum_result_document_three)
+#
+#                                 # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + curriculum_result_three),curriculum_result_document_three)
+#                                 curriculum_obj.curriculum_result_document_three = curriculum_result_three
+#
+#                             if not curriculum_result_document_three_text:
+#                                 curriculum_obj.curriculum_result_document_three = ''
+#
+#                             curriculum_obj.save()
+#
+#                             experience_object = ExperienceDetails.objects.create(
+#                                 work_experience_one=request.POST['work_experience_one'],
+#                                 from_date_one=request.POST['from_date_one'] if request.POST['from_date_one'] else None,
+#                                 to_date_one=request.POST['to_date_one'] if request.POST['to_date_one'] else None,
+#                                 experience_one_current=True if request.POST.get('experience_one_current') else False,
+#
+#                                 work_experience_two=request.POST['work_experience_two'],
+#                                 from_date_two=request.POST['from_date_two'] if request.POST['from_date_two'] else None,
+#                                 to_date_two=request.POST['to_date_two'] if request.POST['to_date_two'] else None,
+#                                 experience_two_current=True if request.POST.get('experience_two_current') else False,
+#                                 applicant_id=request.user.get_application)
+#
+#                             if work_experience_document_one:
+#                                 work_experience_one = str(work_experience_document_one)
+#                                 object_path = media_path(experience_object.applicant_id)
+#                                 handle_uploaded_file(str(object_path) + '/' + work_experience_one,
+#                                                      work_experience_document_one)
+#
+#                                 # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + work_experience_one),work_experience_document_one)
+#                                 experience_object.work_experience_document_one = work_experience_one
+#
+#                             if not work_experience_document_one_text:
+#                                 experience_object.work_experience_document_one = ''
+#
+#                             if work_experience_document_two:
+#                                 work_experience_two = str(work_experience_document_two)
+#                                 object_path = media_path(experience_object.applicant_id)
+#                                 handle_uploaded_file(str(object_path) + '/' + work_experience_two,
+#                                                      work_experience_document_two)
+#
+#                                 # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + work_experience_two),work_experience_document_two)
+#                                 experience_object.work_experience_document_two = work_experience_two
+#
+#                             if not work_experience_document_two_text:
+#                                 experience_object.work_experience_document_two = ''
+#
+#                             experience_object.save()
+#
+#                             redirect_flag = True
+#                         except Exception as e:
+#                             messages.warning(request, "Form have some error" + str(e))
+#                 else:
+#                     messages.success(request, "Please fill the record.")
+#                     return redirect('/student/applicant_personal_info/')
+#
+#                 if redirect_flag:
+#                     messages.success(request, "Record saved")
+#                     return redirect('/student/applicant_scholarship_about_yourself_info/')
+#         except Exception as e:
+#             messages.warning(request, "Form have some error" + str(e))
+#
+#         messages.warning(request, "Please fill proper form")
+#     return redirect('/student/applicant_scholarship_about_yourself_info/')
 
 
 def applicant_scholarship_about_yourself_info(request):
@@ -1159,20 +1376,20 @@ def my_application(request):
     try:
         application_obj = request.user.get_application
         siblings_obj = application_obj.sibling_applicant_rel.all() if application_obj.sibling_applicant_rel.all() else ''
-        qualification_obj = application_obj.academic_applicant_rel.get() if application_obj.academic_applicant_rel.get() else ''
-        english_obj = application_obj.english_applicant_rel.get() if application_obj.english_applicant_rel.all() else ''
-        curriculum_obj = application_obj.curriculum_applicant_rel.get() if application_obj.curriculum_applicant_rel.all() else ''
-        applicant_experience_obj = application_obj.applicant_experience_rel.get() if application_obj.applicant_experience_rel.all() else ''
+        qualification_obj = application_obj.academic_applicant_rel.all() if application_obj.academic_applicant_rel.all() else ''
+        english_obj = application_obj.english_applicant_rel.all() if application_obj.english_applicant_rel.all() else ''
+        curriculum_obj = application_obj.curriculum_applicant_rel.all() if application_obj.curriculum_applicant_rel.all() else ''
+        applicant_experience_obj = application_obj.applicant_experience_rel.all() if application_obj.applicant_experience_rel.all() else ''
         scholarship_obj = application_obj.applicant_scholarship_rel.get() if application_obj.applicant_scholarship_rel.all() else ''
         about_obj = application_obj.applicant_about_rel.get() if application_obj.applicant_about_rel.all() else ''
 
         # path = str(settings.MEDIA_URL) + str('reports/Donors.pdf')
         # path =str('/home/redbytes/scholarship_proj/scholarship_mgmt/media/reports/Donors.pdf')
         return render(request, 'my_application.html', {'siblings_obj': siblings_obj, 'application_obj': application_obj,
-                                                       'qualification_obj': qualification_obj,
-                                                       'english_obj': english_obj,
-                                                       'curriculum_obj': curriculum_obj,
-                                                       'applicant_experience_obj': applicant_experience_obj,
+                                                       'qualification_recs': qualification_obj,
+                                                       'english_recs': english_obj,
+                                                       'curriculum_recs': curriculum_obj,
+                                                       'applicant_experience_recs': applicant_experience_obj,
                                                        'scholarship_obj': scholarship_obj, 'about_obj': about_obj})
     except Exception as e:
         messages.warning(request, "Please Fill The Application Form First ... ")

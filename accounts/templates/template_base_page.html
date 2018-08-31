@@ -506,7 +506,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                 <span class="title">Personal Info</span>
                                 {% if user.get_student_application.personal_info_flag %}
                                     <span class="title glyphicon glyphicon-ok"
-                                          style="color: #41bc2c;font-size: 16px"></span>{% else %}
+                                          style="color: #41bc2c;font-size: 16px"></span>
+                                {% else %}
                                     <span class="title glyphicon glyphicon-exclamation-sign"
                                           style="color: #dc302b; font-size: 16px"></span>{% endif %}
                                 <span class="selected"></span>
@@ -791,14 +792,17 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <a href="{% url 'accounting:get_approval_and_paid_total' %}" class="nav-link ">
                                         Approval & Paid Total </a>
                                 </li>
-                                <li class="nav-item ">
-                                    <a href="{% url 'accounting:get_donor_receipt_voucher' %}" class="nav-link ">
-                                        Donor Receipt Voucher </a>
-                                </li>
-                                <li class="nav-item ">
-                                    <a href="{% url 'accounting:get_donor_report' %}" class="nav-link ">
-                                        Donor Report </a>
-                                </li>
+
+                                {% if not user.is_partner %}
+                                    <li class="nav-item ">
+                                        <a href="{% url 'accounting:get_donor_receipt_voucher' %}" class="nav-link ">
+                                            Donor Receipt Voucher </a>
+                                    </li>
+                                    <li class="nav-item ">
+                                        <a href="{% url 'accounting:get_donor_report' %}" class="nav-link ">
+                                            Donor Report </a>
+                                    </li>
+                                {% endif %}
                             </ul>
                         </li>
                     {% endif %}

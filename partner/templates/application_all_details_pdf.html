@@ -345,179 +345,86 @@
 
                     </tr>
                 {% endfor %}
+
+
                 <td colspan="3" style="font-size: 16px;font-weight:bold">ACADEMIC QUALIFICATION :</td>
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>'A'level :{{ qualification_obj.a_level }}</span>
-                    </td>
+                {% for qualification_obj in qualification_recs %}
+                    <tr>
+                        <td style="text-align: left; font-size: {{ x }}px"><span>Level :{{ qualification_obj.level }}</span></td>
 
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Year :{{ qualification_obj.a_level_year }}</span>
-                    </td>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Result :{{ qualification_obj.a_level_result }}</span>
-                    </td>
+                        <td style="text-align: left; font-size: {{ x }}px"><span>Year :{{ qualification_obj.level_year }}</span></td>
+                        <td style="text-align: left; font-size: {{ x }}px"><span>Result :{{ qualification_obj.level_result }}</span></td>
 
-                </tr>
-                <tr>
-
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Result Doc :{{ qualification_obj.a_level_result_document|default:"" }}</span>
-                    </td>
-
-                </tr>
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>'O'level :{{ qualification_obj.o_level }}</span>
-                    </td>
-
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Year :{{ qualification_obj.o_level_year }}</span>
-                    </td>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Result :{{ qualification_obj.o_level_result }}</span>
-                    </td>
-
-                </tr>
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Result Doc :{{ qualification_obj.applicant_id.o_level_result_document }}</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>High School:{{ qualification_obj.high_school }}</span>
-                    </td>
-
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Year :{{ qualification_obj.high_school_year }}</span>
-                    </td>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Result :{{ qualification_obj.high_school_result }}</span>
-                    </td>
-
-                </tr>
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Result Doc :{{ qualification_obj.high_school_result_document|default:"" }}</span>
-                    </td>
-                </tr>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; font-size: {{ x }}px"><span>Result Doc : {{ qualification_obj.level_result_document|default:"" }}</span></td>
+                    </tr>
+                {% endfor %}
                 <td colspan="3" style="font-size: 16px;font-weight:bold">English Qualification :</td>
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>English Competency Test 1 :{{ english_obj.english_test_one }}</span>
-                    </td>
 
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Year :{{ english_obj.english_test_one_year }}</span>
-                    </td>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Result :{{ english_obj.english_test_one_result }}</span>
-                    </td>
+                {% for  english_obj in english_recs %}
+                    <tr>
+                        <td style="text-align: left; font-size: {{ x }}px">
+                            <span>English Competency Test :{{ english_obj.english_test }}</span>
+                        </td>
 
-                </tr>
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Result Doc :{{ english_obj.english_test_one_result_document|default:"" }}</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>English Competency Test 2 :{{ english_obj.english_test_two }}</span>
-                    </td>
+                        <td style="text-align: left; font-size: {{ x }}px">
+                            <span>Year :{{ english_obj.english_test_year }}</span>
+                        </td>
+                        <td style="text-align: left; font-size: {{ x }}px">
+                            <span>Result :{{ english_obj.english_test_result }}</span>
+                        </td>
 
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Year :{{ english_obj.english_test_two_year }}</span>
-                    </td>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Result :{{ english_obj.english_test_two_result }}</span>
-                    </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; font-size: {{ x }}px">
+                            <span>Result Doc :{{ english_obj.english_test_result_document|default:"" }}</span>
+                        </td>
+                    </tr>
+                {% endfor %}
 
-                </tr>
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Result Doc :{{ english_obj.english_test_two_result_document|default:"" }}</span>
-                    </td>
-                </tr>
+
                 <td colspan="3" style="font-size: 16px;font-weight:bold">Experience Details:</td>
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Co-Curriculum-1 :{{ curriculum_obj.curriculum_name_one }}</span>
-                    </td>
+                {% for curriculum_obj in curriculum_recs %}
+                    <tr>
+                        <td style="text-align: left; font-size: {{ x }}px">
+                            <span>Co-Curriculum:{{ curriculum_obj.curriculum_name }}</span>
+                        </td>
 
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Year :{{ curriculum_obj.curriculum_year_one }}</span>
-                    </td>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Result :{{ curriculum_obj.curriculum_result_document_one|default:"" }}</span>
-                    </td>
+                        <td style="text-align: left; font-size: {{ x }}px">
+                            <span>Year :{{ curriculum_obj.curriculum_year }}</span>
+                        </td>
+                        <td style="text-align: left; font-size: {{ x }}px">
+                            <span>Result :{{ curriculum_obj.curriculum_result_document|default:"" }}</span>
+                        </td>
 
-                </tr>
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Co-Curriculum-2 :{{ curriculum_obj.curriculum_name_two }}</span>
-                    </td>
+                    </tr>
+                {% endfor %}
 
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Year :{{ curriculum_obj.curriculum_year_two }}</span>
-                    </td>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Result :{{ curriculum_obj.curriculum_result_document_two|default:"" }}</span>
-                    </td>
 
-                </tr>
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Co-Curriculum-3 :{{ curriculum_obj.curriculum_name_three }}</span>
-                    </td>
-
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Year :{{ curriculum_obj.curriculum_year_three }}</span>
-                    </td>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Result :{{ curriculum_obj.curriculum_result_document_three|default:"" }}</span>
-                    </td>
-
-                </tr>
                 <td colspan="3" style="font-size: 16px;font-weight:bold">Experience Details:</td>
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Work Experience 1 :{{ applicant_experience_obj.work_experience_one }}</span>
-                    </td>
 
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Start Date :{{ applicant_experience_obj.from_date_one }}</span>
-                    </td>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>End Date :{{ applicant_experience_obj.to_date_one }}</span>
-                    </td>
+                {% for applicant_experience_obj in applicant_experience_recs %}
+                    <tr>
+                        <td style="text-align: left; font-size: {{ x }}px">
+                            <span>Work Experience :{{ applicant_experience_obj.work_experience_one }}</span>
+                        </td>
 
-                </tr>
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Result Doc :{{ applicant_experience_obj.work_experience_document_one|default:"" }}</span>
-                    </td>
-                </tr>
+                        <td style="text-align: left; font-size: {{ x }}px">
+                            <span>Start Date :{{ applicant_experience_obj.from_date_one }}</span>
+                        </td>
+                        <td style="text-align: left; font-size: {{ x }}px">
+                            <span>End Date :{{ applicant_experience_obj.to_date_one }}</span>
+                        </td>
 
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; font-size: {{ x }}px">
+                            <span>Result Doc :{{ applicant_experience_obj.work_experience_document_one|default:"" }}</span>
+                        </td>
+                    </tr>
+                {% endfor %}
 
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Work Experience 2 :{{ applicant_experience_obj.work_experience_two }}</span>
-                    </td>
-
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Start Date :{{ applicant_experience_obj.from_date_two }}</span>
-                    </td>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>End Date :{{ applicant_experience_obj.to_date_two }}</span>
-                    </td>
-
-                </tr>
-                <tr>
-                    <td style="text-align: left; font-size: {{ x }}px">
-                        <span>Result Doc :{{ applicant_experience_obj.work_experience_document_two|default:"" }}</span>
-                    </td>
-                </tr>
                 <td colspan="3" style="font-size: 16px;font-weight:bold">SCHOLARSHIP SELECTION:</td>
                 <tr>
                     <td style="text-align: left; font-size: {{ x }}px">

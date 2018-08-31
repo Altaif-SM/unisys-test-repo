@@ -435,81 +435,72 @@ class SiblingDetails(BaseModel):
 
 
 class AcademicQualificationDetails(BaseModel):
-    a_level = models.CharField(max_length=255, blank=True, null=True)
-    # a_level_year = models.ForeignKey('masters.YearDetails', null=True, blank=True, related_name='a_level_year_rel',on_delete=models.PROTECT)
-    a_level_year = models.CharField(max_length=6, blank=True, null=True)
-    a_level_result = models.CharField(max_length=255, blank=True, null=True)
-    a_level_institution = models.CharField(max_length=255, blank=True, null=True)
-    a_level_result_document = models.FileField(upload_to=content_file_name_report)
+    level = models.CharField(max_length=255, blank=True, null=True)
+    level_year = models.CharField(max_length=6, blank=True, null=True)
+    level_result = models.CharField(max_length=255, blank=True, null=True)
+    level_institution = models.CharField(max_length=255, blank=True, null=True)
+    level_result_document = models.FileField(upload_to=content_file_name_report)
 
-    o_level = models.CharField(max_length=255, blank=True, null=True)
-    # o_level_year = models.ForeignKey('masters.YearDetails', null=True, blank=True, related_name='o_level_year_rel',on_delete=models.PROTECT)
-    o_level_year = models.CharField(max_length=6, blank=True, null=True)
-    o_level_result = models.CharField(max_length=255, blank=True, null=True)
-    o_level_institution = models.CharField(max_length=255, blank=True, null=True)
-    o_level_result_document = models.FileField(upload_to=content_file_name_report)
-
-    high_school = models.CharField(max_length=255, blank=True, null=True)
-    # high_school_year = models.ForeignKey('masters.YearDetails', null=True, blank=True,related_name='high_school_year_rel',on_delete=models.PROTECT)
-    high_school_year = models.CharField(max_length=10, blank=True, null=True)
-    high_school_result = models.CharField(max_length=255, blank=True, null=True)
-    high_school_institution = models.CharField(max_length=255, blank=True, null=True)
-    high_school_result_document = models.FileField(upload_to=content_file_name_report)
+    # o_level = models.CharField(max_length=255, blank=True, null=True)
+    # o_level_year = models.CharField(max_length=6, blank=True, null=True)
+    # o_level_result = models.CharField(max_length=255, blank=True, null=True)
+    # o_level_institution = models.CharField(max_length=255, blank=True, null=True)
+    # o_level_result_document = models.FileField(upload_to=content_file_name_report)
+    #
+    # high_school = models.CharField(max_length=255, blank=True, null=True)
+    # high_school_year = models.CharField(max_length=10, blank=True, null=True)
+    # high_school_result = models.CharField(max_length=255, blank=True, null=True)
+    # high_school_institution = models.CharField(max_length=255, blank=True, null=True)
+    # high_school_result_document = models.FileField(upload_to=content_file_name_report)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='academic_applicant_rel',
                                      on_delete=models.PROTECT)
 
 
 class EnglishQualificationDetails(BaseModel):
-    english_test_one = models.CharField(max_length=255, blank=True, null=True)
-    # english_test_one_year = models.ForeignKey('masters.YearDetails', null=True, blank=True,related_name='english_test_one_rel',on_delete=models.PROTECT)
-    english_test_one_year = models.CharField(max_length=10, blank=True, null=True)
-    english_test_one_result = models.CharField(max_length=255, blank=True, null=True)
-    english_test_one_result_document = models.FileField(upload_to=content_file_name_report)
+    english_test = models.CharField(max_length=255, blank=True, null=True)
+    english_test_year = models.CharField(max_length=10, blank=True, null=True)
+    english_test_result = models.CharField(max_length=255, blank=True, null=True)
+    english_test_result_document = models.FileField(upload_to=content_file_name_report)
 
-    english_test_two = models.CharField(max_length=255, blank=True, null=True)
-    # english_test_two_year = models.ForeignKey('masters.YearDetails', null=True, blank=True,related_name='english_test_two_rel',on_delete=models.PROTECT)
-    english_test_two_year = models.CharField(max_length=10, blank=True, null=True)
-    english_test_two_result = models.CharField(max_length=255, blank=True, null=True)
-    english_test_two_result_document = models.FileField(upload_to=content_file_name_report)
+    # english_test_two = models.CharField(max_length=255, blank=True, null=True)
+    # english_test_two_year = models.CharField(max_length=10, blank=True, null=True)
+    # english_test_two_result = models.CharField(max_length=255, blank=True, null=True)
+    # english_test_two_result_document = models.FileField(upload_to=content_file_name_report)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='english_applicant_rel',
                                      on_delete=models.PROTECT)
     english_qualification = models.BooleanField(default=True)
 
 
 class CurriculumDetails(BaseModel):
-    curriculum_name_one = models.CharField(max_length=255, blank=True, null=True)
-    # curriculum_year_one = models.ForeignKey('masters.YearDetails', null=True, blank=True,related_name='curriculum_year_one_rel',on_delete=models.PROTECT)
-    curriculum_year_one = models.CharField(max_length=10, blank=True, null=True)
-    curriculum_result_document_one = models.FileField(upload_to=content_file_name_report, blank=True, null=True)
+    curriculum_name = models.CharField(max_length=255, blank=True, null=True)
+    curriculum_year = models.CharField(max_length=10, blank=True, null=True)
+    curriculum_result_document = models.FileField(upload_to=content_file_name_report, blank=True, null=True)
+    academic_qualification = models.BooleanField(default=True)
 
-    curriculum_name_two = models.CharField(max_length=255, blank=True, null=True)
-    # curriculum_year_two = models.ForeignKey('masters.YearDetails', null=True, blank=True,related_name='curriculum_year_two_rel',on_delete=models.PROTECT)
-    curriculum_year_two = models.CharField(max_length=10, blank=True, null=True)
-    curriculum_result_document_two = models.FileField(upload_to=content_file_name_report, blank=True, null=True)
-
-    curriculum_name_three = models.CharField(max_length=255, blank=True, null=True)
-    # curriculum_year_three = models.ForeignKey('masters.YearDetails', null=True, blank=True,related_name='curriculum_year_three_rel',on_delete=models.PROTECT)
-    curriculum_year_three = models.CharField(max_length=10, blank=True, null=True)
-    curriculum_result_document_three = models.FileField(upload_to=content_file_name_report, blank=True, null=True)
+    # curriculum_name_two = models.CharField(max_length=255, blank=True, null=True)
+    # curriculum_year_two = models.CharField(max_length=10, blank=True, null=True)
+    # curriculum_result_document_two = models.FileField(upload_to=content_file_name_report, blank=True, null=True)
+    #
+    # curriculum_name_three = models.CharField(max_length=255, blank=True, null=True)
+    # curriculum_year_three = models.CharField(max_length=10, blank=True, null=True)
+    # curriculum_result_document_three = models.FileField(upload_to=content_file_name_report, blank=True, null=True)
 
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='curriculum_applicant_rel',
                                      on_delete=models.PROTECT)
 
-    academic_qualification = models.BooleanField(default=True)
-
 
 class ExperienceDetails(BaseModel):
-    work_experience_one = models.CharField(max_length=255, blank=True, null=True)
-    from_date_one = models.DateField(null=True, blank=True, )
-    to_date_one = models.DateField(null=True, blank=True, )
-    work_experience_document_one = models.FileField(upload_to=content_file_name_report)
-    experience_one_current = models.BooleanField(default=False)
+    work_experience = models.CharField(max_length=255, blank=True, null=True)
+    from_date = models.DateField(null=True, blank=True)
+    to_date = models.DateField(null=True, blank=True)
+    work_experience_document = models.FileField(upload_to=content_file_name_report)
+    experience_current = models.BooleanField(default=False)
 
-    work_experience_two = models.CharField(max_length=255, blank=True, null=True)
-    from_date_two = models.DateField(null=True, blank=True)
-    to_date_two = models.DateField(null=True, blank=True, )
-    experience_two_current = models.BooleanField(default=False)
-    work_experience_document_two = models.FileField(upload_to=content_file_name_report)
+    # work_experience_two = models.CharField(max_length=255, blank=True, null=True)
+    # from_date_two = models.DateField(null=True, blank=True)
+    # to_date_two = models.DateField(null=True, blank=True, )
+    # experience_two_current = models.BooleanField(default=False)
+    # work_experience_document_two = models.FileField(upload_to=content_file_name_report)
 
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_experience_rel',
                                      on_delete=models.PROTECT)

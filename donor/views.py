@@ -124,18 +124,18 @@ def template_student_details(request, app_id):
     try:
         application_obj = ApplicationDetails.objects.get(id=app_id)
         siblings_obj = application_obj.sibling_applicant_rel.all() if application_obj.sibling_applicant_rel.all() else ''
-        qualification_obj = application_obj.academic_applicant_rel.get() if application_obj.academic_applicant_rel.all() else ''
-        english_obj = application_obj.english_applicant_rel.get() if application_obj.english_applicant_rel.all() else ''
-        curriculum_obj = application_obj.curriculum_applicant_rel.get() if application_obj.curriculum_applicant_rel.all() else ''
-        applicant_experience_obj = application_obj.applicant_experience_rel.get() if application_obj.applicant_experience_rel.all() else ''
+        qualification_obj = application_obj.academic_applicant_rel.all() if application_obj.academic_applicant_rel.all() else ''
+        english_obj = application_obj.english_applicant_rel.all() if application_obj.english_applicant_rel.all() else ''
+        curriculum_obj = application_obj.curriculum_applicant_rel.all() if application_obj.curriculum_applicant_rel.all() else ''
+        applicant_experience_obj = application_obj.applicant_experience_rel.all() if application_obj.applicant_experience_rel.all() else ''
         scholarship_obj = application_obj.applicant_scholarship_rel.get() if application_obj.applicant_scholarship_rel.all() else ''
         about_obj = application_obj.applicant_about_rel.get()
 
         return render(request, 'template_student_details.html',
                       {'siblings_obj': siblings_obj, 'application_obj': application_obj,
-                       'qualification_obj': qualification_obj, 'english_obj': english_obj,
-                       'curriculum_obj': curriculum_obj,
-                       'applicant_experience_obj': applicant_experience_obj,
+                       'qualification_recs': qualification_obj, 'english_recs': english_obj,
+                       'curriculum_recs': curriculum_obj,
+                       'applicant_experience_recs': applicant_experience_obj,
                        'scholarship_obj': scholarship_obj,'about_obj':about_obj})
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))

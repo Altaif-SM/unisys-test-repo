@@ -228,7 +228,8 @@
                                 <div class="col-md-3">
                                     <select id='id_country' title="Select Country"
                                             name="country"
-                                            autocomplete="off" class="form-control" data-live-search="true">
+                                            autocomplete="off" class="form-control" data-live-search="true"
+                                            {% if partner_flag %} disabled {% endif %}>
                                         {% if selected_country %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ selected_country.0.id }}">{{ selected_country.0.country_name|title }}

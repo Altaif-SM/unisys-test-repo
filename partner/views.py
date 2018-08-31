@@ -93,18 +93,18 @@ def export_registered_application(request):
 def template_applicant_all_details(request, app_id):
     application_obj = ApplicationDetails.objects.get(id=app_id)
     siblings_obj = application_obj.sibling_applicant_rel.all() if application_obj.sibling_applicant_rel.all() else ''
-    qualification_obj = application_obj.academic_applicant_rel.get() if application_obj.academic_applicant_rel.all() else ''
-    english_obj = application_obj.english_applicant_rel.get() if application_obj.english_applicant_rel.all() else ''
-    curriculum_obj = application_obj.curriculum_applicant_rel.get() if application_obj.curriculum_applicant_rel.all() else ''
-    applicant_experience_obj = application_obj.applicant_experience_rel.get() if application_obj.applicant_experience_rel.all() else ''
+    qualification_obj = application_obj.academic_applicant_rel.all() if application_obj.academic_applicant_rel.all() else ''
+    english_obj = application_obj.english_applicant_rel.all() if application_obj.english_applicant_rel.all() else ''
+    curriculum_obj = application_obj.curriculum_applicant_rel.all() if application_obj.curriculum_applicant_rel.all() else ''
+    applicant_experience_obj = application_obj.applicant_experience_rel.all() if application_obj.applicant_experience_rel.all() else ''
     scholarship_obj = application_obj.applicant_scholarship_rel.get() if application_obj.applicant_scholarship_rel.all() else ''
     about_obj = application_obj.applicant_about_rel.get()
 
     return render(request, 'template_applicant_all_details.html',
                   {'siblings_obj': siblings_obj, 'application_obj': application_obj,
-                   'qualification_obj': qualification_obj, 'english_obj': english_obj,
-                   'curriculum_obj': curriculum_obj,
-                   'applicant_experience_obj': applicant_experience_obj,
+                   'qualification_recs': qualification_obj, 'english_recs': english_obj,
+                   'curriculum_recs': curriculum_obj,
+                   'applicant_experience_recs': applicant_experience_obj,
                    'scholarship_obj': scholarship_obj, 'about_obj': about_obj})
 
 
@@ -2299,6 +2299,47 @@ def save_students_parent_linking(request):
     return redirect('/partner/template_link_students_parent/')
 
 
+# def application_all_details_pdf(request, app_id):
+#     try:
+#         year_recs = YearDetails.objects.all()
+#         curriculum_obj = ''
+#         experience_obj = ''
+#
+#         x = 14
+#
+#         logo_path = settings.MEDIA_ROOT + 'logo.png'
+#
+#         application_obj = ApplicationDetails.objects.get(id=app_id)
+#         report_path = settings.MEDIA_ROOT + str('reports/') + str(application_obj.first_name) + '_' + str(
+#             application_obj.id) + '/'
+#
+#         siblings_obj = application_obj.sibling_applicant_rel.all() if application_obj.sibling_applicant_rel.all() else ''
+#         qualification_obj = application_obj.academic_applicant_rel.get() if application_obj.academic_applicant_rel.all() else ''
+#         english_obj = application_obj.english_applicant_rel.get() if application_obj.english_applicant_rel.all() else ''
+#         curriculum_obj = application_obj.curriculum_applicant_rel.get() if application_obj.curriculum_applicant_rel.all() else ''
+#         applicant_experience_obj = application_obj.applicant_experience_rel.get() if application_obj.applicant_experience_rel.all() else ''
+#         scholarship_obj = application_obj.applicant_scholarship_rel.get() if application_obj.applicant_scholarship_rel.all() else ''
+#         about_obj = application_obj.applicant_about_rel.get()
+#
+#         template = get_template('application_all_details_pdf.html')
+#         Context = ({'report_path': report_path, 'application_obj': application_obj, 'siblings_obj': siblings_obj,
+#                     'qualification_obj': qualification_obj, 'english_obj': english_obj,
+#                     'curriculum_obj': curriculum_obj, 'applicant_experience_obj': applicant_experience_obj,
+#                     'scholarship_obj': scholarship_obj, 'x': x, 'about_obj': about_obj, 'logo_path': logo_path})
+#         html = template.render(Context)
+#
+#         file = open('test.pdf', "w+b")
+#         pisaStatus = pisa.CreatePDF(html.encode('utf-8'), dest=file,
+#                                     encoding='utf-8')
+#
+#         file.seek(0)
+#         pdf = file.read()
+#         file.close()
+#         return HttpResponse(pdf, 'application/pdf')
+#     except:
+#         return redirect('/partner/template_applicant_all_details/' + str(app_id))
+
+
 def application_all_details_pdf(request, app_id):
     try:
         year_recs = YearDetails.objects.all()
@@ -2314,17 +2355,17 @@ def application_all_details_pdf(request, app_id):
             application_obj.id) + '/'
 
         siblings_obj = application_obj.sibling_applicant_rel.all() if application_obj.sibling_applicant_rel.all() else ''
-        qualification_obj = application_obj.academic_applicant_rel.get() if application_obj.academic_applicant_rel.all() else ''
-        english_obj = application_obj.english_applicant_rel.get() if application_obj.english_applicant_rel.all() else ''
-        curriculum_obj = application_obj.curriculum_applicant_rel.get() if application_obj.curriculum_applicant_rel.all() else ''
-        applicant_experience_obj = application_obj.applicant_experience_rel.get() if application_obj.applicant_experience_rel.all() else ''
+        qualification_obj = application_obj.academic_applicant_rel.all() if application_obj.academic_applicant_rel.all() else ''
+        english_obj = application_obj.english_applicant_rel.all() if application_obj.english_applicant_rel.all() else ''
+        curriculum_obj = application_obj.curriculum_applicant_rel.all() if application_obj.curriculum_applicant_rel.all() else ''
+        applicant_experience_obj = application_obj.applicant_experience_rel.all() if application_obj.applicant_experience_rel.all() else ''
         scholarship_obj = application_obj.applicant_scholarship_rel.get() if application_obj.applicant_scholarship_rel.all() else ''
         about_obj = application_obj.applicant_about_rel.get()
 
         template = get_template('application_all_details_pdf.html')
         Context = ({'report_path': report_path, 'application_obj': application_obj, 'siblings_obj': siblings_obj,
-                    'qualification_obj': qualification_obj, 'english_obj': english_obj,
-                    'curriculum_obj': curriculum_obj, 'applicant_experience_obj': applicant_experience_obj,
+                    'qualification_recs': qualification_obj, 'english_recs': english_obj,
+                    'curriculum_recs': curriculum_obj, 'applicant_experience_recs': applicant_experience_obj,
                     'scholarship_obj': scholarship_obj, 'x': x, 'about_obj': about_obj, 'logo_path': logo_path})
         html = template.render(Context)
 
