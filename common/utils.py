@@ -354,6 +354,10 @@ def send_email_with_template(application_obj, context, subject, email_body, requ
     except:
         pass
 
+    finally:
+        if os.path.exists(path):
+            os.remove(path)
+
 
 def media_path(application_obj):
     object_path = str(application_obj.first_name) + '_' + str(application_obj.id)
