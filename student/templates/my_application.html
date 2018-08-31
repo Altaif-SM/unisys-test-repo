@@ -107,6 +107,17 @@
                     <i class="icon-settings font-red"></i>
                     <span class="caption-subject font-red sbold uppercase"> PERSONAL INFO</span>
                 </div>
+            <div class="row">
+                    <div class="">
+                        <label class="col-md-1 control-label">Profile Pic:</label>
+                        <div class="col-md-2">
+                            <a href="{{ application_obj.report_path }}{{ application_obj.image }}" download>
+                                <img src="{{ application_obj.report_path }}{{ application_obj.image }}" alt="image"
+                                     width="104" height="142">
+                            </a>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="">
                         <label class="col-md-1 control-label">First Name:</label>
@@ -292,7 +303,7 @@
                     </div>
                 </div>
                 <br>
-                <div class="row">
+                {% comment %}<div class="row">
 
                     <div class="">
                         <label class="col-md-1 control-label">Photo:</label>
@@ -300,7 +311,7 @@
                             <span class="">{{ application_obj.image }}</span>
                         </div>
                     </div>
-                </div>
+                </div>{% endcomment %}
 
                 <br>
                 <hr>

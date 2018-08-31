@@ -41,8 +41,8 @@
             </li>
             {% if user.is_donor %}
                 <li>
-                <span> Report </span>
-                 <i class="fa fa-angle-right"></i>
+                    <span> Report </span>
+                    <i class="fa fa-angle-right"></i>
 
                 </li>
                 <li>
@@ -54,12 +54,12 @@
                     <a href="{% url 'partner:template_approving_application' %}">Approving Applications</a>
                     <i class="fa fa-angle-right"></i>
                 </li>
-                {% else %}
+            {% else %}
                 <li>
                     <a href="{% url 'partner:template_approving_application' %}">Applicant Details</a>
                     <i class="fa fa-angle-right"></i>
                 </li>
-                {% endif %}
+            {% endif %}
 
             <li>
                 <span> Applications Details</span>
@@ -94,10 +94,21 @@
                     <i class="icon-settings font-red"></i>
                     <span class="caption-subject font-red sbold uppercase"> PERSONAL INFO</span>
                     <form action="{% url 'partner:application_all_details_pdf' application_obj.id %}" id="form_pdf_id"
-                          class="form-horizontal"target="_blank"
+                          class="form-horizontal" target="_blank"
                           method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                     </form>
+                </div>
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-1 control-label">Profile Pic:</label>
+                        <div class="col-md-2">
+                            <a href="{{ application_obj.report_path }}{{ application_obj.image }}" download>
+                                <img src="{{ application_obj.report_path }}{{ application_obj.image }}" alt="image"
+                                     width="104" height="142">
+                            </a>
+                        </div>
+                    </div>
                 </div>
 
 
@@ -286,15 +297,7 @@
                     </div>
                 </div>
                 <br>
-                <div class="row">
 
-                    <div class="">
-                        <label class="col-md-1 control-label">Photo:</label>
-                        <div class="col-md-2">
-                            <span class="">{{ application_obj.image }}</span>
-                        </div>
-                    </div>
-                </div>
 
                 <br>
                 <hr>
@@ -335,6 +338,7 @@
                         <label class="col-md-1 control-label">Pay Slip:</label>
                         <div class="col-md-2">
                             <a href="
+
 
 
 
@@ -418,6 +422,7 @@
                         <label class="col-md-1 control-label">Pay Slip:</label>
                         <div class="col-md-2">
                             <a href="
+
 
 
 
@@ -506,6 +511,7 @@
                         <label class="col-md-1 control-label">Pay Slip:</label>
                         <div class="col-md-2">
                             <a href="
+
 
 
 
@@ -604,41 +610,42 @@
 
                 {% for qualification_obj in qualification_recs %}
                     <div class="row">
-                    <div class="">
-                        <label class="col-md-1 control-label"> level :</label>
-                        <div class="col-md-2">
-                            <span class="">{{ qualification_obj.level }}</span>
+                        <div class="">
+                            <label class="col-md-1 control-label"> level :</label>
+                            <div class="col-md-2">
+                                <span class="">{{ qualification_obj.level }}</span>
+                            </div>
+                        </div>
+
+                        <div class="">
+                            <label class="col-md-1 control-label">Year:</label>
+                            <div class="col-md-2">
+                                <span class="">{{ qualification_obj.level_year }}</span>
+
+                            </div>
+                        </div>
+
+                        <div class="">
+                            <label class="col-md-1 control-label"> Result:</label>
+                            <div class="col-md-2">
+                                <span class="">{{ qualification_obj.level_result }}</span>
+                            </div>
+                        </div>
+
+                        <div class="">
+                            <label class="col-md-1 control-label">Result Doc:</label>
+                            <div class="col-md-2">
+                                <a href="
+
+
+
+                                        {{ qualification_obj.applicant_id.report_path }}{{ qualification_obj.level_result_document }}">{{ qualification_obj.level_result_document|default:"" }}</a>
+                                {#                            <span class="">{{ qualification_obj.a_level_result_document }}</span>#}
+                            </div>
                         </div>
                     </div>
-
-                    <div class="">
-                        <label class="col-md-1 control-label">Year:</label>
-                        <div class="col-md-2">
-                            <span class="">{{ qualification_obj.level_year }}</span>
-
-                        </div>
-                    </div>
-
-                    <div class="">
-                        <label class="col-md-1 control-label"> Result:</label>
-                        <div class="col-md-2">
-                            <span class="">{{ qualification_obj.level_result }}</span>
-                        </div>
-                    </div>
-
-                    <div class="">
-                        <label class="col-md-1 control-label">Result Doc:</label>
-                        <div class="col-md-2">
-                            <a href="
-
-
-                                    {{ qualification_obj.applicant_id.report_path }}{{ qualification_obj.level_result_document }}">{{ qualification_obj.level_result_document|default:"" }}</a>
-                            {#                            <span class="">{{ qualification_obj.a_level_result_document }}</span>#}
-                        </div>
-                    </div>
-                </div>
                     <br>
-            {% endfor %}
+                {% endfor %}
 
 
                 <br>
@@ -650,40 +657,41 @@
 
                 {% for english_obj in english_recs %}
                     <div class="row">
-                    <div class="">
-                        <label class="col-md-1 control-label">English Competency Test:</label>
-                        <div class="col-md-2">
-                            <span class="">{{ english_obj.english_test }}</span>
+                        <div class="">
+                            <label class="col-md-1 control-label">English Competency Test:</label>
+                            <div class="col-md-2">
+                                <span class="">{{ english_obj.english_test }}</span>
+                            </div>
+                        </div>
+
+                        <div class="">
+                            <label class="col-md-1 control-label">Year:</label>
+                            <div class="col-md-2">
+                                <span class="">{{ english_obj.english_test_year }}</span>
+                            </div>
+                        </div>
+
+                        <div class="">
+                            <label class="col-md-1 control-label"> Result:</label>
+                            <div class="col-md-2">
+                                <span class="">{{ english_obj.english_test_result }}</span>
+                            </div>
+                        </div>
+
+                        <div class="">
+                            <label class="col-md-1 control-label">Result Doc:</label>
+                            <div class="col-md-2">
+                                <a href="
+
+
+
+                                        {{ english_obj.applicant_id.report_path }}{{ english_obj.english_test_result_document }}">{{ english_obj.english_test_result_document|default:"" }}</a>
+                                {#                            <span class="">{{ english_obj.english_test_one_result_document }}</span>#}
+                            </div>
                         </div>
                     </div>
-
-                    <div class="">
-                        <label class="col-md-1 control-label">Year:</label>
-                        <div class="col-md-2">
-                            <span class="">{{ english_obj.english_test_year }}</span>
-                        </div>
-                    </div>
-
-                    <div class="">
-                        <label class="col-md-1 control-label"> Result:</label>
-                        <div class="col-md-2">
-                            <span class="">{{ english_obj.english_test_result }}</span>
-                        </div>
-                    </div>
-
-                    <div class="">
-                        <label class="col-md-1 control-label">Result Doc:</label>
-                        <div class="col-md-2">
-                            <a href="
-
-
-                                    {{ english_obj.applicant_id.report_path }}{{ english_obj.english_test_result_document }}">{{ english_obj.english_test_result_document|default:"" }}</a>
-                            {#                            <span class="">{{ english_obj.english_test_one_result_document }}</span>#}
-                        </div>
-                    </div>
-                </div>
-                <br>
-            {% endfor %}
+                    <br>
+                {% endfor %}
 
                 <br>
                 <hr>
@@ -694,34 +702,35 @@
 
                 {% for curriculum_obj in curriculum_recs %}
                     <div class="row">
-                    <div class="">
-                        <label class="col-md-1 control-label">Co-Curriculum :</label>
-                        <div class="col-md-2">
-                            <span class="">{{ curriculum_obj.curriculum_name }}</span>
+                        <div class="">
+                            <label class="col-md-1 control-label">Co-Curriculum :</label>
+                            <div class="col-md-2">
+                                <span class="">{{ curriculum_obj.curriculum_name }}</span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="">
-                        <label class="col-md-1 control-label">Year:</label>
-                        <div class="col-md-2">
-                            <span class="">{{ curriculum_obj.curriculum_year }}</span>
+                        <div class="">
+                            <label class="col-md-1 control-label">Year:</label>
+                            <div class="col-md-2">
+                                <span class="">{{ curriculum_obj.curriculum_year }}</span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="">
-                        <label class="col-md-1 control-label"> Result:</label>
-                        <div class="col-md-2">
-                            <a href="
+                        <div class="">
+                            <label class="col-md-1 control-label"> Result:</label>
+                            <div class="col-md-2">
+                                <a href="
 
 
-                                    {{ curriculum_obj.applicant_id.report_path }}{{ curriculum_obj.curriculum_result_document }}">{{ curriculum_obj.curriculum_result_document|default:"" }}</a>
-                            {#                            <span class="">{{ curriculum_obj.curriculum_result_document_one }}</span>#}
+
+                                        {{ curriculum_obj.applicant_id.report_path }}{{ curriculum_obj.curriculum_result_document }}">{{ curriculum_obj.curriculum_result_document|default:"" }}</a>
+                                {#                            <span class="">{{ curriculum_obj.curriculum_result_document_one }}</span>#}
+                            </div>
                         </div>
-                    </div>
 
-                </div>
-                <br>
-            {% endfor %}
+                    </div>
+                    <br>
+                {% endfor %}
 
                 <hr>
                 <div class="portlet light portlet-fit portlet-form ">
@@ -731,36 +740,37 @@
 
                 {% for applicant_experience_obj in applicant_experience_recs %}
                     <div class="row">
-                    <div class="">
-                        <label class="col-md-1 control-label">Work Experience :</label>
-                        <div class="col-md-2">
-                            <span class="">{{ applicant_experience_obj.work_experience }}</span>
+                        <div class="">
+                            <label class="col-md-1 control-label">Work Experience :</label>
+                            <div class="col-md-2">
+                                <span class="">{{ applicant_experience_obj.work_experience }}</span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="">
-                        <label class="col-md-1 control-label">Start Date:</label>
-                        <div class="col-md-2">
-                            <span class="">{{ applicant_experience_obj.from_date }}</span>
+                        <div class="">
+                            <label class="col-md-1 control-label">Start Date:</label>
+                            <div class="col-md-2">
+                                <span class="">{{ applicant_experience_obj.from_date }}</span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="">
-                        <label class="col-md-1 control-label">End Date:</label>
-                        <div class="col-md-2">
-                            <span class="">{{ applicant_experience_obj.to_date }}</span>
+                        <div class="">
+                            <label class="col-md-1 control-label">End Date:</label>
+                            <div class="col-md-2">
+                                <span class="">{{ applicant_experience_obj.to_date }}</span>
+                            </div>
+                        </div>
+                        <div class="">
+                            <label class="col-md-1 control-label">Result Doc:</label>
+                            <div class="col-md-2">
+                                <a href="
+
+                                        {{ applicant_experience_obj.applicant_id.report_path }}{{ applicant_experience_obj.work_experience_document }}">{{ applicant_experience_obj.work_experience_document|default:"" }}</a>
+                            </div>
                         </div>
                     </div>
-                    <div class="">
-                        <label class="col-md-1 control-label">Result Doc:</label>
-                        <div class="col-md-2">
-                            <a href="
-                                    {{ applicant_experience_obj.applicant_id.report_path }}{{ applicant_experience_obj.work_experience_document }}">{{ applicant_experience_obj.work_experience_document|default:"" }}</a>
-                        </div>
-                    </div>
-                </div>
-                <br>
-            {% endfor %}
+                    <br>
+                {% endfor %}
                 <hr>
                 <div class="portlet light portlet-fit portlet-form ">
                     <i class="icon-settings font-red"></i>
@@ -795,6 +805,7 @@
 
 
 
+
                                     {{ scholarship_obj.applicant_id.report_path }}{{ scholarship_obj.admission_letter_document }}">{{ scholarship_obj.admission_letter_document|default:"" }}</a>
                             {#                            <span class="">{{ scholarship_obj.admission_letter_document }}</span>#}
                         </div>
@@ -808,7 +819,7 @@
                             <span class="">{{ about_obj.about_yourself }}</span>
                         </div>
                     </div>
-            </div>
+                </div>
             </div>
         </div>
     </div>
