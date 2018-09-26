@@ -13,4 +13,5 @@ from django.core.wsgi import get_wsgi_application
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "scholarship_mgmt.settings")
 sys.path.append("/var/www/html/scholarship_mgmt")
+sys.path.append("/var/www/html/var")
 application = get_wsgi_application()
