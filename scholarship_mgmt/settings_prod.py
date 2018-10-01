@@ -96,9 +96,9 @@ DATABASES = {
      'default': {
           'ENGINE': 'django.db.backends.mysql',
           # 'NAME': 'scholarship_mgmt',
-          'NAME': 'scholarship_mgmt_new',
+          'NAME': 'scholarship',
           'USER':'root',
-          'PASSWORD':'redbytes',
+          'PASSWORD':'SKf55mcs8ohbno16CIxXd',
           'HOST': '127.0.0.1',
           'PORT':'3306'
      }
@@ -155,6 +155,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR,'static'),
 )
+#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
 EMAIL_USE_TLS = True
@@ -164,4 +165,4 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'redbytes.test@gmail.com'
 EMAIL_HOST_PASSWORD = 'redbytes@123'
 
-SERVER_HOST_NAME = "http://139.59.24.38:82/"
+SERVER_HOST_NAME = "http://namafund.namafoundation.org"

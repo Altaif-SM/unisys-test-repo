@@ -536,7 +536,7 @@ class ScholarshipSelectionDetails(BaseModel):
 
 
 class ApplicantAboutDetails(BaseModel):
-    about_yourself = models.CharField(max_length=255, blank=True, null=True)
+    about_yourself = models.CharField(max_length=600, blank=True, null=True)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_about_rel',
                                      on_delete=models.PROTECT)
     # my_application = models.BooleanField(default=True)
