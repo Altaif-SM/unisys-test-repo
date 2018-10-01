@@ -165,4 +165,4 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'redbytes.test@gmail.com'
 EMAIL_HOST_PASSWORD = 'redbytes@123'
 
-SERVER_HOST_NAME = "http://namafund.namafoundation.org"
+SERVER_HOST_NAME = "http://namafund.namafoundation.org/"
