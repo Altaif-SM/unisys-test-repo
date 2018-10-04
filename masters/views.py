@@ -9,6 +9,10 @@ import base64
 from django.conf import settings
 from common.utils import *
 from partner.models import *
+from datetime import date
+import datetime
+
+
 
 
 # *********------------ Year Master ----------***************
@@ -22,12 +26,18 @@ def save_year(request):
     year_name = request.POST.get('year_name')
     start_date = request.POST.get('start_date')
     end_date = request.POST.get('end_date')
+    end_dt = datetime.datetime.strptime(str(end_date), "%Y-%m-%d").date()
+    start_dt = datetime.datetime.strptime(str(start_date), "%Y-%m-%d").date()
     try:
-        if not YearDetails.objects.filter(year_name=year_name.lower()).exists():
+        if  YearDetails.objects.filter(year_name=year_name.lower()).exists():
+            messages.warning(request, "Year name already exists. Record not saved.")
+
+        elif  YearDetails.objects.all().filter((Q(start_date__lte=start_dt) & Q(end_date__gte=end_dt)) | Q(start_date__range=(start_dt, end_dt)) | Q(end_date__range=(start_dt, end_dt))):
+                messages.success(request, "Academic year already Exists")
+
+        else:
             YearDetails.objects.create(year_name=year_name.lower(), start_date=start_date, end_date=end_date)
             messages.success(request, "Record saved.")
-        else:
-            messages.warning(request, "Year name already exists. Record not saved.")
     except:
         messages.warning(request, "Record not saved.")
     return redirect('/masters/template_year_master/')
@@ -38,14 +48,20 @@ def update_year(request):
     year_name = request.POST.get('year_name')
     start_date = request.POST.get('start_date')
     end_date = request.POST.get('end_date')
+    end_dt = datetime.datetime.strptime(str(end_date), "%Y-%m-%d").date()
+    start_dt = datetime.datetime.strptime(str(start_date), "%Y-%m-%d").date()
     try:
-        if not YearDetails.objects.filter(~Q(id=year_id), year_name=year_name.lower()).exists():
-            YearDetails.objects.filter(id=year_id).update(year_name=year_name.lower(), start_date=start_date,
-                                                          end_date=end_date)
+        if YearDetails.objects.filter(~Q(id=year_id), year_name=year_name.lower()).exists():
+            messages.success(request, "Year name already exists. Record not updated..")
+
+        elif YearDetails.objects.all().filter((Q(start_date__lte=start_dt) & Q(end_date__gte=end_dt)) | Q(start_date__range=(start_dt, end_dt)) | Q(end_date__range=(start_dt, end_dt))):
+                messages.success(request, "Academic year already Exists")
+                print("1")
+
+        else:
+            YearDetails.objects.filter(id=year_id).update(year_name=year_name.lower(), start_date=start_date,end_date=end_date)
             messages.success(request, "Record updated.")
             return HttpResponse(json.dumps({'success': 'Record updated.'}), content_type="application/json")
-        else:
-            messages.warning(request, "Year name already exists. Record not updated.")
         return HttpResponse(json.dumps({'success': 'Year name already exists. Record not updated.'}),
                             content_type="application/json")
 
