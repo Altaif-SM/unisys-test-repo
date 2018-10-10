@@ -586,6 +586,11 @@ License: You must have a valid license purchased only from themeforest(the above
                                class="nav-link nav-toggle">
                                 <i class="glyphicon glyphicon-copy"></i>
                                 <span class="title">Psychometric Test</span>
+                                {% if user.get_student_application.psychometric_test %}
+                                    <span class="title glyphicon glyphicon-ok"
+                                          style="color: #41bc2c;font-size: 16px"></span>{% else %}
+                                    <span class="title glyphicon glyphicon-exclamation-sign"
+                                          style="color: #dc302b; font-size: 16px"></span>{% endif %}
                                 <span class="selected"></span>
                             </a>
                         </li>
@@ -597,7 +602,13 @@ License: You must have a valid license purchased only from themeforest(the above
                                class="nav-link nav-toggle">
                                 <i class="glyphicon glyphicon-ok"></i>
                                 <span class="title">Agreement Submission</span>
+                                {% if user.get_student_application.agreement %}
+                                    <span class="title glyphicon glyphicon-ok"
+                                          style="color: #41bc2c;font-size: 16px"></span>{% else %}
+                                    <span class="title glyphicon glyphicon-exclamation-sign"
+                                          style="color: #dc302b; font-size: 16px"></span>{% endif %}
                                 <span class="selected"></span>
+
                             </a>
                         </li>
                     {% endif %}

@@ -177,7 +177,7 @@
                                                 <input id="id_applicant" class="student" value="{{ rec.applicant_id.id }}"></td>
                                             <td>
                                                 {#                                            <a href="/partner/template_academic_progress_details/{{ rec.applicant_id.id }}">{{ rec.applicant_id.first_name|title }} {{ rec.applicant_id.last_name|title }}</a>#}
-                                                <p>{{ rec.applicant_id.get_full_name|title }} </p>
+                                                <p>{{ rec.applicant_id.get_full_name_with_father|title }} </p>
                                             </td>
 
                                             <td><p>{{ rec.applicant_id.nationality.country_name|title }}</p></td>

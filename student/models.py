@@ -223,6 +223,11 @@ class ApplicationDetails(BaseModel):
         full_name = '%s %s' % (self.first_name, self.last_name if self.last_name else '')
         return full_name.strip()
 
+    def get_full_name_with_father(self):
+
+        full_name = '%s %s %s' % (self.first_name,self.middle_name if self.middle_name else '', self.last_name if self.last_name else '')
+        return full_name.strip()
+
     def report_path(self):
         """
         Return the path plus the id, with a _ in between.

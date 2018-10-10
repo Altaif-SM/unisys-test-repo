@@ -186,6 +186,8 @@ class User(AbstractUser):
                 form_vals[
                     'scholarship_selection'] = applicaton_obj.applicant_scholarship_rel.get().scholarship_selection if applicaton_obj.applicant_scholarship_rel.all() else False
                 form_vals['my_application'] = applicaton_obj.is_submitted if applicaton_obj.is_submitted else False
+                form_vals['psychometric_test'] = applicaton_obj.applicant_psychometric_test_rel.exists() if applicaton_obj.applicant_psychometric_test_rel.exists() else False
+                form_vals['agreement'] = applicaton_obj.applicant_agreement_rel.exists() if applicaton_obj.applicant_agreement_rel.exists() else False
 
                 return form_vals
             except:
@@ -193,6 +195,8 @@ class User(AbstractUser):
                 form_vals['english_qualification'] = False
                 form_vals['scholarship_selection'] = False
                 form_vals['my_application'] = False
+                form_vals['psychometric_test'] = False
+                form_vals['agreement'] = False
 
                 return form_vals
         else:
