@@ -503,7 +503,7 @@ def delete_module(request):
 
 def template_master_and_phd_master(request):
     try:
-        master_and_phd_recs = DegreeFormula.objects.filter(degree_type__degree_name='phd')
+        master_and_phd_recs = DegreeFormula.objects.filter(degree_type__degree_name__in=['phd','master'])
         scholarship_recs = ScholarshipDetails.objects.all()
         # degree_type_rec = ''
         degree_type_rec = []
