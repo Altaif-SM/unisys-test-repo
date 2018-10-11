@@ -563,12 +563,13 @@ def update_master_and_phd(request):
     scholarship_id = request.POST.get('scholarship_id')
     result = request.POST.get('result')
     repayment = request.POST.get('repayment')
+    degree_type_id = request.POST.get('degree_type')
     try:
         if not DegreeFormula.objects.filter(~Q(id=master_and_phd_id), scholarship_id=scholarship_id,
                                                   result=result.lower()).exists():
             DegreeFormula.objects.filter(id=master_and_phd_id).update(scholarship_id=scholarship_id.lower(),
                                                                             result=result.lower(),
-                                                                            repayment=repayment.lower())
+                                                                            repayment=repayment.lower(),degree_type_id=degree_type_id)
             messages.success(request, "Record updated.")
             return HttpResponse(json.dumps({'success': 'Record updated.'}), content_type="application/json")
         else:

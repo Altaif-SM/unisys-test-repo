@@ -38,6 +38,7 @@
                     var scholarship_id = $('#' + parent_id + ' .scholarship').val();
                     var result = $('#' + parent_id + ' .result').val();
                     var repayment = $('#' + parent_id + ' .repayment').val();
+                    var degree_type = $('#' + parent_id + ' .degree_type').val();
                     if (repayment == '') {
                         $('#' + parent_id + ' .repayment').focus();
                         $('#' + parent_id + ' .repayment').css('border-color', 'red');
@@ -48,7 +49,7 @@
 
 
                     var url = '/masters/update_master_and_phd/';
-                    update_master_and_phd_info(url, master_and_phd_id,scholarship_id, result,repayment)
+                    update_master_and_phd_info(url, master_and_phd_id,scholarship_id, result,repayment,degree_type)
                 })
 
                 $(document).on("click", ".delete", function (e) {
@@ -77,7 +78,7 @@
                     });
                 }
 
-                function update_master_and_phd_info(url, master_and_phd_id,scholarship_id, result,repayment) {
+                function update_master_and_phd_info(url, master_and_phd_id,scholarship_id, result,repayment,degree_type) {
                     $.ajax({
                         type: 'POST',
                         url: url,
@@ -86,6 +87,7 @@
                             scholarship_id: scholarship_id,
                             result: result,
                             repayment: repayment,
+                            degree_type: degree_type,
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
@@ -113,6 +115,7 @@
                     $("#repayment" + i).prop("disabled", false);
                     $("#scholarship" + i).prop("disabled", false);
                     $("#result" + i).prop("disabled", false);
+                    $("#degree_type" + i).prop("disabled", false);
                 });
             });
 
@@ -265,6 +268,7 @@
                     <tr>
                         <th style="display: none">Id</th>
                         <th>Scholarship</th>
+                        <th>Degree Type</th>
                         <th>Result</th>
                         <th>Repayment</th>
                         <th width="10%"></th>
@@ -284,6 +288,18 @@
                                             value="{{ rec.scholarship.id }}">{{ rec.scholarship.scholarship_name|title }} </option>
                                     {% for rec in scholarship_recs %}
                                         <option value='{{ rec.id }}'>{{ rec.scholarship_name|title }}</option>
+                                    {% endfor %}
+                                </select></td>
+                            <td>
+                                <text hidden>{{ rec.scholarship.scholarship_name|title }}</text>
+                                <select id='degree_type{{ forloop.counter }}'
+                                        name="degree_type{{ forloop.counter }}"
+                                        class="form-control data degree_type"
+                                        disabled required>
+                                    <option style="display:none" selected="selected" id=""
+                                            value="{{ rec.degree_type.id }}">{{ rec.degree_type.degree_name|title }} </option>
+                                    {% for rec in degree_type_rec %}
+                                        <option value='{{ rec.id }}'>{{ rec.degree_name|title }}</option>
                                     {% endfor %}
                                 </select></td>
 
