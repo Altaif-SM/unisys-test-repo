@@ -502,15 +502,25 @@ def delete_module(request):
 
 
 def template_master_and_phd_master(request):
-    master_and_phd_recs = DegreeFormula.objects.filter(degree_type__degree_name='phd')
-    scholarship_recs = ScholarshipDetails.objects.all()
-    degree_type_rec = ''
+    try:
+        master_and_phd_recs = DegreeFormula.objects.filter(degree_type__degree_name='phd')
+        scholarship_recs = ScholarshipDetails.objects.all()
+        # degree_type_rec = ''
+        degree_type_rec = []
 
-    if DegreeTypeDetails.objects.filter(degree_name='phd').exists():
-        degree_type_rec = DegreeTypeDetails.objects.get(degree_name='phd')
-    return render(request, 'template_master_and_phd_master.html',
-                  {'master_and_phd_recs': master_and_phd_recs, 'scholarship_recs': scholarship_recs,
-                   'degree_type_rec': degree_type_rec})
+        if DegreeTypeDetails.objects.filter(degree_name='phd').exists():
+            degree_type = DegreeTypeDetails.objects.get(degree_name='phd')
+            degree_type_rec.append(degree_type)
+        if DegreeTypeDetails.objects.filter(degree_name='Masters').exists():
+            degree_master = DegreeTypeDetails.objects.get(degree_name='Masters')
+            degree_type_rec.append(degree_master)
+
+        return render(request, 'template_master_and_phd_master.html',
+                      {'master_and_phd_recs': master_and_phd_recs, 'scholarship_recs': scholarship_recs,
+                       'degree_type_rec': degree_type_rec})
+    except Exception as e:
+        messages.warning(request, "Record not saved." + str(e))
+    return redirect('/masters/template_master_and_phd_master/')
 
 
 def save_master_and_phd(request):
@@ -526,7 +536,7 @@ def save_master_and_phd(request):
             messages.success(request, "Record saved.")
         else:
             messages.warning(request, "Formula already exists for this master. Record not saved.")
-    except:
+    except Exception as e:
         messages.warning(request, "Record not saved.")
     return redirect('/masters/template_master_and_phd_master/')
 

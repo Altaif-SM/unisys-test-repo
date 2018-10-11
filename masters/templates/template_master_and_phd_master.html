@@ -206,11 +206,11 @@
                                 <label class="col-md-1 control-label">Degree Type:</label>
                                 <div class="col-md-2">
                                     <select id='degree_type' name="degree_type" class="form-control" required>
-                                        <option style="display:none" selected="selected" id=""value="{{ degree_type_rec.id }}">{{ degree_type_rec.degree_name|title }}</option>
+{#                                        <option style="display:none" selected="selected" id=""value="{{ degree_type_rec.id }}">{{ degree_type_rec.degree_name|title }}</option>#}
 
-{#                                        {% for rec in degree_type_recs %}#}
-{#                                            <option value='{{ rec.id }}'>{{ degree_type_recs.degree_name|title }}</option>#}
-{#                                        {% endfor %}#}
+                                        {% for rec in degree_type_rec %}
+                                            <option value='{{ rec.id }}'>{{ rec.degree_name|title }}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                             </div>
@@ -238,7 +238,7 @@
 
                                 </label>
                                 <div class="col-md-2">
-                                    <input type="text" id="repayment" name="repayment" class="form-control" required>
+                                    <input type="number" id="repayment" name="repayment" class="form-control" required>
                                 </div>
                             </div>
                         </div>
