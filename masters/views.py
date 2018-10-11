@@ -511,8 +511,8 @@ def template_master_and_phd_master(request):
         if DegreeTypeDetails.objects.filter(degree_name='phd').exists():
             degree_type = DegreeTypeDetails.objects.get(degree_name='phd')
             degree_type_rec.append(degree_type)
-        if DegreeTypeDetails.objects.filter(degree_name='Masters').exists():
-            degree_master = DegreeTypeDetails.objects.get(degree_name='Masters')
+        if DegreeTypeDetails.objects.filter(degree_name='master').exists():
+            degree_master = DegreeTypeDetails.objects.get(degree_name='master')
             degree_type_rec.append(degree_master)
 
         return render(request, 'template_master_and_phd_master.html',
