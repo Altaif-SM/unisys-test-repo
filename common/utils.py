@@ -392,7 +392,7 @@ def render_to_file(path: str, params: dict):
     template = get_template(path)
     html = template.render(params)
     file_name = "{0}-{1}.pdf".format(params['request'].user.first_name, randint(1, 1000000))
-    file_path = os.path.join(os.path.abspath(os.path.dirname("__file__")), "store", file_name)
+    file_path = os.path.join(os.path.abspath(os.path.dirname("__file__")), "html/scholarship_mgmt/store", file_name)
     with open(file_path, 'wb') as pdf:
         pisa.pisaDocument(BytesIO(html.encode("UTF-8")), pdf)
     return [file_name, file_path]

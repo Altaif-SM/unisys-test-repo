@@ -1465,7 +1465,7 @@ def template_link_student_program(request):
 
 def get_semester_modules(request):
     finalDict = []
-    semester = request.POST.get('semester_id', None)
+    semester = request.POST.get('semester_id') or None
 
     modules_recs = DevelopmentProgram.objects.filter(year=YearDetails.objects.get(active_year=1), semester_id=semester)
     module_id = []
