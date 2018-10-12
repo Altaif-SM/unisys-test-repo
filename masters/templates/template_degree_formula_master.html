@@ -237,15 +237,18 @@
                             </div>
 
                             <div class="">
-                                <label class="col-md-2 control-label">Degree Type:</label>
+                                <label class="col-md-1 control-label">Degree Type:</label>
                                 <div class="col-md-2">
-                                    <select id='degree_type' name="degree_type" class="form-control" required>
-                                        <option style="display:none" selected="selected" id=""value="{{ degree_type_recs.id }}">{{ degree_type_recs.degree_name|title }}</option>
+                                    <input type="hidden"name="degree_type" value="{{ degree_type_recs.id }}">
 
+                                    <input type="text" class="form-control" value="{{ degree_type_recs.degree_name|title }}" disabled required>
+{#                                    <select id='degree_type' name="degree_type" class="form-control" required>#}
+{#                                        <option style="display:none" selected="selected" id=""value="{{ degree_type_recs.id }}">{{ degree_type_recs.degree_name|title }}</option>#}
+{##}
 {#                                        {% for rec in degree_type_recs %}#}
 {#                                            <option value='{{ rec.id }}'>{{ degree_type_recs.degree_name|title }}</option>#}
 {#                                        {% endfor %}#}
-                                    </select>
+{#                                    </select>#}
                                 </div>
                             </div>
                         </div>

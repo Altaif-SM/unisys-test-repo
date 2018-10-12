@@ -2366,3 +2366,46 @@ def application_all_details_pdf(request, app_id):
         return HttpResponse(pdf, 'application/pdf')
     except:
         return redirect('/partner/template_applicant_all_details/' + str(app_id))
+
+
+def update_semister_module_link_student(request):
+    try:
+        data_value = json.loads(request.POST.get('module_list'))
+    except Exception as e:
+        messages.warning(request, "No record updated."+str(e))
+        return HttpResponse(json.dumps({'error': 'Record not updated.'}), content_type="application/json")
+
+    if not data_value:
+        messages.warning(request,"No record updated.")
+        return HttpResponse(json.dumps({'error': 'Record not updated.'}), content_type="application/json")
+
+    try:
+        for application in data_value:
+            StudentModuleMapping.objects.filter(applicant_id_id=application['applicant_id']).delete()
+            for module in application['applicant_module']:
+                StudentModuleMapping.objects.create(program_id=application['applicant_program'],degree_id=application['degree'],applicant_id_id=application['applicant_id'],module_id=module)
+                flag_module_assigned = True
+
+            if flag_module_assigned:
+                program_list = DevelopmentProgram.objects.filter(id__in=application['applicant_module'])
+                application_obj = ApplicationDetails.objects.get(id=application['applicant_id'])
+
+                params = {'x': 16, 'program_list': program_list, 'request': request}
+
+                subject, from_email, to = 'Scholarship Module Details', settings.EMAIL_HOST_USER, application_obj.email
+                text_content = 'Following module has been assigned to you. Please Find The Attachment'
+
+                file = render_to_file('development_program_pdf_template.html', params)
+                thread = Thread(target=send_email, args=(file, subject, text_content, from_email, to))
+                thread.start()
+
+                application_notification(application['applicant_id'],'Some modules have assigned to your.')
+
+        messages.success(request, "Module assigned to the student and mail sent with detailed module description.")
+        return HttpResponse(json.dumps({'error': 'Record updated.'}), content_type="application/json")
+
+
+    except Exception as e:
+        messages.warning(request, "Record not updated."+str(e))
+    return HttpResponse(json.dumps({'error': 'Record not updated.'}), content_type="application/json")
+

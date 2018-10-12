@@ -219,13 +219,16 @@
                         <div class="">
                                 <label class="col-md-1 control-label">Degree Type:</label>
                                 <div class="col-md-2">
-                                    <select id='degree_type' name="degree_type" class="form-control" required>
-                                        <option style="display:none" selected="selected" id=""value="{{ degree_type_rec.id }}">{{ degree_type_rec.degree_name|title }}</option>
+                                    <input type="hidden"name="degree_type" value="{{ degree_type_rec.id }}">
 
+                                    <input type="text"name="degree_type_name" class="form-control"value="{{ degree_type_rec.degree_name|title }}"disabled>
+{#                                    <select id='degree_type' name="degree_type" class="form-control" required>#}
+{#                                        <option style="display:none" selected="selected" id=""value="{{ degree_type_rec.id }}">{{ degree_type_rec.degree_name|title }}</option>#}
+{##}
 {#                                        {% for rec in degree_type_recs %}#}
 {#                                            <option value='{{ rec.id }}'>{{ degree_type_recs.degree_name|title }}</option>#}
 {#                                        {% endfor %}#}
-                                    </select>
+{#                                    </select>#}
                                 </div>
                             </div>
                         </div>
@@ -237,7 +240,7 @@
                                 <label class="col-md-2 control-label">Result between:
 
                                 </label>
-                                <div class="col-md-1">
+                                <div class="col-md-2">
                                     <input class="form-control result_min" name="result_min"
                                            type="number" step="any" min="0" max="100"
                                            id="result_min"
@@ -250,7 +253,7 @@
                                 <label class="col-md-1 control-label">And:
 
                                 </label>
-                                <div class="col-md-1">
+                                <div class="col-md-2">
                                     <input class="form-control result_max" name="result_max"
                                            type="number" step="any" min="0" max="100"
                                            id="result_max"
@@ -263,7 +266,7 @@
                                 <label class="col-md-1 control-label">Repayment:
 
                                 </label>
-                                <div class="col-md-1">
+                                <div class="col-md-2">
                                     <input type="number" step="any" min="0" max="100" id="repayment" name="repayment" class="form-control" required>
                                 </div>
                             </div>

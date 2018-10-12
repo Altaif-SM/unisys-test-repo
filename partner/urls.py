@@ -89,4 +89,6 @@ urlpatterns = [
                   path('application_all_details_pdf/<int:app_id>/', views.application_all_details_pdf,
                        name='application_all_details_pdf'),
                   # path('generate_student_details_pdf/<int:app_id>/', views.generate_student_details_pdf,name='generate_student_details_pdf'),
+
+                  path('update_semister_module_link_student/', views.update_semister_module_link_student, name='update_semister_module_link_student'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -36,12 +36,44 @@
         window.onload = function () {
             $(document).ready(function () {
 
+                $(document).on("click", ".update", function (e) {
+
+                    var update_id = $(this).attr('id');
+                    var applicant_id = update_id.split("update")[1]
+                    var payload = {}
+                    var array = []
+                    if ($('#id_applicant_module' + applicant_id).val() != null) {
+                        payload['applicant_id'] = applicant_id;
+                        payload['degree'] = $('#id_applicant_degree' + applicant_id).val();
+                        payload['applicant_program'] = $('#id_applicant_program' + applicant_id).val();
+                        payload['applicant_module'] = $('#id_applicant_module' + applicant_id).val();
+                        array.push(payload);
+
+                    }
+                    var module_list = JSON.stringify(array)
+                    var url = '/partner/update_semister_module_link_student/';
+                    update_semister_module(url, module_list)
+                })
+
+                $(document).on("click", ".edit", function (e) {
+                        var parent_id = $(this).closest('tr').attr('id');
+                        var id = $(this).attr('id');
+                        var i = id.split("edit")[1]
+
+                        {#$(".data").prop("disabled", true);#}
+                        $(".edit").show();
+                        $(".update").hide();
+
+                        $("#update" + i).show();
+                        $("#edit" + i).hide();
+                        $("#id_applicant_semester" + i).prop("disabled", false);
+                        $("#id_applicant_module" + i).prop("disabled", false);
+                    });
+
                 $(document).on("click", ".id_applicant_semester", function (e) {
-
-                    var parent_id = $(this).closest('tr').attr('id');
-                    {#alert(parent_id);#}
-                    var semester_id = $('#' + parent_id + ' #id_applicant_semester').val();
-
+                    var id = ($(this).attr("id"))
+                    var parent_id = id.split("id_applicant_semester")[1]
+                    var semester_id = $('#id_applicant_semester'+parent_id).val();
                     var url = '/partner/get_semester_modules/';
                     get_semester_modules(url, parent_id, semester_id)
                 })
@@ -55,11 +87,9 @@
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
-                            $('#' + item_id + ' .module').empty();
-                            {% comment %}$('#' + item_id + ' .module').append(
-                                '<option value="">Please select</option>');{% endcomment %}
+                            $('#id_applicant_module'+ item_id).empty();
                             for (var i = 0; i < data.length; i++) {
-                                $('#' + item_id + ' .module').append(
+                                $('#id_applicant_module'+ item_id).append(
                                     '<option value="' + data[i].id + '">'
                                     + data[i].module_name + '</option>')
                             }
@@ -69,6 +99,25 @@
                         }
                     });
                 }
+                function update_semister_module(url, module_list) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+
+                            module_list: module_list,
+
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+                            location.reload(true)
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
 
 
                 $('#save_rec').click(function () {
@@ -77,13 +126,14 @@
                     $('.item').each(function (e) {
                         var payload = {}
                         var id = $(this).attr('id');
+                         var i = id.split("item")[1]
 
                         {#alert($('#' + id + ' #id_applicant_module').val())#}
-                        if ($('#' + id + ' #id_applicant_module').val() != null) {
-                            payload['applicant_id'] = $('#' + id + ' #applicant_id').val();
-                            payload['degree'] = $('#' + id + ' #id_applicant_degree').val();
-                            payload['applicant_program'] = $('#' + id + ' #id_applicant_program').val();
-                            payload['applicant_module'] = $('#' + id + ' #id_applicant_module').val();
+                        if ($('#id_applicant_module'+i ).val() != null) {
+                            payload['applicant_id'] = i;
+                            payload['degree'] = $('#id_applicant_degree'+i).val();
+                            payload['applicant_program'] = $('#id_applicant_program'+i).val();
+                            payload['applicant_module'] = $('#id_applicant_module'+i).val();
                             array.push(payload);
                             $('#data_value').val(JSON.stringify(array));
                         }
@@ -218,12 +268,13 @@
                                     </th>
                                     <th>Semester</th>
                                     <th>Module</th>
+                                <th></th>
                                 </tr>
                                 </thead>
 
                                 <tbody id="tbody">
                                 {% for rec in rec_list %}
-                                    <tr  {% if rec.flag %} id="item{{ forloop.counter }}" class="item" {% endif %} >
+                                    <tr  {% if rec.flag %} id="item{{ rec.applicant_rec.id }}" class="item" {% endif %} >
                                         <td style="display: none"><input id="applicant_id"
                                                                          value="{{ rec.applicant_rec.id }}"></td>
                                         <td>
@@ -235,14 +286,14 @@
                                         </td>
 
                                         <td>
-                                            <input hidden id="id_applicant_degree"
+                                            <input hidden id="id_applicant_degree{{rec.applicant_rec.id  }}"
                                                    value="{{ rec.applicant_rec.applicant_scholarship_rel.all.0.degree.id }}">
                                             <text>{{ rec.applicant_rec.applicant_scholarship_rel.all.0.degree.degree_name|title }}</text>
                                         </td>
 
 
                                         <td>
-                                            <input hidden value="{{ rec.program.id }}" id="id_applicant_program" class="id_applicant_program">
+                                            <input hidden value="{{ rec.program.id }}" id="id_applicant_program{{ rec.applicant_rec.id }}" class="id_applicant_program">
                                             <p>{{ rec.program.program_name|title }}</p>
 
                                             {% comment %}<select id='id_applicant_program' title="Select Program"
@@ -270,7 +321,7 @@
                                             {% comment %}<input readonly style="border: none" id='id_applicant_semester'
                                                    title="Semester" class="form-control id_applicant_semester"
                                                    name="applicant_semester">{% endcomment %}
-                                            <select id='id_applicant_semester' title="Select Semester"
+                                            <select id='id_applicant_semester{{ rec.applicant_rec.id }}' title="Select Semester"
                                                     name="applicant_semester"
                                                     class="form-control id_applicant_semester" {% if rec.semester %}
                                                     disabled{% endif %}>
@@ -291,7 +342,7 @@
                                         </td>
 
                                         <td>
-                                            <select id='id_applicant_module' title="Select Module"
+                                            <select id='id_applicant_module{{ rec.applicant_rec.id }}' title="Select Module"
                                                     name="applicant_module"
                                                     class="form-control module selectpicker" multiple
                                                     {% if rec.module %} disabled{% endif %}>
@@ -302,6 +353,19 @@
                                                 {% endif %}
                                             </select>
                                         </td>
+                                    {% if rec.module %}
+                                    <td>
+                                <span type="button" name="updt" id="update{{  rec.applicant_rec.id }}"
+                                        class=" update btn green glyphicon glyphicon-ok" style="display:none;">
+                                </span>
+                                <span type="button" name="edit" id="edit{{  rec.applicant_rec.id }}"
+                                        class=" edit btn blue glyphicon glyphicon-pencil">
+                                </span>
+                            </td>
+                                        {% else %}
+                                        <td></td>
+                                     {% endif %}
+
                                     </tr>
                                 {% endfor %}
                                 </tbody>

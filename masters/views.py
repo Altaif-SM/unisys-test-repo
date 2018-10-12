@@ -597,8 +597,9 @@ def delete_master_and_phd(request):
 
 
 def formula_type_master(request):
-    degree_type = DegreeTypeDetails.objects.all()
+   # degree_type = DegreeTypeDetails.objects.all()
     try:
+        degree_type = DegreeTypeDetails.objects.all().exclude(degree_name__in=['master', 'masters (course work)', 'phd'])
         if request.POST:
             degree_type = request.POST.get('degree_type')
 
@@ -665,8 +666,8 @@ def save_master_course_work(request):
             messages.success(request, "Record saved.")
         else:
             messages.warning(request, "Formula already exists for this master. Record not saved.")
-    except:
-        messages.warning(request, "Record not saved.")
+    except Exception as e:
+        messages.warning(request, "Record not saved."+str(e))
     return redirect('/masters/template_master_course_work_master/')
 
 
