@@ -1417,12 +1417,12 @@ def filter_psychometric_test_report(request):
 
 def template_link_student_program(request):
     if request.user.is_super_admin():
-        applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, year=get_current_year(request))
+        applicant_recs = ApplicationDetails.objects.filter(admin_approval=True, year=get_current_year(request))
         university_recs = UniversityDetails.objects.filter()
     else:
         applicant_recs = ApplicationDetails.objects.filter(
             nationality=request.user.partner_user_rel.get().address.country,
-            year=get_current_year(request), is_submitted=True)
+            year=get_current_year(request),admin_approval=True,)
         university_recs = UniversityDetails.objects.filter(country=request.user.partner_user_rel.get().address.country)
 
     module_recs = ModuleDetails.objects.all()
