@@ -156,11 +156,11 @@ class ScholarshipDetails(BaseModel):
 class DegreeFormula(BaseModel):
     scholarship = models.ForeignKey(ScholarshipDetails, null=True, related_name='degree_scholarship_formula_relation',
                                     on_delete=models.PROTECT)
-    cgpa_min = models.IntegerField(blank=True, null=True)
-    cgpa_max = models.IntegerField(blank=True, null=True)
+    cgpa_min = models.DecimalField(blank=True, null=True,decimal_places=2,max_digits=10)
+    cgpa_max = models.DecimalField(blank=True, null=True,decimal_places=2,max_digits=10)
     grade_min = models.CharField(max_length=10, blank=True, null=True)
     grade_max = models.CharField(max_length=10, blank=True, null=True)
-    repayment = models.IntegerField(blank=True, null=True)
+    repayment = models.DecimalField(blank=True, null=True,decimal_places=2,max_digits=10)
     result = models.CharField(max_length=10, blank=True, null=True)
     is_cgpa_or_grade = models.BooleanField(default=True)
 

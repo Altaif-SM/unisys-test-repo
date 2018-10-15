@@ -778,8 +778,8 @@ def save_degree_formula_master(request):
             messages.success(request, "Record saved.")
         else:
             messages.warning(request, "Formula already exists for this master. Record not saved.")
-    except:
-        messages.warning(request, "Record not saved.")
+    except Exception as e:
+        messages.warning(request, "Record not saved."+str(e))
 
     degree_recs = DegreeFormula.objects.filter(degree_type=degree_type)
     scholarship_recs = ScholarshipDetails.objects.all()

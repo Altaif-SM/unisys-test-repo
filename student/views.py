@@ -1638,7 +1638,11 @@ def applicant_academic_progress(request):
                 year_recs = YearDetails.objects.all()
                 semester_recs = SemesterDetails.objects.all()
 
-                applicant_semester = request.user.get_application.semester.id
+                if request.user.get_application.semester:
+                    applicant_semester = request.user.get_application.semester.id
+                else:
+                    applicant_semester = ''
+
 
                 progress_recs = ApplicantAcademicProgressDetails.objects.filter(
                     applicant_id=request.user.get_application)
@@ -1660,7 +1664,7 @@ def save_applicant_academic_progress(request):
 
     year = request.POST.get('year')
     date = request.POST.get('date')
-    semester = request.POST.get('semester')
+    semester = request.POST.get('semester_name')
 
     gpa_scored = request.POST.get('gpa_scored')
     gpa_from = request.POST.get('gpa_from')
