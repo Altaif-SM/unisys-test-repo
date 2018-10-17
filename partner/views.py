@@ -1702,7 +1702,7 @@ def approve_applicant_semester_result(request, app_id):
         # ApplicantAcademicProgressDetails.objects.filter(id=app_id).update(is_approved=True)
 
         all_semester = SemesterDetails.objects.all()
-        application_rec = ApplicantAcademicProgressDetails.objects.get(id=app_id).applicant_id
+        application_rec = ApplicantAcademicProgressDetails.objects.get(id=app_id)
 
         next_semester_data = (application_rec.semester.end_date - all_semester[0].start_date).days
 
@@ -1716,9 +1716,9 @@ def approve_applicant_semester_result(request, app_id):
 
         if next_semester_rec:
             ApplicantAcademicProgressDetails.objects.filter(id=app_id).update(is_approved=True)
-            ApplicationDetails.objects.filter(id=application_rec.id).update(semester=next_semester_rec)
+            ApplicationDetails.objects.filter(id=application_rec.applicant_id.id).update(semester=next_semester_rec)
             messages.success(request,
-                             application_rec.first_name + ' semester result is approved the applicant is promoted to next semester')
+                             application_rec.applicant_id.first_name + ' semester result is approved the applicant is promoted to next semester')
         else:
             messages.success(request, 'Please create next semester and try to approve the semester result again.')
 
@@ -2336,7 +2336,8 @@ def application_all_details_pdf(request, app_id):
         x = 14
 
         logo_path = settings.MEDIA_ROOT + 'logo.png'
-
+        header_path = settings.MEDIA_ROOT + 'Header.jpg'
+        footer_path = settings.MEDIA_ROOT + 'Footer.jpg'
         application_obj = ApplicationDetails.objects.get(id=app_id)
         report_path = settings.MEDIA_ROOT + str('reports/') + str(application_obj.first_name) + '_' + str(
             application_obj.id) + '/'
@@ -2353,7 +2354,7 @@ def application_all_details_pdf(request, app_id):
         Context = ({'report_path': report_path, 'application_obj': application_obj, 'siblings_obj': siblings_obj,
                     'qualification_recs': qualification_obj, 'english_recs': english_obj,
                     'curriculum_recs': curriculum_obj, 'applicant_experience_recs': applicant_experience_obj,
-                    'scholarship_obj': scholarship_obj, 'x': x, 'about_obj': about_obj, 'logo_path': logo_path})
+                    'scholarship_obj': scholarship_obj, 'x': x, 'about_obj': about_obj, 'logo_path': logo_path,'header_path':header_path,'footer_path':footer_path})
         html = template.render(Context)
 
         file = open('test.pdf', "w+b")

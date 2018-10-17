@@ -1664,7 +1664,7 @@ def save_applicant_academic_progress(request):
 
     year = request.POST.get('year')
     date = request.POST.get('date')
-    semester = request.POST.get('semester_name')
+    semester = request.POST.get('semester')
 
     gpa_scored = request.POST.get('gpa_scored')
     gpa_from = request.POST.get('gpa_from')

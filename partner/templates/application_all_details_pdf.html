@@ -27,7 +27,7 @@
 
     @page {
         margin: 1cm;
-        margin-top: 3cm;
+        margin-top: 5cm;
 
         @frame header {
         -pdf-frame-content: header;
@@ -42,19 +42,22 @@
 
     @frame footer {
     -pdf-frame-content:footerContent;
-    bottom: 1cm;
-    margin-left: 1cm;
-    margin-right: 1cm;
-    height: 2cm;
+    bottom: 15cm;
+    height: 18cm;
+
+
+        margin-top:25pt;
+
+
+
+
     }
     }
 
-    {#@page header {#}
-    {#            font-size: 20px;#}
-    {#            font-weight: 100;#}
-    {#            text-align: center;#}
-    {#            color: #007cae;#}
-    {#        }#}
+
+    @page header {
+
+            }
 
     .wrapper {
         display: table;
@@ -67,13 +70,11 @@
 </style>
 
 {% block content %}
-
     <div class='wrapper'>
         <div class='header' id="header" style="text-align: center;">
-            <img src="{{ logo_path }}" alt="logo"
-                 style="width: 120px;height: 80px;margin-top: 5px; text-align: center" class="logo-default"/><br>
-            <span class='title' style="font-size: 16px;color: #13084e"><b>Application Details </b></span>
-            <hr>
+            <img src="{{ header_path }}" alt="logo"
+                 style="width: 790px;height: 120px;margin-top: 25px; text-align: center" class="logo-default"/><br>
+            <span class='title' style="font-size: 16px; color: #13084e;"><b>Application Details </b></span>
         </div>
 
 
@@ -459,30 +460,26 @@
             {#    </div>#}
         </div>
     </div>
-    <div id="footerContent" style="font-size: 12px">
-        <hr>
+
+    <div id="footerContent">
+
         <table>
             {#                <td colspan="3" style="font-size: 16px;font-weight:bold">PERSONAL INFO:</td>#}
-            <tr>
-                <td style="font-size: 11px;">
-                        <span class="">Level 13.2, Menara Tokio Marine Life,
-            No. 189, Jalan Tun Razak,
-            Kuala Lumpur, Malaysia
-                        </span>
-                </td>
+{#            <tr>#}
+{#                <td style="font-size: 11px;">#}
+{#                        <span class="">Level 13.2, Menara Tokio Marine Life,#}
+{#            No. 189, Jalan Tun Razak,#}
+{#            Kuala Lumpur, Malaysia#}
+{#                        </span>#}
+{#                </td>#}
 
-                <td style="text-align: left;font-size: 12px">
-                        <span class="">
-                             T: +603.2181.6646 <br>F: +603.2181.6643 50400
+{#                <td >#}
+                        <span class="" style="">
+                              <img src="{{ footer_path }}" style="width: 850px;height: 100px;" alt="logo" class="logo-default"/>
                         </span>
-                </td>
+{#                </td>#}
 
-                <td style="text-align: left;font-size: 12px">
-                        <span class="">
-                            Email: partnership1@namafoundation.org
-                            Website: www.namafoundation.org
-                        </span>
-                </td>
+
 
             </tr>
         </table>

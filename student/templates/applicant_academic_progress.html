@@ -31,6 +31,11 @@
     <script>
         window.onload = function () {
             $(document).ready(function () {
+                $(document).on("click", "#id_semester", function (e) {
+                    var sem_id = $(this).val()
+                   $("#get_semester_detail").val(sem_id)
+
+                });
                 {% comment %}$(document).on("click", ".update", function (e) {
 
                     var parent_id = $(this).closest('tr').attr('id');
@@ -325,7 +330,7 @@
                                             <option id="" value="Pass">Pass</option>
                                             <option id="" value="Fail">Fail</option>
                                         </select>
-                                        <input hidden value='{{ applicant_semester }}' name="semester">
+                                        <input hidden value='{{ applicant_semester }}' name="semester" id="get_semester_detail">
                                     </div>
                                 </div>
                             </div>
