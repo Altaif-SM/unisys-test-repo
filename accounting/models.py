@@ -34,6 +34,11 @@ class StudentPaymentReceiptVoucher(BaseModel):
             ('can_view_student_receipt_voucher', 'can view student receipt voucher'),
             ('can_view_donor_payment_voucher', 'can view donor payment voucher'),
             ('can_view_donor_receipt_voucher', 'can view donor receipt voucher'),
+            ('can_view_student_report', 'can view student report'),
+            ('can_view_student_repayment_report', 'can view student repayment report'),
+            ('can_view_donor_report', 'can view donor report'),
+            ('can_view_student_reciept_payment_voucher', 'can_view_student_reciept_payment_voucher'),
+            ('can_view_approve_and_paid_total', 'can view approve and paid total'),
         )
         ordering = ('-created_on',)
 

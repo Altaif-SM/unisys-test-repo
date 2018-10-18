@@ -57,14 +57,14 @@
 
     <body class=" login">
     <!-- BEGIN LOGO -->
-    <div class="logo" style="margin: 0px; padding: 0px;color: #250055;" >
+    <div class="logo" style="margin: 0px; padding: 0px;color: #262668;" >
 
         <img src="{% static 'images/logo.png' %}" alt="" widtn="150px" height="150px;"/>
         <h1 style="font-size:35px;font-weight: bold;">NAMA Fund System</h1>
     </div>
     <!-- END LOGO -->
     <!-- BEGIN LOGIN -->
-    <div class="content" style="border: solid #0a001f;">
+    <div class="content" style="border: solid #262668;">
         <!-- BEGIN LOGIN FORM -->
         <form class="login-form" method="post" action="{% url 'accounts:user_signin' %}">
             {% csrf_token %}
@@ -96,14 +96,14 @@
                 <label class="control-label visible-ie8 visible-ie9">Password</label>
                 {{ form.password }}</div>
             <div class="form-actions" id="log">
-                <button type="submit" style="background-color: #0a001f;color: aliceblue" class="btn uppercase">Login</button>
+                <button type="submit" style="background-color: #262668;color: aliceblue" class="btn uppercase">Login</button>
                 <label class="rememberme check mt-checkbox mt-checkbox-outline">
                     <input type="checkbox" name="remember" value="1"/>Remember
                     <span></span>
                 </label>
                 <a href="/password_reset/recover/" id="forget-password" class="forget-password">Forgot Password?</a>
             </div>
-            <div class="create-account" style="background-color: #0a001f;">
+            <div class="create-account" style="background-color: #262668;">
                 <p>
                     <a href="javascript:;" id="register-btn" class="uppercase">Create an account</a>
                 </p>
@@ -163,7 +163,7 @@
 {#                </div>#}
                 <div class="form-actions">
                     <button type="button" id="register-back-btn" class="btn btn-outline">Back</button>
-                    <button type="submit" id="register-submit-btn" style="background-color: #0a001f;color: aliceblue;" class="btn uppercase pull-right">Submit</button>
+                    <button type="submit" id="register-submit-btn" style="background-color: #262668; color: aliceblue;" class="btn uppercase pull-right">Submit</button>
                 </div>
             </form>
         <!-- BEGIN REGISTRATION FORM -->
@@ -171,7 +171,7 @@
     <div class="copyright"> copyright: 2018 @ NAMA Foundation </div>
     <!--[if lt IE 9]>
 <script src="{% static 'assets/global/plugins/respond.min.js' %}"></script>
-<script src="{% static 'assets/global/plugins/excanvas.min.js' %}"></script> 
+<script src="{% static 'assets/global/plugins/excanvas.min.js' %}"></script>
 <![endif]-->
     <!-- BEGIN CORE PLUGINS -->
     <script src="{% static 'assets/global/plugins/jquery.min.js' %}" type="text/javascript"></script>
@@ -204,4 +204,3 @@
 
     </html>
 {% endblock %}
-
