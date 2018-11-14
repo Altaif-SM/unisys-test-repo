@@ -171,6 +171,7 @@ class User(AbstractUser):
         try:
             return self.student_user_rel.get().student_applicant_rel.get(year__active_year=True)
         except:
+            return self.student_user_rel.get().student_applicant_rel.get()
             return None
 
     @property

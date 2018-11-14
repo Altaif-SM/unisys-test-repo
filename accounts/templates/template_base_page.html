@@ -177,7 +177,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
                 <ul class="nav navbar-nav pull-right">
 
-                    {% if user.is_super_admin %}
+                    {% if user.is_super_admin or user.is_accountant or user.is_donor or user.is_partner %}
                         <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
                             <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
                                data-close-others="true">
@@ -912,6 +912,17 @@ License: You must have a valid license purchased only from themeforest(the above
                             </a>
                         </li>
                     {% endif %}
+
+                    {% if user.is_super_admin  %}
+                        <li class="nav-item " id="acd_qli">
+                            <a href="{% url 'student:import_applicant_records_tile' %}"
+                               class="nav-link nav-toggle">
+                                <i class="glyphicon glyphicon-list-alt"></i>
+                                <span class="title">Import Applicant Records</span>
+                                <span class="selected"></span>
+                            </a>
+                        </li>
+                     {% endif %}
 
 
                 </ul>

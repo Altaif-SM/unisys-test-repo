@@ -50,6 +50,22 @@ def get_application_id(application_obj):
     application_id = year_name + '-' + str(application_obj.id)
     return application_id
 
+def specfic_year_get_application_id(application_obj,year_name):
+    current_year = YearDetails.objects.get(year_name=year_name)
+    year_name = ''.join(current_year.year_name.split(' '))
+
+    application_id = year_name + '-' + str(application_obj.id)
+    return application_id
+
+
+
+def get_application_specfic_year(self,year_name):
+    try:
+        return self.student_user_rel.get().student_applicant_rel.get(year__year_name=year_name)
+    except:
+
+        return None
+
 
 def send_email_to_applicant(from_email, to_mail, subject, message, first_name):
     # from_email = settings.EMAIL_HOST_USER

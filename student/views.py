@@ -7,6 +7,7 @@ from accounts.decoratars import student_login_required, psycho_test_required, se
     dev_program_required, agreements_required, submission_required
 import os
 import shutil
+from django.contrib.auth.hashers import make_password
 
 
 # Create your views here.
@@ -73,8 +74,11 @@ def applicant_personal_info(request):
 
     application_obj = ''
 
-    if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
-        application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
+    # if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
+    #     application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
+    #
+    if ApplicationDetails.objects.filter(id=request.user.get_application.id).exists():
+        application_obj = ApplicationDetails.objects.get(id=request.user.get_application.id)
 
     return render(request, 'applicant_personal_info.html',
                   {'country_recs': country_recs, 'religion_recs': religion_recs, 'application_obj': application_obj})
@@ -1764,3 +1768,264 @@ def save_other_university(request):
 #     pdf = file.read()
 #     file.close()
 #     return HttpResponse(pdf, 'application/pdf')
+
+
+
+#========================Import_Student_Apllication=========================
+from accounts.models import UserRole
+def import_student_application(request):
+    redirect_flag = False
+
+    try:
+        file_recs = request.FILES['excel'].get_records()
+        for file_rec in file_recs:
+            same_as = file_rec['Same as Present Address']
+            if not User.objects.filter(email__iexact=file_rec['Email']).exists():
+                try:
+                    nationality_obj = CountryDetails.objects.get(country_name__iexact=file_rec['Nationality'])
+                except Exception as e:
+                    messages.warning(request, "Nationality Not Found" + str(e))
+                    return redirect('/accounts/home/')
+
+                try:
+                    country_obj = CountryDetails.objects.get(country_name__iexact=file_rec['Country'])
+                except Exception as e:
+                    messages.warning(request, "Country Not Found" + str(e))
+                    return redirect('/accounts/home/')
+
+                try:
+                    permanent_country_obj = CountryDetails.objects.get(country_name__iexact=file_rec['Permanent Country'])
+                except Exception as e:
+                    messages.warning(request, "CountryDetails Not Found" + str(e))
+                    return redirect('/accounts/home/')
+
+                try:
+                    scholarshipDetails_obj = ScholarshipDetails.objects.get(scholarship_name__iexact=file_rec['Scholarship Applied'])
+                except Exception as e:
+                    messages.warning(request, "ScholarshipDetails Not Found" + str(e))
+                    return redirect('/accounts/home/')
+
+                try:
+                    programDetails_obj = ProgramDetails.objects.get(program_name__iexact=file_rec['Course Applied'])
+                except Exception as e:
+                    messages.warning(request, "Program Details Not Found" + str(e))
+                    return redirect('/accounts/home/')
+                try:
+                    degree_details_obj = DegreeDetails.objects.get(degree_name__iexact=file_rec['Degree'])
+                except Exception as e:
+                    messages.warning(request, "Degree Details Not Found" + str(e))
+                    return redirect('/accounts/home/')
+                try:
+                    UniversityDetails_obj = UniversityDetails.objects.get(university_name__iexact=file_rec['University'])
+                except Exception as e:
+                    messages.warning(request, "University Details Not Found" + str(e))
+                    return redirect('/accounts/home/')
+
+                try:
+                    academicyear_obj = YearDetails.objects.get(year_name=file_rec['Academic Year'])
+                except Exception as e:
+                    messages.warning(request, "Year Details Not Found" + str(e))
+                    return redirect('/accounts/home/')
+
+                user = User.objects.create(first_name=file_rec['First Name'],last_name=file_rec['Last Name'],username=file_rec['Email'],email=file_rec['Email'],password= make_password('redbytes123'),is_active=True,
+                registration_switch=True,submission_switch=True,psyc_switch=True,agreements_switch=True,semester_switch=True,program_switch=True)
+
+                user.role.add(UserRole.objects.get(name='Student'))
+                student = StudentDetails.objects.create(user=user)
+
+                #current_year = YearDetails.objects.get(active_year=True)
+
+                application_obj = ApplicationDetails.objects.create(first_name=file_rec['First Name'],last_name=file_rec['Last Name'],birth_date=file_rec['DOB'],
+                                                                    gender=file_rec['Gender'],
+                                                                    nationality_id=nationality_obj.id,
+                                                                    passport_number=file_rec['Passport no.'],telephone_hp=file_rec['Telphone no (HP)'],
+                                                                    email=file_rec['Email'],
+                                                                    student=student,
+                                                                    year_id=academicyear_obj.id)
+
+                address_obj = AddressDetails.objects.create(country_id=country_obj.id,street=file_rec['Premise/Sub-Locality'],state=file_rec['State/Province'],district=file_rec['District'],
+                                                            post_code=file_rec['Postcode'],sub_locality=file_rec['Sub-Locality'],
+                                                            residential_address=file_rec['Residential/Postal Address'])
+
+                if same_as=="Yes":
+                    address_obj.is_same = True
+                    address_obj.save()
+                    application_obj.permanent_address = address_obj
+                else:
+                    permanent_address_obj = AddressDetails.objects.create(country_id=permanent_country_obj.id,street=file_rec['Permanent Premise/Sub-Locality'],
+                        state=file_rec['Permanent State/Province'],district=file_rec['Permanent District'],post_code=file_rec['Permanent Postcode'],
+                        sub_locality=file_rec['Permanent Sub-Locality'],residential_address=file_rec['Permanent Residential/Postal Address'])
+
+                    application_obj.permanent_address = permanent_address_obj
+
+                application_id = specfic_year_get_application_id(application_obj,file_rec['Academic Year'])
+
+                application_obj.application_id = application_id
+                application_obj.address = address_obj
+                application_obj.save()
+
+                scholarship_obj = ScholarshipSelectionDetails.objects.create(
+                    scholarship_id=scholarshipDetails_obj.id,
+                    course_applied_id=programDetails_obj.id,
+                    degree_id=degree_details_obj.id,
+                    university_id=UniversityDetails_obj.id,
+                    applicant_id_id=application_obj.id)
+
+                ApplicantAboutDetails.objects.create(about_yourself=file_rec['About Yourself'],applicant_id_id=application_obj.id)
+                redirect_flag = True
+
+            else:
+                messages.warning(request,"email already exists")
+
+        if redirect_flag:
+            messages.success(request, "Record saved")
+
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+    return redirect('/student/import_applicant_records_tile/')
+
+
+def import_applicant_qualification_info(request):
+    try:
+        redirect_flag = False
+
+        file_recs = request.FILES['student_qualification_rec'].get_records()
+
+        for file_rec in file_recs:
+            try:
+                user_obj = User.objects.get(email=file_rec['Email'])
+            except Exception as e:
+                messages.warning(request, "User Not Found" + str(e))
+                continue
+
+            try:
+                applicant_application = get_application_specfic_year(user_obj,file_rec['Academic year'])
+
+            except Exception as e:
+                messages.warning(request, "Some Error occured..." + str(e))
+                continue
+
+
+
+            english_object = EnglishQualificationDetails.objects.create(english_test=file_rec['English Competency Test'],
+             english_test_year=file_rec['Year'],
+             english_test_result=file_rec['Result'],
+             applicant_id_id=applicant_application.id)
+
+            redirect_flag = True
+
+        if redirect_flag:
+            messages.success(request, "Record saved")
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+    return redirect('/student/import_applicant_records_tile/')
+
+
+def import_applicant_donor_mapping(request):
+    try:
+        redirect_flag = False
+        file_recs = request.FILES['applicant_donor_mapping'].get_records()
+        for file_rec in file_recs:
+            try:
+                user_obj = User.objects.get(email=file_rec['Applicant email'])
+            except Exception as e:
+                messages.warning(request, "User Not Found" + str(e))
+                continue
+            try:
+                donor_user = User.objects.get(email=file_rec['Donor email'])
+                donor = DonorDetails.objects.get(user=donor_user.id)
+            except Exception as e:
+                messages.warning(request, "Donor not Found" + str(e))
+                continue
+            try:
+                applicant_application = get_application_specfic_year(user_obj,file_rec['Academic year'])
+
+            except Exception as e:
+                messages.warning(request, "Some Error occured..." + str(e))
+                continue
+
+            application_obj = ApplicationDetails.objects.filter(id=applicant_application.id).update(is_submitted=True, first_interview=True,first_interview_attend=True, first_interview_approval=True, psychometric_test=True,
+                second_interview_attend=True,
+                second_interview_approval=True, admin_approval=True,scholarship_fee=file_rec['Scholarship Total'] )
+
+            applicant_appliation_id = applicant_application.id
+
+            # application_history start================================
+
+            if not ApplicationHistoryDetails.objects.filter(applicant_id_id=applicant_appliation_id,
+                                                            status='Application Submitted').exists():
+                ApplicationHistoryDetails.objects.create(applicant_id_id=applicant_appliation_id,
+                                                         status='Application Submitted',
+                                                         remark='Your application is submitted and your institution will be notified on further updates regarding your applications.')
+
+            if not ApplicationHistoryDetails.objects.filter(applicant_id_id=applicant_appliation_id,
+                                                            status='First Interview Call').exists():
+                ApplicationHistoryDetails.objects.create(applicant_id_id=applicant_appliation_id,
+                                                         status='First Interview Call',
+                                                         remark='You are requested to come down for the first interview.')
+
+            if not ApplicationHistoryDetails.objects.filter(applicant_id_id=applicant_appliation_id,
+                                                            status='First Interview Attended').exists():
+                ApplicationHistoryDetails.objects.create(applicant_id_id=applicant_appliation_id,
+                                                         status='First Interview Attended',
+                                                         remark='You have attended first interview. Please wait for the further updates.')
+
+            if not ApplicationHistoryDetails.objects.filter(applicant_id_id=applicant_appliation_id,
+                                                            status='First Interview Approval').exists():
+                ApplicationHistoryDetails.objects.create(applicant_id_id=applicant_appliation_id,
+                                                         status='First Interview Approval',
+                                                         remark='You have cleared your first interview. Please wait for the further updates.')
+
+            if not ApplicationHistoryDetails.objects.filter(applicant_id_id=applicant_appliation_id,
+                                                            status='Psychometric Test').exists():
+                ApplicationHistoryDetails.objects.create(applicant_id_id=applicant_appliation_id,
+                                                         status='Psychometric Test',
+                                                         remark='You have submitted Psychometric test result. Please wait for the further updates.')
+
+            if not ApplicationHistoryDetails.objects.filter(applicant_id_id=applicant_appliation_id,
+                                                            status='Second Interview Attended').exists():
+                ApplicationHistoryDetails.objects.create(applicant_id_id=applicant_appliation_id,
+                                                         status='Second Interview Attended',
+                                                         remark='You have attended second interview. Please wait for the further updates.')
+
+            if not ApplicationHistoryDetails.objects.filter(applicant_id_id=applicant_appliation_id,
+                                                            status='Second Interview Approval').exists():
+                ApplicationHistoryDetails.objects.create(applicant_id_id=applicant_appliation_id,
+                                                         status='Second Interview Approval',
+                                                         remark='You have cleared your second interview. Please wait for the further updates.')
+
+            if not ApplicationHistoryDetails.objects.filter(applicant_id_id=applicant_appliation_id,
+                                                            status='Admin Approval').exists():
+                ApplicationHistoryDetails.objects.create(applicant_id_id=applicant_appliation_id,
+                                                         status='Admin Approval',
+                                                         remark='Your application have been approved by the admin. Please wait for the further updates.')
+
+            #========application_history end==================
+
+            #====mapping applicant with donor#==============
+            application_rec = ApplicationDetails.objects.get(id=applicant_application.id)
+            application_rec.is_sponsored = True
+            application_rec.save()
+
+            if not StudentDonorMapping.objects.filter(donor=donor, applicant_id=application_rec).exists():
+                StudentDonorMapping.objects.create(student=application_rec.student, donor=donor, applicant_id=application_rec)
+            redirect_flag = True
+
+        if redirect_flag:
+            messages.success(request, "Record saved")
+
+
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+    return redirect('/student/import_applicant_records_tile/')
+
+
+def import_applicant_records_tile(request):
+
+    return render(request,'import_applicant_records_tile.html')
+
+
+

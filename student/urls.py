@@ -73,4 +73,14 @@ urlpatterns = [
 
                   path('applicant_progress_history/', views.applicant_progress_history,name='applicant_progress_history'),
                   path('save_other_university/', views.save_other_university,name='save_other_university'),
+
+                #========import_student_application======================
+
+                  path('import_student_application/', views.import_student_application,name='import_student_application'),
+                  path('import_applicant_qualification_info/', views.import_applicant_qualification_info,name='import_applicant_qualification_info'),
+                  path('import_applicant_donor_mapping/', views.import_applicant_donor_mapping,name='import_applicant_donor_mapping'),
+                  path('import_applicant_records_tile/', views.import_applicant_records_tile,name='import_applicant_records_tile'),
+
+
+
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
