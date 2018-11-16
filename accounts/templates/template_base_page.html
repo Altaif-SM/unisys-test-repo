@@ -924,6 +924,18 @@ License: You must have a valid license purchased only from themeforest(the above
                         </li>
                      {% endif %}
 
+                    {% if user.is_super_admin  %}
+                        <li class="nav-item " id="acd_qli">
+                            <a href="{% url 'student:export_templates' %}"
+                               class="nav-link nav-toggle">
+                                <i class="glyphicon glyphicon-list-alt"></i>
+                                <span class="title">Export Templates</span>
+                                <span class="selected"></span>
+                            </a>
+                        </li>
+                     {% endif %}
+
+
 
                 </ul>
                 <!-- END SIDEBAR MENU -->

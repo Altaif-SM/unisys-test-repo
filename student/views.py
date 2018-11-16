@@ -74,11 +74,11 @@ def applicant_personal_info(request):
 
     application_obj = ''
 
-    # if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
-    #     application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
-    #
-    if ApplicationDetails.objects.filter(id=request.user.get_application.id).exists():
-        application_obj = ApplicationDetails.objects.get(id=request.user.get_application.id)
+    if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
+        application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
+
+    #if ApplicationDetails.objects.filter(id=request.user.get_application.id).exists():
+    #     application_obj = ApplicationDetails.objects.get(id=request.user.get_application.id)
 
     return render(request, 'applicant_personal_info.html',
                   {'country_recs': country_recs, 'religion_recs': religion_recs, 'application_obj': application_obj})
@@ -1779,53 +1779,53 @@ def import_student_application(request):
     try:
         file_recs = request.FILES['excel'].get_records()
         for file_rec in file_recs:
-            same_as = file_rec['Same as Present Address']
+            same_as = file_rec['Same as Present Address'].lower()
             if not User.objects.filter(email__iexact=file_rec['Email']).exists():
                 try:
                     nationality_obj = CountryDetails.objects.get(country_name__iexact=file_rec['Nationality'])
                 except Exception as e:
-                    messages.warning(request, "Nationality Not Found" + str(e))
-                    return redirect('/accounts/home/')
+                    messages.warning(request, "Nationality Not Found" +"for applicant"+str(file_rec['Email']))
+                    continue
 
                 try:
                     country_obj = CountryDetails.objects.get(country_name__iexact=file_rec['Country'])
                 except Exception as e:
-                    messages.warning(request, "Country Not Found" + str(e))
-                    return redirect('/accounts/home/')
+                    messages.warning(request, "Country Not Found" +"for applicant"+str(file_rec['Email']))
+                    continue
 
                 try:
                     permanent_country_obj = CountryDetails.objects.get(country_name__iexact=file_rec['Permanent Country'])
                 except Exception as e:
-                    messages.warning(request, "CountryDetails Not Found" + str(e))
-                    return redirect('/accounts/home/')
+                    messages.warning(request, "CountryDetails Not Found" +"for applicant"+str(file_rec['Email']))
+                    continue
 
                 try:
                     scholarshipDetails_obj = ScholarshipDetails.objects.get(scholarship_name__iexact=file_rec['Scholarship Applied'])
                 except Exception as e:
-                    messages.warning(request, "ScholarshipDetails Not Found" + str(e))
-                    return redirect('/accounts/home/')
+                    messages.warning(request, "ScholarshipDetails Not Found" +"for applicant"+str(file_rec['Email']))
+                    continue
 
                 try:
                     programDetails_obj = ProgramDetails.objects.get(program_name__iexact=file_rec['Course Applied'])
                 except Exception as e:
-                    messages.warning(request, "Program Details Not Found" + str(e))
-                    return redirect('/accounts/home/')
+                    messages.warning(request, "Program Details Not Found" +"for applicant"+str(file_rec['Email']))
+                    continue
                 try:
                     degree_details_obj = DegreeDetails.objects.get(degree_name__iexact=file_rec['Degree'])
                 except Exception as e:
-                    messages.warning(request, "Degree Details Not Found" + str(e))
-                    return redirect('/accounts/home/')
+                    messages.warning(request, "Degree Details Not Found" +"for applicant"+str(file_rec['Email']))
+                    continue
                 try:
                     UniversityDetails_obj = UniversityDetails.objects.get(university_name__iexact=file_rec['University'])
                 except Exception as e:
-                    messages.warning(request, "University Details Not Found" + str(e))
-                    return redirect('/accounts/home/')
+                    messages.warning(request, "University Details Not Found" +"for applicant"+str(file_rec['Email']))
+                    continue
 
                 try:
                     academicyear_obj = YearDetails.objects.get(year_name=file_rec['Academic Year'])
                 except Exception as e:
-                    messages.warning(request, "Year Details Not Found" + str(e))
-                    return redirect('/accounts/home/')
+                    messages.warning(request, "Year Details Not Found"+"for applicant"+str(file_rec['Email']))
+                    continue
 
                 user = User.objects.create(first_name=file_rec['First Name'],last_name=file_rec['Last Name'],username=file_rec['Email'],email=file_rec['Email'],password= make_password('redbytes123'),is_active=True,
                 registration_switch=True,submission_switch=True,psyc_switch=True,agreements_switch=True,semester_switch=True,program_switch=True)
@@ -1847,7 +1847,7 @@ def import_student_application(request):
                                                             post_code=file_rec['Postcode'],sub_locality=file_rec['Sub-Locality'],
                                                             residential_address=file_rec['Residential/Postal Address'])
 
-                if same_as=="Yes":
+                if same_as=="yes":
                     address_obj.is_same = True
                     address_obj.save()
                     application_obj.permanent_address = address_obj
@@ -1864,18 +1864,24 @@ def import_student_application(request):
                 application_obj.address = address_obj
                 application_obj.save()
 
-                scholarship_obj = ScholarshipSelectionDetails.objects.create(
-                    scholarship_id=scholarshipDetails_obj.id,
-                    course_applied_id=programDetails_obj.id,
-                    degree_id=degree_details_obj.id,
-                    university_id=UniversityDetails_obj.id,
-                    applicant_id_id=application_obj.id)
+                scholarship_obj = ScholarshipSelectionDetails.objects.create(scholarship_id=scholarshipDetails_obj.id,course_applied_id=programDetails_obj.id,degree_id=degree_details_obj.id,university_id=UniversityDetails_obj.id,applicant_id_id=application_obj.id)
 
                 ApplicantAboutDetails.objects.create(about_yourself=file_rec['About Yourself'],applicant_id_id=application_obj.id)
+
+                agreement_obj = ApplicantAgreementDetails.objects.create(applicant_id_id=application_obj.id)
+
+                psychometric_test_obj = ApplicantPsychometricTestDetails.objects.create(applicant_id_id=application_obj.id, result=file_rec['Psychometric Test Result'])
+
+                if not ApplicationHistoryDetails.objects.filter(applicant_id_id=application_obj.id,status='Application Submitted').exists():
+
+                    ApplicationHistoryDetails.objects.create(applicant_id_id=application_obj.id,status='Agreements submitted.',remark='You have submitted agreements. Please wait for the further updates.')
+
                 redirect_flag = True
 
             else:
-                messages.warning(request,"email already exists")
+                messages.warning(request,"email already exists"+str(file_rec['Email']))
+                continue
+
 
         if redirect_flag:
             messages.success(request, "Record saved")
@@ -2027,5 +2033,24 @@ def import_applicant_records_tile(request):
 
     return render(request,'import_applicant_records_tile.html')
 
+def export_templates(request):
+    return render(request, 'export_templates.html')
+
+def export_applicant_info_template(request):
+    rows = []
+    column_names = ["Academic Year", "First Name", "Last Name", "DOB", "Gender", "Nationality","Passport no.","Email","Telphone no (HP)","Country","Residential/Postal Address",
+                    "Premise/Sub-Locality","Sub-Locality","District","Postcode","State/Province","Same as Present Address","Permanent Country","Permanent Residential/Postal Address","Permanent Premise/Sub-Locality",
+                    "Permanent Sub-Locality","Permanent District","Permanent Postcode","Permanent State/Province","Scholarship Applied","Course Applied","Degree","University",
+                    "About Yourself","Psychometric Test Result"]
+    return export_users_xls('Applicant_details_template', column_names, rows)
+
+def export_applicant_donor_mapping(request):
+    rows = []
+    column_names = ["Academic year", "Applicant email", "Donor email", "Scholarship Total"]
+    return export_users_xls('Link_student_donor_template', column_names, rows)
 
 
+def export_applicant_qualification_template(request):
+    rows = []
+    column_names = ["Academic year", "Email", "English Competency Test", "Year","Result"]
+    return export_users_xls('Academic_info_template', column_names, rows)

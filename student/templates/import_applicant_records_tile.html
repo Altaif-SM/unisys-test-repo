@@ -46,6 +46,7 @@
 
             <li>
                 <span> Import Applicant Record </span>
+
             </li>
         </ul>
     </div>
@@ -76,19 +77,19 @@
                     <div class="row">
 
                         <div class="col-md-2">
-                            <button type="button" class="btn blue btn-green" data-toggle="modal" style="width: 200px;"
-                                    data-target="#myModal">Step-1
-                            </button>
+                            <button type="button" class="btn blue btn-green" data-toggle="modal" style="width: 200px;"data-target="#myModal">Import Applicant Details</button>
                         </div>
+
+
                         <div class="col-md-3" style="margin-left: 15%">
                             <button type="button" class="btn blue btn-green" data-toggle="modal" style="width: 250px;"
-                                    data-target="#mystep_2">Step-2
+                                    data-target="#mystep_2">Import Applicant Qualification Info
                             </button>
                         </div>
 
                         <div class="col-md-3" style="margin-left: 10%">
                             <button type="button" class="btn blue btn-green" data-toggle="modal" style="width: 250px;"
-                                    data-target="#mystep_3">Step-3
+                                    data-target="#mystep_3">Link Student With Donor
                             </button>
                         </div>
 
@@ -113,7 +114,7 @@
                         <h4 class="modal-title">Choose File</h4>
                     </div>
                     <div class="modal-body">
-                        <input type="file" name="excel">
+                        <input type="file" name="excel" required>
 
 {#                         {{ Applicant_rec_details.excel }}#}
                     </div>
@@ -141,7 +142,7 @@
                         <h4 class="modal-title">Choose File</h4>
                     </div>
                     <div class="modal-body">
-                        <input type="file" name="student_qualification_rec">
+                        <input type="file" name="student_qualification_rec" required>
                     </div>
 
 
@@ -165,7 +166,7 @@
                         <h4 class="modal-title">Choose File</h4>
                     </div>
                     <div class="modal-body">
-                        <input type="file" name="applicant_donor_mapping">
+                        <input type="file" name="applicant_donor_mapping" required>
                     </div>
 
 

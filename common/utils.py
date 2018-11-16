@@ -19,6 +19,7 @@ import os
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.conf import settings
+import xlwt
 # from Crypto.Cipher import AES
 # import base64
 
@@ -210,6 +211,38 @@ def export_pdf1():
     elements.append(table_obj)
     doc.build(elements)
     return response
+
+
+def export_users_xls(output_file_name, columns, rows):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename='+output_file_name+".xls"
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet(output_file_name,cell_overwrite_ok=True)
+
+    # Sheet header, first row
+    row_num = 0
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    # columns = output_column_heading
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+
+    # rows = AuthUser.objects.all().values_list('username', 'first_name', 'last_name', 'email', 'role__name')
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, unicode(row[col_num]), font_style)
+
+    wb.save(response)
+    return response
+
 
 
 def export_wraped_column_xls(output_file_name, column_names, rows):

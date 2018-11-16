@@ -1,0 +1,107 @@
+{% extends "template_base_page.html" %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'accounts:home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> Settings </span>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span> Export Template </span>
+
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">Export Template</span>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+
+            <!-- BEGIN FORM-->
+            <div class="form-body">
+
+
+                <div class="form-body">
+
+                    <div class="row">
+
+                        <div class="col-md-2">
+                            <button type="button" class="btn blue btn-green" onclick="window.location='{% url "student:export_applicant_info_template" %}'">Applicant Details Template</button>
+                        </div>
+                        
+
+                        <div class="col-md-3" style="margin-left: 15%">
+                            <button type="button" class="btn blue btn-green"style="width: 270px;"
+                                    onclick="window.location='{% url "student:export_applicant_qualification_template" %}'">Applicant Qualification Info Template
+                            </button>
+                        </div>
+
+                        <div class="col-md-3" style="margin-left: 10%">
+                            <button type="button" class="btn blue btn-green" style="width: 250px;"
+                                    onclick="window.location='{% url "student:export_applicant_donor_mapping"%}'">Link Student With Donor Template
+                            </button>
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+{% endblock %}

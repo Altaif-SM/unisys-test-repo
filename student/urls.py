@@ -80,6 +80,10 @@ urlpatterns = [
                   path('import_applicant_qualification_info/', views.import_applicant_qualification_info,name='import_applicant_qualification_info'),
                   path('import_applicant_donor_mapping/', views.import_applicant_donor_mapping,name='import_applicant_donor_mapping'),
                   path('import_applicant_records_tile/', views.import_applicant_records_tile,name='import_applicant_records_tile'),
+                  path('export_templates/', views.export_templates,name='export_templates'),
+                  path('export_applicant_info_template/', views.export_applicant_info_template,name='export_applicant_info_template'),
+                  path('export_applicant_qualification_template/', views.export_applicant_qualification_template,name='export_applicant_qualification_template'),
+                  path('export_applicant_donor_mapping/', views.export_applicant_donor_mapping,name='export_applicant_donor_mapping'),
 
 
 
