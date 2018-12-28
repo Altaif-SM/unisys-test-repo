@@ -460,7 +460,12 @@ def applicant_academic_english_qualification(request):
     english_obj = ''
     passing_year_recs = PassingYear.objects.all()
 
-    application_obj = request.user.get_application
+    try:
+        application_obj = request.user.get_application
+    except Exception as e :
+        messages.warning(request, "Please fill the personal details first...")
+        return redirect('/student/applicant_personal_info/')
+
 
     try:
         if request.user.get_application:
@@ -1255,6 +1260,12 @@ def applicant_scholarship_about_yourself_info(request):
     application_obj = ''
 
     try:
+         request.user.get_application
+    except Exception as e:
+        messages.warning(request, "Please fill the personal details first...")
+        return redirect('/student/applicant_personal_info/')
+
+    try:
         if request.user.get_application:
             # if not request.user.get_application.is_submitted:
             application_obj = request.user.get_application
@@ -1422,6 +1433,12 @@ def submit_application(request):
 @psycho_test_required
 def applicant_psychometric_test(request):
     try:
+         request.user.get_application
+    except Exception as e:
+        messages.warning(request, "Please fill the personal details first...")
+        return redirect('/student/applicant_personal_info/')
+
+    try:
         psychometric_test_obj = ''
         if request.user.get_application:
             if request.user.get_application.is_submitted:
@@ -1484,6 +1501,13 @@ def save_psychometric_test(request):
 
 @agreements_required
 def applicant_agreement_submission(request):
+
+    try:
+       request.user.get_application
+    except Exception as e:
+        messages.warning(request, "Please fill the personal details first...")
+        return redirect('/student/applicant_personal_info/')
+
     try:
         agreement_submission_obj = ''
         if request.user.get_application:
@@ -1560,6 +1584,13 @@ def save_agreement_submission(request):
 
 @dev_program_required
 def applicant_program_certificate_submission(request):
+
+    try:
+       request.user.get_application
+    except Exception as e:
+        messages.warning(request, "Please fill the personal details first...")
+        return redirect('/student/applicant_personal_info/')
+
     try:
         module_recs = ''
         certificate_recs = ''
@@ -1626,6 +1657,11 @@ def applicant_academic_progress(request):
         applicant_semester = ''
         application_degree_type = ''
         degree_name = ''
+        try:
+            request.user.get_application
+        except Exception as e:
+            messages.warning(request, "Please fill the personal details first...")
+            return redirect('/student/applicant_personal_info/')
 
         if request.user.get_application:
             if request.user.get_application.is_submitted:

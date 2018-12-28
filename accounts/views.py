@@ -247,6 +247,8 @@ def user_signup(request):
                                                        message,
                                                        student_obj.user.first_name, user.id)
 
+                        messages.info(request,"The activation link is sent to your email id ... ")
+
                     if request.POST['role'] == "Partner":
                         PartnerDetails.objects.create(user=user, address=address)
 
@@ -267,7 +269,7 @@ def user_signup(request):
             for error_msg in signup_form.errors:
                 # form = signUpForm()
                 for msg in signup_form.errors[error_msg]:
-                    messages.success(request, msg)
+                    messages.error(request, msg)
         if request.POST.get('admin_page'):
             return redirect('/accounts/template_manage_user/')
         return redirect('/')
@@ -297,7 +299,7 @@ def user_signin(request):
             dashboard_path = user.get_dashboard_path()
             return redirect(dashboard_path)
         else:
-            messages.success(request, "Enter Valid User Name and Password.")
+            messages.error(request, "Enter Valid User Name and Password.")
             return redirect('/')
 
         # if user:
@@ -409,9 +411,9 @@ def account_activate(request, user_id):
             User.objects.filter(id=user_id).update(is_active=True)
             messages.success(request, "Account activated. You can login now.")
         else:
-            messages.warning(request, "Account already activated. You can login now.")
+            messages.error(request, "Account already activated. You can login now.")
     except:
-        messages.warning(request, "Invalid operation.")
+        messages.error(request, "Invalid operation.")
     return redirect('/')
 
 

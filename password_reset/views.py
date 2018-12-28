@@ -41,6 +41,8 @@ from django.contrib.auth import authenticate
 
 from django.contrib.auth import login as auth_login
 from django.template import Context
+from django.conf import settings
+
 
 try:
     from django.contrib.sites.shortcuts import get_current_site
@@ -136,6 +138,7 @@ class Recover(SaltMixin, generic.FormView):
             'username': get_username(self.user),
             'token': signing.dumps(self.user.pk, salt=self.salt),
             'secure': self.request.is_secure(),
+            'server_url': settings.SERVER_HOST_NAME,
         }
         h = self.get_site()
 
@@ -144,7 +147,7 @@ class Recover(SaltMixin, generic.FormView):
         # template = get_template('password_reset/password_recovery_email.html')
         # html = template.render(Context(data))
 
-        subject = 'FMS Password Recovery'
+        subject = 'NAMA Password Recovery'
         html_content = render_to_string('password_reset/password_recovery_email.html', context)
         to = [self.user.username]
 

@@ -94,6 +94,13 @@ FILE_UPLOAD_HANDLERS = ("django_excel.ExcelMemoryFileUploadHandler",
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
+from django.contrib.messages import constants as message_constants
+MESSAGE_TAGS = {message_constants.DEBUG: 'debug',
+                message_constants.INFO: 'info',
+                message_constants.SUCCESS: 'success',
+                message_constants.WARNING: 'warning',
+                message_constants.ERROR: 'danger',}
+
 
 
 DATABASES = {
@@ -166,7 +173,8 @@ EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 
-EMAIL_HOST_USER = 'redbytes.test@gmail.com'
-EMAIL_HOST_PASSWORD = 'redbytes@123'
+
+EMAIL_HOST_USER = 'namafund@namafoundation.org'
+EMAIL_HOST_PASSWORD = 'namafund123'
 
 SERVER_HOST_NAME = "http://namafund.namafoundation.org/"
