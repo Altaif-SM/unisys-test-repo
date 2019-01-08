@@ -97,8 +97,7 @@ def save_update_applicant_personal_info(request):
             student = StudentDetails.objects.get(user=request.user)
 
             if request.POST['first_name'] and request.POST['last_name'] and request.POST['gender'] and request.POST[
-                'nationality'] and request.POST['telephone_hp'] and request.POST[
-                'passport_number'] and request.POST['email'] != '':
+                'nationality'] and request.POST['telephone_hp'] and request.POST['email'] != '':
 
                 if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
 
@@ -112,8 +111,7 @@ def save_update_applicant_personal_info(request):
                             'nationality'],
                         religion_id=request.POST['religion'],
                         id_number=request.POST['id_number'],
-                        passport_number=request.POST[
-                            'passport_number'],
+                        passport_number=request.POST.get('passport_number'),
                         passport_issue_country_id=request.POST[
                             'issue_country'],
                         telephone_hp=request.POST[
@@ -190,8 +188,7 @@ def save_update_applicant_personal_info(request):
                                                                             nationality_id=request.POST['nationality'],
                                                                             religion_id=request.POST['religion'],
                                                                             id_number=request.POST['id_number'],
-                                                                            passport_number=request.POST[
-                                                                                'passport_number'],
+                                                                            passport_number=request.POST.get('passport_number'),
                                                                             passport_issue_country_id=request.POST[
                                                                                 'issue_country'],
                                                                             telephone_hp=request.POST['telephone_hp'],
@@ -2090,3 +2087,50 @@ def export_applicant_qualification_template(request):
     rows = []
     column_names = ["Academic year", "Email", "English Competency Test", "Year","Result"]
     return export_users_xls('Academic_info_template', column_names, rows)
+
+
+
+def get_degrees_from_universities(request):
+
+    finalDict = []
+    university_id = request.POST.get('university_id', None)
+    program_rec = ProgramDetails.objects.filter(university_id=university_id)
+    for rec in program_rec:
+
+        degree_type_id = DegreeTypeDetails.objects.get(id=rec.degree_type.id)
+
+        degree_detail_rec = DegreeDetails.objects.filter(degree_type=degree_type_id.id)
+
+        for degree_name in degree_detail_rec:
+            if not any(d['id'] == degree_name.id  for d in finalDict):
+                raw_dict = {}
+                raw_dict['name']=degree_name.degree_name +" " +"("+str(degree_name.degree_type)+")"
+                raw_dict['id']=degree_name.id
+                finalDict.append(raw_dict)
+
+
+    return JsonResponse(finalDict, safe=False)
+
+
+
+def get_courses_from_degrees(request):
+
+    finalDict = []
+
+    university_id = request.POST.get('university_id', None)
+    degree_type_id = request.POST.get('degree_applied_id', None)
+
+    degree_details_obj = DegreeDetails.objects.get(id=degree_type_id).degree_type
+
+    program_rec = ProgramDetails.objects.filter(university_id=university_id,degree_type = degree_details_obj.id)
+
+    for rec in program_rec:
+
+        raw_dict = {}
+        raw_dict['name']=rec.program_name
+        raw_dict['id']=rec.id
+        finalDict.append(raw_dict)
+    return JsonResponse(finalDict, safe=False)
+
+
+

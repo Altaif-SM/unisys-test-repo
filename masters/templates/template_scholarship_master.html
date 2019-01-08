@@ -216,8 +216,8 @@
                     {% for rec in scholarship_recs %}
                         <tr id="item{{ forloop.counter }}" class="item">
                             <td style="display: none"><input id="scholarship_id" value="{{ rec.id }}"></td>
-                            <td><text hidden>{{ rec.scholarship_name|title }}</text> <input class="form-control data scholarship_name" name="scholarship_name_saved" type="text"
-                                       id="scholarship_name{{ forloop.counter }}" value="{{ rec.scholarship_name|title }}"
+                            <td><text hidden>{{ rec.scholarship_name}}</text> <input class="form-control data scholarship_name" name="scholarship_name_saved" type="text"
+                                       id="scholarship_name{{ forloop.counter }}" value="{{ rec.scholarship_name }}"
                                        required pattern='[A-Za-z+-]+'
                                        title='Please enter scholarship name' disabled></td>
                             <td>

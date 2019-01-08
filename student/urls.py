@@ -87,4 +87,11 @@ urlpatterns = [
 
 
 
+                  path('get_degrees_from_universities/', views.get_degrees_from_universities,name='get_degrees_from_universities'),
+                  path('get_courses_from_degrees/', views.get_courses_from_degrees,name='get_courses_from_degrees'),
+
+
+
+
+
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -298,11 +298,11 @@
                             </div>
 
                             <div class="">
-                                <label class="col-md-1 control-label">Passport no:<span style="color: red">*</span></label>
+                                <label class="col-md-1 control-label">Passport no:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Passport number" id="passport_number"
                                            value="{{ application_obj.passport_number }}" name="passport_number"
-                                           class="form-control value_check submitted" required>
+                                           class="form-control value_check " >
                                 </div>
                             </div>
 
@@ -401,14 +401,14 @@
                             </div>
 
                             <div class="">
-                                <label class="col-md-1 control-label">Passport Photo:<span style="color: red">*</span></label>
+                                <label class="col-md-1 control-label">Passport Photo: </label>
                                 <div class="col-md-2">
                                     <input type="text" id="passport_pic" class="value_check" name="passport_pic"
                                            value="{{ application_obj.passport_image }}" hidden>
 
                                     <input name="passport_photo" type="file" title="Select photo"
                                            id="passport_photo"
-                                           class="form-control photo" {% if not application_obj.image %}required{% endif %}>
+                                           class="form-control photo" >
 
                                     {% if application_obj.passport_image %}
                                     <img width="100px" height="120px"

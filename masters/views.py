@@ -102,8 +102,8 @@ def template_scholarship_master(request):
 def save_scholarship(request):
     scholarship_name = request.POST.get('scholarship_name')
     try:
-        if not ScholarshipDetails.objects.filter(scholarship_name=scholarship_name.lower()).exists():
-            ScholarshipDetails.objects.create(scholarship_name=scholarship_name.lower())
+        if not ScholarshipDetails.objects.filter(scholarship_name=scholarship_name).exists():
+            ScholarshipDetails.objects.create(scholarship_name=scholarship_name)
             messages.success(request, "Record saved.")
         else:
             messages.warning(request, "Scholarship name already exists. Record not saved.")
@@ -117,8 +117,8 @@ def update_scholarship(request):
     scholarship_name = request.POST.get('scholarship_name')
     try:
         if not ScholarshipDetails.objects.filter(~Q(id=scholarship_id),
-                                                 scholarship_name=scholarship_name.lower()).exists():
-            ScholarshipDetails.objects.filter(id=scholarship_id).update(scholarship_name=scholarship_name.lower())
+                                                 scholarship_name=scholarship_name).exists():
+            ScholarshipDetails.objects.filter(id=scholarship_id).update(scholarship_name=scholarship_name)
             messages.success(request, "Record updated.")
             return HttpResponse(json.dumps({'success': 'Record updated.'}), content_type="application/json")
         else:
