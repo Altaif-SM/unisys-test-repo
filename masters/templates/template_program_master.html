@@ -200,10 +200,10 @@
                                 <label class="col-md-1 control-label">Degree Type:
 
                                 </label>
-                                <div class="col-md-2">
-                                    <select id='degree_type' name="degree_type" class="form-control" required>
-                                        <option style="display:none" selected="selected" id=""
-                                                value="">Please Select </option>
+                                <div class="col-md-3">
+                                    <select multiple id='degree_type' name="degree_type" class="form-control" required>
+{#                                        <option style="display:none" selected="selected" id=""#}
+{#                                                value="">Please Select </option>#}
 
                                         {% for rec in degree_type_recs %}
                                             <option value='{{ rec.id }}'>{{ rec.degree_name|title }}</option>
@@ -216,10 +216,10 @@
                                 <label class="col-md-1 control-label">University:
 
                                 </label>
-                                <div class="col-md-2">
-                                    <select id='university' name="university" class="form-control" required>
-                                        <option style="display:none" selected="selected" id=""
-                                                value="">Please Select </option>
+                                <div class="col-md-3">
+                                    <select multiple id='university' style="overflow:auto;" name="university" class="form-control" required>
+{#                                        <option style="display:none" selected="selected" id=""#}
+{#                                                value="">Please Select </option>#}
 
                                         {% for rec in university_recs %}
                                             <option value='{{ rec.id }}'>{{ rec.university_name|title }}</option>

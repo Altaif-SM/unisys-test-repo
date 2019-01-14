@@ -379,18 +379,24 @@ def template_program_master(request):
 
 def save_program(request):
     program_name = request.POST.get('program_name')
-    degree_type_id = request.POST.get('degree_type')
-    university = request.POST.get('university')
+    degree_type_id = request.POST.getlist('degree_type')
+    university = request.POST.getlist('university')
     try:
-        if not ProgramDetails.objects.filter(program_name=program_name.lower(), degree_type_id=degree_type_id,
-                                             university_id=university).exists():
-            ProgramDetails.objects.create(program_name=program_name.lower(), degree_type_id=degree_type_id,
-                                          university_id=university)
-            messages.success(request, "Record saved.")
-        else:
-            messages.warning(request, "Program, degree type and university relation already exists. Record not saved.")
-    except:
-        messages.warning(request, "Record not saved.")
+        for degree in degree_type_id:
+            if degree :
+                for rec in university:
+                    if rec :
+                        data = ProgramDetails.objects.filter(program_name=program_name.lower(), degree_type_id=degree,university_id=rec)
+                        if data:
+                            pass
+                        else:
+                            ProgramDetails.objects.create(program_name=program_name.lower(), degree_type_id=degree,university_id=rec)
+
+        messages.success(request, "Record saved.")
+
+    except Exception as e:
+        messages.warning(request, "Record not saved." +str(e))
+
     return redirect('/masters/template_program_master/')
 
 
