@@ -258,7 +258,7 @@
                                         {% if scholarship_obj %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ scholarship_obj.scholarship.id }}">
-                                                {{ scholarship_obj.scholarship.scholarship_name|title }}</option>
+                                                {{ scholarship_obj.scholarship.scholarship_name}}</option>
                                         {% else %}
                                             <option style="display:none" selected="selected" id="" value="">Please
                                                 Select
@@ -266,7 +266,7 @@
                                         {% endif %}
 
                                         {% for rec in scholarship_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.scholarship_name|title }}</option>
+                                            <option value='{{ rec.id }}'>{{ rec.scholarship_name }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
