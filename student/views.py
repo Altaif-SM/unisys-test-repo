@@ -1410,6 +1410,17 @@ def my_application(request):
 
 def submit_application(request):
     try:
+
+        if not AcademicQualificationDetails.objects.filter(applicant_id=request.user.get_application):
+            messages.success(request, "Please fill the academic qualification section before submitting the application  ...")
+            return redirect('/student/my_application/')
+
+        if not ApplicantAboutDetails.objects.filter(applicant_id=request.user.get_application):
+            messages.success(request, "Please fill the scholarship section before submitting the application  ...")
+            return redirect('/student/my_application/')
+
+
+
         ApplicationDetails.objects.filter(application_id=request.user.get_application_id).update(is_submitted=True)
         ApplicationHistoryDetails.objects.create(applicant_id=request.user.get_application,
                                                  status='Application Submitted',
