@@ -197,7 +197,7 @@ def template_signin(request):
     # return render(request, "template_login.html", {'form': form})
     return render(request, "template_login.html", {'form': form, 'country_list': country_list})
 
-
+@registration_required
 @transaction.atomic
 def user_signup(request):
     signup_form = signUpForm(request.POST)

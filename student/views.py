@@ -1407,7 +1407,7 @@ def my_application(request):
         messages.warning(request, "Please Fill The Application Form First ... ")
     return redirect('/')
 
-
+@submission_required
 def submit_application(request):
     try:
 

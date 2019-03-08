@@ -107,7 +107,7 @@ def submission_required(view_func):
 def registration_required(view_func):
     def wrap(request, *args, **kwargs):
         if request.POST['role'] == "Student" and not User.objects.all()[0].registration_switch:
-            messages.warning(request, "Registration closed for now, Please contact Administrator for the same")
+            messages.success(request, "Registration closed for now, Please contact Administrator for the same")
             return HttpResponseRedirect("/")
         else:
             return view_func(request, *args, **kwargs)

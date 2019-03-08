@@ -67,45 +67,69 @@ def template_applicant_scholarship(request):
 
 
 def export_registered_application(request):
-    if request.user.is_super_admin():
-        applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, year=get_current_year(request))
-    else:
-        applicant_recs = ApplicationDetails.objects.filter(
-            nationality=request.user.partner_user_rel.get().address.country,
-            is_submitted=True, year=get_current_year(request))
+    try:
 
-    rows = []
-    for application in applicant_recs:
-        temp_list = []
-        temp_list.append(application.get_full_name())
-        temp_list.append(application.nationality.country_name.title() if application.nationality else '')
-        temp_list.append(application.address.country.country_name.title())
-        temp_list.append(application.applicant_scholarship_rel.all()[0].university.university_name.title())
-        temp_list.append(application.applicant_scholarship_rel.all()[0].degree.degree_name.title())
-        temp_list.append(application.applicant_scholarship_rel.all()[0].course_applied.program_name.title())
-        rows.append(temp_list)
+        if request.user.is_super_admin():
+            applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, year=get_current_year(request))
+        else:
+            applicant_recs = ApplicationDetails.objects.filter(
+                nationality=request.user.partner_user_rel.get().address.country,
+                is_submitted=True, year=get_current_year(request))
+        rows = []
+        for application in applicant_recs:
+            try:
+                temp_list = []
+                temp_list.append(application.get_full_name())
+                temp_list.append(application.nationality.country_name.title() if application.nationality else '')
+                temp_list.append(application.address.country.country_name.title())
 
-    cloumns = ['Student Name', 'Nationality', 'Country', 'University', 'Degree', 'Course']
+                if application.applicant_scholarship_rel.all():
+                    temp_list.append(application.applicant_scholarship_rel.all()[0].university.university_name.title())
+                else:
+                    temp_list.append("")
+                if application.applicant_scholarship_rel.all():
+                    temp_list.append(application.applicant_scholarship_rel.all()[0].degree.degree_name.title())
+                else:
+                    temp_list.append("")
+                if application.applicant_scholarship_rel.all():
+                    temp_list.append(application.applicant_scholarship_rel.all()[0].course_applied.program_name.title())
+                else:
+                    temp_list.append("")
+                rows.append(temp_list)
+            except:
+                continue
 
-    return export_wraped_column_xls('registered_application', cloumns, rows)
+
+        cloumns = ['Student Name', 'Nationality', 'Country', 'University', 'Degree', 'Course']
+
+        return export_wraped_column_xls('registered_application', cloumns, rows)
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+        return redirect("/")
 
 
 def template_applicant_all_details(request, app_id):
-    application_obj = ApplicationDetails.objects.get(id=app_id)
-    siblings_obj = application_obj.sibling_applicant_rel.all() if application_obj.sibling_applicant_rel.all() else ''
-    qualification_obj = application_obj.academic_applicant_rel.all() if application_obj.academic_applicant_rel.all() else ''
-    english_obj = application_obj.english_applicant_rel.all() if application_obj.english_applicant_rel.all() else ''
-    curriculum_obj = application_obj.curriculum_applicant_rel.all() if application_obj.curriculum_applicant_rel.all() else ''
-    applicant_experience_obj = application_obj.applicant_experience_rel.all() if application_obj.applicant_experience_rel.all() else ''
-    scholarship_obj = application_obj.applicant_scholarship_rel.get() if application_obj.applicant_scholarship_rel.all() else ''
-    about_obj = application_obj.applicant_about_rel.get()
+    try:
+        application_obj = ApplicationDetails.objects.get(id=app_id)
+        siblings_obj = application_obj.sibling_applicant_rel.all() if application_obj.sibling_applicant_rel.all() else ''
+        qualification_obj = application_obj.academic_applicant_rel.all() if application_obj.academic_applicant_rel.all() else ''
+        english_obj = application_obj.english_applicant_rel.all() if application_obj.english_applicant_rel.all() else ''
+        curriculum_obj = application_obj.curriculum_applicant_rel.all() if application_obj.curriculum_applicant_rel.all() else ''
+        applicant_experience_obj = application_obj.applicant_experience_rel.all() if application_obj.applicant_experience_rel.all() else ''
+        scholarship_obj = application_obj.applicant_scholarship_rel.get() if application_obj.applicant_scholarship_rel.all() else ''
+        about_obj = application_obj.applicant_about_rel.get()
 
-    return render(request, 'template_applicant_all_details.html',
-                  {'siblings_obj': siblings_obj, 'application_obj': application_obj,
-                   'qualification_recs': qualification_obj, 'english_recs': english_obj,
-                   'curriculum_recs': curriculum_obj,
-                   'applicant_experience_recs': applicant_experience_obj,
-                   'scholarship_obj': scholarship_obj, 'about_obj': about_obj})
+        return render(request, 'template_applicant_all_details.html',
+                      {'siblings_obj': siblings_obj, 'application_obj': application_obj,
+                       'qualification_recs': qualification_obj, 'english_recs': english_obj,
+                       'curriculum_recs': curriculum_obj,
+                       'applicant_experience_recs': applicant_experience_obj,
+                       'scholarship_obj': scholarship_obj, 'about_obj': about_obj})
+
+    except Exception as e:
+        messages.warning(request, "Form have some error " + str(e))
+        return redirect("/")
 
 
 def filter_nationality(field):
