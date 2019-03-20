@@ -270,27 +270,27 @@ def save_update_applicant_personal_info(request):
 def applicant_family_info(request):
     country_recs = AllCountries.objects.all()
     path = ''
-
     application_obj = ''
-
+    sibling_obj = ''
     if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
         application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
         path = base_path(application_obj)
+        if SiblingDetails.objects.filter(applicant_id=application_obj).exists():
+            sibling_obj = SiblingDetails.objects.filter(applicant_id=application_obj)
 
-    return render(request, 'applicant_family_info.html',
-                  {'country_recs': country_recs, 'application_obj': application_obj, 'path': path})
+
+    return render(request, 'applicant_family_info.html',{'country_recs': country_recs, 'application_obj': application_obj, 'path': path,'sibling_obj_rec': sibling_obj})
 
 
 def save_update_applicant_family_info(request):
     redirect_flag = False
-
     if request.POST:
         try:
-            try:
-                wife_pay_slip = request.FILES.get('wife_pay_slip')
 
+            try:
+                mother_pay_slip = request.FILES['mother_pay_slip']
             except Exception as e:
-                wife_pay_slip = ''
+                mother_pay_slip = ''
 
             try:
                 father_pay_slip = request.FILES.get('father_pay_slip')
@@ -299,51 +299,43 @@ def save_update_applicant_family_info(request):
                 father_pay_slip = ''
 
             father_pay_slip_text = request.POST.get('father_pay_slip_text')
-            wife_pay_slip_text = request.POST.get('wife_pay_slip_text')
+
+            sibling_count = request.POST.get('sibling_count')
+            mother_pay_slip_text = request.POST.get('mother_pay_slip_text')
 
             if StudentDetails.objects.filter(user=request.user):
-                # if not request.user.get_application.is_submitted:
 
                 ApplicationDetails.objects.filter(application_id=request.user.get_application_id).update(
-                    wife_name=request.POST['wife_name'],
-                    wife_income=request.POST[
-                        'wife_income'],
-                    wife_nationality=request.POST[
-                        'wife_nationality'],
-                    wife_occupation=request.POST[
-                        'wife_occupation'],
-                    wife_telephone_home=request.POST[
-                        'wife_telephone_home'],
-                    wife_dob=request.POST['wife_dob'] if request.POST['wife_dob'] else None,
-                    wife_email=request.POST[
-                        'wife_email'],
+                    mother_name=request.POST['mother_name'],
+                    mother_income=request.POST['mother_income'],
+                    mother_nationality=request.POST['mother_nationality'],
+                    mother_occupation=request.POST['mother_occupation'],
+                    mother_telephone_home=request.POST['mother_telephone_home'],
+                    mother_dob=request.POST['mother_dob'] if request.POST['mother_dob'] else None,
+                    mother_email=request.POST['mother_email'],
+                    mother_home_address=request.POST['mother_home_address'],
 
-                    father_name=request.POST[
-                        'father_name'],
-                    father_income=request.POST[
-                        'father_income'],
-                    father_nationality=request.POST[
-                        'father_nationality'],
-                    father_occupation=request.POST[
-                        'father_occupation'],
-                    father_telephone_home=request.POST[
-                        'father_telephone_home'],
-                    father_dob=request.POST[
-                        'father_dob'] if request.POST['father_dob'] else None,
-                    father_email=request.POST[
-                        'father_email'])
+                    father_name=request.POST['father_name'],
+                    father_income=request.POST['father_income'],
+                    father_nationality=request.POST['father_nationality'],
+                    father_occupation=request.POST['father_occupation'],
+                    father_telephone_home=request.POST['father_telephone_home'],
+                    father_dob=request.POST['father_dob'] if request.POST['father_dob'] else None,
+                    father_email=request.POST['father_email'],
+                    father_home_address =request.POST['father_home_address'] )
+
 
                 application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
 
-                if wife_pay_slip:
+                mother_slip = str(mother_pay_slip)
+
+                if mother_pay_slip:
                     object_path = media_path(application_obj)
+                    handle_uploaded_file(str(object_path) + '/' + mother_slip, mother_pay_slip)
+                    application_obj.mother_pay_slip = mother_slip
 
-                    wife_slip = str(wife_pay_slip)
-                    handle_uploaded_file(str(object_path) + '/' + wife_slip, wife_pay_slip)
-                    application_obj.wife_pay_slip = wife_slip
-
-                if not wife_pay_slip_text:
-                    application_obj.wife_pay_slip = ''
+                if not mother_pay_slip_text:
+                    application_obj.mother_pay_slip = ''
 
                 if father_pay_slip:
                     object_path = media_path(application_obj)
@@ -355,6 +347,23 @@ def save_update_applicant_family_info(request):
                     application_obj.father_pay_slip = ''
 
                 application_obj.save()
+
+
+
+
+
+                for x in range(int(sibling_count)):
+                    try:
+                        x = x + 1
+                        if request.POST['sibling_id_' + str(x)]:
+                            SiblingDetails.objects.filter(id=request.POST['sibling_id_' + str(x)]).update(sibling_name=request.POST['sibling_' + str(x)],sibling_age=request.POST['age_' + str(x)],sibling_status=request.POST['status_' + str(x)])
+                        else:
+                            SiblingDetails.objects.create(sibling_name=request.POST['sibling_' + str(x)],
+                                                          sibling_age=request.POST['age_' + str(x)],
+                                                          sibling_status=request.POST['status_' + str(x)],
+                                                          applicant_id=application_obj)
+                    except:
+                        pass
 
                 redirect_flag = True
 
@@ -370,76 +379,61 @@ def save_update_applicant_family_info(request):
 
 def applicant_family_mother_sibling_info(request):
     country_recs = AllCountries.objects.all()
+    path = ''
+
     application_obj = ''
-    sibling_obj = ''
 
     if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
         application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
-        if SiblingDetails.objects.filter(applicant_id=application_obj).exists():
-            sibling_obj = SiblingDetails.objects.filter(applicant_id=application_obj)
+        path = base_path(application_obj)
 
     return render(request, 'applicant_family_mother_sibling_info.html',
-                  {'country_recs': country_recs, 'application_obj': application_obj, 'sibling_obj_rec': sibling_obj})
+                  {'country_recs': country_recs, 'application_obj': application_obj,"path":path})
 
 
 def save_update_applicant_family_mother_sibling_info(request):
     redirect_flag = False
 
     if request.POST:
-        sibling_count = request.POST.get('sibling_count')
-        mother_pay_slip_text = request.POST.get('mother_pay_slip_text')
         try:
             try:
-                mother_pay_slip = request.FILES['mother_pay_slip']
+                wife_pay_slip = request.FILES.get('wife_pay_slip')
+
             except Exception as e:
-                mother_pay_slip = ''
+                wife_pay_slip = ''
+
+            wife_pay_slip_text = request.POST.get('wife_pay_slip_text')
+
             if StudentDetails.objects.filter(user=request.user):
-                if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
 
-                    ApplicationDetails.objects.filter(application_id=request.user.get_application_id).update(
-                        mother_name=request.POST['mother_name'],
-                        mother_income=request.POST[
-                            'mother_income'],
-                        mother_nationality=request.POST[
-                            'mother_nationality'],
-                        mother_occupation=request.POST[
-                            'mother_occupation'],
-                        mother_telephone_home=request.POST[
-                            'mother_telephone_home'],
-                        mother_dob=request.POST['mother_dob'] if request.POST['mother_dob'] else None,
-                        mother_email=request.POST['mother_email'])
+                ApplicationDetails.objects.filter(application_id=request.user.get_application_id).update(wife_name=request.POST['wife_name'],
+                    wife_income=request.POST['wife_income'],
+                    wife_nationality=request.POST['wife_nationality'],
+                    wife_occupation=request.POST['wife_occupation'],
+                    wife_telephone_home=request.POST['wife_telephone_home'],
+                    wife_dob=request.POST['wife_dob'] if request.POST['wife_dob'] else None,
+                    wife_email=request.POST['wife_email'],
+                    wife_home_address=request.POST['wife_home_address'])
 
-                    application_obj = request.user.get_application
 
-                    mother_slip = str(mother_pay_slip)
 
-                    if mother_pay_slip:
-                        object_path = media_path(application_obj)
+                application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
 
-                        handle_uploaded_file(str(object_path) + '/' + mother_slip, mother_pay_slip)
-                        application_obj.mother_pay_slip = mother_slip
+                if wife_pay_slip:
+                    object_path = media_path(application_obj)
 
-                    if not mother_pay_slip_text:
-                        application_obj.mother_pay_slip = ''
-                    application_obj.save()
+                    wife_slip = str(wife_pay_slip)
+                    handle_uploaded_file(str(object_path) + '/' + wife_slip, wife_pay_slip)
+                    application_obj.wife_pay_slip = wife_slip
 
-                    for x in range(int(sibling_count)):
-                        try:
-                            x = x + 1
-                            if request.POST['sibling_id_' + str(x)]:
-                                SiblingDetails.objects.filter(id=request.POST['sibling_id_' + str(x)]).update(
-                                    sibling_name=request.POST['sibling_' + str(x)],
-                                    sibling_age=request.POST['age_' + str(x)],
-                                    sibling_status=request.POST['status_' + str(x)])
-                            else:
-                                SiblingDetails.objects.create(sibling_name=request.POST['sibling_' + str(x)],
-                                                              sibling_age=request.POST['age_' + str(x)],
-                                                              sibling_status=request.POST['status_' + str(x)],
-                                                              applicant_id=application_obj)
-                        except:
-                            pass
+                if not wife_pay_slip_text:
+                    application_obj.wife_pay_slip = ''
 
-                    redirect_flag = True
+
+
+                application_obj.save()
+
+                redirect_flag = True
 
             if redirect_flag:
                 messages.success(request, "Record saved")
