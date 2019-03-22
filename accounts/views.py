@@ -515,7 +515,7 @@ def delete_user(request, user_id):
 def update_switch(request):
     if request.method == 'POST':
         val_dict = request.POST
-        if request.user.is_superuser:
+        if request.user.is_superuser or request.user.is_system_admin:
             if 'switch_type' in val_dict and val_dict['switch_type'] == 'is_registration_switch':
                 User.objects.filter().update(registration_switch=(json.loads(val_dict['switch'])))
 
