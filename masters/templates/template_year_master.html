@@ -226,6 +226,7 @@
                         <th>Year Name</th>
                         <th> Start Date</th>
                         <th> End Date</th>
+                        <th> Active Year</th>
                         <th width="8%"></th>
                     </tr>
                     </thead>
@@ -244,6 +245,11 @@
                             <td><input class="form-control data end_date" name="end_date_saved" type="date"
                                        id="end_date{{ forloop.counter }}"
                                        value="{{ rec.end_date|date:"Y-m-d" }}" required="True" disabled></td>
+                            {% if rec.active_year %}
+                            <td style="color: green">Active</td>
+                                {% else %}
+                                <td style="color: red">Inactive</td>
+                            {% endif %}
                             <td>
                                 <span type="button" name="updt" id="update{{ forloop.counter }}"
                                         class=" update btn green glyphicon glyphicon-ok" style="display:none;">
@@ -255,6 +261,7 @@
                                         class=" delete btn red glyphicon glyphicon-trash">
                                 </span>
                             </td>
+
                         </tr>
                     {% endfor %}
                     </tbody>

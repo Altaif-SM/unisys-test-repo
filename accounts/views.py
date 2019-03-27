@@ -18,8 +18,8 @@ import json
 from common.utils import *
 from django.template.context_processors import csrf
 from accounts.service import UserService
-
-
+from datetime import date
+from django.http import JsonResponse
 # Create your views here.
 
 def index(request):
@@ -176,8 +176,16 @@ def home(request):
                 country_list.append(raw_dict)
 
         # if user.is_superuser:
+        current_acd_year = YearDetails.objects.get(active_year=True)
+        end_date = current_acd_year.end_date
+        todayDate = date.today()
+        active_year = False
+        if end_date <= todayDate:
+            active_year = True
+            User.objects.filter().update(registration_switch=False)
+            User.objects.filter().update(submission_switch=False)
         return render(request, "template_admin_dashboard.html",
-                      {'user': user, 'raw_list': raw_list, 'scholarship_list': json.dumps(scholarship_list),
+                      {'user': user, 'raw_list': raw_list, 'scholarship_list': json.dumps(scholarship_list),'active_year':active_year,
                        'country_list': json.dumps(country_list)})
 
 
@@ -516,11 +524,30 @@ def update_switch(request):
     if request.method == 'POST':
         val_dict = request.POST
         if request.user.is_superuser or request.user.is_system_admin:
+
             if 'switch_type' in val_dict and val_dict['switch_type'] == 'is_registration_switch':
+
+                current_acd_year = YearDetails.objects.get(active_year=True)
+                end_date = current_acd_year.end_date
+                todayDate = date.today()
+                if end_date <= todayDate:
+                    acadmic_flag = 'date_over'
+                    return HttpResponse(json.dumps({'flag': acadmic_flag}))
+
                 User.objects.filter().update(registration_switch=(json.loads(val_dict['switch'])))
 
             if 'switch_type' in val_dict and val_dict['switch_type'] == 'is_submission_switch':
+
+                current_acd_year = YearDetails.objects.get(active_year=True)
+                end_date = current_acd_year.end_date
+                todayDate = date.today()
+                if end_date <= todayDate:
+                    acadmic_flag = 'date_over'
+                    return HttpResponse(json.dumps({'flag': acadmic_flag}))
+
                 User.objects.filter().update(submission_switch=(json.loads(val_dict['switch'])))
+
+
 
             if 'switch_type' in val_dict and val_dict['switch_type'] == 'is_psyc_switch':
                 User.objects.filter().update(psyc_switch=(json.loads(val_dict['switch'])))

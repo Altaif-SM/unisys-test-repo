@@ -186,8 +186,11 @@ License: You must have a valid license purchased only from themeforest(the above
                             <ul class="dropdown-menu">
                                 <li>
                                     {% for year in user.year_list %}
-                                        <a href="javascript:;" class="action"
-                                           id="{{ year.id }}"> {{ year.year_name }}</a>
+
+                                        {% if year.active_year %}
+                                            <a href="javascript:;" class="action"
+                                               id="{{ year.id }}"> {{ year.year_name }}</a>
+                                        {% endif %}
                                     {% endfor %}
                                 </li>
                             </ul>

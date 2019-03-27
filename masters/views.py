@@ -28,6 +28,8 @@ def save_year(request):
     end_date = request.POST.get('end_date')
     end_dt = datetime.datetime.strptime(str(end_date), "%Y-%m-%d").date()
     start_dt = datetime.datetime.strptime(str(start_date), "%Y-%m-%d").date()
+
+
     try:
         if  YearDetails.objects.filter(year_name=year_name.lower()).exists():
             messages.warning(request, "Year name already exists. Record not saved.")
@@ -36,7 +38,16 @@ def save_year(request):
                 messages.success(request, "Academic year already Exists")
 
         else:
-            YearDetails.objects.create(year_name=year_name.lower(), start_date=start_date, end_date=end_date)
+
+            today = date.today()
+
+            if (start_dt <= today) and (end_dt > today):
+                YearDetails.objects.filter(active_year=True).update(active_year = False)
+                YearDetails.objects.create(year_name=year_name.lower(), start_date=start_date, end_date=end_date,active_year = True)
+            else:
+                YearDetails.objects.create(year_name=year_name.lower(), start_date=start_date, end_date=end_date)
+
+            # YearDetails.objects.create(year_name=year_name.lower(), start_date=start_date, end_date=end_date)
             messages.success(request, "Record saved.")
     except:
         messages.warning(request, "Record not saved.")
