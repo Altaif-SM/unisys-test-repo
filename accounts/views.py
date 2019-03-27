@@ -176,12 +176,17 @@ def home(request):
                 country_list.append(raw_dict)
 
         # if user.is_superuser:
-        current_acd_year = YearDetails.objects.get(active_year=True)
-        end_date = current_acd_year.end_date
-        todayDate = date.today()
-        active_year = False
-        if end_date <= todayDate:
-            active_year = True
+        try:
+            current_acd_year = YearDetails.objects.get(active_year=True)
+            end_date = current_acd_year.end_date
+            todayDate = date.today()
+            active_year = False
+            if end_date <= todayDate:
+                active_year = True
+                User.objects.filter().update(registration_switch=False)
+                User.objects.filter().update(submission_switch=False)
+        except:
+            active_year = False
             User.objects.filter().update(registration_switch=False)
             User.objects.filter().update(submission_switch=False)
         return render(request, "template_admin_dashboard.html",
@@ -526,22 +531,28 @@ def update_switch(request):
         if request.user.is_superuser or request.user.is_system_admin:
 
             if 'switch_type' in val_dict and val_dict['switch_type'] == 'is_registration_switch':
-
-                current_acd_year = YearDetails.objects.get(active_year=True)
-                end_date = current_acd_year.end_date
-                todayDate = date.today()
-                if end_date <= todayDate:
+                try:
+                    current_acd_year = YearDetails.objects.get(active_year=True)
+                    end_date = current_acd_year.end_date
+                    todayDate = date.today()
+                    if end_date <= todayDate:
+                        acadmic_flag = 'date_over'
+                        return HttpResponse(json.dumps({'flag': acadmic_flag}))
+                except:
                     acadmic_flag = 'date_over'
                     return HttpResponse(json.dumps({'flag': acadmic_flag}))
 
                 User.objects.filter().update(registration_switch=(json.loads(val_dict['switch'])))
 
             if 'switch_type' in val_dict and val_dict['switch_type'] == 'is_submission_switch':
-
-                current_acd_year = YearDetails.objects.get(active_year=True)
-                end_date = current_acd_year.end_date
-                todayDate = date.today()
-                if end_date <= todayDate:
+                try:
+                    current_acd_year = YearDetails.objects.get(active_year=True)
+                    end_date = current_acd_year.end_date
+                    todayDate = date.today()
+                    if end_date <= todayDate:
+                        acadmic_flag = 'date_over'
+                        return HttpResponse(json.dumps({'flag': acadmic_flag}))
+                except:
                     acadmic_flag = 'date_over'
                     return HttpResponse(json.dumps({'flag': acadmic_flag}))
 

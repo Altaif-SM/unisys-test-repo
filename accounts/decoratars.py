@@ -113,24 +113,19 @@ def registration_required(view_func):
             return HttpResponseRedirect("/")
 
         elif request.POST['role'] == "Student":
-            current_acd_year = YearDetails.objects.get(active_year=True)
-            all_academicyr_recs = YearDetails.objects.all()
-            end_date = current_acd_year.end_date
-            todayDate = datetime.date.today()
-            if end_date <= todayDate:
-                # for academicyr_rec in all_academicyr_recs:
-                #     if academicyr_rec:
-                #         acd_year = academicyr_rec.start_date - current_acd_year.end_date
-                #         if acd_year.days > 0:
-                #             next_acd_year_obj = academicyr_rec
-
-                # YearDetails.objects.filter(id=current_acd_year.id).update(active_year=False)
-                # YearDetails.objects.filter(id=next_acd_year_obj.id).update(active_year=True)
-                messages.success(request, "Academic Year Registration date is over, Please contact Administrator for the same")
+            try:
+                current_acd_year = YearDetails.objects.get(active_year=True)
+                end_date = current_acd_year.end_date
+                todayDate = datetime.date.today()
+                if end_date <= todayDate:
+                    messages.success(request, "Academic Year Registration date is over, Please contact Administrator for the same")
+                    return HttpResponseRedirect("/")
+                else:
+                    return view_func(request, *args, **kwargs)
+            except:
+                messages.success(request,
+                                 "Academic Year Registration date is over, Please contact Administrator for the same")
                 return HttpResponseRedirect("/")
-
-            else:
-                return view_func(request, *args, **kwargs)
         else:
             return view_func(request, *args, **kwargs)
 
