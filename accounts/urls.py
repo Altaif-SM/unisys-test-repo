@@ -18,4 +18,5 @@ urlpatterns = [
 
     path('update_switch/', views.update_switch,name='update_switch'),
     path('delete_user/<int:user_id>/', views.delete_user,name='delete_user'),
+    path('check_active_year/', views.CheckActiveYear, name='check_active_year'),
 ]

@@ -267,16 +267,16 @@
                         },
                         success: function (res) {
 
-                            if(res){
-                                data=JSON.parse(res);
-                                if(data['flag'] === 'date_over'){
-                                    alert('Current Academic Year is over.Please Add New Acadmic Year.');
-                                    $('.s-switch-id-id_registration_switch').removeClass('s-switch-on').addClass('s-switch-off');
-                                    $('.s-switch-id-id_submission_switch').removeClass('s-switch-on').addClass('s-switch-off');
-                                    return false;
-                                }
-
-                            }
+{#                            if(res){#}
+{#                                data=JSON.parse(res);#}
+{#                                if(data['flag'] === 'date_over'){#}
+{#                                    alert('Current Academic Year is over.Please Add New Acadmic Year.');#}
+{#                                    $('.s-switch-id-id_registration_switch').removeClass('s-switch-on').addClass('s-switch-off');#}
+{#                                    $('.s-switch-id-id_submission_switch').removeClass('s-switch-on').addClass('s-switch-off');#}
+{#                                    return false;#}
+{#                                }#}
+{##}
+{#                            }#}
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
                             //alert('error!');
@@ -352,12 +352,12 @@
                                     <label class="col-md-3 control-label">Registration:</label>
                                     <div class="col-md-offset-6" style="">
 
-                                    {% if active_year %}
-                                        <input type="checkbox" id="id_registration_switch" >
-                                        {% else %}
+{#                                    {% if active_year %}#}
+{#                                        <input type="checkbox" id="id_registration_switch" >#}
+{#                                        {% else %}#}
                                         <input type="checkbox" id="id_registration_switch"
                                                 {% if user.registration_switch == True %} checked {% endif %}/>
-                                        {% endif %}
+{#                                        {% endif %}#}
 
                                     </div>
                                 </div>
@@ -366,12 +366,12 @@
                                 <div class="row">
                                     <label class="col-md-3 control-label">Submission:</label>
                                     <div class="col-md-offset-6">
-                                    {% if active_year %}
-                                        <input type="checkbox" id="id_submission_switch">
-                                        {% else %}
+{#                                    {% if active_year %}#}
+{#                                        <input type="checkbox" id="id_submission_switch">#}
+{#                                        {% else %}#}
                                         <input type="checkbox" id="id_submission_switch"
                                                 {% if user.submission_switch == True %} checked {% endif %}/>
-                                        {% endif %}
+{#                                        {% endif %}#}
 
                                     </div>
                                 </div>

@@ -1104,5 +1104,20 @@ License: You must have a valid license purchased only from themeforest(the above
         });
     }
 
+{#function refresh() {#}
+{#    $.ajax({#}
+{#        url: "/accounts/check_active_year/",#}
+{#        success: function (data) {#}
+{#            $('.noti_count').html(data);#}
+{#        }#}
+{#    });#}
+{#}#}
+{##}
+{#$(function() {#}
+{#    setInterval(refresh, 3600000);//every 1 hour#}
+{#    setInterval(refresh, 21600000);//every 6 hour#}
+{#});#}
+
+
 </script>
 </html>

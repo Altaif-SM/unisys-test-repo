@@ -112,20 +112,20 @@ def registration_required(view_func):
             messages.success(request, "Registration closed for now, Please contact Administrator for the same")
             return HttpResponseRedirect("/")
 
-        elif request.POST['role'] == "Student":
-            try:
-                current_acd_year = YearDetails.objects.get(active_year=True)
-                end_date = current_acd_year.end_date
-                todayDate = datetime.date.today()
-                if end_date <= todayDate:
-                    messages.success(request, "Academic Year Registration date is over, Please contact Administrator for the same")
-                    return HttpResponseRedirect("/")
-                else:
-                    return view_func(request, *args, **kwargs)
-            except:
-                messages.success(request,
-                                 "Academic Year Registration date is over, Please contact Administrator for the same")
-                return HttpResponseRedirect("/")
+        # elif request.POST['role'] == "Student":
+        #     try:
+        #         current_acd_year = YearDetails.objects.get(active_year=True)
+        #         end_date = current_acd_year.end_date
+        #         todayDate = datetime.date.today()
+        #         if end_date <= todayDate:
+        #             messages.success(request, "Academic Year Registration date is over, Please contact Administrator for the same")
+        #             return HttpResponseRedirect("/")
+        #         else:
+        #             return view_func(request, *args, **kwargs)
+        #     except:
+        #         messages.success(request,
+        #                          "Academic Year Registration date is over, Please contact Administrator for the same")
+        #         return HttpResponseRedirect("/")
         else:
             return view_func(request, *args, **kwargs)
 

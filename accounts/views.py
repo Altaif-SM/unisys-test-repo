@@ -176,21 +176,25 @@ def home(request):
                 country_list.append(raw_dict)
 
         # if user.is_superuser:
-        try:
-            current_acd_year = YearDetails.objects.get(active_year=True)
-            end_date = current_acd_year.end_date
-            todayDate = date.today()
-            active_year = False
-            if end_date <= todayDate:
-                active_year = True
-                User.objects.filter().update(registration_switch=False)
-                User.objects.filter().update(submission_switch=False)
-        except:
-            active_year = False
-            User.objects.filter().update(registration_switch=False)
-            User.objects.filter().update(submission_switch=False)
+        # try:
+        #     current_acd_year = YearDetails.objects.get(active_year=True)
+        #     end_date = current_acd_year.end_date
+        #     todayDate = date.today()
+        #     active_year = False
+        #     if end_date <= todayDate:
+        #         active_year = True
+        #         User.objects.filter().update(registration_switch=False)
+        #         User.objects.filter().update(submission_switch=False)
+        # except:
+        #     active_year = False
+        #     User.objects.filter().update(registration_switch=False)
+        #     User.objects.filter().update(submission_switch=False)
+        # return render(request, "template_admin_dashboard.html",
+        #               {'user': user, 'raw_list': raw_list, 'scholarship_list': json.dumps(scholarship_list),'active_year':active_year,
+        #                'country_list': json.dumps(country_list)})
+
         return render(request, "template_admin_dashboard.html",
-                      {'user': user, 'raw_list': raw_list, 'scholarship_list': json.dumps(scholarship_list),'active_year':active_year,
+                      {'user': user, 'raw_list': raw_list, 'scholarship_list': json.dumps(scholarship_list),
                        'country_list': json.dumps(country_list)})
 
 
@@ -531,30 +535,30 @@ def update_switch(request):
         if request.user.is_superuser or request.user.is_system_admin:
 
             if 'switch_type' in val_dict and val_dict['switch_type'] == 'is_registration_switch':
-                try:
-                    current_acd_year = YearDetails.objects.get(active_year=True)
-                    end_date = current_acd_year.end_date
-                    todayDate = date.today()
-                    if end_date <= todayDate:
-                        acadmic_flag = 'date_over'
-                        return HttpResponse(json.dumps({'flag': acadmic_flag}))
-                except:
-                    acadmic_flag = 'date_over'
-                    return HttpResponse(json.dumps({'flag': acadmic_flag}))
+                # try:
+                #     current_acd_year = YearDetails.objects.get(active_year=True)
+                #     end_date = current_acd_year.end_date
+                #     todayDate = date.today()
+                #     if end_date <= todayDate:
+                #         acadmic_flag = 'date_over'
+                #         return HttpResponse(json.dumps({'flag': acadmic_flag}))
+                # except:
+                #     acadmic_flag = 'date_over'
+                #     return HttpResponse(json.dumps({'flag': acadmic_flag}))
 
                 User.objects.filter().update(registration_switch=(json.loads(val_dict['switch'])))
 
             if 'switch_type' in val_dict and val_dict['switch_type'] == 'is_submission_switch':
-                try:
-                    current_acd_year = YearDetails.objects.get(active_year=True)
-                    end_date = current_acd_year.end_date
-                    todayDate = date.today()
-                    if end_date <= todayDate:
-                        acadmic_flag = 'date_over'
-                        return HttpResponse(json.dumps({'flag': acadmic_flag}))
-                except:
-                    acadmic_flag = 'date_over'
-                    return HttpResponse(json.dumps({'flag': acadmic_flag}))
+                # try:
+                #     current_acd_year = YearDetails.objects.get(active_year=True)
+                #     end_date = current_acd_year.end_date
+                #     todayDate = date.today()
+                #     if end_date <= todayDate:
+                #         acadmic_flag = 'date_over'
+                #         return HttpResponse(json.dumps({'flag': acadmic_flag}))
+                # except:
+                #     acadmic_flag = 'date_over'
+                #     return HttpResponse(json.dumps({'flag': acadmic_flag}))
 
                 User.objects.filter().update(submission_switch=(json.loads(val_dict['switch'])))
 
@@ -579,3 +583,41 @@ def update_switch(request):
                 User.objects.filter().update(program_switch=(json.loads(request.POST['switch'])))
 
     return HttpResponse(json.dumps({'flag': json.loads(request.POST['switch'])}))
+
+
+def CheckActiveYear(request):
+    print("1 hour complter---------------------------------------")
+    year_rec = YearDetails.objects.filter(active_year=True)
+    if year_rec:
+        current_acd_year = YearDetails.objects.get(active_year=True)
+        all_academicyr_recs = YearDetails.objects.all()
+        end_date = current_acd_year.end_date
+        todayDate = date.today()
+        if end_date == todayDate:
+            YearDetails.objects.filter().update(base_date=False)
+            YearDetails.objects.filter(id=current_acd_year.id).update(active_year=False)
+        else:
+            for academicyr_rec in all_academicyr_recs:
+                if academicyr_rec:
+                    acd_year = academicyr_rec.start_date - current_acd_year.end_date
+                    if acd_year.days > 0:
+                        next_acd_year_obj = academicyr_rec
+                        if next_acd_year_obj.start_date == todayDate:
+                            YearDetails.objects.filter().update(base_date = False)
+                            YearDetails.objects.filter().update(active_year=False)
+                            YearDetails.objects.filter(id=next_acd_year_obj.id).update(active_year=True,base_date = True)
+        return HttpResponse('')
+    else:
+        current_acd_year = YearDetails.objects.get(base_date=True)
+        all_academicyr_recs = YearDetails.objects.all()
+        todayDate = date.today()
+        for academicyr_rec in all_academicyr_recs:
+            if academicyr_rec:
+                acd_year = academicyr_rec.start_date - current_acd_year.end_date
+                if acd_year.days > 0:
+                    next_acd_year_obj = academicyr_rec
+                    if next_acd_year_obj.start_date == todayDate:
+                        YearDetails.objects.filter().update(base_date=False)
+                        YearDetails.objects.filter().update(active_year=False)
+                        YearDetails.objects.filter(id=next_acd_year_obj.id).update(active_year=True,base_date = True)
+        return HttpResponse('')
