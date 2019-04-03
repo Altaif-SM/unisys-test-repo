@@ -62,7 +62,7 @@
 
                 $(".add_english_row").click(function () {
                     english_count = english_count + 1;
-                    var english_row = '<div class="row english_item" id="english_check_' + english_count + '" style="margin-top: 50px"><div class=""> <label class="col-md-2 control-label">English Competency Test:</label> <div class="col-md-1"><input type="text" title="Enter English Competency Test" id="english_test_' + english_count + '" name="english_test_' + english_count + '" value="" class="form-control"> <input hidden type="text" name="english_obj_' + count + '" id="english_obj_' + count + '"> </div> </div> <div class=""> <label class="col-md-1 control-label">Year:</label> <div class="col-md-1"> <select id="english_test_year_' + english_count + '" title="Select Year" name="english_test_year_' + english_count + '" class="form-control"> <option style="display:none" selected="selected" id="" value=""> Please Select </option>{% for rec in passing_year_recs %}<option value="{{ rec.year }}">{{ rec.year }}</option>{% endfor %} </select></div></div><div class=""><label class="col-md-1 control-label"> Result:</label><div class="col-md-1"><input type="text" title="Enter result" id="english_test_result_' + english_count + '" name="english_test_result_' + english_count + '" value="" class="form-control"></div></div> <div class=""> <label class="col-md-1 control-label">Result Doc:</label> <div class="col-md-2" id="english_item_obj_' + english_count + '"> <label class="form-control" style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input class="file" style="width: 50%" type="button" value="Choose File:"><a><input type="text" readonly name="english_test_result_document_text_' + english_count + '" class="file_value emp" style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label><input style="display: none" type="file" title="Select Result document" id="english_test_result_document_' + english_count + '" name="english_test_result_document_' + english_count + '" class="file_type"><span style="float: right; color: darkred; cursor: pointer;margin-top: -25px" class="remove_doc fa fa-close"></span></div></div><div class=""><div class="col-md-1"><a href="javascript:;" class="delete_english btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div>#}';
+                    var english_row = '<div class="row english_item" id="english_check_' + english_count + '" style="margin-top: 50px; margin-left:54px;"> <div class="row"> <label class="col-md-2 control-label">English Competency Test:</label> <div class="col-md-2"><input type="text" title="Enter English Competency Test" id="english_test_' + english_count + '" name="english_test_' + english_count + '" value="" class="form-control"> <input hidden type="text" name="english_obj_' + count + '" id="english_obj_' + count + '"> </div>  <label class="col-md-2 control-label">Year:</label> <div class="col-md-2"> <select id="english_test_year_' + english_count + '" title="Select Year" name="english_test_year_' + english_count + '" class="form-control"> <option style="display:none" selected="selected" id="" value=""> Please Select </option>{% for rec in passing_year_recs %}<option value="{{ rec.year }}">{{ rec.year }}</option>{% endfor %} </select></div></div>           <div class="row"><label class="col-md-2 control-label"> Result:</label><div class="col-md-2"><input type="text" title="Enter result" id="english_test_result_' + english_count + '" name="english_test_result_' + english_count + '" value="" class="form-control"></div> <label class="col-md-2 control-label">Result Doc:</label> <div class="col-md-2" id="english_item_obj_' + english_count + '"> <label class="form-control" style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input class="file" style="width: 50%" type="button" value="Choose File:"><a><input type="text" readonly name="english_test_result_document_text_' + english_count + '" class="file_value emp" style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label><input style="display: none" type="file" title="Select Result document" id="english_test_result_document_' + english_count + '" name="english_test_result_document_' + english_count + '" class="file_type"><span style="float: right; color: darkred; cursor: pointer;margin-top: -25px" class="remove_doc fa fa-close"></span></div></div><div class=""><div class="col-md-2"><a href="javascript:;" class="delete_english btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div>#}';
                     $(english_row).removeAttr().hide().insertAfter(".english_item:last").slideDown(300);
                 });
 
@@ -483,10 +483,12 @@
                         {% if english_recs %}
 
                             {% for english_obj in english_recs %}
-                                <div class="row english_item" style="margin-top: 50px" id="english_check_{{ forloop.counter }}">
-                                    <div class="">
+                                <div class="row english_item" style="margin-top: 50px;margin-left: 54px;" id="english_check_{{ forloop.counter }}">
+
+
+                                    <div class="row">
                                         <label class="col-md-2 control-label">English Competency Test:</label>
-                                        <div class="col-md-1">
+                                        <div class="col-md-2">
                                             <input type="text" title="Enter English Competency Test"
                                                    id="english_test_{{ forloop.counter }}"
                                                    name="english_test_{{ forloop.counter }}"
@@ -495,11 +497,9 @@
 
                                             <input hidden type="text" value="{{ english_obj.id }}" id="english_obj_{{ forloop.counter }}" name="english_obj_{{ forloop.counter }}">
                                         </div>
-                                    </div>
 
-                                    <div class="">
-                                        <label class="col-md-1 control-label">Year:</label>
-                                        <div class="col-md-1">
+                                        <label class="col-md-2 control-label">Year:</label>
+                                        <div class="col-md-2">
                                             <select id='english_test_year_{{ forloop.counter }}' title="Select Year"
                                                     name="english_test_year_{{ forloop.counter }}"
                                                     class="form-control eng_emp">
@@ -521,20 +521,20 @@
                                         </div>
                                     </div>
 
-                                    <div class="">
-                                        <label class="col-md-1 control-label"> Result:</label>
-                                        <div class="col-md-1">
+
+
+
+                                    <div class="row">
+                                        <label class="col-md-2 control-label"> Result:</label>
+                                        <div class="col-md-2">
                                             <input type="text" title="Enter result"
                                                    id="english_test_result_{{ forloop.counter }}"
                                                    name="english_test_result_{{ forloop.counter }}"
                                                    value="{{ english_obj.english_test_result }}"
                                                    class="form-control eng_emp">
                                         </div>
-                                    </div>
 
-
-                                    <div class="">
-                                        <label class="col-md-1 control-label">Result Doc:</label>
+                                        <label class="col-md-2 control-label">Result Doc:</label>
                                         <div class="col-md-2" id="english_item_obj_{{ forloop.counter }}">
 
                                             {% if english_obj.english_test_result_document %}
@@ -567,7 +567,13 @@
                                             <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
                                                   class="remove_doc fa fa-close"></span>
                                         </div>
+
                                     </div>
+                                </div>
+
+
+
+                                </div>
 
                                     {% comment %}<div class="">
                                         <label class="col-md-1 control-label">Result Doc:</label>
@@ -591,13 +597,21 @@
                                                   class="remove_doc fa fa-close"></span>
                                         </div>
                                     </div>{% endcomment %}
-                                </div>
+
                             {% endfor %}
                         {% else %}
+
+
+
+
+
                             <div class="row english_item" id="english_check_1">
+
+                              <div class="row">
+
                                 <div class="">
                                     <label class="col-md-2 control-label">English Competency Test:</label>
-                                    <div class="col-md-1">
+                                    <div class="col-md-2">
                                         <input type="text" title="Enter English Competency Test" id="english_test_1"
                                                name="english_test_1" value=""
                                                class="form-control eng_emp">
@@ -607,8 +621,8 @@
                                 </div>
 
                                 <div class="">
-                                    <label class="col-md-1 control-label">Year:</label>
-                                    <div class="col-md-1">
+                                    <label class="col-md-2 control-label">Year:</label>
+                                    <div class="col-md-2">
                                         <select id='english_test_year_1' title="Select Year"
                                                 name="english_test_year_1"
                                                 class="form-control eng_emp">
@@ -623,10 +637,11 @@
                                         </select>
                                     </div>
                                 </div>
-
+                            </div>
+                            <div class="row">
                                 <div class="">
-                                    <label class="col-md-1 control-label"> Result:</label>
-                                    <div class="col-md-1">
+                                    <label class="col-md-2 control-label"> Result:</label>
+                                    <div class="col-md-2">
                                         <input type="text" title="Enter result" id="english_test_result_1"
                                                name="english_test_result_1"
                                                value="{{ english_obj.english_test_one_result }}"
@@ -635,7 +650,7 @@
                                 </div>
 
                                 <div class="">
-                                    <label class="col-md-1 control-label">Result Doc:</label>
+                                    <label class="col-md-2 control-label">Result Doc:</label>
 
                                     <div class="col-md-2" id="english_item_obj_1">
 
@@ -661,7 +676,12 @@
                         <br><br>
                         <br><br>
 
-                        <div class="row">
+
+
+
+
+
+                 <div class="row">
                             <div class="col-md-offset-5 col-md-7">
                                 <button type="button" class="btn blue" id="save" style="margin-left: 70%"
                                         onclick="window.location='{% url "student:applicant_family_mother_sibling_info" %}'">
@@ -678,12 +698,19 @@
                                     Next
                                 </button>{% endcomment %}
                             </div>
-                        </div>
-                    </div>
+             </div>
+                </div>
                 </form>
+
+
+
             </div>
         </div>
     </div>
+
+
+
+
 {% endblock %}
 
 {#<div class="row item" id="check_' + count + '"><div class="row"> <div class=""> <label class="col-md-1 control-label">Level :</label> <div class="col-md-2"> <input type="text" title="Enter Level" id="level' + count + '" name="level' + count + '" value="{{ qualification_obj.a_level }}" class="form-control chk"> </div> </div> <div class=""> <label class="col-md-1 control-label">Year:</label> <div class="col-md-2"> <select id="level_year' + count + '" title="Select Year" name="level_year' + count + '" class="form-control chk"> {% for rec in passing_year_recs %} <option value='{{ rec.year }}'>{{ rec.year }}</option> {% endfor %} </select> </div> </div> <div class=""> <label class="col-md-1 control-label"> Result:</label> <div class="col-md-2"> <input type="text" title="Enter result" id="level_result' + count + '" name="level_result' + count + '" value="" class="form-control chk"> </div> </div> </div> <br> <div class="row"> <div class=""> <label class="col-md-1 control-label"> Institution:</label> <div class="col-md-2"> <input type="text" title="Enter institution" id="a_level_institution" name="level_institution' + count + '" value="" class="form-control chk"> </div></div><div class=""><label class="col-md-1 control-label">Result Doc:</label> <div class="col-md-2" id="item' + count + '"> <label class="form-control" style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input class="file" style="width: 50%" type='button' value='Choose File:'><a><input type="text" readonly name="level_result_document_text' + count + '" class="file_value emp chk" style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label> <input style="display: none" type="file" title="Select Result document" id="level_result_document' + count + '" name="level_result_document' + count + '" class="file_type"><span style="float: right; color: darkred; cursor: pointer;margin-top: -25px" class="remove_doc fa fa-close"></span></div></div></div></div>#}

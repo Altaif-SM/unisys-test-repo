@@ -182,6 +182,12 @@ class User(AbstractUser):
             try:
                 applicaton_obj = self.student_user_rel.get().student_applicant_rel.get(year__active_year=True)
                 form_vals['personal_info_flag'] = applicaton_obj.personal_info_flag
+
+                if applicaton_obj.personal_info_flag:
+                    if not applicaton_obj.father_name == '' or not applicaton_obj.mother_name == '' or not applicaton_obj.father_income == '' or not applicaton_obj.father_occupation == '' or not applicaton_obj.mother_income == '' or not applicaton_obj.mother_occupation == '':
+                        form_vals['family_flag'] = True
+                    else:
+                        form_vals['family_flag'] = False
                 form_vals[
                     'english_qualification'] = applicaton_obj.english_applicant_rel.filter()[0].english_qualification if applicaton_obj.english_applicant_rel.all() else False
                 form_vals[
@@ -198,6 +204,7 @@ class User(AbstractUser):
                 form_vals['my_application'] = False
                 form_vals['psychometric_test'] = False
                 form_vals['agreement'] = False
+                form_vals['family_flag'] = False
 
                 return form_vals
         else:
