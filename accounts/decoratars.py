@@ -97,7 +97,7 @@ def psycho_test_required(view_func):
 def submission_required(view_func):
     def wrap(request, *args, **kwargs):
         if not request.user.submission_switch:
-            messages.warning(request, "Last Date of Application submission is over, Please contact Administrator for the same")
+            messages.warning(request, "You can't submit the Application Form now, Please contact Administrator for the same")
             return HttpResponseRedirect(request.user.get_dashboard_path())
         else:
             return view_func(request, *args, **kwargs)
