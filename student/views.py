@@ -449,7 +449,7 @@ def applicant_academic_english_qualification(request):
     year_recs = YearDetails.objects.all()
     qualification_obj = ''
     english_obj = ''
-    passing_year_recs = PassingYear.objects.all()
+    passing_year_recs = PassingYear.objects.filter().order_by('-year')
 
     try:
         application_obj = request.user.get_application
