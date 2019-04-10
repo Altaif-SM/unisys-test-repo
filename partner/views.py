@@ -84,6 +84,21 @@ def export_registered_application(request):
                 temp_list.append(application.gender)
 
                 temp_list.append(application.nationality.country_name.title() if application.nationality else '')
+
+                temp_list.append(application.id_number)
+                temp_list.append(application.passport_number)
+                temp_list.append(application.passport_issue_country.country_name.title())
+                temp_list.append(application.email)
+                temp_list.append(application.telephone_hp)
+                temp_list.append(application.telephone_home)
+                temp_list.append(application.religion.religion_name.title() if application.religion else '')
+                temp_list.append(application.address.residential_address)
+                temp_list.append(application.address.sub_locality)
+                temp_list.append(application.address.post_code)
+                temp_list.append(application.address.district)
+                temp_list.append(application.address.state)
+
+
                 temp_list.append(application.address.country.country_name.title())
 
                 if application.applicant_scholarship_rel.all():
@@ -103,7 +118,8 @@ def export_registered_application(request):
                 continue
 
 
-        cloumns = ['Student Name',  'DOB','Gender','Nationality', 'Country', 'University', 'Degree', 'Course']
+        cloumns = ['Student Name',  'DOB','Gender','Nationality','ID no','Passport no','Country of Issuer','E-mail','Telephone no (HP)','Telephone no (Home)','Religion','Residential/Postal Address','Premise/Sub-Locality-2','Postcode','District',
+                   'State/Province', 'Country', 'University', 'Degree', 'Course']
 
         return export_wraped_column_xls('registered_application', cloumns, rows)
 
