@@ -66,6 +66,49 @@ def template_applicant_scholarship(request):
                    'degree_recs': degree_recs, 'scholarship_recs': scholarship_recs})
 
 
+# def export_registered_application(request):
+#     try:
+#
+#         if request.user.is_super_admin():
+#             applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, year=get_current_year(request))
+#         else:
+#             applicant_recs = ApplicationDetails.objects.filter(
+#                 nationality=request.user.partner_user_rel.get().address.country,
+#                 is_submitted=True, year=get_current_year(request))
+#         rows = []
+#         for application in applicant_recs:
+#             try:
+#                 temp_list = []
+#                 temp_list.append(application.get_full_name())
+#                 temp_list.append(application.nationality.country_name.title() if application.nationality else '')
+#                 temp_list.append(application.address.country.country_name.title())
+#
+#                 if application.applicant_scholarship_rel.all():
+#                     temp_list.append(application.applicant_scholarship_rel.all()[0].university.university_name.title())
+#                 else:
+#                     temp_list.append("")
+#                 if application.applicant_scholarship_rel.all():
+#                     temp_list.append(application.applicant_scholarship_rel.all()[0].degree.degree_name.title())
+#                 else:
+#                     temp_list.append("")
+#                 if application.applicant_scholarship_rel.all():
+#                     temp_list.append(application.applicant_scholarship_rel.all()[0].course_applied.program_name.title())
+#                 else:
+#                     temp_list.append("")
+#                 rows.append(temp_list)
+#             except:
+#                 continue
+#
+#
+#         cloumns = ['Student Name', 'Nationality', 'Country', 'University', 'Degree', 'Course']
+#
+#         return export_wraped_column_xls('registered_application', cloumns, rows)
+#
+#     except Exception as e:
+#         messages.warning(request, "Form have some error" + str(e))
+#         return redirect("/")
+
+
 def export_registered_application(request):
     try:
 
@@ -80,8 +123,48 @@ def export_registered_application(request):
             try:
                 temp_list = []
                 temp_list.append(application.get_full_name())
+                temp_list.append(application.birth_date if application.birth_date else '')
+                temp_list.append(application.gender if application.gender else '')
                 temp_list.append(application.nationality.country_name.title() if application.nationality else '')
+                temp_list.append(application.id_number if application.id_number else '')
+                temp_list.append(application.passport_number if application.passport_number else '')
+                temp_list.append(application.passport_issue_country.country_name.title() if application.passport_issue_country else '')
+                temp_list.append(application.email if application.email else '')
+                temp_list.append(application.telephone_hp if application.telephone_hp else '')
+                temp_list.append(application.telephone_home if application.telephone_home else '')
+                temp_list.append(application.religion.religion_name.title() if application.religion else '')
+                temp_list.append(application.address.residential_address if application.address else '')
+                temp_list.append(application.address.sub_locality if application.address else '')
+                temp_list.append(application.address.post_code if application.address else '')
+                temp_list.append(application.address.district if application.address else '')
+                temp_list.append(application.address.state if application.address else '')
                 temp_list.append(application.address.country.country_name.title())
+                temp_list.append(application.wife_name if application.wife_name else '')
+                temp_list.append(application.wife_dob if application.wife_dob else '')
+                temp_list.append(application.wife_income if application.wife_income else '')
+                temp_list.append(application.wife_pay_slip if application.wife_pay_slip else '')
+                temp_list.append(application.wife_telephone_home if application.wife_telephone_home else '')
+                temp_list.append(application.wife_occupation if application.wife_occupation else '')
+                temp_list.append(application.wife_nationality.country_name.title() if application.wife_nationality else '')
+
+                temp_list.append(application.father_name if application.father_name else '')
+                temp_list.append(application.father_dob if application.father_dob else '')
+                temp_list.append(application.father_income if application.father_income else '')
+                temp_list.append(application.father_pay_slip if application.father_pay_slip else '')
+                temp_list.append(application.father_email if application.father_email else '')
+                temp_list.append(application.father_telephone_home if application.father_telephone_home else '')
+                temp_list.append(application.father_occupation if application.father_occupation else '')
+                temp_list.append(application.father_nationality.country_name if application.father_nationality else '')
+
+                temp_list.append(application.mother_name if application.mother_name else '')
+                temp_list.append(application.mother_dob if application.mother_dob else '')
+                temp_list.append(application.mother_income if application.mother_income else '')
+                temp_list.append(application.mother_pay_slip if application.mother_pay_slip else '')
+                temp_list.append(application.mother_email if application.mother_email else '')
+                temp_list.append(application.mother_telephone_home if application.mother_telephone_home else '')
+                temp_list.append(application.mother_occupation if application.mother_occupation else '')
+                temp_list.append(application.mother_nationality.country_name if application.mother_nationality else '')
+
 
                 if application.applicant_scholarship_rel.all():
                     temp_list.append(application.applicant_scholarship_rel.all()[0].university.university_name.title())
@@ -100,13 +183,23 @@ def export_registered_application(request):
                 continue
 
 
-        cloumns = ['Student Name', 'Nationality', 'Country', 'University', 'Degree', 'Course']
+        cloumns = ['Student Name', 'DOB','Gender','Nationality','ID no','Passport no','Country of Issuer','E-mail','Telephone no (HP)','Telephone no (Home)','Religion','Residential/Postal Address','Premise/Sub-Locality-2','Postcode','District',
+                   'State/Province','Country','Wife Name','Wife DOB','Wife Income','Wife PaySlip',
+                   'Wife Telephone (Home)','Wife Occupation','Wife Country',
+                   'Father Name','Father DOB','Father Income','Father Payslip','Father E-mail','Father Telephone (Home)','Father Occupation','Father Country',
+
+                   'Mother Name','Mother DOB','Mother Income','Mother Payslip','Mother E-mail','Mother Telephone (Home)','Mother Occupation','Mother Country',
+
+
+
+                   'University', 'Degree', 'Course']
 
         return export_wraped_column_xls('registered_application', cloumns, rows)
 
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
         return redirect("/")
+
 
 
 def template_applicant_all_details(request, app_id):
