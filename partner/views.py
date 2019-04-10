@@ -100,11 +100,11 @@ def export_registered_application(request):
                 temp_list.append(application.address.country.country_name.title())
 
                 temp_list.append(application.wife_name)
-                # temp_list.append(application.wife_dob if application.wife_dob else '')
+                temp_list.append(application.wife_dob if application.wife_dob else '')
                 temp_list.append(application.wife_income)
                 temp_list.append(application.wife_telephone_home)
                 temp_list.append(application.wife_occupation)
-                # temp_list.append(application.wife_nationality.country_name.title() if application.wife_nationality else '')
+                temp_list.append(application.wife_nationality)
 
                 # temp_list.append(application.father_name)
                 # temp_list.append(application.father_dob if application.father_dob else '')
@@ -132,8 +132,8 @@ def export_registered_application(request):
 
 
         cloumns = ['Student Name',  'DOB','Gender','Nationality','ID no','Passport no','Country of Issuer','E-mail','Telephone no (HP)','Telephone no (Home)','Religion','Residential/Postal Address','Premise/Sub-Locality-2','Postcode','District',
-                   'State/Province', 'Country', 'Wife Name','Wife Income',
-                   'Wife Telephone (Home)','Wife Occupation','University', 'Degree', 'Course']
+                   'State/Province', 'Country', 'Wife Name','Wife DOB','Wife Income',
+                   'Wife Telephone (Home)','Wife Occupation','Wife Country','University', 'Degree', 'Course']
 
         return export_wraped_column_xls('registered_application', cloumns, rows)
 
