@@ -106,13 +106,13 @@ def export_registered_application(request):
                 temp_list.append(application.wife_occupation)
                 temp_list.append(application.wife_nationality.country_name.title() if application.wife_nationality else '')
 
-                temp_list.append(application.father_name)
-                temp_list.append(application.father_dob if application.father_dob else '')
-                temp_list.append(application.father_income)
-                temp_list.append(application.father_email)
-                temp_list.append(application.father_telephone_home)
-                temp_list.append(application.father_occupation)
-                temp_list.append(application.father_nationality.country_name if application.father_nationality else '')
+                # temp_list.append(application.father_name)
+                # temp_list.append(application.father_dob if application.father_dob else '')
+                # temp_list.append(application.father_income)
+                # temp_list.append(application.father_email)
+                # temp_list.append(application.father_telephone_home)
+                # temp_list.append(application.father_occupation)
+                # temp_list.append(application.father_nationality.country_name if application.father_nationality else '')
 
                 if application.applicant_scholarship_rel.all():
                     temp_list.append(application.applicant_scholarship_rel.all()[0].university.university_name.title())
@@ -133,7 +133,7 @@ def export_registered_application(request):
 
         cloumns = ['Student Name',  'DOB','Gender','Nationality','ID no','Passport no','Country of Issuer','E-mail','Telephone no (HP)','Telephone no (Home)','Religion','Residential/Postal Address','Premise/Sub-Locality-2','Postcode','District',
                    'State/Province', 'Country', 'Wife Name','Wife DOB','Wife Income',
-                   'Wife Telephone (Home)','Wife Occupation','Wife Country','Father Name','Father DOB','Father Income','Father E-mail','Father Telephone (Home)','Father Occupation','Father Country','University', 'Degree', 'Course']
+                   'Wife Telephone (Home)','Wife Occupation','Wife Country','University', 'Degree', 'Course']
 
         return export_wraped_column_xls('registered_application', cloumns, rows)
 
