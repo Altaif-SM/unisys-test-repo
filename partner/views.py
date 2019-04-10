@@ -80,48 +80,8 @@ def export_registered_application(request):
             try:
                 temp_list = []
                 temp_list.append(application.get_full_name())
-                temp_list.append(application.birth_date)
-                temp_list.append(application.gender)
                 temp_list.append(application.nationality.country_name.title() if application.nationality else '')
-                temp_list.append(application.id_number)
-                temp_list.append(application.passport_number)
-                temp_list.append(application.passport_issue_country.country_name.title())
-                temp_list.append(application.email)
-                temp_list.append(application.telephone_hp)
-                temp_list.append(application.telephone_home)
-                temp_list.append(application.religion.religion_name.title() if application.religion else '')
-                temp_list.append(application.address.residential_address)
-                temp_list.append(application.address.sub_locality)
-                temp_list.append(application.address.post_code)
-                temp_list.append(application.address.district)
-                temp_list.append(application.address.state)
                 temp_list.append(application.address.country.country_name.title())
-                temp_list.append(application.wife_name)
-                temp_list.append(application.wife_dob if application.wife_dob else '')
-                temp_list.append(application.wife_income)
-                temp_list.append(application.wife_pay_slip)
-                temp_list.append(application.wife_telephone_home)
-                temp_list.append(application.wife_occupation)
-                temp_list.append(application.wife_nationality.country_name.title() if application.wife_nationality else '')
-
-                temp_list.append(application.father_name)
-                temp_list.append(application.father_dob if application.father_dob else '')
-                temp_list.append(application.father_income)
-                temp_list.append(application.father_pay_slip)
-                temp_list.append(application.father_email)
-                temp_list.append(application.father_telephone_home)
-                temp_list.append(application.father_occupation)
-                temp_list.append(application.father_nationality.country_name if application.father_nationality else '')
-
-                temp_list.append(application.mother_name)
-                temp_list.append(application.mother_dob if application.mother_dob else '')
-                temp_list.append(application.mother_income)
-                temp_list.append(application.mother_pay_slip)
-                temp_list.append(application.mother_email)
-                temp_list.append(application.mother_telephone_home)
-                temp_list.append(application.mother_occupation)
-                temp_list.append(application.mother_nationality.country_name if application.mother_nationality else '')
-
 
                 if application.applicant_scholarship_rel.all():
                     temp_list.append(application.applicant_scholarship_rel.all()[0].university.university_name.title())
@@ -140,16 +100,7 @@ def export_registered_application(request):
                 continue
 
 
-        cloumns = ['Student Name', 'DOB','Gender','Nationality','ID no','Passport no','Country of Issuer','E-mail','Telephone no (HP)','Telephone no (Home)','Religion','Residential/Postal Address','Premise/Sub-Locality-2','Postcode','District',
-                   'State/Province','Country','Wife Name','Wife DOB','Wife Income','Wife PaySlip',
-                   'Wife Telephone (Home)','Wife Occupation','Wife Country',
-                   'Father Name','Father DOB','Father Income','Father Payslip','Father E-mail','Father Telephone (Home)','Father Occupation','Father Country',
-
-                   'Mother Name','Mother DOB','Mother Income','Mother Payslip','Mother E-mail','Mother Telephone (Home)','Mother Occupation','Mother Country',
-
-
-
-                   'University', 'Degree', 'Course']
+        cloumns = ['Student Name', 'Nationality', 'Country', 'University', 'Degree', 'Course']
 
         return export_wraped_column_xls('registered_application', cloumns, rows)
 
