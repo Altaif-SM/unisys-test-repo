@@ -80,6 +80,9 @@ def export_registered_application(request):
             try:
                 temp_list = []
                 temp_list.append(application.get_full_name())
+                temp_list.append(application.birth_date)
+                temp_list.append(application.gender)
+
                 temp_list.append(application.nationality.country_name.title() if application.nationality else '')
                 temp_list.append(application.address.country.country_name.title())
 
@@ -100,7 +103,7 @@ def export_registered_application(request):
                 continue
 
 
-        cloumns = ['Student Name', 'Nationality', 'Country', 'University', 'Degree', 'Course']
+        cloumns = ['Student Name',  'DOB','Gender','Nationality', 'Country', 'University', 'Degree', 'Course']
 
         return export_wraped_column_xls('registered_application', cloumns, rows)
 
