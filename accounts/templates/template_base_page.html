@@ -1745,6 +1745,15 @@ License: You must have a valid license purchased only from themeforest(the above
         element.classList.add("active");
     }
     {% endif %}
+     {% if request.resolver_match.url_name == 'template_applicant_all_details' %}
+    {
+      var element = document.getElementById("c");
+        element.classList.add("active");
+
+        var element = document.getElementById("app_anch");
+        element.classList.add("active");
+    }
+    {% endif %}
 
 
 
