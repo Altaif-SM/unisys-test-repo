@@ -1727,6 +1727,24 @@ License: You must have a valid license purchased only from themeforest(the above
         element.classList.add("active");
     }
     {% endif %}
+    {% if request.resolver_match.url_name == 'get_student_report' %}
+    {
+     var element = document.getElementById("e");
+        element.classList.add("active");
+
+        var element = document.getElementById("account_anch");
+        element.classList.add("active");
+    }
+    {% endif %}
+    {% if request.resolver_match.url_name == 'get_repayment_report' %}
+    {
+     var element = document.getElementById("e");
+        element.classList.add("active");
+
+        var element = document.getElementById("account_anch");
+        element.classList.add("active");
+    }
+    {% endif %}
 
 
 
