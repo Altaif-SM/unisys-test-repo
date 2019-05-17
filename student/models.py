@@ -449,6 +449,9 @@ class AcademicQualificationDetails(BaseModel):
     level_result = models.CharField(max_length=255, blank=True, null=True)
     level_institution = models.CharField(max_length=255, blank=True, null=True)
     level_result_document = models.FileField(upload_to=content_file_name_report)
+    degree = models.CharField(max_length=256, blank=True, null=True)
+    other_degree = models.CharField(max_length=256, blank=True, null=True)
+    major = models.CharField(max_length=256, blank=True, null=True)
 
     # o_level = models.CharField(max_length=255, blank=True, null=True)
     # o_level_year = models.CharField(max_length=6, blank=True, null=True)

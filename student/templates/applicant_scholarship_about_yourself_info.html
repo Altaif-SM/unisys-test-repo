@@ -30,7 +30,36 @@
 {% block ScriptBlock %}
     <script>
         window.onload = function () {
+
+
+
+
+
             $(document).ready(function () {
+
+                 if($('.aggre_term').is(":checked")){
+                $('#save_id').attr("disabled", false);
+            }
+            else{
+                $('#save_id').attr("disabled", true);
+            }
+
+
+            $("#about_yourself").on('keydown', function(e) {
+                var words = $.trim(this.value).length ? this.value.match(/\S+/g).length : 0;
+                if (words <= 600) {
+                    $('#display_count').text(words);
+                    $('#word_left').text(600-words)
+                }else{
+                    if (e.which !== 8) e.preventDefault();
+                }
+            });
+
+                 var words = $.trim($("textarea").val()).split(" ");
+                 $('#display_count').text(words.length);
+                 $('#word_left').text(600-words.length)
+
+
                 {% if user.get_application %}
                     {% if user.get_application.is_submitted %}
                         $('input').prop('disabled', 'true')
@@ -49,6 +78,17 @@
                         $(this).val('');
                         return false;
                     }
+                });
+
+
+                $(".aggre_term").click(function(){
+                 if($(this).is(":checked")) {
+                    $('#save_id').attr("disabled", false);
+                   }
+
+                 else{
+                     $('#save_id').attr("disabled", true);
+                 }
                 });
 
                 {% comment %}$(document).on("click", ".remove_doc", function (e) {
@@ -205,7 +245,12 @@
                 $(this).remove();
             });
         }, 4000);
+
+
+
+
     </script>
+
 
 {% endblock %}
 
@@ -421,12 +466,44 @@
                             <div class="">
                                 <label class="col-md-2 control-label"></label>
                                 <div class="col-md-6">
-                                    <label>Write 600 word about yourself</label>
+{#                                    <label>Write 600 word about yourself</label>#}
+                                    <label>About yourself : </label>
                                     <textarea id="about_yourself" style="height: 200px" name="about_yourself"
                                               class="form-control eng_emp">{{ about_obj.about_yourself }}</textarea>
+                                    <span id="display_count">0</span> words. Words left : <span id="word_left">600</span>
                                 </div>
                             </div>
                         </div>
+                        <br><br>
+
+{#                        <div class="row">#}
+{#                            <div class="">#}
+{#                                <label class="col-md-2 control-label"><input type="checkbox" class="form-control" required></label>#}
+{#                                <div class="col-md-3">#}
+{#                                    I have read and agree with <a>Personal Data Protection Notice</a>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+
+                        <div class="row">
+                             <div class="">
+                                 <div class="col-md-6" style="margin-left: 10%">
+                                    {% if scholarship_obj%}
+                                     <span style="color: red"><sup>*</sup></span>
+                                      <input type="checkbox" checked class="aggre_term">
+
+                                 {% else %}
+                                  <input type="checkbox" class="aggre_term">
+                                  {% endif %}
+
+                                   I have read and agree with <a target="_blank" href="{% static 'doc/personal_doc_protection.pdf' %} ">Personal Data Protection Notice</a>
+
+                                </div>
+                             </div>
+                        </div>
+
+
+
 
                         <br><br>
                         <br><br>

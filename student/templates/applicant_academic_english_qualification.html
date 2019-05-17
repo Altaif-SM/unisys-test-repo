@@ -33,6 +33,17 @@
 
             $(document).ready(function () {
 
+                 $(document).on("change", ".select_data", function (e) {
+                      var select_id = $(this).attr('id');
+                      var res = select_id.charAt(6);
+                      var select_value = $(this).val();
+                      var element=document.getElementById('other_rec'+res)
+                     if(select_value=='OTHERS')
+                           element.style.display='block';
+                     else
+                           element.style.display='none';
+                })
+
                 {% if user.get_application %}
                     {% if user.get_application.is_submitted %}
                         $('input').prop('disabled', 'true');
@@ -56,7 +67,7 @@
 
                 $(".add_acedimic_row").click(function () {
                     count = count + 1;
-                    var row = '<hr><br><div class="row item" id="check_' + count + '"><div class="row"> <div class=""> <label class="col-md-1 control-label">Level :</label> <div class="col-md-2"> <input type="text" title="Enter Level" id="level' + count + '" name="level' + count + '" value="" class="form-control chk"> <input type="text" hidden value="" id="academic_id_' + count + '" name="academic_id_' + count + '"> </div> </div> <div class=""> <label class="col-md-1 control-label">Year:</label> <div class="col-md-2"> <select id="level_year' + count + '" title="Select Year" name="level_year' + count + '" class="form-control chk"><option selected="selected" id="" value="">Please Select </option>{% for rec in passing_year_recs %} <option value="{{ rec.year }}">{{ rec.year }}</option> {% endfor %} </select> </div> </div> <div class=""> <label class="col-md-1 control-label"> Result:</label> <div class="col-md-2"> <input type="text" title="Enter result" id="level_result' + count + '" name="level_result' + count + '" value="" class="form-control chk"> </div> </div> <div class=""><div class="col-md-1"><a href="javascript:;" class="delete btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div> </div> <br> <div class="row"> <div class=""> <label class="col-md-1 control-label"> Institution:</label> <div class="col-md-2"> <input type="text" title="Enter institution" id="a_level_institution" name="level_institution' + count + '" value="" class="form-control chk"> </div></div><div class=""><label class="col-md-1 control-label">Result Doc:</label> <div class="col-md-2" id="item' + count + '"> <label class="form-control" style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input class="file" style="width: 50%" type="button" value="Choose File:"><a><input type="text" readonly name="level_result_document_text' + count + '" class="file_value emp chk" style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label> <input style="display: none" type="file" title="Select Result document" id="level_result_document' + count + '" name="level_result_document' + count + '" class="file_type"><span style="float: right; color: darkred; cursor: pointer;margin-top: -25px" class="remove_doc fa fa-close"></span></div></div></div></div>';
+                    var row = '<hr><br><div class="row item" id="check_' + count + '"><div class="row"> <div class=""> <label class="col-md-1 control-label">Level :</label> <div class="col-md-2"> <input type="text" title="Enter Level" id="level' + count + '" name="level' + count + '" value="" class="form-control chk"> <input type="text" hidden value="" id="academic_id_' + count + '" name="academic_id_' + count + '"> </div> </div> <div class=""> <label class="col-md-1 control-label">Year:</label> <div class="col-md-2"> <select id="level_year' + count + '" title="Select Year" name="level_year' + count + '" class="form-control chk"><option selected="selected" id="" value="">Please Select </option>{% for rec in passing_year_recs %} <option value="{{ rec.year }}">{{ rec.year }}</option> {% endfor %} </select> </div> </div> <div class=""> <label class="col-md-1 control-label"> Result:</label> <div class="col-md-2"> <input type="text" title="Enter result" id="level_result' + count + '" name="level_result' + count + '" value="" class="form-control chk"> </div> </div> <div class=""><div class="col-md-1"><a href="javascript:;" class="delete btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div> </div> <br> <div class="row"> <div class=""> <label class="col-md-1 control-label"> Institution:</label> <div class="col-md-2"> <input type="text" title="Enter institution" id="a_level_institution" name="level_institution' + count + '" value="" class="form-control chk"> </div></div><div class=""><label class="col-md-1 control-label">Result Doc:</label> <div class="col-md-2" id="item' + count + '"> <label class="form-control" style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input class="file" style="width: 50%" type="button" value="Choose File:"><a><input type="text" readonly name="level_result_document_text' + count + '" class="file_value emp chk" style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label> <input style="display: none" type="file" title="Select Result document" id="level_result_document' + count + '" name="level_result_document' + count + '" class="file_type"><span style="float: right; color: darkred; cursor: pointer;margin-top: -25px" class="remove_doc fa fa-close"></span></div></div><div class=""> <label class="col-md-1 control-label">Degree:</label> <div class="col-md-2"> <select id="degree' + count + '" title="Select Degree" name="degree' + count + '" class="form-control select_data chk"><option selected="selected" id="" value="">Please Select </option><option value="DOCTORAL (PHD)">DOCTORAL (PHD)</option> <option value="MASTER">MASTER</option><option value="BACHELOR">BACHELOR</option><option value="OTHERS">OTHERS</option></select><br> <input type="text" style="display: none;" title="Enter Other" id="other_rec' + count + '" name="other_rec' + count + '"  class="form-control  other_data"></div> </div></div><div class="row"> <div class=""> <label class="col-md-1 control-label">Major :</label> <div class="col-md-2"> <input type="text" title="Enter Level" id="major' + count + '" name="major' + count + '" value="" class="form-control chk"> <input type="text" hidden value="" id="academic_id_' + count + '" name="academic_id_' + count + '"> </div> </div></div></div>';
                     $(row).removeAttr().hide().insertAfter(".item:last").slideDown(300);
                 });
 
@@ -197,6 +208,37 @@
                 $(this).remove();
             });
         }, 4000);
+
+        function check(t){
+             var select_id = t.id;
+             alert(select_id);
+             var abc = document.getElementById(select_id).value = e.target.value;
+             alert(abc);
+
+{#             var rec = ('#' + select_id);#}
+{#             alert(rec);#}
+             var test = $(rec + "option:selected").text();
+             console.log(test);
+             alert(test);
+            }
+
+function showOptions(s) {
+  console.log(s[s.selectedIndex].value); // get value
+  console.log(s[s.selectedIndex].id); // get id
+}
+
+
+
+{#         function CheckOther(val){#}
+{#             var test = document.querySelector('.other_data').id#}
+{#             alert(test);#}
+{#         var element=document.getElementById('other_rec1');#}
+{#         if(val=='OTHERS')#}
+{#           element.style.display='block';#}
+{#         else#}
+{#           element.style.display='none';#}
+{#        }#}
+
     </script>
 
 {% endblock %}
@@ -362,7 +404,51 @@
                                                       class="remove_doc fa fa-close"></span>
                                             </div>
                                         </div>
+
+                                        <div class="">
+                                            <label class="col-md-1 control-label"> Degree:</label>
+                                            <div class="col-md-2">
+
+                                                <select id='degree{{ forloop.counter }}' title="Select Degree" name="degree{{ forloop.counter }}"
+                                                        class="form-control eng_emp select_data">
+{#                                                    {% if qualification_obj %}#}
+                                                        <option style="display:none" selected="selected"
+                                                                value="{{ qualification_obj.degree }}">{{ qualification_obj.degree }}</option>
+
+                                                        <option value='DOCTORAL (PHD)'>DOCTORAL (PHD)</option>
+                                                        <option value='MASTER'>MASTER</option>
+                                                        <option value='BACHELOR'>BACHELOR</option>
+                                                        <option value='OTHERS'>OTHERS</option>
+                                                </select>
+
+                                                <br>
+                                                {% if qualification_obj.degree == 'OTHERS' %}
+                                                    <input type="text" value="{{ qualification_obj.other_degree|default_if_none:"" }}" class="form-control  other_data"  name="other_rec{{ forloop.counter }}" id="other_rec{{ forloop.counter }}"  />
+                                                {% else %}
+                                                    <input type="text" class="form-control  other_data"  name="other_rec{{ forloop.counter }}" id="other_rec{{ forloop.counter }}" style='display:none;' />
+                                                {% endif %}
+
+
+
+                                            </div>
+
+                                        </div>
+
+
+
                                     </div>
+                                <div class="row">
+                                    <div class="">
+                                            <label class="col-md-1 control-label"> Major:</label>
+                                            <div class="col-md-2">
+                                                <input type="text" title="Enter institution"
+                                                       id="major{{ forloop.counter }}"
+                                                       name="major{{ forloop.counter }}"
+                                                       value="{{ qualification_obj.major|default_if_none:"" }}"
+                                                       class="form-control chk">
+                                            </div>
+                                        </div>
+                                </div>
                                 </div>
                                 <br>
                                 <hr><br>
@@ -437,7 +523,44 @@
                                                   class="remove_doc fa fa-close"></span>
                                         </div>
                                     </div>
+
+                                    <div class="">
+                                            <label class="col-md-1 control-label"> Degree:</label>
+                                            <div class="col-md-2">
+
+                                                <select id='degree1' title="Select Degree" name="degree1"
+                                                        class="form-control eng_emp select_data">
+                                                        <option value=''>Please Select</option>
+                                                        <option value='DOCTORAL (PHD)'>DOCTORAL (PHD)</option>
+                                                        <option value='MASTER'>MASTER</option>
+                                                        <option value='BACHELOR'>BACHELOR</option>
+                                                        <option value='OTHERS'>OTHERS</option>
+                                                </select>
+
+                                                <br>
+                                                <input type="text" class="form-control other_data "  name="other_rec1" id="other_rec1" style='display:none;' />
+
+
+
+                                            </div>
+
+                                        </div>
+
+
+
                                 </div>
+                                    <div class="row">
+                                            <div class="">
+                                                    <label class="col-md-1 control-label"> Major:</label>
+                                                    <div class="col-md-2">
+                                                        <input type="text" title="Enter institution"
+                                                               id="major1"
+                                                               name="major1"
+                                                               value="{{ qualification_obj.major|default_if_none:"" }}"
+                                                               class="form-control chk">
+                                                    </div>
+                                                </div>
+                                        </div>
                             </div>
                             <br>
                         {% endif %}

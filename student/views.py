@@ -501,9 +501,16 @@ def save_update_applicant_academic_english_qualification(request):
                                     AcademicQualificationDetails.objects.filter(
                                         id=request.POST['academic_id_' + str(x)]).update(
                                         level=request.POST['level' + str(x)],
+                                        major=request.POST['major' + str(x)],
+                                        degree=request.POST['degree' + str(x)],
                                         level_year=request.POST['level_year' + str(x)],
                                         level_result=request.POST['level_result' + str(x)],
                                         level_institution=request.POST['level_institution' + str(x)])
+
+                                    if request.POST['degree' + str(x)] == 'OTHERS':
+                                        AcademicQualificationDetails.objects.filter(
+                                            id=request.POST['academic_id_' + str(x)]).update(
+                                            other_degree=request.POST['other_rec' + str(x)])
 
                                     qualification_obj = AcademicQualificationDetails.objects.filter(
                                         id=request.POST['academic_id_' + str(x)])[0]
@@ -512,6 +519,8 @@ def save_update_applicant_academic_english_qualification(request):
                                     qualification_obj = AcademicQualificationDetails.objects.create(
                                         level=request.POST['level' + str(x)],
                                         level_year=request.POST['level_year' + str(x)],
+                                        major=request.POST['major' + str(x)],
+                                        degree=request.POST['degree' + str(x)],
                                         level_result=request.POST['level_result' + str(x)],
                                         level_institution=request.POST['level_institution' + str(x)],
                                         applicant_id=request.user.get_application)
@@ -2110,7 +2119,7 @@ def get_degrees_from_universities(request):
         for degree_name in degree_detail_rec:
             if not any(d['id'] == degree_name.id  for d in finalDict):
                 raw_dict = {}
-                raw_dict['name']=degree_name.degree_name +" " +"("+str(degree_name.degree_type)+")"
+                raw_dict['name']=degree_name.degree_name.title() +" " +"("+str(degree_name.degree_type.degree_name.title())+")"
                 raw_dict['id']=degree_name.id
                 finalDict.append(raw_dict)
 
