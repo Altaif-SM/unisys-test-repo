@@ -41,6 +41,8 @@
                     var count = $(".item:last").attr('id').split('_')[1];
                     $('#sibling_count').val(count);
 
+
+
                 });
 
 
@@ -52,7 +54,7 @@
 
                 $(".add_row").click(function () {
                     count = count + 1;
-                    var row = '<div class="row item" id="item_' + count + '" style="margin-top:15px"><div class=""><div class=""><div class="col-md-1"><a href="javascript:;" class="delete btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div><div class=""><label class="col-md-1 control-label">Sibling:</label><div class="col-md-2"><input type="text" title="Enter Sibling " id="sibling_' + count + '" name="sibling_' + count + '"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Age:</label><div class="col-md-2"><input type="text" title="Enter age" id="age_' + count + '"name="age_' + count + '"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Status:</label><div class="col-md-2"> <input type="text" title="Enter status" id="status_' + count + '" name="status_' + count + '" class="form-control"><input type="text" hidden id="sibling_id_' + count + '" name="sibling_id_' + count + '"></div></div></div>'
+                    var row = '<div class="row item" id="item_' + count + '" style="margin-top:15px"><div class=""><div class=""><div class="col-md-1"><a href="javascript:;" class="delete btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div><div class=""><label class="col-md-1 control-label">Sibling:</label><div class="col-md-2"><input type="text" title="Enter Sibling " id="sibling_' + count + '" name="sibling_' + count + '"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Age:</label><div class="col-md-2"><input type="text" title="Enter age" id="age_' + count + '"name="age_' + count + '"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Relationship:</label><div class="col-md-2"> <input type="text" title="Enter status" id="status_' + count + '" name="status_' + count + '" class="form-control"><input type="text" hidden id="sibling_id_' + count + '" name="sibling_id_' + count + '"></div></div></div>'
                     $(row).removeAttr().hide().insertAfter(".item:last").slideDown(300);
                     {#count++;#}
                 });
@@ -152,10 +154,11 @@
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">Father Name:</label>
+                                <label class="col-md-2 control-label">Father Name: <span
+                                        style="color: red">*</span></label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter father name" id="father_name" name="father_name"
-                                           value="{{ application_obj.father_name|default:"" }}" class="form-control">
+                                           value="{{ application_obj.father_name|default:"" }}" class="form-control" required>
                                 </div>
                             </div>
 
@@ -176,7 +179,7 @@
                         <div class="row">
 
                             <div class="">
-                                <label class="col-md-2 control-label">Monthly Income($):</label>
+                                <label class="col-md-2 control-label">Monthly Income:<br><p style="font-size: 12px;">(in US Dollar $)</p></label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Income" id="father_income"
                                            value="{{ application_obj.father_income|default:"" }}" name="father_income"
@@ -185,7 +188,8 @@
                             </div>
 
                             <div class="">
-                                <label class="col-md-2 control-label">Pay Slip:</label>
+                                <label class="col-md-2 control-label">Pay Slip:
+                                <span style="color: red">*</span></label>
                                 <div class="col-md-2" id="parent_2">
                                     {% if application_obj.father_pay_slip %}
                                         <label class="form-control"
@@ -202,10 +206,10 @@
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
                                                 class="file" style="width: 50%"
                                                 type='button' value='Choose File:'><a><input type="text"
-                                                                                             readonly
+
                                                                                              name="father_pay_slip_text"
                                                                                              class="file_value emp"
-                                                                                             style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
+                                                                                             style="cursor: pointer;border: none; width: 50%; color: #292328" required></a></label>
                                     {% endif %}
                                     <input style="display: none" class="file_type" type="file"
                                            title="Select father pay slip" id="father_pay_slip" name="father_pay_slip">
@@ -298,10 +302,11 @@
                         <hr>
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">Mother Name:</label>
+                                <label class="col-md-2 control-label">Mother Name:<span
+                                        style="color: red">*</span></label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter First Name" id="mother_name" name="mother_name"
-                                           value="{{ application_obj.mother_name|default:"" }}" class="form-control">
+                                           value="{{ application_obj.mother_name|default:"" }}" class="form-control" required>
                                 </div>
                             </div>
 
@@ -330,7 +335,7 @@
                         <div class="row">
 
                             <div class="">
-                                <label class="col-md-2 control-label">Income($):</label>
+                                <label class="col-md-2 control-label">Income:<br><p style="font-size: 12px;">(in US Dollar $)</p></label>
                                 <div class="col-md-2">
                                     {% if application_obj.mother_income %}
                                         <input type="text" title="Enter Income" id="mother_income"
@@ -345,7 +350,8 @@
                             </div>
 
                             <div class="">
-                                <label class="col-md-2 control-label">Pay Slip:</label>
+                                <label class="col-md-2 control-label">Pay Slip :<span
+                                        style="color: red">*</span></label>
                                 <div class="col-md-2" id="mother_parent">
                                     {% if application_obj.mother_pay_slip %}
                                         <label class="form-control"
@@ -369,10 +375,10 @@
                                                style="border-color: #b1ad9f; text-align: left;"><input
                                                 class="file"
                                                 type='button' value='Choose File:'><a><input type="text"
-                                                                                             readonly
+
                                                                                              name="mother_pay_slip_text"
                                                                                              class="file_value emp"
-                                                                                             style="cursor: pointer;border: none; width: 100px; color: #292328"></a></label>
+                                                                                             style="cursor: pointer;border: none; width: 100px; color: #292328" required></a></label>
                                     {% endif %}
                                     <input style="display: none" type="file" title="Select mother pay slip"
                                            id="mother_pay_slip"
@@ -510,7 +516,7 @@
                                     </div>
 
                                     <div class="">
-                                        <label class="col-md-1 control-label">Status:</label>
+                                        <label class="col-md-1 control-label">Relationship:</label>
                                         <div class="col-md-2">
                                             <input type="text" title="Enter status" id="status_{{ forloop.counter }}"
                                                    value="{{ sibling_obj.sibling_status }}"
