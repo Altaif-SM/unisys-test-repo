@@ -523,6 +523,412 @@ def template_application_approval_details(request, app_id):
                    'flag_schedule': flag_schedule, 'admin_flag': admin_flag, 'final_approval': final_approval})
 
 
+# def change_application_status(request):
+#     try:
+#         check_ids = json.loads(request.POST.get('check_ids'))
+#         interview_type = request.POST.get('interview_type')
+#
+#         for application in check_ids:
+#
+#             # getting application object for flag validations
+#             application_obj = ApplicationDetails.objects.get(id=application)
+#
+#             if application_obj.application_rejection:
+#                 if request.user.is_partner():
+#                     messages.warning(request, "You don't have permission to change rejected application status.")
+#                     continue
+#                 else:
+#                     application_obj.application_rejection = False
+#                     application_obj.save()
+#
+#             if interview_type == 'First Interview':
+#
+#                 if not application_obj.first_interview:
+#                     time = request.POST.get('time')
+#                     date = request.POST.get('date')
+#                     venue = request.POST.get('venue')
+#
+#                     if not time == '' or date == '' or venue == '':
+#
+#                         application_obj.first_interview = True
+#                         application_obj.interview_time = time
+#                         application_obj.interview_date = date
+#                         application_obj.interview_venue = venue
+#                         application_obj.save()
+#
+#                         try:
+#                             email_rec = EmailTemplates.objects.get(template_for='First Interview Call',
+#                                                                    is_active=True)
+#                             context = {'first_name': application_obj.first_name, 'time': time, 'venue': venue,
+#                                        'date': date}
+#                             send_email_with_template(application_obj, context, email_rec.subject,
+#                                                      email_rec.email_body,
+#                                                      request)
+#                         except:
+#                             subject = 'First Interview Call'
+#                             message = 'You are requested to come down for the first interview time at-' + str(
+#                                 time) + ' on ' + str(date) + ' at ' + str(
+#                                 venue) + '. \n \n Thanks and Regards \n \n XYZ'
+#
+#                             send_email_to_applicant(request.user.email, application_obj.email, subject, message,
+#                                                     application_obj.first_name)
+#
+#                         application_notification(application_obj.id,
+#                                                  'You are requested to come down for the first interview. Check your mail for more updates.')
+#
+#                         if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
+#                                                                         status='First Interview Call').exists():
+#                             ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
+#                                                                      status='First Interview Call',
+#                                                                      remark='You are requested to come down for the first interview.')
+#
+#                         messages.success(request, application_obj.first_name.title() + " application status changed.")
+#
+#                     else:
+#                         messages.warning(request,
+#                                          "For applicant " + application_obj.first_name.title() + " First interview Time, Date and Venue should not be empty.")
+#                         continue
+#                 else:
+#                     messages.warning(request,
+#                                      "Applicant " + application_obj.first_name.title() + " has already got first interview call.")
+#                     continue
+#
+#             elif interview_type == 'First Interview attended':
+#
+#                 if application_obj.first_interview:
+#
+#                     if not application_obj.first_interview_attend:
+#                         # application_obj.first_interview = True
+#                         application_obj.first_interview_attend = True
+#                         application_obj.save()
+#
+#                         try:
+#                             email_rec = EmailTemplates.objects.get(template_for='First Interview Attend',
+#                                                                    is_active=True)
+#                             context = {'first_name': application_obj.first_name}
+#                             send_email_with_template(application_obj, context, email_rec.subject, email_rec.email_body,
+#                                                      request)
+#                         except:
+#                             subject = 'First Interview Attended'
+#                             message = 'This mail is to notify that you have attended first interview. We will update you about the result soon.'
+#
+#                             send_email_to_applicant(request.user.email, application_obj.email, subject, message,
+#                                                     application_obj.first_name)
+#
+#                         application_notification(application_obj.id, 'You have attended first interview.')
+#
+#                         if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
+#                                                                         status='First Interview Attended').exists():
+#                             ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
+#                                                                      status='First Interview Attended',
+#                                                                      remark='You have attended first interview. Please wait for the further updates.')
+#
+#                         messages.success(request, application_obj.first_name.title() + " application status changed.")
+#                     else:
+#                         messages.warning(request,
+#                                          "Applicant " + application_obj.first_name.title() + " has already attended first interview.")
+#                         continue
+#                 else:
+#                     messages.warning(request,
+#                                      "For applicant " + application_obj.first_name.title() + " please change his/her previous application status then try this.")
+#                     continue
+#
+#             elif interview_type == 'First Interview approval':
+#                 if application_obj.first_interview_attend:
+#                     if not application_obj.first_interview_approval:
+#                         # application_obj.first_interview = True
+#                         # application_obj.first_interview_attend = True
+#                         application_obj.first_interview_approval = True
+#                         application_obj.save()
+#
+#                         try:
+#                             email_rec = EmailTemplates.objects.get(template_for='First Interview Approval',
+#                                                                    is_active=True)
+#                             context = {'first_name': application_obj.first_name}
+#                             send_email_with_template(application_obj, context, email_rec.subject, email_rec.email_body,
+#                                                      request)
+#                         except:
+#                             subject = 'First Interview Approval'
+#                             message = 'Your first interview has been approved which was held on ' + str(
+#                                 application_obj.interview_time) + ' - ' + str(
+#                                 application_obj.interview_date) + ' - ' + str(
+#                                 application_obj.interview_venue) + '. Congratualtions!!!. \n \n Please Upload the Psychometric test result. For test please visit at https://www.surveymonkey.com/ and perform test.'
+#                             # message = 'Your first interview has been approved which was held on . Please Upload the Psychometric test result. For test please visit at https://www.surveymonkey.com/ and perform test.'
+#                             send_email_to_applicant(request.user.email, application_obj.email, subject, message,
+#                                                     application_obj.first_name)
+#
+#                         application_notification(application_obj.id,
+#                                                  'You have cleared your first interview. For more updates please check your mail.')
+#
+#                         if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
+#                                                                         status='First Interview Approval').exists():
+#                             ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
+#                                                                      status='First Interview Approval',
+#                                                                      remark='You have cleared your first interview. Please wait for the further updates.')
+#
+#                         messages.success(request, application_obj.first_name.title() + " application status changed.")
+#                     else:
+#                         messages.warning(request,
+#                                          "First interview is already approved for applicant " + application_obj.first_name.title() + " .")
+#                         continue
+#                 else:
+#                     messages.warning(request,
+#                                      "For applicant " + application_obj.first_name.title() + " please change his/her previous application status then try this.")
+#                     continue
+#
+#             elif interview_type == 'Psychometric Test':
+#                 if application_obj.first_interview_approval:
+#                     if not application_obj.psychometric_test:
+#                         if ApplicantPsychometricTestDetails.objects.filter(applicant_id=application_obj).exists():
+#                         # application_obj.first_interview = True
+#                         # application_obj.first_interview_attend = True
+#                         # application_obj.first_interview_approval = True
+#                             application_obj.psychometric_test = True
+#                             application_obj.save()
+#
+#                             try:
+#                                 email_rec = EmailTemplates.objects.get(template_for='Psychometric Test', is_active=True)
+#                                 context = {'first_name': application_obj.first_name}
+#                                 send_email_with_template(application_obj, context, email_rec.subject,
+#                                                          email_rec.email_body,
+#                                                          request)
+#                             except:
+#                                 subject = 'Psychometric Test Update'
+#                                 message = 'You have submitted the Psychometric Test result.'
+#                                 send_email_to_applicant(request.user.email, application_obj.email, subject, message,
+#                                                         application_obj.first_name)
+#
+#                             application_notification(application_obj.id, 'You have submitted Psychometric test result.')
+#
+#                             if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
+#                                                                             status='Psychometric Test').exists():
+#                                 ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
+#                                                                          status='Psychometric Test',
+#                                                                          remark='You have submitted Psychometric test result. Please wait for the further updates.')
+#
+#                             messages.success(request,
+#                                              application_obj.first_name.title() + " application status changed.")
+#                         else:
+#                             messages.warning(request,
+#                                              "Applicant " + application_obj.first_name.title() + " has not submitted the psychometric test yet.")
+#                             continue
+#                     else:
+#                         messages.warning(request,
+#                                          "Psychometric test for applicant " + application_obj.first_name.title() + " is already active.")
+#                         continue
+#                 else:
+#                     messages.warning(request,
+#                                      "For applicant " + application_obj.first_name.title() + " please change his/her previous application status then try this.")
+#                     continue
+#
+#             elif interview_type == 'Second Interview attended':
+#
+#                 if application_obj.psychometric_test:
+#                     if not application_obj.second_interview_attend:
+#
+#                         time = request.POST.get('time')
+#                         date = request.POST.get('date')
+#                         venue = request.POST.get('venue')
+#
+#                         if not time == '' or date == '' or venue == '':
+#
+#                             # application_obj.first_interview = True
+#                             # application_obj.first_interview_attend = True
+#                             # application_obj.first_interview_approval = True
+#                             # application_obj.psychometric_test = True
+#                             application_obj.second_interview_attend = True
+#                             application_obj.second_interview_time = time
+#                             application_obj.second_interview_date = date
+#                             application_obj.second_interview_venue = venue
+#
+#                             application_obj.save()
+#
+#                             try:
+#                                 email_rec = EmailTemplates.objects.get(template_for='Second Interview Attend',
+#                                                                        is_active=True)
+#                                 context = {'first_name': application_obj.first_name}
+#                                 send_email_with_template(application_obj, context, email_rec.subject,
+#                                                          email_rec.email_body,
+#                                                          request)
+#                             except:
+#                                 subject = 'Second Interview Attended'
+#                                 message = 'You are requested to come down for the second interview time at-' + str(
+#                                     time) + ' on ' + str(date) + ' at ' + str(
+#                                     venue) + '. \n \n Thanks and Regards \n \n XYZ'
+#
+#                                 # message = 'This mail is to notify that you have attended second interview. We will update you about the result soon.'
+#
+#                                 send_email_to_applicant(request.user.email, application_obj.email, subject, message,
+#                                                         application_obj.first_name)
+#
+#                             application_notification(application_obj.id,
+#                                                      'You have attended second interview. We will update you about the result soon.')
+#
+#                             if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
+#                                                                             status='Second Interview Attended').exists():
+#                                 ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
+#                                                                          status='Second Interview Attended',
+#                                                                          remark='You have attended second interview. Please wait for the further updates.')
+#
+#                             messages.success(request,
+#                                              application_obj.first_name.title() + " application status changed.")
+#                         else:
+#                             messages.warning(request,
+#                                              "For applicant " + application_obj.first_name.title() + " Second interview Time, Date and Venue should not be empty.")
+#                             continue
+#                     else:
+#                         messages.warning(request,
+#                                          "Second Interview attended For applicant " + application_obj.first_name.title() + " is already active.")
+#                         continue
+#                 else:
+#                     messages.warning(request,
+#                                      "For applicant " + application_obj.first_name.title() + " please change his/her previous application status then try this.")
+#                     continue
+#
+#             elif interview_type == 'Second Interview approval':
+#                 if application_obj.second_interview_attend:
+#                     if not application_obj.second_interview_approval:
+#                         # application_obj.first_interview = True
+#                         # application_obj.first_interview_attend = True
+#                         # application_obj.first_interview_approval = True
+#                         # application_obj.psychometric_test = True
+#                         # application_obj.second_interview_attend = True
+#                         application_obj.second_interview_approval = True
+#                         application_obj.save()
+#
+#                         try:
+#                             email_rec = EmailTemplates.objects.get(template_for='Second Interview Approval',
+#                                                                    is_active=True)
+#                             context = {'first_name': application_obj.first_name}
+#                             send_email_with_template(application_obj, context, email_rec.subject, email_rec.email_body,
+#                                                      request)
+#                         except:
+#                             subject = 'Second Interview Approval'
+#                             message = 'You have cleared the second round of interview.'
+#                             send_email_to_applicant(request.user.email, application_obj.email, subject, message,
+#                                                     application_obj.first_name)
+#                         application_notification(application_obj.id, 'You have cleared the second round of interview.')
+#
+#                         if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
+#                                                                         status='Second Interview Approval').exists():
+#                             ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
+#                                                                      status='Second Interview Approval',
+#                                                                      remark='You have cleared your second interview. Please wait for the further updates.')
+#
+#                         messages.success(request, application_obj.first_name.title() + " application status changed.")
+#                     else:
+#                         messages.warning(request,
+#                                          "Second Interview approval is already active for applicant " + application_obj.first_name.title() + " .")
+#                         continue
+#                 else:
+#                     messages.warning(request,
+#                                      "For applicant " + application_obj.first_name.title() + " please change his/her previous application status then try this.")
+#                     continue
+#
+#             elif interview_type == 'Admin approval':
+#                 if request.user.is_super_admin():
+#                     if application_obj.second_interview_approval:
+#                         if not application_obj.admin_approval:
+#                             scholarship_fee = request.POST.get('scholarship_fee')
+#                             if scholarship_fee != '':
+#                                 application_obj.admin_approval = True
+#                                 application_obj.scholarship_fee = scholarship_fee
+#                                 application_obj.save()
+#
+#                                 try:
+#                                     email_rec = EmailTemplates.objects.get(template_for='Admin Approval',
+#                                                                            is_active=True)
+#                                     context = {'first_name': application_obj.first_name}
+#                                     send_email_with_template(application_obj, context, email_rec.subject,
+#                                                              email_rec.email_body,
+#                                                              request)
+#                                 except:
+#                                     subject = 'Admin Approval'
+#                                     message = 'Congrats... Your application has got final approval by the admin.'
+#
+#                                     send_email_to_applicant(request.user.email, application_obj.email, subject, message,
+#                                                             application_obj.first_name)
+#
+#                                 application_notification(application_obj.id,
+#                                                          'Congrats... Your application has got final approval by the admin.')
+#
+#                                 if not ApplicationHistoryDetails.objects.filter(
+#                                         applicant_id=application_obj,
+#                                         status='Admin Approval').exists():
+#                                     ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
+#                                                                              status='Admin Approval',
+#                                                                              remark='Your application have been approved by the admin. Please wait for the further updates.')
+#
+#                                 messages.success(request,
+#                                                  application_obj.first_name.title() + " application status changed.")
+#                             else:
+#                                 messages.warning(request,
+#                                                  "Scholarship fee cannot be empty for Applicant " + application_obj.first_name.title() + " .")
+#                                 continue
+#                         else:
+#                             messages.warning(request,
+#                                              "For applicant " + application_obj.first_name.title() + " admin approval is already done .")
+#                             continue
+#                     else:
+#                         messages.warning(request,
+#                                          "For applicant " + application_obj.first_name.title() + " please change his/her previous application status then try this.")
+#                         continue
+#                 else:
+#                     messages.warning(request, "Only admin has permission for final approval.")
+#                     continue
+#
+#             elif interview_type == 'Reject':
+#                 if not application_obj.application_rejection:
+#
+#                     if application_obj.admin_approval:
+#                         if not request.user.is_super_admin():
+#                             continue
+#
+#                     application_obj.application_rejection = True
+#                     application_obj.save()
+#
+#                     try:
+#                         email_rec = EmailTemplates.objects.get(template_for='Application Rejected', is_active=True)
+#                         context = {'first_name': application_obj.first_name}
+#                         send_email_with_template(application_obj, context, email_rec.subject, email_rec.email_body,
+#                                                  request)
+#                     except:
+#                         subject = 'Application Rejected'
+#                         message = 'Your application has rejected.'
+#
+#                         send_email_to_applicant(request.user.email, application_obj.email, subject, message,
+#                                                 application_obj.first_name)
+#
+#                     application_notification(application_obj.id, 'Application Rejected')
+#
+#                     ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
+#                                                              status='Application Rejected',
+#                                                              remark='Your application has rejected.')
+#                     messages.success(request, application_obj.first_name.title() + " application rejected.")
+#                 else:
+#                     messages.warning(request,
+#                                      "Applicant " + application_obj.first_name.title() + " is already rejected.")
+#                     continue
+#             else:
+#                 continue
+#
+#     except Exception as e:
+#         messages.warning(request, "Form have some error" + str(e))
+#
+#     # applicant_recs = ''
+#     # try:
+#     #     if request.user.is_super_admin():
+#     #         applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, year=get_current_year(request))
+#     #     else:
+#     #         applicant_recs = ApplicationDetails.objects.filter(
+#     #             nationality=request.user.partner_user_rel.get().address.country,
+#     #             is_submitted=True, year=get_current_year(request))
+#     # except Exception as e:
+#     #     messages.warning(request, "Form have some error" + str(e))
+#     # messages.warning(request, "Bye.........")
+#     # return render(request, 'template_approving_application.html',
+#     #               {'applicant_recs': applicant_recs})
+#     return redirect('/partner/template_approving_application/')
 def change_application_status(request):
     try:
         check_ids = json.loads(request.POST.get('check_ids'))
@@ -595,235 +1001,235 @@ def change_application_status(request):
 
             elif interview_type == 'First Interview attended':
 
-                if application_obj.first_interview:
+                # if application_obj.first_interview:
 
-                    if not application_obj.first_interview_attend:
-                        # application_obj.first_interview = True
-                        application_obj.first_interview_attend = True
-                        application_obj.save()
+                if not application_obj.first_interview_attend:
+                    application_obj.first_interview = True
+                    application_obj.first_interview_attend = True
+                    application_obj.save()
 
-                        try:
-                            email_rec = EmailTemplates.objects.get(template_for='First Interview Attend',
-                                                                   is_active=True)
-                            context = {'first_name': application_obj.first_name}
-                            send_email_with_template(application_obj, context, email_rec.subject, email_rec.email_body,
-                                                     request)
-                        except:
-                            subject = 'First Interview Attended'
-                            message = 'This mail is to notify that you have attended first interview. We will update you about the result soon.'
+                    try:
+                        email_rec = EmailTemplates.objects.get(template_for='First Interview Attend',
+                                                               is_active=True)
+                        context = {'first_name': application_obj.first_name}
+                        send_email_with_template(application_obj, context, email_rec.subject, email_rec.email_body,
+                                                 request)
+                    except:
+                        subject = 'First Interview Attended'
+                        message = 'This mail is to notify that you have attended first interview. We will update you about the result soon.'
 
-                            send_email_to_applicant(request.user.email, application_obj.email, subject, message,
-                                                    application_obj.first_name)
+                        send_email_to_applicant(request.user.email, application_obj.email, subject, message,
+                                                application_obj.first_name)
 
-                        application_notification(application_obj.id, 'You have attended first interview.')
+                    application_notification(application_obj.id, 'You have attended first interview.')
 
-                        if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
-                                                                        status='First Interview Attended').exists():
-                            ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
-                                                                     status='First Interview Attended',
-                                                                     remark='You have attended first interview. Please wait for the further updates.')
+                    if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
+                                                                    status='First Interview Attended').exists():
+                        ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
+                                                                 status='First Interview Attended',
+                                                                 remark='You have attended first interview. Please wait for the further updates.')
 
-                        messages.success(request, application_obj.first_name.title() + " application status changed.")
-                    else:
-                        messages.warning(request,
-                                         "Applicant " + application_obj.first_name.title() + " has already attended first interview.")
-                        continue
+                    messages.success(request, application_obj.first_name.title() + " application status changed.")
                 else:
                     messages.warning(request,
-                                     "For applicant " + application_obj.first_name.title() + " please change his/her previous application status then try this.")
+                                     "Applicant " + application_obj.first_name.title() + " has already attended first interview.")
                     continue
+                # else:
+                #     messages.warning(request,
+                #                      "For applicant " + application_obj.first_name.title() + " please change his/her previous application status then try this.")
+                #     continue
 
             elif interview_type == 'First Interview approval':
-                if application_obj.first_interview_attend:
-                    if not application_obj.first_interview_approval:
-                        # application_obj.first_interview = True
-                        # application_obj.first_interview_attend = True
+                # if application_obj.first_interview_attend:
+                if not application_obj.first_interview_approval:
+                    application_obj.first_interview = True
+                    application_obj.first_interview_attend = True
+                    application_obj.first_interview_approval = True
+                    application_obj.save()
+
+                    try:
+                        email_rec = EmailTemplates.objects.get(template_for='First Interview Approval',
+                                                               is_active=True)
+                        context = {'first_name': application_obj.first_name}
+                        send_email_with_template(application_obj, context, email_rec.subject, email_rec.email_body,
+                                                 request)
+                    except:
+                        subject = 'First Interview Approval'
+                        message = 'Your first interview has been approved which was held on ' + str(
+                            application_obj.interview_time) + ' - ' + str(
+                            application_obj.interview_date) + ' - ' + str(
+                            application_obj.interview_venue) + '. Congratualtions!!!. \n \n Please Upload the Psychometric test result. For test please visit at https://www.surveymonkey.com/ and perform test.'
+                        # message = 'Your first interview has been approved which was held on . Please Upload the Psychometric test result. For test please visit at https://www.surveymonkey.com/ and perform test.'
+                        send_email_to_applicant(request.user.email, application_obj.email, subject, message,
+                                                application_obj.first_name)
+
+                    application_notification(application_obj.id,
+                                             'You have cleared your first interview. For more updates please check your mail.')
+
+                    if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
+                                                                    status='First Interview Approval').exists():
+                        ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
+                                                                 status='First Interview Approval',
+                                                                 remark='You have cleared your first interview. Please wait for the further updates.')
+
+                    messages.success(request, application_obj.first_name.title() + " application status changed.")
+                else:
+                    messages.warning(request,
+                                     "First interview is already approved for applicant " + application_obj.first_name.title() + " .")
+                    continue
+                # else:
+                #     messages.warning(request,
+                #                      "For applicant " + application_obj.first_name.title() + " please change his/her previous application status then try this.")
+                #     continue
+
+            elif interview_type == 'Psychometric Test':
+                # if application_obj.first_interview_approval:
+                if not application_obj.psychometric_test:
+                    # if ApplicantPsychometricTestDetails.objects.filter(applicant_id=application_obj).exists():
+                    application_obj.first_interview = True
+                    application_obj.first_interview_attend = True
+                    application_obj.first_interview_approval = True
+                    application_obj.psychometric_test = True
+                    application_obj.save()
+
+                    try:
+                        email_rec = EmailTemplates.objects.get(template_for='Psychometric Test', is_active=True)
+                        context = {'first_name': application_obj.first_name}
+                        send_email_with_template(application_obj, context, email_rec.subject,
+                                                 email_rec.email_body,
+                                                 request)
+                    except:
+                        subject = 'Psychometric Test Update'
+                        message = 'You have submitted the Psychometric Test result.'
+                        send_email_to_applicant(request.user.email, application_obj.email, subject, message,
+                                                application_obj.first_name)
+
+                    application_notification(application_obj.id, 'You have submitted Psychometric test result.')
+
+                    if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
+                                                                    status='Psychometric Test').exists():
+                        ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
+                                                                 status='Psychometric Test',
+                                                                 remark='You have submitted Psychometric test result. Please wait for the further updates.')
+
+                    messages.success(request,
+                                     application_obj.first_name.title() + " application status changed.")
+                    # else:
+                    #     messages.warning(request,
+                    #                      "Applicant " + application_obj.first_name.title() + " has not submitted the psychometric test yet.")
+                    #     continue
+                else:
+                    messages.warning(request,
+                                     "Psychometric test for applicant " + application_obj.first_name.title() + " is already active.")
+                    continue
+                # else:
+                #     messages.warning(request,
+                #                      "For applicant " + application_obj.first_name.title() + " please change his/her previous application status then try this.")
+                #     continue
+
+            elif interview_type == 'Second Interview attended':
+
+                # if application_obj.psychometric_test:
+                if not application_obj.second_interview_attend:
+
+                    time = request.POST.get('time')
+                    date = request.POST.get('date')
+                    venue = request.POST.get('venue')
+
+                    if not time == '' or date == '' or venue == '':
+
+                        application_obj.first_interview = True
+                        application_obj.first_interview_attend = True
                         application_obj.first_interview_approval = True
+                        application_obj.psychometric_test = True
+                        application_obj.second_interview_attend = True
+                        application_obj.second_interview_time = time
+                        application_obj.second_interview_date = date
+                        application_obj.second_interview_venue = venue
+
                         application_obj.save()
 
                         try:
-                            email_rec = EmailTemplates.objects.get(template_for='First Interview Approval',
+                            email_rec = EmailTemplates.objects.get(template_for='Second Interview Attend',
                                                                    is_active=True)
                             context = {'first_name': application_obj.first_name}
-                            send_email_with_template(application_obj, context, email_rec.subject, email_rec.email_body,
+                            send_email_with_template(application_obj, context, email_rec.subject,
+                                                     email_rec.email_body,
                                                      request)
                         except:
-                            subject = 'First Interview Approval'
-                            message = 'Your first interview has been approved which was held on ' + str(
-                                application_obj.interview_time) + ' - ' + str(
-                                application_obj.interview_date) + ' - ' + str(
-                                application_obj.interview_venue) + '. Congratualtions!!!. \n \n Please Upload the Psychometric test result. For test please visit at https://www.surveymonkey.com/ and perform test.'
-                            # message = 'Your first interview has been approved which was held on . Please Upload the Psychometric test result. For test please visit at https://www.surveymonkey.com/ and perform test.'
+                            subject = 'Second Interview Attended'
+                            message = 'You are requested to come down for the second interview time at-' + str(
+                                time) + ' on ' + str(date) + ' at ' + str(
+                                venue) + '. \n \n Thanks and Regards \n \n XYZ'
+
+                            # message = 'This mail is to notify that you have attended second interview. We will update you about the result soon.'
+
                             send_email_to_applicant(request.user.email, application_obj.email, subject, message,
                                                     application_obj.first_name)
 
                         application_notification(application_obj.id,
-                                                 'You have cleared your first interview. For more updates please check your mail.')
+                                                 'You have attended second interview. We will update you about the result soon.')
 
                         if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
-                                                                        status='First Interview Approval').exists():
+                                                                        status='Second Interview Attended').exists():
                             ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
-                                                                     status='First Interview Approval',
-                                                                     remark='You have cleared your first interview. Please wait for the further updates.')
+                                                                     status='Second Interview Attended',
+                                                                     remark='You have attended second interview. Please wait for the further updates.')
 
-                        messages.success(request, application_obj.first_name.title() + " application status changed.")
+                        messages.success(request,
+                                         application_obj.first_name.title() + " application status changed.")
                     else:
                         messages.warning(request,
-                                         "First interview is already approved for applicant " + application_obj.first_name.title() + " .")
+                                         "For applicant " + application_obj.first_name.title() + " Second interview Time, Date and Venue should not be empty.")
                         continue
                 else:
                     messages.warning(request,
-                                     "For applicant " + application_obj.first_name.title() + " please change his/her previous application status then try this.")
+                                     "Second Interview attended For applicant " + application_obj.first_name.title() + " is already active.")
                     continue
-
-            elif interview_type == 'Psychometric Test':
-                if application_obj.first_interview_approval:
-                    if not application_obj.psychometric_test:
-                        if ApplicantPsychometricTestDetails.objects.filter(applicant_id=application_obj).exists():
-                        # application_obj.first_interview = True
-                        # application_obj.first_interview_attend = True
-                        # application_obj.first_interview_approval = True
-                            application_obj.psychometric_test = True
-                            application_obj.save()
-
-                            try:
-                                email_rec = EmailTemplates.objects.get(template_for='Psychometric Test', is_active=True)
-                                context = {'first_name': application_obj.first_name}
-                                send_email_with_template(application_obj, context, email_rec.subject,
-                                                         email_rec.email_body,
-                                                         request)
-                            except:
-                                subject = 'Psychometric Test Update'
-                                message = 'You have submitted the Psychometric Test result.'
-                                send_email_to_applicant(request.user.email, application_obj.email, subject, message,
-                                                        application_obj.first_name)
-
-                            application_notification(application_obj.id, 'You have submitted Psychometric test result.')
-
-                            if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
-                                                                            status='Psychometric Test').exists():
-                                ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
-                                                                         status='Psychometric Test',
-                                                                         remark='You have submitted Psychometric test result. Please wait for the further updates.')
-
-                            messages.success(request,
-                                             application_obj.first_name.title() + " application status changed.")
-                        else:
-                            messages.warning(request,
-                                             "Applicant " + application_obj.first_name.title() + " has not submitted the psychometric test yet.")
-                            continue
-                    else:
-                        messages.warning(request,
-                                         "Psychometric test for applicant " + application_obj.first_name.title() + " is already active.")
-                        continue
-                else:
-                    messages.warning(request,
-                                     "For applicant " + application_obj.first_name.title() + " please change his/her previous application status then try this.")
-                    continue
-
-            elif interview_type == 'Second Interview attended':
-
-                if application_obj.psychometric_test:
-                    if not application_obj.second_interview_attend:
-
-                        time = request.POST.get('time')
-                        date = request.POST.get('date')
-                        venue = request.POST.get('venue')
-
-                        if not time == '' or date == '' or venue == '':
-
-                            # application_obj.first_interview = True
-                            # application_obj.first_interview_attend = True
-                            # application_obj.first_interview_approval = True
-                            # application_obj.psychometric_test = True
-                            application_obj.second_interview_attend = True
-                            application_obj.second_interview_time = time
-                            application_obj.second_interview_date = date
-                            application_obj.second_interview_venue = venue
-
-                            application_obj.save()
-
-                            try:
-                                email_rec = EmailTemplates.objects.get(template_for='Second Interview Attend',
-                                                                       is_active=True)
-                                context = {'first_name': application_obj.first_name}
-                                send_email_with_template(application_obj, context, email_rec.subject,
-                                                         email_rec.email_body,
-                                                         request)
-                            except:
-                                subject = 'Second Interview Attended'
-                                message = 'You are requested to come down for the second interview time at-' + str(
-                                    time) + ' on ' + str(date) + ' at ' + str(
-                                    venue) + '. \n \n Thanks and Regards \n \n XYZ'
-
-                                # message = 'This mail is to notify that you have attended second interview. We will update you about the result soon.'
-
-                                send_email_to_applicant(request.user.email, application_obj.email, subject, message,
-                                                        application_obj.first_name)
-
-                            application_notification(application_obj.id,
-                                                     'You have attended second interview. We will update you about the result soon.')
-
-                            if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
-                                                                            status='Second Interview Attended').exists():
-                                ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
-                                                                         status='Second Interview Attended',
-                                                                         remark='You have attended second interview. Please wait for the further updates.')
-
-                            messages.success(request,
-                                             application_obj.first_name.title() + " application status changed.")
-                        else:
-                            messages.warning(request,
-                                             "For applicant " + application_obj.first_name.title() + " Second interview Time, Date and Venue should not be empty.")
-                            continue
-                    else:
-                        messages.warning(request,
-                                         "Second Interview attended For applicant " + application_obj.first_name.title() + " is already active.")
-                        continue
-                else:
-                    messages.warning(request,
-                                     "For applicant " + application_obj.first_name.title() + " please change his/her previous application status then try this.")
-                    continue
+                # else:
+                #     messages.warning(request,
+                #                      "For applicant " + application_obj.first_name.title() + " please change his/her previous application status then try this.")
+                #     continue
 
             elif interview_type == 'Second Interview approval':
-                if application_obj.second_interview_attend:
-                    if not application_obj.second_interview_approval:
-                        # application_obj.first_interview = True
-                        # application_obj.first_interview_attend = True
-                        # application_obj.first_interview_approval = True
-                        # application_obj.psychometric_test = True
-                        # application_obj.second_interview_attend = True
-                        application_obj.second_interview_approval = True
-                        application_obj.save()
+                # if application_obj.second_interview_attend:
+                if not application_obj.second_interview_approval:
+                    application_obj.first_interview = True
+                    application_obj.first_interview_attend = True
+                    application_obj.first_interview_approval = True
+                    application_obj.psychometric_test = True
+                    application_obj.second_interview_attend = True
+                    application_obj.second_interview_approval = True
+                    application_obj.save()
 
-                        try:
-                            email_rec = EmailTemplates.objects.get(template_for='Second Interview Approval',
-                                                                   is_active=True)
-                            context = {'first_name': application_obj.first_name}
-                            send_email_with_template(application_obj, context, email_rec.subject, email_rec.email_body,
-                                                     request)
-                        except:
-                            subject = 'Second Interview Approval'
-                            message = 'You have cleared the second round of interview.'
-                            send_email_to_applicant(request.user.email, application_obj.email, subject, message,
-                                                    application_obj.first_name)
-                        application_notification(application_obj.id, 'You have cleared the second round of interview.')
+                    try:
+                        email_rec = EmailTemplates.objects.get(template_for='Second Interview Approval',
+                                                               is_active=True)
+                        context = {'first_name': application_obj.first_name}
+                        send_email_with_template(application_obj, context, email_rec.subject, email_rec.email_body,
+                                                 request)
+                    except:
+                        subject = 'Second Interview Approval'
+                        message = 'You have cleared the second round of interview.'
+                        send_email_to_applicant(request.user.email, application_obj.email, subject, message,
+                                                application_obj.first_name)
+                    application_notification(application_obj.id, 'You have cleared the second round of interview.')
 
-                        if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
-                                                                        status='Second Interview Approval').exists():
-                            ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
-                                                                     status='Second Interview Approval',
-                                                                     remark='You have cleared your second interview. Please wait for the further updates.')
+                    if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
+                                                                    status='Second Interview Approval').exists():
+                        ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
+                                                                 status='Second Interview Approval',
+                                                                 remark='You have cleared your second interview. Please wait for the further updates.')
 
-                        messages.success(request, application_obj.first_name.title() + " application status changed.")
-                    else:
-                        messages.warning(request,
-                                         "Second Interview approval is already active for applicant " + application_obj.first_name.title() + " .")
-                        continue
+                    messages.success(request, application_obj.first_name.title() + " application status changed.")
                 else:
                     messages.warning(request,
-                                     "For applicant " + application_obj.first_name.title() + " please change his/her previous application status then try this.")
+                                     "Second Interview approval is already active for applicant " + application_obj.first_name.title() + " .")
                     continue
+                # else:
+                #     messages.warning(request,
+                #                      "For applicant " + application_obj.first_name.title() + " please change his/her previous application status then try this.")
+                #     continue
 
             elif interview_type == 'Admin approval':
                 if request.user.is_super_admin():
@@ -929,7 +1335,6 @@ def change_application_status(request):
     # return render(request, 'template_approving_application.html',
     #               {'applicant_recs': applicant_recs})
     return redirect('/partner/template_approving_application/')
-
 
 # def change_application_status(request):
 #     application_id = request.POST.get('application_rec')

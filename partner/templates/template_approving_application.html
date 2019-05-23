@@ -160,7 +160,48 @@
                 });
 
 
-                $('.status_change').click(function () {
+{#                $('.status_change').click(function () {#}
+{##}
+{#                    var checked = $('#example').find('input[name="check"]:checked').length;#}
+{##}
+{#                    if (!checked){#}
+{#                        alert('Please select at least one record to proceed..!');#}
+{#                        return false;#}
+{#                    }#}
+{##}
+{#                    var favorite = [];#}
+{#                    if ($(this).attr('id') == 'First Interview'){#}
+{#                        $('#id_accept_student_model').modal();#}
+{#                        $('#second_interview_time').val('');#}
+{#                        return false;#}
+{#                    }#}
+{##}
+{#                    if ($(this).attr('id') == 'Second Interview attended'){#}
+{#                        $('#id_accept_student_model').modal();#}
+{#                        $('#second_interview_time').val('True');#}
+{#                        return false;#}
+{#                    }#}
+{#                    else {#}
+{#                        if (!checked)#}
+{#                            alert('Please select at least one record to proceed..!');#}
+{#                        else {#}
+{#                            $.each($("input[name='check']:checked"), function () {#}
+{##}
+{#                                favorite.push($(this).val());#}
+{#                            });#}
+{##}
+                            {#alert(JSON.stringify(favorite));#}
+{#                            $("#check_ids").val(JSON.stringify(favorite));#}
+{#                            $("#interview_type").val($(this).attr('id'));#}
+{##}
+{#                            $('#form_submit').submit()#}
+{#                        }#}
+{#                    }#}
+{##}
+{#                })#}
+
+
+                  $('.status_change').click(function () {
 
                     var checked = $('#example').find('input[name="check"]:checked').length;
 
@@ -170,18 +211,18 @@
                     }
 
                     var favorite = [];
-                    if ($(this).attr('id') == 'First Interview'){
-                        $('#id_accept_student_model').modal();
-                        $('#second_interview_time').val('');
-                        return false;
-                    }
-
-                    if ($(this).attr('id') == 'Second Interview attended'){
-                        $('#id_accept_student_model').modal();
-                        $('#second_interview_time').val('True');
-                        return false;
-                    }
-                    else {
+{#                    if ($(this).attr('id') == 'First Interview'){#}
+{#                        $('#id_accept_student_model').modal();#}
+{#                        $('#second_interview_time').val('');#}
+{#                        return false;#}
+{#                    }#}
+{##}
+{#                    if ($(this).attr('id') == 'Second Interview attended'){#}
+{#                        $('#id_accept_student_model').modal();#}
+{#                        $('#second_interview_time').val('True');#}
+{#                        return false;#}
+{#                    }#}
+{#                    else {#}
                         if (!checked)
                             alert('Please select at least one record to proceed..!');
                         else {
@@ -196,9 +237,10 @@
 
                             $('#form_submit').submit()
                         }
-                    }
+{#                    }#}
 
                 })
+
 
                 $('#first_interview_save').click(function () {
                     var favorite = []

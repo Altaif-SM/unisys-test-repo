@@ -1065,12 +1065,23 @@ License: You must have a valid license purchased only from themeforest(the above
                 <div class="tabs-left">
                     <ul class="nav nav-tabs menu" style="border-bottom: none">
                         {#<li class="active"><a href="#a" data-toggle="tab">Dashboard</a></li>#}
-
-                        <li id="setting_anch"><a href="#b" data-toggle="tab">Settings</a></li>
+                        {% if not user.is_student %}
+                        <li id="setting_anch" ><a href="#b" data-toggle="tab">Settings</a></li>
+                        {% endif %}
+                        {% if user.is_student %}
                         <li id="app_anch"><a href="#c" data-toggle="tab">Application Management</a></li>
+                        {% else %}
+                        <li id="app_anch"><a href="#c" data-toggle="tab">Application Management</a></li>
+                        {% endif %}
+                        {% if not user.is_student %}
                         <li id="acad_app"><a href="#d" data-toggle="tab">Academic</a></li>
+                        {% endif %}
+                        {% if not user.is_student %}
                         <li id="account_anch"><a href="#e" data-toggle="tab">Accounting</a></li>
+                        {% endif %}
+                        {% if not user.is_student %}
                         <li><a href="#f" data-toggle="tab">Softs Skill Programs</a></li>
+                        {% endif %}
                     </ul>
 
                 </div><!-- /tabbable -->
@@ -1194,9 +1205,24 @@ License: You must have a valid license purchased only from themeforest(the above
 </body>
 
 <script type="text/javascript">
+{#    {% if user.is_super_admin %}#}
+{#        var element = document.getElementById("b");#}
+{#        element.classList.add("active");#}
+{##}
+{#        var element = document.getElementById("setting_anch");#}
+{#        element.classList.add("active");#}
+{##}
+        {% if user.is_student %}
+
+        var element = document.getElementById("c");
+        element.classList.add("active");
+
+        var element = document.getElementById("app_anch");
+        element.classList.add("active");
+
+    {% endif %}
+
     var base_url = window.location.href;
-
-
     if (base_url == 'http://namafund.namafoundation.org/masters/template_year_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
