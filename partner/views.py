@@ -2571,7 +2571,11 @@ def filter_student_agreement(request):
                     program_dict = {}
                     agreement_rec = ApplicantAgreementDetails.objects.get(applicant_id=rec)
                     program_dict['name'] = rec.get_full_name()
-                    program_dict['country'] = rec.address.country.country_name
+                    if rec.address:
+                        program_dict['country'] = rec.address.country.country_name
+                    else:
+                        program_dict['country'] = ''
+                    # program_dict['country'] = rec.address.country.country_name
                     program_dict['four_parties'] = agreement_rec.four_parties_agreement_document
                     program_dict['education_loan'] = agreement_rec.education_loan_agreement_document
                     program_dict['application'] = rec
@@ -2586,7 +2590,11 @@ def filter_student_agreement(request):
                     program_dict = {}
 
                     program_dict['name'] = rec.get_full_name()
-                    program_dict['country'] = rec.address.country.country_name
+                    # program_dict['country'] = rec.address.country.country_name
+                    if rec.address:
+                        program_dict['country'] = rec.address.country.country_name
+                    else:
+                        program_dict['country'] = ''
                     program_dict['four_parties'] = ''
                     program_dict['education_loan'] = ''
                     program_dict['application'] = rec
@@ -2599,7 +2607,11 @@ def filter_student_agreement(request):
             else:
                 program_dict = {}
                 program_dict['name'] = rec.get_full_name()
-                program_dict['country'] = rec.address.country.country_name
+                # program_dict['country'] = rec.address.country.country_name
+                if rec.address:
+                    program_dict['country'] = rec.address.country.country_name
+                else:
+                    program_dict['country'] = ''
                 program_dict['application'] = rec
 
                 if ApplicantAgreementDetails.objects.filter(applicant_id=rec).exists():
