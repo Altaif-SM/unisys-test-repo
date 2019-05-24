@@ -1255,6 +1255,7 @@ def applicant_scholarship_about_yourself_info(request):
     degree_obj = DegreeDetails.objects.all()
     university_obj = UniversityDetails.objects.all()
     course_recs = ProgramDetails.objects.all()
+    terms_condition_recs = UploadTermCondition.objects.all()
 
     scholarship_obj = ''
     about_obj = ''
@@ -1281,7 +1282,7 @@ def applicant_scholarship_about_yourself_info(request):
     return render(request, 'applicant_scholarship_about_yourself_info.html',
                   {'scholarship_recs': scholarship_recs, 'scholarship_obj': scholarship_obj, 'about_obj': about_obj,
                    'university_obj': university_obj, 'degree_obj': degree_obj, 'course_recs': course_recs,
-                   'application_obj': application_obj})
+                   'application_obj': application_obj,'terms_condition_recs':terms_condition_recs})
 
 
 def get_degrees(request):

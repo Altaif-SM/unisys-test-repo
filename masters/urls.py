@@ -20,6 +20,10 @@ urlpatterns = [
     path('update_scholarship/', views.update_scholarship, name='update_scholarship'),
     path('delete_scholarship/', views.delete_scholarship, name='delete_scholarship'),
 
+    # ********------ Terms and Condition Master --------****************************
+    path('terms_condition_master/', views.terms_condition_master, name='terms_condition_master'),
+    path('save_terms_condition/', views.save_terms_condition, name='save_terms_condition'),
+
     # ********------ Country Master --------****************************
     path('template_country_master/', views.template_country_master, name='template_country_master'),
     path('save_country/', views.save_country, name='save_country'),

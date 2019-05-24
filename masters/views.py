@@ -1511,3 +1511,29 @@ def donar_all_details_pdf(request, donor_id):
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
         return redirect('/masters/template_donar_details/' + str(donor_id))
+
+# *********------------ Terms and Condition Master ----------***************
+
+def terms_condition_master(request):
+    try:
+        terms_rec = UploadTermCondition.objects.filter()[0]
+    except IndexError:
+        terms_rec = None
+    return render(request, 'terms_and_condition.html', {'terms_rec': terms_rec})
+
+
+def save_terms_condition(request):
+    term_file = request.FILES.get('terms_condition',None)
+    try:
+        upload_recs = UploadTermCondition.objects.filter()
+        if upload_recs:
+            rec = UploadTermCondition.objects.filter()[0]
+            rec.term_condition = term_file
+            rec.save()
+            messages.success(request, "Record updated.")
+        else:
+            UploadTermCondition.objects.create(term_condition=term_file)
+            messages.success(request, "Record saved.")
+    except:
+        messages.warning(request, "Record not saved.")
+    return redirect('/masters/terms_condition_master/')
