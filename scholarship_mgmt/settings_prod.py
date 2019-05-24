@@ -176,5 +176,5 @@ EMAIL_HOST = 'smtp.gmail.com'
 
 EMAIL_HOST_USER = 'namafund@namafoundation.org'
 EMAIL_HOST_PASSWORD = 'namafund123'
-
+EMAIL_PORT = 587
 SERVER_HOST_NAME = "http://namafund.namafoundation.org/"
