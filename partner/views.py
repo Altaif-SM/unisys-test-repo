@@ -484,22 +484,22 @@ def template_application_approval_details(request, app_id):
             approval_messages = 'First Interview Approval'
             final_approval = False
 
-        elif not application_rec.psychometric_test:
-            if not ApplicantPsychometricTestDetails.objects.filter(applicant_id=application_rec).exists():
-                messages.warning(request, "This applicant has not submitted psychometric test.")
-                return redirect('/partner/template_approving_application/')
+        # elif not application_rec.psychometric_test:
+        #     if not ApplicantPsychometricTestDetails.objects.filter(applicant_id=application_rec).exists():
+        #         messages.warning(request, "This applicant has not submitted psychometric test.")
+        #         return redirect('/partner/template_approving_application/')
+        #
+        #     approval_messages = 'Psychometric Test'
+        #     # flag_test = True
+        #     final_approval = False
 
-            approval_messages = 'Psychometric Test'
-            # flag_test = True
-            final_approval = False
+        # elif not application_rec.second_interview_attend:
+        #     approval_messages = 'Second Interview Attended'
+        #     final_approval = False
 
-        elif not application_rec.second_interview_attend:
-            approval_messages = 'Second Interview Attended'
-            final_approval = False
-
-        elif not application_rec.second_interview_approval:
-            approval_messages = 'Second Interview Approval'
-            final_approval = False
+        # elif not application_rec.second_interview_approval:
+        #     approval_messages = 'Second Interview Approval'
+        #     final_approval = False
 
         elif not application_rec.admin_approval:
             # if not ApplicantAgreementDetails.objects.filter(applicant_id=application_rec).exists():
@@ -1233,52 +1233,59 @@ def change_application_status(request):
 
             elif interview_type == 'Admin approval':
                 if request.user.is_super_admin():
-                    if application_obj.second_interview_approval:
-                        if not application_obj.admin_approval:
-                            scholarship_fee = request.POST.get('scholarship_fee')
-                            if scholarship_fee != '':
-                                application_obj.admin_approval = True
-                                application_obj.scholarship_fee = scholarship_fee
-                                application_obj.save()
+                    # if application_obj.second_interview_approval:
+                    if not application_obj.admin_approval:
 
-                                try:
-                                    email_rec = EmailTemplates.objects.get(template_for='Admin Approval',
-                                                                           is_active=True)
-                                    context = {'first_name': application_obj.first_name}
-                                    send_email_with_template(application_obj, context, email_rec.subject,
-                                                             email_rec.email_body,
-                                                             request)
-                                except:
-                                    subject = 'Admin Approval'
-                                    message = 'Congrats... Your application has got final approval by the admin.'
+                        scholarship_fee = request.POST.get('scholarship_fee')
+                        if scholarship_fee != '':
+                            application_obj.first_interview = True
+                            application_obj.first_interview_attend = True
+                            application_obj.first_interview_approval = True
+                            application_obj.psychometric_test = True
+                            application_obj.second_interview_attend = True
+                            application_obj.second_interview_approval = True
+                            application_obj.admin_approval = True
+                            application_obj.scholarship_fee = scholarship_fee
+                            application_obj.save()
 
-                                    send_email_to_applicant(request.user.email, application_obj.email, subject, message,
-                                                            application_obj.first_name)
+                            try:
+                                email_rec = EmailTemplates.objects.get(template_for='Admin Approval',
+                                                                       is_active=True)
+                                context = {'first_name': application_obj.first_name}
+                                send_email_with_template(application_obj, context, email_rec.subject,
+                                                         email_rec.email_body,
+                                                         request)
+                            except:
+                                subject = 'Admin Approval'
+                                message = 'Congrats... Your application has got final approval by the admin.'
 
-                                application_notification(application_obj.id,
-                                                         'Congrats... Your application has got final approval by the admin.')
+                                send_email_to_applicant(request.user.email, application_obj.email, subject, message,
+                                                        application_obj.first_name)
 
-                                if not ApplicationHistoryDetails.objects.filter(
-                                        applicant_id=application_obj,
-                                        status='Admin Approval').exists():
-                                    ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
-                                                                             status='Admin Approval',
-                                                                             remark='Your application have been approved by the admin. Please wait for the further updates.')
+                            application_notification(application_obj.id,
+                                                     'Congrats... Your application has got final approval by the admin.')
 
-                                messages.success(request,
-                                                 application_obj.first_name.title() + " application status changed.")
-                            else:
-                                messages.warning(request,
-                                                 "Scholarship fee cannot be empty for Applicant " + application_obj.first_name.title() + " .")
-                                continue
+                            if not ApplicationHistoryDetails.objects.filter(
+                                    applicant_id=application_obj,
+                                    status='Admin Approval').exists():
+                                ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
+                                                                         status='Admin Approval',
+                                                                         remark='Your application have been approved by the admin. Please wait for the further updates.')
+
+                            messages.success(request,
+                                             application_obj.first_name.title() + " application status changed.")
                         else:
                             messages.warning(request,
-                                             "For applicant " + application_obj.first_name.title() + " admin approval is already done .")
+                                             "Scholarship fee cannot be empty for Applicant " + application_obj.first_name.title() + " .")
                             continue
                     else:
                         messages.warning(request,
-                                         "For applicant " + application_obj.first_name.title() + " please change his/her previous application status then try this.")
+                                         "For applicant " + application_obj.first_name.title() + " admin approval is already done .")
                         continue
+                    # else:
+                    #     messages.warning(request,
+                    #                      "For applicant " + application_obj.first_name.title() + " please change his/her previous application status then try this.")
+                    #     continue
                 else:
                     messages.warning(request, "Only admin has permission for final approval.")
                     continue
@@ -1598,6 +1605,12 @@ def change_final_application_status(request):
             if not application_obj.admin_approval:
                 scholarship_fee = request.POST.get('scholarship_fee')
                 if scholarship_fee != '':
+                    application_obj.first_interview = True
+                    application_obj.first_interview_attend = True
+                    application_obj.first_interview_approval = True
+                    application_obj.psychometric_test = True
+                    application_obj.second_interview_attend = True
+                    application_obj.second_interview_approval = True
                     application_obj.admin_approval = True
                     application_obj.scholarship_fee = scholarship_fee
                     application_obj.save()
