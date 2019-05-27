@@ -394,7 +394,8 @@ def send_email_with_template(application_obj, context, subject, email_body, requ
         if flag:
             msg = EmailMultiAlternatives(subject, text_content, application_obj.user.email, [application_obj.user.email])
         else:
-            msg = EmailMultiAlternatives(subject, text_content, request.user.email, [application_obj.email])
+            msg = EmailMultiAlternatives(subject, text_content, application_obj.email, [application_obj.email])
+            # msg = EmailMultiAlternatives(subject, text_content, request.user.email, [application_obj.email])
         msg.attach_alternative(html_content, "text/html")
         msg.send()
 
