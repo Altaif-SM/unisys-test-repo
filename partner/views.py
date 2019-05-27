@@ -1612,6 +1612,7 @@ def change_final_application_status(request):
                     application_obj.second_interview_attend = True
                     application_obj.second_interview_approval = True
                     application_obj.admin_approval = True
+                    application_obj.is_sponsored = True
                     application_obj.scholarship_fee = scholarship_fee
                     application_obj.save()
 
