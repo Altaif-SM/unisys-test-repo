@@ -184,10 +184,18 @@
                                     <tr id="item{{ forloop.counter }}" class="item">
 {#                                        <td style="display: none"><input id="application_id" class="application_id"#}
 {#                                                                         value="{{ rec.id }}"></td>#}
-                                        <td>
+{#                                        <td>#}
                                             {#                                            <a href="/partner/template_academic_progress_details/{{ rec.applicant_id.id }}">{{ rec.applicant_id.first_name|title }} {{ rec.applicant_id.last_name|title }}</a>#}
-                                            <p>{{ rec.applicant_id.get_full_name|title }} </p>
-                                        </td>
+{#                                            <p>{{ rec.applicant_id.get_full_name|title }} </p>#}
+{#                                        </td>#}
+
+
+                                         <td>
+                                                <text><a  href="/partner/template_applicant_all_details/{{ rec.applicant_id.id }}" >{{ rec.applicant_id.get_full_name }}</a></text>
+{#                                                <text><a href="/partner/template_applicant_all_details/{{ rec.id }}" {% if rec.application_rejection %} style="color: darkred" {% endif %}>{{ rec.first_name|title }} {{ rec.last_name|title }}</a>#}
+                                                </text>
+                                                {#                                            <text>{{ rec.first_name|title }} {{ rec.last_name|title }}</text>#}
+                                            </td>
 
                                         <td><p>{{ rec.applicant_id.nationality.country_name|title }}</p></td>
                                         <td><p>{{ rec.applicant_id.address.country.country_name|title }}</p></td>
