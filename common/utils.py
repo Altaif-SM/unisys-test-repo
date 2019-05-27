@@ -375,32 +375,42 @@ def export_last_row_wraped_column_xls(output_file_name, column_names, rows, rec_
 
 def send_email_with_template(application_obj, context, subject, email_body, request,flag=False):
     try:
-        email_template = email_body
-        subject = subject
-        text_content = ''
-
+        # email_template = email_body
+        # subject = subject
+        # text_content = ''
+        #
         path = "partner/templates/" + str(application_obj.id) + ".html"
-        file_name = str(application_obj.id) + ".html"
+        # file_name = str(application_obj.id) + ".html"
+        #
+        # open(path, "w").close()
+        # text_file = open(path, "w")
+        # text_file.write(email_template)
+        # text_file.close()
+        #
+        # email_template = get_template(file_name)
+        #
+        # html_content = email_template.render(context)
+        #
+        # if flag:
+        #     msg = EmailMultiAlternatives(subject, text_content, application_obj.user.email, [application_obj.user.email])
+        # else:
+        #     msg = EmailMultiAlternatives(subject, text_content, application_obj.email, [application_obj.email])
+        #     # msg = EmailMultiAlternatives(subject, text_content, request.user.email, [application_obj.email])
+        # msg.attach_alternative(html_content, "text/html")
+        # msg.send()
 
-        open(path, "w").close()
-        text_file = open(path, "w")
-        text_file.write(email_template)
-        text_file.close()
-
-        email_template = get_template(file_name)
-
-        html_content = email_template.render(context)
-
-        if flag:
-            msg = EmailMultiAlternatives(subject, text_content, application_obj.user.email, [application_obj.user.email])
-        else:
-            msg = EmailMultiAlternatives(subject, text_content, application_obj.email, [application_obj.email])
-            # msg = EmailMultiAlternatives(subject, text_content, request.user.email, [application_obj.email])
+        subject, from_email, to = subject, request.user.email, application_obj.email
+        text_content = email_body
+        html_content = text_content
+        msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
         msg.attach_alternative(html_content, "text/html")
         msg.send()
 
+
         if os.path.exists(path):
             os.remove(path)
+
+
     except:
         pass
 
