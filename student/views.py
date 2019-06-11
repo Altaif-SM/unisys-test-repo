@@ -1415,7 +1415,7 @@ def my_application(request):
 @submission_required
 def submit_application(request):
     try:
-
+        app_id = request.POST.get('app_id')
         if not AcademicQualificationDetails.objects.filter(applicant_id=request.user.get_application):
             messages.success(request, "Please fill the academic qualification section before submitting the application  ...")
             return redirect('/student/my_application/')
@@ -1430,6 +1430,19 @@ def submit_application(request):
         ApplicationHistoryDetails.objects.create(applicant_id=request.user.get_application,
                                                  status='Application Submitted',
                                                  remark='Your application is submitted and your institution will be notified on further updates regarding your applications.')
+        application_obj = ApplicationDetails.objects.get(id=app_id)
+        try:
+            email_rec = EmailTemplates.objects.get(template_for='Student Application Submission',
+                                                   is_active=True)
+            context = {'first_name': application_obj.first_name}
+            send_email_with_template(application_obj, context, email_rec.subject, email_rec.email_body,
+                                     request)
+        except:
+            subject = 'Student Application Submission'
+            message = 'This mail is to notify that you have submitted application. We will update you application related info soon.'
+
+            send_email_to_applicant(request.user.email, application_obj.email, subject, message,
+                                    application_obj.first_name)
 
         application_notification(request.user.get_application.id,
                                  'You have successfully submitted your application.')
