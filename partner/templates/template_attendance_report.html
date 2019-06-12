@@ -145,7 +145,7 @@
                                         <td><p>{{ rec.program|title }}</p></td>
                                         <td><p>{{ rec.module|title }}</p></td>
                                         <td><p>{{ rec.semester|title }}</p></td>
-                                        <td><p>{{ rec.certificate }}</p></td>
+                                        <td><a href="{{ rec.certificate }}">{{ rec.certificate_name }}</a></td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>

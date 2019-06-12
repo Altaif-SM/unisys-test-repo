@@ -2273,7 +2273,8 @@ def template_attendance_report(request):
                 program_dict['program'] = rec.module.name
                 program_dict['module'] = rec.module.module.module_name
                 program_dict['semester'] = rec.module.semester.semester_name
-                program_dict['certificate'] = certificate_rec.certificate_document
+                program_dict['certificate'] = certificate_rec.certificate_document.url
+                program_dict['certificate_name'] = certificate_rec.certificate_document
 
                 attended_list.append(program_dict)
 
