@@ -258,8 +258,8 @@ def user_signup(request):
                         #                              request, True)
                         # except:
 
-                        subject = 'Signup Completed'
-                        message = 'Your signup completed in NAMA. Please click on the given button to activate your account.'
+                        subject = 'Sign up Completed'
+                        message = 'Your Sign up completed in NAMA. Please click on the given button to activate your account.'
                         send_signup_email_to_applicant(student_obj.user.email, student_obj.user.email, subject,
                                                        message,
                                                        student_obj.user.first_name, user.id)

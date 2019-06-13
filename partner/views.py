@@ -2266,6 +2266,7 @@ def template_attendance_report(request):
                                                                  module=rec.module).exists():
                 certificate_rec = ApplicantDevelopmentProgramDetails.objects.filter(applicant_id=rec.applicant_id,
                                                                  module=rec.module)[0]
+                application_obj = ApplicationDetails.objects.get(id=rec.applicant_id.id)
                 program_dict[
                     'name'] = rec.applicant_id.get_full_name()
                 program_dict['country'] = rec.applicant_id.address.country.country_name
@@ -2273,7 +2274,7 @@ def template_attendance_report(request):
                 program_dict['program'] = rec.module.name
                 program_dict['module'] = rec.module.module.module_name
                 program_dict['semester'] = rec.module.semester.semester_name
-                program_dict['certificate'] = certificate_rec.certificate_document.url
+                program_dict['certificate'] = application_obj.report_path()+str(certificate_rec.certificate_document)
                 program_dict['certificate_name'] = certificate_rec.certificate_document
 
                 attended_list.append(program_dict)

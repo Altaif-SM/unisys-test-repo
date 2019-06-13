@@ -801,12 +801,7 @@
                     <div class="">
                         <label class="col-md-1 control-label">Admission Letter:</label>
                         <div class="col-md-2">
-                            <a href="
-
-
-
-
-                                    {{ scholarship_obj.applicant_id.report_path }}{{ scholarship_obj.admission_letter_document }}">{{ scholarship_obj.admission_letter_document|default:"" }}</a>
+                            <a href="{{ scholarship_obj.applicant_id.report_path }}{{ scholarship_obj.admission_letter_document }}">{{ scholarship_obj.admission_letter_document|default:"" }}</a>
                             {#                            <span class="">{{ scholarship_obj.admission_letter_document }}</span>#}
                         </div>
                     </div>
