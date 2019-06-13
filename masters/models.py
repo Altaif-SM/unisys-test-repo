@@ -344,6 +344,17 @@ class DevelopmentProgram(BaseModel):
     date = models.DateField()
     remark = models.CharField(max_length=2000, blank=True, null=True)
 
+class SoftSkillDevelopmentProgram(BaseModel):
+    program_name = models.CharField(max_length=255, blank=True, null=True)
+    objectives = models.CharField(max_length=2000, blank=True, null=True)
+    delivery_method = models.CharField(max_length=100, blank=True, null=True)
+    delivery_location = models.CharField(max_length=256, blank=True, null=True)
+    organizer = models.CharField(max_length=256, blank=True, null=True)
+    delivery_date = models.DateField(null=True)
+    completion_deadline = models.DateField(null=True)
+    rsvp_method = models.CharField(max_length=2000, blank=True, null=True)
+    remarks = models.CharField(max_length=2000, blank=True, null=True)
+
 
 class GuardianDetails(BaseModel):
     birth_date = models.DateField(null=True)
