@@ -971,14 +971,14 @@ License: You must have a valid license purchased only from themeforest(the above
                             {% if 'accounting.can_view_student_receipt_voucher' in perms %}
                                 <li class="nav-item ">
                                     <a href="{% url 'accounting:get_student_payment_voucher' %}" class="nav-link ">
-                                        Student Payment Voucher </a>
+                                        Disbursement Register  </a>
                                 </li>
                             {% endif %}
 
                             {% if 'accounting.can_view_student_receipt_voucher' in perms %}
                                 <li class="nav-item ">
                                     <a href="{% url 'accounting:get_student_receipt_voucher' %}" class="nav-link ">
-                                        Student Receipt Voucher </a>
+                                        Repayment Register  </a>
                                 </li>
                             {% endif %}
                              {% if 'accounting.can_view_student_reciept_payment_voucher' in perms %}
@@ -986,26 +986,26 @@ License: You must have a valid license purchased only from themeforest(the above
                                 <li class="nav-item ">
                                     <a href="{% url 'accounting:get_student_payment_and_receipt_report' %}"
                                        class="nav-link ">
-                                        Student Receipt & Payment Voucher </a>
+                                        Individual Summary Report  </a>
                                 </li>
                              {% endif %}
                             {% if 'accounting.can_view_student_report' in perms %}
                                 <li class="nav-item ">
                                     <a href="{% url 'accounting:get_student_report' %}" class="nav-link ">
-                                        Student Report </a>
+                                        Disbursement Report  </a>
                                 </li>
                             {% endif %}
                             {% if 'accounting.can_view_student_repayment_report' in perms %}
                                 <li class="nav-item ">
                                     <a href="{% url 'accounting:get_repayment_report' %}" class="nav-link ">
-                                        Re-Payment Reports
+                                        Repayment Report
                                     </a>
                                 </li>
                                {% endif %}
                             {% if 'accounting.can_view_approve_and_paid_total' in perms %}
                                 <li class="nav-item ">
                                     <a href="{% url 'accounting:get_approval_and_paid_total' %}" class="nav-link ">
-                                        Approval & Paid Total </a>
+                                        Group Summary Report </a>
                                 </li>
                             {% endif %}
 
@@ -1014,7 +1014,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
                                     <li class="nav-item ">
                                         <a href="{% url 'accounting:get_donor_receipt_voucher' %}" class="nav-link ">
-                                            Donor Receipt Voucher </a>
+                                            Donor Register </a>
                                     </li>
                                         {% endif %}
                                {% if 'accounting.can_view_donor_report' in perms %}
