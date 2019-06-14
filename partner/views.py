@@ -1956,16 +1956,16 @@ def template_link_student_program(request):
         if StudentModuleMapping.objects.filter(applicant_id=applicant_rec).exists():
             module_obj = StudentModuleMapping.objects.filter(applicant_id=applicant_rec)
 
-            temp_dict['program'] = module_obj[0].program
-            temp_dict['module'] = module_obj
-            temp_dict['semester'] = module_obj[0].module.semester
+            # temp_dict['program'] = module_obj[0].program
+            # temp_dict['module'] = module_obj
+            temp_dict['soft_skill_program'] = module_obj[0].soft_skill_program
             temp_dict['applicant_rec'] = module_obj[0].applicant_id
             temp_dict['flag'] = False
 
         else:
-            temp_dict['program'] = applicant_rec.applicant_scholarship_rel.get().course_applied
-            temp_dict['module'] = ''
-            temp_dict['semester'] = ''
+            # temp_dict['program'] = applicant_rec.applicant_scholarship_rel.get().course_applied
+            # temp_dict['module'] = ''
+            temp_dict['soft_skill_program'] = ''
             temp_dict['applicant_rec'] = applicant_rec
             temp_dict['flag'] = True
 
@@ -1975,11 +1975,12 @@ def template_link_student_program(request):
     degree_recs = DegreeDetails.objects.all()
     modules_recs = ModuleDetails.objects.all()
     program_recs = DevelopmentProgram.objects.filter(year=YearDetails.objects.get(active_year=1))
+    soft_skill_recs = SoftSkillDevelopmentProgram.objects.all()
 
     return render(request, 'template_link_student_program.html',
                   {'applicant_recs': applicant_recs, 'country_recs': country_recs, 'university_recs': university_recs,
                    'degree_recs': degree_recs, 'semester_recs': semester_recs, 'rec_list': rec_list,
-                   'program_recs': program_recs, 'modules_recs': modules_recs})
+                   'program_recs': program_recs, 'modules_recs': modules_recs,'soft_skill_recs':soft_skill_recs})
 
 
 def get_semester_modules(request):
@@ -2001,44 +2002,65 @@ from threading import Thread, activeCount
 from accounting.views import send_email
 
 
+# def save_student_program(request):
+#     try:
+#         data_value = json.loads(request.POST.get('data_value'))
+#     except Exception as e:
+#         messages.warning(request, "No record updated.")
+#         return redirect('/partner/template_link_student_program/')
+#
+#     try:
+#         for application in data_value:
+#             if not StudentModuleMapping.objects.filter(applicant_id_id=application['applicant_id']).exists():
+#                 flag_module_assigned = False
+#                 for module in application['applicant_module']:
+#                     StudentModuleMapping.objects.create(program_id=application['applicant_program'],
+#                                                         degree_id=application['degree'],
+#                                                         applicant_id_id=application['applicant_id'],
+#                                                         module_id=module)
+#
+#                     flag_module_assigned = True
+#
+#                 if flag_module_assigned:
+#                     program_list = DevelopmentProgram.objects.filter(id__in=application['applicant_module'])
+#                     application_obj = ApplicationDetails.objects.get(id=application['applicant_id'])
+#
+#                     params = {'x': 16, 'program_list': program_list, 'request': request}
+#
+#                     subject, from_email, to = 'Scholarship Module Details', settings.EMAIL_HOST_USER, application_obj.email
+#                     text_content = 'Following module has been assigned to you. Please Find The Attachment'
+#
+#                     file = render_to_file('development_program_pdf_template.html', params)
+#                     thread = Thread(target=send_email, args=(file, subject, text_content, from_email, to))
+#                     thread.start()
+#
+#                     application_notification(application['applicant_id'],
+#                                              'Some modules have assigned to your.')
+#
+#             messages.warning(request,
+#                              "Module assigned to the selected students and mail sent with detailed module description.")
+#
+#     except Exception as e:
+#         messages.warning(request, "Form have some error" + str(e))
+#     return redirect('/partner/template_link_student_program/')
+
 def save_student_program(request):
     try:
         data_value = json.loads(request.POST.get('data_value'))
     except Exception as e:
         messages.warning(request, "No record updated.")
         return redirect('/partner/template_link_student_program/')
-
     try:
-        for application in data_value:
-            if not StudentModuleMapping.objects.filter(applicant_id_id=application['applicant_id']).exists():
-                flag_module_assigned = False
-                for module in application['applicant_module']:
-                    StudentModuleMapping.objects.create(program_id=application['applicant_program'],
-                                                        degree_id=application['degree'],
-                                                        applicant_id_id=application['applicant_id'],
-                                                        module_id=module)
-
-                    flag_module_assigned = True
-
-                if flag_module_assigned:
-                    program_list = DevelopmentProgram.objects.filter(id__in=application['applicant_module'])
-                    application_obj = ApplicationDetails.objects.get(id=application['applicant_id'])
-
-                    params = {'x': 16, 'program_list': program_list, 'request': request}
-
-                    subject, from_email, to = 'Scholarship Module Details', settings.EMAIL_HOST_USER, application_obj.email
-                    text_content = 'Following module has been assigned to you. Please Find The Attachment'
-
-                    file = render_to_file('development_program_pdf_template.html', params)
-                    thread = Thread(target=send_email, args=(file, subject, text_content, from_email, to))
-                    thread.start()
-
-                    application_notification(application['applicant_id'],
-                                             'Some modules have assigned to your.')
-
-            messages.warning(request,
-                             "Module assigned to the selected students and mail sent with detailed module description.")
-
+        for rec in data_value:
+            if not StudentModuleMapping.objects.filter(applicant_id_id=rec['applicant_id']).exists():
+                if rec['soft_skill_id']:
+                    StudentModuleMapping.objects.create(soft_skill_program_id=rec['soft_skill_id'],
+                                                        applicant_id_id=rec['applicant_id']
+                                                        )
+            else:
+                if rec['soft_skill_id']:
+                    StudentModuleMapping.objects.filter(applicant_id_id=rec['applicant_id']).update(soft_skill_program_id=rec['soft_skill_id'])
+        messages.success(request, "Record Saved.")
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
     return redirect('/partner/template_link_student_program/')
