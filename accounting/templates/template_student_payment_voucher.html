@@ -430,7 +430,7 @@
                     </form>
                     <br><br>
                     <form action="{% url 'accounting:save_payment_voucher_data_by_student' %}" id="form_sample_1"
-                          class="form-horizontal"
+                          class="form-horizontal" target="_blank"
                           method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="row">
@@ -438,16 +438,16 @@
                                    value="{{ raw_dict.application_rec.id }}">
                             <input type="hidden" name="btn_type" id="id_btn_type">
 
-                            <div class="">
-                                <label class="col-md-2 control-label">Voucher Number:
-                                </label>
-                                <div class="col-md-2">
-                                    <input type="text" title="Voucher Number" placeholder="Voucher Number"
-                                           id="id_receipt_voucher_number" name="voucher_number"
-                                           class="form-control" required disabled>
-                                    <input type="hidden" name="voucher_number" id="id_voucher_number_id">
-                                </div>
-                            </div>
+{#                            <div class="">#}
+{#                                <label class="col-md-2 control-label">Voucher Number:#}
+{#                                </label>#}
+{#                                <div class="col-md-2">#}
+{#                                    <input type="text" title="Voucher Number" placeholder="Voucher Number"#}
+{#                                           id="id_receipt_voucher_number" name="voucher_number"#}
+{#                                           class="form-control" required disabled>#}
+{#                                    <input type="hidden" name="voucher_number" id="id_voucher_number_id">#}
+{#                                </div>#}
+{#                            </div>#}
 
                             <div class="">
                                 <label class="col-md-2 control-label">Date:</label>
@@ -558,12 +558,12 @@
                         <div class="row">
 
                             <div class="">
-                                <label class="col-md-2 control-label">Program:</label>
+                                <label class="col-md-2 control-label">Course:</label>
                                 <div class="col-md-2">
                                     <input type="text" title="Program" placeholder="Program"
                                            id="id_program" name="program"
                                            class="form-control" required disabled
-                                           value="{{ raw_dict.application_rec.program.program_name }}">
+                                           value="{{ raw_dict.application_rec.program.program_name|title }}">
 
                                     <input type="text" id="id_program_id" name="program" hidden>
                                 </div>
@@ -660,7 +660,7 @@
                         <th>Country</th>
                         <th>University</th>
                         <th>Scholarship</th>
-                        <th>Program</th>
+                        <th>Course</th>
                         <th>Donor</th>
                         <th>Amount</th>
                         <th></th>

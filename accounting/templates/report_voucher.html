@@ -8,12 +8,14 @@
             size: A4;
             margin: 1cm;
         }
+
         .table {
             width: 100%;
             max-width: 100%;
             margin-bottom: 5px;
             background-color: #fff;
         }
+
         .table th,
         .table td {
             padding: 5px;
@@ -21,16 +23,20 @@
             border-top: 1px solid #000;
             text-align: center;
         }
+
         .table thead th {
             vertical-align: bottom;
             border-bottom: 2px solid #000;
         }
+
         .table tbody + tbody {
             border-top: 2px solid #000;
         }
+
         .table .table {
             background-color: #fff;
         }
+
         .list-group {
             display: block;
             width: 100%;
@@ -38,6 +44,7 @@
             margin-top: 15px;
             margin-bottom: 15px;
         }
+
         .list-group p {
             width: 100%;
             height: 20px;
@@ -48,8 +55,15 @@
     </style>
 </head>
 <body>
+<div class='header' id="header" style="text-align: center;">
+    <img src="{{ header_path }}" alt="logo"
+         style="width: 790px;height: 120px;margin-top: 25px; text-align: center" class="logo-default"/><br>
 
+</div>
+<br><br><br>
 <div class="container">
+
+
     <div class="card">
         <div class="card-header">
             <h3>Payment Voucher Report - {{ voucher.created_on | date:"d/m/Y" }}</h3>
@@ -70,19 +84,31 @@
             </tr>
             </thead>
             <tbody>
-{#            {% for voucher in payment_voucher %}#}
-                <tr>
-                    <td>{{ voucher.created_on | date:"d/m/Y" }}</td>
-                    <td>{{ voucher.voucher_number }}</td>
-                    <td>{{ voucher.application.get_full_name|title }}</td>
-                    <td>{{ voucher.voucher_description }}</td>
-                    <td>{{ voucher.voucher_amount }}</td>
-                </tr>
-{#            {% endfor %}#}
+            {#            {% for voucher in payment_voucher %}#}
+            <tr>
+                <td>{{ voucher.created_on | date:"d/m/Y" }}</td>
+                <td>{{ voucher.voucher_number }}</td>
+                <td>{{ voucher.application.get_full_name|title }}</td>
+                <td>{{ voucher.voucher_description }}</td>
+                <td>{{ voucher.voucher_amount }}</td>
+            </tr>
+            {#            {% endfor %}#}
             </tbody>
         </table>
     </div>
 </div>
+<br><br><br><br><br><br><br><br><br>
+<div id="footerContent">
 
+    <table>
+                        <span class="" style="">
+                              <img src="{{ footer_path }}" style="width: 850px;height: 100px;" alt="logo"
+                                   class="logo-default"/>
+                        </span>
+
+
+        </tr>
+    </table>
+</div>
 </body>
 </html>

@@ -659,12 +659,13 @@ def save_payment_voucher_data_by_student(request):
                 file = render_to_file('report_voucher.html', params)
                 thread = Thread(target=send_email, args=(file, subject, text_content, from_email, to))
                 thread.start()
-
         if str(request.POST['btn_type']) == 'save_and_print':
             params = {
                 'voucher_type': 'Student Payment Voucher Report',
                 'voucher': voucher,
-                'request': request
+                'request': request,
+                'header_path':settings.MEDIA_ROOT + 'Header.jpg',
+                'footer_path':settings.MEDIA_ROOT + 'Footer.jpg'
             }
             return render_to_pdf('report_voucher.html', params)
 

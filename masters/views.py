@@ -867,90 +867,139 @@ def template_development_program_master(request):
     year_recs = YearDetails.objects.all()
     semester_recs = SemesterDetails.objects.all()
     module_recs = ModuleDetails.objects.all()
-    development_program_recs = DevelopmentProgram.objects.all()
+    # development_program_recs = DevelopmentProgram.objects.all()
+    development_program_recs = SoftSkillDevelopmentProgram.objects.all()
     return render(request, 'template_development_program_master.html',
                   {'year_recs': year_recs, 'semester_recs': semester_recs, 'module_recs': module_recs,
                    'development_program_recs': development_program_recs})
 
 
+# def save_development_program_master(request):
+#     year_name = request.POST.get('year_name')
+#     semester_name = request.POST.get('semester_name')
+#     module_name = request.POST.get('module_name')
+#     code_name = request.POST.get('code_name')
+#     name = request.POST.get('name')
+#
+#     activities = request.POST.get('activities')
+#     outcomes = request.POST.get('outcomes')
+#
+#     day_duration = request.POST.get('day_duration')
+#     night_duration = request.POST.get('night_duration')
+#     method_name = request.POST.get('method_name')
+#
+#     mark_name = request.POST.get('mark_name')
+#     date_name = request.POST.get('date_name')
+#     remark_name = request.POST.get('remark_name')
+#     try:
+#         if not DevelopmentProgram.objects.filter(year_id=year_name, semester_id=semester_name, name=name,
+#                                                  module_id=module_name).exists():
+#             DevelopmentProgram.objects.create(year_id=year_name, semester_id=semester_name, module_id=module_name,
+#                                               code=code_name, date=date_name, marks=mark_name, name=name,
+#                                               method=method_name, duration_night=night_duration,
+#                                               duration_day=day_duration, outcome=outcomes, activity=activities,
+#                                               remark=remark_name)
+#             messages.success(request, "Record saved.")
+#         else:
+#             messages.warning(request,
+#                              "Development program is already exist for this Year, semester and module. Record not saved.")
+#     except:
+#         messages.warning(request, "Record not saved.")
+#     return redirect('/masters/template_development_program_master/')
+
 def save_development_program_master(request):
-    year_name = request.POST.get('year_name')
-    semester_name = request.POST.get('semester_name')
-    module_name = request.POST.get('module_name')
-    code_name = request.POST.get('code_name')
-    name = request.POST.get('name')
+    program_name = request.POST.get('program_name')
+    objectives = request.POST.get('objectives')
+    delivery_method = request.POST.get('delivery_method')
+    delivery_location = request.POST.get('delivery_location')
+    organizer = request.POST.get('organizer')
 
-    activities = request.POST.get('activities')
-    outcomes = request.POST.get('outcomes')
+    delivery_date = request.POST.get('delivery_date')
+    completion_deadline = request.POST.get('completion_deadline')
 
-    day_duration = request.POST.get('day_duration')
-    night_duration = request.POST.get('night_duration')
-    method_name = request.POST.get('method_name')
-
-    mark_name = request.POST.get('mark_name')
-    date_name = request.POST.get('date_name')
-    remark_name = request.POST.get('remark_name')
+    rsvp_method = request.POST.get('rsvp_method')
+    remarks = request.POST.get('remarks')
     try:
-        if not DevelopmentProgram.objects.filter(year_id=year_name, semester_id=semester_name, name=name,
-                                                 module_id=module_name).exists():
-            DevelopmentProgram.objects.create(year_id=year_name, semester_id=semester_name, module_id=module_name,
-                                              code=code_name, date=date_name, marks=mark_name, name=name,
-                                              method=method_name, duration_night=night_duration,
-                                              duration_day=day_duration, outcome=outcomes, activity=activities,
-                                              remark=remark_name)
-            messages.success(request, "Record saved.")
-        else:
-            messages.warning(request,
-                             "Development program is already exist for this Year, semester and module. Record not saved.")
+        SoftSkillDevelopmentProgram.objects.create(program_name=program_name, objectives=objectives, delivery_method=delivery_method,
+                                          delivery_location=delivery_location, organizer=organizer, delivery_date=delivery_date, completion_deadline=completion_deadline,
+
+                                          rsvp_method=rsvp_method, remarks=remarks)
+        messages.success(request, "Record saved.")
     except:
         messages.warning(request, "Record not saved.")
     return redirect('/masters/template_development_program_master/')
 
 
+# def update_development_program_master(request):
+#     development_program_id = request.POST.get('development_program_id')
+#
+#     year_name = request.POST.get('year_name')
+#     name = request.POST.get('name')
+#     semester_name = request.POST.get('semester_name')
+#     module_name = request.POST.get('module_name')
+#     code_name = request.POST.get('code_name')
+#
+#     activities = request.POST.get('activities')
+#     outcomes = request.POST.get('outcomes')
+#
+#     day_duration = request.POST.get('day_duration')
+#     night_duration = request.POST.get('night_duration')
+#     method_name = request.POST.get('method_name')
+#
+#     mark_name = request.POST.get('mark_name')
+#     date_name = request.POST.get('date_name')
+#     remark_name = request.POST.get('remark_name')
+#     try:
+#         if not DevelopmentProgram.objects.filter(~Q(id=development_program_id), year_id=year_name,
+#                                                  semester_id=semester_name,
+#                                                  module_id=module_name).exists():
+#
+#             DevelopmentProgram.objects.filter(id=development_program_id).update(year_id=year_name,
+#                                                                                 semester_id=semester_name,
+#                                                                                 module_id=module_name, name=name,
+#                                                                                 code=code_name, date=date_name,
+#                                                                                 marks=mark_name,
+#                                                                                 method=method_name,
+#                                                                                 duration_night=night_duration,
+#                                                                                 duration_day=day_duration,
+#                                                                                 outcome=outcomes,
+#                                                                                 activity=activities,
+#                                                                                 remark=remark_name)
+#             messages.success(request, "Record updated.")
+#             return HttpResponse(json.dumps({'success': 'Record updated.'}), content_type="application/json")
+#         else:
+#             messages.warning(request,
+#                              "Development program is already exist for this Year, semester and module. Record not saved.")
+#             return HttpResponse(
+#                 json.dumps({
+#                     'success': "Development program is already exist for this Year, semester and module. Record not saved."}),
+#                 content_type="application/json")
+#
+#     except:
+#         messages.warning(request, "Record not updated.")
+#     return HttpResponse(json.dumps({'error': 'Record not updated.'}),
+#                         content_type="application/json")
 def update_development_program_master(request):
     development_program_id = request.POST.get('development_program_id')
-
-    year_name = request.POST.get('year_name')
-    name = request.POST.get('name')
-    semester_name = request.POST.get('semester_name')
-    module_name = request.POST.get('module_name')
-    code_name = request.POST.get('code_name')
-
-    activities = request.POST.get('activities')
-    outcomes = request.POST.get('outcomes')
-
-    day_duration = request.POST.get('day_duration')
-    night_duration = request.POST.get('night_duration')
-    method_name = request.POST.get('method_name')
-
-    mark_name = request.POST.get('mark_name')
-    date_name = request.POST.get('date_name')
-    remark_name = request.POST.get('remark_name')
+    program_name = request.POST.get('program_name')
+    objectives = request.POST.get('objectives')
+    delivery_method = request.POST.get('delivery_method')
+    delivery_location = request.POST.get('delivery_location')
+    organizer = request.POST.get('organizer')
+    delivery_date = request.POST.get('delivery_date')
+    completion_deadline = request.POST.get('completion_deadline')
+    rsvp_method = request.POST.get('rsvp_method')
+    remarks = request.POST.get('remarks')
     try:
-        if not DevelopmentProgram.objects.filter(~Q(id=development_program_id), year_id=year_name,
-                                                 semester_id=semester_name,
-                                                 module_id=module_name).exists():
-
-            DevelopmentProgram.objects.filter(id=development_program_id).update(year_id=year_name,
-                                                                                semester_id=semester_name,
-                                                                                module_id=module_name, name=name,
-                                                                                code=code_name, date=date_name,
-                                                                                marks=mark_name,
-                                                                                method=method_name,
-                                                                                duration_night=night_duration,
-                                                                                duration_day=day_duration,
-                                                                                outcome=outcomes,
-                                                                                activity=activities,
-                                                                                remark=remark_name)
-            messages.success(request, "Record updated.")
-            return HttpResponse(json.dumps({'success': 'Record updated.'}), content_type="application/json")
-        else:
-            messages.warning(request,
-                             "Development program is already exist for this Year, semester and module. Record not saved.")
-            return HttpResponse(
-                json.dumps({
-                    'success': "Development program is already exist for this Year, semester and module. Record not saved."}),
-                content_type="application/json")
+        SoftSkillDevelopmentProgram.objects.filter(id=development_program_id).update(program_name=program_name,
+                                                                                     objectives=objectives,
+                                                                                     delivery_method=delivery_method, delivery_location=delivery_location,
+                                                                                     organizer=organizer, delivery_date=delivery_date,
+                                                                                     completion_deadline=completion_deadline,
+                                                                                     rsvp_method=rsvp_method,
+                                                                                     remarks=remarks)
+        messages.success(request, "Record updated.")
+        return HttpResponse(json.dumps({'success': 'Record updated.'}), content_type="application/json")
 
     except:
         messages.warning(request, "Record not updated.")
@@ -962,7 +1011,7 @@ def delete_development_program_master(request):
     development_program_id = request.POST.get('development_program_id')
 
     try:
-        DevelopmentProgram.objects.filter(id=development_program_id).delete()
+        SoftSkillDevelopmentProgram.objects.filter(id=development_program_id).delete()
         messages.success(request, "Record deleted.")
         return HttpResponse(json.dumps({'success': 'Record deleted.'}), content_type="application/json")
     except:

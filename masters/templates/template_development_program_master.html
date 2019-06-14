@@ -35,24 +35,27 @@
                 $(document).on("click", ".update", function (e) {
                     var parent_id = $(this).closest('tr').attr('id');
                     var development_program_id = $('#' + parent_id + ' #development_program_id').val();
-                    var name = $('#' + parent_id + ' .name').val();
-                    var year = $('#' + parent_id + ' .year').val();
-                    var semester = $('#' + parent_id + ' .semester').val();
-                    var module = $('#' + parent_id + ' .module').val();
-                    var code = $('#' + parent_id + ' .code_name').val();
+                    var program_name = $('#' + parent_id + ' .program_name').val();
+{#                    var year = $('#' + parent_id + ' .year').val();#}
+{#                    var semester = $('#' + parent_id + ' .semester').val();#}
+{#                    var module = $('#' + parent_id + ' .module').val();#}
+{#                    var code = $('#' + parent_id + ' .code_name').val();#}
 
-                    var activity = $('#' + parent_id + ' .activity').val();
-                    var outcome = $('#' + parent_id + ' .outcome').val();
-                    var duration_day = $('#' + parent_id + ' .duration_day').val();
-                    var duration_night = $('#' + parent_id + ' .duration_night').val();
+                    var objectives = $('#' + parent_id + ' .objectives').val();
+{#                    var outcome = $('#' + parent_id + ' .outcome').val();#}
+                    var delivery_method = $('#' + parent_id + ' .delivery_method').val();
+{#                    var duration_night = $('#' + parent_id + ' .duration_night').val();#}
 
-                    var method = $('#' + parent_id + ' .method').val();
-                    var marks = $('#' + parent_id + ' .marks').val();
-                    var date = $('#' + parent_id + ' .date').val();
-                    var remark = $('#' + parent_id + ' .remark').val();
+{#                    var method = $('#' + parent_id + ' .method').val();#}
+                    var delivery_location = $('#' + parent_id + ' .delivery_location').val();
+                    var organizer = $('#' + parent_id + ' .organizer').val();
+                    var delivery_date = $('#' + parent_id + ' .delivery_date').val();
+                    var completion_deadline = $('#' + parent_id + ' .completion_deadline').val();
+                    var rsvp_method = $('#' + parent_id + ' .rsvp_method').val();
+                    var remarks = $('#' + parent_id + ' .remarks').val();
 
                     var url = '/masters/update_development_program_master/';
-                    update_development_program_info(url, development_program_id, name, year, semester, module, remark, date, marks, method, duration_night, duration_day, outcome, activity, code)
+                    update_development_program_info(url, development_program_id, program_name, objectives, delivery_method, delivery_location, organizer, delivery_date, completion_deadline, rsvp_method, remarks)
                 })
 
                 $(document).on("click", ".delete", function (e) {
@@ -81,25 +84,22 @@
                     });
                 }
 
-                function update_development_program_info(url, development_program_id, name, year, semester, module, remark, date, marks, method, duration_night, duration_day, outcome, activity, code) {
+                function update_development_program_info(url, development_program_id, program_name, objectives, delivery_method, delivery_location, organizer, delivery_date, completion_deadline, rsvp_method, remarks) {
                     $.ajax({
                         type: 'POST',
                         url: url,
                         data: {
                             development_program_id: development_program_id,
-                            name: name,
-                            year_name: year,
-                            semester_name: semester,
-                            module_name: module,
-                            code_name: code,
-                            activities: activity,
-                            outcomes: outcome,
-                            day_duration: duration_day,
-                            night_duration: duration_night,
-                            method_name: method,
-                            mark_name: marks,
-                            date_name: date,
-                            remark_name: remark,
+                            program_name: program_name,
+
+                            objectives: objectives,
+                            delivery_method: delivery_method,
+                            delivery_location: delivery_location,
+                            organizer: organizer,
+                            delivery_date: delivery_date,
+                            completion_deadline: completion_deadline,
+                            rsvp_method: rsvp_method,
+                            remarks: remarks,
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
@@ -198,7 +198,7 @@
             </li>
 
             <li>
-                <span>Soft Skills Programs </span>
+                <span> Soft Skills Programs </span>
             </li>
         </ul>
     </div>
@@ -242,171 +242,255 @@
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-1 control-label">Name:</label>
-                                <div class="col-md-2">
-                                    <input type="text" title="Enter Name" id="name" name="name"
+                                <label class="col-md-2 control-label">Program Name:</label>
+                                <div class="col-md-6">
+                                    <input type="text" title="Enter Program Name" id="program_name" name="program_name"
                                            class="form-control" required>
                                 </div>
                             </div>
 
+{#                            <div class="">#}
+{#                                <label class="col-md-1 control-label">Code:</label>#}
+{#                                <div class="col-md-2">#}
+{#                                    <input type="text" title="Enter code" id="code_name" name="code_name"#}
+{#                                           class="form-control" required>#}
+{#                                </div>#}
+{#                            </div>#}
+                        </div>
+{#                        <br>#}
+{#                        <br>#}
+{#                        <div class="row">#}
+{#                            <div class="">#}
+{#                                <label class="col-md-1 control-label">Year:#}
+{##}
+{#                                </label>#}
+{#                                <div class="col-md-2">#}
+{#                                    <select id='year_name' title="Select year" name="year_name" class="form-control"#}
+{#                                            required>#}
+{#                                        <option style="display:none" selected="selected" id=""#}
+{#                                                value="">Please Select#}
+{#                                        </option>#}
+{##}
+{#                                        {% for rec in year_recs %}#}
+{#                                            <option value='{{ rec.id }}'>{{ rec.year_name|title }}</option>#}
+{#                                        {% endfor %}#}
+{#                                    </select>#}
+{#                                </div>#}
+{#                            </div>#}
+{##}
+{#                            <div class="">#}
+{#                                <label class="col-md-1 control-label">Semester:#}
+{##}
+{#                                </label>#}
+{#                                <div class="col-md-2">#}
+{#                                    <select id='semester_name' title="Select semester" name="semester_name"#}
+{#                                            class="form-control" required>#}
+{#                                        <option style="display:none" selected="selected" id=""#}
+{#                                                value="">Please Select#}
+{#                                        </option>#}
+{##}
+{#                                        {% for rec in semester_recs %}#}
+{#                                            <option value='{{ rec.id }}'>{{ rec.semester_name|title }}</option>#}
+{#                                        {% endfor %}#}
+{#                                    </select>#}
+{#                                </div>#}
+{#                            </div>#}
+{##}
+{#                            <div class="">#}
+{#                                <label class="col-md-1 control-label">Module:</label>#}
+{#                                <div class="col-md-2">#}
+{#                                    <select id='module_name' title="Select module" name="module_name"#}
+{#                                            class="form-control" required>#}
+{#                                        <option style="display:none" selected="selected" id=""#}
+{#                                                value="">Please Select#}
+{#                                        </option>#}
+{##}
+{#                                        {% for rec in module_recs %}#}
+{#                                            <option value='{{ rec.id }}'>{{ rec.module_name|title }}</option>#}
+{#                                        {% endfor %}#}
+{#                                    </select>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+
+                        <br>
+                        <div class="row">
                             <div class="">
-                                <label class="col-md-1 control-label">Code:</label>
-                                <div class="col-md-2">
-                                    <input type="text" title="Enter code" id="code_name" name="code_name"
+                                <label class="col-md-2 control-label">Objectives:</label>
+                                <div class="col-md-6">
+                                    <textarea id="objectives" name="objectives" style="height:100px"
+                                              title="specify objectives" class="form-control" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br><br>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Delivery Method:</label>
+                                <div class="col-md-6">
+                                    <select id='delivery_method'  name="delivery_method"
+                                            class="form-control"
+                                            required>
+                                        <option  value="">Please Select</option>
+                                        <option  value="Classroom">Classroom</option>
+                                        <option  value="Online">Online</option>
+                                        <option  value="Practical">Practical</option>
+                                        <option  value="Others">Others</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Location of Delivery<p style="font-size: 10px;">(if applicable):</p></label>
+                                <div class="col-md-6">
+                                    <input type="text"  id="delivery_location" name="delivery_location"
+                                           class="form-control" >
+                                </div>
+                            </div>
+
+                        </div>
+                        <br>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Organizer:</label>
+                                <div class="col-md-6">
+                                    <input type="text" id="organizer" name="organizer"
+                                           class="form-control" required>
+                                </div>
+                            </div>
+
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Date of Delivery:</label>
+                                <div class="col-md-6">
+                                    <input type="date" title="Select date" id="delivery_date" name="delivery_date"
                                            class="form-control" required>
                                 </div>
                             </div>
                         </div>
                         <br>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Deadline of Completion:</label>
+                                <div class="col-md-6">
+                                    <input type="date" title="Select date" id="completion_deadline" name="completion_deadline"
+                                           class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
                         <br>
                         <div class="row">
                             <div class="">
-                                <label class="col-md-1 control-label">Year:
-
-                                </label>
-                                <div class="col-md-2">
-                                    <select id='year_name' title="Select year" name="year_name" class="form-control"
-                                            required>
-                                        <option style="display:none" selected="selected" id=""
-                                                value="">Please Select
-                                        </option>
-
-                                        {% for rec in year_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.year_name|title }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Semester:
-
-                                </label>
-                                <div class="col-md-2">
-                                    <select id='semester_name' title="Select semester" name="semester_name"
-                                            class="form-control" required>
-                                        <option style="display:none" selected="selected" id=""
-                                                value="">Please Select
-                                        </option>
-
-                                        {% for rec in semester_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.semester_name|title }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Module:</label>
-                                <div class="col-md-2">
-                                    <select id='module_name' title="Select module" name="module_name"
-                                            class="form-control" required>
-                                        <option style="display:none" selected="selected" id=""
-                                                value="">Please Select
-                                        </option>
-
-                                        {% for rec in module_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.module_name|title }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <br><br>
-                        <div class="row">
-                            <div class="">
-                                <label class="col-md-1 control-label">Activities:</label>
+                                <label class="col-md-2 control-label">RSVP Method:</label>
                                 <div class="col-md-6">
-                                    <textarea id="activities" name="activities" style="height:150px"
-                                              title="specify activities" class="form-control" required></textarea>
+                                    <textarea id="rsvp_method" name="rsvp_method" style="height:100px"
+                                               class="form-control" required></textarea>
                                 </div>
                             </div>
                         </div>
-
-                        <br><br>
-
+                        <br>
                         <div class="row">
                             <div class="">
-                                <label class="col-md-1 control-label">Outcomes:</label>
+                                <label class="col-md-2 control-label">Remarks:</label>
                                 <div class="col-md-6">
-                                    <textarea id="outcomes" name="outcomes" style="height:150px" title="specify outcome"
-                                              class="form-control" required></textarea>
+                                    <textarea id="remarks" name="remarks" style="height:100px"
+                                               class="form-control" required></textarea>
                                 </div>
                             </div>
                         </div>
 
-                        <br><br>
 
-                        <div class="row">
-                            <div class="">
-                                <label class="col-md-1 control-label">Duration Day:</label>
-                                <div class="col-md-1">
-                                    <select id='day' title="Select day duration" name="day_duration"
-                                            class="form-control"
-                                            required>
-                                        <option style="display:none" selected="selected" id="1" value="1">1</option>
-                                        <option id="2" value="2">2</option>
-                                        <option id="3" value="3">3</option>
-                                        <option id="4" value="4">4</option>
-                                    </select>
-                                </div>
-                            </div>
 
-                            <div class="">
-                                <label class="col-md-1 control-label">Night:</label>
-                                <div class="col-md-1">
-                                    <select id='night' title="Select night duration" name="night_duration"
-                                            class="form-control"
-                                            required>
-                                        <option style="display:none" selected="selected" id="1" value="1">1</option>
-                                        <option id="2" value="2">2</option>
-                                        <option id="3" value="3">3</option>
-                                        <option id="4" value="4">4</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Method:</label>
-                                <div class="col-md-2">
-                                    <input type="text" title="Enter method" id="method_name" name="method_name"
-                                           class="form-control" required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <br><br>
-
-                        <div class="row">
-                            <div class="">
-                                <label class="col-md-1 control-label">Mark:</label>
-                                <div class="col-md-2">
-                                    <input type="number" min="0" max="100" title="Enter mark" id="mark_name"
-                                           name="mark_name" class="form-control" required>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-2 control-label">Date:</label>
-                                <div class="col-md-2">
-                                    <input type="date" title="Select date" id="date_name" name="date_name"
-                                           class="form-control" required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <br><br>
-                        <div class="row">
-                            <div class="">
-                                <label class="col-md-1 control-label">Remark:</label>
-                                <div class="col-md-6">
-                                    <textarea id="remark_name" name="remark_name" style="height:150px"
-                                              title="Enter remark" class="form-control" required></textarea>
-                                </div>
-                            </div>
-                        </div>
-
+{#                        <div class="row">#}
+{#                            <div class="">#}
+{#                                <label class="col-md-1 control-label">Outcomes:</label>#}
+{#                                <div class="col-md-6">#}
+{#                                    <textarea id="outcomes" name="outcomes" style="height:150px" title="specify outcome"#}
+{#                                              class="form-control" required></textarea>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{##}
+{#                        <br><br>#}
+{##}
+{#                        <div class="row">#}
+{#                            <div class="">#}
+{#                                <label class="col-md-1 control-label">Duration Day:</label>#}
+{#                                <div class="col-md-1">#}
+{#                                    <select id='day' title="Select day duration" name="day_duration"#}
+{#                                            class="form-control"#}
+{#                                            required>#}
+{#                                        <option style="display:none" selected="selected" id="1" value="1">1</option>#}
+{#                                        <option id="2" value="2">2</option>#}
+{#                                        <option id="3" value="3">3</option>#}
+{#                                        <option id="4" value="4">4</option>#}
+{#                                    </select>#}
+{#                                </div>#}
+{#                            </div>#}
+{##}
+{#                            <div class="">#}
+{#                                <label class="col-md-1 control-label">Night:</label>#}
+{#                                <div class="col-md-1">#}
+{#                                    <select id='night' title="Select night duration" name="night_duration"#}
+{#                                            class="form-control"#}
+{#                                            required>#}
+{#                                        <option style="display:none" selected="selected" id="1" value="1">1</option>#}
+{#                                        <option id="2" value="2">2</option>#}
+{#                                        <option id="3" value="3">3</option>#}
+{#                                        <option id="4" value="4">4</option>#}
+{#                                    </select>#}
+{#                                </div>#}
+{#                            </div>#}
+{##}
+{#                            <div class="">#}
+{#                                <label class="col-md-1 control-label">Method:</label>#}
+{#                                <div class="col-md-2">#}
+{#                                    <input type="text" title="Enter method" id="method_name" name="method_name"#}
+{#                                           class="form-control" required>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{##}
+{#                        <br><br>#}
+{##}
+{#                        <div class="row">#}
+{#                            <div class="">#}
+{#                                <label class="col-md-1 control-label">Mark:</label>#}
+{#                                <div class="col-md-2">#}
+{#                                    <input type="number" min="0" max="100" title="Enter mark" id="mark_name"#}
+{#                                           name="mark_name" class="form-control" required>#}
+{#                                </div>#}
+{#                            </div>#}
+{##}
+{#                            <div class="">#}
+{#                                <label class="col-md-2 control-label">Date:</label>#}
+{#                                <div class="col-md-2">#}
+{#                                    <input type="date" title="Select date" id="date_name" name="date_name"#}
+{#                                           class="form-control" required>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{##}
+{#                        <br><br>#}
+{#                        <div class="row">#}
+{#                            <div class="">#}
+{#                                <label class="col-md-1 control-label">Remark:</label>#}
+{#                                <div class="col-md-6">#}
+{#                                    <textarea id="remark_name" name="remark_name" style="height:150px"#}
+{#                                              title="Enter remark" class="form-control" required></textarea>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{##}
                         <br><br>
 
                         <div class="row">
@@ -429,27 +513,30 @@
                         <thead>
                         <tr>
                             <th hidden>Id</th>
-                            <th>Name</th>
-                            <th>Code</th>
-                            <th hidden>Year</th>
-                            <th>Year</th>
+                            <th>Programe Name</th>
+{#                            <th>Code</th>#}
+{#                            <th hidden>Year</th>#}
+{#                            <th>Year</th>#}
+{##}
+{#                            <th hidden>Semester</th>#}
+{#                            <th>Semester</th>#}
+{#                            <th hidden>Module</th>#}
+{#                            <th>Module</th>#}
+                            <th>Objectives</th>
 
-                            <th hidden>Semester</th>
-                            <th>Semester</th>
-                            <th hidden>Module</th>
-                            <th>Module</th>
-                            <th>Activities</th>
-
-                            <th>Outcomes</th>
-                            <th hidden>Day Duration</th>
-                            <th>Day Duration</th>
-                            <th hidden>Night Duration</th>
-                            <th>Night Duration</th>
-
-                            <th>Method</th>
-                            <th>Mark</th>
-                            <th>Date</th>
-                            <th>Remark</th>
+{#                            <th>Outcomes</th>#}
+                            <th hidden>Delivery Method</th>
+                            <th>Delivery Method</th>
+{#                            <th hidden>Night Duration</th>#}
+{#                            <th>Night Duration</th>#}
+{##}
+{#                            <th>Method</th>#}
+                            <th>Delivery Location</th>
+                            <th>Organizer</th>
+                            <th>Date of Delivery</th>
+                            <th>Deadline of Completion</th>
+                            <th>RSVP Method</th>
+                            <th>Remarks</th>
                             <th width="10%"></th>
                         </tr>
                         </thead>
@@ -460,164 +547,189 @@
                                 <td hidden><input id="development_program_id" value="{{ rec.id }}"></td>
 
                                 <td>
-                                    <text hidden>{{ rec.name|title }}</text>
+                                    <text hidden>{{ rec.program_name|title }}</text>
 
-                                    <input class="form-control data name" name="name_saved"
+                                    <input class="form-control data program_name" name="program_name_saved"
                                            type="text"
-                                           id="name{{ forloop.counter }}" value="{{ rec.name|title }}"
+                                           id="program_name{{ forloop.counter }}" value="{{ rec.program_name|title }}"
                                            required
                                            title='Please enter name' disabled>
                                 </td>
 
-                                <td>
-                                    <text hidden>{{ rec.code|title }}</text>
-                                    <input class="form-control data code_name" name="code_name_saved"
-                                           type="text"
-                                           id="code{{ forloop.counter }}" value="{{ rec.code|title }}"
-                                           required
-                                           title='Please enter code' disabled>
-                                </td>
+{#                                <td>#}
+{#                                    <text hidden>{{ rec.code|title }}</text>#}
+{#                                    <input class="form-control data code_name" name="code_name_saved"#}
+{#                                           type="text"#}
+{#                                           id="code{{ forloop.counter }}" value="{{ rec.code|title }}"#}
+{#                                           required#}
+{#                                           title='Please enter code' disabled>#}
+{#                                </td>#}
 
-                                <td hidden>
-                                    <text hidden>{{ rec.year.year_name|title }}</text>
-                                </td>
+{#                                <td hidden>#}
+{#                                    <text hidden>{{ rec.year.year_name|title }}</text>#}
+{#                                </td>#}
 
-                                <td>
-                                    <text hidden>{{ rec.year.year_name|title }}</text>
-                                    <select id='year{{ forloop.counter }}' name="year_name{{ forloop.counter }}"
-                                            class="form-control data year" disabled required>
-                                        <option style="display:none" selected="selected" id=""
-                                                value="{{ rec.year.id }}">{{ rec.year.year_name|title }} </option>
-                                        {% for rec in year_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.year_name|title }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </td>
+{#                                <td>#}
+{#                                    <text hidden>{{ rec.year.year_name|title }}</text>#}
+{#                                    <select id='year{{ forloop.counter }}' name="year_name{{ forloop.counter }}"#}
+{#                                            class="form-control data year" disabled required>#}
+{#                                        <option style="display:none" selected="selected" id=""#}
+{#                                                value="{{ rec.year.id }}">{{ rec.year.year_name|title }} </option>#}
+{#                                        {% for rec in year_recs %}#}
+{#                                            <option value='{{ rec.id }}'>{{ rec.year_name|title }}</option>#}
+{#                                        {% endfor %}#}
+{#                                    </select>#}
+{#                                </td>#}
 
-                                <td hidden>
-                                    <text hidden>{{ rec.semester.semester_name|title }}</text>
-                                </td>
+{#                                <td hidden>#}
+{#                                    <text hidden>{{ rec.semester.semester_name|title }}</text>#}
+{#                                </td>#}
 
-                                <td>
-                                    <text hidden>{{ rec.semester.semester_name|title }}</text>
-                                    <select id='semester{{ forloop.counter }}' name="semester_name{{ forloop.counter }}"
-                                            title='Please select semester' class="form-control data semester" disabled
-                                            required>
-                                        <option style="display:none" selected="selected" id=""
-                                                value="{{ rec.semester.id }}">{{ rec.semester.semester_name|title }} </option>
-                                        {% for rec in semester_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.semester_name|title }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </td>
+{#                                <td>#}
+{#                                    <text hidden>{{ rec.semester.semester_name|title }}</text>#}
+{#                                    <select id='semester{{ forloop.counter }}' name="semester_name{{ forloop.counter }}"#}
+{#                                            title='Please select semester' class="form-control data semester" disabled#}
+{#                                            required>#}
+{#                                        <option style="display:none" selected="selected" id=""#}
+{#                                                value="{{ rec.semester.id }}">{{ rec.semester.semester_name|title }} </option>#}
+{#                                        {% for rec in semester_recs %}#}
+{#                                            <option value='{{ rec.id }}'>{{ rec.semester_name|title }}</option>#}
+{#                                        {% endfor %}#}
+{#                                    </select>#}
+{#                                </td>#}
 
-                                <td hidden>
-                                    <text>{{ rec.module.module_name|title }}</text>
-                                </td>
+{#                                <td hidden>#}
+{#                                    <text>{{ rec.module.module_name|title }}</text>#}
+{#                                </td>#}
 
-                                <td>
-                                    <text hidden>{{ rec.module.module_name|title }}</text>
-                                    <select id='module{{ forloop.counter }}' name="module_name{{ forloop.counter }}"
-                                            title='Please select module' class="form-control data module" disabled
-                                            required>
-                                        <option style="display:none" selected="selected" id=""
-                                                value="{{ rec.module.id }}">{{ rec.module.module_name|title }} </option>
-                                        {% for rec in module_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.module_name|title }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </td>
+{#                                <td>#}
+{#                                    <text hidden>{{ rec.module.module_name|title }}</text>#}
+{#                                    <select id='module{{ forloop.counter }}' name="module_name{{ forloop.counter }}"#}
+{#                                            title='Please select module' class="form-control data module" disabled#}
+{#                                            required>#}
+{#                                        <option style="display:none" selected="selected" id=""#}
+{#                                                value="{{ rec.module.id }}">{{ rec.module.module_name|title }} </option>#}
+{#                                        {% for rec in module_recs %}#}
+{#                                            <option value='{{ rec.id }}'>{{ rec.module_name|title }}</option>#}
+{#                                        {% endfor %}#}
+{#                                    </select>#}
+{#                                </td>#}
 
 
                                 <td>
 {#                                    <text hidden>{{ rec.activity|title }}</text>#}
-                                    <textarea class="form-control data activity" name="activity_saved"
-                                              id="activity{{ forloop.counter }}"
+                                    <textarea class="form-control data objectives" name="objectives_saved"
+                                              id="objectives{{ forloop.counter }}"
                                               required
-                                              title='Please enter activity' disabled> {{ rec.activity|title }}
+                                              title='Please enter objectives' disabled> {{ rec.objectives|title }}
 
                                 </textarea>
                                 </td>
 
-                                <td>
+{#                                <td>#}
 {#                                    <text hidden>{{ rec.outcome|title }}</text>#}
-                                    <textarea class="form-control data outcome" name="outcome_saved"
-                                              id="outcome{{ forloop.counter }}"
+{#                                    <textarea class="form-control data outcome" name="outcome_saved"#}
+{#                                              id="outcome{{ forloop.counter }}"#}
+{#                                              required#}
+{#                                              title='Please enter outcome' disabled>{{ rec.outcome|title }}#}
+{##}
+{#                                </textarea>#}
+{#                                </td>#}
+
+                                <td hidden>
+                                    <text hidden>{{ rec.delivery_method|title }}</text>
+                                </td>
+
+                                <td>
+                                    <text hidden>{{ rec.delivery_method|title }}</text>
+                                    <select title='Please select delivery method' id='delivery_method{{ forloop.counter }}'
+                                            name="delivery_method{{ forloop.counter }}"
+                                            class="form-control data delivery_method"
+                                            disabled required>
+                                        <option style="display:none" selected="selected"
+                                                value="{{ rec.delivery_method }}">{{ rec.delivery_method }} </option>
+                                        <option  value="Classroom">Classroom</option>
+                                        <option  value="Online">Online</option>
+                                        <option  value="Practical">Practical</option>
+                                        <option  value="Others">Others</option>
+                                    </select>
+
+                                </td>
+
+{#                                <td hidden>#}
+{#                                    <text hidden>{{ rec.duration_night|title }}</text>#}
+{#                                </td>#}
+{##}
+{#                                <td>#}
+{#                                    <text hidden>{{ rec.duration_night|title }}</text>#}
+{#                                    <select title='Please select night duration' id='duration_day{{ forloop.counter }}'#}
+{#                                            name="duration_night{{ forloop.counter }}"#}
+{#                                            class="form-control data duration_night"#}
+{#                                            disabled required>#}
+{#                                        <option style="display:none" selected="selected" id=""#}
+{#                                                value="{{ rec.duration_night }}">{{ rec.duration_night }} </option>#}
+{#                                        <option id="1" value="1">1</option>#}
+{#                                        <option id="2" value="2">2</option>#}
+{#                                        <option id="3" value="3">3</option>#}
+{#                                        <option id="4" value="4">4</option>#}
+{#                                    </select>#}
+{#                                </td>#}
+
+{#                                <td>#}
+{#                                    <text hidden>{{ rec.method|title }}</text>#}
+{#                                    <input class="form-control data method" name="method_name_saved"#}
+{#                                           type="text"#}
+{#                                           id="method{{ forloop.counter }}" value="{{ rec.method|title }}"#}
+{#                                           required#}
+{#                                           title='Please enter method' disabled>#}
+{#                                </td>#}
+
+                                <td>
+                                    <text hidden>{{ rec.delivery_location|title }}</text>
+                                    <input class="form-control data delivery_location" name="delivery_location_saved"
+                                           type="text"
+                                           id="delivery_location{{ forloop.counter }}" value="{{ rec.delivery_location|title }}"
+                                           required
+                                           title='Please enter delivery location' disabled>
+                                </td>
+                                <td>
+                                    <text hidden>{{ rec.organizer|title }}</text>
+                                    <input class="form-control data organizer" name="organizer_saved"
+                                           type="text"
+                                           id="organizer{{ forloop.counter }}" value="{{ rec.organizer|title }}"
+                                           required
+                                           title='Please enter organizer' disabled>
+                                </td>
+
+                                <td>
+                                    <text hidden>{{ rec.delivery_date|date:"Y-m-d" }}</text>
+                                    <input class="form-control data delivery_date" name="delivery_date_saved" type="date"
+                                           id="delivery_date{{ forloop.counter }}"
+                                           value="{{ rec.delivery_date|date:"Y-m-d" }}" required="required" disabled>
+                                </td>
+
+                                <td>
+                                    <text hidden>{{ rec.completion_deadline|date:"Y-m-d" }}</text>
+                                    <input class="form-control data completion_deadline" name="completion_deadline_saved" type="date"
+                                           id="completion_deadline{{ forloop.counter }}"
+                                           value="{{ rec.completion_deadline|date:"Y-m-d" }}" required="required" disabled>
+                                </td>
+
+                                <td>
+                                    <text hidden>{{ rec.rsvp_method|title }}</text>
+                                    <textarea class="form-control data rsvp_method" name="rsvp_method_saved"
+                                              id="rsvp_method{{ forloop.counter }}"
                                               required
-                                              title='Please enter outcome' disabled>{{ rec.outcome|title }}
+                                              title='Please enter rsvp_method' disabled>{{ rec.rsvp_method|title }}
 
                                 </textarea>
                                 </td>
-
-                                <td hidden>
-                                    <text hidden>{{ rec.duration_day|title }}</text>
-                                </td>
-
                                 <td>
-                                    <text hidden>{{ rec.duration_day|title }}</text>
-                                    <select title='Please select days duration' id='duration_day{{ forloop.counter }}'
-                                            name="duration_day{{ forloop.counter }}"
-                                            class="form-control data duration_day"
-                                            disabled required>
-                                        <option style="display:none" selected="selected" id=""
-                                                value="{{ rec.duration_day }}">{{ rec.duration_day }} </option>
-                                        <option id="1" value="1">1</option>
-                                        <option id="2" value="2">2</option>
-                                        <option id="3" value="3">3</option>
-                                        <option id="4" value="4">4</option>
-                                    </select>
-                                </td>
-
-                                <td hidden>
-                                    <text hidden>{{ rec.duration_night|title }}</text>
-                                </td>
-
-                                <td>
-                                    <text hidden>{{ rec.duration_night|title }}</text>
-                                    <select title='Please select night duration' id='duration_day{{ forloop.counter }}'
-                                            name="duration_night{{ forloop.counter }}"
-                                            class="form-control data duration_night"
-                                            disabled required>
-                                        <option style="display:none" selected="selected" id=""
-                                                value="{{ rec.duration_night }}">{{ rec.duration_night }} </option>
-                                        <option id="1" value="1">1</option>
-                                        <option id="2" value="2">2</option>
-                                        <option id="3" value="3">3</option>
-                                        <option id="4" value="4">4</option>
-                                    </select>
-                                </td>
-
-                                <td>
-                                    <text hidden>{{ rec.method|title }}</text>
-                                    <input class="form-control data method" name="method_name_saved"
-                                           type="text"
-                                           id="method{{ forloop.counter }}" value="{{ rec.method|title }}"
-                                           required
-                                           title='Please enter method' disabled>
-                                </td>
-
-                                <td>
-                                    <text hidden>{{ rec.marks|title }}</text>
-                                    <input class="form-control data marks" name="marks_name_saved"
-                                           type="number" step="any" min="0" max="1000"
-                                           id="marks{{ forloop.counter }}" value="{{ rec.marks|title }}"
-                                           required
-                                           title='Please enter marks' disabled>
-                                </td>
-
-                                <td>
-                                    <text hidden>{{ rec.date|date:"Y-m-d" }}</text>
-                                    <input class="form-control data date" name="date_saved" type="date"
-                                           id="date{{ forloop.counter }}"
-                                           value="{{ rec.date|date:"Y-m-d" }}" required="required" disabled>
-                                </td>
-
-                                <td>
-                                    <text hidden>{{ rec.remark|title }}</text>
-                                    <textarea class="form-control data remark" name="remark_saved"
-                                              id="remark{{ forloop.counter }}"
+                                    <text hidden>{{ rec.remarks|title }}</text>
+                                    <textarea class="form-control data remarks" name="remarks_saved"
+                                              id="remarks{{ forloop.counter }}"
                                               required
-                                              title='Please enter remark' disabled>{{ rec.remark|title }}
+                                              title='Please enter remarks' disabled>{{ rec.remarks|title }}
 
                                 </textarea>
                                 </td>
