@@ -67,6 +67,9 @@ class StudentModuleMapping(BaseModel):
     program = models.ForeignKey('masters.ProgramDetails', blank=True, null=True,
                                 related_name='program_module_rel',
                                 on_delete=models.PROTECT)
+    soft_skill_program = models.ForeignKey('masters.SoftSkillDevelopmentProgram', blank=True, null=True,
+                                related_name='soft_skill_prog_rel',
+                                on_delete=models.PROTECT)
 
     def __str__(self):
         details = str(self.applicant_id.first_name) + ' and ' + str(self.module.module.module_name)
