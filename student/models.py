@@ -389,8 +389,7 @@ class ApplicationDetails(BaseModel):
             'scholarship_fee': self.scholarship_fee if self.scholarship_fee else 0,
             'voucher_number': self.rel_student_payment_receipt_voucher.all()[
                 0].voucher_number if self.rel_student_payment_receipt_voucher.all() else '',
-            'semester': self.applicant_progress_rel.all()[
-                0].semester.to_dict() if self.applicant_progress_rel.all() else '',
+            # 'semester': self.applicant_progress_rel.all()[0].semester.to_dict() if self.applicant_progress_rel.all() else '',
             'degree': self.applicant_scholarship_rel.all()[
                 0].degree.to_dict() if self.applicant_scholarship_rel.all() else '',
             'student': self.to_dict_student_application() if self.first_name else '',
