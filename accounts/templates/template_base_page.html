@@ -668,7 +668,16 @@ License: You must have a valid license purchased only from themeforest(the above
                     {% endif %}
 
 
-
+                     {% if 'student.can_view_student_academic_progress' in perms %}
+                        <li class="nav-item " id="acd_qli" {% if user.semester_switch == False %} style=" pointer-events:none;opacity:0.6;" disabled {% endif %}>
+                            <a href="{% url 'student:applicant_academic_progress' %}"
+                               class="nav-link nav-toggle">
+                                <i class="glyphicon glyphicon-align-left"></i>
+                                <span class="title">Academic Progress</span>
+                                <span class="selected"></span>
+                            </a>
+                        </li>
+                    {% endif %}
 
 
                             {% if 'student.can_view_student_application_progress_history' in perms %}
@@ -1442,6 +1451,13 @@ License: You must have a valid license purchased only from themeforest(the above
     }
 
     else if (base_url == 'http://namafund.namafoundation.org/student/applicant_personal_info/') {
+        var element = document.getElementById("c");
+        element.classList.add("active");
+
+        var element = document.getElementById("app_anch");
+        element.classList.add("active");
+    }
+    else if (base_url == 'http://namafund.namafoundation.org/student/applicant_academic_progress/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
