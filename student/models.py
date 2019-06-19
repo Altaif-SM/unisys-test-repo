@@ -372,8 +372,7 @@ class ApplicationDetails(BaseModel):
             pass
 
         if repayment_percent:
-            voucher_amount = (
-                    (int(self.scholarship_fee) * int(repayment_percent)) / float(100))
+            voucher_amount = ((int(self.scholarship_fee) * int(repayment_percent)) / float(100))
         else:
             voucher_amount = float(self.scholarship_fee)
 

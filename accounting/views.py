@@ -92,13 +92,10 @@ def get_student_receipt_voucher(request):
         voucher_ids = voucher_record.filter(application_id=application_rec).values('id')
         voucher_record = voucher_record.filter(id__in=voucher_ids)
 
-        balance_total = StudentPaymentReceiptVoucher.objects.filter(voucher_type="credit",
-                                                                    application=application_rec).values(
-            "voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
+        balance_total = StudentPaymentReceiptVoucher.objects.filter(voucher_type="credit",application=application_rec).values("voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
         raw_dict['application_rec'] = application_rec.to_application_dict()
-        raw_dict['outstanding_amount'] = (
-                float(application_rec.scholarship_fee) - float(balance_total['total_credit'])) if \
-            balance_total['total_credit'] else 0
+        raw_dict['repayment_amount'] = (raw_dict['application_rec']['repayment_amount'] - float(balance_total['total_credit'])) if balance_total['total_credit'] else (raw_dict['application_rec']['repayment_amount'])
+        raw_dict['outstanding_amount'] = (float(application_rec.scholarship_fee) - float(balance_total['total_credit'])) if balance_total['total_credit'] else 0
         raw_dict['voucher_rec'] = [obj.to_dict() for obj in voucher_record]
 
     return render(request, "template_student_receipt_voucher.html",

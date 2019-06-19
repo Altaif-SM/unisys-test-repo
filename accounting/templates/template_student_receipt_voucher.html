@@ -493,6 +493,17 @@ var footer = 'data:image/png;base64,/9j/4QAYRXhpZgAASUkqAAgAAAAAAAAAAAAAAP/sABFE
 
 
 
+{#                            <div class="">#}
+{#                                <label class="col-md-2 control-label">Repayment Fee:</label>#}
+{#                                <div class="col-md-2">#}
+{#                                    <input type="number" title="Repayment Fee" id="id_repayment_fee"#}
+{#                                           name="repayment_fee" placeholder="0.00"#}
+{#                                           data-number-to-fixed="2" data-number- stepfactor="100"#}
+{#                                           class="form-control " required disabled#}
+{#                                           value="{{ raw_dict.application_rec.repayment_amount }}">#}
+{#                                </div>#}
+{#                            </div>#}
+
                             <div class="">
                                 <label class="col-md-2 control-label">Repayment Fee:</label>
                                 <div class="col-md-2">
@@ -500,7 +511,7 @@ var footer = 'data:image/png;base64,/9j/4QAYRXhpZgAASUkqAAgAAAAAAAAAAAAAAP/sABFE
                                            name="repayment_fee" placeholder="0.00"
                                            data-number-to-fixed="2" data-number- stepfactor="100"
                                            class="form-control " required disabled
-                                           value="{{ raw_dict.application_rec.repayment_amount }}">
+                                           value="{{ raw_dict.repayment_amount }}">
                                 </div>
                             </div>
 
