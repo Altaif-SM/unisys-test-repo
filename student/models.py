@@ -316,21 +316,21 @@ class ApplicationDetails(BaseModel):
 
         try:
             if self.applicant_scholarship_rel.get().degree.degree_type.degree_name == 'phd':
-                if self.applicant_scholarship_rel.get().degree.degree_type.degree_formula_degree_type_relation.filter(
-                        result=self.applicant_progress_rel.all()[0].result,
-                        scholarship_id=self.applicant_scholarship_rel.all()[0].scholarship.id).exists():
+                # if self.applicant_scholarship_rel.get().degree.degree_type.degree_formula_degree_type_relation.filter(
+                #         result=self.applicant_progress_rel.all()[0].result,
+                #         scholarship_id=self.applicant_scholarship_rel.all()[0].scholarship.id).exists():
+                #
+                #     repayment_percent = self.applicant_scholarship_rel.get().degree.degree_type.degree_formula_degree_type_relation.filter(
+                #         result=self.applicant_progress_rel.all()[0].result,
+                #         scholarship_id=self.applicant_scholarship_rel.all()[0].scholarship.id)[0].repayment
 
-                    repayment_percent = self.applicant_scholarship_rel.get().degree.degree_type.degree_formula_degree_type_relation.filter(
-                        result=self.applicant_progress_rel.all()[0].result,
-                        scholarship_id=self.applicant_scholarship_rel.all()[0].scholarship.id)[0].repayment
-
-                # if self.applicant_progress_rel.all()[0].is_approved:
-                #     if (self.applicant_progress_rel.all()[0].result == 'Pass'):
-                #         repayment_percent = 0
-                #     elif (self.applicant_progress_rel.all()[0].result == 'Fail'):
-                #         repayment_percent = 100
-                #     else:
-                #         pass
+                if self.applicant_progress_rel.all()[0].is_approved:
+                    if (self.applicant_progress_rel.all()[0].result == 'Pass'):
+                       return float(0.0)
+                    elif (self.applicant_progress_rel.all()[0].result == 'Fail'):
+                        repayment_percent = 100
+                    else:
+                        pass
 
 
             elif self.applicant_scholarship_rel.get().degree.degree_type.degree_name == 'masters (course work)':
