@@ -336,15 +336,30 @@ class ApplicationDetails(BaseModel):
                         scholarship_id=self.applicant_scholarship_rel.all()[0].scholarship.id)[0].repayment
 
             else:
-                if self.applicant_scholarship_rel.get().degree.degree_type.degree_formula_degree_type_relation.filter(
-                        cgpa_min__lte=int(self.applicant_progress_rel.all()[0].cgpa_scored),
-                        cgpa_max__gte=int(self.applicant_progress_rel.all()[0].cgpa_from),
-                        scholarship_id=self.applicant_scholarship_rel.all()[0].scholarship.id).exists():
+                # if self.applicant_scholarship_rel.get().degree.degree_type.degree_formula_degree_type_relation.filter(
+                #         cgpa_min__lte=int(self.applicant_progress_rel.all()[0].cgpa_scored),
+                #         cgpa_max__gte=int(self.applicant_progress_rel.all()[0].cgpa_from),
+                #         scholarship_id=self.applicant_scholarship_rel.all()[0].scholarship.id).exists():
+                #     degree_name = self.applicant_scholarship_rel.get().degree.degree_type.degree_name
+                #     DegreeFormula.objects.filter(cgpa_min__lte=int(self.applicant_progress_rel.all()[0].cgpa_scored), cgpa_max__gte=int(self.applicant_progress_rel.all()[0].cgpa_from,
+                #                                  degree_type__degree_name=degree_name))
 
-                    repayment_percent = self.applicant_scholarship_rel.get().degree.degree_type.degree_formula_degree_type_relation.filter(
-                        cgpa_min__lte=int(self.applicant_progress_rel.all()[0].cgpa_scored),
-                        cgpa_max__gte=int(self.applicant_progress_rel.all()[0].cgpa_from),
-                        scholarship_id=self.applicant_scholarship_rel.all()[0].scholarship.id)[0].repayment
+
+                    # repayment_percent = self.applicant_scholarship_rel.get().degree.degree_type.degree_formula_degree_type_relation.filter(
+                    #     cgpa_min__lte=int(self.applicant_progress_rel.all()[0].cgpa_scored),
+                    #     cgpa_max__gte=int(self.applicant_progress_rel.all()[0].cgpa_from),
+                    #     scholarship_id=self.applicant_scholarship_rel.all()[0].scholarship.id)[0].repayment
+                if self.applicant_progress_rel.all()[0].is_approved:
+                    if (float(self.applicant_progress_rel.all()[0].cgpa_scored) <= float(2.99)):
+                        repayment_percent = 50
+                    elif (float(self.applicant_progress_rel.all()[0].cgpa_scored) <= float(3.29)):
+                        repayment_percent = 30
+                    elif (float(self.applicant_progress_rel.all()[0].cgpa_scored) <= float(3.49)):
+                        repayment_percent = 10
+                    elif (float(self.applicant_progress_rel.all()[0].cgpa_scored) <= float(4.00)):
+                        repayment_percent = 0
+                    else:
+                        pass
         except:
             pass
 
