@@ -301,9 +301,12 @@ def get_repayment_report(request):
             "voucher_amount").aggregate(total_credit=Sum('voucher_amount'))
 
         raw_dict['application_rec'] = application_rec.to_application_dict()
+        raw_dict['repay_amount'] = (raw_dict['application_rec']['repayment_amount'] - float(balance_total['total_credit'])) if balance_total['total_credit'] else (raw_dict['application_rec']['repayment_amount'])
+        raw_dict['paid_amount'] = balance_total['total_credit'] if balance_total['total_credit'] else 0
         raw_dict['outstanding_amount'] = (
                 float(application_rec.scholarship_fee) - float(balance_total['total_credit'])) if \
             balance_total['total_credit'] else 0
+
         raw_dict['voucher_rec'] = [obj.to_dict() for obj in voucher_record]
         raw_dict_list.append(raw_dict)
 
