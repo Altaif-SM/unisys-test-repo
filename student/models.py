@@ -324,6 +324,14 @@ class ApplicationDetails(BaseModel):
                         result=self.applicant_progress_rel.all()[0].result,
                         scholarship_id=self.applicant_scholarship_rel.all()[0].scholarship.id)[0].repayment
 
+                # if self.applicant_progress_rel.all()[0].is_approved:
+                #     if (self.applicant_progress_rel.all()[0].result == 'Pass'):
+                #         repayment_percent = 0
+                #     elif (self.applicant_progress_rel.all()[0].result == 'Fail'):
+                #         repayment_percent = 100
+                #     else:
+                #         pass
+
 
             elif self.applicant_scholarship_rel.get().degree.degree_type.degree_name == 'masters (course work)':
                 if self.applicant_scholarship_rel.get().degree.degree_type.degree_formula_degree_type_relation.filter(
@@ -357,7 +365,7 @@ class ApplicationDetails(BaseModel):
                     elif (float(self.applicant_progress_rel.all()[0].cgpa_scored) <= float(3.49)):
                         repayment_percent = 10
                     elif (float(self.applicant_progress_rel.all()[0].cgpa_scored) <= float(4.00)):
-                        repayment_percent = 0
+                        return float(0.0)
                     else:
                         pass
         except:
