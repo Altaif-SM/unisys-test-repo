@@ -406,7 +406,8 @@ def get_approval_and_paid_total(request):
             student_applicant_rel__applicant_scholarship_rel__scholarship_id=query_scholarship)
 
     if query_country:
-        student_list = student_list.filter(address__country_id=query_country)
+        # student_list = student_list.filter(address__country_id=query_country)
+        student_list = student_list.filter(student_applicant_rel__nationality_id=query_country)
 
     student_list_rec = []
 
