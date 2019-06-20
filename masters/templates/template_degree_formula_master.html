@@ -287,34 +287,34 @@
                         <br><br>
 
                         <div class="row">
+{#                            <div class="">#}
+{#                                <label class="col-md-2 control-label">Or Grade between:#}
+{##}
+{#                                </label>#}
+{#                                <div class="col-md-2">#}
+{#                                    <input class="form-control grade_min" name="grade_min"#}
+{#                                           type="text"#}
+{#                                           id="grade_min"#}
+{#                                           required#}
+{#                                           title='Please enter minimum mark'>#}
+{#                                </div>#}
+{#                            </div>#}
+
+{#                            <div class="">#}
+{#                                <label class="col-md-1 control-label">And:#}
+{##}
+{#                                </label>#}
+{#                                <div class="col-md-2">#}
+{#                                    <input class="form-control grade_max" name="grade_max"#}
+{#                                           type="text"#}
+{#                                           id="grade_max"#}
+{#                                           required#}
+{#                                           title='Please enter maximum mark'>#}
+{#                                </div>#}
+{#                            </div>#}
+
                             <div class="">
-                                <label class="col-md-2 control-label">Or Grade between:
-
-                                </label>
-                                <div class="col-md-2">
-                                    <input class="form-control grade_min" name="grade_min"
-                                           type="text"
-                                           id="grade_min"
-                                           required
-                                           title='Please enter minimum mark'>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">And:
-
-                                </label>
-                                <div class="col-md-2">
-                                    <input class="form-control grade_max" name="grade_max"
-                                           type="text"
-                                           id="grade_max"
-                                           required
-                                           title='Please enter maximum mark'>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Repayment:
+                                <label class="col-md-2 control-label">Repayment:
 
                                 </label>
                                 <div class="col-md-2">
@@ -348,8 +348,8 @@
                         <th>Scholarship</th>
                         <th>CGPA Minimum</th>
                         <th>CGPA Maximum</th>
-                        <th>Grade Minimum</th>
-                        <th>Grade Maximum</th>
+{#                        <th>Grade Minimum</th>#}
+{#                        <th>Grade Maximum</th>#}
                         <th>Repayment</th>
                         <th width="10%"></th>
                     </tr>
@@ -387,20 +387,20 @@
                                        required
                                        title='Please enter max cgpa' disabled></td>
 
-                            <td>
-                                <text hidden>{{ rec.grade_min }}</text>
-                                <input class="form-control data grade_min" name="grade_min_saved"
-                                       type="text"
-                                       id="grade_min{{ forloop.counter }}" value="{{ rec.grade_min|title }}"
-                                       required
-                                       title='Please enter minimum grade' disabled></td>
-                            <td>
-                                <text hidden>{{ rec.grade_max }}</text>
-                                <input class="form-control data grade_max" name="grade_max_saved"
-                                       type="text"
-                                       id="grade_max{{ forloop.counter }}" value="{{ rec.grade_max|title }}"
-                                       required pattern='[A-Za-z+-]+'
-                                       title='Please enter max grade' disabled></td>
+{#                            <td>#}
+{#                                <text hidden>{{ rec.grade_min }}</text>#}
+{#                                <input class="form-control data grade_min" name="grade_min_saved"#}
+{#                                       type="text"#}
+{#                                       id="grade_min{{ forloop.counter }}" value="{{ rec.grade_min|title }}"#}
+{#                                       required#}
+{#                                       title='Please enter minimum grade' disabled></td>#}
+{#                            <td>#}
+{#                                <text hidden>{{ rec.grade_max }}</text>#}
+{#                                <input class="form-control data grade_max" name="grade_max_saved"#}
+{#                                       type="text"#}
+{#                                       id="grade_max{{ forloop.counter }}" value="{{ rec.grade_max|title }}"#}
+{#                                       required pattern='[A-Za-z+-]+'#}
+{#                                       title='Please enter max grade' disabled></td>#}
 
                             <td>
                                 <text hidden>{{ rec.repayment|title }}</text>
