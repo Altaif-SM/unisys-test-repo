@@ -271,28 +271,28 @@
                         {% if degree_name == 'degree' %}
 
                             <div class="row">
-                                <div class="">
-                                    <label class="col-md-2 control-label">GPA:</label>
-                                    <div class="col-md-2">
-                                        <input class="form-control gpa_min" name="gpa_scored"
-                                               type="text" step="any" min="0" max="100"
-                                               id="id_gpa_min"
-                                               title='Please enter gpa minimum' required>
-                                    </div>
-                                </div>
+{#                                <div class="">#}
+{#                                    <label class="col-md-2 control-label">GPA:</label>#}
+{#                                    <div class="col-md-2">#}
+{#                                        <input class="form-control gpa_min" name="gpa_scored"#}
+{#                                               type="text" step="any" min="0" max="100"#}
+{#                                               id="id_gpa_min"#}
+{#                                               title='Please enter gpa minimum' required>#}
+{#                                    </div>#}
+{#                                </div>#}
 
-                                <div class="">
-                                    <label class="col-md-2 control-label">OF: </label>
-                                    <div class="col-md-2">
-                                        <input class="form-control gpa_max" name="gpa_from"
-                                               type="text" step="any" min="0" max="100"
-                                               id="id_gpa_max"
-                                               title='Please enter gpa mark' required>
-                                    </div>
-                                </div>
+{#                                <div class="">#}
+{#                                    <label class="col-md-2 control-label">OF: </label>#}
+{#                                    <div class="col-md-2">#}
+{#                                        <input class="form-control gpa_max" name="gpa_from"#}
+{#                                               type="text" step="any" min="0" max="100"#}
+{#                                               id="id_gpa_max"#}
+{#                                               title='Please enter gpa mark' required>#}
+{#                                    </div>#}
+{#                                </div>#}
                             </div>
 
-                            <br><br>
+
 
                             <div class="row">
                                 <div class="">
@@ -399,8 +399,8 @@
                             <th>Date</th>
                             <th>Semester</th>
                             <th>Transcript</th>
-                            <th>GPA Minimum</th>
-                            <th>GPA Maximum</th>
+{#                            <th>GPA Minimum</th>#}
+{#                            <th>GPA Maximum</th>#}
                             <th>Grade Minimum</th>
                             <th>Grade Maximum</th>
                             <th>Result</th>
@@ -456,24 +456,24 @@
                                 </td>
 
 
-                                <td>
-                                    <p>{{ rec.gpa_scored|default:"NA" }}</p>
-                                    <input style="display: none" class="form-control data gpa_scored"
-                                           name="gpa_scored_saved"
-                                           type="text"
-                                           id="gpa_scored{{ forloop.counter }}" value="{{ rec.gpa_scored|default:"NA" }}"
-                                           required
-                                           title='Please enter minimum gpa' disabled></td>
+{#                                <td>#}
+{#                                    <p>{{ rec.gpa_scored|default:"NA" }}</p>#}
+{#                                    <input style="display: none" class="form-control data gpa_scored"#}
+{#                                           name="gpa_scored_saved"#}
+{#                                           type="text"#}
+{#                                           id="gpa_scored{{ forloop.counter }}" value="{{ rec.gpa_scored|default:"NA" }}"#}
+{#                                           required#}
+{#                                           title='Please enter minimum gpa' disabled></td>#}
 
 
-                                <td>
-                                    <p>{{ rec.gpa_from|default:"NA" }}</p>
-                                    <input style="display: none" class="form-control data gpa_from"
-                                           name="gpa_from_saved"
-                                           type="text"
-                                           id="gpa_from{{ forloop.counter }}" value="{{ rec.gpa_from|default:"NA" }}"
-                                           required pattern='[A-Za-z+-]+'
-                                           title='Please enter max gpa' disabled></td>
+{#                                <td>#}
+{#                                    <p>{{ rec.gpa_from|default:"NA" }}</p>#}
+{#                                    <input style="display: none" class="form-control data gpa_from"#}
+{#                                           name="gpa_from_saved"#}
+{#                                           type="text"#}
+{#                                           id="gpa_from{{ forloop.counter }}" value="{{ rec.gpa_from|default:"NA" }}"#}
+{#                                           required pattern='[A-Za-z+-]+'#}
+{#                                           title='Please enter max gpa' disabled></td>#}
 
 
                                 <td>
