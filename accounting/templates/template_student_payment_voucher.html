@@ -120,7 +120,8 @@
 
                     if (validate() == false) {
                         $("#id_btn_type").val("save_and_print");
-                        $('#form_sample_1').submit();
+{#                        $('#form_sample_1').submit();#}
+                        $('#form_sample_1').attr('target', '_blank').submit().removeAttr('target');
                     }
 
                 });
