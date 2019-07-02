@@ -500,7 +500,7 @@ def save_update_applicant_academic_english_qualification(request):
                                 if request.POST.get('academic_id_' + str(x)):
                                     AcademicQualificationDetails.objects.filter(
                                         id=request.POST['academic_id_' + str(x)]).update(
-                                        level=request.POST['level' + str(x)],
+                                        # level=request.POST['level' + str(x)],
                                         major=request.POST['major' + str(x)],
                                         degree=request.POST['degree' + str(x)],
                                         level_year=request.POST['level_year' + str(x)],
@@ -517,13 +517,18 @@ def save_update_applicant_academic_english_qualification(request):
 
                                 else:
                                     qualification_obj = AcademicQualificationDetails.objects.create(
-                                        level=request.POST['level' + str(x)],
+                                        # level=request.POST['level' + str(x)],
                                         level_year=request.POST['level_year' + str(x)],
                                         major=request.POST['major' + str(x)],
                                         degree=request.POST['degree' + str(x)],
                                         level_result=request.POST['level_result' + str(x)],
                                         level_institution=request.POST['level_institution' + str(x)],
                                         applicant_id=request.user.get_application)
+
+                                    if request.POST['degree' + str(x)] == 'OTHERS':
+                                        qualification_obj.other_degree = request.POST['other_rec' + str(x)]
+                                        qualification_obj.save()
+
 
                                 if level_result_document:
                                     level_result = str(level_result_document)

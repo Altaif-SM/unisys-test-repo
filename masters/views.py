@@ -158,7 +158,7 @@ def delete_scholarship(request):
         ScholarshipDetails.objects.filter(id=scholarship_id).delete()
         messages.success(request, "Record deleted.")
         return HttpResponse(json.dumps({'success': 'Record deleted.'}), content_type="application/json")
-    except:
+    except Exception as e:
         messages.warning(request, "Record not deleted.")
     return HttpResponse(json.dumps({'error': 'Record not deleted.'}), content_type="application/json")
 
