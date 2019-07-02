@@ -54,7 +54,7 @@
 
                 $(".add_row").click(function () {
                     count = count + 1;
-                    var row = '<div class="row item" id="item_' + count + '" style="margin-top:15px"><div class=""><div class=""><div class="col-md-1"><a href="javascript:;" class="delete btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div><div class=""><label class="col-md-1 control-label">Name:</label><div class="col-md-2"><input type="text" title="Enter Sibling " id="sibling_' + count + '" name="sibling_' + count + '"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Gender:</label><div class="col-md-2"><input type="text" title="Enter age" id="age_' + count + '"name="age_' + count + '"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Status:</label><div class="col-md-2"> <input type="text" title="Enter status" id="status_' + count + '" name="status_' + count + '" class="form-control"><input type="text" hidden id="sibling_id_' + count + '" name="sibling_id_' + count + '"></div></div></div>'
+                    var row = '<div class="row item" id="item_' + count + '" style="margin-top:15px"><div class=""><div class=""><div class="col-md-1"><a href="javascript:;" class="delete btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div><div class=""><label class="col-md-1 control-label">Name:</label><div class="col-md-2"><input type="text" title="Enter Sibling " id="sibling_' + count + '" name="sibling_' + count + '"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Gender:</label><div class="col-md-2"><input type="text" title="Enter age" id="age_' + count + '"name="age_' + count + '"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Status:</label><div class="col-md-2"> <select  title="Enter status" id="status_' + count + '" name="status_' + count + '" class="form-control"><option value="">Please Select</option><option value="Employed">Employed</option><option value="Unemployed">Unemployed</option><option value="Studying">Studying</option><option value="Deceased">Deceased</option></select><input type="text" hidden id="sibling_id_' + count + '" name="sibling_id_' + count + '"></div></div></div>'
                     $(row).removeAttr().hide().insertAfter(".item:last").slideDown(300);
                     {#count++;#}
                 });
@@ -518,14 +518,30 @@
                                     <div class="">
                                         <label class="col-md-1 control-label">Status:</label>
                                         <div class="col-md-2">
-                                            <input type="text" title="Enter status" id="status_{{ forloop.counter }}"
-                                                   value="{{ sibling_obj.sibling_status }}"
-                                                   name="status_{{ forloop.counter }}"
-                                                   class="form-control">
+{#                                            <input type="text" title="Enter status" id="status_{{ forloop.counter }}"#}
+{#                                                   value="{{ sibling_obj.sibling_status }}"#}
+{#                                                   name="status_{{ forloop.counter }}"#}
+{#                                                   class="form-control">#}
 
                                             <input type="text" hidden value="{{ sibling_obj.id }}"
                                                    id="sibling_id_{{ forloop.counter }}"
                                                    name="sibling_id_{{ forloop.counter }}">
+
+                                            <select id='status_{{ forloop.counter }}' title="Select Status" name="status_{{ forloop.counter }}"
+                                                        class="form-control select_data">
+                                                    {% if sibling_obj.sibling_status %}
+                                                        <option style="display:none" selected="selected"
+                                                                value="{{ sibling_obj.sibling_status }}">{{ sibling_obj.sibling_status }}</option>
+                                                    {% else %}
+                                                         <option value=''>Please Select</option>
+                                                    {% endif %}
+
+                                                        <option value='Employed'>Employed</option>
+                                                        <option value='Unemployed'>Unemployed</option>
+                                                        <option value='Studying'>Studying</option>
+                                                        <option value='Deceased'>Deceased</option>
+                                                </select>
+
                                         </div>
                                     </div>
                                 </div>
@@ -572,6 +588,17 @@
                                         <input type="text" title="Enter status" id="status_1"
                                                name="status_1"
                                                class="form-control">
+
+                                        <select id='status_1' title="Select Status" name="status_1"
+                                                        class="form-control select_data">
+                                                         <option value=''>Please Select</option>
+                                                        <option value='Employed'>Employed</option>
+                                                        <option value='Unemployed'>Unemployed</option>
+                                                        <option value='Studying'>Studying</option>
+                                                        <option value='Deceased'>Deceased</option>
+                                                </select>
+
+
 
                                         <input type="text" hidden id="sibling_id_1" name="sibling_id_1">
                                     </div>
