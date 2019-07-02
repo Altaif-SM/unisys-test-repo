@@ -54,7 +54,7 @@
 
                 $(".add_row").click(function () {
                     count = count + 1;
-                    var row = '<div class="row item" id="item_' + count + '" style="margin-top:15px"><div class=""><div class=""><div class="col-md-1"><a href="javascript:;" class="delete btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div><div class=""><label class="col-md-1 control-label">Sibling:</label><div class="col-md-2"><input type="text" title="Enter Sibling " id="sibling_' + count + '" name="sibling_' + count + '"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Age:</label><div class="col-md-2"><input type="text" title="Enter age" id="age_' + count + '"name="age_' + count + '"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Relationship:</label><div class="col-md-2"> <input type="text" title="Enter status" id="status_' + count + '" name="status_' + count + '" class="form-control"><input type="text" hidden id="sibling_id_' + count + '" name="sibling_id_' + count + '"></div></div></div>'
+                    var row = '<div class="row item" id="item_' + count + '" style="margin-top:15px"><div class=""><div class=""><div class="col-md-1"><a href="javascript:;" class="delete btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div><div class=""><label class="col-md-1 control-label">Name:</label><div class="col-md-2"><input type="text" title="Enter Sibling " id="sibling_' + count + '" name="sibling_' + count + '"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Gender:</label><div class="col-md-2"><input type="text" title="Enter age" id="age_' + count + '"name="age_' + count + '"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Status:</label><div class="col-md-2"> <input type="text" title="Enter status" id="status_' + count + '" name="status_' + count + '" class="form-control"><input type="text" hidden id="sibling_id_' + count + '" name="sibling_id_' + count + '"></div></div></div>'
                     $(row).removeAttr().hide().insertAfter(".item:last").slideDown(300);
                     {#count++;#}
                 });
@@ -179,7 +179,7 @@
                         <div class="row">
 
                             <div class="">
-                                <label class="col-md-2 control-label">Monthly Income:<br><p style="font-size: 12px;">(in US Dollar $)</p></label>
+                                <label class="col-md-2 control-label">Monthly Income:<br><p style="font-size: 12px;">(in Euro <i class="fa fa-eur" aria-hidden="true"></i>)</p></label>
                                 <div class="col-md-2">
                                     <input type="text" title="Enter Income" id="father_income"
                                            value="{{ application_obj.father_income|default:"" }}" name="father_income"
@@ -335,7 +335,7 @@
                         <div class="row">
 
                             <div class="">
-                                <label class="col-md-2 control-label">Income:<br><p style="font-size: 12px;">(in US Dollar $)</p></label>
+                                <label class="col-md-2 control-label">Income:<br><p style="font-size: 12px;">(in Euro <i class="fa fa-eur" aria-hidden="true"></i>)</p></label>
                                 <div class="col-md-2">
                                     {% if application_obj.mother_income %}
                                         <input type="text" title="Enter Income" id="mother_income"
@@ -495,7 +495,7 @@
                                         </div>
                                     </div>
                                     <div class="">
-                                        <label class="col-md-1 control-label">Sibling:</label>
+                                        <label class="col-md-1 control-label">Name:</label>
                                         <div class="col-md-2">
                                             <input type="text" title="Enter Sibling "
                                                    value="{{ sibling_obj.sibling_name }}"
@@ -506,7 +506,7 @@
                                     </div>
 
                                     <div class="">
-                                        <label class="col-md-1 control-label">Age:</label>
+                                        <label class="col-md-1 control-label">Gender:</label>
                                         <div class="col-md-2">
                                             <input type="text" title="Enter age" id="age_{{ forloop.counter }}"
                                                    value="{{ sibling_obj.sibling_age }}"
@@ -516,7 +516,7 @@
                                     </div>
 
                                     <div class="">
-                                        <label class="col-md-1 control-label">Relationship:</label>
+                                        <label class="col-md-1 control-label">Status:</label>
                                         <div class="col-md-2">
                                             <input type="text" title="Enter status" id="status_{{ forloop.counter }}"
                                                    value="{{ sibling_obj.sibling_status }}"
@@ -549,7 +549,7 @@
                                     </div>
                                 </div>
                                 <div class="">
-                                    <label class="col-md-1 control-label">Sibling:</label>
+                                    <label class="col-md-1 control-label">Name:</label>
                                     <div class="col-md-2">
                                         <input type="text" title="Enter Sibling "
                                                id="sibling_1" name="sibling_1"
@@ -558,7 +558,7 @@
                                 </div>
 
                                 <div class="">
-                                    <label class="col-md-1 control-label">Age:</label>
+                                    <label class="col-md-1 control-label">Gender:</label>
                                     <div class="col-md-2">
                                         <input type="text" title="Enter age" id="age_1"
                                                name="age_1"
@@ -567,7 +567,7 @@
                                 </div>
 
                                 <div class="">
-                                    <label class="col-md-1 control-label">Relationship:</label>
+                                    <label class="col-md-1 control-label">Status:</label>
                                     <div class="col-md-2">
                                         <input type="text" title="Enter status" id="status_1"
                                                name="status_1"
