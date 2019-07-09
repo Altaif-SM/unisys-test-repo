@@ -446,12 +446,19 @@
                                 <td>
                                     <text hidden>{{ rec.office_name|title }}</text>
 
-                                    <a href="/masters/template_partner_details/{{ rec.id }}" ><input class="form-control data office" name="office_name_saved"
+                                   <input class="form-control data office" name="office_name_saved"
                                            type="text"
                                            id="office{{ forloop.counter }}"
                                            value="{{ rec.office_name|default_if_none:"" }}"
                                            required
-                                                       title='Please enter office name' disabled></a>
+                                                       title='Please enter office name' disabled>
+{#                                    <a href="/masters/template_partner_details/{{ rec.id }}" ><input class="form-control data office" name="office_name_saved"#}
+{#                                           type="text"#}
+{#                                           id="office{{ forloop.counter }}"#}
+{#                                           value="{{ rec.office_name|default_if_none:"" }}"#}
+{#                                           required#}
+{#                                                       title='Please enter office name' disabled></a>#}
+
                                 </td>
 
                                 <td>

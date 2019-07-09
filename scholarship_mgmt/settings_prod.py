@@ -61,6 +61,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880
+
 ROOT_URLCONF = 'scholarship_mgmt.urls'
 
 TEMPLATES = [

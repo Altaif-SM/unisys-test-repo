@@ -1142,7 +1142,8 @@ def update_manage_partner_master(request):
             PartnerDetails.objects.filter(id=partner_id).update(country_id=country, person_one=person_one,
                                                                 person_one_contact_number=person_one_contact,
                                                                 office_contact_number=office_contact,
-                                                                email=email, single_address=address)
+                                                                email=email, single_address=address,
+                                                                office_name=office_name)
             messages.success(request, "Record updated.")
             return HttpResponse(json.dumps({'success': 'Record updated.'}), content_type="application/json")
         else:
