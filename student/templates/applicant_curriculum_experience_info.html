@@ -50,7 +50,7 @@
 
                 $(document).on("click", ".add_curriculum_row", function (e) {
                     curriculum_count = curriculum_count + 1;
-                    var row = '<div class="row curriculum_item" id="check_' + curriculum_count + '" style="margin-top: 30px"><div class=""> <label class="col-md-2 control-label">Co-Curriculum:</label> <div class="col-md-2"> <input type="text" title="Enter Co-Curriculum" id="curriculum_name_' + curriculum_count + '" name="curriculum_name_' + curriculum_count + '" value="" class="form-control"> <input hidden type="text" name="curriculum_obj_' + curriculum_count + '" id="curriculum_obj_' + curriculum_count + '"></div> </div> <div class=""> <label class="col-md-1 control-label">Year:</label> <div class="col-md-2"> <select id="curriculum_year_' + curriculum_count + '" title="Select Year" name="curriculum_year_' + curriculum_count + '" class="form-control"> <option style="display:none" selected="selected" id="" value="">PleaseSelect</option> {% for rec in passing_year_recs %} <option value="{{ rec.year }}">{{ rec.year }}</option> {% endfor %} </select> </div> </div> <div class=""> <label class="col-md-1 control-label">Result:</label> <div class="col-md-2" id="item' + curriculum_count + '"><label class="form-control" style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input class="file" style="width: 50%" type="button" value="Choose File:"><a><input type="text" readonly name="curriculum_result_document_text_' + curriculum_count + '" class="file_value emp" style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label><input style="display: none" type="file" title="Select Result document" id="curriculum_result_document_' + curriculum_count + '" value="" name="curriculum_result_document_' + curriculum_count + '" class="file_type"><span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"class="remove_doc fa fa-close"></span></div></div><div class=""><div class="col-md-1"><a href="javascript:;" class="delete btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div>';
+                    var row = '<div class="row curriculum_item" id="check_' + curriculum_count + '" style="margin-top: 30px"><div class=""> <label class="col-md-2 control-label">Program Attended:</label> <div class="col-md-2"> <input type="text" title="Enter Co-Curriculum" id="curriculum_name_' + curriculum_count + '" name="curriculum_name_' + curriculum_count + '" value="" class="form-control"> <input hidden type="text" name="curriculum_obj_' + curriculum_count + '" id="curriculum_obj_' + curriculum_count + '"></div> </div> <div class=""> <label class="col-md-1 control-label">Year Obtained:</label> <div class="col-md-2"> <select id="curriculum_year_' + curriculum_count + '" title="Select Year" name="curriculum_year_' + curriculum_count + '" class="form-control"> <option style="display:none" selected="selected" id="" value="">PleaseSelect</option> {% for rec in passing_year_recs %} <option value="{{ rec.year }}">{{ rec.year }}</option> {% endfor %} </select> </div> </div> <div class=""> <label class="col-md-1 control-label">Supporting Document:</label> <div class="col-md-2" id="item' + curriculum_count + '"><label class="form-control" style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input class="file" style="width: 50%" type="button" value="Choose File:"><a><input type="text" readonly name="curriculum_result_document_text_' + curriculum_count + '" class="file_value emp" style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label><input style="display: none" type="file" title="Select Result document" id="curriculum_result_document_' + curriculum_count + '" value="" name="curriculum_result_document_' + curriculum_count + '" class="file_type"><span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"class="remove_doc fa fa-close"></span></div></div><div class=""><div class="col-md-1"><a href="javascript:;" class="delete btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div>';
                     $(row).removeAttr().hide().insertAfter(".curriculum_item:last").slideDown(300);
                 });
 
@@ -64,7 +64,7 @@
 
                 $(document).on("click", ".add_experience_row", function (e) {
                     experience_count = experience_count + 1;
-                    var row = '<div class="row item_experience" id="item_experience_' + experience_count + '"><div class="row"><div class=""><label class="col-md-2 control-label">Work Experience :</label><div class="col-md-3"><input type="text" title="Enter Work Experience" id="work_experience_' + experience_count + '" value="" name="work_experience_' + experience_count + '" class="form-control"><input hidden type="text" name="experience_obj_' + experience_count + '" id="experience_obj_' + experience_count + '"></div></div><div class=""><label class="col-md-2 control-label">Employment Letter:</label><div class="col-md-3" id="item' + experience_count + '"> <label class="form-control" style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input class="file" style="width: 50%" type="button" value="Choose File:"><a><input type="text" readonly name="work_experience_document_text_' + experience_count + '" class="file_value emp" style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label><input style="display: none" type="file" title="Select Result document" id="work_experience_document_' + experience_count + '" name="work_experience_document_' + experience_count + '" class="file_type"><span style="float: right; color: darkred; cursor: pointer;margin-top: -25px" class="remove_doc fa fa-close"></span></div><div class="col-md-1"><a href="javascript:;" class="delete_experience btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div><br><br><div class="row"><div class=""><label class="col-md-2 control-label">Start Date:</label><div class="col-md-3"><input type="date" id="from_date_' + experience_count + '" name="from_date_' + experience_count + '" max="2999-12-31" value="" class="form-control"></div></div><div class=""><label class="col-md-2 control-label">End Date: </label> <div class="col-md-3" id="EndDate"><input type="date" id="to_date_' + experience_count + '" name="to_date_' + experience_count + '" max="2999-12-31" value="" class="form-control end_date"><br><span>Currently Working </span><input class="current" type="checkbox" name="experience_current_' + experience_count + '" id="experience_current_' + experience_count + '"></div></div></div><br><hr><br></div>';
+                    var row = '<div class="row item_experience" id="item_experience_' + experience_count + '"><div class="row"><div class=""><label class="col-md-2 control-label">Position :</label><div class="col-md-3"><input type="text" title="Enter Work Experience" id="work_experience_' + experience_count + '" value="" name="work_experience_' + experience_count + '" class="form-control"><input hidden type="text" name="experience_obj_' + experience_count + '" id="experience_obj_' + experience_count + '"></div></div><div class=""><label class="col-md-2 control-label">Employment Letter:</label><div class="col-md-3" id="item' + experience_count + '"> <label class="form-control" style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input class="file" style="width: 50%" type="button" value="Choose File:"><a><input type="text" readonly name="work_experience_document_text_' + experience_count + '" class="file_value emp" style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label><input style="display: none" type="file" title="Select Result document" id="work_experience_document_' + experience_count + '" name="work_experience_document_' + experience_count + '" class="file_type"><span style="float: right; color: darkred; cursor: pointer;margin-top: -25px" class="remove_doc fa fa-close"></span></div><div class="col-md-1"><a href="javascript:;" class="delete_experience btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div><br><br><div class="row"><div class=""><label class="col-md-2 control-label">Start Date:</label><div class="col-md-3"><input type="date" id="from_date_' + experience_count + '" name="from_date_' + experience_count + '" max="2999-12-31" value="" class="form-control"></div></div><div class=""><label class="col-md-2 control-label">End Date: </label> <div class="col-md-3" id="EndDate"><input type="date" id="to_date_' + experience_count + '" name="to_date_' + experience_count + '" max="2999-12-31" value="" class="form-control end_date"><br><span>Currently Working </span><input class="current" type="checkbox" name="experience_current_' + experience_count + '" id="experience_current_' + experience_count + '"></div></div></div><br><hr><br></div>';
                     $(row).removeAttr().hide().insertAfter(".item_experience:last").slideDown(300);
                 });
 
@@ -170,7 +170,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase">Co-Curriculum Details </span>
+                <span class="caption-subject font-red sbold uppercase">Achievements </span>
             </div>
         </div>
 
@@ -200,7 +200,7 @@
                             {% for curriculum_obj in curriculum_recs %}
                                 <div class="row curriculum_item" id="check_{{ forloop.counter }}">
                                     <div class="">
-                                        <label class="col-md-2 control-label">Co-Curriculum:</label>
+                                        <label class="col-md-2 control-label">Program Attended:</label>
                                         <div class="col-md-2">
                                             <input type="text" title="Enter Co-Curriculum"
                                                    id="curriculum_name_{{ forloop.counter }}"
@@ -214,7 +214,7 @@
                                     </div>
 
                                     <div class="">
-                                        <label class="col-md-1 control-label">Year:</label>
+                                        <label class="col-md-1 control-label">Year Obtained:</label>
                                         <div class="col-md-2">
                                             <select id='curriculum_year_{{ forloop.counter }}' title="Select Year"
                                                     name="curriculum_year_{{ forloop.counter }}"
@@ -238,7 +238,7 @@
                                     </div>
 
                                     <div class="">
-                                        <label class="col-md-1 control-label">Result:</label>
+                                        <label class="col-md-1 control-label">Supporting Document:</label>
                                         <div class="col-md-2" id="item{{ forloop.counter }}">
 
                                             {% if curriculum_obj.curriculum_result_document %}
@@ -281,7 +281,7 @@
                         {% else %}
                             <div class="row curriculum_item" id="check_1">
                                 <div class="">
-                                    <label class="col-md-2 control-label">Co-Curriculum:</label>
+                                    <label class="col-md-2 control-label">Program Attended:</label>
                                     <div class="col-md-2">
                                         <input type="text" title="Enter Co-Curriculum" id="curriculum_name_1"
                                                name="curriculum_name_1"
@@ -293,7 +293,7 @@
                                 </div>
 
                                 <div class="">
-                                    <label class="col-md-1 control-label">Year:</label>
+                                    <label class="col-md-1 control-label">Year Obtained:</label>
                                     <div class="col-md-2">
                                         <select id='curriculum_year_1' title="Select Year" name="curriculum_year_1"
                                                 class="form-control">
@@ -310,7 +310,7 @@
                                 </div>
 
                                 <div class="">
-                                    <label class="col-md-1 control-label">Result:</label>
+                                    <label class="col-md-1 control-label">Supporting Document:</label>
                                     <div class="col-md-2" id="item1">
 
 
@@ -338,10 +338,10 @@
                         <br>
                         <br>
                         <hr>
-                        <div class="portlet-title">
+                        <div class="portlet-title" style="margin-left:-15px;font-size: 16px;">
                             <div class="caption">
                                 <i class="icon-settings font-red"></i>
-                                <span class="caption-subject font-red sbold uppercase"> Experience Details</span>
+                                <span class="caption-subject font-red sbold uppercase"> Working Experience</span>
                             </div>
                         </div>
                         <hr>
@@ -363,7 +363,7 @@
 
                                     <div class="row">
                                         <div class="">
-                                            <label class="col-md-2 control-label">Work Experience :</label>
+                                            <label class="col-md-2 control-label">Position :</label>
                                             <div class="col-md-3">
                                                 <input type="text" title="Enter Work Experience"
                                                        id="work_experience_{{ forloop.counter }}"
@@ -465,7 +465,7 @@
 
                                 <div class="row">
                                     <div class="">
-                                        <label class="col-md-2 control-label">Work Experience :</label>
+                                        <label class="col-md-2 control-label">Position :</label>
                                         <div class="col-md-3">
                                             <input type="text" title="Enter Work Experience" id="work_experience_1"
                                                    value="" name="work_experience_1"
