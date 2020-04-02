@@ -1,5 +1,1 @@
-# namafund
-namafund
-
-
-## PLEASE USE PYTHON # FOR SETUP
+## PLEASE USE PYTHON 3 FOR SETUP
