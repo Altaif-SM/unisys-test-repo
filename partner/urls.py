@@ -3,6 +3,8 @@ from . import views
 from django.conf import settings
 from django.conf.urls.static import static
 
+from . import filters
+
 app_name = 'partner'
 
 urlpatterns = [
@@ -91,4 +93,5 @@ urlpatterns = [
                   # path('generate_student_details_pdf/<int:app_id>/', views.generate_student_details_pdf,name='generate_student_details_pdf'),
 
                   path('update_semister_module_link_student/', views.update_semister_module_link_student, name='update_semister_module_link_student'),
+                  path('companies_datatable/', filters.FilterCompaniesList.as_view(), name='companies_datatable'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

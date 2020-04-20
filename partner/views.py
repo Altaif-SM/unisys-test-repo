@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 from common.utils import *
 from django.db.models import Max, Q
+from django.core.paginator import Paginator
 
 # Create your views here.
 from student.views import applicant_academic_english_qualification
@@ -44,11 +45,17 @@ def template_applicant_scholarship(request):
     scholarship_recs = ScholarshipDetails.objects.all()
     if request.user.is_super_admin():
         applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, year=get_current_year(request))
+        paginator = Paginator(applicant_recs, 10)
+        page = request.GET.get('page')
+        applicant_recs = paginator.get_page(page)
         university_recs = UniversityDetails.objects.all()
     else:
         applicant_recs = ApplicationDetails.objects.filter(
             nationality=request.user.partner_user_rel.get().address.country, year=get_current_year(request),
             is_submitted=True)
+        paginator = Paginator(applicant_recs, 10)
+        page = request.GET.get('page')
+        applicant_recs = paginator.get_page(page)
         university_recs = UniversityDetails.objects.filter(country=request.user.partner_user_rel.get().address.country)
     country_recs = CountryDetails.objects.all()
     degree_recs = DegreeDetails.objects.all()
