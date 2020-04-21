@@ -48,7 +48,6 @@ def template_applicant_scholarship(request):
         paginator = Paginator(applicant_recs, 10)
         page = request.GET.get('page')
         applicant_recs = paginator.get_page(page)
-        university_recs = UniversityDetails.objects.all()
     else:
         applicant_recs = ApplicationDetails.objects.filter(
             nationality=request.user.partner_user_rel.get().address.country, year=get_current_year(request),
@@ -56,7 +55,6 @@ def template_applicant_scholarship(request):
         paginator = Paginator(applicant_recs, 10)
         page = request.GET.get('page')
         applicant_recs = paginator.get_page(page)
-        university_recs = UniversityDetails.objects.filter(country=request.user.partner_user_rel.get().address.country)
     country_recs = CountryDetails.objects.all()
     degree_recs = DegreeDetails.objects.all()
 
@@ -69,7 +67,7 @@ def template_applicant_scholarship(request):
         messages.success(request, 'Record updated successfully.')
 
     return render(request, 'template_applicant_scholarship.html',
-                  {'applicant_recs': applicant_recs, 'country_recs': country_recs, 'university_recs': university_recs,
+                  {'applicant_recs': applicant_recs, 'country_recs': country_recs,
                    'degree_recs': degree_recs, 'scholarship_recs': scholarship_recs})
 
 
