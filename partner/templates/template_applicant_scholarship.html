@@ -76,16 +76,37 @@
                     columnDefs: [
                         {
                             data: "first_name", render: getFirstName,
-                            orderable: false,
+                            orderable: true,
                             defaultContent: "",
                             targets: 1,
                             visible: true
                         },
-                         {
+                        {
                             data: "application_id", render: getCourseName,
-                            orderable: false,
+                            orderable: true,
                             defaultContent: "",
                             targets: 4,
+                            visible: true
+                        },
+                        {
+                            data: "year", render: getDegreeName,
+                            orderable: true,
+                            defaultContent: "",
+                            targets: 5,
+                            visible: true
+                        },
+                         {
+                            data: "semester", render: getProgramName,
+                            orderable: true,
+                            defaultContent: "",
+                            targets: 6,
+                            visible: true
+                        },
+                        {
+                            data: "student", render: getScholarship,
+                            orderable: true,
+                            defaultContent: "",
+                            targets: 7,
                             visible: true
                         },
                         {orderable: false, targets: []}
@@ -117,8 +138,19 @@
         function getFirstName(data, type, full, meta) {
             return '<a href="/partner/template_applicant_all_details/' + full[0] + '">' + full[1] + '</a>'
         }
+
         function getCourseName(data, type, full, meta) {
             return '<p>' + full[4] + '</p>'
+        }
+
+        function getDegreeName(data, type, full, meta) {
+            return '<p>' + full[5] + '</p>'
+        }
+        function getProgramName(data, type, full, meta) {
+            return '<p>' + full[6] + '</p>'
+        }
+        function getScholarship(data, type, full, meta) {
+            return '<p>' + full[7] + '</p>'
         }
     </script>
 
@@ -159,22 +191,6 @@
 
         <div class="portlet-body">
             <div class="form-body">
-                {% comment %}<form method="post" action="{% url 'partner:export_registered_application' %}" id="form_sample_1">
-                    {% csrf_token %}
-                    <div class="col-md-4">
-                        <div class="">
-                            <input type='text' name="export" value="1" hidden>
-                        </div>
-                    </div>
-
-                    <div class="col-md-2">
-                        <button type="submit" class="btn green btn-block" id="go">Export</button>
-                    </div>
-                </form>{% endcomment %}
-
-                {% comment %}<form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data"
-                      action="{% url 'partner:filter_registered_application' %}">
-                    {% csrf_token %}{% endcomment %}
 
                 <div class="row" hidden>
                     <div class="col-md-offset-11">
@@ -184,82 +200,6 @@
 
                 <div class="row">
                     <div class="">
-                        {#                        <table id="example" class="table table-bordered" >#}
-                        {#                            <thead>#}
-                        {#                            <tr>#}
-                        {#                                <th style="display: none"></th>#}
-                        {#                                <th>Id</th>#}
-                        {#                                <th>First Name</th>#}
-                        {#                                <th>middle_name</th>#}
-                        {#                                <th>University</th>#}
-                        {#                                <th>Degree</th>#}
-                        {#                                <th>Course</th>#}
-                        {#                                <th>Scholarship</th>#}
-                        {#                                <th></th>#}
-                        {#                            </tr>#}
-                        {#                            </thead>#}
-                        {##}
-                        {#                            <tbody id="tbody">#}
-                        {#                            {% for rec in applicant_recs %}#}
-                        {#                                <tr id="item{{ forloop.counter }}" class="item">#}
-                        {#                                    <td style="display: none"><input id="scholarship_id" value="{{ rec.id }}"></td>#}
-                        {#                                    <td>{{ rec.id }}</td>#}
-                        {#                                    <td>{{ rec.first_name }}</td>#}
-                        {#                                    <td>{{ rec.middle_name }}</td>#}
-                        {#                                    <td>#}
-                        {#                                        <a href="/partner/template_applicant_all_details/{{ rec.id }}"#}
-                        {#                                                {% if rec.application_rejection %}#}
-                        {#                                           style="color: darkred" {% endif %}>{{ rec.first_name|title }} {{ rec.last_name|title }}</a></text>#}
-                        {#                                    </td>#}
-                        {##}
-                        {#                                    <td>#}
-                        {#                                        <text>{{ rec.nationality.country_name|title }}</text>#}
-                        {#                                    </td>#}
-                        {##}
-                        {#                                    <td>#}
-                        {#                                        <text>{{ rec.address.country.country_name|title }}</text>#}
-                        {#                                    </td>#}
-                        {##}
-                        {#                                    <td>#}
-                        {#                                        <text>{{ rec.applicant_scholarship_rel.all.0.university.university_name|title }}</text>#}
-                        {#                                    </td>#}
-                        {##}
-                        {#                                    <td>#}
-                        {#                                        <text>{{ rec.applicant_scholarship_rel.all.0.degree.degree_name|title }}</text>#}
-                        {#                                    </td>#}
-                        {##}
-                        {#                                    <td>#}
-                        {#                                        <text>{{ rec.applicant_scholarship_rel.all.0.course_applied.program_name|title }}</text>#}
-                        {#                                    </td>#}
-                        {##}
-                        {#                                    <form id="form_sample_1" class="form-horizontal" method="POST"#}
-                        {#                                          enctype="multipart/form-data"#}
-                        {#                                          action="{% url 'partner:template_applicant_scholarship' %}">#}
-                        {#                                        {% csrf_token %}#}
-                        {#                                        <td>#}
-                        {#                                            <input type="text" hidden name="applicant_rec" value="{{ rec.id }}">#}
-                        {#                                            <select id='scholarship' title="Select Scholarship" name="scholarship"#}
-                        {#                                                    class="form-control eng_emp">#}
-                        {#                                                <option style="display:none" selected="selected"#}
-                        {#                                                        value="{{ rec.applicant_scholarship_rel.all.0.scholarship.id }}">#}
-                        {#                                                    {{ rec.applicant_scholarship_rel.all.0.scholarship.scholarship_name|title }}</option>#}
-                        {##}
-                        {#                                                {% for rec in scholarship_recs %}#}
-                        {#                                                    <option value='{{ rec.id }}'>{{ rec.scholarship_name|title }}</option>#}
-                        {#                                                {% endfor %}#}
-                        {#                                            </select>#}
-                        {#                                            <text>{{ rec.applicant_scholarship_rel.all.0.scholarship.scholarship_name|title }}</text>#}
-                        {#                                        </td>#}
-                        {##}
-                        {#                                        <td>#}
-                        {#                                            <button class="btn green btn-block" type="submit">Update</button>#}
-                        {#                                        </td>#}
-                        {#                                    </form>#}
-                        {#                                </tr>#}
-                        {#                            {% endfor %}#}
-                        {#                            </tbody>#}
-                        {#                        </table>#}
-
 
                         <table id="example" class="table table-bordered" style="width:100%" cellspacing="0">
                             <thead style="width: 100%">
@@ -269,6 +209,9 @@
                                 <th>Nationality</th>
                                 <th>Country</th>
                                 <th>University</th>
+                                <th>Degree</th>
+                                <th>Course</th>
+                                <th>Scholarship</th>
                             </tr>
                             </thead>
 
@@ -287,7 +230,12 @@
                                         <text>{{ rec.address.country.country_name|title }}</text>
                                     </td>
                                     <td>
-                                        <text></text>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
                                     </td>
                                 </tr>
                             {% endfor %}
