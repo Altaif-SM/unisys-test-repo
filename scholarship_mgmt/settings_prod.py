@@ -109,10 +109,9 @@ MESSAGE_TAGS = {message_constants.DEBUG: 'debug',
 DATABASES = {
      'default': {
           'ENGINE': 'django.db.backends.mysql',
-          # 'NAME': 'scholarship_mgmt',
           'NAME': 'scholarship',
-          'USER':'root',
-          'PASSWORD':'SKf55mcs8ohbno16CIxXd',
+          'USER':'riyaz',
+          'PASSWORD':'Sayyed@123',
           'HOST': '127.0.0.1',
           'PORT':'3306'
      }
