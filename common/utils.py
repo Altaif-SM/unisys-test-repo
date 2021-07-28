@@ -87,7 +87,7 @@ def send_signup_email_to_applicant(from_email, to_mail, subject, message, first_
     to = [to_mail, from_email]
     host_name = settings.SERVER_HOST_NAME+'accounts/account_activate/'+str(user_id)
 
-    template = get_template('student_signup_mail_template.html')
+    # template = get_template('student_signup_mail_template.html')
     html_content = render_to_string('student_signup_mail_template.html',
                                     {'first_name': first_name, 'message': message,'user_id':user_id,'host_name':host_name})
 
