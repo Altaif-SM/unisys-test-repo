@@ -170,13 +170,20 @@ STATICFILES_DIRS = (
 )
 #STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-
-EMAIL_USE_TLS = True
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+MAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-
-
-EMAIL_HOST_USER = 'namafund@namafoundation.org'
-EMAIL_HOST_PASSWORD = 'namafund123'
 EMAIL_PORT = 587
-SERVER_HOST_NAME = "http://namafund.namafoundation.org/"
+EMAIL_HOST_USER = 'sayyedriyaj55@gmail.com'
+EMAIL_HOST_PASSWORD = 'Sayyed@123'
+EMAIL_USE_TLS = True
+
+
+# EMAIL_USE_TLS = True
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+#
+#
+# EMAIL_HOST_USER = 'namafund@namafoundation.org'
+# EMAIL_HOST_PASSWORD = 'namafund123'
+# EMAIL_PORT = 587
+SERVER_HOST_NAME = "http://159.65.159.193:8000/"
