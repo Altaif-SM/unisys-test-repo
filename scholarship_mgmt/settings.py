@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
-import psycopg2
+# import psycopg2
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -96,10 +96,9 @@ MEDIA_URL = '/media/'
 DATABASES = {
      'default': {
           'ENGINE': 'django.db.backends.mysql',
-          # 'NAME': 'scholarship_mgmt',
-          'NAME': 'scholarship_test',
+          'NAME': 'university_system',
           'USER':'root',
-          'PASSWORD':'redbytes',
+          'PASSWORD':'Sayyed@123',
           'HOST': '127.0.0.1',
           'PORT':'3306'
      }
