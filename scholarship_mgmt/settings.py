@@ -179,3 +179,5 @@ EMAIL_HOST = 'smtp.gmail.com'
 
 EMAIL_HOST_USER = 'redbytes.test@gmail.com'
 EMAIL_HOST_PASSWORD = 'redbytes@123'
+
+SERVER_HOST_NAME = "http://159.65.159.193:8000/"

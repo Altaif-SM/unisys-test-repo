@@ -59,6 +59,10 @@ class PassingYear(BaseModel):
         ordering = ('-id',)
 
 
+class AgentDetails(BaseModel):
+    first_name = models.CharField(max_length=256, blank=True, null=True)
+    last_name = models.CharField(max_length=256, blank=True, null=True)
+
 class StudentDetails(BaseModel):
     # student_name = computed_property.ComputedCharField(compute_from='student_full_name', null=True, max_length=250)
     birth_date = models.DateField(null=True)
@@ -119,6 +123,7 @@ class ApplicationDetails(BaseModel):
     first_name = models.CharField(max_length=255)
     middle_name = models.CharField(max_length=255, blank=True, null=True)
     last_name = models.CharField(max_length=255, blank=True, null=True)
+    surname = models.CharField(max_length=255, blank=True, null=True)
 
     year = models.ForeignKey('masters.YearDetails', blank=True, null=True, related_name='applicant_year_rel',
                              on_delete=models.PROTECT)
@@ -213,6 +218,11 @@ class ApplicationDetails(BaseModel):
     second_interview_venue = models.CharField(max_length=500, blank=True, null=True)
 
     personal_info_flag = models.BooleanField(default=True)
+    ref_by_student = models.ForeignKey(StudentDetails, blank=True, null=True, related_name='student_applicant_ref',
+                                on_delete=models.PROTECT)
+    ref_by_agent = models.ForeignKey(AgentDetails, blank=True, null=True,
+                                       related_name='agent_applicant_ref',
+                                       on_delete=models.PROTECT)
 
     # family_info_flag = models.BooleanField(default=False)
     # mother_sibling_info_flag = models.BooleanField(default=False)

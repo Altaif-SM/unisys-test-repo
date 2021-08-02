@@ -59,6 +59,9 @@
 
 
             $(document).ready(function () {
+                 $("#address_country").chosen();
+                 $("#student_id").chosen();
+                 $("#agent_id").chosen();
 
                 {% if user.get_application %}
                     {% if user.get_application.is_submitted %}
@@ -198,7 +201,7 @@
                             <div class="">
                                 <label class="col-md-2 control-label">First Name: <span
                                         style="color: red">*</span></label>
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <input type="text" title="Enter First Name" id="first_name" name="first_name"
                                            class="form-control value_check submitted" required {% if application_obj %}
                                            value="{{ application_obj.first_name }}"
@@ -206,135 +209,263 @@
                                 </div>
                             </div>
 
+
+
                             <div class="">
-                                <label class="col-md-1 control-label">Middle Name:</label>
-                                <div class="col-md-2">
+                                <label class="col-md-2 control-label">Middle Name:</label>
+                                <div class="col-md-3">
                                     <input type="text" title="Enter Middle Name" id="middle_name" name="middle_name"
                                            value="{{ application_obj.middle_name }}" class="form-control value_check">
                                 </div>
                             </div>
 
-                            <div class="">
-                                <label class="col-md-1 control-label">Last Name:</label>
-                                <div class="col-md-2">
+
+                        </div>
+                    <br>
+                    <div class="row">
+                        <div class="">
+                                <label class="col-md-2 control-label">Last Name:</label>
+                                <div class="col-md-3">
                                     <input type="text" title="Enter Last Name" id="last_name" name="last_name"
                                             {% if application_obj %} value="{{ application_obj.last_name }}"
                                             {% else %} value="{{ user.last_name }}" {% endif %}
                                            class="form-control value_check" readonly>
                                 </div>
                             </div>
-                        </div>
 
-                        <br>
+                    <div class="">
+                                <label class="col-md-2 control-label">Surname:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Surname" id="surname" name="surname"
+                                           value="{{ application_obj.surname }}"
 
-                        <div class="row">
-                            <div class="">
-                                <label class="col-md-2 control-label">DOB:<span
+                                           class="form-control value_check" >
+                                </div>
+                            </div>
+
+                    </div>
+                    <br>
+                    <div class="row">
+
+
+                        <div class="">
+                                <label class="col-md-2 control-label">Passport No:<span
                                         style="color: red">*</span></label>
-                                <div class="col-md-2">
-                                    <input type="date" title="Enter DOB" id="birth_date" name="birth_date"
-                                           value="{{ application_obj.birth_date|date:"Y-m-d" }}"
-                                           class="form-control value_check"
-                                           max="2999-12-31" required>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Gender: <span style="color: red">*</span></label>
-                                <div class="col-md-2">
-                                    <select id='gender' title="Select gender" name="gender"
-                                            class="form-control value_check" required>
-                                        {% if application_obj %}
-                                            <option style="display:none" selected="selected"
-                                                    value="{{ application_obj.gender }}"
-                                                    value="">{{ application_obj.gender|title }}</option>
-                                        {% else %}
-                                            <option style="display:none" selected="selected" id="" value="">Please
-                                                Select
-                                            </option>
-                                        {% endif %}
-                                        <option id="" value="Male">Male</option>
-                                        <option id="" value="Female">Female</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                {% if user.get_application.is_submitted %}
-                                    <input hidden name="nationality" value="{{ application_obj.nationality.id }}">
-                                {% endif %}
-                                <label class="col-md-1 control-label">Nationality:<span
-                                        style="color: red">*</span></label>
-                                <div class="col-md-2">
-                                    <select id='nationality' title="Select nationality" name="nationality"
-                                            class="form-control value_check" {% if user.get_application.is_submitted %} disabled{% endif %} required>
-                                        {% if application_obj %}
-                                            <option style="display:none" selected="selected"
-                                                    value="{{ application_obj.nationality.id }}"
-                                                    value="">{{ application_obj.nationality.country_name|title }}</option>
-                                        {% else %}
-                                            <option style="display:none" selected="selected" id="" value="">Please
-                                                Select
-                                            </option>
-                                        {% endif %}
-
-                                        {% for rec in country_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <br>
-
-                        <div class="row">
-                            <div class="">
-                                <label class="col-md-2 control-label">ID no:</label>
-                                <div class="col-md-2">
-                                    <input type="text" title="Enter ID number" id="id_number" name="id_number"
-                                           value="{{ application_obj.id_number }}" class="form-control value_check">
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Passport no:</label>
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <input type="text" title="Enter Passport number" id="passport_number"
                                            value="{{ application_obj.passport_number }}" name="passport_number"
-                                           class="form-control value_check " >
+                                           class="form-control value_check " required>
                                 </div>
                             </div>
 
-                            <div class="">
-                                <label class="col-md-1 control-label">Country of Issuer:</label>
-                                <div class="col-md-2">
-                                    <select id='issue_country' title="Select Country of Issuer" name="issue_country"
-                                            class="form-control value_check">
-                                        {% if application_obj %}
-                                            <option style="display:none" selected="selected"
-                                                    value="{{ application_obj.passport_issue_country.id }}"
-                                                    value="">{{ application_obj.passport_issue_country.country_name|title }}</option>
-                                        {% else %}
-                                            <option style="display:none" selected="selected" id="" value="">Please
-                                                Select
-                                            </option>
-                                        {% endif %}
+                    </div>
 
-                                        {% for rec in country_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
+{#                        <br>#}
+
+{#                        <div class="row">#}
+{#                            <div class="">#}
+{#                                <label class="col-md-2 control-label">DOB:<span#}
+{#                                        style="color: red">*</span></label>#}
+{#                                <div class="col-md-2">#}
+{#                                    <input type="date" title="Enter DOB" id="birth_date" name="birth_date"#}
+{#                                           value="{{ application_obj.birth_date|date:"Y-m-d" }}"#}
+{#                                           class="form-control value_check"#}
+{#                                           max="2999-12-31" required>#}
+{#                                </div>#}
+{#                            </div>#}
+{##}
+{#                            <div class="">#}
+{#                                <label class="col-md-1 control-label">Gender: <span style="color: red">*</span></label>#}
+{#                                <div class="col-md-2">#}
+{#                                    <select id='gender' title="Select gender" name="gender"#}
+{#                                            class="form-control value_check" required>#}
+{#                                        {% if application_obj %}#}
+{#                                            <option style="display:none" selected="selected"#}
+{#                                                    value="{{ application_obj.gender }}"#}
+{#                                                    value="">{{ application_obj.gender|title }}</option>#}
+{#                                        {% else %}#}
+{#                                            <option style="display:none" selected="selected" id="" value="">Please#}
+{#                                                Select#}
+{#                                            </option>#}
+{#                                        {% endif %}#}
+{#                                        <option id="" value="Male">Male</option>#}
+{#                                        <option id="" value="Female">Female</option>#}
+{#                                    </select>#}
+{#                                </div>#}
+{#                            </div>#}
+{##}
+{#                            <div class="">#}
+{#                                {% if user.get_application.is_submitted %}#}
+{#                                    <input hidden name="nationality" value="{{ application_obj.nationality.id }}">#}
+{#                                {% endif %}#}
+{#                                <label class="col-md-1 control-label">Nationality:<span#}
+{#                                        style="color: red">*</span></label>#}
+{#                                <div class="col-md-2">#}
+{#                                    <select id='nationality' title="Select nationality" name="nationality"#}
+{#                                            class="form-control value_check" {% if user.get_application.is_submitted %} disabled{% endif %} required>#}
+{#                                        {% if application_obj %}#}
+{#                                            <option style="display:none" selected="selected"#}
+{#                                                    value="{{ application_obj.nationality.id }}"#}
+{#                                                    value="">{{ application_obj.nationality.country_name|title }}</option>#}
+{#                                        {% else %}#}
+{#                                            <option style="display:none" selected="selected" id="" value="">Please#}
+{#                                                Select#}
+{#                                            </option>#}
+{#                                        {% endif %}#}
+{##}
+{#                                        {% for rec in country_recs %}#}
+{#                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>#}
+{#                                        {% endfor %}#}
+{#                                    </select>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+
+{#                        <br>#}
+
+{#                        <div class="row">#}
+{#                            <div class="">#}
+{#                                <label class="col-md-2 control-label">ID no:</label>#}
+{#                                <div class="col-md-2">#}
+{#                                    <input type="text" title="Enter ID number" id="id_number" name="id_number"#}
+{#                                           value="{{ application_obj.id_number }}" class="form-control value_check">#}
+{#                                </div>#}
+{#                            </div>#}
+{##}
+{#                            <div class="">#}
+{#                                <label class="col-md-1 control-label">Passport no:</label>#}
+{#                                <div class="col-md-2">#}
+{#                                    <input type="text" title="Enter Passport number" id="passport_number"#}
+{#                                           value="{{ application_obj.passport_number }}" name="passport_number"#}
+{#                                           class="form-control value_check " >#}
+{#                                </div>#}
+{#                            </div>#}
+{##}
+{#                            <div class="">#}
+{#                                <label class="col-md-1 control-label">Country of Issuer:</label>#}
+{#                                <div class="col-md-2">#}
+{#                                    <select id='issue_country' title="Select Country of Issuer" name="issue_country"#}
+{#                                            class="form-control value_check">#}
+{#                                        {% if application_obj %}#}
+{#                                            <option style="display:none" selected="selected"#}
+{#                                                    value="{{ application_obj.passport_issue_country.id }}"#}
+{#                                                    value="">{{ application_obj.passport_issue_country.country_name|title }}</option>#}
+{#                                        {% else %}#}
+{#                                            <option style="display:none" selected="selected" id="" value="">Please#}
+{#                                                Select#}
+{#                                            </option>#}
+{#                                        {% endif %}#}
+{##}
+{#                                        {% for rec in country_recs %}#}
+{#                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>#}
+{#                                        {% endfor %}#}
+{#                                    </select>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+
+{#                        <br>#}
+
+{#                        <div class="row">#}
+{#                            <div class="">#}
+{#                                <label class="col-md-2 control-label">E-mail:<span style="color: red">*</span></label>#}
+{#                                <div class="col-md-2">#}
+{#                                    <input type="text" title="Enter E-mail ID" id="email" name="email"#}
+{#                                            {% if application_obj %} value="{{ application_obj.email }}"#}
+{#                                            {% else %} value="{{ user.email }}" {% endif %}#}
+{#                                           class="form-control value_check submitted" readonly>#}
+{#                                </div>#}
+{#                            </div>#}
+{##}
+{#                            <div class="">#}
+{#                                <label class="col-md-1 control-label">Telephone no (HP):<span#}
+{#                                        style="color: red">*</span></label>#}
+{#                                <div class="col-md-2">#}
+{#                                    <input type="text" title="Enter Telephone number (HP)" id="telephone_hp"#}
+{#                                           value="{{ application_obj.telephone_hp }}" name="telephone_hp"#}
+{#                                           class="form-control value_check" required>#}
+{#                                </div>#}
+{#                            </div>#}
+{##}
+{#                            <div class="">#}
+{#                                <label class="col-md-1 control-label">Telephone no (Home):</label>#}
+{#                                <div class="col-md-2">#}
+{#                                    <input type="text" title="Enter Telephone number (Home)" id="telephone_home"#}
+{#                                           value="{{ application_obj.telephone_home }}" name="telephone_home"#}
+{#                                           class="form-control value_check">#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <br>#}
+{#                        <div class="row">#}
+{##}
+{#                            <div class="">#}
+{#                                <label class="col-md-2 control-label">Religion:</label>#}
+{#                                <div class="col-md-2">#}
+{#                                    <select id='issue_country' title="Select Religion" name="religion"#}
+{#                                            class="form-control value_check">#}
+{#                                        {% if application_obj %}#}
+{#                                            <option style="display:none" selected="selected"#}
+{#                                                    value="{{ application_obj.religion.id }}"#}
+{#                                                    value="">{{ application_obj.religion.religion_name|title }}</option>#}
+{#                                        {% else %}#}
+{#                                            <option style="display:none" selected="selected" id="" value="">Please#}
+{#                                                Select#}
+{#                                            </option>#}
+{#                                        {% endif %}#}
+{##}
+{#                                        {% for rec in religion_recs %}#}
+{#                                            <option value='{{ rec.id }}'>{{ rec.religion_name|title }}</option>#}
+{#                                        {% endfor %}#}
+{#                                    </select>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <div class="">#}
+{#                                <label class="col-md-1 control-label">Face Photo:<span style="color: red">*</span></label>#}
+{#                                <div class="col-md-2">#}
+{#                                    <input type="text" class="value_check" id="pic" name="pic"#}
+{#                                           value="{{ application_obj.image }}" hidden>#}
+{##}
+{#                                    <input name="photo" type="file" title="Select photo"#}
+{#                                           id="applicant_photo"#}
+{#                                           class="form-control photo" {% if not application_obj.image %}required{% endif %}>#}
+{#                                    {% if application_obj.image %}#}
+{#                                    <img width="100px" height="120px"#}
+{#                                         src="{{ application_obj.report_path }}{{ application_obj.image }}">{% endif %}#}
+{#                                </div>#}
+{#                            </div>#}
+{##}
+{#                            <div class="">#}
+{#                                <label class="col-md-1 control-label">Passport Photo: </label>#}
+{#                                <div class="col-md-2">#}
+{#                                    <input type="text" id="passport_pic" class="value_check" name="passport_pic"#}
+{#                                           value="{{ application_obj.passport_image }}" hidden>#}
+{##}
+{#                                    <input name="passport_photo" type="file" title="Select photo"#}
+{#                                           id="passport_photo"#}
+{#                                           class="form-control photo" >#}
+{##}
+{#                                    {% if application_obj.passport_image %}#}
+{#                                    <img width="100px" height="120px"#}
+{#                                         src="#}
+{#                                                 {{ application_obj.report_path }}{{ application_obj.passport_image }}">{% endif %}#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
 
                         <br>
-
-                        <div class="row">
-                            <div class="">
+                        <hr>
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-settings font-red"></i>
+                                <span class="caption-subject font-red sbold uppercase"> CONTACT INFO</span>
+                            </div>
+                        </div>
+                        <hr>
+                    <div class="row">
+                        <div class="">
                                 <label class="col-md-2 control-label">E-mail:<span style="color: red">*</span></label>
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <input type="text" title="Enter E-mail ID" id="email" name="email"
                                             {% if application_obj %} value="{{ application_obj.email }}"
                                             {% else %} value="{{ user.email }}" {% endif %}
@@ -342,98 +473,33 @@
                                 </div>
                             </div>
 
-                            <div class="">
-                                <label class="col-md-1 control-label">Telephone no (HP):<span
-                                        style="color: red">*</span></label>
-                                <div class="col-md-2">
-                                    <input type="text" title="Enter Telephone number (HP)" id="telephone_hp"
-                                           value="{{ application_obj.telephone_hp }}" name="telephone_hp"
-                                           class="form-control value_check" required>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-1 control-label">Telephone no (Home):</label>
-                                <div class="col-md-2">
-                                    <input type="text" title="Enter Telephone number (Home)" id="telephone_home"
-                                           value="{{ application_obj.telephone_home }}" name="telephone_home"
+                    <div class="">
+                                <label class="col-md-2 control-label">Mobile:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Mobile" id="mobile"
+                                           value="{{ application_obj.address.mobile|default_if_none:"" }}" name="mobile"
                                            class="form-control value_check">
                                 </div>
                             </div>
-                        </div>
-                        <br>
-                        <div class="row">
 
-                            <div class="">
-                                <label class="col-md-2 control-label">Religion:</label>
-                                <div class="col-md-2">
-                                    <select id='issue_country' title="Select Religion" name="religion"
-                                            class="form-control value_check">
-                                        {% if application_obj %}
-                                            <option style="display:none" selected="selected"
-                                                    value="{{ application_obj.religion.id }}"
-                                                    value="">{{ application_obj.religion.religion_name|title }}</option>
-                                        {% else %}
-                                            <option style="display:none" selected="selected" id="" value="">Please
-                                                Select
-                                            </option>
-                                        {% endif %}
+                    </div>
+                    <br>
+                    <div class="row">
 
-                                        {% for rec in religion_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.religion_name|title }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="">
-                                <label class="col-md-1 control-label">Face Photo:<span style="color: red">*</span></label>
-                                <div class="col-md-2">
-                                    <input type="text" class="value_check" id="pic" name="pic"
-                                           value="{{ application_obj.image }}" hidden>
-
-                                    <input name="photo" type="file" title="Select photo"
-                                           id="applicant_photo"
-                                           class="form-control photo" {% if not application_obj.image %}required{% endif %}>
-                                    {% if application_obj.image %}
-                                    <img width="100px" height="120px"
-                                         src="{{ application_obj.report_path }}{{ application_obj.image }}">{% endif %}
+                    <div class="">
+                                <label class="col-md-2 control-label">WhatsApp:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter WhatsApp" id="whats_app"
+                                           value="{{ application_obj.address.whats_app|default_if_none:"" }}" name="whats_app"
+                                           class="form-control value_check">
                                 </div>
                             </div>
 
-                            <div class="">
-                                <label class="col-md-1 control-label">Passport Photo: </label>
-                                <div class="col-md-2">
-                                    <input type="text" id="passport_pic" class="value_check" name="passport_pic"
-                                           value="{{ application_obj.passport_image }}" hidden>
-
-                                    <input name="passport_photo" type="file" title="Select photo"
-                                           id="passport_photo"
-                                           class="form-control photo" >
-
-                                    {% if application_obj.passport_image %}
-                                    <img width="100px" height="120px"
-                                         src="
-                                                 {{ application_obj.report_path }}{{ application_obj.passport_image }}">{% endif %}
-                                </div>
-                            </div>
-                        </div>
-
-                        <br>
-                        <hr>
-                        <div class="portlet-title">
-                            <div class="caption">
-                                <i class="icon-settings font-red"></i>
-                                <span class="caption-subject font-red sbold uppercase"> Present Address</span>
-                            </div>
-                        </div>
-                        <hr>
-
-                        <div class="row">
-                            <div class="">
+                        <div class="">
                                 <label class="col-md-2 control-label">Country: <span style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <select id='address_country' title="Select Country" name="country"
-                                            class="form-control value_check" required>
+                                            class="form-control value_check" data-live-search="true" required>
 
                                         {% if application_obj %}
                                             <option style="display:none" selected="selected"
@@ -452,204 +518,288 @@
                                 </div>
                             </div>
 
-
-                            <div class="">
-                                <label class="col-md-2 control-label">Residential/Postal Address:<span
-                                        style="color: red">*</span></label>
-                                <div class="col-md-3">
-                                    <input type="text" title="Enter Residential/Postal Address" id="residential_address"
-                                           value="{{ application_obj.address.residential_address }}"
-                                           name="residential_address"
-                                           class="form-control value_check" required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <br>
-
-                        <div class="row">
-
-                            <div class="">
-                                <label class="col-md-2 control-label">Premise/Sub-Locality-2:<span
-                                        style="color: red">*</span></label>
-                                <div class="col-md-3">
-                                    <input type="text" title="Enter Premise/Sub-Locality-2" id="street"
-                                           value="{{ application_obj.address.street }}" name="street"
-                                           class="form-control value_check" required>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-2 control-label">Sub-Locality:<span
-                                        style="color: red">*</span></label>
-                                <div class="col-md-3">
-                                    <input type="text" title="Enter Sub-Locality " id="sub_locality"
-                                           value="{{ application_obj.address.sub_locality }}" name="sub_locality"
-                                           class="form-control value_check" required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <br>
-
-                        <div class="row">
-
-                            <div class="">
-                                <label class="col-md-2 control-label">Postcode:<span
-                                        style="color: red">*</span></label>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="">
+                                <label class="col-md-2 control-label">Postcode:</label>
                                 <div class="col-md-3">
                                     <input type="text" title="Enter Postcode" id="post_code"
                                            value="{{ application_obj.address.post_code }}" name="post_code"
-                                           class="form-control value_check" required>
+                                           class="form-control value_check" >
+                                </div>
+                            </div>
+                        <div class="">
+                                <label class="col-md-2 control-label">Address line 1:<span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Residential/Postal Address"
+                                           id="permanent_residential_address"
+                                           value="{{ application_obj.address.residential_address }}"
+                                           name="permanent_residential_address"
+                                           class="form-control value_check emp" required>
+                                </div>
+                            </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                         <div class="">
+                                <label class="col-md-2 control-label">Address line 2:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Premise/Sub-Locality-2" id="permanent_street"
+                                           value="{{ application_obj.address.street }}"
+                                           name="permanent_street"
+                                           class="form-control value_check emp" >
                                 </div>
                             </div>
 
-                            <div class="">
-                                <label class="col-md-2 control-label">District:<span
-                                        style="color: red">*</span></label>
+                        <div class="">
+                                <label class="col-md-2 control-label">City:</label>
                                 <div class="col-md-3">
                                     <input type="text" title="Enter District " id="district"
                                            value="{{ application_obj.address.district|title }}" name="district"
                                            class="form-control value_check" required>
                                 </div>
                             </div>
-                        </div>
 
-                        <br>
-
-                        <div class="row">
-
-                            <div class="">
-                                <label class="col-md-2 control-label">State/Province:<span
-                                        style="color: red">*</span></label>
-                                <div class="col-md-3">
-                                    <input type="text" title="Enter State/Province" id="state"
-                                           value="{{ application_obj.address.state|title }}" name="state"
-                                           class="form-control value_check" required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <br>
-                        <hr>
-                        <div class="portlet-title">
+                    </div>
+                    <br>
+                    <hr>
+                    <div class="portlet-title">
                             <div class="caption">
                                 <i class="icon-settings font-red"></i>
-                                <span class="caption-subject font-red sbold uppercase"> Permanent Address</span>
-                                <span style="margin-left: 20px" class="sbold">Same as Present Address:</span> <input
-                                    class="large" type="checkbox" name="same_as" id="same_as"
-                                    {% if application_obj.address.is_same %}checked{% endif %}>
+                                <span class="caption-subject font-red sbold uppercase"> How did you know about us</span>
                             </div>
                         </div>
-                        <hr>
+                    <br>
 
                         <div class="row">
+
+
+
                             <div class="">
-                                <label class="col-md-2 control-label">Country: <span style="color: red">*</span></label>
+                                <label class="col-md-2 control-label">Student:</label>
                                 <div class="col-md-3">
-                                    <select id='permanent_country' title="Select Country" name="permanent_country"
-                                            class="form-control value_check emp" required>
+                                    <select id='student_id' title="Select Country" name="student"
+                                            class="form-control value_check" data-live-search="true" >
 
                                         {% if application_obj %}
                                             <option style="display:none" selected="selected"
-                                                    value="{{ application_obj.permanent_address.country.id }}"
-                                                    value="">{{ application_obj.permanent_address.country.country_name|title }}</option>
+                                                    value="{{ application_obj.ref_by_student.id }}"
+                                                    value="">{{ application_obj.ref_by_student.user.first_name|default_if_none:"" }} {{ application_obj.ref_by_student.user.last_name|default_if_none:"" }}</option>
                                         {% else %}
                                             <option style="display:none" selected="selected" id="" value="">Please
                                                 Select
                                             </option>
                                         {% endif %}
 
-                                        {% for rec in country_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
+                                        {% for rec in student_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.user.first_name|default_if_none:"" }} {{ rec.user.last_name|default_if_none:"" }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
                             </div>
-
-
-                            <div class="">
-                                <label class="col-md-2 control-label">Residential/Postal Address:<span
-                                        style="color: red">*</span></label>
+                         <div class="">
+                                <label class="col-md-2 control-label">Agent:</label>
                                 <div class="col-md-3">
-                                    <input type="text" title="Enter Residential/Postal Address"
-                                           id="permanent_residential_address"
-                                           value="{{ application_obj.permanent_address.residential_address }}"
-                                           name="permanent_residential_address"
-                                           class="form-control value_check emp" required>
+                                    <select id='agent_id' title="Select Country" name="agent"
+                                            class="form-control value_check" data-live-search="true" >
+
+                                        {% if application_obj %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.ref_by_agent.id }}"
+                                                    value="">{{ application_obj.ref_by_agent.first_name|default_if_none:"" }} {{ application_obj.ref_by_agent.last_name|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">Please
+                                                Select
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in agent_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.first_name|default_if_none:"" }} {{ rec.last_name|default_if_none:"" }}</option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
                             </div>
                         </div>
 
                         <br>
 
-                        <div class="row">
+{#                        <div class="row">#}
+{##}
+{#                            <div class="">#}
+{#                                <label class="col-md-2 control-label">Premise/Sub-Locality-2:<span#}
+{#                                        style="color: red">*</span></label>#}
+{#                                <div class="col-md-3">#}
+{#                                    <input type="text" title="Enter Premise/Sub-Locality-2" id="street"#}
+{#                                           value="{{ application_obj.address.street }}" name="street"#}
+{#                                           class="form-control value_check" required>#}
+{#                                </div>#}
+{#                            </div>#}
+{##}
+{#                            <div class="">#}
+{#                                <label class="col-md-2 control-label">Sub-Locality:<span#}
+{#                                        style="color: red">*</span></label>#}
+{#                                <div class="col-md-3">#}
+{#                                    <input type="text" title="Enter Sub-Locality " id="sub_locality"#}
+{#                                           value="{{ application_obj.address.sub_locality }}" name="sub_locality"#}
+{#                                           class="form-control value_check" required>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{##}
+{#                        <br>#}
+{##}
+{#                        <div class="row">#}
+{##}
+{##}
+{##}
+{#                            <div class="">#}
+{#                                <label class="col-md-2 control-label">District:<span#}
+{#                                        style="color: red">*</span></label>#}
+{#                                <div class="col-md-3">#}
+{#                                    <input type="text" title="Enter District " id="district"#}
+{#                                           value="{{ application_obj.address.district|title }}" name="district"#}
+{#                                           class="form-control value_check" required>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{##}
+{#                        <br>#}
+{##}
+{#                        <div class="row">#}
+{##}
+{#                            <div class="">#}
+{#                                <label class="col-md-2 control-label">State/Province:<span#}
+{#                                        style="color: red">*</span></label>#}
+{#                                <div class="col-md-3">#}
+{#                                    <input type="text" title="Enter State/Province" id="state"#}
+{#                                           value="{{ application_obj.address.state|title }}" name="state"#}
+{#                                           class="form-control value_check" required>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
 
-                            <div class="">
-                                <label class="col-md-2 control-label">Premise/Sub-Locality-2:<span
-                                        style="color: red">*</span></label>
-                                <div class="col-md-3">
-                                    <input type="text" title="Enter Premise/Sub-Locality-2" id="permanent_street"
-                                           value="{{ application_obj.permanent_address.street }}"
-                                           name="permanent_street"
-                                           class="form-control value_check emp" required>
-                                </div>
-                            </div>
+{#                        <br>#}
+{#                        <hr>#}
+{#                        <div class="portlet-title">#}
+{#                            <div class="caption">#}
+{#                                <i class="icon-settings font-red"></i>#}
+{#                                <span class="caption-subject font-red sbold uppercase"> Permanent Address</span>#}
+{#                                <span style="margin-left: 20px" class="sbold">Same as Present Address:</span> <input#}
+{#                                    class="large" type="checkbox" name="same_as" id="same_as"#}
+{#                                    {% if application_obj.address.is_same %}checked{% endif %}>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <hr>#}
 
-                            <div class="">
-                                <label class="col-md-2 control-label">Sub-Locality:<span
-                                        style="color: red">*</span></label>
-                                <div class="col-md-3">
-                                    <input type="text" title="Enter Sub-Locality " id="permanent_sub_locality"
-                                           value="{{ application_obj.permanent_address.sub_locality }}"
-                                           name="permanent_sub_locality"
-                                           class="form-control value_check emp" required>
-                                </div>
-                            </div>
-                        </div>
+{#                        <div class="row">#}
+{#                            <div class="">#}
+{#                                <label class="col-md-2 control-label">Country: <span style="color: red">*</span></label>#}
+{#                                <div class="col-md-3">#}
+{#                                    <select id='permanent_country' title="Select Country" name="permanent_country"#}
+{#                                            class="form-control value_check emp" required>#}
+{##}
+{#                                        {% if application_obj %}#}
+{#                                            <option style="display:none" selected="selected"#}
+{#                                                    value="{{ application_obj.permanent_address.country.id }}"#}
+{#                                                    value="">{{ application_obj.permanent_address.country.country_name|title }}</option>#}
+{#                                        {% else %}#}
+{#                                            <option style="display:none" selected="selected" id="" value="">Please#}
+{#                                                Select#}
+{#                                            </option>#}
+{#                                        {% endif %}#}
+{##}
+{#                                        {% for rec in country_recs %}#}
+{#                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>#}
+{#                                        {% endfor %}#}
+{#                                    </select>#}
+{#                                </div>#}
+{#                            </div>#}
+{##}
+{##}
+{#                            <div class="">#}
+{#                                <label class="col-md-2 control-label">Residential/Postal Address:<span#}
+{#                                        style="color: red">*</span></label>#}
+{#                                <div class="col-md-3">#}
+{#                                    <input type="text" title="Enter Residential/Postal Address"#}
+{#                                           id="permanent_residential_address"#}
+{#                                           value="{{ application_obj.permanent_address.residential_address }}"#}
+{#                                           name="permanent_residential_address"#}
+{#                                           class="form-control value_check emp" required>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
 
-                        <br>
+{#                        <br>#}
 
-                        <div class="row">
+{#                        <div class="row">#}
+{##}
+{#                            <div class="">#}
+{#                                <label class="col-md-2 control-label">Premise/Sub-Locality-2:<span#}
+{#                                        style="color: red">*</span></label>#}
+{#                                <div class="col-md-3">#}
+{#                                    <input type="text" title="Enter Premise/Sub-Locality-2" id="permanent_street"#}
+{#                                           value="{{ application_obj.permanent_address.street }}"#}
+{#                                           name="permanent_street"#}
+{#                                           class="form-control value_check emp" required>#}
+{#                                </div>#}
+{#                            </div>#}
+{##}
+{#                            <div class="">#}
+{#                                <label class="col-md-2 control-label">Sub-Locality:<span#}
+{#                                        style="color: red">*</span></label>#}
+{#                                <div class="col-md-3">#}
+{#                                    <input type="text" title="Enter Sub-Locality " id="permanent_sub_locality"#}
+{#                                           value="{{ application_obj.permanent_address.sub_locality }}"#}
+{#                                           name="permanent_sub_locality"#}
+{#                                           class="form-control value_check emp" required>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
 
-                            <div class="">
-                                <label class="col-md-2 control-label">Postcode:<span
-                                        style="color: red">*</span></label>
-                                <div class="col-md-3">
-                                    <input type="text" title="Enter Postcode" id="permanent_post_code"
-                                           value="{{ application_obj.permanent_address.post_code }}"
-                                           name="permanent_post_code"
-                                           class="form-control value_check emp" required>
-                                </div>
-                            </div>
+{#                        <br>#}
 
-                            <div class="">
-                                <label class="col-md-2 control-label">District:<span
-                                        style="color: red">*</span></label>
-                                <div class="col-md-3">
-                                    <input type="text" title="Enter District " id="permanent_district"
-                                           value="{{ application_obj.permanent_address.district|title }}"
-                                           name="permanent_district"
-                                           class="form-control value_check emp" required>
-                                </div>
-                            </div>
-                        </div>
+{#                        <div class="row">#}
+{##}
+{#                            <div class="">#}
+{#                                <label class="col-md-2 control-label">Postcode:<span#}
+{#                                        style="color: red">*</span></label>#}
+{#                                <div class="col-md-3">#}
+{#                                    <input type="text" title="Enter Postcode" id="permanent_post_code"#}
+{#                                           value="{{ application_obj.permanent_address.post_code }}"#}
+{#                                           name="permanent_post_code"#}
+{#                                           class="form-control value_check emp" required>#}
+{#                                </div>#}
+{#                            </div>#}
+{##}
+{#                            <div class="">#}
+{#                                <label class="col-md-2 control-label">District:<span#}
+{#                                        style="color: red">*</span></label>#}
+{#                                <div class="col-md-3">#}
+{#                                    <input type="text" title="Enter District " id="permanent_district"#}
+{#                                           value="{{ application_obj.permanent_address.district|title }}"#}
+{#                                           name="permanent_district"#}
+{#                                           class="form-control value_check emp" required>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{##}
+{#                        <br>#}
 
-                        <br>
-
-                        <div class="row">
-
-                            <div class="">
-                                <label class="col-md-2 control-label">State/Province:<span
-                                        style="color: red">*</span></label>
-                                <div class="col-md-3">
-                                    <input type="text" title="Enter State/Province" id="permanent_state"
-                                           value="{{ application_obj.permanent_address.state|title }}"
-                                           name="permanent_state"
-                                           class="form-control value_check emp" required>
-                                </div>
-                            </div>
-                        </div>
+{#                        <div class="row">#}
+{##}
+{#                            <div class="">#}
+{#                                <label class="col-md-2 control-label">State/Province:<span#}
+{#                                        style="color: red">*</span></label>#}
+{#                                <div class="col-md-3">#}
+{#                                    <input type="text" title="Enter State/Province" id="permanent_state"#}
+{#                                           value="{{ application_obj.permanent_address.state|title }}"#}
+{#                                           name="permanent_state"#}
+{#                                           class="form-control value_check emp" required>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
 
                         <br><br>
                         <br><br>
