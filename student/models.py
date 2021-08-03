@@ -512,6 +512,8 @@ class EnglishQualificationDetails(BaseModel):
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='english_applicant_rel',
                                      on_delete=models.PROTECT)
     english_qualification = models.BooleanField(default=True)
+    english_competency_test = models.ForeignKey('masters.EnglishCompetencyTestDetails', null=True, related_name='english_competency_test_rel',
+                                     on_delete=models.PROTECT)
 
 
 class CurriculumDetails(BaseModel):

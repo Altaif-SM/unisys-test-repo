@@ -76,7 +76,7 @@
 
                 $(".add_english_row").click(function () {
                     english_count = english_count + 1;
-                    var english_row = '<div class="row english_item" id="english_check_' + english_count + '" style="margin-top: 50px"><div class="row"><div class=""> <label class="col-md-2 control-label">English Competency Test:</label> <div class="col-md-2"><input type="text" title="Enter English Competency Test" id="english_test_' + english_count + '" name="english_test_' + english_count + '" value="" class="form-control"> <input hidden type="text" name="english_obj_' + count + '" id="english_obj_' + count + '"> </div> </div> <div class=""> <label class="col-md-2 control-label">Year:</label> <div class="col-md-2"> <select id="english_test_year_' + english_count + '" title="Select Year" name="english_test_year_' + english_count + '" class="form-control"> <option style="display:none" selected="selected" id="" value=""> Please Select </option>{% for rec in passing_year_recs %}<option value="{{ rec.year }}">{{ rec.year }}</option>{% endfor %} </select></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label"> Result:</label><div class="col-md-2"><input type="text" title="Enter result" id="english_test_result_' + english_count + '" name="english_test_result_' + english_count + '" value="" class="form-control"></div></div> <div class=""> <label class="col-md-2 control-label">Result Doc:</label> <div class="col-md-2" id="english_item_obj_' + english_count + '"> <label class="form-control" style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input class="file" style="width: 50%" type="button" value="Choose File:"><a><input type="text" readonly name="english_test_result_document_text_' + english_count + '" class="file_value emp" style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label><input style="display: none" type="file" title="Select Result document" id="english_test_result_document_' + english_count + '" name="english_test_result_document_' + english_count + '" class="file_type"><span style="float: right; color: darkred; cursor: pointer;margin-top: -25px" class="remove_doc fa fa-close"></span></div></div><div class=""><div class="col-md-1"><a href="javascript:;" class="delete_english btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div></div>#}';
+                    var english_row = '<div class="row english_item" id="english_check_' + english_count + '" style="margin-top: 50px"><div class="row"><div class=""> <label class="col-md-2 control-label">English Competency Test:</label> <div class="col-md-2"> <select id="english_competency_test_' + english_count + '" title="Select Year" name="english_competency_test_' + english_count + '" class="form-control"> <option style="display:none" selected="selected" id="" value=""> Please Select </option>{% for rec in english_competency_test_recs %}<option value="{{ rec.id }}">{{ rec.english_competency_test }}</option>{% endfor %} </select></div></div><div class=""> <label class="col-md-2 control-label">Institution:</label> <div class="col-md-2"><input type="text" title="Enter English Competency Test" id="english_test_' + english_count + '" name="english_test_' + english_count + '" value="" class="form-control"> <input hidden type="text" name="english_obj_' + count + '" id="english_obj_' + count + '"> </div> </div></div><br><div class="row"><div class=""><label class="col-md-2 control-label"> Level:</label><div class="col-md-2"><input type="text" title="Enter result" id="english_test_result_' + english_count + '" name="english_test_result_' + english_count + '" value="" class="form-control"></div></div><div class=""><div class="col-md-1" style="margin-top: -55px;margin-left: 400px;"><a href="javascript:;" class="delete_english btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div></div>';
                     $(english_row).removeAttr().hide().insertAfter(".english_item:last").slideDown(300);
                 });
 
@@ -678,6 +678,31 @@ function showOptions(s) {
                                     <div class="">
                                         <label class="col-md-2 control-label">English Competency Test:</label>
                                         <div class="col-md-2">
+                                            <select id='english_competency_test_{{ forloop.counter }}' title="Select Year"
+                                                    name="english_competency_test_{{ forloop.counter }}"
+                                                    class="form-control eng_emp">
+
+                                                {% if english_obj.english_competency_test %}
+                                                    <option style="display:none" selected="selected"
+                                                            value="{{ english_obj.english_competency_test.id }}"
+                                                            value="">{{ english_obj.english_competency_test.english_competency_test|default_if_none:"" }}</option>
+                                                {% else %}
+                                                    <option style="display:none" selected="selected" id="" value="">
+                                                        Please Select
+                                                    </option>
+                                                {% endif %}
+
+                                                {% for rec in english_competency_test_recs %}
+                                                    <option value='{{ rec.id }}'>{{ rec.english_competency_test|default_if_none:"" }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="">
+                                        <label class="col-md-2 control-label">Institution:</label>
+                                        <div class="col-md-2">
                                             <input type="text" title="Enter English Competency Test"
                                                    id="english_test_{{ forloop.counter }}"
                                                    name="english_test_{{ forloop.counter }}"
@@ -688,29 +713,7 @@ function showOptions(s) {
                                         </div>
                                     </div>
 
-                                    <div class="">
-                                        <label class="col-md-2 control-label">Year:</label>
-                                        <div class="col-md-2">
-                                            <select id='english_test_year_{{ forloop.counter }}' title="Select Year"
-                                                    name="english_test_year_{{ forloop.counter }}"
-                                                    class="form-control eng_emp">
 
-                                                {% if english_obj %}
-                                                    <option style="display:none" selected="selected"
-                                                            value="{{ english_obj.english_test_year }}"
-                                                            value="">{{ english_obj.english_test_year }}</option>
-                                                {% else %}
-                                                    <option style="display:none" selected="selected" id="" value="">
-                                                        Please Select
-                                                    </option>
-                                                {% endif %}
-
-                                                {% for rec in passing_year_recs %}
-                                                    <option value='{{ rec.year }}'>{{ rec.year }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                    </div>
 
                                 </div>
                                 <br>
@@ -718,7 +721,7 @@ function showOptions(s) {
                                 <div class="row">
 
                                     <div class="">
-                                        <label class="col-md-2 control-label"> Result:</label>
+                                        <label class="col-md-2 control-label"> Level:</label>
                                         <div class="col-md-2">
                                             <input type="text" title="Enter result"
                                                    id="english_test_result_{{ forloop.counter }}"
@@ -729,41 +732,41 @@ function showOptions(s) {
                                     </div>
 
 
-                                    <div class="">
-                                        <label class="col-md-2 control-label">Result Doc:</label>
-                                        <div class="col-md-2" id="english_item_obj_{{ forloop.counter }}">
-
-                                            {% if english_obj.english_test_result_document %}
-                                                <label class="form-control"
-                                                       style="border-color: #b1ad9f;  width: 100%;text-align: left"><input
-                                                        style="width: 50%"
-                                                        type='button' class="file" value='Choose File:'><a
-                                                        href="
-                                                                {{ english_obj.applicant_id.report_path }}{{ english_obj.english_test_result_document }}"><input
-                                                        readonly
-                                                        class="file_value emp"
-                                                        style="border: none; width: 50%"
-                                                        name="english_test_result_document_text_{{ forloop.counter }}"
-                                                        value="{{ english_obj.english_test_result_document }}"></a></label>
-                                            {% else %}
-                                                <label class="form-control"
-                                                       style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
-                                                        class="file" style="width: 50%"
-                                                        type='button' value='Choose File:'><a><input type="text"
-                                                                                                     readonly
-                                                                                                     name="english_test_result_document_text_{{ forloop.counter }}"
-                                                                                                     class="file_value emp"
-                                                                                                     style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
-                                            {% endif %}
-
-                                            <input style="display: none" type="file" title="Select Result document"
-                                                   id="english_test_result_document_{{ forloop.counter }}"
-                                                   name="english_test_result_document_{{ forloop.counter }}"
-                                                   class="file_type">
-                                            <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
-                                                  class="remove_doc fa fa-close"></span>
-                                        </div>
-                                    </div>
+{#                                    <div class="">#}
+{#                                        <label class="col-md-2 control-label">Result Doc:</label>#}
+{#                                        <div class="col-md-2" id="english_item_obj_{{ forloop.counter }}">#}
+{##}
+{#                                            {% if english_obj.english_test_result_document %}#}
+{#                                                <label class="form-control"#}
+{#                                                       style="border-color: #b1ad9f;  width: 100%;text-align: left"><input#}
+{#                                                        style="width: 50%"#}
+{#                                                        type='button' class="file" value='Choose File:'><a#}
+{#                                                        href="#}
+{#                                                                {{ english_obj.applicant_id.report_path }}{{ english_obj.english_test_result_document }}"><input#}
+{#                                                        readonly#}
+{#                                                        class="file_value emp"#}
+{#                                                        style="border: none; width: 50%"#}
+{#                                                        name="english_test_result_document_text_{{ forloop.counter }}"#}
+{#                                                        value="{{ english_obj.english_test_result_document }}"></a></label>#}
+{#                                            {% else %}#}
+{#                                                <label class="form-control"#}
+{#                                                       style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input#}
+{#                                                        class="file" style="width: 50%"#}
+{#                                                        type='button' value='Choose File:'><a><input type="text"#}
+{#                                                                                                     readonly#}
+{#                                                                                                     name="english_test_result_document_text_{{ forloop.counter }}"#}
+{#                                                                                                     class="file_value emp"#}
+{#                                                                                                     style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>#}
+{#                                            {% endif %}#}
+{##}
+{#                                            <input style="display: none" type="file" title="Select Result document"#}
+{#                                                   id="english_test_result_document_{{ forloop.counter }}"#}
+{#                                                   name="english_test_result_document_{{ forloop.counter }}"#}
+{#                                                   class="file_type">#}
+{#                                            <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"#}
+{#                                                  class="remove_doc fa fa-close"></span>#}
+{#                                        </div>#}
+{#                                    </div>#}
                                 </div>
 
                                     {% comment %}<div class="">
@@ -797,6 +800,27 @@ function showOptions(s) {
                                 <div class="">
                                     <label class="col-md-2 control-label">English Competency Test:</label>
                                     <div class="col-md-2">
+                                        <select id='english_competency_test_1' title="Select Year"
+                                                name="english_competency_test_1"
+                                                class="form-control eng_emp">
+
+                                            <option style="display:none" selected="selected" id="" value="">Please
+                                                Select
+                                            </option>
+
+                                            {% for rec in english_competency_test_recs %}
+                                                <option value='{{ rec.id }}'>{{ rec.english_competency_test|default_if_none:"" }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+
+
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Institution:</label>
+                                    <div class="col-md-2">
                                         <input type="text" title="Enter English Competency Test" id="english_test_1"
                                                name="english_test_1" value=""
                                                class="form-control eng_emp">
@@ -805,29 +829,13 @@ function showOptions(s) {
                                     </div>
                                 </div>
 
-                                <div class="">
-                                    <label class="col-md-2 control-label">Year:</label>
-                                    <div class="col-md-2">
-                                        <select id='english_test_year_1' title="Select Year"
-                                                name="english_test_year_1"
-                                                class="form-control eng_emp">
 
-                                            <option style="display:none" selected="selected" id="" value="">Please
-                                                Select
-                                            </option>
-
-                                            {% for rec in passing_year_recs %}
-                                                <option value='{{ rec.year }}'>{{ rec.year }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                </div>
                             </div>
 
                             <div class="row">
 
                                 <div class="">
-                                    <label class="col-md-2 control-label"> Result:</label>
+                                    <label class="col-md-2 control-label"> Level:</label>
                                     <div class="col-md-2">
                                         <input type="text" title="Enter result" id="english_test_result_1"
                                                name="english_test_result_1"
@@ -836,27 +844,27 @@ function showOptions(s) {
                                     </div>
                                 </div>
 
-                                <div class="">
-                                    <label class="col-md-2 control-label">Result Doc:</label>
-
-                                    <div class="col-md-2" id="english_item_obj_1">
-
-                                        <label class="form-control"
-                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
-                                                class="file" style="width: 50%"
-                                                type='button' value='Choose File:'><a><input type="text"
-                                                                                             readonly
-                                                                                             name="english_test_result_document_text_1"
-                                                                                             class="file_value emp eng_emp"
-                                                                                             style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
-
-                                        <input style="display: none" type="file" title="Select Result document"
-                                               id="english_test_result_document_1"
-                                               name="english_test_result_document_1" class="file_type">
-                                        <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
-                                              class="remove_doc fa fa-close"></span>
-                                    </div>
-                                </div>
+{#                                <div class="">#}
+{#                                    <label class="col-md-2 control-label">Result Doc:</label>#}
+{##}
+{#                                    <div class="col-md-2" id="english_item_obj_1">#}
+{##}
+{#                                        <label class="form-control"#}
+{#                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input#}
+{#                                                class="file" style="width: 50%"#}
+{#                                                type='button' value='Choose File:'><a><input type="text"#}
+{#                                                                                             readonly#}
+{#                                                                                             name="english_test_result_document_text_1"#}
+{#                                                                                             class="file_value emp eng_emp"#}
+{#                                                                                             style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>#}
+{##}
+{#                                        <input style="display: none" type="file" title="Select Result document"#}
+{#                                               id="english_test_result_document_1"#}
+{#                                               name="english_test_result_document_1" class="file_type">#}
+{#                                        <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"#}
+{#                                              class="remove_doc fa fa-close"></span>#}
+{#                                    </div>#}
+{#                                </div>#}
                             </div>
                             </div>
                         {% endif %}

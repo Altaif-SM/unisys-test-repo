@@ -39,6 +39,24 @@ class CountryDetails(BaseModel):
 
         return res
 
+class EnglishCompetencyTestDetails(BaseModel):
+    english_competency_test = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        ordering = ('id',)
+
+    def __str__(self):
+        return self.english_competency_test
+
+    def to_dict(self):
+        res = {
+            'id': self.id if self.id else '',
+            'english_competency_test': self.english_competency_test if self.english_competency_test else '',
+        }
+
+        return res
+
+
 
 class AllCountries(BaseModel):
     country_name = models.CharField(max_length=100, blank=True, null=True)

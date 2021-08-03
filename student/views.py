@@ -429,6 +429,7 @@ def applicant_academic_english_qualification(request):
     english_obj = ''
     passing_year_recs = PassingYear.objects.filter().order_by('-year')
     country_recs = CountryDetails.objects.all()
+    english_competency_test_recs = EnglishCompetencyTestDetails.objects.all()
 
     try:
         application_obj = request.user.get_application
@@ -454,7 +455,7 @@ def applicant_academic_english_qualification(request):
 
     return render(request, 'applicant_academic_english_qualification.html',
                   {'year_recs': year_recs, 'qualification_recs': qualification_obj, 'english_recs': english_obj,
-                   'passing_year_recs': passing_year_recs, 'application_obj': application_obj,'country_recs':country_recs})
+                   'passing_year_recs': passing_year_recs, 'application_obj': application_obj,'country_recs':country_recs,'english_competency_test_recs':english_competency_test_recs})
 
 
 def save_update_applicant_academic_english_qualification(request):
@@ -538,7 +539,8 @@ def save_update_applicant_academic_english_qualification(request):
                                     EnglishQualificationDetails.objects.filter(
                                         id=request.POST['english_obj_' + str(count)]).update(
                                         english_test=request.POST['english_test_' + str(count)],
-                                        english_test_year=request.POST['english_test_year_' + str(count)],
+                                        english_competency_test_id=request.POST['english_competency_test_' + str(count)],
+                                        # english_test_year=request.POST['english_test_year_' + str(count)],
                                         english_test_result=request.POST['english_test_result_' + str(count)])
 
                                     english_object = EnglishQualificationDetails.objects.filter(
@@ -547,7 +549,8 @@ def save_update_applicant_academic_english_qualification(request):
                                 else:
                                     english_object = EnglishQualificationDetails.objects.create(
                                         english_test=request.POST['english_test_' + str(count)],
-                                        english_test_year=request.POST['english_test_year_' + str(count)],
+                                        english_competency_test_id=request.POST['english_competency_test_' + str(count)],
+                                        # english_test_year=request.POST['english_test_year_' + str(count)],
                                         english_test_result=request.POST['english_test_result_' + str(count)],
                                         applicant_id=request.user.get_application)
 
