@@ -65,7 +65,8 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase">{% if template_recs %} Update {% else %} Creating{% endif %} Email Templates </span>
+                <span class="caption-subject font-red sbold uppercase">{% if template_recs %} Update {% else %}
+                    Creating{% endif %} Email Templates </span>
             </div>
         </div>
 
@@ -84,9 +85,12 @@
                                 <div class="col-md-3">
                                     <select id='template_for' name="template_for" class="form-control" required>
                                         {% if template_recs %}
-                                            <option style="display:none" selected="selected" id="" value="{{ template_recs.template_for }}">{{ template_recs.template_for }}</option>
+                                            <option style="display:none" selected="selected" id=""
+                                                    value="{{ template_recs.template_for }}">{{ template_recs.template_for }}</option>
                                         {% else %}
-                                            <option style="display:none" selected="selected" id="" value="">Please Select</option>
+                                            <option style="display:none" selected="selected" id="" value="">Please
+                                                Select
+                                            </option>
                                         {% endif %}
 
                                         <option value='First Interview Call'>First Interview Call</option>
@@ -98,7 +102,8 @@
                                         <option value='Admin Approval'>Admin Approval</option>
                                         <option value='Application Rejected'>Application Rejected</option>
                                         <option value='Student Signup'>Student Signup</option>
-                                        <option value='Student Application Submission'>Student Application Submission</option>
+                                        <option value='Student Application Submission'>Student Application Submission
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -112,7 +117,8 @@
                                 <label class="col-md-2 control-label">Subject:</label>
                                 <div class="col-md-4">
                                     {% if template_recs %}
-                                        <input type="text" name="update" hidden value="{{ template_recs.id }}"> {% endif %}
+                                        <input type="text" name="update" hidden
+                                               value="{{ template_recs.id }}"> {% endif %}
                                     <input type="text" name="subject" class="form-control"
                                            title="Enter subject of email" value="{{ template_recs.subject }}" required>
                                 </div>
@@ -154,3 +160,66 @@
         </div>
     </div>
 {% endblock %}
+
+
+var row = '
+<hr><br>
+<div class="row item" id="check_' + count + '">
+    <div class="row">
+        <div class=""><label class="col-md-1 control-label">Qualification:</label>
+            <div class="col-md-2"><select id="degree' + count + '" title="Select Degree" name="degree' + count + '"
+                                          class="form-control select_data chk">
+                <option selected="selected" id="" value="">Please Select</option>
+                <option value="Secondary">Secondary</option>
+                <option value="O-Level">O-Level</option>
+                <option value="A-Level">A-Level</option>
+                <option value="Bachelor">Bachelor</option>
+                <option value="Master">Master</option>
+            </select><br> <input type="text" style="display: none;" title="Enter Other" id="other_rec' + count + '"
+                                 name="other_rec' + count + '" class="form-control  other_data"></div>
+        </div>
+        <div class=""><label class="col-md-1 control-label">Major :</label>
+            <div class="col-md-2"><input type="text" title="Enter Level" id="major' + count + '"
+                                         name="major' + count + '" value="" class="form-control chk"> <input type="text"
+                                                                                                             hidden
+                                                                                                             value=""
+                                                                                                             id="academic_id_' + count + '"
+                                                                                                             name="academic_id_' + count + '">
+            </div>
+        </div>
+        <div class=""><label class="col-md-1 control-label"> Institution:</label>
+            <div class="col-md-2"><input type="text" title="Enter institution" id="a_level_institution"
+                                         name="level_institution' + count + '" value="" class="form-control chk"></div>
+        </div>
+        <div class="">
+            <div class="col-md-1"><a href="javascript:;" class="delete btn btn-icon-only purple" style=""><i
+                    class="fa fa-times"></i></a></div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class=""><label class="col-md-1 control-label"> Result:</label>
+            <div class="col-md-2"><input type="text" title="Enter result" id="level_result' + count + '"
+                                         name="level_result' + count + '" value="" class="form-control chk"></div>
+        </div>
+        <div class=""><label class="col-md-1 control-label">Result Doc:</label>
+            <div class="col-md-2" id="item' + count + '"><label class="form-control"
+                                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                    class="file" style="width: 50%" type="button" value="Choose File:"><a><input type="text" readonly
+                                                                                                 name="level_result_document_text' + count + '"
+                                                                                                 class="file_value emp chk"
+                                                                                                 style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
+                <input style="display: none" type="file" title="Select Result document"
+                       id="level_result_document' + count + '" name="level_result_document' + count + '"
+                       class="file_type"><span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                                               class="remove_doc fa fa-close"></span></div>
+        </div>
+        <div class=""><label class="col-md-1 control-label">Year:</label>
+            <div class="col-md-2"><select id="level_year' + count + '" title="Select Year"
+                                          name="level_year' + count + '" class="form-control chk">
+                <option selected="selected" id="" value="">Please Select</option>{% for rec in passing_year_recs %}
+                <option value="{{ rec.year }}">{{ rec.year }}</option> {% endfor %} </select></div>
+        </div>
+    </div>
+</div>';
+
