@@ -108,7 +108,7 @@ def save_update_applicant_personal_info(request):
                         last_name=request.POST['last_name'],
                         surname=request.POST['surname'],
                         passport_number=request.POST.get('passport_number'),
-                        email=request.POST['email'],ref_by_student_id=request.POST['student'] if request.POST['student'] else None,ref_by_agent_id=request.POST['agent'] if request.POST['agent'] else None)
+                        email=request.POST['email'])
 
                     application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
 
@@ -176,7 +176,7 @@ def save_update_applicant_personal_info(request):
                                                                             passport_number=request.POST.get('passport_number'),
                                                                             email=request.POST['email'],
                                                                             student=student,
-                                                                            year=current_year,ref_by_student_id=request.POST['student'] if request.POST['student'] else None,ref_by_agent_id=request.POST['agent'] if request.POST['agent'] else None)
+                                                                            year=current_year)
 
                         address_obj = AddressDetails.objects.create(country_id=request.POST['country'],
                                                                     mobile=request.POST['mobile'],
@@ -239,7 +239,7 @@ def save_update_applicant_personal_info(request):
 
     if redirect_flag:
         messages.success(request, "Record saved")
-        return redirect('/student/applicant_family_info/')
+        return redirect('/student/applicant_academic_english_qualification/')
     else:
         messages.warning(request, "Please fill proper form")
         return redirect('/student/applicant_personal_info/')
