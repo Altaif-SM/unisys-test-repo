@@ -483,7 +483,7 @@ class AcademicQualificationDetails(BaseModel):
     degree = models.CharField(max_length=256, blank=True, null=True)
     other_degree = models.CharField(max_length=256, blank=True, null=True)
     major = models.CharField(max_length=256, blank=True, null=True)
-
+    country = models.ForeignKey('masters.CountryDetails', null=True, related_name='academic_country_rel', on_delete=models.PROTECT)
     # o_level = models.CharField(max_length=255, blank=True, null=True)
     # o_level_year = models.CharField(max_length=6, blank=True, null=True)
     # o_level_result = models.CharField(max_length=255, blank=True, null=True)

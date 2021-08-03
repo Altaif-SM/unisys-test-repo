@@ -428,7 +428,7 @@ def applicant_academic_english_qualification(request):
     qualification_obj = ''
     english_obj = ''
     passing_year_recs = PassingYear.objects.filter().order_by('-year')
-
+    country_recs = CountryDetails.objects.all()
 
     try:
         application_obj = request.user.get_application
@@ -454,7 +454,7 @@ def applicant_academic_english_qualification(request):
 
     return render(request, 'applicant_academic_english_qualification.html',
                   {'year_recs': year_recs, 'qualification_recs': qualification_obj, 'english_recs': english_obj,
-                   'passing_year_recs': passing_year_recs, 'application_obj': application_obj})
+                   'passing_year_recs': passing_year_recs, 'application_obj': application_obj,'country_recs':country_recs})
 
 
 def save_update_applicant_academic_english_qualification(request):
@@ -478,7 +478,7 @@ def save_update_applicant_academic_english_qualification(request):
                                 if request.POST.get('academic_id_' + str(x)):
                                     AcademicQualificationDetails.objects.filter(
                                         id=request.POST['academic_id_' + str(x)]).update(
-                                        # level=request.POST['level' + str(x)],
+                                        country_id=request.POST['country' + str(x)],
                                         major=request.POST['major' + str(x)],
                                         degree=request.POST['degree' + str(x)],
                                         level_year=request.POST['level_year' + str(x)],
@@ -497,6 +497,7 @@ def save_update_applicant_academic_english_qualification(request):
                                     qualification_obj = AcademicQualificationDetails.objects.create(
                                         # level=request.POST['level' + str(x)],
                                         level_year=request.POST['level_year' + str(x)],
+                                        country_id=request.POST['country' + str(x)],
                                         major=request.POST['major' + str(x)],
                                         degree=request.POST['degree' + str(x)],
                                         level_result=request.POST['level_result' + str(x)],
