@@ -684,3 +684,16 @@ class AdminNotifications(BaseModel):
 
     def __str__(self):
         return self.applicant_id.first_name
+
+
+class EmployementHistoryDetails(BaseModel):
+    employer_name = models.CharField(max_length=255, blank=True, null=True)
+    designation = models.CharField(max_length=255, blank=True, null=True)
+    country = models.ForeignKey('masters.CountryDetails', null=True, related_name='employement_history_country_rel',
+                                on_delete=models.PROTECT)
+    from_date = models.DateField(null=True, blank=True)
+    to_date = models.DateField(null=True, blank=True)
+    industry_type = models.CharField(max_length=255, blank=True, null=True)
+    employed_years = models.CharField(max_length=255, blank=True, null=True)
+    applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='employement_history_rel',
+                                     on_delete=models.PROTECT)

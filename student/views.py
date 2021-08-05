@@ -980,7 +980,7 @@ def save_update_applicant_curriculum_experience_info(request):
 
                 if redirect_flag:
                     messages.success(request, "Record saved")
-                    return redirect('/student/applicant_scholarship_about_yourself_info/')
+                    return redirect('/student/applicant_employement_history_info/')
         except Exception as e:
             messages.warning(request, "Form have some error" + str(e))
 
@@ -2158,3 +2158,58 @@ def get_courses_from_degrees(request):
 
 
 
+def applicant_employement_history_info(request):
+    country_recs = CountryDetails.objects.all()
+    employement_history_obj = ''
+    try:
+        application_obj = request.user.get_application
+        if request.user.get_application:
+            if EmployementHistoryDetails.objects.filter(applicant_id=request.user.get_application).exists():
+                employement_history_obj = EmployementHistoryDetails.objects.get(applicant_id=request.user.get_application)
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+        return redirect('/student/applicant_personal_info/')
+    return render(request, 'applicant_employement_history_info.html',
+                  {'employement_history_obj': employement_history_obj,'application_obj': application_obj,'country_recs':country_recs})
+
+
+def save_update_applicant_employement_history_info(request):
+    redirect_flag = False
+    if request.POST:
+        try:
+            if StudentDetails.objects.filter(user=request.user):
+                student = StudentDetails.objects.filter(user=request.user)[0]
+                if not request.user.get_application.is_submitted:
+                    if request.POST.get('employement_history_obj'):
+                        EmployementHistoryDetails.objects.filter(id=request.POST['employement_history_obj']).update(
+                            employer_name=request.POST['employer_name'],
+                            designation=request.POST['designation'],
+                            country_id=request.POST['country'] if request.POST['country'] else None,
+                            from_date=request.POST['from_date'] if request.POST['from_date'] else None,
+                            to_date=request.POST['to_date'] if request.POST['to_date'] else None,
+                            industry_type=request.POST['industry_type'],
+                            employed_years=request.POST['employed_years'],
+                        )
+                    else:
+                        EmployementHistoryDetails.objects.create(
+                            employer_name=request.POST['employer_name'],
+                            designation=request.POST['designation'],
+                            country_id=request.POST['country'] if request.POST['country'] else None,
+                            from_date=request.POST['from_date'] if request.POST['from_date'] else None,
+                            to_date=request.POST['to_date'] if request.POST['to_date'] else None,
+                            industry_type=request.POST['industry_type'],
+                            employed_years=request.POST['employed_years'],
+                            applicant_id=request.user.get_application)
+                    redirect_flag = True
+                else:
+                    messages.success(request, "Please fill the record.")
+                    return redirect('/student/applicant_personal_info/')
+
+                if redirect_flag:
+                    messages.success(request, "Record saved")
+                    return redirect('/student/applicant_scholarship_about_yourself_info/')
+        except Exception as e:
+            messages.warning(request, "Form have some error" + str(e))
+
+        messages.warning(request, "Please fill proper form")
+    return redirect('/student/applicant_scholarship_about_yourself_info/')
