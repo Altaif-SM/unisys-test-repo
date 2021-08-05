@@ -64,7 +64,9 @@
 
                 $(document).on("click", ".add_experience_row", function (e) {
                     experience_count = experience_count + 1;
-                    var row = '<div class="row item_experience" id="item_experience_' + experience_count + '"><div class="row"><div class=""><label class="col-md-2 control-label">Position :</label><div class="col-md-3"><input type="text" title="Enter Work Experience" id="work_experience_' + experience_count + '" value="" name="work_experience_' + experience_count + '" class="form-control"><input hidden type="text" name="experience_obj_' + experience_count + '" id="experience_obj_' + experience_count + '"></div></div><div class=""><label class="col-md-2 control-label">Employment Letter:</label><div class="col-md-3" id="item' + experience_count + '"> <label class="form-control" style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input class="file" style="width: 50%" type="button" value="Choose File:"><a><input type="text" readonly name="work_experience_document_text_' + experience_count + '" class="file_value emp" style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label><input style="display: none" type="file" title="Select Result document" id="work_experience_document_' + experience_count + '" name="work_experience_document_' + experience_count + '" class="file_type"><span style="float: right; color: darkred; cursor: pointer;margin-top: -25px" class="remove_doc fa fa-close"></span></div><div class="col-md-1"><a href="javascript:;" class="delete_experience btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div><br><br><div class="row"><div class=""><label class="col-md-2 control-label">Start Date:</label><div class="col-md-3"><input type="date" id="from_date_' + experience_count + '" name="from_date_' + experience_count + '" max="2999-12-31" value="" class="form-control"></div></div><div class=""><label class="col-md-2 control-label">End Date: </label> <div class="col-md-3" id="EndDate"><input type="date" id="to_date_' + experience_count + '" name="to_date_' + experience_count + '" max="2999-12-31" value="" class="form-control end_date"><br><span>Currently Working </span><input class="current" type="checkbox" name="experience_current_' + experience_count + '" id="experience_current_' + experience_count + '"></div></div></div><br><hr><br></div>';
+                    var row = '<div class="row item_experience" id="item_experience_' + experience_count + '"><div class="row"><div class=""><label class="col-md-2 control-label">Qualification Name:</label><div class="col-md-3"><input type="text" title="Enter Work Experience" id="qualification_name_' + experience_count + '" value="" name="qualification_name_' + experience_count + '" class="form-control"><input hidden type="text" name="experience_obj_' + experience_count + '" id="experience_obj_' + experience_count + '"></div></div><div class=""><label class="col-md-2 control-label">License/Certificate No:</label><div class="col-md-3"><input type="text" title="Enter License/Certificate No" id="license_' + experience_count + '" value="" name="license_' + experience_count + '" class="form-control"></div></div><div class="col-md-1"><a href="javascript:;" class="delete_experience btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div><br><br><div class="row"><div class=""><label class="col-md-2 control-label">Professional Body:</label><div class="col-md-3"><input type="text" title="Enter Professional Body" id="professional_body_' + experience_count + '"value="" name="professional_body_' + experience_count + '" class="form-control"></div></div><div class=""><label class="col-md-2 control-label">Date Awarded:</label><div class="col-md-3"><input type="date" id="awarded_date_' + experience_count + '" name="awarded_date_' + experience_count + '" max="2999-12-31" value="" class="form-control"></div></div></div><br><br><div class="row"><div class=""><label class="col-md-2 control-label">Agency Name/No:</label><div class="col-md-3"><input type="text" title="Enter Agency Name/No" id="agency_name_no_' + experience_count + '" value="" name="agency_name_no_' + experience_count + '" class="form-control"></div></div><div class=""><label class="col-md-2 control-label">Issued in Country:</label><div class="col-md-3"><select id="country_' + experience_count + '" title="Select Country" name="country_' + experience_count + '" class="form-control chk"><option style="display:none" selected="selected" id="" value="">Please Select</option>{% for rec in country_recs %}<option value="{{ rec.id }}">{{ rec.country_name }}</option>{% endfor %}</select></div></div></div><br><br><div class="row"><div class=""><label class="col-md-2 control-label">Expiration Date:</label><div class="col-md-3" id="EndDate"><input type="date" id="expiration_date_' + experience_count + '" name="expiration_date_' + experience_count + '" max="2999-12-31" value="" class="form-control end_date"></div></div></div><br><hr><br></div>';
+                    {#var row = '<div class="row item_experience" id="item_experience_' + experience_count + '"><div class="row"><div class=""><label class="col-md-2 control-label">Position :</label><div class="col-md-3"><input type="text" title="Enter Work Experience" id="work_experience_' + experience_count + '" value="" name="work_experience_' + experience_count + '" class="form-control"><input hidden type="text" name="experience_obj_' + experience_count + '" id="experience_obj_' + experience_count + '"></div></div><div class=""><label class="col-md-2 control-label">Employment Letter:</label><div class="col-md-3" id="item' + experience_count + '"> <label class="form-control" style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input class="file" style="width: 50%" type="button" value="Choose File:"><a><input type="text" readonly name="work_experience_document_text_' + experience_count + '" class="file_value emp" style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label><input style="display: none" type="file" title="Select Result document" id="work_experience_document_' + experience_count + '" name="work_experience_document_' + experience_count + '" class="file_type"><span style="float: right; color: darkred; cursor: pointer;margin-top: -25px" class="remove_doc fa fa-close"></span></div><div class="col-md-1"><a href="javascript:;" class="delete_experience btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div><br><br><div class="row"><div class=""><label class="col-md-2 control-label">Start Date:</label><div class="col-md-3"><input type="date" id="from_date_' + experience_count + '" name="from_date_' + experience_count + '" max="2999-12-31" value="" class="form-control"></div></div><div class=""><label class="col-md-2 control-label">End Date: </label> <div class="col-md-3" id="EndDate"><input type="date" id="to_date_' + experience_count + '" name="to_date_' + experience_count + '" max="2999-12-31" value="" class="form-control end_date"></div></div></div><br><hr><br></div>';#}
+                    {#var row = '<div class="row item_experience" id="item_experience_' + experience_count + '"><div class="row"><div class=""><label class="col-md-2 control-label">Position :</label><div class="col-md-3"><input type="text" title="Enter Work Experience" id="work_experience_' + experience_count + '" value="" name="work_experience_' + experience_count + '" class="form-control"><input hidden type="text" name="experience_obj_' + experience_count + '" id="experience_obj_' + experience_count + '"></div></div><div class=""><label class="col-md-2 control-label">Employment Letter:</label><div class="col-md-3" id="item' + experience_count + '"> <label class="form-control" style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input class="file" style="width: 50%" type="button" value="Choose File:"><a><input type="text" readonly name="work_experience_document_text_' + experience_count + '" class="file_value emp" style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label><input style="display: none" type="file" title="Select Result document" id="work_experience_document_' + experience_count + '" name="work_experience_document_' + experience_count + '" class="file_type"><span style="float: right; color: darkred; cursor: pointer;margin-top: -25px" class="remove_doc fa fa-close"></span></div><div class="col-md-1"><a href="javascript:;" class="delete_experience btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div><br><br><div class="row"><div class=""><label class="col-md-2 control-label">Start Date:</label><div class="col-md-3"><input type="date" id="from_date_' + experience_count + '" name="from_date_' + experience_count + '" max="2999-12-31" value="" class="form-control"></div></div><div class=""><label class="col-md-2 control-label">End Date: </label> <div class="col-md-3" id="EndDate"><input type="date" id="to_date_' + experience_count + '" name="to_date_' + experience_count + '" max="2999-12-31" value="" class="form-control end_date"><br><span>Currently Working </span><input class="current" type="checkbox" name="experience_current_' + experience_count + '" id="experience_current_' + experience_count + '"></div></div></div><br><hr><br></div>';#}
                     $(row).removeAttr().hide().insertAfter(".item_experience:last").slideDown(300);
                 });
 
@@ -95,8 +97,8 @@
                 $(document).on("click", "#save_form", function (e) {
 
 
-                    var curriculum_count = $(".curriculum_item:last").attr('id').split('_')[1];
-                    $('#curriculum_count').val(curriculum_count);
+                    {#var curriculum_count = $(".curriculum_item:last").attr('id').split('_')[1];#}
+                    {#$('#curriculum_count').val(curriculum_count);#}
 
                     var experience_count = $(".item_experience:last").attr('id').split('_')[2];
                     $('#experience_count').val(experience_count);
@@ -167,12 +169,12 @@
 
     <!-- BEGIN VALIDATION STATES-->
     <div class="portlet light portlet-fit portlet-form ">
-        <div class="portlet-title">
-            <div class="caption">
-                <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase">Achievements </span>
-            </div>
-        </div>
+{#        <div class="portlet-title">#}
+{#            <div class="caption">#}
+{#                <i class="icon-settings font-red"></i>#}
+{#                <span class="caption-subject font-red sbold uppercase">Achievements </span>#}
+{#            </div>#}
+{#        </div>#}
 
         <div class="portlet-body">
             <div class="form-body">
@@ -186,162 +188,161 @@
 
                         <input id="curriculum_count" name="curriculum_count" hidden>
 
-                        <div class="" style="float: right; padding-right: 98px">
-                            <div class="">
-                                <a href="javascript:;" id="add" class="btn btn-icon-only green add_curriculum_row"
-                                   style="">
-                                    <i class="fa fa-plus "></i>
-                                </a>
-                            </div>
-                        </div>
+{#                        <div class="" style="float: right; padding-right: 98px">#}
+{#                            <div class="">#}
+{#                                <a href="javascript:;" id="add" class="btn btn-icon-only green add_curriculum_row"#}
+{#                                   style="">#}
+{#                                    <i class="fa fa-plus "></i>#}
+{#                                </a>#}
+{#                            </div>#}
+{#                        </div>#}
 
 
-                        {% if curriculum_recs %}
-                            {% for curriculum_obj in curriculum_recs %}
-                                <div class="row curriculum_item" id="check_{{ forloop.counter }}">
-                                    <div class="">
-                                        <label class="col-md-2 control-label">Program Attended:</label>
-                                        <div class="col-md-2">
-                                            <input type="text" title="Enter Co-Curriculum"
-                                                   id="curriculum_name_{{ forloop.counter }}"
-                                                   name="curriculum_name_{{ forloop.counter }}"
-                                                   value="{{ curriculum_obj.curriculum_name }}" class="form-control">
+{#                        {% if curriculum_recs %}#}
+{#                            {% for curriculum_obj in curriculum_recs %}#}
+{#                                <div class="row curriculum_item" id="check_{{ forloop.counter }}">#}
+{#                                    <div class="">#}
+{#                                        <label class="col-md-2 control-label">Program Attended:</label>#}
+{#                                        <div class="col-md-2">#}
+{#                                            <input type="text" title="Enter Co-Curriculum"#}
+{#                                                   id="curriculum_name_{{ forloop.counter }}"#}
+{#                                                   name="curriculum_name_{{ forloop.counter }}"#}
+{#                                                   value="{{ curriculum_obj.curriculum_name }}" class="form-control">#}
+{##}
+{#                                            <input hidden type="text" name="curriculum_obj_{{ forloop.counter }}"#}
+{#                                                   id="curriculum_obj_{{ forloop.counter }}"#}
+{#                                                   value="{{ curriculum_obj.id }}">#}
+{#                                        </div>#}
+{#                                    </div>#}
+{##}
+{#                                    <div class="">#}
+{#                                        <label class="col-md-1 control-label">Year Obtained:</label>#}
+{#                                        <div class="col-md-2">#}
+{#                                            <select id='curriculum_year_{{ forloop.counter }}' title="Select Year"#}
+{#                                                    name="curriculum_year_{{ forloop.counter }}"#}
+{#                                                    class="form-control">#}
+{#                                                {% if curriculum_obj %}#}
+{#                                                    <option style="display:none" selected="selected"#}
+{#                                                            value="{{ curriculum_obj.curriculum_year }}"#}
+{#                                                            value="">{{ curriculum_obj.curriculum_year }}</option>#}
+{#                                                {% else %}#}
+{#                                                    <option style="display:none" selected="selected" id="" value="">#}
+{#                                                        Please#}
+{#                                                        Select#}
+{#                                                    </option>#}
+{#                                                {% endif %}#}
+{##}
+{#                                                {% for rec in passing_year_recs %}#}
+{#                                                    <option value='{{ rec.year }}'>{{ rec.year }}</option>#}
+{#                                                {% endfor %}#}
+{#                                            </select>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{##}
+{#                                    <div class="">#}
+{#                                        <label class="col-md-1 control-label">Supporting Document:</label>#}
+{#                                        <div class="col-md-2" id="item{{ forloop.counter }}">#}
+{##}
+{#                                            {% if curriculum_obj.curriculum_result_document %}#}
+{#                                                <label class="form-control"#}
+{#                                                       style="border-color: #b1ad9f;  width: 100%;text-align: left"><input#}
+{#                                                        style="width: 50%"#}
+{#                                                        type='button' class="file" value='Choose File:'><a#}
+{#                                                        href="#}
+{##}
+{#                                                                {{ curriculum_obj.applicant_id.report_path }}{{ curriculum_obj.curriculum_result_document }}"><input#}
+{#                                                        readonly#}
+{#                                                        name="curriculum_result_document_text_{{ forloop.counter }}"#}
+{#                                                        class="file_value emp"#}
+{#                                                        style="border: red; width: 50%"#}
+{#                                                        value="{{ curriculum_obj.curriculum_result_document }}"></a></label>#}
+{#                                            {% else %}#}
+{#                                                <label class="form-control"#}
+{#                                                       style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input#}
+{#                                                        class="file" style="width: 50%"#}
+{#                                                        type='button' value='Choose File:'><a><input type="text"#}
+{#                                                                                                     readonly#}
+{#                                                                                                     name="curriculum_result_document_text_{{ forloop.counter }}"#}
+{#                                                                                                     class="file_value emp"#}
+{#                                                                                                     style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>#}
+{#                                            {% endif %}#}
+{##}
+{##}
+{#                                            <input style="display: none" type="file" title="Select Result document"#}
+{#                                                   id="curriculum_result_document_{{ forloop.counter }}"#}
+{#                                                   value="{{ curriculum_obj.curriculum_result_document }}"#}
+{#                                                   name="curriculum_result_document_{{ forloop.counter }}"#}
+{#                                                   class="file_type">#}
+{#                                            <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"#}
+{#                                                  class="remove_doc fa fa-close"></span>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <br>#}
+{#                            {% endfor %}#}
+{#                        {% else %}#}
+{#                            <div class="row curriculum_item" id="check_1">#}
+{#                                <div class="">#}
+{#                                    <label class="col-md-2 control-label">Program Attended:</label>#}
+{#                                    <div class="col-md-2">#}
+{#                                        <input type="text" title="Enter Co-Curriculum" id="curriculum_name_1"#}
+{#                                               name="curriculum_name_1"#}
+{#                                               value="" class="form-control">#}
+{##}
+{#                                        <input hidden type="text" name="curriculum_obj_{{ forloop.counter }}"#}
+{#                                               id="curriculum_obj_1">#}
+{#                                    </div>#}
+{#                                </div>#}
+{##}
+{#                                <div class="">#}
+{#                                    <label class="col-md-1 control-label">Year Obtained:</label>#}
+{#                                    <div class="col-md-2">#}
+{#                                        <select id='curriculum_year_1' title="Select Year" name="curriculum_year_1"#}
+{#                                                class="form-control">#}
+{##}
+{#                                            <option style="display:none" selected="selected" id="" value="">#}
+{#                                                PleaseSelect#}
+{#                                            </option>#}
+{##}
+{#                                            {% for rec in passing_year_recs %}#}
+{#                                                <option value='{{ rec.year }}'>{{ rec.year }}</option>#}
+{#                                            {% endfor %}#}
+{#                                        </select>#}
+{#                                    </div>#}
+{#                                </div>#}
+{##}
+{#                                <div class="">#}
+{#                                    <label class="col-md-1 control-label">Supporting Document:</label>#}
+{#                                    <div class="col-md-2" id="item1">#}
+{##}
+{##}
+{#                                        <label class="form-control"#}
+{#                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input#}
+{#                                                class="file" style="width: 50%"#}
+{#                                                type='button' value='Choose File:'><a><input type="text"#}
+{#                                                                                             readonly#}
+{#                                                                                             name="curriculum_result_document_text_1"#}
+{#                                                                                             class="file_value emp"#}
+{#                                                                                             style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>#}
+{##}
+{##}
+{#                                        <input style="display: none" type="file" title="Select Result document"#}
+{#                                               id="curriculum_result_document_1"#}
+{#                                               value=""#}
+{#                                               name="curriculum_result_document_1" class="file_type">#}
+{#                                        <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"#}
+{#                                              class="remove_doc fa fa-close"></span>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        {% endif %}#}
 
-                                            <input hidden type="text" name="curriculum_obj_{{ forloop.counter }}"
-                                                   id="curriculum_obj_{{ forloop.counter }}"
-                                                   value="{{ curriculum_obj.id }}">
-                                        </div>
-                                    </div>
-
-                                    <div class="">
-                                        <label class="col-md-1 control-label">Year Obtained:</label>
-                                        <div class="col-md-2">
-                                            <select id='curriculum_year_{{ forloop.counter }}' title="Select Year"
-                                                    name="curriculum_year_{{ forloop.counter }}"
-                                                    class="form-control">
-                                                {% if curriculum_obj %}
-                                                    <option style="display:none" selected="selected"
-                                                            value="{{ curriculum_obj.curriculum_year }}"
-                                                            value="">{{ curriculum_obj.curriculum_year }}</option>
-                                                {% else %}
-                                                    <option style="display:none" selected="selected" id="" value="">
-                                                        Please
-                                                        Select
-                                                    </option>
-                                                {% endif %}
-
-                                                {% for rec in passing_year_recs %}
-                                                    <option value='{{ rec.year }}'>{{ rec.year }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="">
-                                        <label class="col-md-1 control-label">Supporting Document:</label>
-                                        <div class="col-md-2" id="item{{ forloop.counter }}">
-
-                                            {% if curriculum_obj.curriculum_result_document %}
-                                                <label class="form-control"
-                                                       style="border-color: #b1ad9f;  width: 100%;text-align: left"><input
-                                                        style="width: 50%"
-                                                        type='button' class="file" value='Choose File:'><a
-                                                        href="
-
-                                                                {{ curriculum_obj.applicant_id.report_path }}{{ curriculum_obj.curriculum_result_document }}"><input
-                                                        readonly
-                                                        name="curriculum_result_document_text_{{ forloop.counter }}"
-                                                        class="file_value emp"
-                                                        style="border: red; width: 50%"
-                                                        value="{{ curriculum_obj.curriculum_result_document }}"></a></label>
-                                            {% else %}
-                                                <label class="form-control"
-                                                       style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
-                                                        class="file" style="width: 50%"
-                                                        type='button' value='Choose File:'><a><input type="text"
-                                                                                                     readonly
-                                                                                                     name="curriculum_result_document_text_{{ forloop.counter }}"
-                                                                                                     class="file_value emp"
-                                                                                                     style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
-                                            {% endif %}
-
-
-                                            <input style="display: none" type="file" title="Select Result document"
-                                                   id="curriculum_result_document_{{ forloop.counter }}"
-                                                   value="{{ curriculum_obj.curriculum_result_document }}"
-                                                   name="curriculum_result_document_{{ forloop.counter }}"
-                                                   class="file_type">
-                                            <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
-                                                  class="remove_doc fa fa-close"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <br>
-                            {% endfor %}
-                        {% else %}
-                            <div class="row curriculum_item" id="check_1">
-                                <div class="">
-                                    <label class="col-md-2 control-label">Program Attended:</label>
-                                    <div class="col-md-2">
-                                        <input type="text" title="Enter Co-Curriculum" id="curriculum_name_1"
-                                               name="curriculum_name_1"
-                                               value="" class="form-control">
-
-                                        <input hidden type="text" name="curriculum_obj_{{ forloop.counter }}"
-                                               id="curriculum_obj_1">
-                                    </div>
-                                </div>
-
-                                <div class="">
-                                    <label class="col-md-1 control-label">Year Obtained:</label>
-                                    <div class="col-md-2">
-                                        <select id='curriculum_year_1' title="Select Year" name="curriculum_year_1"
-                                                class="form-control">
-
-                                            <option style="display:none" selected="selected" id="" value="">
-                                                PleaseSelect
-                                            </option>
-
-                                            {% for rec in passing_year_recs %}
-                                                <option value='{{ rec.year }}'>{{ rec.year }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="">
-                                    <label class="col-md-1 control-label">Supporting Document:</label>
-                                    <div class="col-md-2" id="item1">
-
-
-                                        <label class="form-control"
-                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
-                                                class="file" style="width: 50%"
-                                                type='button' value='Choose File:'><a><input type="text"
-                                                                                             readonly
-                                                                                             name="curriculum_result_document_text_1"
-                                                                                             class="file_value emp"
-                                                                                             style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
-
-
-                                        <input style="display: none" type="file" title="Select Result document"
-                                               id="curriculum_result_document_1"
-                                               value=""
-                                               name="curriculum_result_document_1" class="file_type">
-                                        <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
-                                              class="remove_doc fa fa-close"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-
-                        <br>
-                        <br>
-                        <hr>
                         <div class="portlet-title" style="margin-left:-15px;font-size: 16px;">
                             <div class="caption">
                                 <i class="icon-settings font-red"></i>
-                                <span class="caption-subject font-red sbold uppercase"> Working Experience</span>
+                                <span class="caption-subject font-red sbold uppercase"> Professional Qualifications</span>
+                                <br>
+                                <span style="font-family: 'Times New Roman';font-size: 16px;"><b>(Optional for Postgraduate Applications)</b></span>
                             </div>
                         </div>
                         <hr>
@@ -363,11 +364,11 @@
 
                                     <div class="row">
                                         <div class="">
-                                            <label class="col-md-2 control-label">Position :</label>
+                                            <label class="col-md-2 control-label">Qualification Name:</label>
                                             <div class="col-md-3">
                                                 <input type="text" title="Enter Work Experience"
-                                                       id="work_experience_{{ forloop.counter }}"
-                                                       value="{{ experience_obj.work_experience }}" name="work_experience_{{ forloop.counter }}"
+                                                       id="qualification_name_{{ forloop.counter }}"
+                                                       value="{{ experience_obj.qualification_name }}" name="qualification_name_{{ forloop.counter }}"
                                                        class="form-control">
 
                                                 <input hidden type="text" name="experience_obj_{{ forloop.counter }}" value="{{ experience_obj.id }}"
@@ -375,84 +376,107 @@
                                             </div>
                                         </div>
 
+
                                         <div class="">
-                                            <label class="col-md-2 control-label">Employment Letter:</label>
-                                            <div class="col-md-3" id="item{{ forloop.counter }}">
-                                                {% if experience_obj.work_experience_document %}
-                                                    <label class="form-control"
-                                                           style="border-color: #b1ad9f;  width: 100%;text-align: left"><input
-                                                            style="width: 50%"
-                                                            type='button' class="file" value='Choose File:'><a
-                                                            href="
-
-
-
-                                                                    {{ experience_obj.applicant_id.report_path }}{{ experience_obj.work_experience_document }}"><input
-                                                            readonly
-                                                            class="file_value emp"
-                                                            style="border: red; width: 50%"
-                                                            name="work_experience_document_text_{{ forloop.counter }}"
-                                                            value="{{ experience_obj.work_experience_document }}"></a></label>
-                                                {% else %}
-                                                    <label class="form-control"
-                                                           style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
-                                                            class="file" style="width: 50%"
-                                                            type="button" value="Choose File:"><a><input type="text"
-                                                                                                         readonly
-                                                                                                         name="work_experience_document_text_{{ forloop.counter }}"
-                                                                                                         class="file_value emp"
-                                                                                                         style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
-                                                {% endif %}
-
-                                                <input style="display: none" type="file" title="Select Result document"
-                                                       id="work_experience_document_{{ forloop.counter }}"
-                                                       name="work_experience_document_{{ forloop.counter }}"
-                                                       class="file_type">
-                                                <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
-                                                      class="remove_doc fa fa-close"></span>
-                                            </div>
-                                            {% comment %}<div class="col-md-1">
-                                    <a href="javascript:;" class="delete btn btn-icon-only purple" style="">
-                                        <i class="fa fa-times"></i>
-                                    </a>
-                                </div>{% endcomment %}
+                                        <label class="col-md-2 control-label">License/Certificate No:</label>
+                                        <div class="col-md-3">
+                                            <input type="text" title="Enter License/Certificate No" id="license_{{ forloop.counter }}"
+                                                   value="{{ experience_obj.license_certificate_no}}" name="license_{{ forloop.counter }}"
+                                                   class="form-control">
 
                                         </div>
                                     </div>
+
+                                    </div>
+
+
 
                                     <br>
                                     <br>
 
 
                                     <div class="row">
+
                                         <div class="">
-                                            <label class="col-md-2 control-label">Start Date:</label>
+                                        <label class="col-md-2 control-label">Professional Body:</label>
+                                        <div class="col-md-3">
+                                            <input type="text" title="Enter Professional Body" id="professional_body_{{ forloop.counter }}"
+                                                   value="{{ experience_obj.professional_body}}" name="professional_body_{{ forloop.counter }}"
+                                                   class="form-control">
+
+                                        </div>
+                                    </div>
+
+
+                                        <div class="">
+                                            <label class="col-md-2 control-label">Date Awarded:</label>
                                             <div class="col-md-3">
-                                                <input type="date" id="from_date_{{ forloop.counter }}"
-                                                       name="from_date_{{ forloop.counter }}" max="2999-12-31"
-                                                       value="{{ experience_obj.from_date|date:"Y-m-d" }}"
+                                                <input type="date" id="awarded_date_{{ forloop.counter }}"
+                                                       name="awarded_date_{{ forloop.counter }}" max="2999-12-31"
+                                                       value="{{ experience_obj.awarded_date|date:"Y-m-d" }}"
                                                        class="form-control">
                                             </div>
                                         </div>
 
-                                        <div class="">
-                                            <label class="col-md-2 control-label">End Date:
+                                    </div>
+                                <br><br>
 
-                                            </label>
-                                            <div class="col-md-3" id="EndDate">
-                                                <input type="date" id="to_date_{{ forloop.counter }}"
-                                                       name="to_date_{{ forloop.counter }}" max="2999-12-31"
-                                                       {% if experience_obj.experience_current %}readonly{% endif %}
-                                                       value="{{ experience_obj.to_date|date:"Y-m-d" }}"
-                                                       class="form-control end_date">
-                                                <br><span>Currently Working </span>
-                                                <input class="current" type="checkbox"
-                                                       name="experience_current_{{ forloop.counter }}"
-                                                       id="experience_current_{{ forloop.counter }}"
-                                                       {% if experience_obj.experience_current %}checked{% endif %}>
+                                    <div class="row">
+                                        <div class="">
+                                            <label class="col-md-2 control-label">Agency Name/No:</label>
+                                            <div class="col-md-3">
+                                                <input type="text" title="Enter Agency Name/No"
+                                                       id="agency_name_no_{{ forloop.counter }}"
+                                                       value="{{ experience_obj.agency_name_no}}" name="agency_name_no_{{ forloop.counter }}"
+                                                       class="form-control">
+
                                             </div>
                                         </div>
+
+
+                                        <div class="">
+                                        <label class="col-md-2 control-label">Issued in Country:</label>
+                                        <div class="col-md-3">
+                                            <select id='country_{{ forloop.counter }}' title="Select Year" name="country_{{ forloop.counter }}"
+                                                    class="form-control chk">
+
+                                                {% if experience_obj.country %}
+
+                                                        <option style="display:none" selected="selected"
+                                                                value="{{ experience_obj.country.id }}"
+                                                                >{{ experience_obj.country.country_name }}</option>
+                                                {% else %}
+                                                        <option style="display:none" selected="selected" id="" value="">
+                                                            Please
+                                                            Select
+                                                        </option>
+                                                {% endif %}
+
+                                                {% for rec in country_recs %}
+                                                    <option value='{{ rec.id }}'>{{ rec.country_name|default_if_none:"" }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
                                     </div>
+
+
+                                    </div>
+
+                                    <br>
+                                    <br>
+                                 <div class="row">
+                                     <div class="">
+                                            <label class="col-md-2 control-label">Expiration Date:</label>
+                                            <div class="col-md-3">
+                                                <input type="date" id="expiration_date_{{ forloop.counter }}"
+                                                       name="expiration_date_{{ forloop.counter }}" max="2999-12-31"
+                                                       value="{{ experience_obj.expiration_date|date:"Y-m-d" }}"
+                                                       class="form-control">
+                                            </div>
+                                        </div>
+
+                                 </div>
+
 
                                     <br>
                                     <hr>
@@ -465,10 +489,10 @@
 
                                 <div class="row">
                                     <div class="">
-                                        <label class="col-md-2 control-label">Position :</label>
+                                        <label class="col-md-2 control-label">Qualification Name:</label>
                                         <div class="col-md-3">
-                                            <input type="text" title="Enter Work Experience" id="work_experience_1"
-                                                   value="" name="work_experience_1"
+                                            <input type="text" title="Enter Work Experience" id="qualification_name_1"
+                                                   value="" name="qualification_name_1"
                                                    class="form-control">
 
                                             <input hidden type="text" name="experience_obj_1" id="experience_obj_1">
@@ -476,60 +500,86 @@
                                     </div>
 
                                     <div class="">
-                                        <label class="col-md-2 control-label">Employment Letter:</label>
-                                        <div class="col-md-3" id="item_1">
+                                        <label class="col-md-2 control-label">License/Certificate No:</label>
+                                        <div class="col-md-3">
+                                            <input type="text" title="Enter License/Certificate No" id="license_1"
+                                                   value="" name="license_1"
+                                                   class="form-control">
 
-                                            <label class="form-control"
-                                                   style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
-                                                    class="file" style="width: 50%"
-                                                    type='button' value='Choose File:'><a><input type="text"
-                                                                                                 readonly
-                                                                                                 name="work_experience_document_text_1"
-                                                                                                 class="file_value emp"
-                                                                                                 style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
-
-                                            <input style="display: none" type="file" title="Select Result document"
-                                                   id="work_experience_document_1"
-                                                   name="work_experience_document_1" class="file_type">
-                                            <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
-                                                  class="remove_doc fa fa-close"></span>
                                         </div>
-                                        {% comment %}<div class="col-md-1">
-                                    <a href="javascript:;" class="delete btn btn-icon-only purple" style="">
-                                        <i class="fa fa-times"></i>
-                                    </a>
-                                </div>{% endcomment %}
-
                                     </div>
+
                                 </div>
 
                                 <br>
                                 <br>
 
-
-                                <div class="row">
-                                    <div class="">
-                                        <label class="col-md-2 control-label">Start Date:</label>
+                                 <div class="row">
+                                     <div class="">
+                                        <label class="col-md-2 control-label">Professional Body:</label>
                                         <div class="col-md-3">
-                                            <input type="date" id="from_date_1" name="from_date_1" max="2999-12-31"
+                                            <input type="text" title="Enter Professional Body" id="professional_body_1"
+                                                   value="" name="professional_body_1"
+                                                   class="form-control">
+
+                                        </div>
+                                    </div>
+
+                                      <div class="">
+                                        <label class="col-md-2 control-label">Date Awarded:</label>
+                                        <div class="col-md-3">
+                                            <input type="date" id="awarded_date_1" name="awarded_date_1" max="2999-12-31"
                                                    value="" class="form-control">
                                         </div>
                                     </div>
 
+                                 </div>
+                                <br><br>
+
+
+                                <div class="row">
                                     <div class="">
-                                        <label class="col-md-2 control-label">End Date:
+                                        <label class="col-md-2 control-label">Agency Name/No:</label>
+                                        <div class="col-md-3">
+                                            <input type="text" title="Enter Agency Name/No" id="agency_name_no_1"
+                                                   value="" name="agency_name_no_1"
+                                                   class="form-control">
+
+                                        </div>
+                                    </div>
+
+                                    <div class="">
+                                        <label class="col-md-2 control-label">Issued in Country:</label>
+                                        <div class="col-md-3">
+                                            <select id='country_1' title="Select Country" name="country_1"
+                                                    class="form-control chk">
+                                                <option style="display:none" selected="selected" id="" value="">
+                                                    Please
+                                                    Select
+                                                </option>
+
+                                                {% for rec in country_recs %}
+                                                    <option value='{{ rec.id }}'>{{ rec.country_name|default_if_none:"" }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            <br><br>
+                            <div class="row">
+                                <div class="">
+                                        <label class="col-md-2 control-label">Expiration Date:
 
                                         </label>
                                         <div class="col-md-3" id="EndDate">
-                                            <input type="date" id="to_date_1" name="to_date_1" max="2999-12-31"
+                                            <input type="date" id="expiration_date_1" name="expiration_date_1" max="2999-12-31"
                                                    value=""
                                                    class="form-control end_date">
-                                            <br><span>Currently Working </span>
-                                            <input class="current" type="checkbox" name="experience_current_1"
-                                                   id="experience_current_1">
                                         </div>
                                     </div>
-                                </div>
+                            </div>
 
                                 <br>
                                 <hr>

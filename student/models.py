@@ -551,6 +551,21 @@ class ExperienceDetails(BaseModel):
                                      on_delete=models.PROTECT)
 
 
+class PostgraduateDetails(BaseModel):
+    qualification_name = models.CharField(max_length=255, blank=True, null=True)
+    license_certificate_no = models.CharField(max_length=255, blank=True, null=True)
+    professional_body = models.CharField(max_length=255, blank=True, null=True)
+    awarded_date = models.DateField(null=True, blank=True)
+    agency_name_no = models.CharField(max_length=255, blank=True, null=True)
+    country = models.ForeignKey('masters.CountryDetails', null=True, related_name='academic_postgraduate_country_rel',
+                                on_delete=models.PROTECT)
+    expiration_date = models.DateField(null=True, blank=True)
+    applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_postgraduate_rel',
+                                     on_delete=models.PROTECT)
+
+
+
+
 class ScholarshipSelectionDetails(BaseModel):
     scholarship = models.ForeignKey('masters.ScholarshipDetails', null=True, related_name='scholarship_selection_rel',
                                     on_delete=models.PROTECT)

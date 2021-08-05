@@ -67,7 +67,7 @@ def delete_application(request, app_id):
         messages.warning(request, "An error occurred " + str(e))
     return redirect('/student/student_home/')
 
-
+@student_login_required
 def applicant_personal_info(request):
     country_recs = CountryDetails.objects.all()
     religion_recs = ReligionDetails.objects.all()
@@ -844,6 +844,7 @@ def applicant_curriculum_experience_info(request):
     application_obj = ''
 
     passing_year_recs = PassingYear.objects.all()
+    country_recs = CountryDetails.objects.all()
     try:
         application_obj = request.user.get_application
         if request.user.get_application:
@@ -852,15 +853,15 @@ def applicant_curriculum_experience_info(request):
             if CurriculumDetails.objects.filter(applicant_id=request.user.get_application).exists():
                 curriculum_obj = CurriculumDetails.objects.filter(applicant_id=request.user.get_application)
 
-            if ExperienceDetails.objects.filter(applicant_id=request.user.get_application).exists():
-                experience_obj = ExperienceDetails.objects.filter(applicant_id=request.user.get_application)
+            if PostgraduateDetails.objects.filter(applicant_id=request.user.get_application).exists():
+                experience_obj = PostgraduateDetails.objects.filter(applicant_id=request.user.get_application)
 
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
         return redirect('/student/applicant_personal_info/')
     return render(request, 'applicant_curriculum_experience_info.html',
                   {'year_recs': year_recs, 'experience_recs': experience_obj, 'curriculum_recs': curriculum_obj,
-                   'passing_year_recs': passing_year_recs, 'application_obj': application_obj})
+                   'passing_year_recs': passing_year_recs, 'application_obj': application_obj,'country_recs':country_recs})
 
 
 def save_update_applicant_curriculum_experience_info(request):
@@ -876,89 +877,96 @@ def save_update_applicant_curriculum_experience_info(request):
                 if not request.user.get_application.is_submitted:
                     # application_obj = ApplicationDetails.objects.get(student=student, is_submitted=False)
 
-                    for x in range(int(curriculum_count)):
-                        try:
-                            x = x + 1
-
-                            curriculum_result_document = request.FILES.get('curriculum_result_document_' + str(x))
-                            curriculum_result_document_text = request.POST.get(
-                                'curriculum_result_document_text_' + str(x))
-
-                            if request.POST.get('curriculum_obj_' + str(x)):
-                                CurriculumDetails.objects.filter(
-                                    id=request.POST['curriculum_obj_' + str(x)]).update(
-                                    curriculum_name=request.POST['curriculum_name_' + str(x)],
-                                    curriculum_year=request.POST['curriculum_year_' + str(x)])
-
-                                curriculum_obj = CurriculumDetails.objects.filter(
-                                    id=request.POST['curriculum_obj_' + str(x)])[0]
-
-                            else:
-                                curriculum_obj = CurriculumDetails.objects.create(
-                                    curriculum_name=request.POST['curriculum_name_' + str(x)],
-                                    curriculum_year=request.POST['curriculum_year_' + str(x)],
-                                    applicant_id=request.user.get_application)
-
-                            if curriculum_result_document:
-                                result_document = str(curriculum_result_document)
-
-                                object_path = media_path(curriculum_obj.applicant_id)
-                                handle_uploaded_file(str(object_path) + '/' + result_document,
-                                                     curriculum_result_document)
-
-                                curriculum_obj.curriculum_result_document = result_document
-
-                            if not curriculum_result_document_text:
-                                curriculum_obj.curriculum_result_document = ''
-
-                            curriculum_obj.save()
-                        except Exception as e:
-                            pass
+                    # for x in range(int(curriculum_count)):
+                    #     try:
+                    #         x = x + 1
+                    #
+                    #         curriculum_result_document = request.FILES.get('curriculum_result_document_' + str(x))
+                    #         curriculum_result_document_text = request.POST.get(
+                    #             'curriculum_result_document_text_' + str(x))
+                    #
+                    #         if request.POST.get('curriculum_obj_' + str(x)):
+                    #             CurriculumDetails.objects.filter(
+                    #                 id=request.POST['curriculum_obj_' + str(x)]).update(
+                    #                 curriculum_name=request.POST['curriculum_name_' + str(x)],
+                    #                 curriculum_year=request.POST['curriculum_year_' + str(x)])
+                    #
+                    #             curriculum_obj = CurriculumDetails.objects.filter(
+                    #                 id=request.POST['curriculum_obj_' + str(x)])[0]
+                    #
+                    #         else:
+                    #             curriculum_obj = CurriculumDetails.objects.create(
+                    #                 curriculum_name=request.POST['curriculum_name_' + str(x)],
+                    #                 curriculum_year=request.POST['curriculum_year_' + str(x)],
+                    #                 applicant_id=request.user.get_application)
+                    #
+                    #         if curriculum_result_document:
+                    #             result_document = str(curriculum_result_document)
+                    #
+                    #             object_path = media_path(curriculum_obj.applicant_id)
+                    #             handle_uploaded_file(str(object_path) + '/' + result_document,
+                    #                                  curriculum_result_document)
+                    #
+                    #             curriculum_obj.curriculum_result_document = result_document
+                    #
+                    #         if not curriculum_result_document_text:
+                    #             curriculum_obj.curriculum_result_document = ''
+                    #
+                    #         curriculum_obj.save()
+                    #     except Exception as e:
+                    #         pass
 
                     for count in range(int(experience_count)):
                         try:
                             count = count + 1
 
-                            work_experience_document = request.FILES.get('work_experience_document_' + str(count))
-                            work_experience_document_text = request.POST.get(
-                                'work_experience_document_text_' + str(count))
+                            # work_experience_document = request.FILES.get('work_experience_document_' + str(count))
+                            # work_experience_document_text = request.POST.get(
+                            #     'work_experience_document_text_' + str(count))
 
                             if request.POST.get('experience_obj_' + str(count)):
 
-                                ExperienceDetails.objects.filter(id=request.POST['experience_obj_' + str(count)]).update(
-                                    work_experience=request.POST['work_experience_' + str(count)],
-                                    from_date=request.POST['from_date_' + str(count)] if request.POST[
-                                        'from_date_' + str(count)] else None,
-                                    to_date=request.POST['to_date_' + str(count)] if request.POST[
-                                        'to_date_' + str(count)] else None,
-                                    experience_current=True if request.POST.get(
-                                        'experience_current_' + str(count)) else False,
+                                PostgraduateDetails.objects.filter(id=request.POST['experience_obj_' + str(count)]).update(
+                                    qualification_name=request.POST['qualification_name_' + str(count)],
+                                    license_certificate_no=request.POST['license_' + str(count)],
+                                    professional_body=request.POST['professional_body_' + str(count)],
+                                    awarded_date=request.POST['awarded_date_' + str(count)] if request.POST[
+                                        'awarded_date_' + str(count)] else None,
+                                    expiration_date=request.POST['expiration_date_' + str(count)] if request.POST[
+                                        'expiration_date_' + str(count)] else None,
+                                    agency_name_no=request.POST['agency_name_no_' + str(count)],
+                                    country=request.POST['country_' + str(count)] if request.POST[
+                                        'country_' + str(count)] else None,
+
                                 )
 
-                                experience_object = ExperienceDetails.objects.filter(
+                                experience_object = PostgraduateDetails.objects.filter(
                                     id=request.POST['experience_obj_' + str(count)])[0]
 
                             else:
-                                experience_object = ExperienceDetails.objects.create(
-                                    work_experience=request.POST['work_experience_' + str(count)],
-                                    from_date=request.POST['from_date_' + str(count)] if request.POST[
-                                        'from_date_' + str(count)] else None,
-                                    to_date=request.POST['to_date_' + str(count)] if request.POST[
-                                        'to_date_' + str(count)] else None,
-                                    experience_current=True if request.POST.get(
-                                        'experience_current_' + str(count)) else False,
+                                experience_object = PostgraduateDetails.objects.create(
+                                    qualification_name=request.POST['qualification_name_' + str(count)],
+                                    license_certificate_no=request.POST['license_' + str(count)],
+                                    professional_body=request.POST['professional_body_' + str(count)],
+                                    awarded_date=request.POST['awarded_date_' + str(count)] if request.POST[
+                                        'awarded_date_' + str(count)] else None,
+                                    expiration_date=request.POST['expiration_date_' + str(count)] if request.POST[
+                                        'expiration_date_' + str(count)] else None,
+                                    agency_name_no=request.POST['agency_name_no_' + str(count)],
+                                    country=request.POST['country_' + str(count)] if request.POST[
+                                        'country_' + str(count)] else None,
                                     applicant_id=request.user.get_application)
 
-                            if work_experience_document:
-                                work_experience = str(work_experience_document)
-                                object_path = media_path(experience_object.applicant_id)
-                                handle_uploaded_file(str(object_path) + '/' + work_experience,
-                                                     work_experience_document)
-
-                                experience_object.work_experience_document = work_experience
-
-                            if not work_experience_document_text:
-                                experience_object.work_experience_document_one = ''
+                            # if work_experience_document:
+                            #     work_experience = str(work_experience_document)
+                            #     object_path = media_path(experience_object.applicant_id)
+                            #     handle_uploaded_file(str(object_path) + '/' + work_experience,
+                            #                          work_experience_document)
+                            #
+                            #     experience_object.work_experience_document = work_experience
+                            #
+                            # if not work_experience_document_text:
+                            #     experience_object.work_experience_document_one = ''
 
                             experience_object.save()
                         except Exception as e:

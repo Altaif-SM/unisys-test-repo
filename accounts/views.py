@@ -621,3 +621,10 @@ def CheckActiveYear(request):
                         YearDetails.objects.filter().update(active_year=False)
                         YearDetails.objects.filter(id=next_acd_year_obj.id).update(active_year=True,base_date = True)
         return HttpResponse('')
+
+
+class AuthRequiredMiddleware(object):
+    def process_request(self, request):
+        if not request.user.is_authenticated():
+            return HttpResponseRedirect("/")
+        return None
