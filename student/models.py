@@ -120,7 +120,7 @@ class StudentDetails(BaseModel):
 
 
 class ApplicationDetails(BaseModel):
-    first_name = models.CharField(max_length=255)
+    first_name = models.CharField(max_length=255, blank=True, null=True)
     middle_name = models.CharField(max_length=255, blank=True, null=True)
     last_name = models.CharField(max_length=255, blank=True, null=True)
     surname = models.CharField(max_length=255, blank=True, null=True)
@@ -223,6 +223,11 @@ class ApplicationDetails(BaseModel):
     ref_by_agent = models.ForeignKey(AgentDetails, blank=True, null=True,
                                        related_name='agent_applicant_ref',
                                        on_delete=models.PROTECT)
+    ken_name = models.CharField(max_length=255, blank=True, null=True)
+    ken_id = models.CharField(max_length=255, blank=True, null=True)
+    ken_relationship = models.CharField(max_length=255, blank=True, null=True)
+    ken_tel_no = models.CharField(max_length=255, blank=True, null=True)
+    ken_email = models.CharField(max_length=255, blank=True, null=True)
 
     # family_info_flag = models.BooleanField(default=False)
     # mother_sibling_info_flag = models.BooleanField(default=False)

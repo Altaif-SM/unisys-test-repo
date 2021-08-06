@@ -2213,3 +2213,20 @@ def save_update_applicant_employement_history_info(request):
 
         messages.warning(request, "Please fill proper form")
     return redirect('/student/applicant_scholarship_about_yourself_info/')
+
+
+def applicant_ken_info(request):
+    country_recs = AllCountries.objects.all()
+    student_recs = StudentDetails.objects.filter(user__is_active=True)
+    agent_recs = AgentDetails.objects.filter()
+    path = ''
+    application_obj = ''
+    sibling_obj = ''
+    if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
+        application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
+        path = base_path(application_obj)
+        if SiblingDetails.objects.filter(applicant_id=application_obj).exists():
+            sibling_obj = SiblingDetails.objects.filter(applicant_id=application_obj)
+
+
+    return render(request, 'applicant_ken_info.html',{'country_recs': country_recs, 'application_obj': application_obj, 'path': path,'sibling_obj_rec': sibling_obj,'student_recs':student_recs,'agent_recs':agent_recs})

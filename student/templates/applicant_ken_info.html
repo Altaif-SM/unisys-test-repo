@@ -1,0 +1,471 @@
+{% extends "template_base_page.html" %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+
+            $(document).ready(function () {
+                {#$("#father_nationality").chosen();#}
+
+                {#$("#mother_nationality").chosen();#}
+
+            $("#student_id").chosen();
+                 $("#agent_id").chosen();
+
+
+                $('#save').click(function () {
+                    var count = $(".item:last").attr('id').split('_')[1];
+                    $('#sibling_count').val(count);
+
+
+
+                });
+
+
+                {% if sibling_obj_rec %}
+                    var count = $('.item').length;
+                {% else %}
+                    var count = 1;
+                {% endif %}
+
+                $(".add_row").click(function () {
+                    count = count + 1;
+                    var row = '<div class="row item" id="item_' + count + '" style="margin-top:15px"><div class=""><div class=""><div class="col-md-1"><a href="javascript:;" class="delete btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div><div class=""><label class="col-md-1 control-label">Name:</label><div class="col-md-2"><input type="text" title="Enter Sibling " id="sibling_' + count + '" name="sibling_' + count + '"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Gender:</label><div class="col-md-2"><input type="text" title="Enter age" id="age_' + count + '"name="age_' + count + '"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Status:</label><div class="col-md-2"> <select  title="Enter status" id="status_' + count + '" name="status_' + count + '" class="form-control"><option value="">Please Select</option><option value="Employed">Employed</option><option value="Unemployed">Unemployed</option><option value="Studying">Studying</option><option value="Deceased">Deceased</option></select><input type="text" hidden id="sibling_id_' + count + '" name="sibling_id_' + count + '"></div></div></div>'
+                    $(row).removeAttr().hide().insertAfter(".item:last").slideDown(300);
+                    {#count++;#}
+                });
+
+                $(document).on("click", ".delete", function () {
+                    $(this).parents('.item').remove();
+                    $(this).parents('.item').next('br').remove();
+                    ;
+                });
+
+
+                $(document).on("click", ".remove_doc", function (e) {
+                    var parent_id = $(this).closest('div').attr('id');
+                    $('#' + parent_id + ' .emp').val('');
+                });
+
+                $(document).on("click", ".file", function (e) {
+                    $(this).parent('.form-control').next('.file_type').trigger('click');
+                });
+
+                $('.file_type').change(function (evt) {
+
+                    var files = !!this.files ? this.files : [];
+                    if (!files.length || !window.FileReader) return;
+                    var fileExtension = ['pdf'];
+                    if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                        alert("Only formats are allowed : " + fileExtension.join(', '));
+                        $(this).val('');
+                        return false;
+                    }
+
+                    var file_name = $(this).val().split('\\')[2];
+                    $(this).prev().children().children('.file_value').val(file_name);
+                });
+
+            });
+
+
+            $('#sample_1').dataTable().fnDestroy();
+            $('#sample_1').dataTable({
+                "aoColumnDefs": [
+                    {'bSortable': false}
+                ]
+            });
+        }
+
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'student:student_home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span> KEN Info </span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase"> NEXT OF KEN DETAILS</span>
+            </div>
+        </div>
+
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form action="{% url 'student:save_update_applicant_family_info' %}"
+                      id="form_sample_1"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-body">
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Name:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Name" id="ken_name" name="ken_name"
+                                           value="{{ application_obj.ken_name|default:"" }}" class="form-control" required>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-2 control-label">ID:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter ID" id="ken_id" name="ken_id"
+                                           value="{{ application_obj.ken_id|default:"" }}" class="form-control" required>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <br>
+
+
+
+                        <div class="row">
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Relationship:</label>
+                                <div class="col-md-3">
+                                    <select id='ken_relationship' title="Select Country" name="ken_relationship"
+                                            class="form-control">
+                                        {% if application_obj.ken_relationship %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.ken_relationship }}"
+                                                    value="">{{ application_obj.ken_relationship|title }}</option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">Please
+                                                Select
+                                            </option>
+                                        {% endif %}
+
+                                        <option value='Spouse'>Spouse</option>
+                                        <option value='Friend'>Friend</option>
+
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Tel No:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Tel No" id="ken_tel_no"
+                                           value="{{ application_obj.ken_tel_no|default:"" }}"
+                                           name="ken_tel_no"
+                                           class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Email:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Email" id="ken_email"
+                                           value="{{ application_obj.ken_email|default:"" }}"
+                                           name="ken_email"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+                        <hr>
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-settings font-red"></i>
+                                <span class="caption-subject font-red sbold uppercase"> OTHER INFORMATION</span>
+                                 <br>
+                <span style="font-family: 'Times New Roman';font-size: 16px;"><b>(How did you know about us)</b></span>
+                            </div>
+                        </div>
+                        <hr>
+
+<div class="row">
+
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Student:</label>
+                                <div class="col-md-3">
+                                    <select id='student_id' title="Select Country" name="student"
+                                            class="form-control value_check" data-live-search="true" >
+
+                                        {% if application_obj %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.ref_by_student.id }}"
+                                                    value="">{{ application_obj.ref_by_student.user.first_name|default_if_none:"" }} {{ application_obj.ref_by_student.user.last_name|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">Please
+                                                Select
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in student_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.user.first_name|default_if_none:"" }} {{ rec.user.last_name|default_if_none:"" }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                         <div class="">
+                                <label class="col-md-2 control-label">Agent:</label>
+                                <div class="col-md-3">
+                                    <select id='agent_id' title="Select Country" name="agent"
+                                            class="form-control value_check" data-live-search="true" >
+
+                                        {% if application_obj %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.ref_by_agent.id }}"
+                                                    value="">{{ application_obj.ref_by_agent.first_name|default_if_none:"" }} {{ application_obj.ref_by_agent.last_name|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">Please
+                                                Select
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in agent_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.first_name|default_if_none:"" }} {{ rec.last_name|default_if_none:"" }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+
+
+
+
+{#                        <br>#}
+{#                        <br>#}
+                        <hr>
+{#                        <div class="portlet-title">#}
+{#                            <div class="caption">#}
+{#                                <i class="icon-settings font-red"></i>#}
+{#                                <span class="caption-subject font-red sbold uppercase"> Siblings Info</span>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <hr>#}
+
+{#                        <input id="sibling_count" name="sibling_count" hidden>#}
+
+{#                        {% if sibling_obj_rec %}#}
+{#                            {% for sibling_obj in sibling_obj_rec %}#}
+{#                                <div class="row item" id="item_1">#}
+{##}
+{##}
+{#                                    <div class="">#}
+{#                                        <div class="col-md-1">#}
+{#                                            <a href="javascript:;" id="add" class="btn btn-icon-only green add_row"#}
+{#                                               style="">#}
+{#                                                <i class="fa fa-plus "></i>#}
+{#                                            </a>#}
+{#                                            {% comment %}#}
+{#                                                <a href="javascript:;" class="delete permenent btn btn-icon-only purple"#}
+{#                                                   style="">#}
+{#                                                    <i class="fa fa-times"></i>#}
+{#                                                </a>{% endcomment %}#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                    <div class="">#}
+{#                                        <label class="col-md-1 control-label">Name:</label>#}
+{#                                        <div class="col-md-2">#}
+{#                                            <input type="text" title="Enter Sibling "#}
+{#                                                   value="{{ sibling_obj.sibling_name }}"#}
+{#                                                   id="sibling_{{ forloop.counter }}"#}
+{#                                                   name="sibling_{{ forloop.counter }}"#}
+{#                                                   class="form-control">#}
+{#                                        </div>#}
+{#                                    </div>#}
+{##}
+{#                                    <div class="">#}
+{#                                        <label class="col-md-1 control-label">Gender:</label>#}
+{#                                        <div class="col-md-2">#}
+{#                                            <input type="text" title="Enter age" id="age_{{ forloop.counter }}"#}
+{#                                                   value="{{ sibling_obj.sibling_age }}"#}
+{#                                                   name="age_{{ forloop.counter }}"#}
+{#                                                   class="form-control">#}
+{#                                        </div>#}
+{#                                    </div>#}
+{##}
+{#                                    <div class="">#}
+{#                                        <label class="col-md-1 control-label">Status:</label>#}
+{#                                        <div class="col-md-2">#}
+{#                                            <input type="text" title="Enter status" id="status_{{ forloop.counter }}"#}
+{#                                                   value="{{ sibling_obj.sibling_status }}"#}
+{#                                                   name="status_{{ forloop.counter }}"#}
+{#                                                   class="form-control">#}
+{##}
+{#                                            <input type="text" hidden value="{{ sibling_obj.id }}"#}
+{#                                                   id="sibling_id_{{ forloop.counter }}"#}
+{#                                                   name="sibling_id_{{ forloop.counter }}">#}
+{##}
+{#                                            <select id='status_{{ forloop.counter }}' title="Select Status" name="status_{{ forloop.counter }}"#}
+{#                                                        class="form-control select_data">#}
+{#                                                    {% if sibling_obj.sibling_status %}#}
+{#                                                        <option style="display:none" selected="selected"#}
+{#                                                                value="{{ sibling_obj.sibling_status }}">{{ sibling_obj.sibling_status }}</option>#}
+{#                                                    {% else %}#}
+{#                                                         <option value=''>Please Select</option>#}
+{#                                                    {% endif %}#}
+{##}
+{#                                                        <option value='Employed'>Employed</option>#}
+{#                                                        <option value='Unemployed'>Unemployed</option>#}
+{#                                                        <option value='Studying'>Studying</option>#}
+{#                                                        <option value='Deceased'>Deceased</option>#}
+{#                                                </select>#}
+{##}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <br>#}
+{#                            {% endfor %}#}
+{#                        {% else %}#}
+{#                            <div class="row item" id="item_1">#}
+{##}
+                                {#                                <input id="sibling_count" name="sibling_count" hidden>#}
+{#                                <div class="">#}
+{#                                    <div class="col-md-1">#}
+{#                                        <a href="javascript:;" id="add" class="btn btn-icon-only green add_row"#}
+{#                                           style="">#}
+{#                                            <i class="fa fa-plus "></i>#}
+{#                                        </a>#}
+{#                                        {% comment %}#}
+{#                                            <a href="javascript:;" class="delete permenent btn btn-icon-only purple"#}
+{#                                               style="">#}
+{#                                                <i class="fa fa-times"></i>#}
+{#                                            </a>{% endcomment %}#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <div class="">#}
+{#                                    <label class="col-md-1 control-label">Name:</label>#}
+{#                                    <div class="col-md-2">#}
+{#                                        <input type="text" title="Enter Sibling "#}
+{#                                               id="sibling_1" name="sibling_1"#}
+{#                                               class="form-control">#}
+{#                                    </div>#}
+{#                                </div>#}
+{##}
+{#                                <div class="">#}
+{#                                    <label class="col-md-1 control-label">Gender:</label>#}
+{#                                    <div class="col-md-2">#}
+{#                                        <input type="text" title="Enter age" id="age_1"#}
+{#                                               name="age_1"#}
+{#                                               class="form-control">#}
+{#                                    </div>#}
+{#                                </div>#}
+{##}
+{#                                <div class="">#}
+{#                                    <label class="col-md-1 control-label">Status:</label>#}
+{#                                    <div class="col-md-2">#}
+{#                                        <input type="text" title="Enter status" id="status_1"#}
+{#                                               name="status_1"#}
+{#                                               class="form-control">#}
+{##}
+{#                                        <select id='status_1' title="Select Status" name="status_1"#}
+{#                                                        class="form-control select_data">#}
+{#                                                         <option value=''>Please Select</option>#}
+{#                                                        <option value='Employed'>Employed</option>#}
+{#                                                        <option value='Unemployed'>Unemployed</option>#}
+{#                                                        <option value='Studying'>Studying</option>#}
+{#                                                        <option value='Deceased'>Deceased</option>#}
+{#                                                </select>#}
+{##}
+{##}
+{##}
+{#                                        <input type="text" hidden id="sibling_id_1" name="sibling_id_1">#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <br>#}
+{#                        {% endif %}#}
+{##}
+{##}
+{##}
+{##}
+{#                        <br><br>#}
+{#                        <br><br>#}
+
+                        <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                                        onclick="window.location='{% url "student:applicant_family_info" %}'">Back
+                                </button>
+
+                                {% if application_obj %}
+                                    <button type="submit" class="btn green" id="save">Save/Next</button>
+                                {% endif %}
+                                {% comment %}
+                                    <button type="button" class="btn blue" id="next"
+                                            onclick="window.location='{% url "student:applicant_academic_english_qualification" %}'">
+                                        Next
+                                    </button>{% endcomment %}
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
