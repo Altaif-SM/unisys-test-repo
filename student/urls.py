@@ -98,8 +98,8 @@ urlpatterns = [
 
 
                   path('applicant_ken_info/', views.applicant_ken_info, name='applicant_ken_info'),
-                  # path('save_update_applicant_family_info/', views.save_update_applicant_family_info,
-                  #      name='save_update_applicant_family_info'),
+                  path('save_update_applicant_ken_info/', views.save_update_applicant_ken_info,
+                       name='save_update_applicant_ken_info'),
 
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

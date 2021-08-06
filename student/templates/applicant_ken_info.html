@@ -36,17 +36,30 @@
 
                 {#$("#mother_nationality").chosen();#}
 
-            $("#student_id").chosen();
-                 $("#agent_id").chosen();
+                $("#student_id").chosen();
+                $("#agent_id").chosen();
 
+                var is_sponsored = "{{ application_obj.is_sponsored }}";
+                if(is_sponsored === 'False'){
+                    $(".sponsored").prop("disabled", true);
+                }
 
                 $('#save').click(function () {
                     var count = $(".item:last").attr('id').split('_')[1];
                     $('#sibling_count').val(count);
 
 
-
                 });
+
+                $('input[type="radio"]').on('change', function(){
+                    var is_sponsored = $('input[name="is_sponsored"]:checked').val();
+                    if(is_sponsored === 'No'){
+                         $(".sponsored").prop("disabled", true);
+                    }
+                    else{
+                        $(".sponsored").prop("disabled", false);
+                    }
+                })
 
 
                 {% if sibling_obj_rec %}
@@ -147,7 +160,7 @@
 
         <div class="portlet-body">
             <div class="form-body">
-                <form action="{% url 'student:save_update_applicant_family_info' %}"
+                <form action="{% url 'student:save_update_applicant_ken_info' %}"
                       id="form_sample_1"
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
@@ -160,7 +173,7 @@
                                 <label class="col-md-2 control-label">Name:</label>
                                 <div class="col-md-3">
                                     <input type="text" title="Enter Name" id="ken_name" name="ken_name"
-                                           value="{{ application_obj.ken_name|default:"" }}" class="form-control" required>
+                                           value="{{ application_obj.ken_name|default:"" }}" class="form-control">
                                 </div>
                             </div>
 
@@ -168,14 +181,13 @@
                                 <label class="col-md-2 control-label">ID:</label>
                                 <div class="col-md-3">
                                     <input type="text" title="Enter ID" id="ken_id" name="ken_id"
-                                           value="{{ application_obj.ken_id|default:"" }}" class="form-control" required>
+                                           value="{{ application_obj.ken_id|default:"" }}" class="form-control">
                                 </div>
                             </div>
 
                         </div>
 
                         <br>
-
 
 
                         <div class="row">
@@ -236,21 +248,20 @@
                             <div class="caption">
                                 <i class="icon-settings font-red"></i>
                                 <span class="caption-subject font-red sbold uppercase"> OTHER INFORMATION</span>
-                                 <br>
-                <span style="font-family: 'Times New Roman';font-size: 16px;"><b>(How did you know about us)</b></span>
+                                <br>
+                                <span style="font-family: 'Times New Roman';font-size: 16px;"><b>(How did you know about us)</b></span>
                             </div>
                         </div>
                         <hr>
 
-<div class="row">
-
+                        <div class="row">
 
 
                             <div class="">
                                 <label class="col-md-2 control-label">Student:</label>
                                 <div class="col-md-3">
                                     <select id='student_id' title="Select Country" name="student"
-                                            class="form-control value_check" data-live-search="true" >
+                                            class="form-control value_check" data-live-search="true">
 
                                         {% if application_obj %}
                                             <option style="display:none" selected="selected"
@@ -268,11 +279,11 @@
                                     </select>
                                 </div>
                             </div>
-                         <div class="">
+                            <div class="">
                                 <label class="col-md-2 control-label">Agent:</label>
                                 <div class="col-md-3">
                                     <select id='agent_id' title="Select Country" name="agent"
-                                            class="form-control value_check" data-live-search="true" >
+                                            class="form-control value_check" data-live-search="true">
 
                                         {% if application_obj %}
                                             <option style="display:none" selected="selected"
@@ -295,177 +306,102 @@
                         <br>
 
 
-
-
-{#                        <br>#}
-{#                        <br>#}
                         <hr>
-{#                        <div class="portlet-title">#}
-{#                            <div class="caption">#}
-{#                                <i class="icon-settings font-red"></i>#}
-{#                                <span class="caption-subject font-red sbold uppercase"> Siblings Info</span>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                        <hr>#}
 
-{#                        <input id="sibling_count" name="sibling_count" hidden>#}
+                        <hr>
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-settings font-red"></i>
+                                <span class="caption-subject font-red sbold uppercase"> SPONSORSHIP</span>
+                                <br>
+                            </div>
+                        </div>
+                        <hr>
 
-{#                        {% if sibling_obj_rec %}#}
-{#                            {% for sibling_obj in sibling_obj_rec %}#}
-{#                                <div class="row item" id="item_1">#}
-{##}
-{##}
-{#                                    <div class="">#}
-{#                                        <div class="col-md-1">#}
-{#                                            <a href="javascript:;" id="add" class="btn btn-icon-only green add_row"#}
-{#                                               style="">#}
-{#                                                <i class="fa fa-plus "></i>#}
-{#                                            </a>#}
-{#                                            {% comment %}#}
-{#                                                <a href="javascript:;" class="delete permenent btn btn-icon-only purple"#}
-{#                                                   style="">#}
-{#                                                    <i class="fa fa-times"></i>#}
-{#                                                </a>{% endcomment %}#}
-{#                                        </div>#}
-{#                                    </div>#}
-{#                                    <div class="">#}
-{#                                        <label class="col-md-1 control-label">Name:</label>#}
-{#                                        <div class="col-md-2">#}
-{#                                            <input type="text" title="Enter Sibling "#}
-{#                                                   value="{{ sibling_obj.sibling_name }}"#}
-{#                                                   id="sibling_{{ forloop.counter }}"#}
-{#                                                   name="sibling_{{ forloop.counter }}"#}
-{#                                                   class="form-control">#}
-{#                                        </div>#}
-{#                                    </div>#}
-{##}
-{#                                    <div class="">#}
-{#                                        <label class="col-md-1 control-label">Gender:</label>#}
-{#                                        <div class="col-md-2">#}
-{#                                            <input type="text" title="Enter age" id="age_{{ forloop.counter }}"#}
-{#                                                   value="{{ sibling_obj.sibling_age }}"#}
-{#                                                   name="age_{{ forloop.counter }}"#}
-{#                                                   class="form-control">#}
-{#                                        </div>#}
-{#                                    </div>#}
-{##}
-{#                                    <div class="">#}
-{#                                        <label class="col-md-1 control-label">Status:</label>#}
-{#                                        <div class="col-md-2">#}
-{#                                            <input type="text" title="Enter status" id="status_{{ forloop.counter }}"#}
-{#                                                   value="{{ sibling_obj.sibling_status }}"#}
-{#                                                   name="status_{{ forloop.counter }}"#}
-{#                                                   class="form-control">#}
-{##}
-{#                                            <input type="text" hidden value="{{ sibling_obj.id }}"#}
-{#                                                   id="sibling_id_{{ forloop.counter }}"#}
-{#                                                   name="sibling_id_{{ forloop.counter }}">#}
-{##}
-{#                                            <select id='status_{{ forloop.counter }}' title="Select Status" name="status_{{ forloop.counter }}"#}
-{#                                                        class="form-control select_data">#}
-{#                                                    {% if sibling_obj.sibling_status %}#}
-{#                                                        <option style="display:none" selected="selected"#}
-{#                                                                value="{{ sibling_obj.sibling_status }}">{{ sibling_obj.sibling_status }}</option>#}
-{#                                                    {% else %}#}
-{#                                                         <option value=''>Please Select</option>#}
-{#                                                    {% endif %}#}
-{##}
-{#                                                        <option value='Employed'>Employed</option>#}
-{#                                                        <option value='Unemployed'>Unemployed</option>#}
-{#                                                        <option value='Studying'>Studying</option>#}
-{#                                                        <option value='Deceased'>Deceased</option>#}
-{#                                                </select>#}
-{##}
-{#                                        </div>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                                <br>#}
-{#                            {% endfor %}#}
-{#                        {% else %}#}
-{#                            <div class="row item" id="item_1">#}
-{##}
-                                {#                                <input id="sibling_count" name="sibling_count" hidden>#}
-{#                                <div class="">#}
-{#                                    <div class="col-md-1">#}
-{#                                        <a href="javascript:;" id="add" class="btn btn-icon-only green add_row"#}
-{#                                           style="">#}
-{#                                            <i class="fa fa-plus "></i>#}
-{#                                        </a>#}
-{#                                        {% comment %}#}
-{#                                            <a href="javascript:;" class="delete permenent btn btn-icon-only purple"#}
-{#                                               style="">#}
-{#                                                <i class="fa fa-times"></i>#}
-{#                                            </a>{% endcomment %}#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                                <div class="">#}
-{#                                    <label class="col-md-1 control-label">Name:</label>#}
-{#                                    <div class="col-md-2">#}
-{#                                        <input type="text" title="Enter Sibling "#}
-{#                                               id="sibling_1" name="sibling_1"#}
-{#                                               class="form-control">#}
-{#                                    </div>#}
-{#                                </div>#}
-{##}
-{#                                <div class="">#}
-{#                                    <label class="col-md-1 control-label">Gender:</label>#}
-{#                                    <div class="col-md-2">#}
-{#                                        <input type="text" title="Enter age" id="age_1"#}
-{#                                               name="age_1"#}
-{#                                               class="form-control">#}
-{#                                    </div>#}
-{#                                </div>#}
-{##}
-{#                                <div class="">#}
-{#                                    <label class="col-md-1 control-label">Status:</label>#}
-{#                                    <div class="col-md-2">#}
-{#                                        <input type="text" title="Enter status" id="status_1"#}
-{#                                               name="status_1"#}
-{#                                               class="form-control">#}
-{##}
-{#                                        <select id='status_1' title="Select Status" name="status_1"#}
-{#                                                        class="form-control select_data">#}
-{#                                                         <option value=''>Please Select</option>#}
-{#                                                        <option value='Employed'>Employed</option>#}
-{#                                                        <option value='Unemployed'>Unemployed</option>#}
-{#                                                        <option value='Studying'>Studying</option>#}
-{#                                                        <option value='Deceased'>Deceased</option>#}
-{#                                                </select>#}
-{##}
-{##}
-{##}
-{#                                        <input type="text" hidden id="sibling_id_1" name="sibling_id_1">#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                            <br>#}
-{#                        {% endif %}#}
-{##}
-{##}
-{##}
-{##}
-{#                        <br><br>#}
-{#                        <br><br>#}
+                        <span style="padding:inherit"><b>Sponsored by Organisation:  </b></span>
+                        {% if application_obj.is_sponsored == True %}
+                         <span style="padding:inherit">Yes </span>
+                        <input class="current" type="radio" checked name="is_sponsored" id="sponsored_by_yes" value="Yes">
+                        <span style="padding:inherit">No</span>
+                        <input class="current" type="radio" name="is_sponsored" value="No"
+                               id="sponsored_by_no">
+                        {% else %}
+                            <span style="padding:inherit">Yes </span>
+                        <input class="current" type="radio"  name="is_sponsored" id="sponsored_by_yes" value="Yes">
+                        <span style="padding:inherit">No</span>
+                        <input class="current" type="radio" checked name="is_sponsored" value="No"
+                               id="sponsored_by_no">
+                        {% endif %}
 
+
+                        <br><br>
                         <div class="row">
-                            <div class="col-md-offset-5 col-md-7">
-                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"
-                                        onclick="window.location='{% url "student:applicant_family_info" %}'">Back
-                                </button>
+                            <div class="">
+                                <label class="col-md-2 control-label">Name of the Organisation:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Tel No" id="sponsore_organisation"
+                                           value="{{ application_obj.sponsore_organisation|default:"" }}"
+                                           name="sponsore_organisation"
+                                           class="form-control sponsored">
+                                </div>
+                            </div>
+                            <div class="">
+                                <label class="col-md-2 control-label">Address:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Tel No" id="sponsore_address"
+                                           value="{{ application_obj.sponsore_address|default:"" }}"
+                                           name="sponsore_address"
+                                           class="form-control sponsored">
+                                </div>
+                            </div>
+                        </div>
+                    <br>
+                    <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Email:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Tel No" id="sponsore_email"
+                                           value="{{ application_obj.sponsore_email|default:"" }}"
+                                           name="sponsore_email"
+                                           class="form-control sponsored">
+                                </div>
+                            </div>
+                            <div class="">
+                                <label class="col-md-2 control-label">Contact dept/person:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Tel No" id="sponsore_contact"
+                                           value="{{ application_obj.sponsore_contact|default:"" }}"
+                                           name="sponsore_contact"
+                                           class="form-control sponsored">
+                                </div>
+                            </div>
+                        </div>
 
-                                {% if application_obj %}
-                                    <button type="submit" class="btn green" id="save">Save/Next</button>
-                                {% endif %}
-                                {% comment %}
+                    </div>
+                    <br>
+
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-md-offset-5 col-md-7">
+                            <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                                    onclick="window.location='{% url "student:applicant_family_info" %}'">Back
+                            </button>
+
+                            {% if application_obj %}
+                                <button type="submit" class="btn green" id="save">Save/Next</button>
+                            {% endif %}
+                            {% comment %}
                                     <button type="button" class="btn blue" id="next"
                                             onclick="window.location='{% url "student:applicant_academic_english_qualification" %}'">
                                         Next
                                     </button>{% endcomment %}
-                            </div>
                         </div>
                     </div>
-                </form>
             </div>
+            </form>
         </div>
+    </div>
     </div>
 {% endblock %}

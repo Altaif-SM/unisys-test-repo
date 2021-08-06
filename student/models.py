@@ -205,7 +205,7 @@ class ApplicationDetails(BaseModel):
     second_interview_approval = models.BooleanField(default=False)
     admin_approval = models.BooleanField(default=False)
     application_rejection = models.BooleanField(default=False)
-    is_sponsored = models.BooleanField(default=False)
+
 
     scholarship_fee = models.CharField(max_length=15, blank=True, null=True)
 
@@ -228,6 +228,12 @@ class ApplicationDetails(BaseModel):
     ken_relationship = models.CharField(max_length=255, blank=True, null=True)
     ken_tel_no = models.CharField(max_length=255, blank=True, null=True)
     ken_email = models.CharField(max_length=255, blank=True, null=True)
+
+    is_sponsored = models.BooleanField(default=False)
+    sponsore_organisation = models.CharField(max_length=255, blank=True, null=True)
+    sponsore_address = models.CharField(max_length=255, blank=True, null=True)
+    sponsore_email = models.CharField(max_length=255, blank=True, null=True)
+    sponsore_contact = models.CharField(max_length=255, blank=True, null=True)
 
     # family_info_flag = models.BooleanField(default=False)
     # mother_sibling_info_flag = models.BooleanField(default=False)

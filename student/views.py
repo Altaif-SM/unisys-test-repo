@@ -2230,3 +2230,44 @@ def applicant_ken_info(request):
 
 
     return render(request, 'applicant_ken_info.html',{'country_recs': country_recs, 'application_obj': application_obj, 'path': path,'sibling_obj_rec': sibling_obj,'student_recs':student_recs,'agent_recs':agent_recs})
+
+def save_update_applicant_ken_info(request):
+    redirect_flag = False
+    if request.POST:
+        try:
+
+            if StudentDetails.objects.filter(user=request.user):
+                ApplicationDetails.objects.filter(application_id=request.user.get_application_id).update(
+                    ken_name=request.POST['ken_name'],
+                    ken_id=request.POST['ken_id'],
+                    ken_relationship=request.POST['ken_relationship'],
+                    ken_tel_no=request.POST['ken_tel_no'],
+                    ken_email=request.POST['ken_email'],
+                    ref_by_student_id=request.POST['student'] if request.POST['student'] else None,
+                    ref_by_agent_id=request.POST['agent'] if request.POST['agent'] else None,
+                    )
+                if request.POST['is_sponsored'] == 'Yes':
+                    ApplicationDetails.objects.filter(application_id=request.user.get_application_id).update(
+                        sponsore_organisation=request.POST['sponsore_organisation'],
+                        sponsore_address=request.POST['sponsore_address'],
+                        sponsore_email=request.POST['sponsore_email'],
+                        sponsore_contact=request.POST['sponsore_contact'],
+                        is_sponsored = True
+                    )
+                else:
+                    ApplicationDetails.objects.filter(application_id=request.user.get_application_id).update(
+                        sponsore_organisation='',
+                        sponsore_address='',
+                        sponsore_email='',
+                        sponsore_contact='',
+                        is_sponsored = False
+                    )
+                redirect_flag = True
+            if redirect_flag:
+                messages.success(request, "Record saved")
+                return redirect('/student/applicant_scholarship_about_yourself_info/')
+        except Exception as e:
+            messages.warning(request, "Form have some error" + str(e))
+
+        messages.warning(request, "Please fill proper form")
+    return redirect('/student/applicant_ken_info/')
