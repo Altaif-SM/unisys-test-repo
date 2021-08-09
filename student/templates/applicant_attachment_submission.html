@@ -128,7 +128,8 @@
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-3 control-label">Passport ID:</label>
+                                <label class="col-md-3 control-label">Passport ID:<br><span style="color:red;font-size: 12px">(Only formats are allowed png,gif,jpeg)</span></label>
+
 
                                 <div class="col-md-3" id="item1">
                                     {% if attachment_obj.passport_image %}
@@ -168,7 +169,7 @@
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-3 control-label">Personal Photo:</label>
+                                <label class="col-md-3 control-label">Personal Photo:<br><span style="color:red;font-size: 12px">(Only formats are allowed png,gif,jpeg)</span></label>
                                 <div class="col-md-3" id="parent1">
                                     {% if attachment_obj.image %}
                                         <label class="form-control"
@@ -204,7 +205,7 @@
                     <br>
                     <div class="row">
                             <div class="">
-                                <label class="col-md-3 control-label">Academic Certificate:</label>
+                                <label class="col-md-3 control-label">Academic Certificate:<br><span style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
                                 <div class="col-md-3" id="parent2">
                                     {% if attachment_obj.level_result_document %}
                                         <label class="form-control"
@@ -240,7 +241,7 @@
                     <br>
                     <div class="row">
                             <div class="">
-                                <label class="col-md-3 control-label">Transcript:</label>
+                                <label class="col-md-3 control-label">Transcript:<br><span style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
                                 <div class="col-md-3" id="parent3">
                                     {% if attachment_obj.transcript_document %}
                                         <label class="form-control"
@@ -277,7 +278,7 @@
                     <br>
                     <div class="row">
                             <div class="">
-                                <label class="col-md-3 control-label">English Language Proficiency Certificate:</label>
+                                <label class="col-md-3 control-label">English Language Proficiency Certificate:<br><span style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
                                 <div class="col-md-3" id="parent4">
                                     {% if attachment_obj.english_test_result_document %}
                                         <label class="form-control"
@@ -314,7 +315,7 @@
                     <div class="row">
                             <div class="">
                                 <label class="col-md-3 control-label">Recommendation
-Letter:</label>
+Letter:<br><span style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
                                 <div class="col-md-3" id="parent5">
                                     {% if attachment_obj.recommendation_letter %}
                                         <label class="form-control"
@@ -349,8 +350,6 @@ Letter:</label>
                             </div>
                         </div>
 
-                        <br>
-                        <br>
                         <br>
 
                         <div class="row">

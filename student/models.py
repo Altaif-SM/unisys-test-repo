@@ -712,7 +712,7 @@ class EmployementHistoryDetails(BaseModel):
 
 class ApplicantAttachementDetails(BaseModel):
     passport_image = models.FileField(upload_to='photo/', null=True, blank=True)
-    image = models.FileField(upload_to='document/', null=True, blank=True)
+    image = models.FileField(upload_to='photo/', null=True, blank=True)
     level_result_document = models.FileField(upload_to='document/', null=True, blank=True)
     transcript_document = models.FileField(upload_to='document/', null=True, blank=True)
     english_test_result_document = models.FileField(upload_to='document/', null=True, blank=True)
