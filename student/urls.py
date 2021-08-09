@@ -101,5 +101,8 @@ urlpatterns = [
                   path('save_update_applicant_additional_info/', views.save_update_applicant_additional_info,
                        name='save_update_applicant_additional_info'),
 
+                  path('applicant_attachment_submission/', views.applicant_attachment_submission,
+                       name='applicant_attachment_submission'),
+                  path('save_attachement_submission/', views.save_attachement_submission, name='save_attachement_submission'),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -59,7 +59,7 @@
 
 
             $(document).ready(function () {
-                 $("#address_country").chosen();
+                 {#$("#address_country").chosen();#}
                  $("#student_id").chosen();
                  $("#agent_id").chosen();
 
@@ -558,7 +558,7 @@
                                 <div class="col-md-3">
                                     <input type="text" title="Enter District " id="district"
                                            value="{{ application_obj.address.district|title }}" name="district"
-                                           class="form-control value_check" required>
+                                           class="form-control value_check">
                                 </div>
                             </div>
 

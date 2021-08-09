@@ -2222,6 +2222,13 @@ def applicant_additional_information(request):
     path = ''
     application_obj = ''
     sibling_obj = ''
+
+    try:
+         request.user.get_application
+    except Exception as e:
+        messages.warning(request, "Please fill the personal details first...")
+        return redirect('/student/applicant_personal_info/')
+
     if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
         application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
         path = base_path(application_obj)
@@ -2229,7 +2236,7 @@ def applicant_additional_information(request):
             sibling_obj = SiblingDetails.objects.filter(applicant_id=application_obj)
 
 
-    return render(request, 'applicant_ken_info.html',{'country_recs': country_recs, 'application_obj': application_obj, 'path': path,'sibling_obj_rec': sibling_obj,'student_recs':student_recs,'agent_recs':agent_recs})
+    return render(request, 'applicant_additional_info.html', {'country_recs': country_recs, 'application_obj': application_obj, 'path': path, 'sibling_obj_rec': sibling_obj, 'student_recs':student_recs, 'agent_recs':agent_recs})
 
 def save_update_applicant_additional_info(request):
     redirect_flag = False
@@ -2271,3 +2278,80 @@ def save_update_applicant_additional_info(request):
 
         messages.warning(request, "Please fill proper form")
     return redirect('/student/applicant_ken_info/')
+
+
+@agreements_required
+def applicant_attachment_submission(request):
+
+    try:
+       request.user.get_application
+    except Exception as e:
+        messages.warning(request, "Please fill the personal details first...")
+        return redirect('/student/applicant_personal_info/')
+
+    try:
+        attachment_obj = ''
+        if request.user.get_application:
+            # if request.user.get_application.is_submitted:
+            if ApplicantAttachementDetails.objects.filter(applicant_id=request.user.get_application).exists():
+                attachment_obj = ApplicantAttachementDetails.objects.get(
+                    applicant_id=request.user.get_application)
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+        return redirect('/student/student_home/')
+    return render(request, 'applicant_attachment_submission.html',
+                  {'attachment_obj': attachment_obj})
+
+
+@agreements_required
+def save_attachement_submission(request):
+    try:
+        passport_photo = request.FILES.get('passport_photo')
+        photo = request.FILES.get('photo')
+        level_result_document = request.FILES.get('level_result_document')
+        transcript_document = request.FILES.get('transcript_document')
+        english_test_result_document = request.FILES.get('english_test_result_document')
+        recommendation_letter = request.FILES.get('recommendation_letter')
+    except:
+        passport_photo = ''
+        photo = ''
+        level_result_document = ''
+        transcript_document = ''
+        english_test_result_document = ''
+        recommendation_letter = ''
+
+    try:
+
+        if ApplicantAttachementDetails.objects.filter(applicant_id=request.user.get_application).exists():
+            attachment_obj = ApplicantAttachementDetails.objects.get(
+                applicant_id=request.user.get_application)
+        else:
+            attachment_obj = ApplicantAttachementDetails.objects.create(
+                applicant_id=request.user.get_application)
+
+        if passport_photo:
+            attachment_obj.passport_image = passport_photo
+
+        if photo:
+            attachment_obj.image = photo
+
+        if level_result_document:
+            attachment_obj.level_result_document = level_result_document
+
+        if transcript_document:
+            attachment_obj.transcript_document = transcript_document
+
+        if english_test_result_document:
+            attachment_obj.english_test_result_document = english_test_result_document
+
+        if recommendation_letter:
+            attachment_obj.recommendation_letter = recommendation_letter
+
+        attachment_obj.save()
+
+        messages.success(request, "Attachment submitted successfully.")
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+    return redirect('/student/applicant_attachment_submission/')

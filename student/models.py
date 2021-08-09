@@ -708,3 +708,14 @@ class EmployementHistoryDetails(BaseModel):
     employed_years = models.CharField(max_length=255, blank=True, null=True)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='employement_history_rel',
                                      on_delete=models.PROTECT)
+
+
+class ApplicantAttachementDetails(BaseModel):
+    passport_image = models.FileField(upload_to='photo/', null=True, blank=True)
+    image = models.FileField(upload_to='document/', null=True, blank=True)
+    level_result_document = models.FileField(upload_to='document/', null=True, blank=True)
+    transcript_document = models.FileField(upload_to='document/', null=True, blank=True)
+    english_test_result_document = models.FileField(upload_to='document/', null=True, blank=True)
+    recommendation_letter = models.FileField(upload_to='document/', null=True, blank=True)
+    applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_attachement_rel',
+                                     on_delete=models.PROTECT)

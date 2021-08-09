@@ -165,6 +165,21 @@
                     })
 
 
+                      var flag_emp = false;
+                    $('.chk').css('border-color', '');
+                    $('.chk').each(function () {
+                        if ($(this).val() == '') {
+                            if ($(this).hasClass('file_value')) {
+                                $(this).parents('label:eq(0)').css('border-color', 'red');
+                            }
+                            else {
+                                $(this).css('border-color', 'red');
+                            }
+                            flag_emp = true;
+                        }
+                    })
+
+                    /*
                     var flag_emp = false;
                     $('.eng_emp').css('border-color', '');
                     $('.eng_emp').each(function () {
@@ -178,6 +193,7 @@
                             flag_emp = true;
                         }
                     })
+                    */
 
                     if (flag_emp) {
                         return false;
@@ -331,7 +347,7 @@ function showOptions(s) {
                                             <div class="col-md-2">
 
                                                 <select id='degree{{ forloop.counter }}' title="Select Degree" name="degree{{ forloop.counter }}"
-                                                        class="form-control select_data">
+                                                        class="form-control select_data chk">
 {#                                                    {% if qualification_obj %}#}
                                                         <option style="display:none" selected="selected"
                                                                 value="{{ qualification_obj.degree }}">{{ qualification_obj.degree }}</option>
@@ -512,7 +528,7 @@ function showOptions(s) {
                                             <div class="col-md-2">
 
                                                 <select id='degree1' title="Select Degree" name="degree1"
-                                                        class="form-control select_data">
+                                                        class="form-control select_data chk">
                                                         <option value=''>Please Select</option>
                                                         <option value='Secondary'>Secondary</option>
                                                         <option value='O-Level'>O-Level</option>
