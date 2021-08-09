@@ -2207,15 +2207,15 @@ def save_update_applicant_employement_history_info(request):
 
                 if redirect_flag:
                     messages.success(request, "Record saved")
-                    return redirect('/student/applicant_scholarship_about_yourself_info/')
+                    return redirect('/student/applicant_additional_information/')
         except Exception as e:
             messages.warning(request, "Form have some error" + str(e))
 
         messages.warning(request, "Please fill proper form")
-    return redirect('/student/applicant_scholarship_about_yourself_info/')
+    return redirect('/student/applicant_employement_history_info/')
 
 
-def applicant_ken_info(request):
+def applicant_additional_information(request):
     country_recs = AllCountries.objects.all()
     student_recs = StudentDetails.objects.filter(user__is_active=True)
     agent_recs = AgentDetails.objects.filter()
@@ -2231,7 +2231,7 @@ def applicant_ken_info(request):
 
     return render(request, 'applicant_ken_info.html',{'country_recs': country_recs, 'application_obj': application_obj, 'path': path,'sibling_obj_rec': sibling_obj,'student_recs':student_recs,'agent_recs':agent_recs})
 
-def save_update_applicant_ken_info(request):
+def save_update_applicant_additional_info(request):
     redirect_flag = False
     if request.POST:
         try:

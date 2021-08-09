@@ -582,10 +582,10 @@ License: You must have a valid license purchased only from themeforest(the above
 
                             {% if 'student.can_view_scholarship_selection' in perms %}
                         <li class="nav-item " id="acd_qli">
-                            <a href="{% url 'student:applicant_scholarship_about_yourself_info' %}"
+                            <a href="{% url 'student:applicant_additional_information' %}"
                                class="nav-link nav-toggle">
                                 <i class="glyphicon glyphicon-star"></i>
-                                <span class="title">Scholarship Selection</span>
+                                <span class="title">Additional Information</span>
                                 {% if user.get_student_application.scholarship_selection %}
                                     <span class="title glyphicon glyphicon-ok"
                                           style="color: #41bc2c;font-size: 16px"></span>{% else %}
