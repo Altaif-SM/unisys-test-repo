@@ -2272,12 +2272,12 @@ def save_update_applicant_additional_info(request):
                 redirect_flag = True
             if redirect_flag:
                 messages.success(request, "Record saved")
-                return redirect('/student/applicant_scholarship_about_yourself_info/')
+                return redirect('/student/applicant_attachment_submission/')
         except Exception as e:
             messages.warning(request, "Form have some error" + str(e))
 
         messages.warning(request, "Please fill proper form")
-    return redirect('/student/applicant_ken_info/')
+    return redirect('/student/applicant_additional_information/')
 
 
 @agreements_required

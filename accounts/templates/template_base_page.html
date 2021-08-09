@@ -597,12 +597,12 @@ License: You must have a valid license purchased only from themeforest(the above
                     {% endif %}
 
                          {% if 'student.can_view_student_psychometric_test' in perms %}
-                        <li class="nav-item " id="acd_qli" {% if user.psyc_switch == False %} style=" pointer-events:none;opacity:0.6;background-color: grey" disabled {% endif %}>
+                        <li class="nav-item " id="acd_qli">
                             <a href="{% url 'student:applicant_attachment_submission' %}"
                                class="nav-link nav-toggle">
                                 <i class="glyphicon glyphicon-copy"></i>
                                 <span class="title">Attachment</span>
-                                {% if user.get_student_application.psychometric_test %}
+                                {% if user.get_student_application.attachment %}
                                     <span class="title glyphicon glyphicon-ok"
                                           style="color: #41bc2c;font-size: 16px"></span>{% else %}
                                     <span class="title glyphicon glyphicon-exclamation-sign"
