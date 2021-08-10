@@ -51,22 +51,43 @@
                 $(document).on("click", ".file", function (e) {
                     $(this).parent('.form-control').next('.file_type').trigger('click');
                 });
-
+                var _URL = window.URL || window.webkitURL;
                 $('.file_type').change(function (evt) {
                     var extension = $(this).val().split('.').pop().toLowerCase();
-                    if ((extension == 'jpeg') || (extension == 'jpg'))
-                    {
+                    if ((extension == 'jpeg') || (extension == 'jpg')) {
+
                         var files = !!this.files ? this.files : [];
                         var maxSizeKB = 66; //Size in KB
                         var maxSize = maxSizeKB * 1024; //File size is returned in Bytes
                         if (files[0].size > maxSize) {
-                            alert('Maximum file size must be 66 KB')
+                            alert('Maximum file size must be 66 KB');
+                            location.reload();
                             return false;
-                         }
-                        var file_name = $(this).val().split('\\')[2];
-                        $(this).prev().children().children('.file_value').val(file_name);
+                        }
+                        var file, img;
+                        if ((file = files[0])) {
+                            img = new Image();
+                            var objectUrl = _URL.createObjectURL(file);
+                            img.onload = function () {
+                                var width = img.naturalWidth,
+                                    height = img.naturalHeight;
+                                _URL.revokeObjectURL(objectUrl);
+                                if(width <= 217 && height <= 280){
+                                     var file_name = $(this).val().split('\\')[2];
+                                    $(this).prev().children().children('.file_value').val(file_name);
+                                } else {
+                                    alert('Maximum file height and width must be 280px*217px');
+                                    location.reload();
+                                    return false
 
-                    }else{
+                                }
+
+                            };
+                            img.src = objectUrl;
+                        }
+
+
+                    } else {
                         var file_name = $(this).val().split('\\')[2];
                         $(this).prev().children().children('.file_value').val(file_name);
                     }
@@ -141,16 +162,19 @@
                     {% csrf_token %}
 
                     <div class="form-body">
-                    <div class="row">
+                        <div class="row">
                             <div class="">
-                                <label class="col-md-4 control-label">Personal Photo:<br><span style="color:red;font-size: 12px">(photo must be jpg and White background)</span><br><span style="color:red;font-size: 12px">(Maximum file height and width must be 280px*217px)<br><span style="color:red;font-size: 12px">(Maximum file size must be 66 KB.)</span></label>
+                                <label class="col-md-4 control-label">Personal Photo:<br><span
+                                        style="color:red;font-size: 12px">(photo must be jpg and White background)</span><br><span
+                                        style="color:red;font-size: 12px">(Maximum file height and width must be 280px*217px)<br><span
+                                        style="color:red;font-size: 12px">(Maximum file size must be 66 KB.)</span></label>
                                 <div class="col-md-3" id="parent1">
                                     {% if attachment_obj.image %}
                                         <label class="form-control"
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
                                                 class="file" style="width: 50%"
                                                 type='button' value='Choose File:'><a target="_blank"
-                                                href="{{ attachment_obj.image.url }}"><input
+                                                                                      href="{{ attachment_obj.image.url }}"><input
                                                 type="text"
                                                 readonly name="photo_text"
                                                 class="file_value emp"
@@ -160,7 +184,8 @@
                                     {% else %}
                                         <label class="form-control"
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
-                                                class="file" accept="image/png, image/gif, image/jpeg" style="width: 50%"
+                                                class="file" accept="image/png, image/gif, image/jpeg"
+                                                style="width: 50%"
                                                 type='button' value='Choose File:'><a><input type="text"
                                                                                              readonly
                                                                                              name="photo_text"
@@ -176,11 +201,12 @@
 
                             </div>
                         </div>
-                    <br>
+                        <br>
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-4 control-label">Passport ID:<br><span style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
+                                <label class="col-md-4 control-label">Passport ID:<br><span
+                                        style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
 
 
                                 <div class="col-md-3" id="item1">
@@ -189,7 +215,7 @@
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
                                                 class="file" style="width: 50%"
                                                 type='button' value='Choose File:'><a target="_blank"
-                                                href="{{ attachment_obj.passport_image.url }}"><input
+                                                                                      href="{{ attachment_obj.passport_image.url }}"><input
                                                 type="text"
                                                 readonly name="passport_photo_text"
                                                 class="file_value emp"
@@ -220,16 +246,17 @@
                         <br>
 
 
-                    <div class="row">
+                        <div class="row">
                             <div class="">
-                                <label class="col-md-4 control-label">Academic Certificate:<br><span style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
+                                <label class="col-md-4 control-label">Academic Certificate:<br><span
+                                        style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
                                 <div class="col-md-3" id="parent2">
                                     {% if attachment_obj.level_result_document %}
                                         <label class="form-control"
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
                                                 class="file" style="width: 50%"
                                                 type='button' value='Choose File:'><a target="_blank"
-                                                href="{{ attachment_obj.level_result_document.url }}"><input
+                                                                                      href="{{ attachment_obj.level_result_document.url }}"><input
                                                 type="text"
                                                 readonly name="level_result_document_text"
                                                 class="file_value emp"
@@ -255,10 +282,11 @@
 
                             </div>
                         </div>
-                    <br>
-                    <div class="row">
+                        <br>
+                        <div class="row">
                             <div class="">
-                                <label class="col-md-4 control-label">Transcript:<br><span style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
+                                <label class="col-md-4 control-label">Transcript:<br><span
+                                        style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
                                 <div class="col-md-3" id="parent3">
                                     {% if attachment_obj.transcript_document %}
                                         <label class="form-control"
@@ -292,17 +320,18 @@
 
                             </div>
                         </div>
-                    <br>
-                    <div class="row">
+                        <br>
+                        <div class="row">
                             <div class="">
-                                <label class="col-md-4 control-label">English Language Proficiency Certificate:<br><span style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
+                                <label class="col-md-4 control-label">English Language Proficiency Certificate:<br><span
+                                        style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
                                 <div class="col-md-3" id="parent4">
                                     {% if attachment_obj.english_test_result_document %}
                                         <label class="form-control"
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
                                                 class="file" style="width: 50%"
                                                 type='button' value='Choose File:'><a target="_blank"
-                                                href="{{ attachment_obj.english_test_result_document.url }}"><input
+                                                                                      href="{{ attachment_obj.english_test_result_document.url }}"><input
                                                 type="text"
                                                 readonly name="english_test_result_document_text"
                                                 class="file_value emp"
@@ -320,7 +349,8 @@
                                                                                              style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
                                     {% endif %}
                                     <input type="file" style="display: none" class="file_type" accept="application/pdf,"
-                                           title="Select English Language Proficiency Certificate" id="english_test_result_document"
+                                           title="Select English Language Proficiency Certificate"
+                                           id="english_test_result_document"
                                            name="english_test_result_document">
                                     <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
                                           class="remove_doc fa fa-close"></span>
@@ -328,11 +358,12 @@
 
                             </div>
                         </div>
-                    <br>
-                    <div class="row">
+                        <br>
+                        <div class="row">
                             <div class="">
                                 <label class="col-md-4 control-label">Recommendation
-Letter:<br><span style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
+                                    Letter:<br><span
+                                            style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
                                 <div class="col-md-3" id="parent5">
                                     {% if attachment_obj.recommendation_letter %}
                                         <label class="form-control"
@@ -372,10 +403,10 @@ Letter:<br><span style="color:red;font-size: 12px">(Only formats are allowed pdf
                         <div class="row">
                             <div class="col-md-offset-4 col-md-7">
                                 {% if user.get_application %}
-{#                                    {% if user.get_application.is_submitted %}#}
-                                        <button type="submit" class="btn green" id="save" style="">Submit</button>
-                                        {#                                    <button type="submit" class="btn green" id="save" style="">Submit</button>#}
-{#                                    {% endif %}#}
+                                    {#                                    {% if user.get_application.is_submitted %}#}
+                                    <button type="submit" class="btn green" id="save" style="">Submit</button>
+                                    {#                                    <button type="submit" class="btn green" id="save" style="">Submit</button>#}
+                                    {#                                    {% endif %}#}
                                 {% endif %}
                             </div>
                         </div>
