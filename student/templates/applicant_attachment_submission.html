@@ -125,10 +125,46 @@
                     {% csrf_token %}
 
                     <div class="form-body">
+                    <div class="row">
+                            <div class="">
+                                <label class="col-md-4 control-label">Personal Photo:<br><span style="color:red;font-size: 12px">(photo must be jpg and White background)</span><br><span style="color:red;font-size: 12px">(Maximum file height and width must be 280px*217px)<br><span style="color:red;font-size: 12px">(Maximum file size should be 66 KB.)</span></label>
+                                <div class="col-md-3" id="parent1">
+                                    {% if attachment_obj.image %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a target="_blank"
+                                                href="{{ attachment_obj.image.url }}"><input
+                                                type="text"
+                                                readonly name="photo_text"
+                                                class="file_value emp"
+                                                style="cursor: pointer;border: none; width: 50%"
+                                                value="{{ attachment_obj.image }}"></a>
+                                        </label>
+                                    {% else %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" accept="image/png, image/gif, image/jpeg" style="width: 50%"
+                                                type='button' value='Choose File:'><a><input type="text"
+                                                                                             readonly
+                                                                                             name="photo_text"
+                                                                                             class="file_value emp"
+                                                                                             style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
+                                    {% endif %}
+                                    <input type="file" style="display: none" class="file_type" accept="image/jpeg,"
+                                           title="Select Photo" id="photo"
+                                           name="photo">
+                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                                          class="remove_doc fa fa-close"></span>
+                                </div>
+
+                            </div>
+                        </div>
+                    <br>
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-3 control-label">Passport ID:<br><span style="color:red;font-size: 12px">(Only formats are allowed png,gif,jpeg)</span></label>
+                                <label class="col-md-4 control-label">Passport ID:<br><span style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
 
 
                                 <div class="col-md-3" id="item1">
@@ -154,7 +190,7 @@
                                                                                              class="file_value emp"
                                                                                              style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
                                     {% endif %}
-                                    <input type="file" style="display: none" class="file_type" accept="image/png, image/gif, image/jpeg"
+                                    <input type="file" style="display: none" class="file_type" accept="application/pdf,"
                                            title="Select Passport ID" id="passport_photo"
                                            name="passport_photo" class="doc form-control">
                                     <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
@@ -167,45 +203,10 @@
 
                         <br>
 
-                        <div class="row">
-                            <div class="">
-                                <label class="col-md-3 control-label">Personal Photo:<br><span style="color:red;font-size: 12px">(Only formats are allowed png,gif,jpeg)</span></label>
-                                <div class="col-md-3" id="parent1">
-                                    {% if attachment_obj.image %}
-                                        <label class="form-control"
-                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
-                                                class="file" style="width: 50%"
-                                                type='button' value='Choose File:'><a target="_blank"
-                                                href="{{ attachment_obj.image.url }}"><input
-                                                type="text"
-                                                readonly name="photo_text"
-                                                class="file_value emp"
-                                                style="cursor: pointer;border: none; width: 50%"
-                                                value="{{ attachment_obj.image }}"></a>
-                                        </label>
-                                    {% else %}
-                                        <label class="form-control"
-                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
-                                                class="file" accept="image/png, image/gif, image/jpeg" style="width: 50%"
-                                                type='button' value='Choose File:'><a><input type="text"
-                                                                                             readonly
-                                                                                             name="photo_text"
-                                                                                             class="file_value emp"
-                                                                                             style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
-                                    {% endif %}
-                                    <input type="file" style="display: none" class="file_type" accept="image/png, image/gif, image/jpeg"
-                                           title="Select Photo" id="photo"
-                                           name="photo">
-                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
-                                          class="remove_doc fa fa-close"></span>
-                                </div>
 
-                            </div>
-                        </div>
-                    <br>
                     <div class="row">
                             <div class="">
-                                <label class="col-md-3 control-label">Academic Certificate:<br><span style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
+                                <label class="col-md-4 control-label">Academic Certificate:<br><span style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
                                 <div class="col-md-3" id="parent2">
                                     {% if attachment_obj.level_result_document %}
                                         <label class="form-control"
@@ -241,7 +242,7 @@
                     <br>
                     <div class="row">
                             <div class="">
-                                <label class="col-md-3 control-label">Transcript:<br><span style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
+                                <label class="col-md-4 control-label">Transcript:<br><span style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
                                 <div class="col-md-3" id="parent3">
                                     {% if attachment_obj.transcript_document %}
                                         <label class="form-control"
@@ -278,7 +279,7 @@
                     <br>
                     <div class="row">
                             <div class="">
-                                <label class="col-md-3 control-label">English Language Proficiency Certificate:<br><span style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
+                                <label class="col-md-4 control-label">English Language Proficiency Certificate:<br><span style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
                                 <div class="col-md-3" id="parent4">
                                     {% if attachment_obj.english_test_result_document %}
                                         <label class="form-control"
@@ -314,7 +315,7 @@
                     <br>
                     <div class="row">
                             <div class="">
-                                <label class="col-md-3 control-label">Recommendation
+                                <label class="col-md-4 control-label">Recommendation
 Letter:<br><span style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
                                 <div class="col-md-3" id="parent5">
                                     {% if attachment_obj.recommendation_letter %}
