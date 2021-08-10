@@ -34,47 +34,22 @@
 
             $(document).ready(function () {
 
+
+                $(document).on("click", "#save_id", function () {
+                    $('#id_accept_student_model').modal();
+                });
+
+                 $(document).on("click", "#submit_appplication", function () {
+                    $("#form_sample_1").submit();
+                });
+
+
+
                 if ($('.aggre_term').is(":checked")) {
                     $('#save_id').attr("disabled", false);
                 } else {
                     $('#save_id').attr("disabled", true);
                 }
-
-
-                $("#about_yourself").on('keydown', function (e) {
-                    var words = $.trim(this.value).length ? this.value.match(/\S+/g).length : 0;
-                    if (words <= 600) {
-                        $('#display_count').text(words);
-                        $('#word_left').text(600 - words)
-                    } else {
-                        if (e.which !== 8) e.preventDefault();
-                    }
-                });
-
-                var words = $.trim($("textarea").val()).split(" ");
-                $('#display_count').text(words.length);
-                $('#word_left').text(600 - words.length)
-
-
-                {% if user.get_application %}
-                    {% if user.get_application.is_submitted %}
-                        $('input').prop('disabled', 'true')
-                        $('select').prop('disabled', 'true')
-                        $('label').prop('readonly', 'true')
-                        $('textarea').prop('readonly', 'true')
-                    {% endif %}
-                {% endif %}
-
-                $(document).on("change", ".doc", function (e) {
-                    var files = !!this.files ? this.files : [];
-                    if (!files.length || !window.FileReader) return;
-                    var fileExtension = ['pdf'];
-                    if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
-                        alert("Only formats are allowed : " + fileExtension.join(', '));
-                        $(this).val('');
-                        return false;
-                    }
-                });
 
 
                 $(".aggre_term").click(function () {
@@ -85,139 +60,8 @@
                     }
                 });
 
-                {% comment %}$(document).on("click", ".remove_doc", function (e) {
-                    {#alert($(this).prev().attr('id'))#}
-                    var id = $(this).prev().attr('id');
-                    $('#'+id).val('');
-                });{% endcomment %}
-
-                $(document).on("click", ".remove_doc", function (e) {
-                    var parent_id = $(this).closest('div').attr('id');
-                    $('#' + parent_id + ' .emp').val('');
-                });
 
 
-                $(document).on("click", ".file", function (e) {
-                    $(this).parent('.form-control').next('.file_type').trigger('click');
-                });
-
-
-                $('.file_type').change(function (evt) {
-
-                    var files = !!this.files ? this.files : [];
-                    if (!files.length || !window.FileReader) return;
-                    var fileExtension = ['pdf'];
-                    if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
-                        alert("Only formats are allowed : " + fileExtension.join(', '));
-                        $(this).val('');
-                        return false;
-                    }
-
-                    var file_name = $(this).val().split('\\')[2];
-                    $(this).prev().children().children('.file_value').val(file_name);
-                });
-
-
-                $(document).on("change", "#university", function (s) {
-                    if (this.options[this.selectedIndex].id == 'add_university') {
-                        $('#id_accept_student_model').modal();
-                    } else {
-                        var university_id = $(this).val()
-                        var url = '/student/get_degrees_from_universities/';
-                        get_degrees_from_universities(url, university_id)
-
-                    }
-                });
-
-
-                $(document).on("click", "#degree_applied", function (e) {
-                    var degree_applied_id = $(this).val();
-                    var university_id = $('#university').val();
-                    var url = '/student/get_courses_from_degrees/';
-                    get_courses_from_degrees(url, university_id, degree_applied_id)
-                })
-
-
-                $('#cancel_model').click(function () {
-                    $('#university').val('')
-                })
-
-                $('#save_id').click(function () {
-                    $('.eng_emp').css('border-color', '');
-                    $('label').css('border-color', '');
-
-                    var flag_emp = false;
-                    $('.eng_emp').each(function () {
-                        if ($(this).val() == '') {
-                            if ($(this).hasClass('file_value')) {
-                                $(this).parents('label:eq(0)').css('border-color', 'red');
-                            } else {
-                                $(this).css('border-color', 'red');
-                            }
-                            flag_emp = true;
-                        }
-                    })
-
-                    if (flag_emp) {
-                        return false;
-                    } else {
-                        $('#id_form').submit();
-                    }
-
-                })
-
-
-                function get_degrees_from_universities(url, university_id) {
-                    $.ajax({
-                        type: 'POST',
-                        url: url,
-                        data: {
-                            university_id: university_id,
-                            csrfmiddlewaretoken: '{{ csrf_token }}',
-                        },
-                        success: function (data) {
-
-                            $('#degree_applied').empty();
-                            $('#degree_applied').append(
-                                '<option value="">Please select</option>');
-                            for (var i = 0; i < data.length; i++) {
-                                $('#degree_applied').append(
-                                    '<option value="' + data[i]['id'] + '">'
-                                    + data[i]['name'] + '</option>')
-                            }
-                        },
-                        error: function (xhr, msg, err) {
-                            alert(xhr.responseJSON.error);
-                        }
-                    });
-                }
-
-
-                function get_courses_from_degrees(url, university_id, degree_applied_id) {
-                    $.ajax({
-                        type: 'POST',
-                        url: url,
-                        data: {
-                            university_id: university_id,
-                            degree_applied_id: degree_applied_id,
-                            csrfmiddlewaretoken: '{{ csrf_token }}',
-                        },
-                        success: function (data) {
-
-                            $('#course_applied').empty();
-                            $('#course_applied').append(
-                                '<option value="">Please select</option>');
-                            for (var i = 0; i < data.length; i++) {
-                                $('#course_applied').append(
-                                    '<option value="' + data[i]['id'] + '">'
-                                    + data[i]['name'] + '</option>')
-                            }
-                        },
-                        error: function (xhr, msg, err) {
-                            alert(xhr.responseJSON.error);
-                        }
-                    });
-                }
 
 
                 $('#sample_1').dataTable().fnDestroy();
@@ -273,7 +117,7 @@
 
         <div class="portlet-body">
             <div class="form-body">
-                <form action="{% url 'student:save_update_applicant_scholarship_about_yourself_info' %}"
+                <form action="{% url 'student:submit_application' %}"
                       id="id_form"
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
@@ -315,8 +159,8 @@ incomplete application could result in the rejection of my application.
 
                             <div class="">
                                 <div class="col-md-8" style="margin-left: 10%;">
-                                    {% if scholarship_obj %}
-                                        <span style="color: red"><sup>*</sup></span>
+                                    {% if application_obj.is_submitted %}
+                                        <span style="color: red"></span>
                                         <input type="checkbox" checked class="aggre_term">
 
                                     {% else %}
@@ -359,29 +203,30 @@ incomplete application could result in the rejection of my application.
     <div id="id_accept_student_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{% url 'student:save_other_university' %}"
-                      id="form_sample_1"
-                      class="form-horizontal"
-                      method="POST" enctype="multipart/form-data">
+                <form action="{% url 'student:submit_application' %}"
+                        id="form_sample_1"
+                        class="form-horizontal"
+                        method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                        <h4 class="modal-title" style="color: #2a015e; text-align: center"><b>Add University</b></h4>
+                        <h4 class="modal-title" style="color: #2a015e; text-align: center"><b>Confirmation</b></h4>
                     </div>
                     <div class="modal-body">
-                        <p> Enter University Name: </p>
-                        <input type="text" name="other_university_name" class="form-control">
-                        <input hidden type="text" name="other_university_country"
-                               value="{{ application_obj.nationality.id }}">
+                        <p> Are you sure, you want to submit application? </p>
+                        <p> After submission you will not be able to modify the application. </p>
+                                                <input type="hidden" name="app_id" value="{{ application_obj.id }}">
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="cancel_model" data-dismiss="modal" class="btn dark btn-outline">
                             Cancel
                         </button>
-                        <button type="submit" id="submit_appplication" class="btn green">Add</button>
+                        <button type="button" id="submit_appplication" class="btn green">Confirm</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
 {% endblock %}

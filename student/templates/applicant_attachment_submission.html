@@ -416,16 +416,16 @@
                     <div class="row">
                             <div class="col-md-offset-3 col-md-9">
                                 <button type="button" class="btn blue" id="save" style="margin-left: 70%"
-                                        onclick="window.location='{% url "student:applicant_academic_english_qualification" %}'">
+                                        onclick="window.location='{% url "student:applicant_additional_information" %}'">
                                     Back
                                 </button>
 
                                 {% if user.get_application %}
-                                    {% if not user.get_application.is_submitted %}
+{#                                    {% if not user.get_application.is_submitted %}#}
                                         <button type="submit" class="btn green" id="save" style="">Save/Next
-                                            Application
+
                                         </button>
-                                    {% endif %}
+{#                                    {% endif %}#}
                                 {% endif %}
 
                             </div>

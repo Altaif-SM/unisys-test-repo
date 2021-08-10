@@ -33,13 +33,13 @@
 
             $(document).ready(function () {
 
-                {% if user.get_application %}
-                    {% if user.get_application.is_submitted %}
-                        $('input').prop('disabled', 'true')
-                        $('select').prop('disabled', 'true')
-                        $('label').prop('readonly', 'true')
-                    {% endif %}
-                {% endif %}
+{#                {% if user.get_application %}#}
+{#                    {% if user.get_application.is_submitted %}#}
+{#                        $('input').prop('disabled', 'true')#}
+{#                        $('select').prop('disabled', 'true')#}
+{#                        $('label').prop('readonly', 'true')#}
+{#                    {% endif %}#}
+{#                {% endif %}#}
 
 
                 {% if curriculum_recs %}
@@ -597,10 +597,10 @@
                                 </button>
 
                                 {% if application_obj %}
-                                    {% if not application_obj.is_submitted %}
+{#                                    {% if not application_obj.is_submitted %}#}
                                         <button type="button" class="btn green" id="save_form" style="">Save/Next
                                         </button>
-                                    {% endif %}
+{#                                    {% endif %}#}
                                 {% endif %}
 
                                 {% comment %}{% if application_obj %}
