@@ -53,8 +53,25 @@
                 });
 
                 $('.file_type').change(function (evt) {
+                    var extension = $(this).val().split('.').pop().toLowerCase();
+                    if ((extension == 'jpeg') || (extension == 'jpg'))
+                    {
+                        var files = !!this.files ? this.files : [];
+                        var maxSizeKB = 66; //Size in KB
+                        var maxSize = maxSizeKB * 1024; //File size is returned in Bytes
+                        if (files[0].size > maxSize) {
+                            alert('Maximum file size must be 66 KB')
+                            return false;
+                         }
+                        var file_name = $(this).val().split('\\')[2];
+                        $(this).prev().children().children('.file_value').val(file_name);
+
+                    }else{
+                        var file_name = $(this).val().split('\\')[2];
+                        $(this).prev().children().children('.file_value').val(file_name);
+                    }
+
                     /*
-                    var files = !!this.files ? this.files : [];
                     if (!files.length || !window.FileReader) return;
                     var fileExtension = ['pdf'];
                     if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
@@ -63,8 +80,7 @@
                         return false;
                     }
                     */
-                    var file_name = $(this).val().split('\\')[2];
-                    $(this).prev().children().children('.file_value').val(file_name);
+
                 });
 
 
@@ -127,7 +143,7 @@
                     <div class="form-body">
                     <div class="row">
                             <div class="">
-                                <label class="col-md-4 control-label">Personal Photo:<br><span style="color:red;font-size: 12px">(photo must be jpg and White background)</span><br><span style="color:red;font-size: 12px">(Maximum file height and width must be 280px*217px)<br><span style="color:red;font-size: 12px">(Maximum file size should be 66 KB.)</span></label>
+                                <label class="col-md-4 control-label">Personal Photo:<br><span style="color:red;font-size: 12px">(photo must be jpg and White background)</span><br><span style="color:red;font-size: 12px">(Maximum file height and width must be 280px*217px)<br><span style="color:red;font-size: 12px">(Maximum file size must be 66 KB.)</span></label>
                                 <div class="col-md-3" id="parent1">
                                     {% if attachment_obj.image %}
                                         <label class="form-control"
