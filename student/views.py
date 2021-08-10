@@ -2354,4 +2354,38 @@ def save_attachement_submission(request):
 
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
-    return redirect('/student/applicant_attachment_submission/')
+    return redirect('/student/applicant_declaration/')
+
+def applicant_declaration(request):
+    scholarship_recs = ScholarshipDetails.objects.all()
+    degree_obj = DegreeDetails.objects.all()
+    university_obj = UniversityDetails.objects.all()
+    course_recs = ProgramDetails.objects.all()
+    terms_condition_recs = UploadTermCondition.objects.all()
+
+    scholarship_obj = ''
+    about_obj = ''
+    application_obj = ''
+
+    try:
+         request.user.get_application
+    except Exception as e:
+        messages.warning(request, "Please fill the personal details first...")
+        return redirect('/student/applicant_personal_info/')
+
+    try:
+        if request.user.get_application:
+            # if not request.user.get_application.is_submitted:
+            application_obj = request.user.get_application
+
+            if ScholarshipSelectionDetails.objects.filter(applicant_id=request.user.get_application).exists():
+                scholarship_obj = ScholarshipSelectionDetails.objects.get(applicant_id=request.user.get_application)
+
+            if ApplicantAboutDetails.objects.filter(applicant_id=request.user.get_application).exists():
+                about_obj = ApplicantAboutDetails.objects.get(applicant_id=request.user.get_application)
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+    return render(request, 'applicant_declaration.html',
+                  {'scholarship_recs': scholarship_recs, 'scholarship_obj': scholarship_obj, 'about_obj': about_obj,
+                   'university_obj': university_obj, 'degree_obj': degree_obj, 'course_recs': course_recs,
+                   'application_obj': application_obj,'terms_condition_recs':terms_condition_recs})

@@ -168,7 +168,7 @@
                                         style="color:red;font-size: 12px">(photo must be jpg and White background)</span><br><span
                                         style="color:red;font-size: 12px">(Maximum file height and width must be 280px*217px)<br><span
                                         style="color:red;font-size: 12px">(Maximum file size must be 66 KB)</span></label>
-                                <div class="col-md-3" id="parent1">
+                                <div class="col-md-3" id="parent1" style="margin-top:20px;">
                                     {% if attachment_obj.image %}
                                         <label class="form-control"
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
@@ -400,16 +400,38 @@
 
                         <br>
 
-                        <div class="row">
-                            <div class="col-md-offset-4 col-md-7">
+{#                        <div class="row">#}
+{#                            <div class="col-md-offset-4 col-md-7">#}
+{#                                {% if user.get_application %}#}
+{#                                                                        {% if user.get_application.is_submitted %}#}
+{#                                    <button type="submit" class="btn green" id="save" style="">Submit</button>#}
+{#                                                                        <button type="submit" class="btn green" id="save" style="">Submit</button>#}
+{#                                                                        {% endif %}#}
+{#                                {% endif %}#}
+{#                            </div>#}
+{#                        </div>#}
+
+
+
+                    <div class="row">
+                            <div class="col-md-offset-3 col-md-9">
+                                <button type="button" class="btn blue" id="save" style="margin-left: 70%"
+                                        onclick="window.location='{% url "student:applicant_academic_english_qualification" %}'">
+                                    Back
+                                </button>
+
                                 {% if user.get_application %}
-                                    {#                                    {% if user.get_application.is_submitted %}#}
-                                    <button type="submit" class="btn green" id="save" style="">Submit</button>
-                                    {#                                    <button type="submit" class="btn green" id="save" style="">Submit</button>#}
-                                    {#                                    {% endif %}#}
+                                    {% if not user.get_application.is_submitted %}
+                                        <button type="submit" class="btn green" id="save" style="">Save/Next
+                                            Application
+                                        </button>
+                                    {% endif %}
                                 {% endif %}
+
                             </div>
                         </div>
+
+
                     </div>
                 </form>
             </div>
