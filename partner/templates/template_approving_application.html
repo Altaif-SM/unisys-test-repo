@@ -337,19 +337,19 @@
         <div class="portlet-body">
             <div class="form-body">
 {#                <div class="row col-md-offset-3">#}
-{#                    <form method="post" action="{% url 'partner:change_application_status' %}" id="form_submit">#}
-{#                        {% csrf_token %}#}
-{#                        <div class="col-md-4">#}
-{#                            <div class="">#}
-{#                                <input type="text" hidden id="check_ids" name="check_ids">#}
-{#                                <input type="text" hidden id="interview_type" name="interview_type">#}
-{##}
-{#                                <input type="text" hidden id="time" name="time">#}
-{#                                <input type="text" hidden id="date" name="date">#}
-{#                                <input type="text" hidden id="venue" name="venue">#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </form>#}
+                    <form method="post" action="{% url 'partner:change_application_status' %}" id="form_submit">
+                        {% csrf_token %}
+                        <div class="col-md-4">
+                            <div class="">
+                                <input type="text" hidden id="check_ids" name="check_ids">
+                                <input type="text" hidden id="interview_type" name="interview_type">
+
+                                <input type="text" hidden id="time" name="time">
+                                <input type="text" hidden id="date" name="date">
+                                <input type="text" hidden id="venue" name="venue">
+                            </div>
+                        </div>
+                    </form>
 {##}
 {#                    <form method="post" action="{% url 'partner:filter_application_status' %}">#}
 {#                        {% csrf_token %}#}
@@ -396,12 +396,12 @@
                                         <i class="fa fa-angle-down"></i>
                                     </a>
                                     <ul class="dropdown-menu pull-right" id="action">
-                                        <li><a class="status_change" id="First Interview"> First Interview</a></li>
-                                        <li><a class="status_change" id="First Interview attended">First Interview attended</a></li>
-                                        <li><a class="status_change" id="First Interview approval">First Interview approval</a></li>
-                                        <li><a class="status_change" id="Psychometric Test">Psychometric Test</a></li>
-                                        <li><a class="status_change" id="Second Interview attended">Second Interview attended</a></li>
-                                        <li><a class="status_change" id="Second Interview approval">Second Interview approval</a></li>
+                                        <li><a class="status_change" id="First Interview attended">Conditional Offer Letter</a></li>
+                                        <li><a class="status_change" id="First Interview"> Full Offer Letter</a></li>
+{#                                        <li><a class="status_change" id="First Interview approval">First Interview approval</a></li>#}
+{#                                        <li><a class="status_change" id="Psychometric Test">Psychometric Test</a></li>#}
+{#                                        <li><a class="status_change" id="Second Interview attended">Second Interview attended</a></li>#}
+{#                                        <li><a class="status_change" id="Second Interview approval">Second Interview approval</a></li>#}
 {#                                        <li><a href="javascript:;" class="action" id="Admin approval">Admin approval</a></li>#}
                                         <li><a class="status_change" id="Reject">Reject</a></li>
                                     </ul>
@@ -430,13 +430,13 @@
                                             </label>{% endcomment %}
                                         </th>
                                         <th>Student Name</th>
-                                        <th>1st</th>
-                                        <th>1st Interview</th>
-                                        <th>1st Interview Approval</th>
-                                        <th>Test</th>
-                                        <th>2nd Interview</th>
-                                        <th>2nd Interview approval</th>
-                                        <th>Admin</th>
+                                        <th>Conditional Offer Letter</th>
+                                        <th>Full Offer Letter</th>
+{#                                        <th>1st Interview Approval</th>#}
+{#                                        <th>Test</th>#}
+{#                                        <th>2nd Interview</th>#}
+{#                                        <th>2nd Interview approval</th>#}
+{#                                        <th>Admin</th>#}
                                     </tr>
                                     </thead>
 
@@ -485,61 +485,61 @@
                                             <input hidden id="id_first_attend_venue">{% endcomment %}
                                             </td>
 
-                                            <td>
-                                            <p hidden>{% if rec.first_interview_approval == True %}True{% else %}False{% endif %}</p>
-                                                <input class="app" type="checkbox" name="first_interview_approval"
-                                                       {% if rec.first_interview_approval == True %}checked{% endif %}
-                                                       id="id_first_interview_approval" disabled>
-                                            </td>
+{#                                            <td>#}
+{#                                            <p hidden>{% if rec.first_interview_approval == True %}True{% else %}False{% endif %}</p>#}
+{#                                                <input class="app" type="checkbox" name="first_interview_approval"#}
+{#                                                       {% if rec.first_interview_approval == True %}checked{% endif %}#}
+{#                                                       id="id_first_interview_approval" disabled>#}
+{#                                            </td>#}
 
-                                            <td>
-                                            <p hidden>{% if rec.psychometric_test == True %}True{% else %}False{% endif %}</p>
-                                                <input class="app" type="checkbox" name="id_test" id="id_test"
-                                                       {% if rec.psychometric_test == True %}checked{% endif %}
-                                                       disabled>
-                                            </td>
+{#                                            <td>#}
+{#                                            <p hidden>{% if rec.psychometric_test == True %}True{% else %}False{% endif %}</p>#}
+{#                                                <input class="app" type="checkbox" name="id_test" id="id_test"#}
+{#                                                       {% if rec.psychometric_test == True %}checked{% endif %}#}
+{#                                                       disabled>#}
+{#                                            </td>#}
 
-                                            <td>
-                                            <p hidden>{% if rec.second_interview_attend == True %}True{% else %}False{% endif %}</p>
-                                                <input class="app" type="checkbox"
-                                                       name="second_interview_attend"
-                                                       {% if rec.second_interview_attend == True %}checked{% endif %}
-                                                       id="id_second_interview_attend" disabled>
+{#                                            <td>#}
+{#                                            <p hidden>{% if rec.second_interview_attend == True %}True{% else %}False{% endif %}</p>#}
+{#                                                <input class="app" type="checkbox"#}
+{#                                                       name="second_interview_attend"#}
+{#                                                       {% if rec.second_interview_attend == True %}checked{% endif %}#}
+{#                                                       id="id_second_interview_attend" disabled>#}
+{##}
+{#                                                {% comment %}<input hidden id="id_second_attend_time">#}
+{#                                            <input hidden id="id_second_attend_date">#}
+{#                                            <input hidden id="id_second_attend_venue">{% endcomment %}#}
+{#                                            </td>#}
 
-                                                {% comment %}<input hidden id="id_second_attend_time">
-                                            <input hidden id="id_second_attend_date">
-                                            <input hidden id="id_second_attend_venue">{% endcomment %}
-                                            </td>
+{#                                            <td>#}
+{#                                            <p hidden>{% if rec.second_interview_approval == True %}True{% else %}False{% endif %}</p>#}
+{#                                                <input class="app" type="checkbox" name="second_interview_approval"#}
+{#                                                       {% if rec.second_interview_approval == True %}checked{% endif %}#}
+{#                                                       id="id_second_interview_approval" disabled>#}
+{#                                            </td>#}
 
-                                            <td>
-                                            <p hidden>{% if rec.second_interview_approval == True %}True{% else %}False{% endif %}</p>
-                                                <input class="app" type="checkbox" name="second_interview_approval"
-                                                       {% if rec.second_interview_approval == True %}checked{% endif %}
-                                                       id="id_second_interview_approval" disabled>
-                                            </td>
-
-                                            <td>
-                                            <p hidden>{% if rec.admin_approval == True %}True{% else %}False{% endif %}</p>
-                                                <input class="app class_admin" type="checkbox" name="admin"
-                                                       id="id_admin"
-                                                       {% if rec.admin_approval == True %}checked{% endif %}
-
-                                                        {% if not user.is_super_admin %} disabled {% else %} {% endif %}
-                                                       disabled>
-
-                                                {% comment %}{% if user.is_super_admin %}
-                                                {% if rec.admin_approval == True %}
-                                                    <input type="number" title="Enter Scholarship Fee"
-                                                           style="width: 50%" id="id_scholarship_fee"
-                                                           name="scholarship_fee" class="id_scholarship_fee"
-                                                           value="{{ rec.scholarship_fee }}">
-                                                {% else %}
-                                                    <input type="number" hidden title="Enter Scholarship Fee"
-                                                           style="width: 50%" id="id_scholarship_fee"
-                                                           name="scholarship_fee" class="id_scholarship_fee">
-                                                {% endif %}
-                                            {% endif %}{% endcomment %}
-                                            </td>
+{#                                            <td>#}
+{#                                            <p hidden>{% if rec.admin_approval == True %}True{% else %}False{% endif %}</p>#}
+{#                                                <input class="app class_admin" type="checkbox" name="admin"#}
+{#                                                       id="id_admin"#}
+{#                                                       {% if rec.admin_approval == True %}checked{% endif %}#}
+{##}
+{#                                                        {% if not user.is_super_admin %} disabled {% else %} {% endif %}#}
+{#                                                       disabled>#}
+{##}
+{#                                                {% comment %}{% if user.is_super_admin %}#}
+{#                                                {% if rec.admin_approval == True %}#}
+{#                                                    <input type="number" title="Enter Scholarship Fee"#}
+{#                                                           style="width: 50%" id="id_scholarship_fee"#}
+{#                                                           name="scholarship_fee" class="id_scholarship_fee"#}
+{#                                                           value="{{ rec.scholarship_fee }}">#}
+{#                                                {% else %}#}
+{#                                                    <input type="number" hidden title="Enter Scholarship Fee"#}
+{#                                                           style="width: 50%" id="id_scholarship_fee"#}
+{#                                                           name="scholarship_fee" class="id_scholarship_fee">#}
+{#                                                {% endif %}#}
+{#                                            {% endif %}{% endcomment %}#}
+{#                                            </td>#}
                                         </tr>
                                     {% endfor %}
                                     </tbody>

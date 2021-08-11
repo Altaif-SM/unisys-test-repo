@@ -1421,7 +1421,7 @@ def submit_application(request):
 
 
 
-        ApplicationDetails.objects.filter(application_id=request.user.get_application_id).update(is_submitted=True)
+        ApplicationDetails.objects.filter(application_id=request.user.get_application_id).update(is_submitted=True,is_online_admission = True)
         ApplicationHistoryDetails.objects.create(applicant_id=request.user.get_application,
                                                  status='Application Submitted',
                                                  remark='Your application is submitted and your institution will be notified on further updates regarding your applications.')
@@ -2229,11 +2229,11 @@ def applicant_additional_information(request):
         messages.warning(request, "Please fill the personal details first...")
         return redirect('/student/applicant_personal_info/')
 
-    if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
-        application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
-        path = base_path(application_obj)
-        if SiblingDetails.objects.filter(applicant_id=application_obj).exists():
-            sibling_obj = SiblingDetails.objects.filter(applicant_id=application_obj)
+    if AdditionInformationDetails.objects.filter(application_id=request.user.get_application).exists():
+        application_obj = AdditionInformationDetails.objects.get(application_id=request.user.get_application)
+        # path = base_path(application_obj)
+        # if SiblingDetails.objects.filter(applicant_id=application_obj).exists():
+        #     sibling_obj = SiblingDetails.objects.filter(applicant_id=application_obj)
 
 
     return render(request, 'applicant_additional_info.html', {'country_recs': country_recs, 'application_obj': application_obj, 'path': path, 'sibling_obj_rec': sibling_obj, 'student_recs':student_recs, 'agent_recs':agent_recs})
@@ -2244,31 +2244,56 @@ def save_update_applicant_additional_info(request):
         try:
 
             if StudentDetails.objects.filter(user=request.user):
-                ApplicationDetails.objects.filter(application_id=request.user.get_application_id).update(
-                    ken_name=request.POST['ken_name'],
-                    ken_id=request.POST['ken_id'],
-                    ken_relationship=request.POST['ken_relationship'],
-                    ken_tel_no=request.POST['ken_tel_no'],
-                    ken_email=request.POST['ken_email'],
-                    ref_by_student_id=request.POST['student'] if request.POST['student'] else None,
-                    ref_by_agent_id=request.POST['agent'] if request.POST['agent'] else None,
-                    )
-                if request.POST['is_sponsored'] == 'Yes':
-                    ApplicationDetails.objects.filter(application_id=request.user.get_application_id).update(
-                        sponsore_organisation=request.POST['sponsore_organisation'],
-                        sponsore_address=request.POST['sponsore_address'],
-                        sponsore_email=request.POST['sponsore_email'],
-                        sponsore_contact=request.POST['sponsore_contact'],
-                        is_sponsored = True
-                    )
+                if AdditionInformationDetails.objects.filter(application_id = request.user.get_application).exists():
+                    AdditionInformationDetails.objects.filter(application_id = request.user.get_application).update(
+                        ken_name=request.POST['ken_name'],
+                        ken_id=request.POST['ken_id'],
+                        ken_relationship=request.POST['ken_relationship'],
+                        ken_tel_no=request.POST['ken_tel_no'],
+                        ken_email=request.POST['ken_email'],
+                        ref_by_student_id=request.POST['student'] if request.POST['student'] else None,
+                        ref_by_agent_id=request.POST['agent'] if request.POST['agent'] else None,
+                        )
+                    if request.POST['is_sponsored'] == 'Yes':
+                        AdditionInformationDetails.objects.filter(application_id=request.user.get_application).update(
+                            sponsore_organisation=request.POST['sponsore_organisation'],
+                            sponsore_address=request.POST['sponsore_address'],
+                            sponsore_email=request.POST['sponsore_email'],
+                            sponsore_contact=request.POST['sponsore_contact'],
+                            is_sponsored=True
+                        )
+                    else:
+                        AdditionInformationDetails.objects.filter(application_id=request.user.get_application).update(
+                            sponsore_organisation='',
+                            sponsore_address='',
+                            sponsore_email='',
+                            sponsore_contact='',
+                            is_sponsored=False
+                        )
                 else:
-                    ApplicationDetails.objects.filter(application_id=request.user.get_application_id).update(
-                        sponsore_organisation='',
-                        sponsore_address='',
-                        sponsore_email='',
-                        sponsore_contact='',
-                        is_sponsored = False
-                    )
+                    AdditionInformationDetails.objects.create(application_id=request.user.get_application,ken_name=request.POST['ken_name'],
+                        ken_id=request.POST['ken_id'],
+                        ken_relationship=request.POST['ken_relationship'],
+                        ken_tel_no=request.POST['ken_tel_no'],
+                        ken_email=request.POST['ken_email'],
+                        ref_by_student_id=request.POST['student'] if request.POST['student'] else None,
+                        ref_by_agent_id=request.POST['agent'] if request.POST['agent'] else None)
+                    if request.POST['is_sponsored'] == 'Yes':
+                        AdditionInformationDetails.objects.filter(application_id=request.user.get_application).update(
+                            sponsore_organisation=request.POST['sponsore_organisation'],
+                            sponsore_address=request.POST['sponsore_address'],
+                            sponsore_email=request.POST['sponsore_email'],
+                            sponsore_contact=request.POST['sponsore_contact'],
+                            is_sponsored=True
+                        )
+                    else:
+                        AdditionInformationDetails.objects.filter(application_id=request.user.get_application).update(
+                            sponsore_organisation='',
+                            sponsore_address='',
+                            sponsore_email='',
+                            sponsore_contact='',
+                            is_sponsored=False
+                        )
                 redirect_flag = True
             if redirect_flag:
                 messages.success(request, "Record saved")

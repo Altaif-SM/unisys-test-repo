@@ -38,9 +38,8 @@
 
                 $("#student_id").chosen();
                 $("#agent_id").chosen();
-
                 var is_sponsored = "{{ application_obj.is_sponsored }}";
-                if(is_sponsored === 'False'){
+                if(is_sponsored === 'False' || is_sponsored === ''){
                     $(".sponsored").prop("disabled", true);
                 }
 
@@ -388,9 +387,9 @@
                                     onclick="window.location='{% url "student:applicant_academic_english_qualification" %}'">Back
                             </button>
 
-                            {% if application_obj %}
+{#                            {% if application_obj.application_id %}#}
                                 <button type="submit" class="btn green" id="save">Save/Next</button>
-                            {% endif %}
+{#                            {% endif %}#}
                             {% comment %}
                                     <button type="button" class="btn blue" id="next"
                                             onclick="window.location='{% url "student:applicant_academic_english_qualification" %}'">

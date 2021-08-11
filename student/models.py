@@ -218,22 +218,9 @@ class ApplicationDetails(BaseModel):
     second_interview_venue = models.CharField(max_length=500, blank=True, null=True)
 
     personal_info_flag = models.BooleanField(default=True)
-    ref_by_student = models.ForeignKey(StudentDetails, blank=True, null=True, related_name='student_applicant_ref',
-                                on_delete=models.PROTECT)
-    ref_by_agent = models.ForeignKey(AgentDetails, blank=True, null=True,
-                                       related_name='agent_applicant_ref',
-                                       on_delete=models.PROTECT)
-    ken_name = models.CharField(max_length=255, blank=True, null=True)
-    ken_id = models.CharField(max_length=255, blank=True, null=True)
-    ken_relationship = models.CharField(max_length=255, blank=True, null=True)
-    ken_tel_no = models.CharField(max_length=255, blank=True, null=True)
-    ken_email = models.CharField(max_length=255, blank=True, null=True)
 
     is_sponsored = models.BooleanField(default=False)
-    sponsore_organisation = models.CharField(max_length=255, blank=True, null=True)
-    sponsore_address = models.CharField(max_length=255, blank=True, null=True)
-    sponsore_email = models.CharField(max_length=255, blank=True, null=True)
-    sponsore_contact = models.CharField(max_length=255, blank=True, null=True)
+    is_online_admission = models.BooleanField(default=False)
 
     # family_info_flag = models.BooleanField(default=False)
     # mother_sibling_info_flag = models.BooleanField(default=False)
@@ -718,4 +705,26 @@ class ApplicantAttachementDetails(BaseModel):
     english_test_result_document = models.FileField(upload_to='document/', null=True, blank=True)
     recommendation_letter = models.FileField(upload_to='document/', null=True, blank=True)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_attachement_rel',
+                                     on_delete=models.PROTECT)
+
+
+class AdditionInformationDetails(BaseModel):
+    ken_name = models.CharField(max_length=255, blank=True, null=True)
+    ken_id = models.CharField(max_length=255, blank=True, null=True)
+    ken_relationship = models.CharField(max_length=255, blank=True, null=True)
+    ken_tel_no = models.CharField(max_length=255, blank=True, null=True)
+    ken_email = models.CharField(max_length=255, blank=True, null=True)
+
+    is_sponsored = models.BooleanField(default=False)
+    sponsore_organisation = models.CharField(max_length=255, blank=True, null=True)
+    sponsore_address = models.CharField(max_length=255, blank=True, null=True)
+    sponsore_email = models.CharField(max_length=255, blank=True, null=True)
+    sponsore_contact = models.CharField(max_length=255, blank=True, null=True)
+
+    ref_by_student = models.ForeignKey(StudentDetails, blank=True, null=True, related_name='student_additional_info',
+                                       on_delete=models.PROTECT)
+    ref_by_agent = models.ForeignKey(AgentDetails, blank=True, null=True,
+                                     related_name='agent_additional_info',
+                                     on_delete=models.PROTECT)
+    application_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_addition_info',
                                      on_delete=models.PROTECT)

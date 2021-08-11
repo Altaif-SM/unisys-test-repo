@@ -266,7 +266,7 @@ def template_approving_application(request):
     # messages.success(request, "Records are.... ")
     try:
         if request.user.is_super_admin():
-            applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, year=get_current_year(request))
+            applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission = True,year=get_current_year(request))
         else:
             applicant_recs = ApplicationDetails.objects.filter(
                 nationality=request.user.partner_user_rel.get().address.country,
@@ -1013,18 +1013,18 @@ def change_application_status(request):
                     application_obj.first_interview_attend = True
                     application_obj.save()
 
-                    try:
-                        email_rec = EmailTemplates.objects.get(template_for='First Interview Attend',
-                                                               is_active=True)
-                        context = {'first_name': application_obj.first_name}
-                        send_email_with_template(application_obj, context, email_rec.subject, email_rec.email_body,
-                                                 request)
-                    except:
-                        subject = 'First Interview Attended'
-                        message = 'This mail is to notify that you have attended first interview. We will update you about the result soon.'
-
-                        send_email_to_applicant(request.user.email, application_obj.email, subject, message,
-                                                application_obj.first_name)
+                    # try:
+                    #     email_rec = EmailTemplates.objects.get(template_for='First Interview Attend',
+                    #                                            is_active=True)
+                    #     context = {'first_name': application_obj.first_name}
+                    #     send_email_with_template(application_obj, context, email_rec.subject, email_rec.email_body,
+                    #                              request)
+                    # except:
+                    #     subject = 'First Interview Attended'
+                    #     message = 'This mail is to notify that you have attended first interview. We will update you about the result soon.'
+                    #
+                    #     send_email_to_applicant(request.user.email, application_obj.email, subject, message,
+                    #                             application_obj.first_name)
 
                     application_notification(application_obj.id, 'You have attended first interview.')
 

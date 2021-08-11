@@ -196,7 +196,7 @@ class User(AbstractUser):
                 form_vals[
                     'english_qualification'] = applicaton_obj.english_applicant_rel.filter()[0].english_qualification if applicaton_obj.english_applicant_rel.all() else False
                 form_vals[
-                    'scholarship_selection'] = True if applicaton_obj.ken_name else False
+                    'scholarship_selection'] = True if applicaton_obj.applicant_addition_info.all() else False
                 form_vals['attachment'] = True if applicaton_obj.applicant_attachement_rel.all() else False
                 form_vals['declaration'] = True if applicaton_obj.is_submitted else False
                 form_vals['my_application'] = applicaton_obj.is_submitted if applicaton_obj.is_submitted else False
