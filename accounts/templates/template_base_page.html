@@ -646,45 +646,45 @@ License: You must have a valid license purchased only from themeforest(the above
 
 
 
-                           {% if 'student.can_view_student_agreements' in perms %}
-                        <li class="nav-item " id="acd_qli" {% if user.agreements_switch == False %} style=" pointer-events:none;opacity:0.6;background-color: grey" disabled {% endif %}>
-                            <a href="{% url 'student:applicant_agreement_submission' %}"
-                               class="nav-link nav-toggle">
-                                <i class="glyphicon glyphicon-ok"></i>
-                                <span class="title">Agreement Submission</span>
-                                {% if user.get_student_application.agreement %}
-                                    <span class="title glyphicon glyphicon-ok"
-                                          style="color: #41bc2c;font-size: 16px"></span>{% else %}
-                                    <span class="title glyphicon glyphicon-exclamation-sign"
-                                          style="color: #dc302b; font-size: 16px"></span>{% endif %}
-                                <span class="selected"></span>
+{#                           {% if 'student.can_view_student_agreements' in perms %}#}
+{#                        <li class="nav-item " id="acd_qli" {% if user.agreements_switch == False %} style=" pointer-events:none;opacity:0.6;background-color: grey" disabled {% endif %}>#}
+{#                            <a href="{% url 'student:applicant_agreement_submission' %}"#}
+{#                               class="nav-link nav-toggle">#}
+{#                                <i class="glyphicon glyphicon-ok"></i>#}
+{#                                <span class="title">Agreement Submission</span>#}
+{#                                {% if user.get_student_application.agreement %}#}
+{#                                    <span class="title glyphicon glyphicon-ok"#}
+{#                                          style="color: #41bc2c;font-size: 16px"></span>{% else %}#}
+{#                                    <span class="title glyphicon glyphicon-exclamation-sign"#}
+{#                                          style="color: #dc302b; font-size: 16px"></span>{% endif %}#}
+{#                                <span class="selected"></span>#}
+{##}
+{#                            </a>#}
+{#                        </li>#}
+{#                    {% endif %}#}
 
-                            </a>
-                        </li>
-                    {% endif %}
-
-                            {% if 'student.can_view_student_development_program' in perms %}
-                        <li class="nav-item " id="acd_qli" {% if user.program_switch == False %} style=" pointer-events:none;opacity:0.6;background-color: grey" disabled {% endif %}>
-                            <a href="{% url 'student:applicant_program_certificate_submission' %}"
-                               class="nav-link nav-toggle">
-                                <i class="glyphicon glyphicon-certificate"></i>
-                                <span class="title">Program Certificate</span>
-                                <span class="selected"></span>
-                            </a>
-                        </li>
-                    {% endif %}
+{#                            {% if 'student.can_view_student_development_program' in perms %}#}
+{#                        <li class="nav-item " id="acd_qli" {% if user.program_switch == False %} style=" pointer-events:none;opacity:0.6;background-color: grey" disabled {% endif %}>#}
+{#                            <a href="{% url 'student:applicant_program_certificate_submission' %}"#}
+{#                               class="nav-link nav-toggle">#}
+{#                                <i class="glyphicon glyphicon-certificate"></i>#}
+{#                                <span class="title">Program Certificate</span>#}
+{#                                <span class="selected"></span>#}
+{#                            </a>#}
+{#                        </li>#}
+{#                    {% endif %}#}
 
 
-                     {% if 'student.can_view_student_academic_progress' in perms %}
-                        <li class="nav-item " id="acd_qli" {% if user.semester_switch == False %} style=" pointer-events:none;opacity:0.6;" disabled {% endif %}>
-                            <a href="{% url 'student:applicant_academic_progress' %}"
-                               class="nav-link nav-toggle">
-                                <i class="glyphicon glyphicon-align-left"></i>
-                                <span class="title">Academic Progress</span>
-                                <span class="selected"></span>
-                            </a>
-                        </li>
-                    {% endif %}
+{#                     {% if 'student.can_view_student_academic_progress' in perms %}#}
+{#                        <li class="nav-item " id="acd_qli" {% if user.semester_switch == False %} style=" pointer-events:none;opacity:0.6;" disabled {% endif %}>#}
+{#                            <a href="{% url 'student:applicant_academic_progress' %}"#}
+{#                               class="nav-link nav-toggle">#}
+{#                                <i class="glyphicon glyphicon-align-left"></i>#}
+{#                                <span class="title">Academic Progress</span>#}
+{#                                <span class="selected"></span>#}
+{#                            </a>#}
+{#                        </li>#}
+{#                    {% endif %}#}
 
 
                             {% if 'student.can_view_student_application_progress_history' in perms %}
