@@ -100,6 +100,7 @@
                         style="color: #0c203a">{{ username|title }}</span>. <br><br>To proceed with the application, please complete the sections on the left side of the screen. Good luck!</b></h3>
             </div>
         </div>
+        <br><br>
 
 {#        {% if application %}#}
 {#            <div class="portlet-body">#}
@@ -140,67 +141,67 @@
 {#            </div>#}
 {#        {% endif %}#}
 
-        <div class="form-body">
-            <form id="form_sample_1" {% if application %}
-                  action="{% url 'partner:application_all_details_pdf' application.id %}" {% endif %}
-                  class="form-horizontal" target="_blank" method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-
-                <br>
-                <hr>
-                <div class="portlet-title">
-                    <div class="caption">
-                        <i class="icon-settings font-red"></i>
-                        <span class="caption-subject font-red sbold uppercase"> Application Progress History</span>
+{#        <div class="form-body">#}
+{#            <form id="form_sample_1" {% if application %}#}
+{#                  action="{% url 'partner:application_all_details_pdf' application.id %}" {% endif %}#}
+{#                  class="form-horizontal" target="_blank" method="POST" enctype="multipart/form-data">#}
+{#                {% csrf_token %}#}
+{##}
+{#                <br>#}
+{#                <hr>#}
+{#                <div class="portlet-title">#}
+{#                    <div class="caption">#}
+{#                        <i class="icon-settings font-red"></i>#}
+{#                        <span class="caption-subject font-red sbold uppercase"> Application Progress History</span>#}
 {#                        {% if application %}#}
 {#                            <span style="margin-left: 10%">#}
 {#                                <button type="submit" id="button_pdf_id" class="btn green">PDF</button>#}
 {#                            </span>#}
 {#                        {% endif %}#}
-
-                        {% if application_id %}<span class="btn red btn" style="margin-left: 70%"
-                                                     onclick="window.location='{% url "student:delete_application" application_id %}'">Delete Application</span>
-                        {% endif %}
-                    </div>
-                </div>
-                <hr>
-                <div class="row">
-                    <input hidden id="data_value" name="data_value">
-                    <div class="">
-                        <table class="table table-striped table-hover table-bordered" id="sample_1">
-                            <thead>
-                            <tr>
-                                <th style="display: none"></th>
-                                <th>Date</th>
-                                <th>Status</th>
-                                <th>Remark</th>
-                            </tr>
-                            </thead>
-
-                            <tbody id="tbody">
-                            {% for rec in application_history_obj %}
-                                <tr id="item{{ forloop.counter }}" class="item">
-                                    <td style="display: none"><input id="application_id" class="application_id"
-                                                                     value="{{ rec.id }}"></td>
-
-                                    <td>
-                                        <text>{{ rec.last_updated|date:"d-m-Y" }}</text>
-                                    </td>
-
-                                    <td>
-                                        <text>{{ rec.status }}</text>
-                                    </td>
-
-                                    <td>
-                                        <text>{{ rec.remark }}</text>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </form>
-        </div>
+{##}
+{#                        {% if application_id %}<span class="btn red btn" style="margin-left: 70%"#}
+{#                                                     onclick="window.location='{% url "student:delete_application" application_id %}'">Delete Application</span>#}
+{#                        {% endif %}#}
+{#                    </div>#}
+{#                </div>#}
+{#                <hr>#}
+{#                <div class="row">#}
+{#                    <input hidden id="data_value" name="data_value">#}
+{#                    <div class="">#}
+{#                        <table class="table table-striped table-hover table-bordered" id="sample_1">#}
+{#                            <thead>#}
+{#                            <tr>#}
+{#                                <th style="display: none"></th>#}
+{#                                <th>Date</th>#}
+{#                                <th>Status</th>#}
+{#                                <th>Remark</th>#}
+{#                            </tr>#}
+{#                            </thead>#}
+{##}
+{#                            <tbody id="tbody">#}
+{#                            {% for rec in application_history_obj %}#}
+{#                                <tr id="item{{ forloop.counter }}" class="item">#}
+{#                                    <td style="display: none"><input id="application_id" class="application_id"#}
+{#                                                                     value="{{ rec.id }}"></td>#}
+{##}
+{#                                    <td>#}
+{#                                        <text>{{ rec.last_updated|date:"d-m-Y" }}</text>#}
+{#                                    </td>#}
+{##}
+{#                                    <td>#}
+{#                                        <text>{{ rec.status }}</text>#}
+{#                                    </td>#}
+{##}
+{#                                    <td>#}
+{#                                        <text>{{ rec.remark }}</text>#}
+{#                                    </td>#}
+{#                                </tr>#}
+{#                            {% endfor %}#}
+{#                            </tbody>#}
+{#                        </table>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </form>#}
+{#        </div>#}
     </div>
 {% endblock %}

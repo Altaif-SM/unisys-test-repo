@@ -645,11 +645,9 @@ License: You must have a valid license purchased only from themeforest(the above
                                class="nav-link nav-toggle">
                                 <i class="glyphicon glyphicon-check"></i>
                                 <span class="title">My Application</span>
-                                {% if user.get_student_application.my_application %}
-                                    <span class="title glyphicon glyphicon-ok"
-                                          style="color: #41bc2c;font-size: 16px"></span>{% else %}
-                                    <span class="title glyphicon glyphicon-exclamation-sign"
-                                          style="color: #dc302b; font-size: 16px"></span>{% endif %}
+
+
+                                    </span>
                                 <span class="selected"></span>
                             </a>
                         </li>
@@ -698,16 +696,16 @@ License: You must have a valid license purchased only from themeforest(the above
 {#                    {% endif %}#}
 
 
-                            {% if 'student.can_view_student_application_progress_history' in perms %}
-                        <li class="nav-item " id="acd_qli">
-                            <a href="{% url 'student:applicant_progress_history' %}"
-                               class="nav-link nav-toggle">
-                                <i class="glyphicon glyphicon-list-alt"></i>
-                                <span class="title">Application Progress History</span>
-                                <span class="selected"></span>
-                            </a>
-                        </li>
-                    {% endif %}
+{#                            {% if 'student.can_view_student_application_progress_history' in perms %}#}
+{#                        <li class="nav-item " id="acd_qli">#}
+{#                            <a href="{% url 'student:applicant_progress_history' %}"#}
+{#                               class="nav-link nav-toggle">#}
+{#                                <i class="glyphicon glyphicon-list-alt"></i>#}
+{#                                <span class="title">Application Progress History</span>#}
+{#                                <span class="selected"></span>#}
+{#                            </a>#}
+{#                        </li>#}
+{#                    {% endif %}#}
 
                            {% if 'partner.can_view_applicant_details' in perms %}
                         <li class="nav-item " id="acd_qli">
@@ -1101,6 +1099,32 @@ License: You must have a valid license purchased only from themeforest(the above
                         <!-- END SIDEBAR MENU -->
                     </div>  <!-- END tabpane -->
 
+                <div class="tab-pane " id="application_progress">
+                        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
+                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+
+
+
+
+
+
+ {% if 'student.can_view_student_application_progress_history' in perms %}
+                        <li class="nav-item " id="acd_qli">
+                            <a href="{% url 'student:applicant_progress_history' %}"
+                               class="nav-link nav-toggle">
+                                <i class="glyphicon glyphicon-list-alt"></i>
+                                <span class="title">Application Progress History</span>
+                                <span class="selected"></span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+
+
+                        </ul>
+                        <!-- END SIDEBAR MENU -->
+                    </div>  <!-- END tabpane -->
+
 
 
 
@@ -1126,6 +1150,9 @@ License: You must have a valid license purchased only from themeforest(the above
                         <li id="app_anch"><a href="#c" data-toggle="tab">Application Management</a></li>
                         {% endif %}
 
+                        {% if user.is_student %}
+                        <li id="app_prog"><a href="#application_progress" data-toggle="tab">Application Progress History</a></li>
+                        {% endif %}
 
                         {% if not user.is_student %}
                         <li id="acad_app"><a href="#d" data-toggle="tab">Academic</a></li>
@@ -1267,15 +1294,7 @@ License: You must have a valid license purchased only from themeforest(the above
 {#        var element = document.getElementById("setting_anch");#}
 {#        element.classList.add("active");#}
 {##}
-        {% if user.is_student %}
 
-        var element = document.getElementById("c");
-        element.classList.add("active");
-
-        var element = document.getElementById("app_anch");
-        element.classList.add("active");
-
-    {% endif %}
 
     var base_url = window.location.href;
     if (base_url == 'http://namafund.namafoundation.org/masters/template_year_master/') {
@@ -1866,6 +1885,39 @@ License: You must have a valid license purchased only from themeforest(the above
         element.classList.add("active");
     }
     {% endif %}
+
+{# {% if user.is_student %}#}
+{##}
+{#        var element = document.getElementById("c");#}
+{#        element.classList.add("active");#}
+{##}
+{#        var element = document.getElementById("app_anch");#}
+{#        element.classList.add("active");#}
+{##}
+{#    {% endif %}#}
+
+{% if request.resolver_match.url_name == 'student_home' or request.resolver_match.url_name == 'applicant_personal_info' or request.resolver_match.url_name == 'applicant_academic_english_qualification' or request.resolver_match.url_name == 'applicant_curriculum_experience_info' or request.resolver_match.url_name == 'applicant_additional_information' or request.resolver_match.url_name == 'applicant_attachment_submission'  or request.resolver_match.url_name == 'applicant_declaration' or request.resolver_match.url_name == 'my_application'    %}
+    {
+       var element = document.getElementById("c");
+        element.classList.add("active");
+
+        var element = document.getElementById("app_anch");
+        element.classList.add("active");
+    }
+    {% endif %}
+
+
+
+{% if request.resolver_match.url_name == 'applicant_progress_history' %}
+    {
+       var element = document.getElementById("application_progress");
+        element.classList.add("active");
+
+        var element = document.getElementById("app_prog");
+        element.classList.add("active");
+    }
+    {% endif %}
+
 
 
 
