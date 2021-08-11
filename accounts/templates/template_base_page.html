@@ -354,6 +354,17 @@ License: You must have a valid license purchased only from themeforest(the above
 
                             </li>
                         {% endif %}
+
+                    {% if user.is_student %}
+                            <li class="nav-item " id="dashboard">
+                                <a href="/student/student_home/" class="nav-link nav-toggle">
+                                    <i class="glyphicon glyphicon-stats"></i>
+                                    <span class="title">Dashboard</span>
+                                    <span class="selected"></span>
+                                </a>
+
+                            </li>
+                        {% endif %}
                     </ul>
 
 
@@ -1114,6 +1125,8 @@ License: You must have a valid license purchased only from themeforest(the above
                         {% else %}
                         <li id="app_anch"><a href="#c" data-toggle="tab">Application Management</a></li>
                         {% endif %}
+
+
                         {% if not user.is_student %}
                         <li id="acad_app"><a href="#d" data-toggle="tab">Academic</a></li>
                         {% endif %}
