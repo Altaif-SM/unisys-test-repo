@@ -336,61 +336,61 @@
 
         <div class="portlet-body">
             <div class="form-body">
-                <div class="row col-md-offset-3">
-                    <form method="post" action="{% url 'partner:change_application_status' %}" id="form_submit">
-                        {% csrf_token %}
-                        <div class="col-md-4">
-                            <div class="">
-                                <input type="text" hidden id="check_ids" name="check_ids">
-                                <input type="text" hidden id="interview_type" name="interview_type">
-
-                                <input type="text" hidden id="time" name="time">
-                                <input type="text" hidden id="date" name="date">
-                                <input type="text" hidden id="venue" name="venue">
-                            </div>
-                        </div>
-                    </form>
-
-                    <form method="post" action="{% url 'partner:filter_application_status' %}">
-                        {% csrf_token %}
-                        <div class="col-md-4">
-                            <div class="">
-                                <select autocomplete="off" class="form-control" data-live-search="true"
-                                        id="application_status" name="application_status" required="required">
-                                    {% if application_status %}
-                                        <option style="display: none" value="{{ application_status }}"
-                                                selected="selected">{{ application_status }}</option>
-                                    {% else %}
-                                        <option value="" style="display: none" selected="selected">Please Select
-                                        </option>
-                                    {% endif %}
-
-                                    <option value="All">All</option>
-                                    <option value="First Interview">First Interview</option>
-                                    <option value="First Interview attended">First Interview attended</option>
-                                    <option value="First Interview approval">First Interview approval</option>
-                                    <option value="Psychometric Test">Psychometric Test</option>
-                                    <option value="Second Interview attended">Second Interview attended</option>
-                                    <option value="Second Interview approval">Second Interview approval</option>
-                                    <option value="Admin approval">Admin approval</option>
-                                    <option value="Rejected">Rejected</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2">
-                            <button type="submit" class="btn blue btn-block" id="go">Filter
-                            </button>
-                        </div>
-                    </form>
-
-                </div>
+{#                <div class="row col-md-offset-3">#}
+{#                    <form method="post" action="{% url 'partner:change_application_status' %}" id="form_submit">#}
+{#                        {% csrf_token %}#}
+{#                        <div class="col-md-4">#}
+{#                            <div class="">#}
+{#                                <input type="text" hidden id="check_ids" name="check_ids">#}
+{#                                <input type="text" hidden id="interview_type" name="interview_type">#}
+{##}
+{#                                <input type="text" hidden id="time" name="time">#}
+{#                                <input type="text" hidden id="date" name="date">#}
+{#                                <input type="text" hidden id="venue" name="venue">#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </form>#}
+{##}
+{#                    <form method="post" action="{% url 'partner:filter_application_status' %}">#}
+{#                        {% csrf_token %}#}
+{#                        <div class="col-md-4">#}
+{#                            <div class="">#}
+{#                                <select autocomplete="off" class="form-control" data-live-search="true"#}
+{#                                        id="application_status" name="application_status" required="required">#}
+{#                                    {% if application_status %}#}
+{#                                        <option style="display: none" value="{{ application_status }}"#}
+{#                                                selected="selected">{{ application_status }}</option>#}
+{#                                    {% else %}#}
+{#                                        <option value="" style="display: none" selected="selected">Please Select#}
+{#                                        </option>#}
+{#                                    {% endif %}#}
+{##}
+{#                                    <option value="All">All</option>#}
+{#                                    <option value="First Interview">First Interview</option>#}
+{#                                    <option value="First Interview attended">First Interview attended</option>#}
+{#                                    <option value="First Interview approval">First Interview approval</option>#}
+{#                                    <option value="Psychometric Test">Psychometric Test</option>#}
+{#                                    <option value="Second Interview attended">Second Interview attended</option>#}
+{#                                    <option value="Second Interview approval">Second Interview approval</option>#}
+{#                                    <option value="Admin approval">Admin approval</option>#}
+{#                                    <option value="Rejected">Rejected</option>#}
+{#                                </select>#}
+{#                            </div>#}
+{#                        </div>#}
+{##}
+{#                        <div class="col-md-2">#}
+{#                            <button type="submit" class="btn blue btn-block" id="go">Filter#}
+{#                            </button>#}
+{#                        </div>#}
+{#                    </form>#}
+{##}
+{#                </div>#}
                 <div class="form-body">
                     <form class="form-horizontal" method="POST" enctype="multipart/form-data" {% comment %}action="{% url 'partner:change_application_status' %}"{% endcomment %}>
                         {% csrf_token %}
 
                         <div class="row">
-                            <div class="actions" style="margin-left: 150px">
+                            <div class="actions" style="text-align: right;margin-top: -40px;">
                                 <div class="btn-group">
                                     <a class="btn green-haze btn-outline btn-circle btn-sm" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"> Actions
                                         <i class="fa fa-angle-down"></i>

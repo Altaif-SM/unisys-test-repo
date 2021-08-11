@@ -1918,7 +1918,7 @@ License: You must have a valid license purchased only from themeforest(the above
     }
     {% endif %}
 
-{% if request.resolver_match.url_name == 'home' %}
+{% if request.resolver_match.url_name == 'home' or request.resolver_match.url_name == 'template_approving_application' %}
     {
        var element = document.getElementById("c");
         element.classList.add("active");
