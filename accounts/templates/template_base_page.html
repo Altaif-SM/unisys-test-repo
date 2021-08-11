@@ -136,14 +136,14 @@ License: You must have a valid license purchased only from themeforest(the above
                                 {% if user.get_application %}
                                     <img alt="" class="img-circle"
                                          src="{{ user.get_application.report_path }}{{ user.get_application.image }}"/>
-                                    <span class="username username-hide-on-mobile"> {{ user.get_application.first_name }} {{ user.get_application.last_name }} </span>
+                                    <span class="username username-hide-on-mobile"> {{ user.get_application.first_name|default_if_none:"" }} {{ user.get_application.last_name|default_if_none:"" }} </span>
                                     -<b><span
                                         class="username username-hide-on-mobile"> {{ user.get_application_id }}</span></b>
                                 {% endif %}
                             {% else %}
                                 {#                                <img alt="" class="img-circle" src="../../media/{{ user.get_application.image }}"/>#}
                                 <b><span
-                                        class="username username-hide-on-mobile">{{ user.accountant_type }}-{{ user.first_name }} {{ user.last_name }} </span></b>
+                                        class="username username-hide-on-mobile">{{ user.accountant_type }}-{{ user.first_name|default_if_none:"" }} {{ user.last_name|default_if_none:"" }} </span></b>
                                 {#                                <br>#}
                                 {#                                <span class="username username-hide-on-mobile"> {{ user.get_application_id }}#}
                                 </span>
@@ -756,27 +756,27 @@ License: You must have a valid license purchased only from themeforest(the above
 
 
 
-                           {% if 'partner.can_view_psychometric_test_report' in perms %}
-                        <li class="nav-item " id="acd_qli">
-                            <a href="{% url 'partner:template_psychometric_test_report' %}"
-                               class="nav-link nav-toggle">
-                                <i class="glyphicon glyphicon-list-alt"></i>
-                                <span class="title">Psychometric Test Report</span>
-                                <span class="selected"></span>
-                            </a>
-                        </li>
-                    {% endif %}
+{#                           {% if 'partner.can_view_psychometric_test_report' in perms %}#}
+{#                        <li class="nav-item " id="acd_qli">#}
+{#                            <a href="{% url 'partner:template_psychometric_test_report' %}"#}
+{#                               class="nav-link nav-toggle">#}
+{#                                <i class="glyphicon glyphicon-list-alt"></i>#}
+{#                                <span class="title">Psychometric Test Report</span>#}
+{#                                <span class="selected"></span>#}
+{#                            </a>#}
+{#                        </li>#}
+{#                    {% endif %}#}
 
-                            {% if 'partner.can_view_student_agreement' in perms %}
-                        <li class="nav-item " id="acd_qli">
-                            <a href="{% url 'partner:template_student_agreement' %}"
-                               class="nav-link nav-toggle">
-                                <i class="glyphicon glyphicon-list-alt"></i>
-                                <span class="title">Agreements</span>
-                                <span class="selected"></span>
-                            </a>
-                        </li>
-                    {% endif %}
+{#                            {% if 'partner.can_view_student_agreement' in perms %}#}
+{#                        <li class="nav-item " id="acd_qli">#}
+{#                            <a href="{% url 'partner:template_student_agreement' %}"#}
+{#                               class="nav-link nav-toggle">#}
+{#                                <i class="glyphicon glyphicon-list-alt"></i>#}
+{#                                <span class="title">Agreements</span>#}
+{#                                <span class="selected"></span>#}
+{#                            </a>#}
+{#                        </li>#}
+{#                    {% endif %}#}
 
 
 
@@ -899,27 +899,27 @@ License: You must have a valid license purchased only from themeforest(the above
                         </li>
                     {% endif %}
 
-                           {% if user.is_super_admin  %}
-                        <li class="nav-item " id="acd_qli">
-                            <a href="{% url 'student:import_applicant_records_tile' %}"
-                               class="nav-link nav-toggle">
-                                <i class="glyphicon glyphicon-list-alt"></i>
-                                <span class="title">Import Applicant Records</span>
-                                <span class="selected"></span>
-                            </a>
-                        </li>
-                     {% endif %}
-
-                            {% if user.is_super_admin  %}
-                        <li class="nav-item " id="acd_qli">
-                            <a href="{% url 'student:export_templates' %}"
-                               class="nav-link nav-toggle">
-                                <i class="glyphicon glyphicon-list-alt"></i>
-                                <span class="title">Export Templates</span>
-                                <span class="selected"></span>
-                            </a>
-                        </li>
-                     {% endif %}
+{#                           {% if user.is_super_admin  %}#}
+{#                        <li class="nav-item " id="acd_qli">#}
+{#                            <a href="{% url 'student:import_applicant_records_tile' %}"#}
+{#                               class="nav-link nav-toggle">#}
+{#                                <i class="glyphicon glyphicon-list-alt"></i>#}
+{#                                <span class="title">Import Applicant Records</span>#}
+{#                                <span class="selected"></span>#}
+{#                            </a>#}
+{#                        </li>#}
+{#                     {% endif %}#}
+{##}
+{#                            {% if user.is_super_admin  %}#}
+{#                        <li class="nav-item " id="acd_qli">#}
+{#                            <a href="{% url 'student:export_templates' %}"#}
+{#                               class="nav-link nav-toggle">#}
+{#                                <i class="glyphicon glyphicon-list-alt"></i>#}
+{#                                <span class="title">Export Templates</span>#}
+{#                                <span class="selected"></span>#}
+{#                            </a>#}
+{#                        </li>#}
+{#                     {% endif %}#}
 
 
                         </ul>
@@ -1141,9 +1141,9 @@ License: You must have a valid license purchased only from themeforest(the above
                 <div class="tabs-left">
                     <ul class="nav nav-tabs menu" style="border-bottom: none">
                         {#<li class="active"><a href="#a" data-toggle="tab">Dashboard</a></li>#}
-                        {% if not user.is_student %}
-                        <li id="setting_anch" ><a href="#b" data-toggle="tab">Settings</a></li>
-                        {% endif %}
+{#                        {% if not user.is_student %}#}
+{#                        <li id="setting_anch" ><a href="#b" data-toggle="tab">Settings</a></li>#}
+{#                        {% endif %}#}
                         {% if user.is_student %}
                         <li id="app_anch"><a href="#c" data-toggle="tab">Application Management</a></li>
                         {% else %}
@@ -1154,15 +1154,15 @@ License: You must have a valid license purchased only from themeforest(the above
                         <li id="app_prog"><a href="#application_progress" data-toggle="tab">Application Progress History</a></li>
                         {% endif %}
 
-                        {% if not user.is_student %}
-                        <li id="acad_app"><a href="#d" data-toggle="tab">Academic</a></li>
-                        {% endif %}
-                        {% if not user.is_student %}
-                        <li id="account_anch"><a href="#e" data-toggle="tab">Accounting</a></li>
-                        {% endif %}
-                        {% if not user.is_student %}
-                        <li id="soft_skill"><a href="#f" data-toggle="tab">Softs Skill Programs</a></li>
-                        {% endif %}
+{#                        {% if not user.is_student %}#}
+{#                        <li id="acad_app"><a href="#d" data-toggle="tab">Academic</a></li>#}
+{#                        {% endif %}#}
+{#                        {% if not user.is_student %}#}
+{#                        <li id="account_anch"><a href="#e" data-toggle="tab">Accounting</a></li>#}
+{#                        {% endif %}#}
+{#                        {% if not user.is_student %}#}
+{#                        <li id="soft_skill"><a href="#f" data-toggle="tab">Softs Skill Programs</a></li>#}
+{#                        {% endif %}#}
                     </ul>
 
                 </div><!-- /tabbable -->
@@ -1918,6 +1918,15 @@ License: You must have a valid license purchased only from themeforest(the above
     }
     {% endif %}
 
+{% if request.resolver_match.url_name == 'home' %}
+    {
+       var element = document.getElementById("c");
+        element.classList.add("active");
+
+        var element = document.getElementById("app_anch");
+        element.classList.add("active");
+    }
+    {% endif %}
 
 
 
