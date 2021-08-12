@@ -211,11 +211,10 @@
                     }
 
                     var favorite = [];
-{#                    if ($(this).attr('id') == 'First Interview'){#}
-{#                        $('#id_accept_student_model').modal();#}
-{#                        $('#second_interview_time').val('');#}
-{#                        return false;#}
-{#                    }#}
+                    if ($(this).attr('id') == 'Incomplete'){
+                        $('#id_accept_student_model').modal();
+                        return false;
+                    }
 {##}
 {#                    if ($(this).attr('id') == 'Second Interview attended'){#}
 {#                        $('#id_accept_student_model').modal();#}
@@ -235,6 +234,7 @@
                             $("#check_ids").val(JSON.stringify(favorite));
                             $("#interview_type").val($(this).attr('id'));
 
+
                             $('#form_submit').submit()
                         }
 {#                    }#}
@@ -244,20 +244,6 @@
 
                 $('#first_interview_save').click(function () {
                     var favorite = []
-                    var emp_flag = false
-
-                    $('.emp').css('border-color', '');
-
-                        $('.emp').each(function () {
-                            if($(this).val()==''){
-                                emp_flag = true
-                                $(this).css('border-color', 'red');
-                            }
-                        })
-
-                        if(emp_flag){
-                            return false
-                        }
 
                         var checked = $('#example').find('input[name="check"]:checked').length;
                         if (!checked)
@@ -270,16 +256,10 @@
 
                             {#alert(JSON.stringify(favorite));#}
                             $("#check_ids").val(JSON.stringify(favorite));
-                            if($('#second_interview_time').val() !== ''){
-                                $("#interview_type").val('Second Interview attended');
-                            }
-                            else{
-                                $("#interview_type").val('First Interview');
-                            }
 
-                            $("#time").val($('#first_time').val());
-                            $("#venue").val($('#first_venue').val());
-                            $("#date").val($('#first_date').val());
+                            $("#interview_type").val('Incomplete');
+                            $("#description").val($('#incomplete_description').val());
+
 
                             $('#form_submit').submit()
                         }
@@ -344,9 +324,7 @@
                                 <input type="text" hidden id="check_ids" name="check_ids">
                                 <input type="text" hidden id="interview_type" name="interview_type">
 
-                                <input type="text" hidden id="time" name="time">
-                                <input type="text" hidden id="date" name="date">
-                                <input type="text" hidden id="venue" name="venue">
+                                <input type="text" hidden id="description" name="description">
                             </div>
                         </div>
                     </form>
@@ -398,6 +376,7 @@
                                     <ul class="dropdown-menu pull-right" id="action">
                                         <li><a class="status_change" id="First Interview">Conditional Offer Letter</a></li>
                                         <li><a class="status_change" id="First Interview attended"> Full Offer Letter</a></li>
+                                        <li><a class="status_change" id="Incomplete"> Incomplete</a></li>
 {#                                        <li><a class="status_change" id="First Interview approval">First Interview approval</a></li>#}
 {#                                        <li><a class="status_change" id="Psychometric Test">Psychometric Test</a></li>#}
 {#                                        <li><a class="status_change" id="Second Interview attended">Second Interview attended</a></li>#}
@@ -432,6 +411,7 @@
                                         <th>Student Name</th>
                                         <th>Conditional Offer Letter</th>
                                         <th>Full Offer Letter</th>
+                                        <th>Incomplete</th>
 {#                                        <th>1st Interview Approval</th>#}
 {#                                        <th>Test</th>#}
 {#                                        <th>2nd Interview</th>#}
@@ -470,6 +450,9 @@
 {#                                                       {% if rec.first_interview == True %}checked{% endif %} disabled>#}
                                             {% if rec.first_interview == True %}
                                                 <i class="fa fa-check" aria-hidden="true" style="color: green"></i>
+                                            {% else %}
+                                                <i class="fa fa-times" aria-hidden="true" style="color: red"></i>
+
                                             {% endif %}
 
                                                 {% comment %}<input hidden id="id_time">
@@ -486,6 +469,28 @@
 {#                                                       id="id_first_interview_attend" disabled>#}
                                              {% if rec.first_interview_attend == True %}
                                                 <i class="fa fa-check" style="color: green" aria-hidden="true"></i>
+                                             {% else %}
+                                                  <i class="fa fa-times" aria-hidden="true" style="color: red"></i>
+                                            {% endif %}
+
+
+                                                {% comment %}<input hidden id="id_first_attend_time">
+                                            <input hidden id="id_first_attend_date">
+                                            <input hidden id="id_first_attend_venue">{% endcomment %}
+                                            </td>
+
+                                         <td>
+                                            <p hidden>{% if rec.incomplete == True %}True{% else %}False{% endif %}</p>
+
+{#                                                <input class="app" type="checkbox"#}
+{#                                                       name="first_interview_attend"#}
+{#                                                       {% if rec.first_interview_attend == True %}checked{% endif %}#}
+{#                                                       id="id_first_interview_attend" disabled>#}
+                                             {% if rec.incomplete == True %}
+{#                                                <i class="fa fa-check" style="color: green" aria-hidden="true"></i>#}
+                                                 <i class="fa fa-exclamation-circle" aria-hidden="true" style="color: orange"></i>
+                                             {% else %}
+                                                  <i class="fa fa-times" aria-hidden="true" style="color: red"></i>
                                             {% endif %}
 
 
@@ -569,45 +574,27 @@
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal"
                                                 aria-hidden="true"></button>
-                                        <h4 class="modal-title">Interview Details</h4>
+                                        <h4 class="modal-title">Incomplete Details</h4>
                                     </div>
                                     <div class="modal-body">
-                                        <div class="row">
-                                            <div class="">
-                                                <label class="col-md-7 control-label">Please Enter The Interview
-                                                    Details.</label>
-                                            </div>
+{#                                        <div class="row">#}
+{#                                            <div class="">#}
+{#                                                <label class="col-md-7 control-label">Please Enter The Interview#}
+{#                                                    Details.</label>#}
+{#                                            </div>#}
                                             {#                                        <p> Please Enter The Interview Details. </p>#}
-                                        </div>
-                                        <br>
-                                        <br>
+{#                                        </div>#}
+{#                                        <br>#}
+{#                                        <br>#}
+
 
                                         <div class="row">
                                             <div class="">
-                                                <label class="col-md-2 control-label">Time:</label>
-                                                <div class="col-md-3">
-                                                    <input type="text" hidden id="second_interview_time"> <br> <br>
-                                                    <input type="time" class="emp" id="first_time"> <br> <br>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="">
-                                                <label class="col-md-2 control-label">Date:</label>
-                                                <div class="col-md-3">
-                                                    <input type="date" class="emp" id="first_date"> <br> <br>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="">
-                                                <label class="col-md-2 control-label">Venue:</label>
-                                                <div class="col-md-3">
-                                                    <textarea class="emp" id="first_venue"> </textarea>
+                                                <label class="col-md-2 control-label">Description:</label>
+{#                                                <div class="col-md-9">#}
+                                                    <textarea class="emp" id="incomplete_description" name="incomplete_description" style="width: 70%;padding: 10px;"> </textarea>
 {#                                                    <input type="text" class="emp" id="first_venue"> <br> <br>#}
-                                                </div>
+{#                                                </div>#}
                                             </div>
                                         </div>
                                     </div>

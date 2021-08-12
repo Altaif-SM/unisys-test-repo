@@ -205,6 +205,7 @@ class ApplicationDetails(BaseModel):
     second_interview_approval = models.BooleanField(default=False)
     admin_approval = models.BooleanField(default=False)
     application_rejection = models.BooleanField(default=False)
+    incomplete = models.BooleanField(default=False)
 
 
     scholarship_fee = models.CharField(max_length=15, blank=True, null=True)

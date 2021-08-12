@@ -954,94 +954,139 @@ def change_application_status(request):
 
             if interview_type == 'First Interview':
 
-                if not application_obj.first_interview:
-                    time = request.POST.get('time')
-                    date = request.POST.get('date')
-                    venue = request.POST.get('venue')
+                # if not application_obj.first_interview:
+                time = request.POST.get('time')
+                date = request.POST.get('date')
+                venue = request.POST.get('venue')
 
-                    # if not time == '' or date == '' or venue == '':
+                # if not time == '' or date == '' or venue == '':
 
-                    application_obj.first_interview = True
-                    application_obj.first_interview_attend = False
-                    # application_obj.interview_time = time
-                    # application_obj.interview_date = date
-                    # application_obj.interview_venue = venue
-                    application_obj.save()
 
-                    # try:
-                    #     email_rec = EmailTemplates.objects.get(template_for='First Interview Call',
-                    #                                            is_active=True)
-                    #     context = {'first_name': application_obj.first_name, 'time': time, 'venue': venue,
-                    #                'date': date}
-                    #     send_email_with_template(application_obj, context, email_rec.subject,
-                    #                              email_rec.email_body,
-                    #                              request)
-                    # except:
-                    #     subject = 'First Interview Call'
-                    #     message = 'You are requested to come down for the first interview time at-' + str(
-                    #         time) + ' on ' + str(date) + ' at ' + str(
-                    #         venue) + '. \n \n Thanks and Regards \n \n XYZ'
-                    #
-                    #     send_email_to_applicant(request.user.email, application_obj.email, subject, message,
-                    #                             application_obj.first_name)
+                application_obj.incomplete = False
+                application_obj.first_interview_attend = False
+                application_obj.first_interview = True
+                # application_obj.interview_time = time
+                # application_obj.interview_date = date
+                # application_obj.interview_venue = venue
+                application_obj.save()
 
-                    application_notification(application_obj.id, 'You have got Conditional Offer Letter.')
+                # try:
+                #     email_rec = EmailTemplates.objects.get(template_for='First Interview Call',
+                #                                            is_active=True)
+                #     context = {'first_name': application_obj.first_name, 'time': time, 'venue': venue,
+                #                'date': date}
+                #     send_email_with_template(application_obj, context, email_rec.subject,
+                #                              email_rec.email_body,
+                #                              request)
+                # except:
+                #     subject = 'First Interview Call'
+                #     message = 'You are requested to come down for the first interview time at-' + str(
+                #         time) + ' on ' + str(date) + ' at ' + str(
+                #         venue) + '. \n \n Thanks and Regards \n \n XYZ'
+                #
+                #     send_email_to_applicant(request.user.email, application_obj.email, subject, message,
+                #                             application_obj.first_name)
 
-                    if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
-                                                                    status='First Interview Call').exists():
-                        ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
-                                                                 status='Conditional Offer Letter',
-                                                                 remark='Congratulations! We are pleased to inform you that the University ####### is making you a Conditional Offer.')
+                application_notification(application_obj.id, 'You have got Conditional Offer Letter.')
 
-                    messages.success(request, application_obj.first_name.title() + " application status changed.")
+                if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
+                                                                status='First Interview Call').exists():
+                    ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
+                                                             status='Conditional Offer Letter',
+                                                             remark='Congratulations! We are pleased to inform you that the University ####### is making you a Conditional Offer.')
 
-                    # else:
-                    #     messages.warning(request,
-                    #                      "For applicant " + application_obj.first_name.title() + " First interview Time, Date and Venue should not be empty.")
-                    #     continue
-                else:
-                    messages.warning(request, "Applicant " + application_obj.first_name.title() + " has already got Conditional Offer Letter.")
-                    continue
+                messages.success(request, application_obj.first_name.title() + " application status changed.")
+
+                # else:
+                #     messages.warning(request,
+                #                      "For applicant " + application_obj.first_name.title() + " First interview Time, Date and Venue should not be empty.")
+                #     continue
+            # else:
+            #     messages.warning(request, "Applicant " + application_obj.first_name.title() + " has already got Conditional Offer Letter.")
+            #     continue
 
             elif interview_type == 'First Interview attended':
 
                 # if application_obj.first_interview:
 
-                if not application_obj.first_interview_attend:
+                # if not application_obj.first_interview_attend:
                     # application_obj.first_interview = True
-                    application_obj.first_interview = False
-                    application_obj.first_interview_attend = True
-                    application_obj.save()
+                application_obj.first_interview = False
+                application_obj.incomplete = False
+                application_obj.first_interview_attend = True
+                application_obj.save()
 
-                    # try:
-                    #     email_rec = EmailTemplates.objects.get(template_for='First Interview Attend',
-                    #                                            is_active=True)
-                    #     context = {'first_name': application_obj.first_name}
-                    #     send_email_with_template(application_obj, context, email_rec.subject, email_rec.email_body,
-                    #                              request)
-                    # except:
-                    #     subject = 'First Interview Attended'
-                    #     message = 'This mail is to notify that you have attended first interview. We will update you about the result soon.'
-                    #
-                    #     send_email_to_applicant(request.user.email, application_obj.email, subject, message,
-                    #                             application_obj.first_name)
+                # try:
+                #     email_rec = EmailTemplates.objects.get(template_for='First Interview Attend',
+                #                                            is_active=True)
+                #     context = {'first_name': application_obj.first_name}
+                #     send_email_with_template(application_obj, context, email_rec.subject, email_rec.email_body,
+                #                              request)
+                # except:
+                #     subject = 'First Interview Attended'
+                #     message = 'This mail is to notify that you have attended first interview. We will update you about the result soon.'
+                #
+                #     send_email_to_applicant(request.user.email, application_obj.email, subject, message,
+                #                             application_obj.first_name)
 
-                    application_notification(application_obj.id, 'You have got Full Offer Letter')
+                application_notification(application_obj.id, 'You have got Full Offer Letter')
 
-                    if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
-                                                                    status='Full Offer Letter').exists():
-                        ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
-                                                                 status='Full Offer Letter',
-                                                                 remark='Congratulations! We are pleased to inform you that the University ####### is making you a Full Offer Letter.')
+                if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
+                                                                status='Full Offer Letter').exists():
+                    ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
+                                                             status='Full Offer Letter',
+                                                             remark='Congratulations! We are pleased to inform you that the University ####### is making you a Full Offer Letter.')
 
-                    messages.success(request, application_obj.first_name.title() + " application status changed.")
-                else:
-                    messages.warning(request,"Applicant " + application_obj.first_name.title() + " has already got Full Offer Letter")
-                    continue
+                messages.success(request, application_obj.first_name.title() + " application status changed.")
+                # else:
+                #     messages.warning(request,"Applicant " + application_obj.first_name.title() + " has already got Full Offer Letter")
+                #     continue
                 # else:
                 #     messages.warning(request,
                 #                      "For applicant " + application_obj.first_name.title() + " please change his/her previous application status then try this.")
                 #     continue
+
+            elif interview_type == 'Incomplete':
+
+                # if application_obj.first_interview:
+
+                # if not application_obj.incomplete:
+                # application_obj.first_interview = True
+                description = request.POST.get('description')
+                application_obj.first_interview = False
+                application_obj.first_interview_attend = False
+                application_obj.incomplete = True
+                application_obj.save()
+
+                # try:
+                #     email_rec = EmailTemplates.objects.get(template_for='First Interview Attend',
+                #                                            is_active=True)
+                #     context = {'first_name': application_obj.first_name}
+                #     send_email_with_template(application_obj, context, email_rec.subject, email_rec.email_body,
+                #                              request)
+                # except:
+                #     subject = 'First Interview Attended'
+                #     message = 'This mail is to notify that you have attended first interview. We will update you about the result soon.'
+                #
+                #     send_email_to_applicant(request.user.email, application_obj.email, subject, message,
+                #                             application_obj.first_name)
+
+                application_notification(application_obj.id, 'You have Incomplete Application')
+
+                if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
+                                                                status='Incomplete Application').exists():
+                    ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
+                                                             status='Incomplete Application',
+                                                             remark=description)
+
+                messages.success(request, application_obj.first_name.title() + " application status changed.")
+            # else:
+            #     messages.warning(request,"Applicant " + application_obj.first_name.title() + " has already Incomplete Application")
+            #     continue
+            # else:
+            #     messages.warning(request,
+            #                      "For applicant " + application_obj.first_name.title() + " please change his/her previous application status then try this.")
+            #     continue
 
             elif interview_type == 'First Interview approval':
                 # if application_obj.first_interview_attend:
