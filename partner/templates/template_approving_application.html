@@ -465,9 +465,13 @@
 
                                             <td>
                                             <p hidden>{% if rec.first_interview == True %}True{% else %}False{% endif %}</p>
-                                                <input class="app class_detail" type="checkbox" name="first"
-                                                       id="id_first"
-                                                       {% if rec.first_interview == True %}checked{% endif %} disabled>
+{#                                                <input class="app class_detail" type="checkbox" name="first"#}
+{#                                                       id="id_first"#}
+{#                                                       {% if rec.first_interview == True %}checked{% endif %} disabled>#}
+                                            {% if rec.first_interview == True %}
+                                                <i class="fa fa-check" aria-hidden="true" style="color: green"></i>
+                                            {% endif %}
+
                                                 {% comment %}<input hidden id="id_time">
                                             <input hidden id="id_date">
                                             <input hidden id="id_venue">{% endcomment %}
@@ -475,10 +479,15 @@
 
                                             <td>
                                             <p hidden>{% if rec.first_interview_attend == True %}True{% else %}False{% endif %}</p>
-                                                <input class="app" type="checkbox"
-                                                       name="first_interview_attend"
-                                                       {% if rec.first_interview_attend == True %}checked{% endif %}
-                                                       id="id_first_interview_attend" disabled>
+
+{#                                                <input class="app" type="checkbox"#}
+{#                                                       name="first_interview_attend"#}
+{#                                                       {% if rec.first_interview_attend == True %}checked{% endif %}#}
+{#                                                       id="id_first_interview_attend" disabled>#}
+                                             {% if rec.first_interview_attend == True %}
+                                                <i class="fa fa-check" style="color: green" aria-hidden="true"></i>
+                                            {% endif %}
+
 
                                                 {% comment %}<input hidden id="id_first_attend_time">
                                             <input hidden id="id_first_attend_date">

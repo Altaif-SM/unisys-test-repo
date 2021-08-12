@@ -962,6 +962,7 @@ def change_application_status(request):
                     # if not time == '' or date == '' or venue == '':
 
                     application_obj.first_interview = True
+                    application_obj.first_interview_attend = False
                     # application_obj.interview_time = time
                     # application_obj.interview_date = date
                     # application_obj.interview_venue = venue
@@ -1008,6 +1009,7 @@ def change_application_status(request):
 
                 if not application_obj.first_interview_attend:
                     # application_obj.first_interview = True
+                    application_obj.first_interview = False
                     application_obj.first_interview_attend = True
                     application_obj.save()
 

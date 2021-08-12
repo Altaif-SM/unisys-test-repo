@@ -1424,7 +1424,7 @@ def submit_application(request):
         ApplicationDetails.objects.filter(application_id=request.user.get_application_id).update(is_submitted=True,is_online_admission = True)
         ApplicationHistoryDetails.objects.create(applicant_id=request.user.get_application,
                                                  status='Application Submitted',
-                                                 remark='Your application is submitted and your institution will be notified on further updates regarding your applications.')
+                                                 remark='Your application is submitted and your University will be notified on further updates regarding your applications.')
         application_obj = ApplicationDetails.objects.get(id=app_id)
         # try:
         #     email_rec = EmailTemplates.objects.get(template_for='Student Application Submission',
