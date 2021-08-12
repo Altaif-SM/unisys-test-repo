@@ -437,7 +437,7 @@
                                             </td>
 
                                             <td>
-                                                <text><a {% if rec.first_interview_approval and not rec.admin_approval %} href="/partner/template_application_approval_details/{{ rec.id }}" {% else %} href="/partner/template_applicant_all_details/{{ rec.id }}" {% endif %}{% if rec.application_rejection %} style="color: darkred" {% endif %}>{{ rec.first_name|title }} {{ rec.last_name|title }}</a></text>
+                                                <text><a href="/partner/template_applicant_all_details/{{ rec.id }}" {% if rec.application_rejection %} style="color: darkred" {% endif %}>{{ rec.first_name|title }} {{ rec.last_name|title }}</a></text>
 {#                                                <text><a href="/partner/template_applicant_all_details/{{ rec.id }}" {% if rec.application_rejection %} style="color: darkred" {% endif %}>{{ rec.first_name|title }} {{ rec.last_name|title }}</a>#}
                                                 </text>
                                                 {#                                            <text>{{ rec.first_name|title }} {{ rec.last_name|title }}</text>#}

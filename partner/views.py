@@ -172,7 +172,7 @@ def template_applicant_all_details(request, app_id):
         curriculum_obj = application_obj.curriculum_applicant_rel.all() if application_obj.curriculum_applicant_rel.all() else ''
         applicant_experience_obj = application_obj.applicant_experience_rel.all() if application_obj.applicant_experience_rel.all() else ''
         scholarship_obj = application_obj.applicant_scholarship_rel.get() if application_obj.applicant_scholarship_rel.all() else ''
-        about_obj = application_obj.applicant_about_rel.get()
+        about_obj = application_obj.applicant_about_rel.get() if application_obj.applicant_about_rel.all() else ''
 
         return render(request, 'template_applicant_all_details.html',
                       {'siblings_obj': siblings_obj, 'application_obj': application_obj,
@@ -987,11 +987,11 @@ def change_application_status(request):
                 #     send_email_to_applicant(request.user.email, application_obj.email, subject, message,
                 #                             application_obj.first_name)
 
-                application_notification(application_obj.id, 'You have got Conditional Offer Letter.')
+                # application_notification(application_obj.id, 'You have got Conditional Offer Letter.')
 
-                if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
-                                                                status='First Interview Call').exists():
-                    ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
+                # if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
+                #                                                 status='Conditional Offer Letter').exists():
+                ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
                                                              status='Conditional Offer Letter',
                                                              remark='Congratulations! We are pleased to inform you that the University ####### is making you a Conditional Offer.')
 
@@ -1031,9 +1031,9 @@ def change_application_status(request):
 
                 application_notification(application_obj.id, 'You have got Full Offer Letter')
 
-                if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
-                                                                status='Full Offer Letter').exists():
-                    ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
+                # if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
+                #                                                 status='Full Offer Letter').exists():
+                ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
                                                              status='Full Offer Letter',
                                                              remark='Congratulations! We are pleased to inform you that the University ####### is making you a Full Offer Letter.')
 
@@ -1073,11 +1073,11 @@ def change_application_status(request):
 
                 application_notification(application_obj.id, 'You have Incomplete Application')
 
-                if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
-                                                                status='Incomplete Application').exists():
-                    ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
-                                                             status='Incomplete Application',
-                                                             remark=description)
+                # if not ApplicationHistoryDetails.objects.filter(applicant_id=application_obj,
+                #                                                 status='Incomplete Application').exists():
+                ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
+                                                         status='Incomplete Application',
+                                                         remark=description)
 
                 messages.success(request, application_obj.first_name.title() + " application status changed.")
             # else:
