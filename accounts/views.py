@@ -247,7 +247,7 @@ def user_signup(request):
 
                     if request.POST['role'] == "Student":
                         # student_obj = StudentDetails.objects.create(user=user, address=address)
-                        user.is_active = False
+                        user.is_active = True
                         user.save()
                         student_obj = StudentDetails.objects.create(user=user)
 
