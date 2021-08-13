@@ -1,0 +1,133 @@
+{% extends "template_base_page.html" %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+            $(document).ready(function () {
+                $(".pdf_class").on('click', function (e) {
+                    window.open($(this).attr("data-href"), '_blank');
+                });
+
+                $(document).on("click", "#save_form", function () {
+                    $('#id_accept_student_model').modal();
+                    {#$("#form_sample_1").submit();#}
+                });
+
+                $(document).on("click", "#submit_appplication", function () {
+                    $('#id_accept_student_model').modal();
+                    $("#form_sample_1").submit();
+                });
+            });
+        }
+
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+
+
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'student:student_home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span> Offer Status </span>
+
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+
+        <div class="portlet-body">
+            <div class="form-body">
+
+                <div class="portlet light portlet-fit portlet-form ">
+                    <i class="icon-settings font-red"></i>
+                    <span class="caption-subject font-red sbold uppercase">Offer Status</span>
+                </div>
+
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-2 control-label">Offer Letter:</label>
+
+                        <div class="col-md-4">
+                            {% if application_obj.first_interview_attend %}
+                                <a href="{% url 'student:application_offer_letter_pdf' application_obj.id %}" target="_blank">Download Offer Letter</a>
+                            {% else %}
+                                ----
+                            {% endif %}
+                        </div>
+
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-2 control-label">Conditional Offer Letter:</label>
+
+                        <div class="col-md-4">
+                            {% if application_obj.first_interview %}
+                                <a href="{% url 'student:application_offer_letter_pdf' application_obj.id %}" target="_blank">Download Conditional Offer Letter</a>
+                            {% else %}
+                                ----
+                            {% endif %}
+                        </div>
+
+                    </div>
+
+
+                </div>
+            <br><br><br><br>
+
+                <hr>
+
+
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

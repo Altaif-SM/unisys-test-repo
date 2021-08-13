@@ -8,7 +8,9 @@ from accounts.decoratars import student_login_required, psycho_test_required, se
 import os
 import shutil
 from django.contrib.auth.hashers import make_password
-
+import datetime
+import uuid
+import binascii
 
 # Create your views here.
 @student_login_required
@@ -2398,3 +2400,31 @@ def applicant_declaration(request):
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
     return render(request, 'applicant_declaration.html', {'application_obj':application_obj})
+
+
+def application_offer_letter_pdf(request, app_id):
+    try:
+        header_path = settings.MEDIA_ROOT + 'university_logo.png'
+        application_obj = ApplicationDetails.objects.get(id=app_id)
+        current_date = datetime.datetime.now().strftime("%d %B %Y")
+        student_id = hex(binascii.crc32(str(app_id).encode()))[2:]
+        template = get_template('application_offer_letter_pdf.html')
+        Context = ({ 'application_obj': application_obj, 'header_path':header_path,'current_date':current_date,'student_id':student_id})
+        html = template.render(Context)
+        file = open('test.pdf', "w+b")
+        pisa.CreatePDF(html.encode('utf-8'), dest=file,encoding='utf-8')
+        file.seek(0)
+        pdf = file.read()
+        file.close()
+        return HttpResponse(pdf, 'application/pdf')
+    except:
+        return redirect('/student/application_offer_letter/')
+
+
+def application_offer_letter(request):
+    try:
+        application_obj = request.user.get_application
+        return render(request, 'applicant_offer_letter.html', {'application_obj': application_obj})
+    except Exception as e:
+        messages.warning(request, "Please Fill The Application Form First ... ")
+        return redirect("/")

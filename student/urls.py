@@ -106,5 +106,9 @@ urlpatterns = [
                   path('save_attachement_submission/', views.save_attachement_submission, name='save_attachement_submission'),
 
                   path('applicant_declaration/', views.applicant_declaration, name='applicant_declaration'),
+                  path('application_offer_letter/', views.application_offer_letter, name='application_offer_letter'),
+
+                  path('application_offer_letter_pdf/<int:app_id>/', views.application_offer_letter_pdf,
+                       name='application_offer_letter_pdf'),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

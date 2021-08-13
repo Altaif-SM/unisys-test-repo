@@ -1127,6 +1127,34 @@ License: You must have a valid license purchased only from themeforest(the above
 
 
 
+                <div class="tab-pane " id="offer_status">
+                        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
+                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+
+
+
+
+
+
+ {% if 'student.can_view_student_application_progress_history' in perms %}
+                        <li class="nav-item " id="acd_qli">
+                            <a href="{% url 'student:application_offer_letter' %}"
+                               class="nav-link nav-toggle">
+                                <i class="glyphicon glyphicon-list-alt"></i>
+                                <span class="title">Offer Status</span>
+                                <span class="selected"></span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+
+
+                        </ul>
+                        <!-- END SIDEBAR MENU -->
+                    </div>  <!-- END tabpane -->
+
+
+
 
                 </div> <!-- tab-content -->
             </div>
@@ -1152,6 +1180,10 @@ License: You must have a valid license purchased only from themeforest(the above
 
                         {% if user.is_student %}
                         <li id="app_prog"><a href="#application_progress" data-toggle="tab">Application Progress History</a></li>
+                        {% endif %}
+
+                    {% if user.is_student %}
+                        <li id="app_offer_status"><a href="#offer_status" data-toggle="tab">Offer Status</a></li>
                         {% endif %}
 
 {#                        {% if not user.is_student %}#}
@@ -1924,6 +1956,16 @@ License: You must have a valid license purchased only from themeforest(the above
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
+        element.classList.add("active");
+    }
+    {% endif %}
+
+{% if request.resolver_match.url_name == 'application_offer_letter' %}
+    {
+       var element = document.getElementById("offer_status");
+        element.classList.add("active");
+
+        var element = document.getElementById("app_offer_status");
         element.classList.add("active");
     }
     {% endif %}
