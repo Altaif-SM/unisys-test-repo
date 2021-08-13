@@ -1394,18 +1394,22 @@ def my_application(request):
         applicant_experience_obj = application_obj.applicant_experience_rel.all() if application_obj.applicant_experience_rel.all() else ''
         scholarship_obj = application_obj.applicant_scholarship_rel.get() if application_obj.applicant_scholarship_rel.all() else ''
         about_obj = application_obj.applicant_about_rel.get() if application_obj.applicant_about_rel.all() else ''
+        postgraduate_obj = application_obj.applicant_postgraduate_rel.get() if application_obj.applicant_postgraduate_rel.all() else ''
+        employement_history_obj = application_obj.employement_history_rel.get() if application_obj.employement_history_rel.all() else ''
+        addition_info_obj = application_obj.applicant_addition_info.get() if application_obj.applicant_addition_info.all() else ''
+        attachement_obj = application_obj.applicant_attachement_rel.all() if application_obj.applicant_attachement_rel.all() else ''
 
-        # path = str(settings.MEDIA_URL) + str('reports/Donors.pdf')
-        # path =str('/home/redbytes/scholarship_proj/scholarship_mgmt/media/reports/Donors.pdf')
-        return render(request, 'my_application.html', {'siblings_obj': siblings_obj, 'application_obj': application_obj,
-                                                       'qualification_recs': qualification_obj,
-                                                       'english_recs': english_obj,
-                                                       'curriculum_recs': curriculum_obj,
-                                                       'applicant_experience_recs': applicant_experience_obj,
-                                                       'scholarship_obj': scholarship_obj, 'about_obj': about_obj})
+        return render(request, 'my_application.html',
+                      {'siblings_obj': siblings_obj, 'application_obj': application_obj,
+                       'qualification_recs': qualification_obj, 'english_recs': english_obj,
+                       'curriculum_recs': curriculum_obj,
+                       'applicant_experience_recs': applicant_experience_obj,
+                       'scholarship_obj': scholarship_obj, 'about_obj': about_obj,'attachement_obj':attachement_obj,'postgraduate_obj':postgraduate_obj,
+                       'employement_history_obj':employement_history_obj,'addition_info_obj':addition_info_obj,'attachement_obj':attachement_obj})
+
     except Exception as e:
         messages.warning(request, "Please Fill The Application Form First ... ")
-    return redirect('/')
+        return redirect("/")
 
 @submission_required
 def submit_application(request):
