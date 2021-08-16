@@ -214,6 +214,7 @@
                     }
 
                     var favorite = [];
+                    var conditional_offer = []
                     if ($(this).attr('id') == 'Incomplete'){
                         $('#id_accept_student_model').modal();
                         return false;
@@ -231,6 +232,7 @@
                         });
                         {#alert(JSON.stringify(favorite));#}
                         $("#check_ids").val(JSON.stringify(favorite));
+                        $("#conditional_documents").val(JSON.stringify(conditional_offer));
                         $("#interview_type").val($(this).attr('id'));
                         $('#form_submit').submit()
                     }
@@ -240,6 +242,7 @@
 
                 $('#first_interview_save').click(function () {
                     var favorite = []
+                    var conditional_offer = []
 
                         var checked = $('#example').find('input[name="check"]:checked').length;
                         if (!checked)
@@ -252,6 +255,7 @@
 
                             {#alert(JSON.stringify(favorite));#}
                             $("#check_ids").val(JSON.stringify(favorite));
+                            $("#conditional_documents").val(JSON.stringify(conditional_offer));
 
                             $("#interview_type").val('Incomplete');
                             $("#description").val($('#incomplete_description').val());
@@ -260,6 +264,36 @@
                             $('#form_submit').submit()
                         }
                 })
+
+
+                $('#conditional_offer_save').click(function () {
+                    var conditional_offer = []
+                    var favorite = []
+                        var checked = $('#example').find('input[name="check"]:checked').length;
+                        if (!checked)
+                            alert('Please select at least one record to proceed..!');
+                        else {
+                            $.each($("input[name='conditional_check']:checked"), function () {
+
+                                conditional_offer.push($(this).val());
+                            });
+                            $.each($("input[name='check']:checked"), function () {
+
+                                favorite.push($(this).val());
+                            });
+
+                            {#alert(JSON.stringify(conditional_offer));#}
+                            $("#check_ids").val(JSON.stringify(favorite));
+                            $("#conditional_documents").val(JSON.stringify(conditional_offer));
+
+                            $("#interview_type").val('First Interview');
+
+
+                            $('#form_submit').submit()
+                        }
+                })
+
+
 
             });
 
@@ -318,8 +352,8 @@
                         <div class="col-md-4">
                             <div class="">
                                 <input type="text" hidden id="check_ids" name="check_ids">
+                                <input type="text" hidden id="conditional_documents" name="conditional_documents">
                                 <input type="text" hidden id="interview_type" name="interview_type">
-
                                 <input type="text" hidden id="description" name="description">
                             </div>
                         </div>
@@ -630,13 +664,13 @@
                                             <div class="">
                                                 <label class="col-md-4 control-label">Personal Photo:</label>
                                                 <div class="col-md-2">
-                                                    <input name="check" type="checkbox" class="checkboxes" value="{{ rec.id }}">
+                                                    <input name="conditional_check" type="checkbox" class="checkboxes" value="Personal Photo">
                                                 </div>
                                             </div>
                                             <div class="">
                                                 <label class="col-md-4 control-label">Passport ID:</label>
                                                 <div class="col-md-2">
-                                                    <input name="check" type="checkbox" class="checkboxes" value="{{ rec.id }}">
+                                                    <input name="conditional_check" type="checkbox" class="checkboxes" value="Passport ID">
                                                 </div>
                                             </div>
                                         </div>
@@ -644,13 +678,13 @@
                                             <div class="">
                                                 <label class="col-md-4 control-label">Academic Certificate:</label>
                                                 <div class="col-md-2">
-                                                    <input name="check" type="checkbox" class="checkboxes" value="{{ rec.id }}">
+                                                    <input name="conditional_check" type="checkbox" class="checkboxes" value="Academic Certificate">
                                                 </div>
                                             </div>
                                             <div class="">
                                                 <label class="col-md-4 control-label">Transcript:</label>
                                                 <div class="col-md-2">
-                                                    <input name="check" type="checkbox" class="checkboxes" value="{{ rec.id }}">
+                                                    <input name="conditional_check" type="checkbox" class="checkboxes" value="Transcript">
                                                 </div>
                                             </div>
                                         </div>
@@ -658,13 +692,13 @@
                                             <div class="">
                                                 <label class="col-md-4 control-label">English Language Proficiency Certificate:</label>
                                                 <div class="col-md-2">
-                                                    <input name="check" type="checkbox" class="checkboxes" value="{{ rec.id }}">
+                                                    <input name="conditional_check" type="checkbox" class="checkboxes" value="{{ rec.id }}">
                                                 </div>
                                             </div>
                                             <div class="">
                                                 <label class="col-md-4 control-label">Recommendation Letter:</label>
                                                 <div class="col-md-2">
-                                                    <input name="check" type="checkbox" class="checkboxes" value="{{ rec.id }}">
+                                                    <input name="conditional_check" type="checkbox" class="checkboxes" value="Recommendation Letter">
                                                 </div>
                                             </div>
                                         </div>
@@ -673,7 +707,7 @@
                                         <button type="button" id="cancel_model" data-dismiss="modal"
                                                 class="btn dark btn-outline">Cancel
                                         </button>
-                                        <button type="button" id="first_interview_save" data-dismiss="modal"
+                                        <button type="button" id="conditional_offer_save" data-dismiss="modal"
                                                 class="btn green btn-outline">
                                             Ok
                                         </button>

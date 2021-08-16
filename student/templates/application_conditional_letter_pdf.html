@@ -124,7 +124,10 @@
         <span class="max-lines" style="font-size: 17px;color: #333">This is a conditional offer and will be confirmed if you fulfill University of Science and Technology Entry Requirement as per UST's approval.</span>
         <br><br><br> <br><br>
         <span style="font-size: 17px;color: #333"><b>You are required to submit the following documents for verification:</b></span>
-        <br><br> <br><br><br><br> <br><br><br><br>
+        {% for rec in application_obj.applicant_verification_document.all %}
+            <span class="max-lines" style="font-size: 17px;color: red">{{ forloop.counter }}-{{ rec.required_document|default_if_none:"" }}</span>
+        {% endfor %}
+        <br><br> <br>
         <span class="max-lines" style="font-size: 17px;color: #333">The Actual Offer letter will be emailed to you upon obtaining the approval from ## Uni’s board. The details of the Registration Day will be provided in the Actual Offer letter.</span>
         <br>
         <span class="max-lines" style="font-size: 17px;color: #333">I regret to inform you that the offer will be automatically void if the above documents are not received before or on the programme commencement date.</span>

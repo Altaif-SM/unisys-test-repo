@@ -942,6 +942,7 @@ def template_application_approval_details(request, app_id):
 def change_application_status(request):
     try:
         check_ids = json.loads(request.POST.get('check_ids'))
+        conditional_documents = json.loads(request.POST.get('conditional_documents'))
         interview_type = request.POST.get('interview_type')
 
         for application in check_ids:
@@ -974,6 +975,13 @@ def change_application_status(request):
                 # application_obj.interview_date = date
                 # application_obj.interview_venue = venue
                 application_obj.save()
+
+                if conditional_documents:
+                    ConditionalVerificationDocumentsDetails.objects.filter(application_id=application_obj).delete()
+                    for document in conditional_documents:
+                        ConditionalVerificationDocumentsDetails.objects.create(required_document = document,application_id=application_obj)
+                else:
+                    ConditionalVerificationDocumentsDetails.objects.filter(application_id=application_obj).delete()
 
                 # try:
                 #     email_rec = EmailTemplates.objects.get(template_for='First Interview Call',
