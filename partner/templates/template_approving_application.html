@@ -24,6 +24,9 @@
             padding-right: 40px;
             padding-top: 10px;
         }
+    .checkboxes{
+        margin: 10px!important;
+    }
 
 
     </style>
@@ -215,29 +218,22 @@
                         $('#id_accept_student_model').modal();
                         return false;
                     }
-{##}
-{#                    if ($(this).attr('id') == 'Second Interview attended'){#}
-{#                        $('#id_accept_student_model').modal();#}
-{#                        $('#second_interview_time').val('True');#}
-{#                        return false;#}
-{#                    }#}
-{#                    else {#}
-                        if (!checked)
-                            alert('Please select at least one record to proceed..!');
-                        else {
-                            $.each($("input[name='check']:checked"), function () {
+                    if ($(this).attr('id') == 'First Interview'){
+                        $('#id_conditional_model').modal();
+                        return false;
+                    }
+                    if (!checked)
+                        alert('Please select at least one record to proceed..!');
+                    else {
+                        $.each($("input[name='check']:checked"), function () {
 
-                                favorite.push($(this).val());
-                            });
-
-                            {#alert(JSON.stringify(favorite));#}
-                            $("#check_ids").val(JSON.stringify(favorite));
-                            $("#interview_type").val($(this).attr('id'));
-
-
-                            $('#form_submit').submit()
-                        }
-{#                    }#}
+                            favorite.push($(this).val());
+                        });
+                        {#alert(JSON.stringify(favorite));#}
+                        $("#check_ids").val(JSON.stringify(favorite));
+                        $("#interview_type").val($(this).attr('id'));
+                        $('#form_submit').submit()
+                    }
 
                 })
 
@@ -582,7 +578,7 @@
 {#                                                <label class="col-md-7 control-label">Please Enter The Interview#}
 {#                                                    Details.</label>#}
 {#                                            </div>#}
-                                            {#                                        <p> Please Enter The Interview Details. </p>#}
+{#                                                                                    <p> Please Enter The Interview Details. </p>#}
 {#                                        </div>#}
 {#                                        <br>#}
 {#                                        <br>#}
@@ -607,6 +603,80 @@
                                             Ok
                                         </button>
                                         {#                                    <button type="button" id="okay" class="btn green">Ok</button>#}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    <div id="id_conditional_model" class="modal fade" tabindex="-1" data-backdrop="static"
+                             data-keyboard="false">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"
+                                                aria-hidden="true"></button>
+                                        <h4 class="modal-title">Conditional Offer Letter Details</h4>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <div class="row">
+                                            <div class="">
+                                                <label class="col-md-12 control-label" style="text-align: center!important;"><b>Please Select required documents for Conditional Offer Letter.</b></label>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            <div class="">
+                                                <label class="col-md-4 control-label">Personal Photo:</label>
+                                                <div class="col-md-2">
+                                                    <input name="check" type="checkbox" class="checkboxes" value="{{ rec.id }}">
+                                                </div>
+                                            </div>
+                                            <div class="">
+                                                <label class="col-md-4 control-label">Passport ID:</label>
+                                                <div class="col-md-2">
+                                                    <input name="check" type="checkbox" class="checkboxes" value="{{ rec.id }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="">
+                                                <label class="col-md-4 control-label">Academic Certificate:</label>
+                                                <div class="col-md-2">
+                                                    <input name="check" type="checkbox" class="checkboxes" value="{{ rec.id }}">
+                                                </div>
+                                            </div>
+                                            <div class="">
+                                                <label class="col-md-4 control-label">Transcript:</label>
+                                                <div class="col-md-2">
+                                                    <input name="check" type="checkbox" class="checkboxes" value="{{ rec.id }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="">
+                                                <label class="col-md-4 control-label">English Language Proficiency Certificate:</label>
+                                                <div class="col-md-2">
+                                                    <input name="check" type="checkbox" class="checkboxes" value="{{ rec.id }}">
+                                                </div>
+                                            </div>
+                                            <div class="">
+                                                <label class="col-md-4 control-label">Recommendation Letter:</label>
+                                                <div class="col-md-2">
+                                                    <input name="check" type="checkbox" class="checkboxes" value="{{ rec.id }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" id="cancel_model" data-dismiss="modal"
+                                                class="btn dark btn-outline">Cancel
+                                        </button>
+                                        <button type="button" id="first_interview_save" data-dismiss="modal"
+                                                class="btn green btn-outline">
+                                            Ok
+                                        </button>
                                     </div>
                                 </div>
                             </div>
