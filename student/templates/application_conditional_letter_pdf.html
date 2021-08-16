@@ -1,0 +1,146 @@
+{#{% extends "template_base_page.html" %}#}
+{#{% load staticfiles %}#}
+<style>
+
+
+    {% comment %}@page {
+        margin: 1cm;
+        margin-bottom: 2.5cm;
+        @frame footer {
+        -pdf-frame-content: footerContent;
+        bottom: 2cm;
+        margin-left: 1cm;
+        margin-right: 1cm;
+        height: 1cm;
+    }
+    }{% endcomment %}
+
+    table {
+        border-collapse: collapse;
+    }
+
+    td {
+        padding-top: .5em;
+        padding-bottom: .5em;
+
+    }
+
+    @page {
+        margin: 1cm;
+        margin-top: 2cm;
+
+        @frame header {
+        -pdf-frame-content: header;
+        -pdf-frame-content: headerFirst;
+    {#font-size: 20px;#}
+    {#font-weight: 100;#}
+    {#text-align: center;#}
+    {#color: #007cae;#}
+    {#font-size: 50px;#}
+    {#background-color: red;#}
+    }
+    margin-bottom: 2.5cm;
+
+    @frame footer {
+    -pdf-frame-content:footerContent;
+    bottom: 15cm;
+    height: 18cm;
+
+
+    margin-top:25pt;
+
+
+    }
+    }
+
+
+    @page header {
+
+    }
+
+    .wrapper {
+        display: table;
+        width: 150%;
+    }
+
+    .left {
+        display: table-cell;
+    }
+    .max-lines {
+  display: block;/* or inline-block */
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  overflow: hidden;
+  max-height: 2.6em;
+  line-height: 1.5em;
+}
+</style>
+
+{% block content %}
+    <div class='wrapper'>
+        <div class='header' id="header" style="text-align: center;">
+            <img src="{{ header_path }}" alt="logo"
+                 style="width: 600px;height: 80px;margin-top: 25px; text-align: center" class="logo-default"/><br><br>
+            <span class='title' style="font-size: 20px; color: #13084e;"><b>Conditional Offer Letter</b></span>
+        </div>
+        <br><br><br>
+        <span style="font-size: 17px;color: #333">{{ current_date }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 17px;color: #333">Student ID : {{ student_id }}</span>
+        <br><br>
+        <span style="font-size: 17px;color: #333">Student Name  : {{ application_obj.first_name|default_if_none:"" }} {{ application_obj.middle_name|default_if_none:"" }} {{ application_obj.last_name|default_if_none:"" }}</span>
+        <br><br>
+
+        <span class="max-lines" style="font-size: 17px;color: #333">Address : {{ application_obj.address.residential_address|default_if_none:"" }}</span>
+        <br>
+        <span style="font-size: 17px;color: #333">Country of Origin: {{ application_obj.address.country.country_name|title }}</span>
+        <br><br>
+        <span style="font-size: 17px;color: #333">Dear MR / Ms :  {{ application_obj.first_name|default_if_none:"" }} {{ application_obj.last_name|default_if_none:"" }}</span>
+        <br><br><br>
+        <span style="font-size: 17px;color: #333"><b>UNDERGRADUATE CONDITIONAL OFFER OF ADMISSION {{ application_obj.application_id|upper|default_if_none:"" }}</b></span>
+
+        <br><br>
+        <span class="max-lines" style="font-size: 17px;color: #333">I am pleased to inform you that the University of Science and Technology is making you a Conditional Offer for a place in the following programme:</span>
+
+        <br><br>
+        <span style="font-size: 17px;color: #333">Programme of Study : ####</span>
+        <br><br>
+        <span style="font-size: 17px;color: #333">Registration Number : {{ registration_number }}</span>
+        <br><br>
+        <span style="font-size: 17px;color: #333">Duration of Study : ####</span>
+        <br><br>
+        <span style="font-size: 17px;color: #333">Mode of Study : Online</span>
+        <br><br>
+        <span style="font-size: 17px;color: #333">Campus : ####</span>
+        <br><br>
+        <span style="font-size: 17px;color: #333">Date of Registration : {{ created_on }}</span>
+        <br><br>
+        <span style="font-size: 17px;color: #333">Language Requirement : ####</span>
+
+        <br><br> <br><br>
+     <span class="max-lines" style="font-size: 17px;color: #333">
+         Visa Fee: ##	Applicable for on campus programmes and for those selected required visa (or we just make it tab after offer letter visa requirement if student select required visa (can fill up form with required visa details)
+     </span>
+
+        <br><br>
+        <span class="max-lines" style="font-size: 17px;color: #333">This is a conditional offer and will be confirmed if you fulfill ## UNI's Entry Requirement as per UST's approval.</span>
+        <br><br><br> <br><br>
+        <span style="font-size: 17px;color: #333">You are required to submit the following documents for verification:</span>
+        <br><br> <br><br><br><br> <br><br><br><br>
+        <span class="max-lines" style="font-size: 17px;color: #333">The Actual Offer letter will be emailed to you upon obtaining the approval from ## Uni’s board. The details of the Registration Day will be provided in the Actual Offer letter.</span>
+        <br>
+        <span class="max-lines" style="font-size: 17px;color: #333">I regret to inform you that the offer will be automatically void if the above documents are not received before or on the programme commencement date.</span>
+        <br>
+        <span class="max-lines" style="font-size: 17px;color: #333">This letter will be revoked in the event any incorrect, false or forged documents are found to be submitted to us</span>
+        <br>
+        <span class="max-lines" style="font-size: 17px;color: #333">I look forward to welcoming you to University of Science and Technology. </span>
+        <br><br><br>
+        <span class="max-lines" style="font-size: 17px;color: #333">Yours sincerely,</span>
+         <br><br><br><br>
+        <span style="font-size: 17px;color: #333"><b>ACADEMIC REGISTRAR</b></span>
+    <br><br>
+        <span style="font-size: 17px;color: #333"><b>University of Science and Technology</b></span>
+
+
+
+    </div>
+
+{% endblock %}

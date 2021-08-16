@@ -2404,21 +2404,38 @@ def applicant_declaration(request):
 
 def application_offer_letter_pdf(request, app_id):
     try:
-        header_path = settings.MEDIA_ROOT + 'university_logo.png'
         application_obj = ApplicationDetails.objects.get(id=app_id)
-        created_on = application_obj.created_on.strftime("%d %B %Y")
-        registration_number = int(application_obj.created_on.timestamp())
-        current_date = datetime.datetime.now().strftime("%d %B %Y")
-        student_id = hex(binascii.crc32(str(app_id).encode()))[2:]
-        template = get_template('application_offer_letter_pdf.html')
-        Context = ({ 'application_obj': application_obj, 'header_path':header_path,'current_date':current_date,'student_id':student_id,'created_on':created_on,'registration_number':registration_number})
-        html = template.render(Context)
-        file = open('test.pdf', "w+b")
-        pisa.CreatePDF(html.encode('utf-8'), dest=file,encoding='utf-8')
-        file.seek(0)
-        pdf = file.read()
-        file.close()
-        return HttpResponse(pdf, 'application/pdf')
+        if application_obj.first_interview_attend:
+            header_path = settings.MEDIA_ROOT + 'university_logo.png'
+            created_on = application_obj.created_on.strftime("%d %B %Y")
+            registration_number = int(application_obj.created_on.timestamp())
+            current_date = datetime.datetime.now().strftime("%d %B %Y")
+            student_id = hex(binascii.crc32(str(app_id).encode()))[2:]
+            template = get_template('application_offer_letter_pdf.html')
+            Context = ({ 'application_obj': application_obj, 'header_path':header_path,'current_date':current_date,'student_id':student_id,'created_on':created_on,'registration_number':registration_number})
+            html = template.render(Context)
+            file = open('test.pdf', "w+b")
+            pisa.CreatePDF(html.encode('utf-8'), dest=file,encoding='utf-8')
+            file.seek(0)
+            pdf = file.read()
+            file.close()
+            return HttpResponse(pdf, 'application/pdf')
+        else:
+            header_path = settings.MEDIA_ROOT + 'university_logo.png'
+            created_on = application_obj.created_on.strftime("%d %B %Y")
+            registration_number = int(application_obj.created_on.timestamp())
+            current_date = datetime.datetime.now().strftime("%d %B %Y")
+            student_id = hex(binascii.crc32(str(app_id).encode()))[2:]
+            template = get_template('application_conditional_letter_pdf.html')
+            Context = ({'application_obj': application_obj, 'header_path': header_path, 'current_date': current_date,
+                        'student_id': student_id, 'created_on': created_on, 'registration_number': registration_number})
+            html = template.render(Context)
+            file = open('test.pdf', "w+b")
+            pisa.CreatePDF(html.encode('utf-8'), dest=file, encoding='utf-8')
+            file.seek(0)
+            pdf = file.read()
+            file.close()
+            return HttpResponse(pdf, 'application/pdf')
     except:
         return redirect('/student/application_offer_letter/')
 
