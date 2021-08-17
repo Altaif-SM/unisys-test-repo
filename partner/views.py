@@ -980,8 +980,8 @@ def change_application_status(request):
                     ConditionalVerificationDocumentsDetails.objects.filter(application_id=application_obj).delete()
                     for document in conditional_documents:
                         ConditionalVerificationDocumentsDetails.objects.create(required_document = document,application_id=application_obj)
-                else:
-                    ConditionalVerificationDocumentsDetails.objects.filter(application_id=application_obj).delete()
+                # else:
+                #     ConditionalVerificationDocumentsDetails.objects.filter(application_id=application_obj).delete()
 
                 # try:
                 #     email_rec = EmailTemplates.objects.get(template_for='First Interview Call',
