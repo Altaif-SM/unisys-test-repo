@@ -121,4 +121,6 @@ urlpatterns = [
     path('template_donar_details/<int:donor_id>/', views.template_donar_details, name='template_donar_details'),
     path('donar_all_details_pdf/<int:donor_id>/', views.donar_all_details_pdf, name='donar_all_details_pdf'),
 
+    path('university_details/', views.university_details, name='university_details'),
+    path('save_university_details/', views.save_university_details, name='save_university_details'),
 ]

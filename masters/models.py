@@ -262,6 +262,9 @@ class UniversityDetails(BaseModel):
     university_name = models.CharField(max_length=255, blank=True, null=True)
     address = models.ForeignKey(AddressDetails, null=True, related_name='university_address_rel',
                                 on_delete=models.PROTECT)
+    university_logo = models.ImageField(upload_to='university_logo/', null=True, blank=True)
+    university_address = models.CharField(max_length=255, blank=True, null=True)
+    is_active = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('university_name',)

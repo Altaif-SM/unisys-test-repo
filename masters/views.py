@@ -1587,3 +1587,32 @@ def save_terms_condition(request):
     except:
         messages.warning(request, "Record not saved.")
     return redirect('/masters/terms_condition_master/')
+
+
+def university_details(request):
+    try:
+        university_details = UniversityDetails.objects.get(is_active = True)
+    except IndexError:
+        university_details = None
+    return render(request, 'university_details.html', {'university_details': university_details})
+
+def save_university_details(request):
+    university_logo = request.FILES.get('university_logo',None)
+    university_name = request.POST.get('university_name')
+    university_address = request.POST.get('university_address')
+    try:
+        university_obj = UniversityDetails.objects.filter(is_active = True)
+        if university_obj:
+            university_obj = university_obj[0]
+            if university_logo:
+                university_obj.university_logo = university_logo
+            university_obj.university_name = university_name
+            university_obj.university_address = university_address
+            university_obj.save()
+            messages.success(request, "Record updated.")
+        else:
+            UniversityDetails.objects.create(university_logo=university_logo,university_name = university_name,university_address = university_address,is_active = True)
+            messages.success(request, "Record saved.")
+    except:
+        messages.warning(request, "Record not saved.")
+    return redirect('/masters/university_details/')
