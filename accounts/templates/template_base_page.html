@@ -522,7 +522,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <li class="nav-item  ">
                                         <a href="/masters/university_details/" class="nav-link ">
                                             <i class="fa fa-university" aria-hidden="true"></i>
-                                            <span class="title">Manage University Details</span>
+                                            <span class="title">Manage Universities</span>
                                         </a>
                                     </li>
 
@@ -732,7 +732,20 @@ License: You must have a valid license purchased only from themeforest(the above
                         <li class="nav-item " id="acd_qli">
                             <a href="{% url 'partner:template_approving_application' %}"
                                class="nav-link nav-toggle">
-                                <i class="glyphicon glyphicon-list-alt"></i>
+                                <i class="fa fa-file" aria-hidden="true"></i>
+
+                                <span class="title">Manage Documents</span>
+                                <span class="selected"></span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                        {% if 'partner.can_view_approving_application' in perms %}
+                        <li class="nav-item " id="acd_qli">
+                            <a href="{% url 'partner:template_approving_application' %}"
+                               class="nav-link nav-toggle">
+                                <i class="fa fa-check" aria-hidden="true"></i>
+
                                 <span class="title">Approving Applicant Details</span>
                                 <span class="selected"></span>
                             </a>
