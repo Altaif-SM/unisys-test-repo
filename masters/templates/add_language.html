@@ -103,7 +103,7 @@
                                     <label class="col-md-2 control-label">Short Code:</label>
                                     <div class="col-md-3">
                                         <input type="text" title="Enter Short Code" id="short_code"
-                                               value="" name="short_code"
+                                               value="{{ language_dict.short_code|default_if_none:"" }}" name="short_code"
                                                class="form-control" required>
 
 
@@ -115,7 +115,7 @@
                                         Name:</label>
                                     <div class="col-md-3">
                                         <input type="text" title="Enter Language Name" id="language_name"
-                                               value="" name="language_name"
+                                               value="{{ language_dict.language_name|default_if_none:""}}" name="language_name"
                                                class="form-control" required>
 
                                     </div>
@@ -135,8 +135,13 @@
                                         <select id='language_direction' title="Select Language Direction"
                                                 name="language_direction"
                                                 class="form-control" required>
+                                             {% if language_dict.language_direction %}
+                                                 <option  style="display:none;" selected="selected" value="{{ language_dict.language_direction|default_if_none:"" }}"> {{ language_dict.language_direction|default_if_none:"" }}</option>
+                                                 <option value=""> Please Select</option>
+                                            {% else %}
+                                                 <option selected="selected" value=""> Please Select</option>
+                                            {% endif %}
 
-                                            <option selected="selected" value=""> Please Select</option>
                                             <option value="left to right"> left to right</option>
                                             <option value="right to left"> right to left</option>
 
@@ -147,8 +152,15 @@
                                 <div class="">
                                     <label class="col-md-2 control-label">Status:</label>
                                     <div class="col-md-3">
+
+                                        {% if language_dict.status == True %}
                                         <input type="checkbox" checked data-toggle="toggle" data-onstyle="success"
                                                data-offstyle="danger" id="status" name="status">
+                                        {% else %}
+                                            <input type="checkbox"  data-toggle="toggle" data-onstyle="success"
+                                               data-offstyle="danger" id="status" name="status">
+                                        {% endif %}
+
                                     </div>
                                 </div>
 

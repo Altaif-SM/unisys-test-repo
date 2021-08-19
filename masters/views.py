@@ -1633,13 +1633,31 @@ def add_language(request):
         else:
             status = False
         try:
+            language_dict = {
+                'short_code':short_code,
+                'language_name':language_name,
+                'language_direction':language_direction,
+                'status':status,
+            }
+            if LanguageDetails.objects.filter(short_code=short_code).exists():
+                messages.warning(request, "Short code already exists.")
+                return render(request, 'add_language.html', {'language_dict': language_dict})
+            elif LanguageDetails.objects.filter(language_name=language_name).exists():
+                messages.warning(request, "Language name already exists.")
+                return render(request, 'add_language.html', {'language_dict': language_dict})
             LanguageDetails.objects.create(short_code=short_code, language_name=language_name,
                                              language_direction=language_direction, status=status)
             messages.success(request, "Record saved.")
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/language_settings/')
-    return render(request, 'add_language.html')
+    language_dict = {
+        'short_code': '',
+        'language_name': '',
+        'language_direction': '',
+        'status': True,
+    }
+    return render(request, 'add_language.html',{'language_dict':language_dict})
 
 
 def edit_language(request, language_id=None):
@@ -1654,15 +1672,31 @@ def edit_language(request, language_id=None):
         else:
             status = False
         try:
-            language_obj.short_code = short_code
-            language_obj.language_name = language_name
-            language_obj.language_direction = language_direction
-            language_obj.status = status
-            language_obj.save()
+            language_obj = {
+                'id':language_id,
+                'short_code': short_code,
+                'language_name': language_name,
+                'language_direction': language_direction,
+                'status': status,
+            }
+            if LanguageDetails.objects.filter(~Q(id=language_id), short_code=short_code).exists():
+                messages.warning(request, "Short code already exists.")
+                return render(request, "edit_language.html", {'language_obj': language_obj})
+            elif LanguageDetails.objects.filter(~Q(id=language_id), language_name=language_name).exists():
+                messages.warning(request, "Language name already exists.")
+                return render(request, "edit_language.html", {'language_obj': language_obj})
+            LanguageDetails.objects.filter(id = language_id).update(short_code = short_code,language_name = language_name,language_direction = language_direction,status = status)
             messages.success(request, "Record saved.")
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/language_settings/')
+    language_obj = {
+        'id': language_id,
+        'short_code': language_obj.short_code,
+        'language_name': language_obj.language_name,
+        'language_direction': language_obj.language_direction,
+        'status': language_obj.status,
+    }
     return render(request, "edit_language.html", {'language_obj': language_obj})
 
 
