@@ -2447,3 +2447,5 @@ def application_offer_letter(request):
     except Exception as e:
         messages.warning(request, "Please Fill The Application Form First ... ")
         return redirect("/")
+
+

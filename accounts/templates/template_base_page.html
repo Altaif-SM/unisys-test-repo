@@ -386,18 +386,18 @@ License: You must have a valid license purchased only from themeforest(the above
 {#                                        <span class="title">Manage Scholarships</span>#}
 {#                                    </a>#}
 {#                                </li>#}
-{#                                <li class="nav-item  ">#}
-{#                                    <a href="javascript:;" class="nav-link nav-toggle">#}
-{#                                        <i class="icon-graph"></i>#}
-{#                                        <span class="title">Manage Formulas</span>#}
-{#                                        <span class="arrow"></span>#}
-{#                                    </a>#}
-{#                                    <ul class="sub-menu">#}
-{#                                        <li class="nav-item ">#}
-{#                                            <a href="{% url 'masters:formula_type_master' %}"#}
-{#                                               class="nav-link ">#}
-{#                                                Degree Formula </a>#}
-{#                                        </li>#}
+                                <li class="nav-item  ">
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+                                       <i class="fa fa-cog" aria-hidden="true"></i>
+
+                                        <span class="title">System Settings</span>
+                                        <span class="arrow"></span>
+                                    </a>
+                                    <ul class="sub-menu">
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:language_settings' %}"
+                                               class="nav-link ">Manage Language </a>
+                                        </li>
 {#                                        <li class="nav-item ">#}
 {#                                            <a href="{% url 'masters:template_master_and_phd_master' %}"#}
 {#                                               class="nav-link ">#}
@@ -407,8 +407,8 @@ License: You must have a valid license purchased only from themeforest(the above
 {#                                            <a href="{% url 'masters:template_master_course_work_master' %}"#}
 {#                                               class="nav-link "> Msr crs work Formula </a>#}
 {#                                        </li>#}
-{#                                    </ul>#}
-{#                                </li>#}
+                                    </ul>
+                                </li>
 {#                                <li class="nav-item  ">#}
 {#                                    <a href="{% url 'masters:template_country_master' %}" class="nav-link ">#}
 {#                                        <i class="icon-graph"></i>#}
@@ -519,12 +519,12 @@ License: You must have a valid license purchased only from themeforest(the above
 {#                                    </ul>#}
 {#                                </li>#}
 
-                                    <li class="nav-item  ">
-                                        <a href="/masters/university_details/" class="nav-link ">
-                                            <i class="fa fa-university" aria-hidden="true"></i>
-                                            <span class="title">Manage Universities</span>
-                                        </a>
-                                    </li>
+{#                                    <li class="nav-item  ">#}
+{#                                        <a href="/masters/university_details/" class="nav-link ">#}
+{#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
+{#                                            <span class="title">Manage Universities</span>#}
+{#                                        </a>#}
+{#                                    </li>#}
 
 
 
@@ -734,7 +734,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                class="nav-link nav-toggle">
                                 <i class="fa fa-file" aria-hidden="true"></i>
 
-                                <span class="title">Manage Documents</span>
+                                <span class="title">Manage Applicant Documents</span>
                                 <span class="selected"></span>
                             </a>
                         </li>
@@ -1182,12 +1182,12 @@ License: You must have a valid license purchased only from themeforest(the above
                     <ul class="nav nav-tabs menu" style="border-bottom: none">
                         {#<li class="active"><a href="#a" data-toggle="tab">Dashboard</a></li>#}
                         {% if not user.is_student %}
-                        <li id="setting_anch" ><a href="#b" data-toggle="tab">Settings</a></li>
+                        <li id="setting_anch" ><a href="#b" data-toggle="tab">Master Settings</a></li>
                         {% endif %}
                         {% if user.is_student %}
                         <li id="app_anch"><a href="#c" data-toggle="tab">Application Management</a></li>
                         {% else %}
-                        <li id="app_anch"><a href="#c" data-toggle="tab">Application Management</a></li>
+                        <li id="app_anch"><a href="#c" data-toggle="tab">Module Settings</a></li>
                         {% endif %}
 
                         {% if user.is_student %}
@@ -1327,6 +1327,7 @@ License: You must have a valid license purchased only from themeforest(the above
         src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-progressbar/0.9.0/bootstrap-progressbar.min.js"></script>
 <script src="http://www.amcharts.com/lib/amcharts.js" type="text/javascript"></script>
 <script src="{% static 'js-webshim/minified/polyfiller.js' %}" type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 
 </body>
 
@@ -1983,7 +1984,7 @@ License: You must have a valid license purchased only from themeforest(the above
     {% endif %}
 
 
-{% if request.resolver_match.url_name == 'university_details' %}
+{% if request.resolver_match.url_name == 'university_details' or request.resolver_match.url_name == 'language_settings' or request.resolver_match.url_name == 'add_language'   %}
     {
        var element = document.getElementById("b");
         element.classList.add("active");

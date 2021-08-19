@@ -1616,3 +1616,63 @@ def save_university_details(request):
     except:
         messages.warning(request, "Record not saved.")
     return redirect('/masters/university_details/')
+
+
+def language_settings(request):
+    language_recs = LanguageDetails.objects.all()
+    return render(request, 'template_language_settings.html', {'language_recs': language_recs})
+
+def add_language(request):
+    if request.method == 'POST':
+        short_code = request.POST.get('short_code')
+        language_name = request.POST.get('language_name')
+        language_direction = request.POST.get('language_direction')
+        status = request.POST.get('status')
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            LanguageDetails.objects.create(short_code=short_code, language_name=language_name,
+                                             language_direction=language_direction, status=status)
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/language_settings/')
+    return render(request, 'add_language.html')
+
+
+def edit_language(request, language_id=None):
+    language_obj = LanguageDetails.objects.get(id=language_id)
+    if request.method == 'POST':
+        short_code = request.POST.get('short_code')
+        language_name = request.POST.get('language_name')
+        language_direction = request.POST.get('language_direction')
+        status = request.POST.get('status')
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            language_obj.short_code = short_code
+            language_obj.language_name = language_name
+            language_obj.language_direction = language_direction
+            language_obj.status = status
+            language_obj.save()
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/language_settings/')
+    return render(request, "edit_language.html", {'language_obj': language_obj})
+
+
+def delete_language(request):
+    if request.method == 'POST':
+        language_delete_id = request.POST.get('language_delete_id')
+        try:
+            LanguageDetails.objects.filter(id=language_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/language_settings/')
+    return render(request, 'add_language.html')

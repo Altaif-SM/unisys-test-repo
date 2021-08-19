@@ -426,3 +426,13 @@ class EmailTemplates(BaseModel):
 
 class UploadTermCondition(BaseModel):
     term_condition = models.FileField(upload_to='term_condition/pdf', blank=True, null=True)
+
+
+
+class LanguageDetails(BaseModel):
+    short_code = models.CharField(max_length=255, blank=True, null=True)
+    language_name = models.CharField(max_length=255, blank=True, null=True)
+    language_direction = models.CharField(max_length=255, blank=True, null=True)
+    status = models.BooleanField(default=False)
+    class Meta:
+        ordering = ('-id',)
