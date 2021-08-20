@@ -402,6 +402,15 @@ License: You must have a valid license purchased only from themeforest(the above
                                             <a href="{% url 'masters:currency_settings' %}"
                                                class="nav-link ">Manage Currency </a>
                                         </li>
+
+
+                                        <li class="nav-item  ">
+                                        <a href="/masters/university_settings/" class="nav-link ">
+{#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
+                                            <span class="title">Manage Universities</span>
+                                        </a>
+                                    </li>
+
 {#                                        <li class="nav-item ">#}
 {#                                            <a href="{% url 'masters:template_master_course_work_master' %}"#}
 {#                                               class="nav-link "> Msr crs work Formula </a>#}
@@ -1983,7 +1992,7 @@ License: You must have a valid license purchased only from themeforest(the above
     {% endif %}
 
 
-{% if request.resolver_match.url_name == 'university_details' or request.resolver_match.url_name == 'language_settings' or request.resolver_match.url_name == 'add_language' or request.resolver_match.url_name == 'edit_language' or request.resolver_match.url_name == 'currency_settings' or request.resolver_match.url_name == 'add_currency' or request.resolver_match.url_name == 'edit_currency'  %}
+{% if request.resolver_match.url_name == 'university_settings' or request.resolver_match.url_name == 'language_settings' or request.resolver_match.url_name == 'add_language' or request.resolver_match.url_name == 'edit_language' or request.resolver_match.url_name == 'currency_settings' or request.resolver_match.url_name == 'add_currency' or request.resolver_match.url_name == 'edit_currency'  or request.resolver_match.url_name == 'add_university'  or request.resolver_match.url_name == 'edit_university'  %}
     {
        var element = document.getElementById("b");
         element.classList.add("active");

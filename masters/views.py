@@ -1822,3 +1822,68 @@ def delete_currency(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/currency_settings/')
+
+
+def university_settings(request):
+    university_recs = UniversityDetails.objects.filter(is_delete = False)
+    return render(request, 'university_settings.html', {'university_recs': university_recs})
+
+
+def add_university(request):
+    if request.method == 'POST':
+        university_logo = request.FILES.get('university_logo', None)
+        university_id = request.POST.get('university_id')
+        university_name = request.POST.get('university_name')
+        email = request.POST.get('email')
+        telephone = request.POST.get('telephone')
+        website = request.POST.get('website')
+        university_address = request.POST.get('university_address')
+        status = request.POST.get('status')
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            university_obj = UniversityDetails.objects.create(university_id=university_id,
+                                             university_name=university_name, email=email,telephone = telephone,website = website,
+                                             university_address = university_address,is_active = status)
+            if university_logo:
+                university_obj.university_logo = university_logo
+                university_obj.save()
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/university_settings/')
+    return render(request, 'add_university.html')
+
+def edit_university(request, university_id=None):
+    university_obj = UniversityDetails.objects.get(id=university_id)
+    if request.method == 'POST':
+        university_logo = request.FILES.get('university_logo', None)
+        university_id = request.POST.get('university_id')
+        university_name = request.POST.get('university_name')
+        email = request.POST.get('email')
+        telephone = request.POST.get('telephone')
+        website = request.POST.get('website')
+        university_address = request.POST.get('university_address')
+        status = request.POST.get('status')
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            university_obj.university_id = university_id
+            university_obj.university_name = university_name
+            university_obj.email = email
+            university_obj.telephone = telephone
+            university_obj.website = website
+            university_obj.university_address = university_address
+            university_obj.is_active = status
+            if university_logo:
+                university_obj.university_logo = university_logo
+            university_obj.save()
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/university_settings/')
+    return render(request, "edit_university.html", {'university_obj': university_obj})

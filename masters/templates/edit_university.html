@@ -1,0 +1,288 @@
+{% extends "template_base_page.html" %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css"
+          rel="stylesheet">
+
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+
+    <script>
+        window.onload = function () {
+
+
+            window.setTimeout(function () {
+                $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                    $(this).remove();
+                });
+            }, 4000);
+        }
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'accounts:home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> Master Settings </span>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> System Settings</span>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span> Edit University </span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">Edit University </span>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form action="{% url 'masters:edit_university' university_obj.id %}"
+                      id="id_form"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-body">
+
+                        <div class="row item_experience" id="item_experience_1">
+
+                            <div class="row">
+                                {% if university_obj.university_logo %}
+                                    <div class="">
+                                        <label class="col-md-2 control-label">University Logo:
+
+                                        </label>
+                                        <div class="col-md-2">
+
+                                            <input name="university_logo" type="file" title="Select University Logo"
+                                                   accept="image/gif, image/jpeg, image/png"
+                                                   id="university_logo"
+                                                   class="form-control ">
+
+
+                                        </div>
+                                        {% if university_obj.university_logo %}
+                                            <div class="col-md-1" style="margin-top: 5px;
+    font-size: 20px;">
+                                                <a href="{{ university_obj.university_logo.url }}" download>
+                                                    <i class="fa fa-download" aria-hidden="true"></i>
+
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% else %}
+                                    <div class="">
+                                        <label class="col-md-2 control-label">University Logo:
+
+                                        </label>
+                                        <div class="col-md-3">
+
+                                            <input name="university_logo" type="file" title="Select University Logo"
+                                                   accept="image/gif, image/jpeg, image/png"
+                                                   id="university_logo"
+                                                   class="form-control ">
+
+
+                                        </div>
+
+                                    </div>
+                                {% endif %}
+
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">University ID:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter University ID" id="university_id"
+                                               value="{{ university_obj.university_id|default_if_none:"" }}"
+                                               name="university_id"
+                                               class="form-control" required>
+
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <br>
+                            <div class="row">
+                                <div class="">
+                                    <label class="col-md-2 control-label">University Name:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter University Namee" id="university_name"
+                                               value="{{ university_obj.university_name|default_if_none:"" }}"
+                                               name="university_name"
+                                               class="form-control" required>
+
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Email:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter Email" id="email"
+                                               value="{{ university_obj.email|default_if_none:"" }}"
+                                               name="email"
+                                               class="form-control" required>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <br>
+
+
+                            <div class="row">
+                                <div class="">
+                                    <label class="col-md-2 control-label">Telephone:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter Telephone" id="telephone"
+                                               value="{{ university_obj.telephone|default_if_none:"" }}"
+                                               name="telephone"
+                                               class="form-control" required>
+
+                                    </div>
+                                </div>
+
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Website:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter Website" id="website"
+                                               value="{{ university_obj.website|default_if_none:"" }}"
+                                               name="website"
+                                               class="form-control" required>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <br>
+
+                            <div class="row">
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Address:<span
+                                            style="color: red">*</span>
+
+                                    </label>
+                                    <div class="col-md-3">
+                                        <textarea rows="2" class="form-control " required id="university_address"
+                                                  name="university_address">{{ university_obj.university_address|default_if_none:"" }}</textarea>
+
+                                    </div>
+                                </div>
+
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Status:</label>
+                                    <div class="col-md-3">
+                                        {% if university_obj.is_active == True %}
+                                            <input type="checkbox" checked data-toggle="toggle" data-onstyle="success"
+                                                   data-offstyle="danger" id="status" name="status">
+                                        {% else %}
+                                            <input type="checkbox" data-toggle="toggle" data-onstyle="success"
+                                                   data-offstyle="danger" id="status" name="status">
+                                        {% endif %}
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                        <br>
+
+                        <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                                        onclick="window.location='{% url "masters:university_settings" %}'">
+                                    Back
+                                </button>
+
+                                <button type="submit" class="btn green" id="save_form" style="">Save
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -259,12 +259,18 @@ class StudentDonorMapping(BaseModel):
 class UniversityDetails(BaseModel):
     country = models.ForeignKey(CountryDetails, null=True, related_name='university_country_rel',
                                 on_delete=models.PROTECT)
+    university_id = models.CharField(max_length=255, blank=True, null=True)
     university_name = models.CharField(max_length=255, blank=True, null=True)
+    email = models.CharField(max_length=255, blank=True, null=True)
+    telephone = models.CharField(max_length=255, blank=True, null=True)
+    website = models.CharField(max_length=255, blank=True, null=True)
     address = models.ForeignKey(AddressDetails, null=True, related_name='university_address_rel',
                                 on_delete=models.PROTECT)
     university_logo = models.ImageField(upload_to='university_logo/', null=True, blank=True)
     university_address = models.CharField(max_length=255, blank=True, null=True)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    is_delete = models.BooleanField(default=False)
+
 
     class Meta:
         ordering = ('university_name',)

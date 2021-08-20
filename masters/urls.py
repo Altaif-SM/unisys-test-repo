@@ -137,4 +137,8 @@ urlpatterns = [
     path('edit_currency/<int:currency_id>/', views.edit_currency, name='edit_currency'),
     path('delete_currency/', views.delete_currency, name='delete_currency'),
 
+    path('university_settings/', views.university_settings, name='university_settings'),
+    path('add_university/', views.add_university, name='add_university'),
+    path('edit_university/<int:university_id>/', views.edit_university, name='edit_university'),
+
 ]
