@@ -100,7 +100,8 @@
 
                             <div class="row">
                                 <div class="">
-                                    <label class="col-md-2 control-label">Short Code:</label>
+                                    <label class="col-md-2 control-label">Short Code:<span
+                                        style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <input type="text" title="Enter Short Code" id="short_code"
                                                value="{{ language_obj.short_code|default_if_none:"" }}" name="short_code"
@@ -112,7 +113,8 @@
 
                                 <div class="">
                                     <label class="col-md-2 control-label">Language
-                                        Name:</label>
+                                        Name:<span
+                                        style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <input type="text" title="Enter Language Name" id="language_name"
                                                value="{{ language_obj.language_name|default_if_none:"" }}" name="language_name"
@@ -130,7 +132,8 @@
 
 
                                 <div class="">
-                                    <label class="col-md-2 control-label">Language Direction:</label>
+                                    <label class="col-md-2 control-label">Language Direction:<span
+                                        style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <select id='language_direction' title="Select Language Direction"
                                                 name="language_direction"
