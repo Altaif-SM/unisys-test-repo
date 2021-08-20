@@ -273,7 +273,7 @@ class UniversityDetails(BaseModel):
 
 
     class Meta:
-        ordering = ('university_name',)
+        ordering = ('-id',)
 
     def __str__(self):
         return self.university_name
