@@ -1709,4 +1709,116 @@ def delete_language(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/language_settings/')
-    return render(request, 'add_language.html')
+
+
+def currency_settings(request):
+    currency_recs = CurrencyDetails.objects.all()
+    return render(request, 'template_currency_settings.html', {'currency_recs': currency_recs})
+
+def add_currency(request):
+    if request.method == 'POST':
+        currency_number = request.POST.get('currency_number')
+        currency_code = request.POST.get('currency_code')
+        currency_name = request.POST.get('currency_name')
+        decimal_description = request.POST.get('decimal_description')
+        record_status = request.POST.get('record_status')
+        length = request.POST.get('length')
+        exchange_type = request.POST.get('exchange_type')
+
+        if record_status == 'on':
+            record_status = True
+        else:
+            record_status = False
+        try:
+            currency_dict = {
+                'currency_number':currency_number,
+                'currency_code':currency_code,
+                'currency_name':currency_name,
+                'decimal_description':decimal_description,
+                'record_status':record_status,
+                'length':length,
+                'exchange_type':exchange_type,
+            }
+            if CurrencyDetails.objects.filter(currency_name=currency_name).exists():
+                messages.warning(request, "Currency Name already exists.")
+                return render(request, 'add_currency.html', {'currency_dict': currency_dict})
+            elif CurrencyDetails.objects.filter(currency_code=currency_code).exists():
+                messages.warning(request, "Currency Code already exists.")
+                return render(request, 'add_currency.html', {'currency_dict': currency_dict})
+
+            CurrencyDetails.objects.create(currency_number=currency_number, currency_name=currency_name, currency_code = currency_code,
+                                             decimal_description=decimal_description, record_status=record_status,length = length,exchange_type = exchange_type)
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/currency_settings/')
+    currency_dict = {
+        'currency_number': '',
+        'currency_code': '',
+        'currency_name': '',
+        'decimal_description': '',
+        'record_status': True,
+        'length': '',
+        'exchange_type': '',
+    }
+    return render(request, 'add_currency.html',{'currency_dict':currency_dict})
+
+
+def edit_currency(request, currency_id=None):
+    currency_obj = CurrencyDetails.objects.get(id=currency_id)
+    if request.method == 'POST':
+        currency_number = request.POST.get('currency_number')
+        currency_code = request.POST.get('currency_code')
+        currency_name = request.POST.get('currency_name')
+        decimal_description = request.POST.get('decimal_description')
+        record_status = request.POST.get('record_status')
+        length = request.POST.get('length')
+        exchange_type = request.POST.get('exchange_type')
+        if record_status == 'on':
+            record_status = True
+        else:
+            record_status = False
+        try:
+            currency_obj = {
+                'id':currency_id,
+                'currency_number': currency_number,
+                'currency_code': currency_code,
+                'currency_name': currency_name,
+                'decimal_description': decimal_description,
+                'record_status': record_status,
+                'length': length,
+                'exchange_type': exchange_type,
+            }
+            if CurrencyDetails.objects.filter(~Q(id=currency_id), currency_name=currency_name.strip()).exists():
+                messages.warning(request, "Currency Name already exists.")
+                return render(request, "edit_currency.html", {'currency_obj': currency_obj})
+            if CurrencyDetails.objects.filter(~Q(id=currency_id), currency_code=currency_code.strip()).exists():
+                messages.warning(request, "Currency Code already exists.")
+                return render(request, "edit_currency.html", {'currency_obj': currency_obj})
+            CurrencyDetails.objects.filter(id = currency_id).update(currency_number=currency_number, currency_code = currency_code,currency_name=currency_name,
+                                             decimal_description=decimal_description, record_status=record_status,length = length,exchange_type = exchange_type)
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/currency_settings/')
+    currency_obj = {
+        'id': currency_id,
+        'currency_number': currency_obj.currency_number,
+        'currency_code': currency_obj.currency_code,
+        'currency_name': currency_obj.currency_name,
+        'decimal_description': currency_obj.decimal_description,
+        'record_status': currency_obj.record_status,
+        'length': currency_obj.length,
+        'exchange_type': currency_obj.exchange_type,
+    }
+    return render(request, "edit_currency.html", {'currency_obj': currency_obj})
+
+def delete_currency(request):
+    if request.method == 'POST':
+        currency_delete_id = request.POST.get('currency_delete_id')
+        try:
+            CurrencyDetails.objects.filter(id=currency_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/currency_settings/')

@@ -436,3 +436,14 @@ class LanguageDetails(BaseModel):
     status = models.BooleanField(default=False)
     class Meta:
         ordering = ('-id',)
+
+class CurrencyDetails(BaseModel):
+    currency_number = models.CharField(max_length=255, blank=True, null=True)
+    currency_code = models.CharField(max_length=255, blank=True, null=True)
+    currency_name = models.CharField(max_length=255, blank=True, null=True)
+    decimal_description = models.CharField(max_length=255, blank=True, null=True)
+    record_status = models.BooleanField(default=False)
+    length = models.CharField(max_length=255, blank=True, null=True)
+    exchange_type = models.CharField(max_length=255, blank=True, null=True)
+    class Meta:
+        ordering = ('-id',)

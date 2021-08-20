@@ -1,0 +1,254 @@
+{% extends "template_base_page.html" %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css"
+          rel="stylesheet">
+
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+
+    <script>
+        window.onload = function () {
+
+
+            window.setTimeout(function () {
+                $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                    $(this).remove();
+                });
+            }, 4000);
+        }
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'accounts:home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> Master Settings </span>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> System Settings</span>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span> Add Currency </span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">Add Currency </span>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form action="{% url 'masters:add_currency' %}"
+                      id="id_form"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-body">
+
+                        <div class="row item_experience" id="item_experience_1">
+
+                            <div class="row">
+                                <div class="">
+                                    <label class="col-md-2 control-label">Currency Number:</label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter Currency Number" id="currency_number"
+                                               value="{{ currency_dict.currency_number|default_if_none:"" }}"
+                                               name="currency_number"
+                                               class="form-control" required>
+
+
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Currency Code:</label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter Currency Code" id="currency_code"
+                                               value="{{ currency_dict.currency_code|default_if_none:"" }}"
+                                               name="currency_code"
+                                               class="form-control" required>
+
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+
+                            <br>
+
+                            <div class="row">
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Currency Name:</label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter Currency Name" id="currency_name"
+                                               value="{{ currency_dict.currency_name|default_if_none:"" }}"
+                                               name="currency_name"
+                                               class="form-control" required>
+
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Decimal Description:</label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter Decimal Description" id="decimal_description"
+                                               value="{{ currency_dict.decimal_description|default_if_none:"" }}"
+                                               name="decimal_description"
+                                               class="form-control" required>
+
+
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+
+                            <br>
+
+
+                            <div class="row">
+
+                            <div class="">
+                                    <label class="col-md-2 control-label">Length:</label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter Length" id="length"
+                                               value="{{ currency_dict.length|default_if_none:"" }}"
+                                               name="length"
+                                               class="form-control" required>
+
+                                    </div>
+                                </div>
+
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Exchange Type:</label>
+                                    <div class="col-md-3">
+                                        <select id='exchange_type' title="Select Exchange Type"
+                                                name="exchange_type"
+                                                class="form-control" required>
+                                            {% if currency_dict.exchange_type %}
+                                                <option style="display:none;" selected="selected"
+                                                        value="{{ currency_dict.exchange_type|default_if_none:"" }}"> {{ currency_dict.exchange_type|default_if_none:"" }}</option>
+                                                <option value=""> Please Select</option>
+                                            {% else %}
+                                                <option selected="selected" value=""> Please Select</option>
+                                            {% endif %}
+
+                                            <option value="Floating Exchange"> Floating Exchange</option>
+                                            <option value="Fixed Exchange"> Fixed Exchange</option>
+                                            <option value="Pegged Float Exchange"> Pegged Float Exchange</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                        <br>
+                        <div class="row">
+                            <div class="">
+                                    <label class="col-md-2 control-label">Status:</label>
+                                    <div class="col-md-3">
+
+                                        {% if currency_dict.record_status == True %}
+                                            <input type="checkbox" checked data-toggle="toggle" data-onstyle="success"
+                                                   data-offstyle="danger" id="record_status" name="record_status">
+                                        {% else %}
+                                            <input type="checkbox" data-toggle="toggle" data-onstyle="success"
+                                                   data-offstyle="danger" id="record_status" name="record_status">
+                                        {% endif %}
+
+                                    </div>
+                                </div>
+                        </div>
+
+
+                        </div>
+                        <br>
+
+                        <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                                        onclick="window.location='{% url "masters:currency_settings" %}'">
+                                    Back
+                                </button>
+
+                                <button type="submit" class="btn green" id="save_form" style="">Save
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

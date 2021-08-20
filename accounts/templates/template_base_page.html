@@ -386,23 +386,22 @@ License: You must have a valid license purchased only from themeforest(the above
 {#                                        <span class="title">Manage Scholarships</span>#}
 {#                                    </a>#}
 {#                                </li>#}
-                                <li class="nav-item ">
+                                <li class="nav-item master_settings_nav_item">
                                     <a href="javascript:;" class="nav-link nav-toggle">
                                        <i class="fa fa-cog" aria-hidden="true"></i>
 
                                         <span class="title">System Settings</span>
-                                        <span class="arrow "></span>
+                                        <span class="arrow master_settings_arrow"></span>
                                     </a>
-                                    <ul class="sub-menu master_settings">
+                                    <ul class="sub-menu master_settings_sub_menu">
                                         <li class="nav-item ">
                                             <a href="{% url 'masters:language_settings' %}"
                                                class="nav-link ">Manage Language </a>
                                         </li>
-{#                                        <li class="nav-item ">#}
-{#                                            <a href="{% url 'masters:template_master_and_phd_master' %}"#}
-{#                                               class="nav-link ">#}
-{#                                                Msr & Phd Formula </a>#}
-{#                                        </li>#}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:currency_settings' %}"
+                                               class="nav-link ">Manage Currency </a>
+                                        </li>
 {#                                        <li class="nav-item ">#}
 {#                                            <a href="{% url 'masters:template_master_course_work_master' %}"#}
 {#                                               class="nav-link "> Msr crs work Formula </a>#}
@@ -1984,7 +1983,7 @@ License: You must have a valid license purchased only from themeforest(the above
     {% endif %}
 
 
-{% if request.resolver_match.url_name == 'university_details' or request.resolver_match.url_name == 'language_settings' or request.resolver_match.url_name == 'add_language'   %}
+{% if request.resolver_match.url_name == 'university_details' or request.resolver_match.url_name == 'language_settings' or request.resolver_match.url_name == 'add_language' or request.resolver_match.url_name == 'edit_language' or request.resolver_match.url_name == 'currency_settings' or request.resolver_match.url_name == 'add_currency' or request.resolver_match.url_name == 'edit_currency'  %}
     {
        var element = document.getElementById("b");
         element.classList.add("active");
@@ -1992,7 +1991,10 @@ License: You must have a valid license purchased only from themeforest(the above
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
 
-        $('.master_settings').css('display','block');
+        $(".master_settings_nav_item").addClass("open");
+        $(".master_settings_arrow").addClass("open");
+        $('.master_settings_sub_menu').css('display','block');
+
     }
     {% endif %}
 

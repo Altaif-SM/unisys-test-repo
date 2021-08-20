@@ -132,4 +132,9 @@ urlpatterns = [
     path('edit_language/<int:language_id>/', views.edit_language, name='edit_language'),
     path('delete_language/', views.delete_language, name='delete_language'),
 
+    path('currency_settings/', views.currency_settings, name='currency_settings'),
+    path('add_currency/', views.add_currency, name='add_currency'),
+    path('edit_currency/<int:currency_id>/', views.edit_currency, name='edit_currency'),
+    path('delete_currency/', views.delete_currency, name='delete_currency'),
+
 ]
