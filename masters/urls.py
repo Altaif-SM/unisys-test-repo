@@ -140,5 +140,6 @@ urlpatterns = [
     path('university_settings/', views.university_settings, name='university_settings'),
     path('add_university/', views.add_university, name='add_university'),
     path('edit_university/<int:university_id>/', views.edit_university, name='edit_university'),
+    path('delete_university/', views.delete_university, name='delete_university'),
 
 ]

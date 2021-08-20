@@ -1887,3 +1887,13 @@ def edit_university(request, university_id=None):
             messages.warning(request, "Record not saved.")
         return redirect('/masters/university_settings/')
     return render(request, "edit_university.html", {'university_obj': university_obj})
+
+def delete_university(request):
+    if request.method == 'POST':
+        university_delete_id = request.POST.get('university_delete_id')
+        try:
+            UniversityDetails.objects.filter(id=university_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/university_settings/')

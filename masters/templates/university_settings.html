@@ -50,11 +50,10 @@
 
                 $(document).on("click", ".delete", function (e) {
 
-                    $('#id_delete_language_model').modal();
+                    $('#id_delete_university_model').modal();
                     var parent_id = $(this).closest('tr').attr('id');
-                    var language_id = $('#' + parent_id + ' #language_id').val();
-                    console.log("language_id"+language_id);
-                    $("#language_delete_id").val(language_id)
+                    var university_id = $('#' + parent_id + ' #university_id').val();
+                    $("#university_delete_id").val(university_id)
 
                     {#var url = '/masters/delete_semester/';#}
                     {#delete_semester_info(url, language_id)#}
@@ -201,7 +200,7 @@
                     <tbody id="tbody">
                     {% for rec in university_recs %}
                         <tr id="item{{ forloop.counter }}" class="item">
-                            <td style="display: none"><input id="language_id" value="{{ rec.id }}"></td>
+                            <td style="display: none"><input id="university_id" value="{{ rec.id }}"></td>
                             <td>{{ rec.university_id|default_if_none:"" }}</td>
                             <td>{{ rec.university_name|default_if_none:"" }}</td>
                             <td>{{ rec.email|default_if_none:"" }}</td>
@@ -237,23 +236,22 @@
         </div>
     </div>
 
-    <div id="id_delete_language_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+    <div id="id_delete_university_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{% url 'masters:delete_language' %}"
+                <form action="{% url 'masters:delete_university' %}"
                         id="form_sample_1"
                         class="form-horizontal"
                         method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <input type="hidden" id="language_delete_id" name="language_delete_id">
+                    <input type="hidden" id="university_delete_id" name="university_delete_id">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                         <h4 class="modal-title" style="color: #2a015e; text-align: center"><b  >Delete Confirmation</b></h4>
                     </div>
                     <div class="modal-body">
-                        <p> Are you sure, you want to delete language? </p>
-                        <p> After delete you will not be able to modify the language. </p>
-                                                <input type="hidden" name="app_id" value="{{ application_obj.id }}">
+                        <p> Are you sure, you want to delete university? </p>
+                        <p> After delete you will not be able to modify the university. </p>
 
                     </div>
                     <div class="modal-footer">
