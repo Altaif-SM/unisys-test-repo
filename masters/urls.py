@@ -159,4 +159,9 @@ urlpatterns = [
     path('edit_study_level/', views.edit_study_level, name='edit_study_level'),
     path('delete_study_level/', views.delete_study_level, name='delete_study_level'),
 
+    path('study_type_settings/', views.study_type_settings, name='study_type_settings'),
+    path('add_study_type/', views.add_study_type, name='add_study_type'),
+    path('edit_study_type/', views.edit_study_type, name='edit_study_type'),
+    path('delete_study_type/', views.delete_study_type, name='delete_study_type'),
+
 ]

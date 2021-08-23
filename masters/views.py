@@ -2071,3 +2071,49 @@ def delete_study_level(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/study_level_settings/')
+
+
+
+def study_type_settings(request):
+    study_type_recs = StudyTypeDetails.objects.filter().order_by('-id')
+    return render(request, 'study_type.html',
+                  {'study_type_recs': study_type_recs})
+
+def add_study_type(request):
+    study_type = request.POST.get('study_type')
+    try:
+        if not StudyTypeDetails.objects.filter(study_type=study_type).exists():
+            StudyTypeDetails.objects.create(study_type=study_type)
+            messages.success(request, "Record saved.")
+        else:
+            messages.warning(request, "Study type already exists.")
+    except:
+        messages.warning(request, "Record not saved.")
+    return redirect('/masters/study_type_settings/')
+
+def edit_study_type(request):
+    study_type_id = request.POST.get('study_type_id')
+    study_type = request.POST.get('study_type')
+    try:
+        if not StudyTypeDetails.objects.filter(~Q(id=study_type_id), study_type=study_type).exists():
+            StudyTypeDetails.objects.filter(id=study_type_id).update(study_type=study_type)
+            messages.success(request, "Record saved.")
+            return HttpResponse(json.dumps({'success': 'Record saved.'}), content_type="application/json")
+        else:
+            messages.warning(request, "Study type already exists.")
+            return HttpResponse(
+                json.dumps({'success': "Study type already exists."}),
+                content_type="application/json")
+    except:
+        messages.warning(request, "Record not updated.")
+        return HttpResponse(json.dumps({'error': 'Record not updated.'}), content_type="application/json")
+
+def delete_study_type(request):
+    if request.method == 'POST':
+        study_level_delete_id = request.POST.get('study_level_delete_id')
+        try:
+            StudyTypeDetails.objects.filter(id=study_level_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/study_type_settings/')
