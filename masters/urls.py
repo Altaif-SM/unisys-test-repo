@@ -142,4 +142,8 @@ urlpatterns = [
     path('edit_university/<int:university_id>/', views.edit_university, name='edit_university'),
     path('delete_university/', views.delete_university, name='delete_university'),
 
+    path('faculty_settings/', views.faculty_settings, name='faculty_settings'),
+    path('add_faculty/', views.add_faculty, name='add_faculty'),
+    path('edit_faculty/<int:faculty_id>/', views.edit_faculty, name='edit_faculty'),
+
 ]

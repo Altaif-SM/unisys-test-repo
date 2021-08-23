@@ -453,3 +453,18 @@ class CurrencyDetails(BaseModel):
     exchange_type = models.CharField(max_length=255, blank=True, null=True)
     class Meta:
         ordering = ('-id',)
+
+class FacultyDetails(BaseModel):
+    university = models.ForeignKey(UniversityDetails, null=True, related_name='university_faculty_rel',
+                                on_delete=models.PROTECT)
+    faculty_id = models.CharField(max_length=255, blank=True, null=True)
+    faculty_name = models.CharField(max_length=255, blank=True, null=True)
+    email = models.CharField(max_length=255, blank=True, null=True)
+    telephone = models.CharField(max_length=255, blank=True, null=True)
+    website = models.CharField(max_length=255, blank=True, null=True)
+    logo = models.ImageField(upload_to='faculty_logo/', null=True, blank=True)
+    address = models.CharField(max_length=255, blank=True, null=True)
+    status = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ('-id',)

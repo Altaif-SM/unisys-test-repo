@@ -1897,3 +1897,66 @@ def delete_university(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/university_settings/')
+
+def faculty_settings(request):
+    faculty_recs = FacultyDetails.objects.filter()
+    return render(request, 'faculty_settings.html', {'faculty_recs': faculty_recs})
+
+def add_faculty(request):
+    if request.method == 'POST':
+        logo = request.FILES.get('logo', None)
+        faculty_id = request.POST.get('faculty_id')
+        faculty_name = request.POST.get('faculty_name')
+        email = request.POST.get('email')
+        telephone = request.POST.get('telephone')
+        website = request.POST.get('website')
+        address = request.POST.get('address')
+        status = request.POST.get('status')
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            faculty_obj = FacultyDetails.objects.create(faculty_id=faculty_id,
+                                             faculty_name=faculty_name, email=email,telephone = telephone,website = website,
+                                             address = address,status = status)
+            if logo:
+                faculty_obj.logo = logo
+                faculty_obj.save()
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/faculty_settings/')
+    return render(request, 'add_faculty.html')
+
+def edit_faculty(request, faculty_id=None):
+    faculty_obj = FacultyDetails.objects.get(id=faculty_id)
+    if request.method == 'POST':
+        logo = request.FILES.get('logo', None)
+        faculty_id = request.POST.get('faculty_id')
+        faculty_name = request.POST.get('faculty_name')
+        email = request.POST.get('email')
+        telephone = request.POST.get('telephone')
+        website = request.POST.get('website')
+        address = request.POST.get('address')
+        status = request.POST.get('status')
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            faculty_obj.faculty_id = faculty_id
+            faculty_obj.faculty_name = faculty_name
+            faculty_obj.email = email
+            faculty_obj.telephone = telephone
+            faculty_obj.website = website
+            faculty_obj.address = address
+            faculty_obj.status = status
+            if logo:
+                faculty_obj.logo = logo
+            faculty_obj.save()
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/faculty_settings/')
+    return render(request, "edit_faculty.html", {'faculty_obj': faculty_obj})
