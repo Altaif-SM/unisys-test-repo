@@ -1965,3 +1965,64 @@ def edit_faculty(request, faculty_id=None):
             messages.warning(request, "Record not saved.")
         return redirect('/masters/faculty_settings/')
     return render(request, "edit_faculty.html", {'faculty_obj': faculty_obj,'university_recs':university_recs})
+
+def delete_faculty(request):
+    if request.method == 'POST':
+        faculty_delete_id = request.POST.get('faculty_delete_id')
+        try:
+            FacultyDetails.objects.filter(id=faculty_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/faculty_settings/')
+
+
+def program_settings(request):
+    program_recs = ProgramDetails.objects.filter()
+    return render(request, 'program_settings.html', {'program_recs': program_recs})
+
+
+def study_mode_settings(request):
+    study_mode_recs = StudyModeDetails.objects.filter().order_by('-id')
+    return render(request, 'study_mode.html',
+                  {'study_mode_recs': study_mode_recs})
+
+def add_program(request):
+    study_mode = request.POST.get('study_mode')
+    try:
+        if not StudyModeDetails.objects.filter(study_mode=study_mode).exists():
+            StudyModeDetails.objects.create(study_mode=study_mode)
+            messages.success(request, "Record saved.")
+        else:
+            messages.warning(request, "Study mode already exists.")
+    except:
+        messages.warning(request, "Record not saved.")
+    return redirect('/masters/study_mode_settings/')
+
+def edit_study_mode(request):
+    study_mode_id = request.POST.get('study_mode_id')
+    study_mode = request.POST.get('study_mode')
+    try:
+        if not StudyModeDetails.objects.filter(~Q(id=study_mode_id), study_mode=study_mode).exists():
+            StudyModeDetails.objects.filter(id=study_mode_id).update(study_mode=study_mode)
+            messages.success(request, "Record saved.")
+            return HttpResponse(json.dumps({'success': 'Record saved.'}), content_type="application/json")
+        else:
+            messages.warning(request, "Study mode already exists.")
+            return HttpResponse(
+                json.dumps({'success': "Study mode already exists."}),
+                content_type="application/json")
+    except:
+        messages.warning(request, "Record not updated.")
+        return HttpResponse(json.dumps({'error': 'Record not updated.'}), content_type="application/json")
+
+
+def delete_study_mode(request):
+    if request.method == 'POST':
+        study_mode_delete_id = request.POST.get('study_mode_delete_id')
+        try:
+            StudyModeDetails.objects.filter(id=study_mode_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/study_mode_settings/')

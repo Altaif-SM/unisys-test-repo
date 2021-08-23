@@ -91,8 +91,8 @@ License: You must have a valid license purchased only from themeforest(the above
         <div class="page-logo">
 
             {#            <h4>SMS</h4>#}
-{#            <img src="{% static 'images/logo.png' %}" alt="logo"#}
-{#                 style="width: 100px;height: 70px;margin-top: 0px; margin-left: 30px" class="logo-default"/>#}
+            {#            <img src="{% static 'images/logo.png' %}" alt="logo"#}
+            {#                 style="width: 100px;height: 70px;margin-top: 0px; margin-left: 30px" class="logo-default"/>#}
 
             <img src="{% static 'images/university_logo.png' %}" alt="logo"
                  style="width: 145px;height: 45px;margin-top: 10px; margin-left: -15px" class="logo-default"/>
@@ -355,7 +355,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             </li>
                         {% endif %}
 
-                    {% if user.is_student %}
+                        {% if user.is_student %}
                             <li class="nav-item " id="dashboard">
                                 <a href="/student/student_home/" class="nav-link nav-toggle">
                                     <i class="glyphicon glyphicon-stats"></i>
@@ -374,21 +374,21 @@ License: You must have a valid license purchased only from themeforest(the above
 
                             {% if user.is_super_admin %}
 
-{#                                <li class="nav-item  ">#}
-{#                                    <a href="/masters/template_year_master/" class="nav-link ">#}
-{#                                        <i class="icon-calendar"></i>#}
-{#                                        <span class="title">Manage Year</span>#}
-{#                                    </a>#}
-{#                                </li>#}
-{#                                <li class="nav-item  ">#}
-{#                                    <a href="/masters/template_scholarship_master/" class="nav-link ">#}
-{#                                        <i class="icon-bulb"></i>#}
-{#                                        <span class="title">Manage Scholarships</span>#}
-{#                                    </a>#}
-{#                                </li>#}
+                                {#                                <li class="nav-item  ">#}
+                                {#                                    <a href="/masters/template_year_master/" class="nav-link ">#}
+                                {#                                        <i class="icon-calendar"></i>#}
+                                {#                                        <span class="title">Manage Year</span>#}
+                                {#                                    </a>#}
+                                {#                                </li>#}
+                                {#                                <li class="nav-item  ">#}
+                                {#                                    <a href="/masters/template_scholarship_master/" class="nav-link ">#}
+                                {#                                        <i class="icon-bulb"></i>#}
+                                {#                                        <span class="title">Manage Scholarships</span>#}
+                                {#                                    </a>#}
+                                {#                                </li>#}
                                 <li class="nav-item master_settings_nav_item">
                                     <a href="javascript:;" class="nav-link nav-toggle">
-                                       <i class="fa fa-cog" aria-hidden="true"></i>
+                                        <i class="fa fa-cog" aria-hidden="true"></i>
 
                                         <span class="title">System Settings</span>
                                         <span class="arrow master_settings_arrow"></span>
@@ -405,140 +405,162 @@ License: You must have a valid license purchased only from themeforest(the above
 
 
                                         <li class="nav-item  ">
-                                        <a href="/masters/university_settings/" class="nav-link ">
-{#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
-                                            <span class="title">Manage Universities</span>
-                                        </a>
-                                    </li>
+                                            <a href="/masters/university_settings/" class="nav-link ">
+                                                {#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
+                                                <span class="title">Manage Universities</span>
+                                            </a>
+                                        </li>
                                         <li class="nav-item  ">
-                                        <a href="/masters/faculty_settings/" class="nav-link ">
-{#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
-                                            <span class="title">Manage Faculties</span>
-                                        </a>
-                                    </li>
+                                            <a href="/masters/faculty_settings/" class="nav-link ">
+                                                {#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
+                                                <span class="title">Manage Faculties</span>
+                                            </a>
+                                        </li>
+                                        {#                                        <li class="nav-item  ">#}
+                                        {#                                        <a href="/masters/program_settings/" class="nav-link ">#}
+                                        {#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
+                                        {#                                            <span class="title">Manage Program</span>#}
+                                        {#                                        </a>#}
+                                        {#                                    </li>#}
 
-{#                                        <li class="nav-item ">#}
-{#                                            <a href="{% url 'masters:template_master_course_work_master' %}"#}
-{#                                               class="nav-link "> Msr crs work Formula </a>#}
-{#                                        </li>#}
+                                        {#                                        <li class="nav-item ">#}
+                                        {#                                            <a href="{% url 'masters:template_master_course_work_master' %}"#}
+                                        {#                                               class="nav-link "> Msr crs work Formula </a>#}
+                                        {#                                        </li>#}
                                     </ul>
                                 </li>
-{#                                <li class="nav-item  ">#}
-{#                                    <a href="{% url 'masters:template_country_master' %}" class="nav-link ">#}
-{#                                        <i class="icon-graph"></i>#}
-{#                                        <span class="title">Manage Countries</span>#}
-{#                                    </a>#}
-{#                                </li>#}
-{#                                <li class="nav-item  ">#}
-{#                                    <a href="{% url 'masters:template_manage_partner_master' %}" class="nav-link ">#}
-{#                                        <i class="icon-graph"></i>#}
-{#                                        <span class="title">Manage Partners</span>#}
-{#                                    </a>#}
-{#                                </li>#}
-{#                                <li class="nav-item  ">#}
-{#                                    <a href="javascript:;" class="nav-link nav-toggle">#}
-{#                                        <i class="fa fa-money"></i>#}
-{#                                        <span class="title">Manage Donors</span>#}
-{#                                        <span class="arrow"></span>#}
-{#                                    </a>#}
-{#                                    <ul class="sub-menu">#}
-{#                                        <li class="nav-item ">#}
-{#                                            <a href="{% url 'masters:template_manage_donor_master' %}"#}
-{#                                               class="nav-link ">#}
-{#                                                Manage Donors </a>#}
-{#                                        </li>#}
-{#                                        <li class="nav-item ">#}
-{#                                            <a href="{% url 'partner:template_link_students_donor' %}"#}
-{#                                               class="nav-link ">#}
-{#                                                Link Student to Donor </a>#}
-{#                                        </li>#}
-{#                                        <li class="nav-item ">#}
-{#                                            <a href="{% url 'partner:template_donor_students_linking' %}"#}
-{#                                               class="nav-link ">#}
-{#                                                Donors Student </a>#}
-{#                                        </li>#}
-{#                                    </ul>#}
-{#                                </li>#}
-{#                                <li class="nav-item  ">#}
-{#                                    <a href="javascript:;" class="nav-link nav-toggle">#}
-{#                                        <i class="fa fa-university"></i>#}
-{#                                        <span class="title">Manage Universities</span>#}
-{#                                        <span class="arrow"></span>#}
-{#                                    </a>#}
-{#                                    <ul class="sub-menu">#}
-{#                                        <li class="nav-item ">#}
-{#                                            <a href="{% url 'masters:template_university_master' %}" class="nav-link ">#}
-{#                                                Manage Universities </a>#}
-{#                                        </li>#}
-{#                                        <li class="nav-item ">#}
-{#                                            <a href="{% url 'masters:template_semester_master' %}" class="nav-link ">#}
-{#                                                Manage#}
-{#                                                Semesters </a>#}
-{#                                        </li>#}
-{#                                        <li class="nav-item ">#}
-{#                                            <a href="{% url 'masters:template_degree_master' %}" class="nav-link ">#}
-{#                                                Manage#}
-{#                                                Degrees </a>#}
-{#                                        </li>#}
-{#                                        <li class="nav-item ">#}
-{#                                            <a href="{% url 'masters:template_program_master' %}" class="nav-link ">#}
-{#                                                Manage Course </a>#}
-{#                                        </li>#}
-{#                                    </ul>#}
-{#                                </li>#}
+                                <li class="nav-item program_settings_nav_item">
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+                                        <i class="fa fa-tasks" aria-hidden="true"></i>
 
-{#                                <li class="nav-item  ">#}
-{#                                    <a href="javascript:;" class="nav-link nav-toggle">#}
-{#                                        <i class="icon-graph"></i>#}
-{#                                        <span class="title">Manage Soft Skills Programs</span>#}
-{#                                        <span class="arrow"></span>#}
-{#                                    </a>#}
-{#                                    <ul class="sub-menu">#}
-{#                                        <li class="nav-item ">#}
-{#                                            <a href="{% url 'masters:template_module_master' %}" class="nav-link ">#}
-{#                                                Manage#}
-{#                                                Modules </a>#}
-{#                                        </li>#}
-{#                                        <li class="nav-item ">#}
-{#                                            <a href="{% url 'masters:template_development_program_master' %}"#}
-{#                                               class="nav-link "> Soft Skills Programs </a>#}
-{#                                        </li>#}
-{#                                    </ul>#}
-{#                                </li>#}
 
-{#                                <li class="nav-item  ">#}
-{#                                    <a href="{% url 'accounts:template_manage_user' %}" class="nav-link ">#}
-{#                                        <i class="fa fa-users"></i>#}
-{#                                        <span class="title">Manage Users</span>#}
-{#                                    </a>#}
-{#                                </li>#}
-{#                                <li class="nav-item  ">#}
-{#                                    <a href="{% url 'partner:template_link_students_parent' %}" class="nav-link ">#}
-{#                                        <i class="icon-graph"></i>#}
-{#                                        <span class="title">Manage Guardians</span>#}
-{#                                    </a>#}
-{#                                </li>#}
+                                        <span class="title">Program Settings</span>
+                                        <span class="arrow program_settings_arrow"></span>
+                                    </a>
+                                    <ul class="sub-menu program_settings_sub_menu">
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:study_mode_settings' %}"
+                                               class="nav-link ">Manage Study Mode </a>
+                                        </li>
 
-{#                                <li class="nav-item  ">#}
-{#                                    <a href="javascript:;" class="nav-link nav-toggle">#}
-{#                                        <i class="icon-graph"></i>#}
-{#                                        <span class="title">Email Template</span>#}
-{#                                        <span class="icon-wrench"></span>#}
-{#                                    </a>#}
-{#                                    <ul class="sub-menu">#}
-{#                                        <li class="nav-item ">#}
-                                            {#                                            <a href="{% url 'masters:email_templates' %}" class="nav-link ">Email templates</a>#}
-{#                                            <a href="{% url 'masters:email_templates_list' %}" class="nav-link ">Template</a>#}
-{#                                        </li>#}
-{#                                    </ul>#}
-{#                                </li>#}
+                                    </ul>
+                                </li>
+                                {#                                <li class="nav-item  ">#}
+                                {#                                    <a href="{% url 'masters:template_country_master' %}" class="nav-link ">#}
+                                {#                                        <i class="icon-graph"></i>#}
+                                {#                                        <span class="title">Manage Countries</span>#}
+                                {#                                    </a>#}
+                                {#                                </li>#}
+                                {#                                <li class="nav-item  ">#}
+                                {#                                    <a href="{% url 'masters:template_manage_partner_master' %}" class="nav-link ">#}
+                                {#                                        <i class="icon-graph"></i>#}
+                                {#                                        <span class="title">Manage Partners</span>#}
+                                {#                                    </a>#}
+                                {#                                </li>#}
+                                {#                                <li class="nav-item  ">#}
+                                {#                                    <a href="javascript:;" class="nav-link nav-toggle">#}
+                                {#                                        <i class="fa fa-money"></i>#}
+                                {#                                        <span class="title">Manage Donors</span>#}
+                                {#                                        <span class="arrow"></span>#}
+                                {#                                    </a>#}
+                                {#                                    <ul class="sub-menu">#}
+                                {#                                        <li class="nav-item ">#}
+                                {#                                            <a href="{% url 'masters:template_manage_donor_master' %}"#}
+                                {#                                               class="nav-link ">#}
+                                {#                                                Manage Donors </a>#}
+                                {#                                        </li>#}
+                                {#                                        <li class="nav-item ">#}
+                                {#                                            <a href="{% url 'partner:template_link_students_donor' %}"#}
+                                {#                                               class="nav-link ">#}
+                                {#                                                Link Student to Donor </a>#}
+                                {#                                        </li>#}
+                                {#                                        <li class="nav-item ">#}
+                                {#                                            <a href="{% url 'partner:template_donor_students_linking' %}"#}
+                                {#                                               class="nav-link ">#}
+                                {#                                                Donors Student </a>#}
+                                {#                                        </li>#}
+                                {#                                    </ul>#}
+                                {#                                </li>#}
+                                {#                                <li class="nav-item  ">#}
+                                {#                                    <a href="javascript:;" class="nav-link nav-toggle">#}
+                                {#                                        <i class="fa fa-university"></i>#}
+                                {#                                        <span class="title">Manage Universities</span>#}
+                                {#                                        <span class="arrow"></span>#}
+                                {#                                    </a>#}
+                                {#                                    <ul class="sub-menu">#}
+                                {#                                        <li class="nav-item ">#}
+                                {#                                            <a href="{% url 'masters:template_university_master' %}" class="nav-link ">#}
+                                {#                                                Manage Universities </a>#}
+                                {#                                        </li>#}
+                                {#                                        <li class="nav-item ">#}
+                                {#                                            <a href="{% url 'masters:template_semester_master' %}" class="nav-link ">#}
+                                {#                                                Manage#}
+                                {#                                                Semesters </a>#}
+                                {#                                        </li>#}
+                                {#                                        <li class="nav-item ">#}
+                                {#                                            <a href="{% url 'masters:template_degree_master' %}" class="nav-link ">#}
+                                {#                                                Manage#}
+                                {#                                                Degrees </a>#}
+                                {#                                        </li>#}
+                                {#                                        <li class="nav-item ">#}
+                                {#                                            <a href="{% url 'masters:template_program_master' %}" class="nav-link ">#}
+                                {#                                                Manage Course </a>#}
+                                {#                                        </li>#}
+                                {#                                    </ul>#}
+                                {#                                </li>#}
 
-{#                                    <li class="nav-item  ">#}
-{#                                        <a href="/masters/university_details/" class="nav-link ">#}
-{#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
-{#                                            <span class="title">Manage Universities</span>#}
-{#                                        </a>#}
-{#                                    </li>#}
+                                {#                                <li class="nav-item  ">#}
+                                {#                                    <a href="javascript:;" class="nav-link nav-toggle">#}
+                                {#                                        <i class="icon-graph"></i>#}
+                                {#                                        <span class="title">Manage Soft Skills Programs</span>#}
+                                {#                                        <span class="arrow"></span>#}
+                                {#                                    </a>#}
+                                {#                                    <ul class="sub-menu">#}
+                                {#                                        <li class="nav-item ">#}
+                                {#                                            <a href="{% url 'masters:template_module_master' %}" class="nav-link ">#}
+                                {#                                                Manage#}
+                                {#                                                Modules </a>#}
+                                {#                                        </li>#}
+                                {#                                        <li class="nav-item ">#}
+                                {#                                            <a href="{% url 'masters:template_development_program_master' %}"#}
+                                {#                                               class="nav-link "> Soft Skills Programs </a>#}
+                                {#                                        </li>#}
+                                {#                                    </ul>#}
+                                {#                                </li>#}
+
+                                {#                                <li class="nav-item  ">#}
+                                {#                                    <a href="{% url 'accounts:template_manage_user' %}" class="nav-link ">#}
+                                {#                                        <i class="fa fa-users"></i>#}
+                                {#                                        <span class="title">Manage Users</span>#}
+                                {#                                    </a>#}
+                                {#                                </li>#}
+                                {#                                <li class="nav-item  ">#}
+                                {#                                    <a href="{% url 'partner:template_link_students_parent' %}" class="nav-link ">#}
+                                {#                                        <i class="icon-graph"></i>#}
+                                {#                                        <span class="title">Manage Guardians</span>#}
+                                {#                                    </a>#}
+                                {#                                </li>#}
+
+                                {#                                <li class="nav-item  ">#}
+                                {#                                    <a href="javascript:;" class="nav-link nav-toggle">#}
+                                {#                                        <i class="icon-graph"></i>#}
+                                {#                                        <span class="title">Email Template</span>#}
+                                {#                                        <span class="icon-wrench"></span>#}
+                                {#                                    </a>#}
+                                {#                                    <ul class="sub-menu">#}
+                                {#                                        <li class="nav-item ">#}
+                                {#                                            <a href="{% url 'masters:email_templates' %}" class="nav-link ">Email templates</a>#}
+                                {#                                            <a href="{% url 'masters:email_templates_list' %}" class="nav-link ">Template</a>#}
+                                {#                                        </li>#}
+                                {#                                    </ul>#}
+                                {#                                </li>#}
+
+                                {#                                    <li class="nav-item  ">#}
+                                {#                                        <a href="/masters/university_details/" class="nav-link ">#}
+                                {#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
+                                {#                                            <span class="title">Manage Universities</span>#}
+                                {#                                        </a>#}
+                                {#                                    </li>#}
 
 
 
@@ -554,306 +576,302 @@ License: You must have a valid license purchased only from themeforest(the above
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
 
 
-                           {% if 'student.can_view_student_personal_info' in perms %}
-                        <li class="nav-item " id="personal_info">
-                            <a href="{% url 'student:applicant_personal_info' %}" class="nav-link nav-toggle">
-                                <i class="fa fa-id-card"></i>
-                                <span class="title">Personal Info</span>
-                                {% if user.get_student_application.personal_info_flag %}
-                                    <span class="title glyphicon glyphicon-ok"
-                                          style="color: #41bc2c;font-size: 16px"></span>
-                                {% else %}
-                                    <span class="title glyphicon glyphicon-exclamation-sign"
-                                          style="color: #dc302b; font-size: 16px"></span>{% endif %}
-                                <span class="selected"></span>
-                            </a>
-                        </li>
-                    {% endif %}
+                            {% if 'student.can_view_student_personal_info' in perms %}
+                                <li class="nav-item " id="personal_info">
+                                    <a href="{% url 'student:applicant_personal_info' %}" class="nav-link nav-toggle">
+                                        <i class="fa fa-id-card"></i>
+                                        <span class="title">Personal Info</span>
+                                        {% if user.get_student_application.personal_info_flag %}
+                                            <span class="title glyphicon glyphicon-ok"
+                                                  style="color: #41bc2c;font-size: 16px"></span>
+                                        {% else %}
+                                            <span class="title glyphicon glyphicon-exclamation-sign"
+                                                  style="color: #dc302b; font-size: 16px"></span>{% endif %}
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
 
 
-{#                           {% if 'student.can_view_student_family_info' in perms %}#}
-{#                        <li class="nav-item " id="family_info">#}
-{#                            <a href="{% url 'student:applicant_family_info' %}" class="nav-link nav-toggle">#}
-{#                                <i class="fa fa-users"></i>#}
-                                {#                            <i class="glyphicon glyphicon-user"></i>#}
-{#                                <span class="title">Family Info</span>#}
-{#                                {% if user.get_student_application.my_application %}#}
-{#                                {% if user.get_student_application.family_flag %}#}
-{#                                    <span class="title glyphicon glyphicon-ok"#}
-{#                                          style="color: #41bc2c;font-size: 16px"></span>{% else %}#}
-{#                                    <span class="title glyphicon glyphicon-exclamation-sign"#}
-{#                                          style="color: #dc302b; font-size: 16px"></span>{% endif %}#}
-{#                                <span class="selected"></span>#}
-{#                            </a>#}
-{#                        </li>#}
-{#                    {% endif %}#}
+                            {#                           {% if 'student.can_view_student_family_info' in perms %}#}
+                            {#                        <li class="nav-item " id="family_info">#}
+                            {#                            <a href="{% url 'student:applicant_family_info' %}" class="nav-link nav-toggle">#}
+                            {#                                <i class="fa fa-users"></i>#}
+                            {#                            <i class="glyphicon glyphicon-user"></i>#}
+                            {#                                <span class="title">Family Info</span>#}
+                            {#                                {% if user.get_student_application.my_application %}#}
+                            {#                                {% if user.get_student_application.family_flag %}#}
+                            {#                                    <span class="title glyphicon glyphicon-ok"#}
+                            {#                                          style="color: #41bc2c;font-size: 16px"></span>{% else %}#}
+                            {#                                    <span class="title glyphicon glyphicon-exclamation-sign"#}
+                            {#                                          style="color: #dc302b; font-size: 16px"></span>{% endif %}#}
+                            {#                                <span class="selected"></span>#}
+                            {#                            </a>#}
+                            {#                        </li>#}
+                            {#                    {% endif %}#}
 
                             {% if 'student.can_view_student_academic_qualification' in perms %}
-                        <li class="nav-item " id="acd_qli">
-                            <a href="{% url 'student:applicant_academic_english_qualification' %}"
-                               class="nav-link nav-toggle">
-                                <i class="glyphicon glyphicon-education"></i>
-                                <span class="title">Qualification</span>
-                                {% if user.get_student_application.english_qualification %}
-                                    <span class="title glyphicon glyphicon-ok"
-                                          style="color: #41bc2c;font-size: 16px"></span>{% else %}
-                                    <span class="title glyphicon glyphicon-exclamation-sign"
-                                          style="color: #dc302b; font-size: 16px"></span>{% endif %}
-                                <span class="selected"></span>
-                            </a>
-                        </li>
-                    {% endif %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'student:applicant_academic_english_qualification' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-education"></i>
+                                        <span class="title">Qualification</span>
+                                        {% if user.get_student_application.english_qualification %}
+                                            <span class="title glyphicon glyphicon-ok"
+                                                  style="color: #41bc2c;font-size: 16px"></span>{% else %}
+                                            <span class="title glyphicon glyphicon-exclamation-sign"
+                                                  style="color: #dc302b; font-size: 16px"></span>{% endif %}
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
 
                             {% if 'student.can_view_scholarship_selection' in perms %}
-                        <li class="nav-item " id="acd_qli">
-                            <a href="{% url 'student:applicant_additional_information' %}"
-                               class="nav-link nav-toggle">
-                                <i class="glyphicon glyphicon-star"></i>
-                                <span class="title">Additional Information</span>
-                                {% if user.get_student_application.scholarship_selection %}
-                                    <span class="title glyphicon glyphicon-ok"
-                                          style="color: #41bc2c;font-size: 16px"></span>{% else %}
-                                    <span class="title glyphicon glyphicon-exclamation-sign"
-                                          style="color: #dc302b; font-size: 16px"></span>{% endif %}
-                                <span class="selected"></span>
-                            </a>
-                        </li>
-                    {% endif %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'student:applicant_additional_information' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-star"></i>
+                                        <span class="title">Additional Information</span>
+                                        {% if user.get_student_application.scholarship_selection %}
+                                            <span class="title glyphicon glyphicon-ok"
+                                                  style="color: #41bc2c;font-size: 16px"></span>{% else %}
+                                            <span class="title glyphicon glyphicon-exclamation-sign"
+                                                  style="color: #dc302b; font-size: 16px"></span>{% endif %}
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
 
-                         {% if 'student.can_view_student_psychometric_test' in perms %}
-                        <li class="nav-item " id="acd_qli">
-                            <a href="{% url 'student:applicant_attachment_submission' %}"
-                               class="nav-link nav-toggle">
-                                <i class="glyphicon glyphicon-copy"></i>
-                                <span class="title">Attachment</span>
-                                {% if user.get_student_application.attachment %}
-                                    <span class="title glyphicon glyphicon-ok"
-                                          style="color: #41bc2c;font-size: 16px"></span>{% else %}
-                                    <span class="title glyphicon glyphicon-exclamation-sign"
-                                          style="color: #dc302b; font-size: 16px"></span>{% endif %}
-                                <span class="selected"></span>
-                            </a>
-                        </li>
-                    {% endif %}
+                            {% if 'student.can_view_student_psychometric_test' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'student:applicant_attachment_submission' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-copy"></i>
+                                        <span class="title">Attachment</span>
+                                        {% if user.get_student_application.attachment %}
+                                            <span class="title glyphicon glyphicon-ok"
+                                                  style="color: #41bc2c;font-size: 16px"></span>{% else %}
+                                            <span class="title glyphicon glyphicon-exclamation-sign"
+                                                  style="color: #dc302b; font-size: 16px"></span>{% endif %}
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
 
-                        {% if 'student.can_view_student_psychometric_test' in perms %}
-                        <li class="nav-item " id="acd_qli">
-                            <a href="{% url 'student:applicant_declaration' %}"
-                               class="nav-link nav-toggle">
-                                <i class="glyphicon glyphicon-pencil"></i>
-                                <span class="title">Declaration</span>
-                                {% if user.get_student_application.declaration %}
-                                    <span class="title glyphicon glyphicon-ok"
-                                          style="color: #41bc2c;font-size: 16px"></span>{% else %}
-                                    <span class="title glyphicon glyphicon-exclamation-sign"
-                                          style="color: #dc302b; font-size: 16px"></span>{% endif %}
-                                <span class="selected"></span>
-                            </a>
-                        </li>
-                    {% endif %}
+                            {% if 'student.can_view_student_psychometric_test' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'student:applicant_declaration' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-pencil"></i>
+                                        <span class="title">Declaration</span>
+                                        {% if user.get_student_application.declaration %}
+                                            <span class="title glyphicon glyphicon-ok"
+                                                  style="color: #41bc2c;font-size: 16px"></span>{% else %}
+                                            <span class="title glyphicon glyphicon-exclamation-sign"
+                                                  style="color: #dc302b; font-size: 16px"></span>{% endif %}
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
 
                             {% if 'student.can_view_my_application' in perms %}
-                        <li class="nav-item " id="acd_qli">
-                            <a href="{% url 'student:my_application' %}"
-                               class="nav-link nav-toggle">
-                                <i class="glyphicon glyphicon-check"></i>
-                                <span class="title">My Application</span>
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'student:my_application' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-check"></i>
+                                        <span class="title">My Application</span>
 
 
-                                    </span>
-                                <span class="selected"></span>
-                            </a>
-                        </li>
-                    {% endif %}
-
-
-
-{#                           {% if 'student.can_view_student_agreements' in perms %}#}
-{#                        <li class="nav-item " id="acd_qli" {% if user.agreements_switch == False %} style=" pointer-events:none;opacity:0.6;background-color: grey" disabled {% endif %}>#}
-{#                            <a href="{% url 'student:applicant_agreement_submission' %}"#}
-{#                               class="nav-link nav-toggle">#}
-{#                                <i class="glyphicon glyphicon-ok"></i>#}
-{#                                <span class="title">Agreement Submission</span>#}
-{#                                {% if user.get_student_application.agreement %}#}
-{#                                    <span class="title glyphicon glyphicon-ok"#}
-{#                                          style="color: #41bc2c;font-size: 16px"></span>{% else %}#}
-{#                                    <span class="title glyphicon glyphicon-exclamation-sign"#}
-{#                                          style="color: #dc302b; font-size: 16px"></span>{% endif %}#}
-{#                                <span class="selected"></span>#}
-{##}
-{#                            </a>#}
-{#                        </li>#}
-{#                    {% endif %}#}
-
-{#                            {% if 'student.can_view_student_development_program' in perms %}#}
-{#                        <li class="nav-item " id="acd_qli" {% if user.program_switch == False %} style=" pointer-events:none;opacity:0.6;background-color: grey" disabled {% endif %}>#}
-{#                            <a href="{% url 'student:applicant_program_certificate_submission' %}"#}
-{#                               class="nav-link nav-toggle">#}
-{#                                <i class="glyphicon glyphicon-certificate"></i>#}
-{#                                <span class="title">Program Certificate</span>#}
-{#                                <span class="selected"></span>#}
-{#                            </a>#}
-{#                        </li>#}
-{#                    {% endif %}#}
-
-
-{#                     {% if 'student.can_view_student_academic_progress' in perms %}#}
-{#                        <li class="nav-item " id="acd_qli" {% if user.semester_switch == False %} style=" pointer-events:none;opacity:0.6;" disabled {% endif %}>#}
-{#                            <a href="{% url 'student:applicant_academic_progress' %}"#}
-{#                               class="nav-link nav-toggle">#}
-{#                                <i class="glyphicon glyphicon-align-left"></i>#}
-{#                                <span class="title">Academic Progress</span>#}
-{#                                <span class="selected"></span>#}
-{#                            </a>#}
-{#                        </li>#}
-{#                    {% endif %}#}
-
-
-{#                            {% if 'student.can_view_student_application_progress_history' in perms %}#}
-{#                        <li class="nav-item " id="acd_qli">#}
-{#                            <a href="{% url 'student:applicant_progress_history' %}"#}
-{#                               class="nav-link nav-toggle">#}
-{#                                <i class="glyphicon glyphicon-list-alt"></i>#}
-{#                                <span class="title">Application Progress History</span>#}
-{#                                <span class="selected"></span>#}
-{#                            </a>#}
-{#                        </li>#}
-{#                    {% endif %}#}
-
-{#                           {% if 'partner.can_view_applicant_details' in perms %}#}
-{#                        <li class="nav-item " id="acd_qli">#}
-{#                            <a href="{% url 'partner:template_registered_application' %}"#}
-{#                               class="nav-link nav-toggle">#}
-{#                                <i class="glyphicon glyphicon-list-alt"></i>#}
-{#                                <span class="title">Applicant Details</span>#}
-{#                                <span class="selected"></span>#}
-{#                            </a>#}
-{#                        </li>#}
-{#                    {% endif %}#}
-
-{#                            {% if 'partner.can_view_applicant_scholarship' in perms %}#}
-{#                        <li class="nav-item " id="acd_qli">#}
-{#                            <a href="{% url 'partner:template_applicant_scholarship' %}"#}
-{#                               class="nav-link nav-toggle">#}
-{#                                <i class="glyphicon glyphicon-list-alt"></i>#}
-{#                                <span class="title">Applicant Scholarship</span>#}
-{#                                <span class="selected"></span>#}
-{#                            </a>#}
-{#                        </li>#}
-{#                    {% endif %}#}
-
-                           {% if 'partner.can_view_approving_application' in perms %}
-                        <li class="nav-item " id="acd_qli">
-                            <a href="{% url 'partner:template_approving_application' %}"
-                               class="nav-link nav-toggle">
-                                <i class="fa fa-file" aria-hidden="true"></i>
-
-                                <span class="title">Manage Applicant Documents</span>
-                                <span class="selected"></span>
-                            </a>
-                        </li>
-                    {% endif %}
-
-                        {% if 'partner.can_view_approving_application' in perms %}
-                        <li class="nav-item " id="acd_qli">
-                            <a href="{% url 'partner:template_approving_application' %}"
-                               class="nav-link nav-toggle">
-                                <i class="fa fa-check" aria-hidden="true"></i>
-
-                                <span class="title">Approving Applicant Details</span>
-                                <span class="selected"></span>
-                            </a>
-                        </li>
-                    {% endif %}
-
-{#                            {% if 'partner.can_view_accepted_students' in perms %}#}
-{#                        <li class="nav-item " id="acd_qli">#}
-{#                            <a href="{% url 'partner:template_accepted_students' %}"#}
-{#                               class="nav-link nav-toggle">#}
-{#                                <i class="glyphicon glyphicon-list-alt"></i>#}
-{#                                <span class="title">Accepted Applicants</span>#}
-{#                                <span class="selected"></span>#}
-{#                            </a>#}
-{#                        </li>#}
-{#                    {% endif %}#}
-
-
-
-
-
-
-{#                           {% if 'partner.can_view_psychometric_test_report' in perms %}#}
-{#                        <li class="nav-item " id="acd_qli">#}
-{#                            <a href="{% url 'partner:template_psychometric_test_report' %}"#}
-{#                               class="nav-link nav-toggle">#}
-{#                                <i class="glyphicon glyphicon-list-alt"></i>#}
-{#                                <span class="title">Psychometric Test Report</span>#}
-{#                                <span class="selected"></span>#}
-{#                            </a>#}
-{#                        </li>#}
-{#                    {% endif %}#}
-
-{#                            {% if 'partner.can_view_student_agreement' in perms %}#}
-{#                        <li class="nav-item " id="acd_qli">#}
-{#                            <a href="{% url 'partner:template_student_agreement' %}"#}
-{#                               class="nav-link nav-toggle">#}
-{#                                <i class="glyphicon glyphicon-list-alt"></i>#}
-{#                                <span class="title">Agreements</span>#}
-{#                                <span class="selected"></span>#}
-{#                            </a>#}
-{#                        </li>#}
-{#                    {% endif %}#}
-
-
-
-{#                             {% if 'partner.can_view_link_student_program' in perms %}#}
-{#                        <li class="nav-item " id="acd_qli">#}
-{#                            <a href="{% url 'partner:template_link_student_program' %}"#}
-{#                               class="nav-link nav-toggle">#}
-{#                                <i class="glyphicon glyphicon-list-alt"></i>#}
-{#                                <span class="title">Link Students & Program</span>#}
-{#                                <span class="selected"></span>#}
-{#                            </a>#}
-{#                        </li>#}
-{#                    {% endif %}#}
-
-
-
-
-                        {% if 'donor.can_view_scholarship' in perms %}
-                        <li class="nav-item " id="acd_qli">
-                            <a href="javascript:;" class="nav-link nav-toggle">
-                                <i class="fa fa-briefcase"></i>
-                                <span class="title">Scholarship</span>
-                            </a>
-                            <ul class="sub-menu">
-                                <li class="nav-item ">
-                                    <a href="{% url 'donor:template_student_selection' %}" class="nav-link ">
-                                        Student Selection </a>
+                                        </span>
+                                        <span class="selected"></span>
+                                    </a>
                                 </li>
-                            </ul>
-                        </li>
-                    {% endif %}
+                            {% endif %}
 
 
-                        {% if 'donor.can_view_reports' in perms %}
-                        <li class="nav-item " id="acd_qli">
-                            <a href="javascript:;" class="nav-link nav-toggle">
-                                <i class="glyphicon glyphicon-list-alt"></i>
-                                <span class="title">Report</span>
-                            </a>
-                            <ul class="sub-menu">
-                                <li class="nav-item ">
-                                    <a href="{% url 'donor:template_student_reports' %}" class="nav-link ">
-                                        Student Report </a>
+
+                            {#                           {% if 'student.can_view_student_agreements' in perms %}#}
+                            {#                        <li class="nav-item " id="acd_qli" {% if user.agreements_switch == False %} style=" pointer-events:none;opacity:0.6;background-color: grey" disabled {% endif %}>#}
+                            {#                            <a href="{% url 'student:applicant_agreement_submission' %}"#}
+                            {#                               class="nav-link nav-toggle">#}
+                            {#                                <i class="glyphicon glyphicon-ok"></i>#}
+                            {#                                <span class="title">Agreement Submission</span>#}
+                            {#                                {% if user.get_student_application.agreement %}#}
+                            {#                                    <span class="title glyphicon glyphicon-ok"#}
+                            {#                                          style="color: #41bc2c;font-size: 16px"></span>{% else %}#}
+                            {#                                    <span class="title glyphicon glyphicon-exclamation-sign"#}
+                            {#                                          style="color: #dc302b; font-size: 16px"></span>{% endif %}#}
+                            {#                                <span class="selected"></span>#}
+                            {##}
+                            {#                            </a>#}
+                            {#                        </li>#}
+                            {#                    {% endif %}#}
+
+                            {#                            {% if 'student.can_view_student_development_program' in perms %}#}
+                            {#                        <li class="nav-item " id="acd_qli" {% if user.program_switch == False %} style=" pointer-events:none;opacity:0.6;background-color: grey" disabled {% endif %}>#}
+                            {#                            <a href="{% url 'student:applicant_program_certificate_submission' %}"#}
+                            {#                               class="nav-link nav-toggle">#}
+                            {#                                <i class="glyphicon glyphicon-certificate"></i>#}
+                            {#                                <span class="title">Program Certificate</span>#}
+                            {#                                <span class="selected"></span>#}
+                            {#                            </a>#}
+                            {#                        </li>#}
+                            {#                    {% endif %}#}
+
+
+                            {#                     {% if 'student.can_view_student_academic_progress' in perms %}#}
+                            {#                        <li class="nav-item " id="acd_qli" {% if user.semester_switch == False %} style=" pointer-events:none;opacity:0.6;" disabled {% endif %}>#}
+                            {#                            <a href="{% url 'student:applicant_academic_progress' %}"#}
+                            {#                               class="nav-link nav-toggle">#}
+                            {#                                <i class="glyphicon glyphicon-align-left"></i>#}
+                            {#                                <span class="title">Academic Progress</span>#}
+                            {#                                <span class="selected"></span>#}
+                            {#                            </a>#}
+                            {#                        </li>#}
+                            {#                    {% endif %}#}
+
+
+                            {#                            {% if 'student.can_view_student_application_progress_history' in perms %}#}
+                            {#                        <li class="nav-item " id="acd_qli">#}
+                            {#                            <a href="{% url 'student:applicant_progress_history' %}"#}
+                            {#                               class="nav-link nav-toggle">#}
+                            {#                                <i class="glyphicon glyphicon-list-alt"></i>#}
+                            {#                                <span class="title">Application Progress History</span>#}
+                            {#                                <span class="selected"></span>#}
+                            {#                            </a>#}
+                            {#                        </li>#}
+                            {#                    {% endif %}#}
+
+                            {#                           {% if 'partner.can_view_applicant_details' in perms %}#}
+                            {#                        <li class="nav-item " id="acd_qli">#}
+                            {#                            <a href="{% url 'partner:template_registered_application' %}"#}
+                            {#                               class="nav-link nav-toggle">#}
+                            {#                                <i class="glyphicon glyphicon-list-alt"></i>#}
+                            {#                                <span class="title">Applicant Details</span>#}
+                            {#                                <span class="selected"></span>#}
+                            {#                            </a>#}
+                            {#                        </li>#}
+                            {#                    {% endif %}#}
+
+                            {#                            {% if 'partner.can_view_applicant_scholarship' in perms %}#}
+                            {#                        <li class="nav-item " id="acd_qli">#}
+                            {#                            <a href="{% url 'partner:template_applicant_scholarship' %}"#}
+                            {#                               class="nav-link nav-toggle">#}
+                            {#                                <i class="glyphicon glyphicon-list-alt"></i>#}
+                            {#                                <span class="title">Applicant Scholarship</span>#}
+                            {#                                <span class="selected"></span>#}
+                            {#                            </a>#}
+                            {#                        </li>#}
+                            {#                    {% endif %}#}
+
+                            {% if 'partner.can_view_approving_application' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'partner:template_approving_application' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="fa fa-file" aria-hidden="true"></i>
+
+                                        <span class="title">Manage Applicant Documents</span>
+                                        <span class="selected"></span>
+                                    </a>
                                 </li>
-                                <li class="nav-item ">
-                                    <a href="{% url 'donor:template_application_progress_history' %}" class="nav-link ">
-                                        App Progress History </a>
+                            {% endif %}
+
+                            {% if 'partner.can_view_approving_application' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'partner:template_approving_application' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="fa fa-check" aria-hidden="true"></i>
+
+                                        <span class="title">Approving Applicant Details</span>
+                                        <span class="selected"></span>
+                                    </a>
                                 </li>
-                            </ul>
-                        </li>
-                    {% endif %}
+                            {% endif %}
+
+                            {#                            {% if 'partner.can_view_accepted_students' in perms %}#}
+                            {#                        <li class="nav-item " id="acd_qli">#}
+                            {#                            <a href="{% url 'partner:template_accepted_students' %}"#}
+                            {#                               class="nav-link nav-toggle">#}
+                            {#                                <i class="glyphicon glyphicon-list-alt"></i>#}
+                            {#                                <span class="title">Accepted Applicants</span>#}
+                            {#                                <span class="selected"></span>#}
+                            {#                            </a>#}
+                            {#                        </li>#}
+                            {#                    {% endif %}#}
+
+
+                            {#                           {% if 'partner.can_view_psychometric_test_report' in perms %}#}
+                            {#                        <li class="nav-item " id="acd_qli">#}
+                            {#                            <a href="{% url 'partner:template_psychometric_test_report' %}"#}
+                            {#                               class="nav-link nav-toggle">#}
+                            {#                                <i class="glyphicon glyphicon-list-alt"></i>#}
+                            {#                                <span class="title">Psychometric Test Report</span>#}
+                            {#                                <span class="selected"></span>#}
+                            {#                            </a>#}
+                            {#                        </li>#}
+                            {#                    {% endif %}#}
+
+                            {#                            {% if 'partner.can_view_student_agreement' in perms %}#}
+                            {#                        <li class="nav-item " id="acd_qli">#}
+                            {#                            <a href="{% url 'partner:template_student_agreement' %}"#}
+                            {#                               class="nav-link nav-toggle">#}
+                            {#                                <i class="glyphicon glyphicon-list-alt"></i>#}
+                            {#                                <span class="title">Agreements</span>#}
+                            {#                                <span class="selected"></span>#}
+                            {#                            </a>#}
+                            {#                        </li>#}
+                            {#                    {% endif %}#}
+
+
+                            {#                             {% if 'partner.can_view_link_student_program' in perms %}#}
+                            {#                        <li class="nav-item " id="acd_qli">#}
+                            {#                            <a href="{% url 'partner:template_link_student_program' %}"#}
+                            {#                               class="nav-link nav-toggle">#}
+                            {#                                <i class="glyphicon glyphicon-list-alt"></i>#}
+                            {#                                <span class="title">Link Students & Program</span>#}
+                            {#                                <span class="selected"></span>#}
+                            {#                            </a>#}
+                            {#                        </li>#}
+                            {#                    {% endif %}#}
+
+
+
+
+                            {% if 'donor.can_view_scholarship' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+                                        <i class="fa fa-briefcase"></i>
+                                        <span class="title">Scholarship</span>
+                                    </a>
+                                    <ul class="sub-menu">
+                                        <li class="nav-item ">
+                                            <a href="{% url 'donor:template_student_selection' %}" class="nav-link ">
+                                                Student Selection </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+
+
+                            {% if 'donor.can_view_reports' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-list-alt"></i>
+                                        <span class="title">Report</span>
+                                    </a>
+                                    <ul class="sub-menu">
+                                        <li class="nav-item ">
+                                            <a href="{% url 'donor:template_student_reports' %}" class="nav-link ">
+                                                Student Report </a>
+                                        </li>
+                                        <li class="nav-item ">
+                                            <a href="{% url 'donor:template_application_progress_history' %}"
+                                               class="nav-link ">
+                                                App Progress History </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% endif %}
 
 
 
@@ -894,58 +912,58 @@ License: You must have a valid license purchased only from themeforest(the above
                             {% endif %}
 
                             {% if 'donor.can_view_payments_reports' in perms %}
-                        <li class="nav-item" id="acd_qli">
-                            <a href="javascript:;" class="nav-link nav-toggle">
-                                <i class="fa fa-briefcase"></i>
-                                <span class="title">Payment Report</span>
-                            </a>
-                            <ul class="sub-menu">
-                                <li class="nav-item ">
-                                    <a href="{% url 'donor:template_my_payments' %}" class="nav-link ">
-                                        My Payments </a>
+                                <li class="nav-item" id="acd_qli">
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+                                        <i class="fa fa-briefcase"></i>
+                                        <span class="title">Payment Report</span>
+                                    </a>
+                                    <ul class="sub-menu">
+                                        <li class="nav-item ">
+                                            <a href="{% url 'donor:template_my_payments' %}" class="nav-link ">
+                                                My Payments </a>
+                                        </li>
+                                        <li class="nav-item ">
+                                            <a href="{% url 'donor:template_students_receipts' %}" class="nav-link ">
+                                                Student Receipt </a>
+                                        </li>
+                                    </ul>
                                 </li>
-                                <li class="nav-item ">
-                                    <a href="{% url 'donor:template_students_receipts' %}" class="nav-link ">
-                                        Student Receipt </a>
-                                </li>
-                            </ul>
-                        </li>
-                    {% endif %}
+                            {% endif %}
 
 
 
                             {% if 'masters.can_view_application_progress_history' in perms %}
-                        <li class="nav-item " id="acd_qli">
-                            <a href="{% url 'parent:template_student_application_progress_history' %}"
-                               class="nav-link nav-toggle">
-                                <i class="glyphicon glyphicon-list-alt"></i>
-                                <span class="title">Applications Progress History</span>
-                                <span class="selected"></span>
-                            </a>
-                        </li>
-                    {% endif %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'parent:template_student_application_progress_history' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-list-alt"></i>
+                                        <span class="title">Applications Progress History</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
 
-{#                           {% if user.is_super_admin  %}#}
-{#                        <li class="nav-item " id="acd_qli">#}
-{#                            <a href="{% url 'student:import_applicant_records_tile' %}"#}
-{#                               class="nav-link nav-toggle">#}
-{#                                <i class="glyphicon glyphicon-list-alt"></i>#}
-{#                                <span class="title">Import Applicant Records</span>#}
-{#                                <span class="selected"></span>#}
-{#                            </a>#}
-{#                        </li>#}
-{#                     {% endif %}#}
-{##}
-{#                            {% if user.is_super_admin  %}#}
-{#                        <li class="nav-item " id="acd_qli">#}
-{#                            <a href="{% url 'student:export_templates' %}"#}
-{#                               class="nav-link nav-toggle">#}
-{#                                <i class="glyphicon glyphicon-list-alt"></i>#}
-{#                                <span class="title">Export Templates</span>#}
-{#                                <span class="selected"></span>#}
-{#                            </a>#}
-{#                        </li>#}
-{#                     {% endif %}#}
+                            {#                           {% if user.is_super_admin  %}#}
+                            {#                        <li class="nav-item " id="acd_qli">#}
+                            {#                            <a href="{% url 'student:import_applicant_records_tile' %}"#}
+                            {#                               class="nav-link nav-toggle">#}
+                            {#                                <i class="glyphicon glyphicon-list-alt"></i>#}
+                            {#                                <span class="title">Import Applicant Records</span>#}
+                            {#                                <span class="selected"></span>#}
+                            {#                            </a>#}
+                            {#                        </li>#}
+                            {#                     {% endif %}#}
+                            {##}
+                            {#                            {% if user.is_super_admin  %}#}
+                            {#                        <li class="nav-item " id="acd_qli">#}
+                            {#                            <a href="{% url 'student:export_templates' %}"#}
+                            {#                               class="nav-link nav-toggle">#}
+                            {#                                <i class="glyphicon glyphicon-list-alt"></i>#}
+                            {#                                <span class="title">Export Templates</span>#}
+                            {#                                <span class="selected"></span>#}
+                            {#                            </a>#}
+                            {#                        </li>#}
+                            {#                     {% endif %}#}
 
 
                         </ul>
@@ -955,51 +973,49 @@ License: You must have a valid license purchased only from themeforest(the above
                         <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
 
-                         {% if 'partner.can_view_academic_progress' in perms %}
-                        <li class="nav-item " id="acd_qli">
-                            <a href="{% url 'partner:template_academic_progress' %}"
-                               class="nav-link nav-toggle">
-                                <i class="glyphicon glyphicon-list-alt"></i>
-                                <span class="title">Academic Progress</span>
-                                <span class="selected"></span>
-                            </a>
-                        </li>
-                    {% endif %}
+                            {% if 'partner.can_view_academic_progress' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'partner:template_academic_progress' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-list-alt"></i>
+                                        <span class="title">Academic Progress</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
 
-                        {% if 'partner.can_view_progress_history' in perms %}
-                        <li class="nav-item " id="acd_qli">
-                            <a href="{% url 'partner:template_student_progress_history' %}"
-                               class="nav-link nav-toggle">
-                                <i class="glyphicon glyphicon-list-alt"></i>
-                                <span class="title">Applications Progress History</span>
-                                <span class="selected"></span>
-                            </a>
-                        </li>
-                    {% endif %}
+                            {% if 'partner.can_view_progress_history' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'partner:template_student_progress_history' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-list-alt"></i>
+                                        <span class="title">Applications Progress History</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
 
-                         {% if 'partner.can_view_semester_result' in perms %}
-                        <li class="nav-item " id="acd_qli">
-                            <a href="{% url 'partner:template_semester_result' %}"
-                               class="nav-link nav-toggle">
-                                <i class="glyphicon glyphicon-list-alt"></i>
-                                <span class="title">Semester Result</span>
-                                <span class="selected"></span>
-                            </a>
-                        </li>
-                    {% endif %}
+                            {% if 'partner.can_view_semester_result' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'partner:template_semester_result' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-list-alt"></i>
+                                        <span class="title">Semester Result</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
 
-                        {% if 'masters.can_view_student_academic_reports' in perms %}
-                        <li class="nav-item " id="acd_qli">
-                            <a href="{% url 'parent:template_student_academic_report' %}"
-                               class="nav-link nav-toggle">
-                                <i class="glyphicon glyphicon-list-alt"></i>
-                                <span class="title">Student Report</span>
-                                <span class="selected"></span>
-                            </a>
-                        </li>
-                    {% endif %}
-
-
+                            {% if 'masters.can_view_student_academic_reports' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'parent:template_student_academic_report' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-list-alt"></i>
+                                        <span class="title">Student Report</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
 
 
                         </ul>
@@ -1007,179 +1023,162 @@ License: You must have a valid license purchased only from themeforest(the above
                     </div>  <!-- END tabpane -->
 
 
-                <div class="tab-pane " id="e"><!--Accounting -->
+                    <div class="tab-pane " id="e"><!--Accounting -->
                         <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
 
                             {% if 'accounting.can_view_student_payment_voucher' in perms %}
-                        <li class="nav-item start ">
-                            <a href="javascript:;" class="nav-link nav-toggle">
-                                <i class="fa fa-briefcase"></i>
-                                <span class="title">Accounting</span>
-                                <span class="arrow"></span>
-                            </a>
-                            <ul class="sub-menu" style="display: block">
-                            {% if 'accounting.can_view_student_receipt_voucher' in perms %}
-                                <li class="nav-item ">
-                                    <a href="{% url 'accounting:get_student_payment_voucher' %}" class="nav-link ">
-                                        Disbursement Register  </a>
+                                <li class="nav-item start ">
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+                                        <i class="fa fa-briefcase"></i>
+                                        <span class="title">Accounting</span>
+                                        <span class="arrow"></span>
+                                    </a>
+                                    <ul class="sub-menu" style="display: block">
+                                        {% if 'accounting.can_view_student_receipt_voucher' in perms %}
+                                            <li class="nav-item ">
+                                                <a href="{% url 'accounting:get_student_payment_voucher' %}"
+                                                   class="nav-link ">
+                                                    Disbursement Register </a>
+                                            </li>
+                                        {% endif %}
+
+                                        {% if 'accounting.can_view_student_receipt_voucher' in perms %}
+                                            <li class="nav-item ">
+                                                <a href="{% url 'accounting:get_student_receipt_voucher' %}"
+                                                   class="nav-link ">
+                                                    Repayment Register </a>
+                                            </li>
+                                        {% endif %}
+                                        {% if 'accounting.can_view_student_reciept_payment_voucher' in perms %}
+
+                                            <li class="nav-item ">
+                                                <a href="{% url 'accounting:get_student_payment_and_receipt_report' %}"
+                                                   class="nav-link ">
+                                                    Individual Summary Report </a>
+                                            </li>
+                                        {% endif %}
+                                        {% if 'accounting.can_view_student_report' in perms %}
+                                            <li class="nav-item ">
+                                                <a href="{% url 'accounting:get_student_report' %}" class="nav-link ">
+                                                    Disbursement Report </a>
+                                            </li>
+                                        {% endif %}
+                                        {% if 'accounting.can_view_student_repayment_report' in perms %}
+                                            <li class="nav-item ">
+                                                <a href="{% url 'accounting:get_repayment_report' %}" class="nav-link ">
+                                                    Repayment Report
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        {% if 'accounting.can_view_approve_and_paid_total' in perms %}
+                                            <li class="nav-item ">
+                                                <a href="{% url 'accounting:get_approval_and_paid_total' %}"
+                                                   class="nav-link ">
+                                                    Group Summary Report </a>
+                                            </li>
+                                        {% endif %}
+
+                                        {% if not user.is_partner %}
+                                            {% if 'accounting.can_view_donor_receipt_voucher' in perms %}
+
+                                                <li class="nav-item ">
+                                                    <a href="{% url 'accounting:get_donor_receipt_voucher' %}"
+                                                       class="nav-link ">
+                                                        Donor Register </a>
+                                                </li>
+                                            {% endif %}
+                                            {% if 'accounting.can_view_donor_report' in perms %}
+                                                <li class="nav-item ">
+                                                    <a href="{% url 'accounting:get_donor_report' %}" class="nav-link ">
+                                                        Donor Report </a>
+                                                </li>
+
+                                            {% endif %}
+                                        {% endif %}
+                                    </ul>
                                 </li>
                             {% endif %}
 
-                            {% if 'accounting.can_view_student_receipt_voucher' in perms %}
-                                <li class="nav-item ">
-                                    <a href="{% url 'accounting:get_student_receipt_voucher' %}" class="nav-link ">
-                                        Repayment Register  </a>
-                                </li>
-                            {% endif %}
-                             {% if 'accounting.can_view_student_reciept_payment_voucher' in perms %}
 
-                                <li class="nav-item ">
-                                    <a href="{% url 'accounting:get_student_payment_and_receipt_report' %}"
-                                       class="nav-link ">
-                                        Individual Summary Report  </a>
-                                </li>
-                             {% endif %}
-                            {% if 'accounting.can_view_student_report' in perms %}
-                                <li class="nav-item ">
-                                    <a href="{% url 'accounting:get_student_report' %}" class="nav-link ">
-                                        Disbursement Report  </a>
-                                </li>
-                            {% endif %}
-                            {% if 'accounting.can_view_student_repayment_report' in perms %}
-                                <li class="nav-item ">
-                                    <a href="{% url 'accounting:get_repayment_report' %}" class="nav-link ">
-                                        Repayment Report
+                        </ul>
+                        <!-- END SIDEBAR MENU -->
+                    </div>  <!-- END tabpane -->
+
+                    <div class="tab-pane " id="f"><!--Soft Skills Program-->
+                        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
+                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+
+
+                            {% if 'partner.can_view_link_student_program' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'partner:template_link_student_program' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-list-alt"></i>
+                                        <span class="title">Link Students & Program</span>
+                                        <span class="selected"></span>
                                     </a>
                                 </li>
-                               {% endif %}
-                            {% if 'accounting.can_view_approve_and_paid_total' in perms %}
-                                <li class="nav-item ">
-                                    <a href="{% url 'accounting:get_approval_and_paid_total' %}" class="nav-link ">
-                                        Group Summary Report </a>
+                            {% endif %}
+
+                            {% if 'partner.can_view_attendance_report' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'partner:template_attendance_report' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-list-alt"></i>
+                                        <span class="title">Attendance Report</span>
+                                        <span class="selected"></span>
+                                    </a>
                                 </li>
                             {% endif %}
 
-                                {% if not user.is_partner %}
-                                    {% if 'accounting.can_view_donor_receipt_voucher' in perms %}
-
-                                    <li class="nav-item ">
-                                        <a href="{% url 'accounting:get_donor_receipt_voucher' %}" class="nav-link ">
-                                            Donor Register </a>
-                                    </li>
-                                        {% endif %}
-                               {% if 'accounting.can_view_donor_report' in perms %}
-                                    <li class="nav-item ">
-                                        <a href="{% url 'accounting:get_donor_report' %}" class="nav-link ">
-                                            Donor Report </a>
-                                    </li>
-
-                                {% endif %}
-                                {% endif %}
-                            </ul>
-                        </li>
-                    {% endif %}
-
-
-
 
                         </ul>
                         <!-- END SIDEBAR MENU -->
                     </div>  <!-- END tabpane -->
 
-                <div class="tab-pane " id="f"><!--Soft Skills Program-->
+                    <div class="tab-pane " id="application_progress">
                         <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
 
 
-
-
-
-
-                {% if 'partner.can_view_link_student_program' in perms %}
-                        <li class="nav-item " id="acd_qli">
-                            <a href="{% url 'partner:template_link_student_program' %}"
-                               class="nav-link nav-toggle">
-                                <i class="glyphicon glyphicon-list-alt"></i>
-                                <span class="title">Link Students & Program</span>
-                                <span class="selected"></span>
-                            </a>
-                        </li>
-                    {% endif %}
-
-                         {% if 'partner.can_view_attendance_report' in perms %}
-                        <li class="nav-item " id="acd_qli">
-                            <a href="{% url 'partner:template_attendance_report' %}"
-                               class="nav-link nav-toggle">
-                                <i class="glyphicon glyphicon-list-alt"></i>
-                                <span class="title">Attendance Report</span>
-                                <span class="selected"></span>
-                            </a>
-                        </li>
-                    {% endif %}
-
-
+                            {% if 'student.can_view_student_application_progress_history' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'student:applicant_progress_history' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-list-alt"></i>
+                                        <span class="title">Application Progress History</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
 
 
                         </ul>
                         <!-- END SIDEBAR MENU -->
                     </div>  <!-- END tabpane -->
 
-                <div class="tab-pane " id="application_progress">
+
+                    <div class="tab-pane " id="offer_status">
                         <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
 
 
-
-
-
-
- {% if 'student.can_view_student_application_progress_history' in perms %}
-                        <li class="nav-item " id="acd_qli">
-                            <a href="{% url 'student:applicant_progress_history' %}"
-                               class="nav-link nav-toggle">
-                                <i class="glyphicon glyphicon-list-alt"></i>
-                                <span class="title">Application Progress History</span>
-                                <span class="selected"></span>
-                            </a>
-                        </li>
-                    {% endif %}
-
+                            {% if 'student.can_view_student_application_progress_history' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'student:application_offer_letter' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-list-alt"></i>
+                                        <span class="title">Offer Status</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
 
 
                         </ul>
                         <!-- END SIDEBAR MENU -->
                     </div>  <!-- END tabpane -->
-
-
-
-                <div class="tab-pane " id="offer_status">
-                        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
-                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-
-
-
-
-
-
- {% if 'student.can_view_student_application_progress_history' in perms %}
-                        <li class="nav-item " id="acd_qli">
-                            <a href="{% url 'student:application_offer_letter' %}"
-                               class="nav-link nav-toggle">
-                                <i class="glyphicon glyphicon-list-alt"></i>
-                                <span class="title">Offer Status</span>
-                                <span class="selected"></span>
-                            </a>
-                        </li>
-                    {% endif %}
-
-
-
-                        </ul>
-                        <!-- END SIDEBAR MENU -->
-                    </div>  <!-- END tabpane -->
-
-
 
 
                 </div> <!-- tab-content -->
@@ -1196,31 +1195,32 @@ License: You must have a valid license purchased only from themeforest(the above
                     <ul class="nav nav-tabs menu" style="border-bottom: none">
                         {#<li class="active"><a href="#a" data-toggle="tab">Dashboard</a></li>#}
                         {% if not user.is_student %}
-                        <li id="setting_anch" ><a href="#b" data-toggle="tab">Master Settings</a></li>
+                            <li id="setting_anch"><a href="#b" data-toggle="tab">Master Settings</a></li>
                         {% endif %}
                         {% if user.is_student %}
-                        <li id="app_anch"><a href="#c" data-toggle="tab">Application Management</a></li>
+                            <li id="app_anch"><a href="#c" data-toggle="tab">Application Management</a></li>
                         {% else %}
-                        <li id="app_anch"><a href="#c" data-toggle="tab">Module Settings</a></li>
+                            <li id="app_anch"><a href="#c" data-toggle="tab">Module Settings</a></li>
                         {% endif %}
 
                         {% if user.is_student %}
-                        <li id="app_prog"><a href="#application_progress" data-toggle="tab">Application Progress History</a></li>
+                            <li id="app_prog"><a href="#application_progress" data-toggle="tab">Application Progress
+                                History</a></li>
                         {% endif %}
 
-                    {% if user.is_student %}
-                        <li id="app_offer_status"><a href="#offer_status" data-toggle="tab">Offer Status</a></li>
+                        {% if user.is_student %}
+                            <li id="app_offer_status"><a href="#offer_status" data-toggle="tab">Offer Status</a></li>
                         {% endif %}
 
-{#                        {% if not user.is_student %}#}
-{#                        <li id="acad_app"><a href="#d" data-toggle="tab">Academic</a></li>#}
-{#                        {% endif %}#}
-{#                        {% if not user.is_student %}#}
-{#                        <li id="account_anch"><a href="#e" data-toggle="tab">Accounting</a></li>#}
-{#                        {% endif %}#}
-{#                        {% if not user.is_student %}#}
-{#                        <li id="soft_skill"><a href="#f" data-toggle="tab">Softs Skill Programs</a></li>#}
-{#                        {% endif %}#}
+                        {#                        {% if not user.is_student %}#}
+                        {#                        <li id="acad_app"><a href="#d" data-toggle="tab">Academic</a></li>#}
+                        {#                        {% endif %}#}
+                        {#                        {% if not user.is_student %}#}
+                        {#                        <li id="account_anch"><a href="#e" data-toggle="tab">Accounting</a></li>#}
+                        {#                        {% endif %}#}
+                        {#                        {% if not user.is_student %}#}
+                        {#                        <li id="soft_skill"><a href="#f" data-toggle="tab">Softs Skill Programs</a></li>#}
+                        {#                        {% endif %}#}
                     </ul>
 
                 </div><!-- /tabbable -->
@@ -1346,13 +1346,13 @@ License: You must have a valid license purchased only from themeforest(the above
 </body>
 
 <script type="text/javascript">
-{#    {% if user.is_super_admin %}#}
-{#        var element = document.getElementById("b");#}
-{#        element.classList.add("active");#}
-{##}
-{#        var element = document.getElementById("setting_anch");#}
-{#        element.classList.add("active");#}
-{##}
+    {#    {% if user.is_super_admin %}#}
+    {#        var element = document.getElementById("b");#}
+    {#        element.classList.add("active");#}
+    {##}
+    {#        var element = document.getElementById("setting_anch");#}
+    {#        element.classList.add("active");#}
+    {##}
 
 
     var base_url = window.location.href;
@@ -1362,519 +1362,439 @@ License: You must have a valid license purchased only from themeforest(the above
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/masters/template_scholarship_master/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/masters/template_scholarship_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/masters/terms_condition_master/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/masters/terms_condition_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/masters/formula_type_master/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/masters/formula_type_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/masters/template_master_and_phd_master/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/masters/template_master_and_phd_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/masters/template_scholarship_master/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/masters/template_scholarship_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/masters/template_master_course_work_master/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/masters/template_master_course_work_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/masters/template_master_course_work_master/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/masters/template_master_course_work_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/masters/template_master_course_work_master/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/masters/template_master_course_work_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/masters/template_master_course_work_master/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/masters/template_master_course_work_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/masters/template_country_master/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/masters/template_country_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/masters/template_manage_partner_master/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/masters/template_manage_partner_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/masters/template_manage_donor_master/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/masters/template_manage_donor_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/template_link_students_donor/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/partner/template_link_students_donor/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/template_donor_students_linking/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/partner/template_donor_students_linking/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/masters/save_degree_formula_master/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/masters/save_degree_formula_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/filter_donor_student_linking/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/partner/filter_donor_student_linking/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
-    }
-     else if (base_url == 'http://namafund.namafoundation.org/masters/template_university_master/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/masters/template_university_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
-    }
-     else if (base_url == 'http://namafund.namafoundation.org/masters/template_semester_master/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/masters/template_semester_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
-    }
-     else if (base_url == 'http://namafund.namafoundation.org/masters/template_degree_master/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/masters/template_degree_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
-    }
-     else if (base_url == 'http://namafund.namafoundation.org/masters/template_program_master/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/masters/template_program_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
-    }
-     else if (base_url == 'http://namafund.namafoundation.org/masters/template_module_master/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/masters/template_module_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
-    }
-     else if (base_url == 'http://namafund.namafoundation.org/masters/template_development_program_master/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/masters/template_development_program_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
-    }
-
-    else if (base_url == 'http://namafund.namafoundation.org/accounts/template_manage_user/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/accounts/template_manage_user/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/template_link_students_parent/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/partner/template_link_students_parent/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/masters/email_templates_list/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/masters/email_templates_list/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
-    }
-
-
-    else if (base_url == 'http://namafund.namafoundation.org/masters/create_email_template/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/masters/create_email_template/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
-    }
-
-    else if (base_url == 'http://namafund.namafoundation.org/student/applicant_personal_info/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/student/applicant_personal_info/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/student/applicant_academic_progress/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/student/applicant_academic_progress/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/student/applicant_family_info/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/student/applicant_family_info/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/student/applicant_family_mother_sibling_info/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/student/applicant_family_mother_sibling_info/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
-    }
-     else if (base_url == 'http://namafund.namafoundation.org/student/applicant_curriculum_experience_info/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/student/applicant_curriculum_experience_info/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/student/applicant_academic_english_qualification/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/student/applicant_academic_english_qualification/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/student/applicant_scholarship_about_yourself_info/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/student/applicant_scholarship_about_yourself_info/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/student/my_application/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/student/my_application/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/student/applicant_psychometric_test/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/student/applicant_psychometric_test/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/student/applicant_agreement_submission/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/student/applicant_agreement_submission/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/student/applicant_program_certificate_submission/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/student/applicant_program_certificate_submission/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/student/applicant_progress_history/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/student/applicant_progress_history/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/template_registered_application/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/partner/template_registered_application/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/template_applicant_scholarship/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/partner/template_applicant_scholarship/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/template_applicant_scholarship/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/partner/template_applicant_scholarship/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/filter_application_status/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/partner/filter_application_status/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/template_approving_application/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/partner/template_approving_application/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/template_accepted_students/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/partner/template_accepted_students/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/template_student_progress_history/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/partner/template_student_progress_history/') {
         var element = document.getElementById("d");
         element.classList.add("active");
 
         var element = document.getElementById("acad_app");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/filter_application_history/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/partner/filter_application_history/') {
         var element = document.getElementById("d");
         element.classList.add("active");
 
         var element = document.getElementById("acad_app");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/template_psychometric_test_report/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/partner/template_psychometric_test_report/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/filter_psychometric_test_report/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/partner/filter_psychometric_test_report/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/template_student_agreement/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/partner/template_student_agreement/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/filter_student_agreement/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/partner/filter_student_agreement/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/template_semester_result/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/partner/template_semester_result/') {
         var element = document.getElementById("d");
         element.classList.add("active");
 
         var element = document.getElementById("acad_app");
         element.classList.add("active");
-    }
-
-    else if (base_url == 'http://namafund.namafoundation.org/partner/template_attendance_report/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/partner/template_attendance_report/') {
         var element = document.getElementById("f");
         element.classList.add("active");
 
         var element = document.getElementById("soft_skill");
         element.classList.add("active");
-    }
-     else if (base_url == 'http://namafund.namafoundation.org/partner/filter_attendance_report/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/partner/filter_attendance_report/') {
         var element = document.getElementById("f");
         element.classList.add("active");
 
         var element = document.getElementById("soft_skill");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/donor/template_student_selection/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/donor/template_student_selection/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/donor/template_student_reports/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/donor/template_student_reports/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
-    }
-
-    else if (base_url == 'http://namafund.namafoundation.org/donor/template_application_progress_history/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/donor/template_application_progress_history/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/donor/template_my_payments/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/donor/template_my_payments/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/donor/template_students_receipts/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/donor/template_students_receipts/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/parent/template_student_academic_report/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/parent/template_student_academic_report/') {
         var element = document.getElementById("d");
         element.classList.add("active");
 
         var element = document.getElementById("acad_app");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/parent/template_student_application_progress_history/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/parent/template_student_application_progress_history/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/student/import_applicant_records_tile/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/student/import_applicant_records_tile/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/student/export_templates/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/student/export_templates/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
-    }
-
-     else if (base_url == 'http://namafund.namafoundation.org/partner/template_academic_progress/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/partner/template_academic_progress/') {
         var element = document.getElementById("d");
         element.classList.add("active");
 
         var element = document.getElementById("acad_app");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/filter_academic_progress/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/partner/filter_academic_progress/') {
         var element = document.getElementById("d");
         element.classList.add("active");
 
         var element = document.getElementById("acad_app");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/accounting/get_student_payment_voucher/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/accounting/get_student_payment_voucher/') {
         var element = document.getElementById("e");
         element.classList.add("active");
 
         var element = document.getElementById("account_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/accounting/get_student_receipt_voucher/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/accounting/get_student_receipt_voucher/') {
         var element = document.getElementById("e");
         element.classList.add("active");
 
         var element = document.getElementById("account_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/accounting/get_donor_receipt_voucher/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/accounting/get_donor_receipt_voucher/') {
         var element = document.getElementById("e");
         element.classList.add("active");
 
         var element = document.getElementById("account_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/accounting/get_student_payment_and_receipt_report/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/accounting/get_student_payment_and_receipt_report/') {
         var element = document.getElementById("e");
         element.classList.add("active");
 
         var element = document.getElementById("account_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/accounting/get_student_report/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/accounting/get_student_report/') {
         var element = document.getElementById("e");
         element.classList.add("active");
 
         var element = document.getElementById("account_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/accounting/get_repayment_report/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/accounting/get_repayment_report/') {
         var element = document.getElementById("e");
         element.classList.add("active");
 
         var element = document.getElementById("account_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/accounting/get_approval_and_paid_total/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/accounting/get_approval_and_paid_total/') {
         var element = document.getElementById("e");
         element.classList.add("active");
 
         var element = document.getElementById("account_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/accounting/get_donor_report/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/accounting/get_donor_report/') {
         var element = document.getElementById("e");
         element.classList.add("active");
 
         var element = document.getElementById("account_anch");
         element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/template_link_student_program/') {
+    } else if (base_url == 'http://namafund.namafoundation.org/partner/template_link_student_program/') {
         var element = document.getElementById("f");
         element.classList.add("active");
 
@@ -1882,135 +1802,151 @@ License: You must have a valid license purchased only from themeforest(the above
         element.classList.add("active");
     }
     {% if request.resolver_match.url_name == 'get_student_payment_voucher' %}
-    {
-     var element = document.getElementById("e");
-        element.classList.add("active");
+        {
+            var element = document.getElementById("e");
+            element.classList.add("active");
 
-        var element = document.getElementById("account_anch");
-        element.classList.add("active");
-    }
+            var element = document.getElementById("account_anch");
+            element.classList.add("active");
+        }
     {% endif %}
     {% if request.resolver_match.url_name == 'get_student_receipt_voucher' %}
-    {
-     var element = document.getElementById("e");
-        element.classList.add("active");
+        {
+            var element = document.getElementById("e");
+            element.classList.add("active");
 
-        var element = document.getElementById("account_anch");
-        element.classList.add("active");
-    }
+            var element = document.getElementById("account_anch");
+            element.classList.add("active");
+        }
     {% endif %}
     {% if request.resolver_match.url_name == 'get_student_payment_and_receipt_report' %}
-    {
-     var element = document.getElementById("e");
-        element.classList.add("active");
+        {
+            var element = document.getElementById("e");
+            element.classList.add("active");
 
-        var element = document.getElementById("account_anch");
-        element.classList.add("active");
-    }
+            var element = document.getElementById("account_anch");
+            element.classList.add("active");
+        }
     {% endif %}
     {% if request.resolver_match.url_name == 'get_student_report' %}
-    {
-     var element = document.getElementById("e");
-        element.classList.add("active");
+        {
+            var element = document.getElementById("e");
+            element.classList.add("active");
 
-        var element = document.getElementById("account_anch");
-        element.classList.add("active");
-    }
+            var element = document.getElementById("account_anch");
+            element.classList.add("active");
+        }
     {% endif %}
     {% if request.resolver_match.url_name == 'get_repayment_report' %}
-    {
-     var element = document.getElementById("e");
-        element.classList.add("active");
+        {
+            var element = document.getElementById("e");
+            element.classList.add("active");
 
-        var element = document.getElementById("account_anch");
-        element.classList.add("active");
-    }
+            var element = document.getElementById("account_anch");
+            element.classList.add("active");
+        }
     {% endif %}
-     {% if request.resolver_match.url_name == 'template_applicant_all_details' %}
-    {
-      var element = document.getElementById("c");
-        element.classList.add("active");
+    {% if request.resolver_match.url_name == 'template_applicant_all_details' %}
+        {
+            var element = document.getElementById("c");
+            element.classList.add("active");
 
-        var element = document.getElementById("app_anch");
-        element.classList.add("active");
-    }
+            var element = document.getElementById("app_anch");
+            element.classList.add("active");
+        }
     {% endif %}
     {% if request.resolver_match.url_name == 'template_academic_progress_details' %}
-    {
-       var element = document.getElementById("d");
-        element.classList.add("active");
+        {
+            var element = document.getElementById("d");
+            element.classList.add("active");
 
-        var element = document.getElementById("acad_app");
-        element.classList.add("active");
-    }
+            var element = document.getElementById("acad_app");
+            element.classList.add("active");
+        }
     {% endif %}
 
-{# {% if user.is_student %}#}
-{##}
-{#        var element = document.getElementById("c");#}
-{#        element.classList.add("active");#}
-{##}
-{#        var element = document.getElementById("app_anch");#}
-{#        element.classList.add("active");#}
-{##}
-{#    {% endif %}#}
+    {# {% if user.is_student %}#}
+    {##}
+    {#        var element = document.getElementById("c");#}
+    {#        element.classList.add("active");#}
+    {##}
+    {#        var element = document.getElementById("app_anch");#}
+    {#        element.classList.add("active");#}
+    {##}
+    {#    {% endif %}#}
 
-{% if request.resolver_match.url_name == 'student_home' or request.resolver_match.url_name == 'applicant_personal_info' or request.resolver_match.url_name == 'applicant_academic_english_qualification' or request.resolver_match.url_name == 'applicant_curriculum_experience_info' or request.resolver_match.url_name == 'applicant_additional_information' or request.resolver_match.url_name == 'applicant_attachment_submission'  or request.resolver_match.url_name == 'applicant_declaration' or request.resolver_match.url_name == 'my_application'    %}
-    {
-       var element = document.getElementById("c");
-        element.classList.add("active");
+    {% if request.resolver_match.url_name == 'student_home' or request.resolver_match.url_name == 'applicant_personal_info' or request.resolver_match.url_name == 'applicant_academic_english_qualification' or request.resolver_match.url_name == 'applicant_curriculum_experience_info' or request.resolver_match.url_name == 'applicant_additional_information' or request.resolver_match.url_name == 'applicant_attachment_submission'  or request.resolver_match.url_name == 'applicant_declaration' or request.resolver_match.url_name == 'my_application'    %}
+        {
+            var element = document.getElementById("c");
+            element.classList.add("active");
 
-        var element = document.getElementById("app_anch");
-        element.classList.add("active");
-    }
-    {% endif %}
-
-
-
-{% if request.resolver_match.url_name == 'applicant_progress_history' %}
-    {
-       var element = document.getElementById("application_progress");
-        element.classList.add("active");
-
-        var element = document.getElementById("app_prog");
-        element.classList.add("active");
-    }
-    {% endif %}
-
-{% if request.resolver_match.url_name == 'template_approving_application' %}
-    {
-       var element = document.getElementById("c");
-        element.classList.add("active");
-
-        var element = document.getElementById("app_anch");
-        element.classList.add("active");
-    }
-    {% endif %}
-
-{% if request.resolver_match.url_name == 'application_offer_letter' %}
-    {
-       var element = document.getElementById("offer_status");
-        element.classList.add("active");
-
-        var element = document.getElementById("app_offer_status");
-        element.classList.add("active");
-    }
+            var element = document.getElementById("app_anch");
+            element.classList.add("active");
+        }
     {% endif %}
 
 
-{% if request.resolver_match.url_name == 'university_settings' or request.resolver_match.url_name == 'language_settings' or request.resolver_match.url_name == 'add_language' or request.resolver_match.url_name == 'edit_language' or request.resolver_match.url_name == 'currency_settings' or request.resolver_match.url_name == 'add_currency' or request.resolver_match.url_name == 'edit_currency'  or request.resolver_match.url_name == 'add_university'  or request.resolver_match.url_name == 'edit_university'  or request.resolver_match.url_name == 'faculty_settings' or request.resolver_match.url_name == 'add_faculty'  or request.resolver_match.url_name == 'edit_faculty' %}
-    {
-       var element = document.getElementById("b");
-        element.classList.add("active");
 
-        var element = document.getElementById("setting_anch");
-        element.classList.add("active");
+    {% if request.resolver_match.url_name == 'applicant_progress_history' %}
+        {
+            var element = document.getElementById("application_progress");
+            element.classList.add("active");
 
-        $(".master_settings_nav_item").addClass("open");
-        $(".master_settings_arrow").addClass("open");
-        $('.master_settings_sub_menu').css('display','block');
+            var element = document.getElementById("app_prog");
+            element.classList.add("active");
+        }
+    {% endif %}
 
-    }
+    {% if request.resolver_match.url_name == 'template_approving_application' %}
+        {
+            var element = document.getElementById("c");
+            element.classList.add("active");
+
+            var element = document.getElementById("app_anch");
+            element.classList.add("active");
+        }
+    {% endif %}
+
+    {% if request.resolver_match.url_name == 'application_offer_letter' %}
+        {
+            var element = document.getElementById("offer_status");
+            element.classList.add("active");
+
+            var element = document.getElementById("app_offer_status");
+            element.classList.add("active");
+        }
+    {% endif %}
+
+
+    {% if request.resolver_match.url_name == 'university_settings' or request.resolver_match.url_name == 'language_settings' or request.resolver_match.url_name == 'add_language' or request.resolver_match.url_name == 'edit_language' or request.resolver_match.url_name == 'currency_settings' or request.resolver_match.url_name == 'add_currency' or request.resolver_match.url_name == 'edit_currency'  or request.resolver_match.url_name == 'add_university'  or request.resolver_match.url_name == 'edit_university'  or request.resolver_match.url_name == 'faculty_settings' or request.resolver_match.url_name == 'add_faculty'  or request.resolver_match.url_name == 'edit_faculty'   %}
+        {
+            var element = document.getElementById("b");
+            element.classList.add("active");
+
+            var element = document.getElementById("setting_anch");
+            element.classList.add("active");
+
+            $(".master_settings_nav_item").addClass("open");
+            $(".master_settings_arrow").addClass("open");
+            $('.master_settings_sub_menu').css('display', 'block');
+
+        }
+    {% endif %}
+
+
+    {% if request.resolver_match.url_name == 'program_settings' or request.resolver_match.url_name == 'study_mode_settings'  %}
+        {
+            var element = document.getElementById("b");
+            element.classList.add("active");
+
+            var element = document.getElementById("setting_anch");
+            element.classList.add("active");
+
+            $(".program_settings_nav_item").addClass("open");
+            $(".program_settings_arrow").addClass("open");
+            $('.program_settings_sub_menu').css('display', 'block');
+
+        }
     {% endif %}
 
 

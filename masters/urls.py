@@ -145,5 +145,13 @@ urlpatterns = [
     path('faculty_settings/', views.faculty_settings, name='faculty_settings'),
     path('add_faculty/', views.add_faculty, name='add_faculty'),
     path('edit_faculty/<int:faculty_id>/', views.edit_faculty, name='edit_faculty'),
+    path('delete_faculty/', views.delete_faculty, name='delete_faculty'),
+
+    path('program_settings/', views.program_settings, name='program_settings'),
+
+    path('study_mode_settings/', views.study_mode_settings, name='study_mode_settings'),
+    path('add_program/', views.add_program, name='add_program'),
+    path('edit_study_mode/', views.edit_study_mode, name='edit_study_mode'),
+    path('delete_study_mode/', views.delete_study_mode, name='delete_study_mode'),
 
 ]

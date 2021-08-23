@@ -329,11 +329,50 @@ class DegreeDetails(BaseModel):
         return res
 
 
+class StudyModeDetails(BaseModel):
+    study_mode = models.CharField(max_length=255, blank=True, null=True)
+    def __str__(self):
+        return self.study_mode
+
+class StudyTypeDetails(BaseModel):
+    study_type = models.CharField(max_length=255, blank=True, null=True)
+    def __str__(self):
+        return self.study_type
+
+
+
+class StudyLevelDetails(BaseModel):
+    study_level = models.CharField(max_length=255, blank=True, null=True)
+    def __str__(self):
+        return self.study_level
+
+class FacultyDetails(BaseModel):
+    university = models.ForeignKey(UniversityDetails, null=True, related_name='university_faculty_rel',
+                                on_delete=models.PROTECT)
+    faculty_id = models.CharField(max_length=255, blank=True, null=True)
+    faculty_name = models.CharField(max_length=255, blank=True, null=True)
+    email = models.CharField(max_length=255, blank=True, null=True)
+    telephone = models.CharField(max_length=255, blank=True, null=True)
+    website = models.CharField(max_length=255, blank=True, null=True)
+    logo = models.ImageField(upload_to='faculty_logo/', null=True, blank=True)
+    address = models.CharField(max_length=255, blank=True, null=True)
+    status = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ('-id',)
+
 class ProgramDetails(BaseModel):
     program_name = models.CharField(max_length=255, blank=True, null=True)
+    program_overview = models.CharField(max_length=255, blank=True, null=True)
+    program_objective = models.CharField(max_length=255, blank=True, null=True)
+    program_vision = models.CharField(max_length=255, blank=True, null=True)
+    program_mission = models.CharField(max_length=255, blank=True, null=True)
+    program_id = models.CharField(max_length=255, blank=True, null=True)
     degree_type = models.ForeignKey(DegreeTypeDetails, null=True, related_name='program_degree_type_rel',
                                     on_delete=models.PROTECT)
     university = models.ForeignKey(UniversityDetails, null=True, related_name='program_university_rel',
+                                   on_delete=models.PROTECT)
+    faculty = models.ForeignKey(FacultyDetails, null=True, related_name='program_faculty_rel',
                                    on_delete=models.PROTECT)
 
     class Meta:
@@ -349,6 +388,8 @@ class ProgramDetails(BaseModel):
         }
 
         return res
+
+
 
 
 class ModuleDetails(BaseModel):
@@ -454,17 +495,3 @@ class CurrencyDetails(BaseModel):
     class Meta:
         ordering = ('-id',)
 
-class FacultyDetails(BaseModel):
-    university = models.ForeignKey(UniversityDetails, null=True, related_name='university_faculty_rel',
-                                on_delete=models.PROTECT)
-    faculty_id = models.CharField(max_length=255, blank=True, null=True)
-    faculty_name = models.CharField(max_length=255, blank=True, null=True)
-    email = models.CharField(max_length=255, blank=True, null=True)
-    telephone = models.CharField(max_length=255, blank=True, null=True)
-    website = models.CharField(max_length=255, blank=True, null=True)
-    logo = models.ImageField(upload_to='faculty_logo/', null=True, blank=True)
-    address = models.CharField(max_length=255, blank=True, null=True)
-    status = models.BooleanField(default=True)
-
-    class Meta:
-        ordering = ('-id',)
