@@ -1987,7 +1987,7 @@ def study_mode_settings(request):
     return render(request, 'study_mode.html',
                   {'study_mode_recs': study_mode_recs})
 
-def add_program(request):
+def add_study_mode(request):
     study_mode = request.POST.get('study_mode')
     try:
         if not StudyModeDetails.objects.filter(study_mode=study_mode).exists():
@@ -2026,3 +2026,48 @@ def delete_study_mode(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/study_mode_settings/')
+
+
+def study_level_settings(request):
+    study_level_recs = StudyLevelDetails.objects.filter().order_by('-id')
+    return render(request, 'study_level.html',
+                  {'study_level_recs': study_level_recs})
+
+def add_study_level(request):
+    study_level = request.POST.get('study_level')
+    try:
+        if not StudyLevelDetails.objects.filter(study_level=study_level).exists():
+            StudyLevelDetails.objects.create(study_level=study_level)
+            messages.success(request, "Record saved.")
+        else:
+            messages.warning(request, "Study level already exists.")
+    except:
+        messages.warning(request, "Record not saved.")
+    return redirect('/masters/study_level_settings/')
+
+def edit_study_level(request):
+    study_level_id = request.POST.get('study_level_id')
+    study_level = request.POST.get('study_level')
+    try:
+        if not StudyLevelDetails.objects.filter(~Q(id=study_level_id), study_level=study_level).exists():
+            StudyLevelDetails.objects.filter(id=study_level_id).update(study_level=study_level)
+            messages.success(request, "Record saved.")
+            return HttpResponse(json.dumps({'success': 'Record saved.'}), content_type="application/json")
+        else:
+            messages.warning(request, "Study mode already exists.")
+            return HttpResponse(
+                json.dumps({'success': "Study mode already exists."}),
+                content_type="application/json")
+    except:
+        messages.warning(request, "Record not updated.")
+        return HttpResponse(json.dumps({'error': 'Record not updated.'}), content_type="application/json")
+
+def delete_study_level(request):
+    if request.method == 'POST':
+        study_level_delete_id = request.POST.get('study_level_delete_id')
+        try:
+            StudyLevelDetails.objects.filter(id=study_level_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/study_level_settings/')

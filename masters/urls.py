@@ -150,8 +150,13 @@ urlpatterns = [
     path('program_settings/', views.program_settings, name='program_settings'),
 
     path('study_mode_settings/', views.study_mode_settings, name='study_mode_settings'),
-    path('add_program/', views.add_program, name='add_program'),
+    path('add_study_mode/', views.add_study_mode, name='add_study_mode'),
     path('edit_study_mode/', views.edit_study_mode, name='edit_study_mode'),
     path('delete_study_mode/', views.delete_study_mode, name='delete_study_mode'),
+
+    path('study_level_settings/', views.study_level_settings, name='study_level_settings'),
+    path('add_study_level/', views.add_study_level, name='add_study_level'),
+    path('edit_study_level/', views.edit_study_level, name='edit_study_level'),
+    path('delete_study_level/', views.delete_study_level, name='delete_study_level'),
 
 ]

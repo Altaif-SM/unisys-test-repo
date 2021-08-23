@@ -34,23 +34,23 @@
                 $(document).on("click", ".update", function (e) {
 
                     var parent_id = $(this).closest('tr').attr('id');
-                    var study_mode_id = $('#' + parent_id + ' #study_mode_id').val();
-                    var study_mode = $('#' + parent_id + ' .study_mode').val();
-                    if (study_mode == '') {
-                        $('#' + parent_id + ' .study_mode').focus();
-                        $('#' + parent_id + ' .study_mode').css('border-color', 'red');
+                    var study_level_id = $('#' + parent_id + ' #study_level_id').val();
+                    var study_level = $('#' + parent_id + ' .study_level').val();
+                    if (study_level == '') {
+                        $('#' + parent_id + ' .study_level').focus();
+                        $('#' + parent_id + ' .study_level').css('border-color', 'red');
                         return false;
                     }
-                    var url = '/masters/edit_study_mode/';
-                    update_study_mode(url, study_mode_id, study_mode)
+                    var url = '/masters/edit_study_level/';
+                    update_study_level(url, study_level_id, study_level)
                 })
 
                 $(document).on("click", ".delete", function (e) {
 
-                    $('#id_delete_study_mode_model').modal();
+                    $('#id_delete_study_level_model').modal();
                     var parent_id = $(this).closest('tr').attr('id');
-                    var study_mode_id = $('#' + parent_id + ' #study_mode_id').val();
-                    $("#study_mode_delete_id").val(study_mode_id)
+                    var study_level_id = $('#' + parent_id + ' #study_level_id').val();
+                    $("#study_level_delete_id").val(study_level_id)
 
 
                     {#var url = '/masters/delete_study_mode/';#}
@@ -74,13 +74,13 @@
                     });
                 }
 
-                function update_study_mode(url, study_mode_id, study_mode) {
+                function update_study_level(url, study_level_id, study_level) {
                     $.ajax({
                         type: 'POST',
                         url: url,
                         data: {
-                            study_mode_id: study_mode_id,
-                            study_mode: study_mode,
+                            study_level_id: study_level_id,
+                            study_level: study_level,
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
@@ -96,7 +96,7 @@
 
                 $(document).on("click", ".edit", function (e) {
                     {#var parent_id = $(this).closest('tr').attr('id');#}
-                    $('.study_mode').css('border-color', '');
+                    $('.study_level').css('border-color', '');
                     var id = $(this).attr('id');
                     var i = id.split("edit")[1]
 
@@ -106,7 +106,7 @@
 
                     $("#update" + i).show();
                     $("#edit" + i).hide();
-                    $("#study_mode" + i).prop("disabled", false);
+                    $("#study_level" + i).prop("disabled", false);
                 });
             });
 
@@ -147,7 +147,7 @@
             </li>
 
             <li>
-                <span> Manage Study Mode </span>
+                <span> Manage Study Level </span>
             </li>
         </ul>
     </div>
@@ -163,7 +163,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> Manage Study Mode</span>
+                <span class="caption-subject font-red sbold uppercase"> Manage Study Level</span>
             </div>
         </div>
 
@@ -172,7 +172,7 @@
             <!-- BEGIN FORM-->
             <div class="form-body">
 
-                <form action="{% url 'masters:add_study_mode' %}" id="form_sample_1" class="form-horizontal"
+                <form action="{% url 'masters:add_study_level' %}" id="form_sample_1" class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
@@ -180,11 +180,11 @@
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">Study Mode:
+                                <label class="col-md-2 control-label">Study Level:
 
                                 </label>
                                 <div class="col-md-3">
-                                    <input type="text" name="study_mode" class="form-control" required>
+                                    <input type="text" name="study_level" class="form-control" required>
                                 </div>
                             </div>
 
@@ -211,22 +211,22 @@
                     <thead>
                     <tr>
                         <th style="display: none">Id</th>
-                        <th>Study Mode</th>
+                        <th>Study Level</th>
                         <th width="10%">Action</th>
                     </tr>
                     </thead>
 
                     <tbody id="tbody">
-                    {% for rec in study_mode_recs %}
+                    {% for rec in study_level_recs %}
                         <tr id="item{{ forloop.counter }}" class="item">
-                            <td style="display: none"><input id="study_mode_id" value="{{ rec.id }}"></td>
+                            <td style="display: none"><input id="study_level_id" value="{{ rec.id }}"></td>
                             <td>
-                                <text hidden>{{ rec.study_mode|default_if_none:"" }}</text>
-                                <input class="form-control data study_mode" name="study_mode"
+                                <text hidden>{{ rec.study_level|default_if_none:"" }}</text>
+                                <input class="form-control data study_level" name="study_level"
                                        type="text"
-                                       id="study_mode{{ forloop.counter }}" value="{{ rec.study_mode|default_if_none:"" }}"
+                                       id="study_level{{ forloop.counter }}" value="{{ rec.study_level|default_if_none:"" }}"
                                        required pattern='[A-Za-z+-]+'
-                                       title='Please Enter study mode' disabled></td>
+                                       title='Please Enter study level' disabled></td>
 
                             <td>
                                 <span type="button" name="updt" id="update{{ forloop.counter }}"
@@ -247,22 +247,22 @@
         </div>
     </div>
 
-    <div id="id_delete_study_mode_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+    <div id="id_delete_study_level_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{% url 'masters:delete_study_mode' %}"
+                <form action="{% url 'masters:delete_study_level' %}"
                         id="form_sample_1"
                         class="form-horizontal"
                         method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <input type="hidden" id="study_mode_delete_id" name="study_mode_delete_id">
+                    <input type="hidden" id="study_level_delete_id" name="study_level_delete_id">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                         <h4 class="modal-title" style="color: #2a015e; text-align: center"><b  >Delete Confirmation</b></h4>
                     </div>
                     <div class="modal-body">
-                        <p> Are you sure, you want to delete Study Mode? </p>
-                        <p> After delete you will not be able to modify the Study Mode. </p>
+                        <p> Are you sure, you want to delete Study Level? </p>
+                        <p> After delete you will not be able to modify the Study Level. </p>
 
                     </div>
                     <div class="modal-footer">

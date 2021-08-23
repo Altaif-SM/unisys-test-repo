@@ -442,6 +442,10 @@ License: You must have a valid license purchased only from themeforest(the above
                                             <a href="{% url 'masters:study_mode_settings' %}"
                                                class="nav-link ">Manage Study Mode </a>
                                         </li>
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:study_level_settings' %}"
+                                               class="nav-link ">Manage Study Level </a>
+                                        </li>
 
                                     </ul>
                                 </li>
@@ -1934,7 +1938,7 @@ License: You must have a valid license purchased only from themeforest(the above
     {% endif %}
 
 
-    {% if request.resolver_match.url_name == 'program_settings' or request.resolver_match.url_name == 'study_mode_settings'  %}
+    {% if request.resolver_match.url_name == 'program_settings' or request.resolver_match.url_name == 'study_mode_settings'  or request.resolver_match.url_name == 'study_level_settings'%}
         {
             var element = document.getElementById("b");
             element.classList.add("active");
