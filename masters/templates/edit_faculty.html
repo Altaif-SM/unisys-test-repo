@@ -100,46 +100,30 @@
 
                             <div class="row">
 
-                                {% if faculty_obj.logo %}
-                                    <div class="">
-                                        <label class="col-md-2 control-label">Logo:
 
-                                        </label>
-                                        <div class="col-md-2">
+                                <div class="">
+                                    <label class="col-md-2 control-label">University:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select id='university' title="Select University"
+                                                name="university"
+                                                class="form-control" required>
 
-                                            <input name="logo" type="file" title="Select Faculty Logo"
-                                                   accept="image/gif, image/jpeg, image/png"
-                                                   id="logo"
-                                                   class="form-control ">
+                                            {% if faculty_obj.university %}
+                                                <option style="display:none;" selected="selected"
+                                                        value="{{ faculty_obj.university.id|default_if_none:"" }}"> {{ faculty_obj.university.university_name|default_if_none:"" }}</option>
+                                            {% else %}
+                                                <option selected="selected" value=""> Please Select</option>
+                                            {% endif %}
 
+                                            {% for rec in university_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.university_name|default_if_none:"" }}</option>
+                                            {% endfor %}
 
-                                        </div>
-                                        {% if faculty_obj.logo %}
-                                            <div class="col-md-1" style="margin-top: 5px;
-    font-size: 20px;">
-                                                <a href="{{ faculty_obj.logo.url }}" download>
-                                                    <i class="fa fa-download" aria-hidden="true"></i>
-
-                                                </a>
-                                            </div>
-                                        {% endif %}
+                                        </select>
                                     </div>
-                                {% else %}
-                                    <div class="">
-                                        <label class="col-md-2 control-label">Logo:
+                                </div>
 
-                                        </label>
-                                        <div class="col-md-3">
-
-                                            <input name="logo" type="file" title="Select Faculty Logo"
-                                                   accept="image/gif, image/jpeg, image/png"
-                                                   id="logo"
-                                                   class="form-control ">
-
-                                        </div>
-
-                                    </div>
-                                {% endif %}
 
                                 <div class="">
                                     <label class="col-md-2 control-label">Faculty ID:<span
@@ -220,21 +204,64 @@
 
                             <div class="row">
 
+                                {% if faculty_obj.logo %}
+                                    <div class="">
+                                        <label class="col-md-2 control-label">Logo:
+
+                                        </label>
+                                        <div class="col-md-2">
+
+                                            <input name="logo" type="file" title="Select Faculty Logo"
+                                                   accept="image/gif, image/jpeg, image/png"
+                                                   id="logo"
+                                                   class="form-control ">
+
+
+                                        </div>
+                                        {% if faculty_obj.logo %}
+                                            <div class="col-md-1" style="margin-top: 5px;
+    font-size: 20px;">
+                                                <a href="{{ faculty_obj.logo.url }}" download>
+                                                    <i class="fa fa-download" aria-hidden="true"></i>
+
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% else %}
+                                    <div class="">
+                                        <label class="col-md-2 control-label">Logo:
+
+                                        </label>
+                                        <div class="col-md-3">
+
+                                            <input name="logo" type="file" title="Select Faculty Logo"
+                                                   accept="image/gif, image/jpeg, image/png"
+                                                   id="logo"
+                                                   class="form-control ">
+
+                                        </div>
+
+                                    </div>
+                                {% endif %}
+
                                 <div class="">
                                     <label class="col-md-2 control-label">Address:<span
                                             style="color: red">*</span>
 
                                     </label>
                                     <div class="col-md-3">
-                                        <textarea rows="2" class="form-control "  id="address"
-                                                  name="address" required>{{ faculty_obj.address|default_if_none:"" }}</textarea>
+                                        <textarea rows="2" class="form-control " id="address"
+                                                  name="address"
+                                                  required>{{ faculty_obj.address|default_if_none:"" }}</textarea>
 
                                     </div>
                                 </div>
 
 
-
-
+                            </div>
+                            <br>
+                            <div class="row">
                                 <div class="">
                                     <label class="col-md-2 control-label">Status:</label>
                                     <div class="col-md-3">
@@ -249,7 +276,6 @@
 
                                     </div>
                                 </div>
-
                             </div>
 
 

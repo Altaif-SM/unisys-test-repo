@@ -1903,8 +1903,10 @@ def faculty_settings(request):
     return render(request, 'faculty_settings.html', {'faculty_recs': faculty_recs})
 
 def add_faculty(request):
+    university_recs = UniversityDetails.objects.filter(is_delete=False,is_active=True).order_by('-id')
     if request.method == 'POST':
         logo = request.FILES.get('logo', None)
+        university = request.POST.get('university')
         faculty_id = request.POST.get('faculty_id')
         faculty_name = request.POST.get('faculty_name')
         email = request.POST.get('email')
@@ -1917,7 +1919,7 @@ def add_faculty(request):
         else:
             status = False
         try:
-            faculty_obj = FacultyDetails.objects.create(faculty_id=faculty_id,
+            faculty_obj = FacultyDetails.objects.create(faculty_id=faculty_id,university_id=university,
                                              faculty_name=faculty_name, email=email,telephone = telephone,website = website,
                                              address = address,status = status)
             if logo:
@@ -1927,12 +1929,14 @@ def add_faculty(request):
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/faculty_settings/')
-    return render(request, 'add_faculty.html')
+    return render(request, 'add_faculty.html',{'university_recs':university_recs})
 
 def edit_faculty(request, faculty_id=None):
     faculty_obj = FacultyDetails.objects.get(id=faculty_id)
+    university_recs = UniversityDetails.objects.filter(is_delete = False,is_active = True).order_by('-id')
     if request.method == 'POST':
         logo = request.FILES.get('logo', None)
+        university = request.POST.get('university')
         faculty_id = request.POST.get('faculty_id')
         faculty_name = request.POST.get('faculty_name')
         email = request.POST.get('email')
@@ -1945,6 +1949,7 @@ def edit_faculty(request, faculty_id=None):
         else:
             status = False
         try:
+            faculty_obj.university_id = university
             faculty_obj.faculty_id = faculty_id
             faculty_obj.faculty_name = faculty_name
             faculty_obj.email = email
@@ -1959,4 +1964,4 @@ def edit_faculty(request, faculty_id=None):
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/faculty_settings/')
-    return render(request, "edit_faculty.html", {'faculty_obj': faculty_obj})
+    return render(request, "edit_faculty.html", {'faculty_obj': faculty_obj,'university_recs':university_recs})
