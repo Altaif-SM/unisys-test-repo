@@ -363,10 +363,10 @@ class FacultyDetails(BaseModel):
 
 class ProgramDetails(BaseModel):
     program_name = models.CharField(max_length=255, blank=True, null=True)
-    program_overview = models.CharField(max_length=255, blank=True, null=True)
-    program_objective = models.CharField(max_length=255, blank=True, null=True)
-    program_vision = models.CharField(max_length=255, blank=True, null=True)
-    program_mission = models.CharField(max_length=255, blank=True, null=True)
+    program_overview = models.TextField(blank=True, null=True)
+    program_objective = models.TextField(blank=True, null=True)
+    program_vision = models.TextField(blank=True, null=True)
+    program_mission = models.TextField(blank=True, null=True)
     program_id = models.CharField(max_length=255, blank=True, null=True)
     degree_type = models.ForeignKey(DegreeTypeDetails, null=True, related_name='program_degree_type_rel',
                                     on_delete=models.PROTECT)
