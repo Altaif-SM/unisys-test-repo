@@ -2110,9 +2110,9 @@ def edit_study_type(request):
 
 def delete_study_type(request):
     if request.method == 'POST':
-        study_level_delete_id = request.POST.get('study_level_delete_id')
+        study_type_delete_id = request.POST.get('study_type_delete_id')
         try:
-            StudyTypeDetails.objects.filter(id=study_level_delete_id).delete()
+            StudyTypeDetails.objects.filter(id=study_type_delete_id).delete()
             messages.success(request, "Record deleted.")
         except:
             messages.warning(request, "Record not deleted.")
