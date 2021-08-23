@@ -374,7 +374,14 @@ class ProgramDetails(BaseModel):
                                    on_delete=models.PROTECT)
     faculty = models.ForeignKey(FacultyDetails, null=True, related_name='program_faculty_rel',
                                    on_delete=models.PROTECT)
-
+    study_mode = models.ForeignKey(StudyModeDetails, null=True, related_name='program_study_mode_rel',
+                                on_delete=models.PROTECT)
+    study_level = models.ForeignKey(StudyLevelDetails, null=True, related_name='program_study_level_rel',
+                                   on_delete=models.PROTECT)
+    study_type = models.ForeignKey(StudyTypeDetails, null=True, related_name='program_study_type_rel',
+                                   on_delete=models.PROTECT)
+    status = models.BooleanField(default=True)
+    is_delete = models.BooleanField(default=False)
     class Meta:
         ordering = ('program_name',)
 

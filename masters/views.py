@@ -447,7 +447,7 @@ def update_program(request):
                         content_type="application/json")
 
 
-def delete_program(request):
+def delete_programs(request):
     program_id = request.POST.get('program_id')
 
     try:
@@ -1977,10 +1977,6 @@ def delete_faculty(request):
         return redirect('/masters/faculty_settings/')
 
 
-def program_settings(request):
-    program_recs = ProgramDetails.objects.filter()
-    return render(request, 'program_settings.html', {'program_recs': program_recs})
-
 
 def study_mode_settings(request):
     study_mode_recs = StudyModeDetails.objects.filter().order_by('-id')
@@ -2117,3 +2113,96 @@ def delete_study_type(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/study_type_settings/')
+
+def program_settings(request):
+    program_recs = ProgramDetails.objects.filter(is_delete=False).order_by('-id')
+    return render(request, 'program_settings.html', {'program_recs': program_recs})
+
+def add_program(request):
+    if request.method == 'POST':
+        university = request.POST.get('university')
+        faculty = request.POST.get('faculty')
+        program_id = request.POST.get('program_id')
+        program_name = request.POST.get('program_name')
+        study_type = request.POST.get('study_type')
+        study_level = request.POST.get('study_level')
+        study_mode = request.POST.get('study_mode')
+        program_overview = request.POST.get('program_overview')
+        program_objective = request.POST.get('program_objective')
+        program_vision = request.POST.get('program_vision')
+        program_mission = request.POST.get('program_mission')
+        status = request.POST.get('status')
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            ProgramDetails.objects.create(faculty_id=faculty,university_id=university,
+                                             program_id=program_id, program_name=program_name,program_overview = program_overview,program_objective = program_objective,
+                                             program_vision = program_vision,program_mission = program_mission,status = status,study_type_id = study_type,study_mode_id = study_mode,study_level_id = study_level)
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/program_settings/')
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True).order_by('-id')
+    study_mode_recs = StudyModeDetails.objects.filter().order_by('-id')
+    study_level_recs = StudyLevelDetails.objects.filter().order_by('-id')
+    study_type_recs = StudyTypeDetails.objects.filter().order_by('-id')
+    faculty_recs = FacultyDetails.objects.filter(status=True).order_by('-id')
+    return render(request, 'add_program.html',{'university_recs':university_recs,'faculty_recs':faculty_recs,'study_level_recs':study_level_recs,'study_mode_recs':study_mode_recs,'study_type_recs':study_type_recs})
+
+
+def edit_program(request, program_id=None):
+    program_obj = ProgramDetails.objects.get(id=program_id)
+    if request.method == 'POST':
+        university = request.POST.get('university')
+        faculty = request.POST.get('faculty')
+        program_id = request.POST.get('program_id')
+        program_name = request.POST.get('program_name')
+        study_type = request.POST.get('study_type')
+        study_level = request.POST.get('study_level')
+        study_mode = request.POST.get('study_mode')
+        program_overview = request.POST.get('program_overview')
+        program_objective = request.POST.get('program_objective')
+        program_vision = request.POST.get('program_vision')
+        program_mission = request.POST.get('program_mission')
+        status = request.POST.get('status')
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            program_obj.university_id = university
+            program_obj.faculty_id = faculty
+            program_obj.program_id = program_id
+            program_obj.program_name = program_name
+            program_obj.study_type_id = study_type
+            program_obj.study_level_id = study_level
+            program_obj.study_mode_id = study_mode
+            program_obj.program_overview = program_overview
+            program_obj.program_objective = program_objective
+            program_obj.program_vision = program_vision
+            program_obj.program_mission = program_mission
+            program_obj.status = status
+            program_obj.save()
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/program_settings/')
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True).order_by('-id')
+    study_mode_recs = StudyModeDetails.objects.filter().order_by('-id')
+    study_level_recs = StudyLevelDetails.objects.filter().order_by('-id')
+    study_type_recs = StudyTypeDetails.objects.filter().order_by('-id')
+    faculty_recs = FacultyDetails.objects.filter(status=True).order_by('-id')
+    return render(request, "edit_program.html", {'program_obj': program_obj,'university_recs':university_recs,'study_mode_recs':study_mode_recs,'study_level_recs':study_level_recs,'study_type_recs':study_type_recs,'faculty_recs':faculty_recs})
+
+
+def delete_program(request):
+    if request.method == 'POST':
+        program_delete_id = request.POST.get('program_delete_id')
+        try:
+            ProgramDetails.objects.filter(id=program_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/program_settings/')

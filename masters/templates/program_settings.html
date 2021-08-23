@@ -50,10 +50,10 @@
 
                 $(document).on("click", ".delete", function (e) {
 
-                    $('#id_delete_faculty_model').modal();
+                    $('#id_delete_program_model').modal();
                     var parent_id = $(this).closest('tr').attr('id');
-                    var faculty_id = $('#' + parent_id + ' #faculty_id').val();
-                    $("#faculty_delete_id").val(faculty_id)
+                    var program_id = $('#' + parent_id + ' #program_id').val();
+                    $("#program_delete_id").val(program_id)
 
                     {#var url = '/masters/delete_semester/';#}
                     {#delete_semester_info(url, language_id)#}
@@ -186,27 +186,29 @@
                     <thead>
                     <tr>
                         <th style="display: none">Id</th>
-                        <th>Faculty ID</th>
-                        <th> Faculty Name</th>
-                        <th> Email</th>
-                        <th> Telephone</th>
-                        <th> Website</th>
-                        <th> Address</th>
+                        <th>Program ID</th>
+                        <th> Program Name</th>
+                        <th> University</th>
+                        <th> Faculty</th>
+                        <th> Study Mode</th>
+                        <th> Study Level</th>
+                        <th> Study Type</th>
                         <th> Status</th>
                         <th width="10%">Action</th>
                     </tr>
                     </thead>
 
                     <tbody id="tbody">
-                    {% for rec in faculty_recs %}
+                    {% for rec in program_recs %}
                         <tr id="item{{ forloop.counter }}" class="item">
-                            <td style="display: none"><input id="faculty_id" value="{{ rec.id }}"></td>
-                            <td>{{ rec.faculty_id|default_if_none:"" }}</td>
-                            <td>{{ rec.faculty_name|default_if_none:"" }}</td>
-                            <td>{{ rec.email|default_if_none:"" }}</td>
-                            <td>{{ rec.telephone|default_if_none:"" }}</td>
-                             <td>{{ rec.website|default_if_none:"" }}</td>
-                        <td>{{ rec.address|default_if_none:"" }}</td>
+                            <td style="display: none"><input id="program_id" value="{{ rec.id }}"></td>
+                            <td>{{ rec.program_id|default_if_none:"" }}</td>
+                            <td>{{ rec.program_name|default_if_none:"" }}</td>
+                            <td>{{ rec.university.university_name|default_if_none:"" }}</td>
+                            <td>{{ rec.faculty.faculty_name|default_if_none:"" }}</td>
+                            <td>{{ rec.study_mode.study_mode|default_if_none:"" }}</td>
+                             <td>{{ rec.study_level.study_level|default_if_none:"" }}</td>
+                        <td>{{ rec.study_type.study_type|default_if_none:"" }}</td>
                          <td>
                                 {% if rec.status == True %}
                                     <i class="fa fa-power-off" aria-hidden="true"
@@ -218,7 +220,7 @@
                             </td>
 
                             <td>
-                                <a href="{% url 'masters:edit_faculty' rec.id %}">
+                                <a href="{% url 'masters:edit_program' rec.id %}">
                                 <span type="button" name="edit" id="edit{{ forloop.counter }}"
                                       class=" edit_btn btn blue glyphicon glyphicon-pencil">
                                 </span>
@@ -236,22 +238,22 @@
         </div>
     </div>
 
-    <div id="id_delete_faculty_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+    <div id="id_delete_program_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{% url 'masters:delete_faculty' %}"
+                <form action="{% url 'masters:delete_program' %}"
                         id="form_sample_1"
                         class="form-horizontal"
                         method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <input type="hidden" id="faculty_delete_id" name="faculty_delete_id">
+                    <input type="hidden" id="program_delete_id" name="program_delete_id">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                         <h4 class="modal-title" style="color: #2a015e; text-align: center"><b  >Delete Confirmation</b></h4>
                     </div>
                     <div class="modal-body">
-                        <p> Are you sure, you want to delete Faculty? </p>
-                        <p> After delete you will not be able to modify the Faculty. </p>
+                        <p> Are you sure, you want to delete Program? </p>
+                        <p> After delete you will not be able to modify the Program. </p>
 
                     </div>
                     <div class="modal-footer">

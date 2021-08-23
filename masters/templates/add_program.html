@@ -66,7 +66,7 @@
             </li>
 
             <li>
-                <span> Add Faculty </span>
+                <span> Add Program </span>
             </li>
         </ul>
     </div>
@@ -82,13 +82,13 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase">Add Faculty </span>
+                <span class="caption-subject font-red sbold uppercase">Add Program </span>
             </div>
         </div>
 
         <div class="portlet-body">
             <div class="form-body">
-                <form action="{% url 'masters:add_faculty' %}"
+                <form action="{% url 'masters:add_program' %}"
                       id="id_form"
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
@@ -114,18 +114,19 @@
                                         </select>
                                     </div>
                                 </div>
-
-
                                 <div class="">
-                                    <label class="col-md-2 control-label">Faculty ID:<span
+                                    <label class="col-md-2 control-label">Faculty:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
-                                        <input type="text" title="Enter Faculty ID" id="faculty_id"
-                                               value=""
-                                               name="faculty_id"
-                                               class="form-control" required>
+                                        <select id='faculty' title="Select Faculty"
+                                                name="faculty"
+                                                class="form-control" required>
+                                            <option selected="selected" value=""> Please Select</option>
+                                            {% for rec in faculty_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.faculty_name|default_if_none:"" }}</option>
+                                            {% endfor %}
 
-
+                                        </select>
                                     </div>
                                 </div>
 
@@ -135,98 +136,150 @@
                             <br>
                             <div class="row">
                                 <div class="">
-                                    <label class="col-md-2 control-label">Faculty Name:<span
+                                    <label class="col-md-2 control-label">Program ID:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
-                                        <input type="text" title="Enter Faculty Name" id="faculty_name"
+                                        <input type="text" title="Enter Program ID" id="program_id"
                                                value=""
-                                               name="faculty_name"
+                                               name="program_id"
+                                               class="form-control" required>
+
+
+                                    </div>
+                                </div>
+                                <div class="">
+                                    <label class="col-md-2 control-label">Program Name:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter Program Name" id="program_name"
+                                               value=""
+                                               name="program_name"
                                                class="form-control" required>
 
                                     </div>
                                 </div>
 
+                            </div>
+                            <br>
+                            <div class="row">
                                 <div class="">
-                                    <label class="col-md-2 control-label">Email:<span
+                                    <label class="col-md-2 control-label">Study Mode:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
-                                        <input type="text" title="Enter Email" id="email"
-                                               value=""
-                                               name="email"
-                                               class="form-control" required>
+                                        <select id='study_mode' title="Select Study Mode"
+                                                name="study_mode"
+                                                class="form-control" required>
+                                            <option selected="selected" value=""> Please Select</option>
+                                            {% for rec in study_mode_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.study_mode|default_if_none:"" }}</option>
+                                            {% endfor %}
 
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="">
+                                    <label class="col-md-2 control-label">Study Level:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select id='study_level' title="Select Study Level"
+                                                name="study_level"
+                                                class="form-control" required>
+                                            <option selected="selected" value=""> Please Select</option>
+                                            {% for rec in study_level_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.study_level|default_if_none:"" }}</option>
+                                            {% endfor %}
+
+                                        </select>
                                     </div>
                                 </div>
 
 
                             </div>
+
                             <br>
 
 
                             <div class="row">
+
                                 <div class="">
-                                    <label class="col-md-2 control-label">Telephone:<span
+                                    <label class="col-md-2 control-label">Study Type:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
-                                        <input type="text" title="Enter Telephone" id="telephone"
-                                               value=""
-                                               name="telephone"
-                                               class="form-control" required>
+                                        <select id='study_type' title="Select Study Type"
+                                                name="study_type"
+                                                class="form-control" required>
+                                            <option selected="selected" value=""> Please Select</option>
+                                            {% for rec in study_type_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.study_type|default_if_none:"" }}</option>
+                                            {% endfor %}
 
+                                        </select>
                                     </div>
                                 </div>
 
 
                                 <div class="">
-                                    <label class="col-md-2 control-label">Website:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <input type="text" title="Enter Website" id="website"
-                                               value=""
-                                               name="website"
-                                               class="form-control" required>
-
-                                    </div>
-                                </div>
-
-
-                            </div>
-                            <br>
-
-                            <div class="row">
-
-                                <div class="">
-                                    <label class="col-md-2 control-label">Logo:
-
-                                    </label>
-                                    <div class="col-md-3">
-
-                                        <input name="logo" type="file" title="Select Faculty Logo"
-                                               accept="image/gif, image/jpeg, image/png"
-                                               id="logo"
-                                               class="form-control ">
-
-
-                                    </div>
-                                </div>
-
-
-                                <div class="">
-                                    <label class="col-md-2 control-label">Address:<span
+                                    <label class="col-md-2 control-label">Overview:<span
                                             style="color: red">*</span>
 
                                     </label>
                                     <div class="col-md-3">
-                                        <textarea rows="2" class="form-control " id="address"
-                                                  name="address" required></textarea>
+                                        <textarea rows="2" class="form-control " id="program_overview"
+                                                  name="program_overview" required></textarea>
 
                                     </div>
                                 </div>
 
 
+
+
                             </div>
                             <br>
                             <div class="row">
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Objective:<span
+                                            style="color: red">*</span>
+
+                                    </label>
+                                    <div class="col-md-3">
+                                        <textarea rows="2" class="form-control " id="program_objective"
+                                                  name="program_objective" required></textarea>
+
+                                    </div>
+                                </div>
+
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Vision:<span
+                                            style="color: red">*</span>
+
+                                    </label>
+                                    <div class="col-md-3">
+                                        <textarea rows="2" class="form-control " id="program_vision"
+                                                  name="program_vision" required></textarea>
+
+                                    </div>
+                                </div>
+
+
+
+
+                            </div>
+                            <br>
+                            <div class="row">
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Mission:<span
+                                            style="color: red">*</span>
+
+                                    </label>
+                                    <div class="col-md-3">
+                                        <textarea rows="2" class="form-control " id="program_mission"
+                                                  name="program_mission" required></textarea>
+
+                                    </div>
+                                </div>
 
                                 <div class="">
                                     <label class="col-md-2 control-label">Status:</label>
@@ -246,7 +299,7 @@
                         <div class="row">
                             <div class="col-md-offset-5 col-md-7">
                                 <button type="button" class="btn blue" id="back" style="margin-left: 70%"
-                                        onclick="window.location='{% url "masters:faculty_settings" %}'">
+                                        onclick="window.location='{% url "masters:program_settings" %}'">
                                     Back
                                 </button>
 

@@ -55,7 +55,7 @@ urlpatterns = [
     path('template_program_master/', views.template_program_master, name='template_program_master'),
     path('save_program/', views.save_program, name='save_program'),
     path('update_program/', views.update_program, name='update_program'),
-    path('delete_program/', views.delete_program, name='delete_program'),
+    path('delete_programs/', views.delete_programs, name='delete_programs'),
 
     # ********------ module Master --------****************************
     path('template_module_master/', views.template_module_master, name='template_module_master'),
@@ -147,8 +147,6 @@ urlpatterns = [
     path('edit_faculty/<int:faculty_id>/', views.edit_faculty, name='edit_faculty'),
     path('delete_faculty/', views.delete_faculty, name='delete_faculty'),
 
-    path('program_settings/', views.program_settings, name='program_settings'),
-
     path('study_mode_settings/', views.study_mode_settings, name='study_mode_settings'),
     path('add_study_mode/', views.add_study_mode, name='add_study_mode'),
     path('edit_study_mode/', views.edit_study_mode, name='edit_study_mode'),
@@ -163,5 +161,10 @@ urlpatterns = [
     path('add_study_type/', views.add_study_type, name='add_study_type'),
     path('edit_study_type/', views.edit_study_type, name='edit_study_type'),
     path('delete_study_type/', views.delete_study_type, name='delete_study_type'),
+
+    path('program_settings/', views.program_settings, name='program_settings'),
+    path('add_program/', views.add_program, name='add_program'),
+    path('edit_program/<int:program_id>/', views.edit_program, name='edit_program'),
+    path('delete_program/', views.delete_program, name='delete_program'),
 
 ]
