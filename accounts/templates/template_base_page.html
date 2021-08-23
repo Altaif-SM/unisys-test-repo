@@ -410,6 +410,12 @@ License: You must have a valid license purchased only from themeforest(the above
                                             <span class="title">Manage Universities</span>
                                         </a>
                                     </li>
+                                        <li class="nav-item  ">
+                                        <a href="/masters/faculty_settings/" class="nav-link ">
+{#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
+                                            <span class="title">Manage Faculties</span>
+                                        </a>
+                                    </li>
 
 {#                                        <li class="nav-item ">#}
 {#                                            <a href="{% url 'masters:template_master_course_work_master' %}"#}
@@ -1992,7 +1998,7 @@ License: You must have a valid license purchased only from themeforest(the above
     {% endif %}
 
 
-{% if request.resolver_match.url_name == 'university_settings' or request.resolver_match.url_name == 'language_settings' or request.resolver_match.url_name == 'add_language' or request.resolver_match.url_name == 'edit_language' or request.resolver_match.url_name == 'currency_settings' or request.resolver_match.url_name == 'add_currency' or request.resolver_match.url_name == 'edit_currency'  or request.resolver_match.url_name == 'add_university'  or request.resolver_match.url_name == 'edit_university'  %}
+{% if request.resolver_match.url_name == 'university_settings' or request.resolver_match.url_name == 'language_settings' or request.resolver_match.url_name == 'add_language' or request.resolver_match.url_name == 'edit_language' or request.resolver_match.url_name == 'currency_settings' or request.resolver_match.url_name == 'add_currency' or request.resolver_match.url_name == 'edit_currency'  or request.resolver_match.url_name == 'add_university'  or request.resolver_match.url_name == 'edit_university'  or request.resolver_match.url_name == 'faculty_settings'  %}
     {
        var element = document.getElementById("b");
         element.classList.add("active");
