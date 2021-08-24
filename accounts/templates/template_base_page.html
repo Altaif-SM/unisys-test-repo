@@ -449,7 +449,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                                class="nav-link ">Manage Year </a>
                                         </li>
                                         <li class="nav-item ">
-                                            <a href="{% url 'masters:study_level_settings' %}"
+                                            <a href="{% url 'masters:semester_settings' %}"
                                                class="nav-link ">Manage Semester </a>
                                         </li>
                                         <li class="nav-item ">
@@ -1952,7 +1952,7 @@ License: You must have a valid license purchased only from themeforest(the above
     {% endif %}
 
 
-    {% if request.resolver_match.url_name == 'year_settings' %}
+    {% if request.resolver_match.url_name == 'year_settings' or request.resolver_match.url_name == 'semester_settings' %}
         {
             var element = document.getElementById("b");
             element.classList.add("active");

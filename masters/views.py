@@ -316,7 +316,7 @@ def update_semester(request):
                         content_type="application/json")
 
 
-def delete_semester(request):
+def delete_semesters(request):
     semester_id = request.POST.get('semester_id')
 
     try:
@@ -2255,3 +2255,35 @@ def delete_year(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/year_settings/')
+
+def semester_settings(request):
+    semester_recs = SemesterDetails.objects.all()
+    return render(request, 'semester_settings.html', {'semester_recs': semester_recs})
+
+
+def add_semester(request):
+    semester_name = request.POST.get('semester_name')
+    start_date = request.POST.get('start_date')
+    end_date = request.POST.get('end_date')
+    try:
+        if not SemesterDetails.objects.filter(semester_name=semester_name.lower()).exists():
+            SemesterDetails.objects.create(semester_name=semester_name.lower(), start_date=start_date,
+                                           end_date=end_date)
+            messages.success(request, "Record saved.")
+        else:
+            messages.warning(request, "Semester name already exists. Record not saved.")
+    except:
+        messages.warning(request, "Record not saved.")
+    return redirect('/masters/semester_settings/')
+
+
+
+def delete_semester(request):
+    if request.method == 'POST':
+        semester_delete_id = request.POST.get('semester_delete_id')
+        try:
+            SemesterDetails.objects.filter(id=semester_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/semester_settings/')

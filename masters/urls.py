@@ -43,7 +43,7 @@ urlpatterns = [
     path('template_semester_master/', views.template_semester_master, name='template_semester_master'),
     path('save_semester/', views.save_semester, name='save_semester'),
     path('update_semester/', views.update_semester, name='update_semester'),
-    path('delete_semester/', views.delete_semester, name='delete_semester'),
+    path('delete_semesters/', views.delete_semesters, name='delete_semesters'),
 
     # ********------ degree Master --------****************************
     path('template_degree_master/', views.template_degree_master, name='template_degree_master'),
@@ -170,5 +170,9 @@ urlpatterns = [
     path('year_settings/', views.year_settings, name='year_settings'),
     path('add_year/', views.add_year, name='add_year'),
     path('delete_year/', views.delete_year, name='delete_year'),
+
+    path('semester_settings/', views.semester_settings, name='semester_settings'),
+    path('add_semester/', views.add_semester, name='add_semester'),
+    path('delete_semester/', views.delete_semester, name='delete_semester'),
 
 ]
