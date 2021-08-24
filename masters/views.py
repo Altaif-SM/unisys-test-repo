@@ -165,7 +165,7 @@ def delete_scholarship(request):
 
 # *********------------ Country Master ----------***************
 
-def template_country_master(request):
+def country_settings(request):
     country_recs = CountryDetails.objects.all()
     return render(request, 'template_country_master.html', {'country_recs': country_recs})
 
@@ -177,10 +177,10 @@ def save_country(request):
             CountryDetails.objects.create(country_name=country_name.lower())
             messages.success(request, "Record saved.")
         else:
-            messages.warning(request, "Country name already exists. Record not saved.")
+            messages.warning(request, "Country name already exists.")
     except:
         messages.warning(request, "Record not saved.")
-    return redirect('/masters/template_country_master/')
+    return redirect('/masters/country_settings/')
 
 
 def update_country(request):
@@ -189,28 +189,25 @@ def update_country(request):
     try:
         if not CountryDetails.objects.filter(~Q(id=country_id), country_name=country_name.lower()).exists():
             CountryDetails.objects.filter(id=country_id).update(country_name=country_name.lower())
-            messages.success(request, "Record updated.")
-            return HttpResponse(json.dumps({'success': 'Record updated.'}), content_type="application/json")
+            messages.success(request, "Record saved.")
+            return HttpResponse(json.dumps({'success': 'Record saved.'}), content_type="application/json")
         else:
-            messages.warning(request, "Country name already exists. Record not updated.")
-            return HttpResponse(json.dumps({'success': '"Country name already exists. Record not updated.'}),
+            messages.warning(request, "Country name already exists.")
+            return HttpResponse(json.dumps({'success': '"Country name already exists.'}),
                                 content_type="application/json")
-
     except:
-        messages.warning(request, "Record not updated.")
+        messages.warning(request, "Record not saved.")
     return HttpResponse(json.dumps({'error': 'Record not updated.'}), content_type="application/json")
 
 
 def delete_country(request):
-    country_id = request.POST.get('country_id')
-
+    country_delete_id = request.POST.get('country_delete_id')
     try:
-        CountryDetails.objects.filter(id=country_id).delete()
+        CountryDetails.objects.filter(id=country_delete_id).delete()
         messages.success(request, "Record deleted.")
-        return HttpResponse(json.dumps({'success': 'Record deleted.'}), content_type="application/json")
-    except Exception as e:
+    except:
         messages.warning(request, "Record not deleted.")
-    return HttpResponse(json.dumps({'error': 'Record not deleted.'}), content_type="application/json")
+    return redirect('/masters/country_settings/')
 
 
 # *********------------ University Master ----------***************
@@ -2380,3 +2377,7 @@ def delete_student_mode(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/student_mode_settings/')
+
+def learning_centers_settings(request):
+    program_recs = ProgramDetails.objects.filter(is_delete=False).order_by('-id')
+    return render(request, 'learning_centers_settings.html', {'program_recs': program_recs})

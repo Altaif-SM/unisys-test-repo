@@ -523,3 +523,18 @@ class StudentModeDetails(BaseModel):
 
     def __str__(self):
         return self.student_mode
+
+class LearningCentersDetails(BaseModel):
+    lc_name = models.CharField(max_length=255, blank=True, null=True)
+    lc_address = models.CharField(max_length=255, blank=True, null=True)
+    lc_email = models.CharField(max_length=255, blank=True, null=True)
+    lc_tel = models.CharField(max_length=255, blank=True, null=True)
+    country = models.ForeignKey(CountryDetails, null=True, related_name='learning_centers_country_rel',
+                                    on_delete=models.PROTECT)
+    status = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ('-id',)
+
+    def __str__(self):
+        return self.lc_name

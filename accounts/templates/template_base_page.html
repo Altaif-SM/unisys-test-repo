@@ -432,6 +432,14 @@ License: You must have a valid license purchased only from themeforest(the above
                                             <a href="{% url 'masters:program_settings' %}"
                                                class="nav-link ">Manage Program </a>
                                         </li>
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:country_settings' %}"
+                                               class="nav-link ">Manage Country </a>
+                                        </li>
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:program_settings' %}"
+                                               class="nav-link ">Manage Learning Centers </a>
+                                        </li>
                                     </ul>
                                 </li>
                                 <li class="nav-item program_settings_nav_item">
@@ -1936,7 +1944,7 @@ License: You must have a valid license purchased only from themeforest(the above
     {% endif %}
 
 
-    {% if request.resolver_match.url_name == 'university_settings' or request.resolver_match.url_name == 'language_settings' or request.resolver_match.url_name == 'add_language' or request.resolver_match.url_name == 'edit_language' or request.resolver_match.url_name == 'currency_settings' or request.resolver_match.url_name == 'add_currency' or request.resolver_match.url_name == 'edit_currency'  or request.resolver_match.url_name == 'add_university'  or request.resolver_match.url_name == 'edit_university'  or request.resolver_match.url_name == 'faculty_settings' or request.resolver_match.url_name == 'add_faculty'  or request.resolver_match.url_name == 'edit_faculty' or request.resolver_match.url_name == 'study_mode_settings'  or request.resolver_match.url_name == 'study_level_settings' or request.resolver_match.url_name == 'study_type_settings' or request.resolver_match.url_name == 'program_settings'  or request.resolver_match.url_name == 'add_program' or request.resolver_match.url_name == 'edit_program'   %}
+    {% if request.resolver_match.url_name == 'university_settings' or request.resolver_match.url_name == 'language_settings' or request.resolver_match.url_name == 'add_language' or request.resolver_match.url_name == 'edit_language' or request.resolver_match.url_name == 'currency_settings' or request.resolver_match.url_name == 'add_currency' or request.resolver_match.url_name == 'edit_currency'  or request.resolver_match.url_name == 'add_university'  or request.resolver_match.url_name == 'edit_university'  or request.resolver_match.url_name == 'faculty_settings' or request.resolver_match.url_name == 'add_faculty'  or request.resolver_match.url_name == 'edit_faculty' or request.resolver_match.url_name == 'study_mode_settings'  or request.resolver_match.url_name == 'study_level_settings' or request.resolver_match.url_name == 'study_type_settings' or request.resolver_match.url_name == 'program_settings'  or request.resolver_match.url_name == 'add_program' or request.resolver_match.url_name == 'edit_program'  or request.resolver_match.url_name == 'country_settings'  %}
         {
             var element = document.getElementById("b");
             element.classList.add("active");

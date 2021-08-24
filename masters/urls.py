@@ -28,7 +28,7 @@ urlpatterns = [
     path('save_terms_condition/', views.save_terms_condition, name='save_terms_condition'),
 
     # ********------ Country Master --------****************************
-    path('template_country_master/', views.template_country_master, name='template_country_master'),
+    path('country_settings/', views.country_settings, name='country_settings'),
     path('save_country/', views.save_country, name='save_country'),
     path('update_country/', views.update_country, name='update_country'),
     path('delete_country/', views.delete_country, name='delete_country'),
@@ -184,5 +184,7 @@ urlpatterns = [
     path('add_student_mode/', views.add_student_mode, name='add_student_mode'),
     path('update_student_mode/', views.update_student_mode, name='update_student_mode'),
     path('delete_student_mode/', views.delete_student_mode, name='delete_student_mode'),
+
+    path('learning_centers_settings/', views.learning_centers_settings, name='learning_centers_settings'),
 
 ]

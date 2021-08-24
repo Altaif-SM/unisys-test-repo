@@ -11,7 +11,6 @@
     </head>
     <!-- END HEAD -->
     <style type="text/css">
-
         div.dataTables_wrapper div.dataTables_filter label {
             font-weight: normal;
             white-space: nowrap;
@@ -34,40 +33,38 @@
                 $(document).on("click", ".update", function (e) {
 
                     var parent_id = $(this).closest('tr').attr('id');
-                    var country_id = $('#' + parent_id + ' #country_id').val();
-                    var country_name = $('#' + parent_id + ' .country_name').val();
-                    if (country_name == '') {
-                        $('#' + parent_id + ' .country_name').focus();
-                        $('#' + parent_id + ' .country_name').css('border-color', 'red');
+                    var semester_id = $('#' + parent_id + ' #semester_id').val();
+                    var semester_name = $('#' + parent_id + ' .semester_name').val();
+                    var start_date = $('#' + parent_id + ' .start_date').val();
+                    var end_date = $('#' + parent_id + ' .end_date').val();
+
+                    if (semester_name == '') {
+                        $('#' + parent_id + ' .semester_name').focus();
+                        $('#' + parent_id + ' .semester_name').css('border-color', 'red');
                         return false;
                     }
 
-                    var url = '/masters/update_country/';
-                    update_country_info(url, country_id, country_name)
+                    var url = '/masters/update_semester/';
+                    update_semester_info(url, semester_id, semester_name, start_date, end_date)
                 })
 
                 $(document).on("click", ".delete", function (e) {
 
-                    $('#id_delete_country_model').modal();
+                    $('#id_delete_program_model').modal();
                     var parent_id = $(this).closest('tr').attr('id');
-                    var country_id = $('#' + parent_id + ' #country_id').val();
-                    $("#country_delete_id").val(country_id)
+                    var program_id = $('#' + parent_id + ' #program_id').val();
+                    $("#program_delete_id").val(program_id)
 
-
-
-                    {#var parent_id = $(this).closest('tr').attr('id');#}
-                    {#var country_id = $('#' + parent_id + ' #country_id').val();#}
-
-                    {#var url = '/masters/delete_country/';#}
-                    {#delete_country_info(url, country_id)#}
+                    {#var url = '/masters/delete_semester/';#}
+                    {#delete_semester_info(url, language_id)#}
                 })
 
-                function delete_country_info(url, country_id) {
+                function delete_semester_info(url, semester_id) {
                     $.ajax({
                         type: 'POST',
                         url: url,
                         data: {
-                            country_id: country_id,
+                            semester_id: semester_id,
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
@@ -79,13 +76,15 @@
                     });
                 }
 
-                function update_country_info(url, country_id, country_name) {
+                function update_semester_info(url, semester_id, semester_name, start_date, end_date) {
                     $.ajax({
                         type: 'POST',
                         url: url,
                         data: {
-                            country_id: country_id,
-                            country_name: country_name,
+                            semester_id: semester_id,
+                            semester_name: semester_name,
+                            start_date: start_date,
+                            end_date: end_date,
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
@@ -100,6 +99,7 @@
 
                 $(document).on("click", ".edit", function (e) {
                     var parent_id = $(this).closest('tr').attr('id');
+                    $('.semester_name').css('border-color', '');
                     var id = $(this).attr('id');
                     var i = id.split("edit")[1]
 
@@ -109,7 +109,9 @@
 
                     $("#update" + i).show();
                     $("#edit" + i).hide();
-                    $("#country_name" + i).prop("disabled", false);
+                    $("#semester_name" + i).prop("disabled", false);
+                    $("#start_date" + i).prop("disabled", false);
+                    $("#end_date" + i).prop("disabled", false);
                 });
             });
 
@@ -122,6 +124,7 @@
             });
         }
 
+
         window.setTimeout(function () {
             $(".alert").fadeTo(500, 0).slideUp(500, function () {
                 $(this).remove();
@@ -133,7 +136,7 @@
 
 {% block content %}
     <div class="page-bar" style="margin-bottom: 1px;">
-         <ul class="page-breadcrumb">
+        <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
                 <a href="{% url 'accounts:home' %}">Home</a>
@@ -149,7 +152,7 @@
             </li>
 
             <li>
-                <span> Manage Country </span>
+                <span> Manage Program </span>
             </li>
         </ul>
     </div>
@@ -165,79 +168,68 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> Manage Country</span>
+                <span class="caption-subject font-red sbold uppercase"> Manage Program</span>
             </div>
+            <a href="{% url 'masters:add_program' %}">
+                <button type="submit" class="btn green" id="save" style="margin-left:80%;background-color: #3598dc">Add
+                </button>
+            </a>
         </div>
 
         <div class="portlet-body">
-
-            <!-- BEGIN FORM-->
-            <div class="form-body">
-
-                <form action="{% url 'masters:save_country' %}" id="form_sample_1" class="form-horizontal"
-                      method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-
-                    <div class="form-body">
-
-                        <div class="row">
-                            <div class="">
-                                <label class="col-md-2 control-label">Country Name:
-
-                                </label>
-                                <div class="col-md-3">
-                                    <input type="text" name="country_name" class="form-control" required>
-                                </div>
-                            </div>
-                            <div class="">
-                                <div class="col-md-3">
-                                     <button type="submit" class="btn green" id="save">Add</button>
-                                </div>
-                            </div>
-
-                        </div>
-
-                    </div>
-                </form>
-            </div>
-
 
 
             <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
 
-                {% comment %}<input class="form-control" id="year_id_edit" name="year_id_edit" type="hidden" value="">
-                <input class="form-control" id="start_date_edit" name="start_date_edit" type="hidden" value="">
-                <input class="form-control" id="end_date_edit" name="end_date_edit" type="hidden" value="">{% endcomment %}
-
                 <table class="table table-striped table-hover table-bordered" id="sample_1">
                     <thead>
                     <tr>
                         <th style="display: none">Id</th>
-                        <th>Country Name</th>
-                        <th width="10%"></th>
+                        <th>Program ID</th>
+                        <th> Program Name</th>
+                        <th> University</th>
+                        <th> Faculty</th>
+                        <th> Study Mode</th>
+                        <th> Study Level</th>
+                        <th> Study Type</th>
+                        <th> Status</th>
+                        <th width="10%">Action</th>
                     </tr>
                     </thead>
 
                     <tbody id="tbody">
-                    {% for rec in country_recs %}
+                    {% for rec in program_recs %}
                         <tr id="item{{ forloop.counter }}" class="item">
-                            <td style="display: none"><input id="country_id" value="{{ rec.id }}"></td>
-                            <td><text hidden>{{ rec.country_name|title }}</text> <input class="form-control data country_name" name="country_name_saved" type="text"
-                                       id="country_name{{ forloop.counter }}" value="{{ rec.country_name|title }}"
-                                       required="True" pattern='[A-Za-z+-]+'
-                                       title='Please enter country name' disabled></td>
+                            <td style="display: none"><input id="program_id" value="{{ rec.id }}"></td>
+                            <td>{{ rec.program_id|default_if_none:"" }}</td>
+                            <td>{{ rec.program_name|default_if_none:"" }}</td>
+                            <td>{{ rec.university.university_name|default_if_none:"" }}</td>
+                            <td>{{ rec.faculty.faculty_name|default_if_none:"" }}</td>
+                            <td>{{ rec.study_mode.study_mode|default_if_none:"" }}</td>
+                             <td>{{ rec.study_level.study_level|default_if_none:"" }}</td>
+                        <td>{{ rec.study_type.study_type|default_if_none:"" }}</td>
+                         <td>
+                                {% if rec.status == True %}
+                                    <i class="fa fa-power-off" aria-hidden="true"
+                                       style="margin-left: 30px;margin-top:8px;font-size:18px;color:green"></i>
+                                {% else %}
+                                    <i class="fa fa-power-off" aria-hidden="true"
+                                       style="margin-left: 30px;margin-top:8px;font-size:18px;color:red"></i>
+                                {% endif %}
+                            </td>
+
                             <td>
-                                <span type="button" name="updt" id="update{{ forloop.counter }}"
-                                        class=" update btn green glyphicon glyphicon-ok" style="display:none;">
-                                </span>
+                                <a href="{% url 'masters:edit_program' rec.id %}">
                                 <span type="button" name="edit" id="edit{{ forloop.counter }}"
-                                        class=" edit btn blue glyphicon glyphicon-pencil">
+                                      class=" edit_btn btn blue glyphicon glyphicon-pencil">
                                 </span>
+                                    </a>
                                 <span type="button" name="delete" id="delete{{ forloop.counter }}"
-                                        class=" delete btn red glyphicon glyphicon-trash">
+                                      class=" delete btn red glyphicon glyphicon-trash">
                                 </span>
                             </td>
+
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -246,22 +238,22 @@
         </div>
     </div>
 
-    <div id="id_delete_country_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+    <div id="id_delete_program_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{% url 'masters:delete_country' %}"
+                <form action="{% url 'masters:delete_program' %}"
                         id="form_sample_1"
                         class="form-horizontal"
                         method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <input type="hidden" id="country_delete_id" name="country_delete_id">
+                    <input type="hidden" id="program_delete_id" name="program_delete_id">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                         <h4 class="modal-title" style="color: #2a015e; text-align: center"><b  >Delete Confirmation</b></h4>
                     </div>
                     <div class="modal-body">
-                        <p> Are you sure, you want to delete Country? </p>
-                        <p> After delete you will not be able to modify the Country. </p>
+                        <p> Are you sure, you want to delete Program? </p>
+                        <p> After delete you will not be able to modify the Program. </p>
 
                     </div>
                     <div class="modal-footer">
@@ -274,4 +266,5 @@
             </div>
         </div>
     </div>
+
 {% endblock %}
