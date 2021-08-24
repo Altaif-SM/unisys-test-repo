@@ -2379,5 +2379,65 @@ def delete_student_mode(request):
         return redirect('/masters/student_mode_settings/')
 
 def learning_centers_settings(request):
-    program_recs = ProgramDetails.objects.filter(is_delete=False).order_by('-id')
-    return render(request, 'learning_centers_settings.html', {'program_recs': program_recs})
+    learning_centers_recs = LearningCentersDetails.objects.filter().order_by('-id')
+    return render(request, 'learning_centers_settings.html', {'learning_centers_recs': learning_centers_recs})
+
+def add_learning_centers(request):
+    if request.method == 'POST':
+        country = request.POST.get('country')
+        lc_name = request.POST.get('lc_name')
+        lc_address = request.POST.get('lc_address')
+        lc_email = request.POST.get('lc_email')
+        lc_tel = request.POST.get('lc_tel')
+        status = request.POST.get('status')
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            LearningCentersDetails.objects.create(country_id=country,lc_name=lc_name,
+                                             lc_address=lc_address, lc_email=lc_email,lc_tel = lc_tel,status = status)
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/learning_centers_settings/')
+    country_recs = CountryDetails.objects.all()
+    return render(request, 'add_learning_centers.html',{'country_recs':country_recs,})
+
+def edit_learning_centers(request, learning_center_id=None):
+    learning_center_obj = LearningCentersDetails.objects.get(id=learning_center_id)
+    if request.method == 'POST':
+        country = request.POST.get('country')
+        lc_name = request.POST.get('lc_name')
+        lc_address = request.POST.get('lc_address')
+        lc_email = request.POST.get('lc_email')
+        lc_tel = request.POST.get('lc_tel')
+        status = request.POST.get('status')
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            learning_center_obj.country_id = country
+            learning_center_obj.lc_name = lc_name
+            learning_center_obj.lc_address = lc_address
+            learning_center_obj.lc_email = lc_email
+            learning_center_obj.lc_tel = lc_tel
+            learning_center_obj.status = status
+            learning_center_obj.save()
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/learning_centers_settings/')
+    country_recs = CountryDetails.objects.all()
+    return render(request, "edit_learning_centers.html", {'learning_center_obj': learning_center_obj,'country_recs':country_recs})
+
+def delete_learning_centers(request):
+    if request.method == 'POST':
+        learning_centers_delete_id = request.POST.get('learning_centers_delete_id')
+        try:
+            LearningCentersDetails.objects.filter(id=learning_centers_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/learning_centers_settings/')

@@ -7,6 +7,7 @@ app_name = 'masters'
 
 
 
+
 urlpatterns = [
 
     # *******------------- Year Master ---------------************
@@ -186,5 +187,9 @@ urlpatterns = [
     path('delete_student_mode/', views.delete_student_mode, name='delete_student_mode'),
 
     path('learning_centers_settings/', views.learning_centers_settings, name='learning_centers_settings'),
+    path('add_learning_centers/', views.add_learning_centers, name='add_learning_centers'),
+    path('edit_learning_centers/<int:learning_center_id>/', views.edit_learning_centers, name='edit_learning_centers'),
+    path('delete_learning_centers/', views.delete_learning_centers, name='delete_learning_centers'),
 
 ]
+

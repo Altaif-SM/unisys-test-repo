@@ -50,10 +50,10 @@
 
                 $(document).on("click", ".delete", function (e) {
 
-                    $('#id_delete_program_model').modal();
+                    $('#id_delete_learning_centers_model').modal();
                     var parent_id = $(this).closest('tr').attr('id');
-                    var program_id = $('#' + parent_id + ' #program_id').val();
-                    $("#program_delete_id").val(program_id)
+                    var learning_centers_id = $('#' + parent_id + ' #learning_centers_id').val();
+                    $("#learning_centers_delete_id").val(learning_centers_id)
 
                     {#var url = '/masters/delete_semester/';#}
                     {#delete_semester_info(url, language_id)#}
@@ -152,7 +152,7 @@
             </li>
 
             <li>
-                <span> Manage Program </span>
+                <span> Manage Learning Centers </span>
             </li>
         </ul>
     </div>
@@ -168,10 +168,10 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> Manage Program</span>
+                <span class="caption-subject font-red sbold uppercase"> Manage Learning Centers</span>
             </div>
-            <a href="{% url 'masters:add_program' %}">
-                <button type="submit" class="btn green" id="save" style="margin-left:80%;background-color: #3598dc">Add
+            <a href="{% url 'masters:add_learning_centers' %}">
+                <button type="submit" class="btn green" id="save" style="margin-left:74%;background-color: #3598dc">Add
                 </button>
             </a>
         </div>
@@ -186,29 +186,25 @@
                     <thead>
                     <tr>
                         <th style="display: none">Id</th>
-                        <th>Program ID</th>
-                        <th> Program Name</th>
-                        <th> University</th>
-                        <th> Faculty</th>
-                        <th> Study Mode</th>
-                        <th> Study Level</th>
-                        <th> Study Type</th>
+                        <th>Learning Center</th>
+                        <th> Country</th>
+                        <th> Email</th>
+                        <th> Telephone</th>
+                        <th> Address</th>
                         <th> Status</th>
                         <th width="10%">Action</th>
                     </tr>
                     </thead>
 
                     <tbody id="tbody">
-                    {% for rec in program_recs %}
+                    {% for rec in learning_centers_recs %}
                         <tr id="item{{ forloop.counter }}" class="item">
-                            <td style="display: none"><input id="program_id" value="{{ rec.id }}"></td>
-                            <td>{{ rec.program_id|default_if_none:"" }}</td>
-                            <td>{{ rec.program_name|default_if_none:"" }}</td>
-                            <td>{{ rec.university.university_name|default_if_none:"" }}</td>
-                            <td>{{ rec.faculty.faculty_name|default_if_none:"" }}</td>
-                            <td>{{ rec.study_mode.study_mode|default_if_none:"" }}</td>
-                             <td>{{ rec.study_level.study_level|default_if_none:"" }}</td>
-                        <td>{{ rec.study_type.study_type|default_if_none:"" }}</td>
+                            <td style="display: none"><input id="learning_centers_id" value="{{ rec.id }}"></td>
+                            <td>{{ rec.lc_name|default_if_none:"" }}</td>
+                            <td>{{ rec.country.country_name|default_if_none:"" }}</td>
+                            <td>{{ rec.lc_email|default_if_none:"" }}</td>
+                            <td>{{ rec.lc_tel|default_if_none:"" }}</td>
+                        <td>{{ rec.lc_address|default_if_none:"" }}</td>
                          <td>
                                 {% if rec.status == True %}
                                     <i class="fa fa-power-off" aria-hidden="true"
@@ -220,7 +216,7 @@
                             </td>
 
                             <td>
-                                <a href="{% url 'masters:edit_program' rec.id %}">
+                                <a href="{% url 'masters:edit_learning_centers' rec.id %}">
                                 <span type="button" name="edit" id="edit{{ forloop.counter }}"
                                       class=" edit_btn btn blue glyphicon glyphicon-pencil">
                                 </span>
@@ -238,22 +234,22 @@
         </div>
     </div>
 
-    <div id="id_delete_program_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+    <div id="id_delete_learning_centers_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{% url 'masters:delete_program' %}"
+                <form action="{% url 'masters:delete_learning_centers' %}"
                         id="form_sample_1"
                         class="form-horizontal"
                         method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <input type="hidden" id="program_delete_id" name="program_delete_id">
+                    <input type="hidden" id="learning_centers_delete_id" name="learning_centers_delete_id">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                         <h4 class="modal-title" style="color: #2a015e; text-align: center"><b  >Delete Confirmation</b></h4>
                     </div>
                     <div class="modal-body">
-                        <p> Are you sure, you want to delete Program? </p>
-                        <p> After delete you will not be able to modify the Program. </p>
+                        <p> Are you sure, you want to delete Learning Centers? </p>
+                        <p> After delete you will not be able to modify the Learning Centers. </p>
 
                     </div>
                     <div class="modal-footer">
