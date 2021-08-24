@@ -512,3 +512,14 @@ class ActivityDetails(BaseModel):
 
     def __str__(self):
         return self.acivity_name
+
+
+class StudentModeDetails(BaseModel):
+    student_mode = models.CharField(max_length=255, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+
+    class Meta:
+        ordering = ('-id',)
+
+    def __str__(self):
+        return self.student_mode

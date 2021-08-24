@@ -2333,3 +2333,50 @@ def delete_activity(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/activity_settings/')
+
+
+def student_mode_settings(request):
+    student_mode_recs = StudentModeDetails.objects.all()
+    return render(request, 'student_mode.html', {'student_mode_recs': student_mode_recs})
+
+def add_student_mode(request):
+    student_mode = request.POST.get('student_mode')
+    description = request.POST.get('description')
+    try:
+        if not StudentModeDetails.objects.filter(student_mode=student_mode.lower()).exists():
+            StudentModeDetails.objects.create(student_mode=student_mode.lower(),description = description)
+            messages.success(request, "Record saved.")
+        else:
+            messages.warning(request, "Student mode already exists.")
+    except:
+        messages.warning(request, "Record not saved.")
+    return redirect('/masters/student_mode_settings/')
+
+
+def update_student_mode(request):
+    student_mode_id = request.POST.get('student_mode_id')
+    student_mode = request.POST.get('student_mode')
+    description = request.POST.get('description')
+    try:
+        if not StudentModeDetails.objects.filter(~Q(id=student_mode_id), student_mode=student_mode.lower()).exists():
+            StudentModeDetails.objects.filter(id=student_mode_id).update(student_mode=student_mode.lower(),
+                                                                  description=description)
+            messages.success(request, "Record saved.")
+            return HttpResponse(json.dumps({'success': 'Record saved.'}), content_type="application/json")
+        else:
+            messages.warning(request, "Student mode already exists.")
+            return HttpResponse(json.dumps({'success': 'Record saved.'}), content_type="application/json")
+    except:
+        messages.warning(request, "Record not saved.")
+    return redirect('/masters/student_mode_settings/')
+
+
+def delete_student_mode(request):
+    if request.method == 'POST':
+        student_mode_delete_id = request.POST.get('student_mode_delete_id')
+        try:
+            StudentModeDetails.objects.filter(id=student_mode_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/student_mode_settings/')

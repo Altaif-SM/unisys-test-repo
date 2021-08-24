@@ -180,4 +180,9 @@ urlpatterns = [
     path('update_activity/', views.update_activity, name='update_activity'),
     path('delete_activity/', views.delete_activity, name='delete_activity'),
 
+    path('student_mode_settings/', views.student_mode_settings, name='student_mode_settings'),
+    path('add_student_mode/', views.add_student_mode, name='add_student_mode'),
+    path('update_student_mode/', views.update_student_mode, name='update_student_mode'),
+    path('delete_student_mode/', views.delete_student_mode, name='delete_student_mode'),
+
 ]
