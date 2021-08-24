@@ -2221,7 +2221,7 @@ def add_year(request):
 
     try:
         if YearDetails.objects.filter(year_name=year_name.lower()).exists():
-            messages.warning(request, "Year name already exists. Record not saved.")
+            messages.warning(request, "Year name already exists.")
 
         elif YearDetails.objects.all().filter(
                 (Q(start_date__lte=start_dt) & Q(end_date__gte=end_dt)) | Q(start_date__range=(start_dt, end_dt)) | Q(
@@ -2271,7 +2271,7 @@ def add_semester(request):
                                            end_date=end_date)
             messages.success(request, "Record saved.")
         else:
-            messages.warning(request, "Semester name already exists. Record not saved.")
+            messages.warning(request, "Semester name already exists.")
     except:
         messages.warning(request, "Record not saved.")
     return redirect('/masters/semester_settings/')
@@ -2287,3 +2287,49 @@ def delete_semester(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/semester_settings/')
+
+def activity_settings(request):
+    activity_recs = ActivityDetails.objects.all()
+    return render(request, 'activity_settings.html', {'activity_recs': activity_recs})
+
+def add_activity(request):
+    activity_name = request.POST.get('activity_name')
+    description = request.POST.get('description')
+    try:
+        if not ActivityDetails.objects.filter(activity_name=activity_name.lower()).exists():
+            ActivityDetails.objects.create(activity_name=activity_name.lower(),description = description)
+            messages.success(request, "Record saved.")
+        else:
+            messages.warning(request, "Activity name already exists.")
+    except:
+        messages.warning(request, "Record not saved.")
+    return redirect('/masters/activity_settings/')
+
+
+def update_activity(request):
+    activity_id = request.POST.get('activity_id')
+    activity_name = request.POST.get('activity_name')
+    description = request.POST.get('description')
+    try:
+        if not ActivityDetails.objects.filter(~Q(id=activity_id), activity_name=activity_name.lower()).exists():
+            ActivityDetails.objects.filter(id=activity_id).update(activity_name=activity_name.lower(),
+                                                                  description=description)
+            messages.success(request, "Record saved.")
+            return HttpResponse(json.dumps({'success': 'Record saved.'}), content_type="application/json")
+        else:
+            messages.warning(request, "Activity name already exists.")
+            return HttpResponse(json.dumps({'success': 'Record saved.'}), content_type="application/json")
+    except:
+        messages.warning(request, "Record not saved.")
+    return redirect('/masters/activity_settings/')
+
+
+def delete_activity(request):
+    if request.method == 'POST':
+        activity_delete_id = request.POST.get('activity_delete_id')
+        try:
+            ActivityDetails.objects.filter(id=activity_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/activity_settings/')

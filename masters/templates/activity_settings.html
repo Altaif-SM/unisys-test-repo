@@ -33,28 +33,33 @@
                 $(document).on("click", ".update", function (e) {
 
                     var parent_id = $(this).closest('tr').attr('id');
-                    var semester_id = $('#' + parent_id + ' #semester_id').val();
-                    var semester_name = $('#' + parent_id + ' .semester_name').val();
-                    var start_date = $('#' + parent_id + ' .start_date').val();
-                    var end_date = $('#' + parent_id + ' .end_date').val();
+                    var activity_id = $('#' + parent_id + ' #activity_id').val();
+                    var activity_name = $('#' + parent_id + ' .activity_name').val();
+                    var description = $('#' + parent_id + ' .description').val();
 
-                    if (semester_name == '') {
-                        $('#' + parent_id + ' .semester_name').focus();
-                        $('#' + parent_id + ' .semester_name').css('border-color', 'red');
+                    if (activity_name == '') {
+                        $('#' + parent_id + ' .activity_name').focus();
+                        $('#' + parent_id + ' .activity_name').css('border-color', 'red');
+                        return false;
+                    }
+                    else if (description == '') {
+                        $('#' + parent_id + ' .description').focus();
+                        $('#' + parent_id + ' .description').css('border-color', 'red');
                         return false;
                     }
 
-                    var url = '/masters/update_semester/';
-                    update_semester_info(url, semester_id, semester_name, start_date, end_date)
+                    var url = '/masters/update_activity/';
+                    update_activity_info(url, activity_id, activity_name,description)
                 })
 
                 $(document).on("click", ".delete", function (e) {
 
-                     $('#id_delete_semester_model').modal();
+                     $('#id_delete_activity_model').modal();
 
                     var parent_id = $(this).closest('tr').attr('id');
-                    var semester_id = $('#' + parent_id + ' #semester_id').val();
-                    $("#semester_delete_id").val(semester_id)
+                    var activity_id = $('#' + parent_id + ' #activity_id').val();
+
+                    $("#activity_delete_id").val(activity_id)
 
 
                     {#var url = '/masters/delete_semester/';#}
@@ -78,15 +83,14 @@
                     });
                 }
 
-                function update_semester_info(url, semester_id, semester_name, start_date, end_date) {
+                function update_activity_info(url, activity_id, activity_name, description) {
                     $.ajax({
                         type: 'POST',
                         url: url,
                         data: {
-                            semester_id: semester_id,
-                            semester_name: semester_name,
-                            start_date: start_date,
-                            end_date: end_date,
+                            activity_id: activity_id,
+                            activity_name: activity_name,
+                            description: description,
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
@@ -111,9 +115,8 @@
 
                     $("#update" + i).show();
                     $("#edit" + i).hide();
-                    $("#semester_name" + i).prop("disabled", false);
-                    $("#start_date" + i).prop("disabled", false);
-                    $("#end_date" + i).prop("disabled", false);
+                    $("#activity_name" + i).prop("disabled", false);
+                    $("#description" + i).prop("disabled", false);
                 });
             });
 
@@ -153,7 +156,7 @@
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <span> Manage Semester</span>
+                <span> Manage Activities</span>
             </li>
 
         </ul>
@@ -170,14 +173,14 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> Manage Semester</span>
+                <span class="caption-subject font-red sbold uppercase"> Manage Activities</span>
             </div>
         </div>
 
         <div class="portlet-body">
 
             <div class="form-body">
-                <form action="{% url 'masters:add_semester' %}" id="form_sample_1" class="form-horizontal"
+                <form action="{% url 'masters:add_activity' %}" id="form_sample_1" class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
@@ -185,37 +188,25 @@
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">Semester Name:
+                                <label class="col-md-2 control-label">Activity Name:
 
                                 </label>
                                 <div class="col-md-4">
-                                    <input type="text" name="semester_name" class="form-control" required>
+                                    <input type="text" name="activity_name" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="">
+                                <label class="col-md-2 control-label">Description:
+
+                                </label>
+                                <div class="col-md-4">
+                                    <textarea class="form-control" name="description"  required></textarea>
                                 </div>
                             </div>
                         </div>
 
                         <br>
 
-                        <div class="row">
-                            <div class="">
-                                <label class="col-md-2 control-label">Start Date:
-
-                                </label>
-                                <div class="col-md-4">
-                                    <input type="date" name="start_date" class="form-control" required>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-2 control-label">End Date:
-
-                                </label>
-                                <div class="col-md-4" id="EndDate">
-                                    <input type="date" name="end_date" class="form-control" required>
-                                </div>
-                            </div>
-                        </div>
-                       <br>
                         <div class="row">
                             <div class="col-md-offset-5 col-md-7">
                                 <button type="submit" class="btn green" id="save">Add</button>
@@ -233,29 +224,28 @@
                     <thead>
                     <tr>
                         <th style="display: none">Id</th>
-                        <th>Semester Name</th>
-                        <th> Start Date</th>
-                        <th> End Date</th>
+                        <th>Activity Name</th>
+                        <th> Description</th>
                         <th width="10%">Action</th>
                     </tr>
                     </thead>
 
                     <tbody id="tbody">
-                    {% for rec in semester_recs %}
+                    {% for rec in activity_recs %}
                         <tr id="item{{ forloop.counter }}" class="item">
-                            <td style="display: none"><input id="semester_id" value="{{ rec.id }}"></td>
+                            <td style="display: none"><input id="activity_id" value="{{ rec.id }}"></td>
                             <td>
-                                <text hidden>{{ rec.semester_name|title }}</text>
-                                <input class="form-control data semester_name" name="semester_name_saved" type="text"
-                                       id="semester_name{{ forloop.counter }}" value="{{ rec.semester_name|title }}"
+                                <text hidden>{{ rec.activity_name|title }}</text>
+                                <input class="form-control data activity_name" name="activity_name_saved" type="text"
+                                       id="activity_name{{ forloop.counter }}" value="{{ rec.activity_name|title }}"
                                        required pattern='[A-Za-z+-]+'
-                                       title='Please enter semester name' disabled></td>
-                            <td><input class="form-control data start_date" name="start_date_saved" type="date"
-                                       id="start_date{{ forloop.counter }}"
-                                       value="{{ rec.start_date|date:"Y-m-d" }}" required="True" disabled></td>
-                            <td><input class="form-control data end_date" name="end_date_saved" type="date"
-                                       id="end_date{{ forloop.counter }}"
-                                       value="{{ rec.end_date|date:"Y-m-d" }}" required="True" disabled></td>
+                                       title='Please enter activity name' disabled></td>
+                             <td>
+                                <text hidden>{{ rec.description|default_if_none:"" }}</text>
+                                <textarea class="form-control data description" name="description_saved"
+                                       id="description{{ forloop.counter }}"
+                                       required pattern='[A-Za-z+-]+'
+                                          title='Please enter description name' disabled>{{ rec.description|default_if_none:"" }}</textarea></td>
                             <td>
                                 <span type="button" name="updt" id="update{{ forloop.counter }}"
                                       class=" update btn green glyphicon glyphicon-ok" style="display:none;">
@@ -274,22 +264,22 @@
             </form>
         </div>
     </div>
-    <div id="id_delete_semester_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+    <div id="id_delete_activity_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{% url 'masters:delete_semester' %}"
+                <form action="{% url 'masters:delete_activity' %}"
                         id="form_sample_1"
                         class="form-horizontal"
                         method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <input type="hidden" id="semester_delete_id" name="semester_delete_id">
+                    <input type="hidden" id="activity_delete_id" name="activity_delete_id">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                         <h4 class="modal-title" style="color: #2a015e; text-align: center"><b  >Delete Confirmation</b></h4>
                     </div>
                     <div class="modal-body">
-                        <p> Are you sure, you want to delete Semester? </p>
-                        <p> After delete you will not be able to modify the Semester. </p>
+                        <p> Are you sure, you want to delete Activity? </p>
+                        <p> After delete you will not be able to modify the Activity. </p>
 
                     </div>
                     <div class="modal-footer">
