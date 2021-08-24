@@ -434,34 +434,35 @@ License: You must have a valid license purchased only from themeforest(the above
                                         </li>
                                     </ul>
                                 </li>
-{#                                <li class="nav-item program_settings_nav_item">#}
-{#                                    <a href="javascript:;" class="nav-link nav-toggle">#}
-{#                                        <i class="fa fa-tasks" aria-hidden="true"></i>#}
-{##}
-{##}
-{#                                        <span class="title">Program Settings</span>#}
-{#                                        <span class="arrow program_settings_arrow"></span>#}
-{#                                    </a>#}
-{#                                    <ul class="sub-menu program_settings_sub_menu">#}
-{#                                        <li class="nav-item ">#}
-{#                                            <a href="{% url 'masters:study_mode_settings' %}"#}
-{#                                               class="nav-link ">Manage Study Mode </a>#}
-{#                                        </li>#}
-{#                                        <li class="nav-item ">#}
-{#                                            <a href="{% url 'masters:study_level_settings' %}"#}
-{#                                               class="nav-link ">Manage Study Level </a>#}
-{#                                        </li>#}
-{#                                        <li class="nav-item ">#}
-{#                                            <a href="{% url 'masters:study_type_settings' %}"#}
-{#                                               class="nav-link ">Manage Study Type </a>#}
-{#                                        </li>#}
-{#                                        <li class="nav-item ">#}
-{#                                            <a href="{% url 'masters:study_type_settings' %}"#}
-{#                                               class="nav-link ">Manage Program </a>#}
-{#                                        </li>#}
-{##}
-{#                                    </ul>#}
-{#                                </li>#}
+                                <li class="nav-item program_settings_nav_item">
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+                                        <i class="fa fa-university" aria-hidden="true"></i>
+
+
+
+                                        <span class="title">Academic Settings</span>
+                                        <span class="arrow program_settings_arrow"></span>
+                                    </a>
+                                    <ul class="sub-menu program_settings_sub_menu">
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:year_settings' %}"
+                                               class="nav-link ">Manage Year </a>
+                                        </li>
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:study_level_settings' %}"
+                                               class="nav-link ">Manage Semester </a>
+                                        </li>
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:study_type_settings' %}"
+                                               class="nav-link ">Manage Activity </a>
+                                        </li>
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:study_type_settings' %}"
+                                               class="nav-link ">Manage Calendar </a>
+                                        </li>
+
+                                    </ul>
+                                </li>
                                 {#                                <li class="nav-item  ">#}
                                 {#                                    <a href="{% url 'masters:template_country_master' %}" class="nav-link ">#}
                                 {#                                        <i class="icon-graph"></i>#}
@@ -1951,20 +1952,20 @@ License: You must have a valid license purchased only from themeforest(the above
     {% endif %}
 
 
-{#    {% if request.resolver_match.url_name == 'program_settings' or request.resolver_match.url_name == 'study_mode_settings'  or request.resolver_match.url_name == 'study_level_settings' or request.resolver_match.url_name == 'study_type_settings'  %}#}
-{#        {#}
-{#            var element = document.getElementById("b");#}
-{#            element.classList.add("active");#}
-{##}
-{#            var element = document.getElementById("setting_anch");#}
-{#            element.classList.add("active");#}
-{##}
-{#            $(".program_settings_nav_item").addClass("open");#}
-{#            $(".program_settings_arrow").addClass("open");#}
-{#            $('.program_settings_sub_menu').css('display', 'block');#}
-{##}
-{#        }#}
-{#    {% endif %}#}
+    {% if request.resolver_match.url_name == 'year_settings' %}
+        {
+            var element = document.getElementById("b");
+            element.classList.add("active");
+
+            var element = document.getElementById("setting_anch");
+            element.classList.add("active");
+
+            $(".program_settings_nav_item").addClass("open");
+            $(".program_settings_arrow").addClass("open");
+            $('.program_settings_sub_menu').css('display', 'block');
+
+        }
+    {% endif %}
 
 
 

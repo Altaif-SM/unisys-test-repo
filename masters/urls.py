@@ -13,7 +13,7 @@ urlpatterns = [
     path('template_year_master/', views.template_year_master, name='template_year_master'),
     path('save_year/', views.save_year, name='save_year'),
     path('update_year/', views.update_year, name='update_year'),
-    path('delete_year/', views.delete_year, name='delete_year'),
+    path('delete_years/', views.delete_years, name='delete_years'),
 
     path('change_session_year/', views.change_session_year, name='change_session_year'),
 
@@ -166,5 +166,9 @@ urlpatterns = [
     path('add_program/', views.add_program, name='add_program'),
     path('edit_program/<int:program_id>/', views.edit_program, name='edit_program'),
     path('delete_program/', views.delete_program, name='delete_program'),
+
+    path('year_settings/', views.year_settings, name='year_settings'),
+    path('add_year/', views.add_year, name='add_year'),
+    path('delete_year/', views.delete_year, name='delete_year'),
 
 ]

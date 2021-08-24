@@ -78,17 +78,17 @@ def update_year(request):
             #                                                   end_date=end_date,active_year = False)
             YearDetails.objects.filter(id=year_id).update(year_name=year_name.lower(), start_date=start_date,
                                                               end_date=end_date)
-            messages.success(request, "Record updated.")
-            return HttpResponse(json.dumps({'success': 'Record updated.'}), content_type="application/json")
-        return HttpResponse(json.dumps({'success': 'Year name already exists. Record not updated.'}),
+            messages.success(request, "Record saved.")
+            return HttpResponse(json.dumps({'success': 'Record saved.'}), content_type="application/json")
+        return HttpResponse(json.dumps({'success': 'Year name already exists. Record not saved.'}),
                             content_type="application/json")
 
     except:
-        messages.warning(request, "Record not updated.")
+        messages.warning(request, "Record not saved.")
     return HttpResponse(json.dumps({'error': 'Record not updated.'}), content_type="application/json")
 
 
-def delete_year(request):
+def delete_years(request):
     year_id = request.POST.get('year_id')
 
     try:
@@ -2206,3 +2206,52 @@ def delete_program(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/program_settings/')
+
+
+def year_settings(request):
+    year_recs = YearDetails.objects.all()
+    return render(request, 'year_settings.html', {'year_recs': year_recs})
+
+def add_year(request):
+    year_name = request.POST.get('year_name')
+    start_date = request.POST.get('start_date')
+    end_date = request.POST.get('end_date')
+    end_dt = datetime.datetime.strptime(str(end_date), "%Y-%m-%d").date()
+    start_dt = datetime.datetime.strptime(str(start_date), "%Y-%m-%d").date()
+
+    try:
+        if YearDetails.objects.filter(year_name=year_name.lower()).exists():
+            messages.warning(request, "Year name already exists. Record not saved.")
+
+        elif YearDetails.objects.all().filter(
+                (Q(start_date__lte=start_dt) & Q(end_date__gte=end_dt)) | Q(start_date__range=(start_dt, end_dt)) | Q(
+                        end_date__range=(start_dt, end_dt))):
+            messages.success(request, "Academic year already Exists")
+
+        else:
+
+            # today = date.today()
+            #
+            # if (start_dt <= today) and (end_dt > today):
+            #     YearDetails.objects.filter().update(active_year = False)
+            #     YearDetails.objects.filter().update(base_date = False)
+            #     YearDetails.objects.create(year_name=year_name.lower(), start_date=start_date, end_date=end_date,active_year = True,base_date = True)
+            # else:
+            #     YearDetails.objects.create(year_name=year_name.lower(), start_date=start_date, end_date=end_date)
+
+            YearDetails.objects.create(year_name=year_name.lower(), start_date=start_date, end_date=end_date)
+            messages.success(request, "Record saved.")
+    except:
+        messages.warning(request, "Record not saved.")
+    return redirect('/masters/year_settings/')
+
+
+def delete_year(request):
+    if request.method == 'POST':
+        year_delete_id = request.POST.get('year_delete_id')
+        try:
+            YearDetails.objects.filter(id=year_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/year_settings/')
