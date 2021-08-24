@@ -108,7 +108,7 @@
                                                 class="form-control" required>
                                             <option selected="selected" value=""> Please Select</option>
                                             {% for rec in country_recs %}
-                                                <option value="{{ rec.id }}">{{ rec.country_name|default_if_none:"" }}</option>
+                                                <option value="{{ rec.id }}">{{ rec.country_name|title }}</option>
                                             {% endfor %}
 
                                         </select>

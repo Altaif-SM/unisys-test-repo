@@ -109,13 +109,13 @@
 
                                          {% if learning_center_obj.country %}
                                                 <option style="display:none;" selected="selected"
-                                                        value="{{ learning_center_obj.country.id|default_if_none:"" }}"> {{ learning_center_obj.country.country_name|default_if_none:"" }}</option>
+                                                        value="{{ learning_center_obj.country.id|default_if_none:"" }}"> {{ learning_center_obj.country.country_name|title }}</option>
                                             {% else %}
                                                 <option selected="selected" value=""> Please Select</option>
                                             {% endif %}
 
                                             {% for rec in country_recs %}
-                                                <option value="{{ rec.id }}">{{ rec.country_name|default_if_none:"" }}</option>
+                                                <option value="{{ rec.id }}">{{ rec.country_name|title }}</option>
                                             {% endfor %}
 
                                         </select>
