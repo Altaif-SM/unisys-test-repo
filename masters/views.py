@@ -2441,3 +2441,70 @@ def delete_learning_centers(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/learning_centers_settings/')
+
+
+def university_partner_settings(request):
+    university_partner_recs = UniversitPartnerDetails.objects.all()
+    return render(request, 'university_partner_settings.html', {'university_partner_recs': university_partner_recs})
+
+
+def add_university_partner(request):
+    if request.method == 'POST':
+        university_name = request.POST.get('university_name')
+        email = request.POST.get('email')
+        telephone = request.POST.get('telephone')
+        website = request.POST.get('website')
+        university_address = request.POST.get('university_address')
+        status = request.POST.get('status')
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            UniversitPartnerDetails.objects.create(
+                                             university_name=university_name, email=email,telephone = telephone,website = website,
+                                             university_address = university_address,is_active = status)
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/university_partner_settings/')
+    return render(request, 'add_university_partner.html')
+
+
+def edit_university_partner(request, university_id=None):
+    university_obj = UniversitPartnerDetails.objects.get(id=university_id)
+    if request.method == 'POST':
+        university_name = request.POST.get('university_name')
+        email = request.POST.get('email')
+        telephone = request.POST.get('telephone')
+        website = request.POST.get('website')
+        university_address = request.POST.get('university_address')
+        status = request.POST.get('status')
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            university_obj.university_name = university_name
+            university_obj.email = email
+            university_obj.telephone = telephone
+            university_obj.website = website
+            university_obj.university_address = university_address
+            university_obj.is_active = status
+            university_obj.save()
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/university_partner_settings/')
+    return render(request, "edit_university_partner.html", {'university_obj': university_obj})
+
+
+def delete_university_partner(request):
+    if request.method == 'POST':
+        university_delete_id = request.POST.get('university_delete_id')
+        try:
+            UniversitPartnerDetails.objects.filter(id=university_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/university_partner_settings/')

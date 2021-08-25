@@ -453,6 +453,12 @@ License: You must have a valid license purchased only from themeforest(the above
                                                 <span class="title">Manage Universities</span>
                                             </a>
                                         </li>
+                                        <li class="nav-item  ">
+                                            <a href="/masters/university_partner_settings/" class="nav-link ">
+                                                {#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
+                                                <span class="title">Manage University Partner</span>
+                                            </a>
+                                        </li>
 
                                     </ul>
                                 </li>
@@ -1989,7 +1995,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-     {% if request.resolver_match.url_name == 'university_settings' or request.resolver_match.url_name == 'edit_university' or request.resolver_match.url_name == 'add_university' %}
+     {% if request.resolver_match.url_name == 'university_settings' or request.resolver_match.url_name == 'edit_university' or request.resolver_match.url_name == 'add_university' or request.resolver_match.url_name == 'university_partner_settings' or request.resolver_match.url_name == 'add_university_partner' or request.resolver_match.url_name == 'edit_university_partner'  %}
         {
             var element = document.getElementById("b");
             element.classList.add("active");

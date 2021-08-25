@@ -538,3 +538,18 @@ class LearningCentersDetails(BaseModel):
 
     def __str__(self):
         return self.lc_name
+
+
+class UniversitPartnerDetails(BaseModel):
+    university_name = models.CharField(max_length=255, blank=True, null=True)
+    email = models.CharField(max_length=255, blank=True, null=True)
+    telephone = models.CharField(max_length=255, blank=True, null=True)
+    website = models.CharField(max_length=255, blank=True, null=True)
+    university_address = models.CharField(max_length=255, blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ('-id',)
+
+    def __str__(self):
+        return self.university_name
