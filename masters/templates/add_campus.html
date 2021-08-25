@@ -66,7 +66,7 @@
             </li>
 
             <li>
-                <span> Edit University </span>
+                <span> Add Campus/Branches </span>
             </li>
         </ul>
     </div>
@@ -82,13 +82,13 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase">Edit University </span>
+                <span class="caption-subject font-red sbold uppercase">Add Campus/Branches </span>
             </div>
         </div>
 
         <div class="portlet-body">
             <div class="form-body">
-                <form action="{% url 'masters:edit_university' university_obj.id %}"
+                <form action="{% url 'masters:add_campus' %}"
                       id="id_form"
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
@@ -97,61 +97,35 @@
                     <div class="form-body">
 
                         <div class="row item_experience" id="item_experience_1">
-
                             <div class="row">
-                                {% if university_obj.university_logo %}
-                                    <div class="">
-                                        <label class="col-md-2 control-label">University Logo:
-
-                                        </label>
-                                        <div class="col-md-2">
-
-                                            <input name="university_logo" type="file" title="Select University Logo"
-                                                   accept="image/gif, image/jpeg, image/png"
-                                                   id="university_logo"
-                                                   class="form-control ">
-
-
-                                        </div>
-                                        {% if university_obj.university_logo %}
-                                            <div class="col-md-1" style="margin-top: 5px;
-    font-size: 20px;">
-                                                <a href="{{ university_obj.university_logo.url }}" download>
-                                                    <i class="fa fa-download" aria-hidden="true"></i>
-
-                                                </a>
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                {% else %}
-                                    <div class="">
-                                        <label class="col-md-2 control-label">University Logo:
-
-                                        </label>
-                                        <div class="col-md-3">
-
-                                            <input name="university_logo" type="file" title="Select University Logo"
-                                                   accept="image/gif, image/jpeg, image/png"
-                                                   id="university_logo"
-                                                   class="form-control ">
-
-
-                                        </div>
-
-                                    </div>
-                                {% endif %}
-
-
                                 <div class="">
-                                    <label class="col-md-2 control-label">University ID:<span
+                                    <label class="col-md-2 control-label">University:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
-                                        <input type="text" title="Enter University ID" id="university_id"
-                                               value="{{ university_obj.university_id|default_if_none:"" }}"
-                                               name="university_id"
-                                               class="form-control" required>
+                                        <select id='university' title="Select University"
+                                                name="university"
+                                                class="form-control" required>
+                                            <option selected="selected" value=""> Please Select</option>
+                                            {% for rec in university_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.university_name|default_if_none:"" }}</option>
+                                            {% endfor %}
 
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="">
+                                    <label class="col-md-2 control-label">Country:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select id='country' title="Select Country"
+                                                name="country"
+                                                class="form-control" required>
+                                            <option selected="selected" value=""> Please Select</option>
+                                            {% for rec in country_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.country_name|title }}</option>
+                                            {% endfor %}
 
+                                        </select>
                                     </div>
                                 </div>
 
@@ -159,14 +133,15 @@
                             </div>
 
                             <br>
+
                             <div class="row">
                                 <div class="">
-                                    <label class="col-md-2 control-label">University Name:<span
+                                    <label class="col-md-2 control-label">Campus/Branch Name:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
-                                        <input type="text" title="Enter University Namee" id="university_name"
-                                               value="{{ university_obj.university_name|default_if_none:"" }}"
-                                               name="university_name"
+                                        <input type="text" title="Enter Campus Name" id="campus_name"
+                                               value=""
+                                               name="campus_name"
                                                class="form-control" required>
 
                                     </div>
@@ -177,7 +152,7 @@
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <input type="text" title="Enter Email" id="email"
-                                               value="{{ university_obj.email|default_if_none:"" }}"
+                                               value=""
                                                name="email"
                                                class="form-control" required>
 
@@ -195,7 +170,7 @@
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <input type="text" title="Enter Telephone" id="telephone"
-                                               value="{{ university_obj.telephone|default_if_none:"" }}"
+                                               value=""
                                                name="telephone"
                                                class="form-control" required>
 
@@ -208,7 +183,7 @@
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <input type="text" title="Enter Website" id="website"
-                                               value="{{ university_obj.website|default_if_none:"" }}"
+                                               value=""
                                                name="website"
                                                class="form-control" required>
 
@@ -227,8 +202,8 @@
 
                                     </label>
                                     <div class="col-md-3">
-                                        <textarea rows="2" class="form-control " required id="university_address"
-                                                  name="university_address">{{ university_obj.university_address|default_if_none:"" }}</textarea>
+                                        <textarea rows="2" class="form-control " required id="address"
+                                                  name="address"></textarea>
 
                                     </div>
                                 </div>
@@ -237,14 +212,9 @@
                                 <div class="">
                                     <label class="col-md-2 control-label">Status:</label>
                                     <div class="col-md-3">
-                                        {% if university_obj.is_active == True %}
+
                                             <input type="checkbox" checked data-toggle="toggle" data-onstyle="success"
                                                    data-offstyle="danger" id="status" name="status">
-                                        {% else %}
-                                            <input type="checkbox" data-toggle="toggle" data-onstyle="success"
-                                                   data-offstyle="danger" id="status" name="status">
-                                        {% endif %}
-
 
                                     </div>
                                 </div>
@@ -254,11 +224,10 @@
 
                         </div>
 
-
                         <div class="row">
                             <div class="col-md-offset-5 col-md-7">
                                 <button type="button" class="btn blue" id="back" style="margin-left: 70%"
-                                        onclick="window.location='{% url "masters:university_settings" %}'">
+                                        onclick="window.location='{% url "masters:university_partner_settings" %}'">
                                     Back
                                 </button>
 

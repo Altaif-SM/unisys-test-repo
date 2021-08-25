@@ -50,10 +50,10 @@
 
                 $(document).on("click", ".delete", function (e) {
 
-                    $('#id_delete_university_model').modal();
+                    $('#id_delete_campus_model').modal();
                     var parent_id = $(this).closest('tr').attr('id');
-                    var university_id = $('#' + parent_id + ' #university_id').val();
-                    $("#university_delete_id").val(university_id)
+                    var campus_id = $('#' + parent_id + ' #campus_id').val();
+                    $("#campus_delete_id").val(campus_id)
 
                     {#var url = '/masters/delete_semester/';#}
                     {#delete_semester_info(url, language_id)#}
@@ -152,7 +152,7 @@
             </li>
 
             <li>
-                <span> Manage Universities </span>
+                <span> Manage Campus/Branches </span>
             </li>
         </ul>
     </div>
@@ -165,13 +165,13 @@
 
     <!-- BEGIN VALIDATION STATES-->
     <div class="portlet light portlet-fit portlet-form ">
-        <div class="portlet-title">
+        <div class="portlet-title" style="padding: 15px 20px 0px;">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> Manage Universities</span>
+                <span class="caption-subject font-red sbold uppercase"> Manage Campus/Branches</span>
             </div>
-            <a href="{% url 'masters:add_university' %}">
-                <button type="submit" class="btn green" id="save" style="margin-left:78%;background-color: #3598dc">Add
+            <a href="{% url 'masters:add_campus' %}">
+                <button type="submit" class="btn green" id="save" style="margin-left:94%;margin-top:-6%;background-color: #3598dc">Add
                 </button>
             </a>
         </div>
@@ -186,8 +186,9 @@
                     <thead>
                     <tr>
                         <th style="display: none">Id</th>
-                        <th>University ID</th>
-                        <th> University Name</th>
+                        <th> Campus/Branch Name</th>
+                        <th> University</th>
+                        <th> Country</th>
                         <th> Email</th>
                         <th> Telephone</th>
                         <th> Website</th>
@@ -198,15 +199,16 @@
                     </thead>
 
                     <tbody id="tbody">
-                    {% for rec in university_recs %}
+                    {% for rec in campus_recs %}
                         <tr id="item{{ forloop.counter }}" class="item">
-                            <td style="display: none"><input id="university_id" value="{{ rec.id }}"></td>
-                            <td>{{ rec.university_id|default_if_none:"" }}</td>
-                            <td>{{ rec.university_name|default_if_none:"" }}</td>
+                            <td style="display: none"><input id="campus_id" value="{{ rec.id }}"></td>
+                            <td>{{ rec.campus_name|default_if_none:"" }}</td>
+                            <td>{{ rec.university.university_name|default_if_none:"" }}</td>
+                            <td>{{ rec.country.country_name|title }}</td>
                             <td>{{ rec.email|default_if_none:"" }}</td>
                             <td>{{ rec.telephone|default_if_none:"" }}</td>
                              <td>{{ rec.website|default_if_none:"" }}</td>
-                        <td>{{ rec.university_address|default_if_none:"" }}</td>
+                        <td>{{ rec.address|default_if_none:"" }}</td>
                          <td>
                                 {% if rec.is_active == True %}
                                     <i class="fa fa-power-off" aria-hidden="true"
@@ -218,7 +220,7 @@
                             </td>
 
                             <td>
-                                <a href="{% url 'masters:edit_university' rec.id %}">
+                                <a href="{% url 'masters:edit_campus' rec.id %}">
                                 <span type="button" name="edit" id="edit{{ forloop.counter }}"
                                       class=" edit_btn btn blue glyphicon glyphicon-pencil">
                                 </span>
@@ -236,22 +238,22 @@
         </div>
     </div>
 
-    <div id="id_delete_university_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+    <div id="id_delete_campus_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{% url 'masters:delete_university' %}"
+                <form action="{% url 'masters:delete_campus' %}"
                         id="form_sample_1"
                         class="form-horizontal"
                         method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <input type="hidden" id="university_delete_id" name="university_delete_id">
+                    <input type="hidden" id="campus_delete_id" name="campus_delete_id">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                         <h4 class="modal-title" style="color: #2a015e; text-align: center"><b  >Delete Confirmation</b></h4>
                     </div>
                     <div class="modal-body">
-                        <p> Are you sure, you want to delete university? </p>
-                        <p> After delete you will not be able to modify the university. </p>
+                        <p> Are you sure, you want to delete Campus? </p>
+                        <p> After delete you will not be able to modify the Campus. </p>
 
                     </div>
                     <div class="modal-footer">

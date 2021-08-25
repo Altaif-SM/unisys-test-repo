@@ -553,3 +553,22 @@ class UniversitPartnerDetails(BaseModel):
 
     def __str__(self):
         return self.university_name
+
+
+class CampusBranchesDetails(BaseModel):
+    campus_name = models.CharField(max_length=255, blank=True, null=True)
+    email = models.CharField(max_length=255, blank=True, null=True)
+    telephone = models.CharField(max_length=255, blank=True, null=True)
+    website = models.CharField(max_length=255, blank=True, null=True)
+    address = models.CharField(max_length=255, blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    university = models.ForeignKey(UniversityDetails, null=True, related_name='campus_university_rel',
+                                   on_delete=models.PROTECT)
+    country = models.ForeignKey(CountryDetails, null=True, related_name='campus_centers_country_rel',
+                                on_delete=models.PROTECT)
+
+    class Meta:
+        ordering = ('-id',)
+
+    def __str__(self):
+        return self.university_name

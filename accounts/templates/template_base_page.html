@@ -443,7 +443,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
 
 
-                                        <span class="title">Organization Settings</span>
+                                        <span class="title">University Settings</span>
                                         <span class="arrow organization_settings_arrow"></span>
                                     </a>
                                     <ul class="sub-menu organization_settings_sub_menu">
@@ -457,6 +457,12 @@ License: You must have a valid license purchased only from themeforest(the above
                                             <a href="/masters/university_partner_settings/" class="nav-link ">
                                                 {#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
                                                 <span class="title">Manage University Partner</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item  ">
+                                            <a href="/masters/campus_settings/" class="nav-link ">
+                                                {#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
+                                                <span class="title">Manage Campus/Branches</span>
                                             </a>
                                         </li>
 
@@ -1995,7 +2001,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-     {% if request.resolver_match.url_name == 'university_settings' or request.resolver_match.url_name == 'edit_university' or request.resolver_match.url_name == 'add_university' or request.resolver_match.url_name == 'university_partner_settings' or request.resolver_match.url_name == 'add_university_partner' or request.resolver_match.url_name == 'edit_university_partner'  %}
+     {% if request.resolver_match.url_name == 'university_settings' or request.resolver_match.url_name == 'edit_university' or request.resolver_match.url_name == 'add_university' or request.resolver_match.url_name == 'university_partner_settings' or request.resolver_match.url_name == 'add_university_partner' or request.resolver_match.url_name == 'edit_university_partner' or request.resolver_match.url_name == 'campus_settings'  or request.resolver_match.url_name == 'add_campus'  or request.resolver_match.url_name == 'edit_campus' %}
         {
             var element = document.getElementById("b");
             element.classList.add("active");

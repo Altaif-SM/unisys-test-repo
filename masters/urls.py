@@ -196,5 +196,10 @@ urlpatterns = [
     path('edit_university_partner/<int:university_id>/', views.edit_university_partner, name='edit_university_partner'),
     path('delete_university_partner/', views.delete_university_partner, name='delete_university_partner'),
 
+    path('campus_settings/', views.campus_settings, name='campus_settings'),
+    path('add_campus/', views.add_campus, name='add_campus'),
+    path('edit_campus/<int:campus_id>/', views.edit_campus, name='edit_campus'),
+    path('delete_campus/', views.delete_campus, name='delete_campus'),
+
 ]
 

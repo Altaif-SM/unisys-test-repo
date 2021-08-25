@@ -2508,3 +2508,78 @@ def delete_university_partner(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/university_partner_settings/')
+
+def campus_settings(request):
+    campus_recs = CampusBranchesDetails.objects.all()
+    return render(request, 'campus_settings.html', {'campus_recs': campus_recs})
+
+
+def add_campus(request):
+    if request.method == 'POST':
+        country = request.POST.get('country')
+        university = request.POST.get('university')
+        campus_name = request.POST.get('campus_name')
+        email = request.POST.get('email')
+        telephone = request.POST.get('telephone')
+        website = request.POST.get('website')
+        address = request.POST.get('address')
+        status = request.POST.get('status')
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            CampusBranchesDetails.objects.create(
+                                             campus_name=campus_name, email=email,telephone = telephone,website = website,
+                                             address = address,is_active = status,country_id = country,university_id=university)
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/campus_settings/')
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True).order_by('-id')
+    country_recs = CountryDetails.objects.all()
+    return render(request, 'add_campus.html',{'university_recs':university_recs,'country_recs':country_recs})
+
+
+def edit_campus(request, campus_id=None):
+    campus_obj = CampusBranchesDetails.objects.get(id=campus_id)
+    if request.method == 'POST':
+        country = request.POST.get('country')
+        university = request.POST.get('university')
+        campus_name = request.POST.get('campus_name')
+        email = request.POST.get('email')
+        telephone = request.POST.get('telephone')
+        website = request.POST.get('website')
+        address = request.POST.get('address')
+        status = request.POST.get('status')
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            campus_obj.country_id = country
+            campus_obj.university_id = university
+            campus_obj.campus_name = campus_name
+            campus_obj.email = email
+            campus_obj.telephone = telephone
+            campus_obj.website = website
+            campus_obj.address = address
+            campus_obj.is_active = status
+            campus_obj.save()
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/campus_settings/')
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True).order_by('-id')
+    country_recs = CountryDetails.objects.all()
+    return render(request, "edit_campus.html", {'campus_obj': campus_obj,'university_recs':university_recs,'country_recs':country_recs})
+
+def delete_campus(request):
+    if request.method == 'POST':
+        campus_delete_id = request.POST.get('campus_delete_id')
+        try:
+            CampusBranchesDetails.objects.filter(id=campus_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/campus_settings/')
