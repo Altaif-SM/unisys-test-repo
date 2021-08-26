@@ -235,9 +235,9 @@
                         <tr id="item{{ forloop.counter }}" class="item">
                             <td style="display: none"><input id="activity_id" value="{{ rec.id }}"></td>
                             <td>
-                                <text hidden>{{ rec.activity_name|title }}</text>
+                                <text hidden>{{ rec.activity_name|default_if_none:"" }}</text>
                                 <input class="form-control data activity_name" name="activity_name_saved" type="text"
-                                       id="activity_name{{ forloop.counter }}" value="{{ rec.activity_name|title }}"
+                                       id="activity_name{{ forloop.counter }}" value="{{ rec.activity_name|default_if_none:"" }}"
                                        required pattern='[A-Za-z+-]+'
                                        title='Please enter activity name' disabled></td>
                              <td>

@@ -241,8 +241,8 @@
                     {% for rec in year_recs %}
                         <tr id="item{{ forloop.counter }}" class="item">
                             <td style="display: none"><input id="year_id" value="{{ rec.id }}"></td>
-                            <td><text hidden>{{ rec.year_name|title }}</text> <input class="form-control data year_name" name="year_name_saved" type="text"
-                                       id="year_name{{ forloop.counter }}" value="{{ rec.year_name|title }}"
+                            <td><text hidden>{{ rec.year_name|default_if_none:"" }}</text> <input class="form-control data year_name" name="year_name_saved" type="text"
+                                       id="year_name{{ forloop.counter }}" value="{{ rec.year_name|default_if_none:"" }}"
                                        required="True" pattern='[A-Za-z+-]+'
                                        title='Please enter year name' disabled></td>
                             <td><input class="form-control data start_date" name="start_date_saved" type="date"

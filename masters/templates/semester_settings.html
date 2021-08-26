@@ -245,9 +245,9 @@
                         <tr id="item{{ forloop.counter }}" class="item">
                             <td style="display: none"><input id="semester_id" value="{{ rec.id }}"></td>
                             <td>
-                                <text hidden>{{ rec.semester_name|title }}</text>
+                                <text hidden>{{ rec.semester_name|default_if_none:"" }}</text>
                                 <input class="form-control data semester_name" name="semester_name_saved" type="text"
-                                       id="semester_name{{ forloop.counter }}" value="{{ rec.semester_name|title }}"
+                                       id="semester_name{{ forloop.counter }}" value="{{ rec.semester_name|default_if_none:"" }}"
                                        required pattern='[A-Za-z+-]+'
                                        title='Please enter semester name' disabled></td>
                             <td><input class="form-control data start_date" name="start_date_saved" type="date"

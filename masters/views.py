@@ -2217,7 +2217,7 @@ def add_year(request):
     start_dt = datetime.datetime.strptime(str(start_date), "%Y-%m-%d").date()
 
     try:
-        if YearDetails.objects.filter(year_name=year_name.lower()).exists():
+        if YearDetails.objects.filter(year_name=year_name).exists():
             messages.warning(request, "Year name already exists.")
 
         elif YearDetails.objects.all().filter(
@@ -2236,7 +2236,7 @@ def add_year(request):
             # else:
             #     YearDetails.objects.create(year_name=year_name.lower(), start_date=start_date, end_date=end_date)
 
-            YearDetails.objects.create(year_name=year_name.lower(), start_date=start_date, end_date=end_date)
+            YearDetails.objects.create(year_name=year_name, start_date=start_date, end_date=end_date)
             messages.success(request, "Record saved.")
     except:
         messages.warning(request, "Record not saved.")
@@ -2263,8 +2263,8 @@ def add_semester(request):
     start_date = request.POST.get('start_date')
     end_date = request.POST.get('end_date')
     try:
-        if not SemesterDetails.objects.filter(semester_name=semester_name.lower()).exists():
-            SemesterDetails.objects.create(semester_name=semester_name.lower(), start_date=start_date,
+        if not SemesterDetails.objects.filter(semester_name=semester_name).exists():
+            SemesterDetails.objects.create(semester_name=semester_name, start_date=start_date,
                                            end_date=end_date)
             messages.success(request, "Record saved.")
         else:
@@ -2293,8 +2293,8 @@ def add_activity(request):
     activity_name = request.POST.get('activity_name')
     description = request.POST.get('description')
     try:
-        if not ActivityDetails.objects.filter(activity_name=activity_name.lower()).exists():
-            ActivityDetails.objects.create(activity_name=activity_name.lower(),description = description)
+        if not ActivityDetails.objects.filter(activity_name=activity_name).exists():
+            ActivityDetails.objects.create(activity_name=activity_name,description = description)
             messages.success(request, "Record saved.")
         else:
             messages.warning(request, "Activity name already exists.")
@@ -2308,8 +2308,8 @@ def update_activity(request):
     activity_name = request.POST.get('activity_name')
     description = request.POST.get('description')
     try:
-        if not ActivityDetails.objects.filter(~Q(id=activity_id), activity_name=activity_name.lower()).exists():
-            ActivityDetails.objects.filter(id=activity_id).update(activity_name=activity_name.lower(),
+        if not ActivityDetails.objects.filter(~Q(id=activity_id), activity_name=activity_name).exists():
+            ActivityDetails.objects.filter(id=activity_id).update(activity_name=activity_name,
                                                                   description=description)
             messages.success(request, "Record saved.")
             return HttpResponse(json.dumps({'success': 'Record saved.'}), content_type="application/json")
@@ -2340,8 +2340,8 @@ def add_student_mode(request):
     student_mode = request.POST.get('student_mode')
     description = request.POST.get('description')
     try:
-        if not StudentModeDetails.objects.filter(student_mode=student_mode.lower()).exists():
-            StudentModeDetails.objects.create(student_mode=student_mode.lower(),description = description)
+        if not StudentModeDetails.objects.filter(student_mode=student_mode).exists():
+            StudentModeDetails.objects.create(student_mode=student_mode,description = description)
             messages.success(request, "Record saved.")
         else:
             messages.warning(request, "Student mode already exists.")
@@ -2355,8 +2355,8 @@ def update_student_mode(request):
     student_mode = request.POST.get('student_mode')
     description = request.POST.get('description')
     try:
-        if not StudentModeDetails.objects.filter(~Q(id=student_mode_id), student_mode=student_mode.lower()).exists():
-            StudentModeDetails.objects.filter(id=student_mode_id).update(student_mode=student_mode.lower(),
+        if not StudentModeDetails.objects.filter(~Q(id=student_mode_id), student_mode=student_mode).exists():
+            StudentModeDetails.objects.filter(id=student_mode_id).update(student_mode=student_mode,
                                                                   description=description)
             messages.success(request, "Record saved.")
             return HttpResponse(json.dumps({'success': 'Record saved.'}), content_type="application/json")
