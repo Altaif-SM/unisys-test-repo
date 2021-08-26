@@ -2670,3 +2670,5 @@ def delete_calender(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/calendar_settings/')
+
+

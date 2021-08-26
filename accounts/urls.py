@@ -19,4 +19,8 @@ urlpatterns = [
     path('update_switch/', views.update_switch,name='update_switch'),
     path('delete_user/<int:user_id>/', views.delete_user,name='delete_user'),
     path('check_active_year/', views.CheckActiveYear, name='check_active_year'),
+    path('staff_settings/', views.staff_settings,name='staff_settings'),
+    path('add_staff/', views.add_staff, name='add_staff'),
+    path('delete_staff/', views.delete_staff, name='delete_staff'),
+    path('edit_staff/<int:staff_id>/', views.edit_staff, name='edit_staff'),
 ]

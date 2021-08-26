@@ -33,6 +33,14 @@ class User(AbstractUser):
     ACCOUNTANT = 'Accountant'
     PARENT = 'Parent'
 
+    DEAN = 'Dean'
+    DEPUTY_DEAN = 'Deputy Dean'
+    HEAD = 'Head'
+    REGISTRAR = 'Registrar'
+    VICE_CHANCELLOR = 'Vice Chancellor'
+    DEPUTT_VICE_CHANCELLOR = 'Deputy Vice Chancellor'
+
+
     first_name = models.CharField(max_length=256, blank=True, null=True)
     middle_name = models.CharField(max_length=256, blank=True, null=True)
     last_name = models.CharField(max_length=256, blank=True, null=True)
@@ -44,6 +52,8 @@ class User(AbstractUser):
     agreements_switch = models.BooleanField(default=False)
     semester_switch = models.BooleanField(default=False)
     program_switch = models.BooleanField(default=False)
+    address = models.ForeignKey('masters.AddressDetails', blank=True, null=True, related_name='user_address_rel',
+                                on_delete=models.PROTECT)
 
     class Meta:
         permissions = (

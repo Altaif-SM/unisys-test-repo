@@ -436,11 +436,29 @@ License: You must have a valid license purchased only from themeforest(the above
                                         </li>
                                     </ul>
                                 </li>
+
+                                <li class="nav-item staff_settings_nav_item">
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+                                        <i class="fa fa-users" aria-hidden="true"></i>
+
+
+                                        <span class="title">Staff Settings</span>
+                                        <span class="arrow staff_settings_arrow"></span>
+                                    </a>
+                                    <ul class="sub-menu staff_settings_sub_menu">
+                                        <li class="nav-item  ">
+                                            <a href="/accounts/staff_settings/" class="nav-link ">
+                                                {#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
+                                                <span class="title">Manage Staff</span>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+
                                 <li class="nav-item organization_settings_nav_item">
                                     <a href="javascript:;" class="nav-link nav-toggle">
                                         <i class="fa fa-building-o" aria-hidden="true"></i>
-
-
 
 
                                         <span class="title">University Settings</span>
@@ -471,7 +489,6 @@ License: You must have a valid license purchased only from themeforest(the above
                                 <li class="nav-item program_settings_nav_item">
                                     <a href="javascript:;" class="nav-link nav-toggle">
                                         <i class="fa fa-university" aria-hidden="true"></i>
-
 
 
                                         <span class="title">Academic Settings</span>
@@ -2005,7 +2022,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-     {% if request.resolver_match.url_name == 'university_settings' or request.resolver_match.url_name == 'edit_university' or request.resolver_match.url_name == 'add_university' or request.resolver_match.url_name == 'university_partner_settings' or request.resolver_match.url_name == 'add_university_partner' or request.resolver_match.url_name == 'edit_university_partner' or request.resolver_match.url_name == 'campus_settings'  or request.resolver_match.url_name == 'add_campus'  or request.resolver_match.url_name == 'edit_campus' %}
+    {% if request.resolver_match.url_name == 'university_settings' or request.resolver_match.url_name == 'edit_university' or request.resolver_match.url_name == 'add_university' or request.resolver_match.url_name == 'university_partner_settings' or request.resolver_match.url_name == 'add_university_partner' or request.resolver_match.url_name == 'edit_university_partner' or request.resolver_match.url_name == 'campus_settings'  or request.resolver_match.url_name == 'add_campus'  or request.resolver_match.url_name == 'edit_campus' %}
         {
             var element = document.getElementById("b");
             element.classList.add("active");
@@ -2016,6 +2033,21 @@ License: You must have a valid license purchased only from themeforest(the above
             $(".organization_settings_nav_item").addClass("open");
             $(".organization_settings_arrow").addClass("open");
             $('.organization_settings_sub_menu').css('display', 'block');
+
+        }
+    {% endif %}
+
+     {% if request.resolver_match.url_name == 'staff_settings'  or request.resolver_match.url_name == 'add_staff' or request.resolver_match.url_name == 'edit_staff' %}
+        {
+            var element = document.getElementById("b");
+            element.classList.add("active");
+
+            var element = document.getElementById("setting_anch");
+            element.classList.add("active");
+
+            $(".staff_settings_nav_item").addClass("open");
+            $(".staff_settings_arrow").addClass("open");
+            $('.staff_settings_sub_menu').css('display', 'block');
 
         }
     {% endif %}

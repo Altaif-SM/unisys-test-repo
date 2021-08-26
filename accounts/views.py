@@ -526,7 +526,7 @@ def delete_user(request, user_id):
                 messages.warning(request, "Record not deleted.")
     except:
         messages.warning(request, "Record not deleted.")
-    return redirect('/accounts/template_manage_user')
+    return redirect('/accounts/staff_settings')
 
 
 def update_switch(request):
@@ -628,3 +628,144 @@ class AuthRequiredMiddleware(object):
         if not request.user.is_authenticated():
             return HttpResponseRedirect("/")
         return None
+
+
+def staff_settings(request):
+    country_list = CountryDetails.objects.all()
+    role_name_list = ['Admin','Student','Donor','Partner','Parent','System Admin']
+    user_recs = User.objects.filter().exclude(role__name__in=role_name_list)
+    return render(request, 'staff_settings.html',
+                  {'country_list': country_list, 'user_recs': user_recs})
+
+def add_staff(request):
+    country_list = CountryDetails.objects.all()
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        role = request.POST.get('role')
+        password = request.POST.get('password')
+        country = request.POST.get('country')
+        residential_address = request.POST.get('address')
+        status = request.POST.get('status')
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            country_obj = CountryDetails.objects.get(id = country)
+            staff_dict = {
+                'first_name': first_name,
+                'last_name': last_name,
+                'email': email,
+                'role': role,
+                'country': country_obj.id,
+                'country_name': country_obj.country_name,
+                'residential_address': residential_address,
+                'status': status,
+            }
+            if User.objects.filter(email=email).exists():
+                messages.warning(request, "Email already exists.")
+                return render(request, 'add_staff.html',{'country_list':country_list,'staff_dict':staff_dict})
+
+            staff_obj = User.objects.create(first_name=first_name, last_name=last_name,email = email,username = email,password = make_password(password),is_active = status)
+            staff_obj.role.add(UserRole.objects.get(name=role))
+            try:
+                country = CountryDetails.objects.get(id=country)
+                address = AddressDetails.objects.create(country=country,residential_address = residential_address)
+                staff_obj.address = address
+            except:
+                pass
+            staff_obj.save()
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/accounts/staff_settings/')
+    staff_dict = {
+        'first_name': '',
+        'last_name': '',
+        'email': '',
+        'role': '',
+        'country': '',
+        'residential_address': '',
+        'status': True,
+    }
+    return render(request, 'add_staff.html',{'country_list':country_list,'staff_dict':staff_dict})
+
+def delete_staff(request):
+    if request.method == 'POST':
+        staff_delete_id = request.POST.get('staff_delete_id')
+        try:
+            User.objects.filter(id=staff_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/accounts/staff_settings/')
+
+def edit_staff(request, staff_id=None):
+    country_list = CountryDetails.objects.all()
+    user_obj = User.objects.get(id=staff_id)
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        role = request.POST.get('role')
+        password = request.POST.get('password')
+        country = request.POST.get('country')
+        residential_address = request.POST.get('address')
+        status = request.POST.get('status')
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            country_obj = CountryDetails.objects.get(id=country)
+            user_obj = {
+                'id': user_obj.id,
+                'first_name': first_name,
+                'last_name': last_name,
+                'email': email,
+                'role': role,
+                'country': country_obj.id,
+                'country_name': country_obj.country_name,
+                'residential_address': residential_address,
+                'status': status,
+            }
+            if User.objects.filter(~Q(id=staff_id), email=email).exists():
+                messages.warning(request, "Email already exists.")
+                return render(request, 'edit_staff.html',{'country_list':country_list,'user_obj':user_obj})
+
+            user = User.objects.get(id=staff_id)
+            try:
+                country = CountryDetails.objects.get(id=country)
+                address = AddressDetails.objects.create(country=country, residential_address=residential_address)
+                user.address = address
+            except:
+                pass
+            user.first_name = first_name
+            user.last_name = last_name
+            user.email = email
+            if password:
+                user.set_password(password)
+            user.username = email
+            user.is_active = status
+            user.save()
+            # user.role.all().delete()
+            # user.role.add(UserRole.objects.get(name=role))
+            # user.save()
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/accounts/staff_settings/')
+    user_obj = {
+        'id': user_obj.id,
+        'first_name': user_obj.first_name,
+        'last_name': user_obj.last_name,
+        'email': user_obj.email,
+        'role': user_obj.role.all()[0].name,
+        'country': user_obj.address.country.id,
+        'country_name': user_obj.address.country.country_name,
+        'residential_address': user_obj.address.residential_address,
+        'status': user_obj.is_active,
+    }
+    return render(request, "edit_staff.html", {'user_obj': user_obj,'country_list':country_list})
+

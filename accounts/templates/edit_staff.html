@@ -1,0 +1,310 @@
+{% extends "template_base_page.html" %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css"
+          rel="stylesheet">
+
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+            $(document).ready(function () {
+                var password = document.getElementById("password")
+                var confirm_password = document.getElementById("confirm_password");
+                password.onchange = validatePassword;
+                confirm_password.onkeyup = validatePassword;
+
+
+            });
+
+            function validatePassword() {
+                if (password.value != confirm_password.value) {
+                    confirm_password.setCustomValidity("Passwords Don't Match");
+                } else {
+                    confirm_password.setCustomValidity('');
+                }
+            }
+
+
+        }
+
+
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+    </script>
+
+{% endblock %}
+
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'accounts:home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> Master Settings </span>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> Staff Settings</span>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span> Edit Staff </span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">Edit Staff </span>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form action="{% url 'accounts:edit_staff' user_obj.id %}"
+                      id="staff_form"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-body">
+
+                        <div class="row item_experience" id="item_experience_1">
+
+                            <div class="row">
+
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">First Name:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter First Name" id="first_name"
+                                               value="{{ user_obj.first_name|default_if_none:"" }}"
+                                               name="first_name"
+                                               class="form-control" required>
+
+
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Last Name:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter Last Name" id="last_name"
+                                               value="{{ user_obj.last_name|default_if_none:"" }}"
+                                               name="last_name"
+                                               class="form-control" required>
+
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <br>
+                            <div class="row">
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Email:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter Email" id="email"
+                                               value="{{ user_obj.email|default_if_none:"" }}"
+                                               name="email"
+                                               class="form-control" required>
+
+
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Position:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select name="role" class="form-control" required id="id_account_type" >
+                                            {% if user_obj.role %}
+                                                <option style="display:none;" selected="selected"
+                                                        value="{{ user_obj.role|default_if_none:"" }}"> {{ user_obj.role|default_if_none:"" }}</option>
+                                                <option value="" disabled> Please Select</option>
+                                            {% else %}
+                                                <option selected="selected" disabled value=""> Please Select</option>
+                                            {% endif %}
+
+                                            <option value="Dean">Dean</option>
+                                            <option value="Deputy Dean">Deputy Dean</option>
+                                            <option value="Head">Head</option>
+                                            <option value="Registrar">Registrar</option>
+                                            <option value="Accountant">Accountant</option>
+                                            <option value="Vice Chancellor">Vice Chancellor</option>
+                                            <option value="Deputy Vice Chancellor">Deputy Vice Chancellor</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <br>
+
+                            <div class="row">
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Password:</label>
+                                    <div class="col-md-3">
+                                        <input type="password" title="Enter Password"
+                                               id="password" name="password"
+                                               class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Re-Password:</label>
+                                    <div class="col-md-3">
+                                        <input type="password" title="Enter Re-Password"
+                                               id="confirm_password" name="confirm_password"
+                                               class="form-control">
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <br>
+
+
+                            <div class="row">
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Country:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select id='country' title="Select Country"
+                                                name="country"
+                                                class="form-control" required>
+                                            {% if user_obj.country %}
+                                                <option style="display:none;" selected="selected"
+                                                        value="{{ user_obj.country|default_if_none:"" }}"> {{ user_obj.country_name|title }}</option>
+                                                <option value="" disabled> Please Select</option>
+                                            {% else %}
+                                                <option selected="selected" value="" disabled> Please Select</option>
+                                            {% endif %}
+
+                                            {% for rec in country_list %}
+                                                <option value="{{ rec.id }}">{{ rec.country_name|title }}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Office Details:<span
+                                            style="color: red">*</span>
+
+                                    </label>
+                                    <div class="col-md-3">
+                                        <textarea rows="2" class="form-control " required id="address"
+                                                  name="address">{{ user_obj.residential_address|default_if_none:"" }}</textarea>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="row">
+                                <div class="">
+                                    <label class="col-md-2 control-label">Status:</label>
+                                    <div class="col-md-3">
+                                        {% if user_obj.status == True %}
+                                            <input type="checkbox" checked data-toggle="toggle" data-onstyle="success"
+                                                   data-offstyle="danger" id="status" name="status">
+                                        {% else %}
+                                            <input type="checkbox" data-toggle="toggle" data-onstyle="success"
+                                                   data-offstyle="danger" id="status" name="status">
+                                        {% endif %}
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                                        onclick="window.location='{% url "accounts:staff_settings" %}'">
+                                    Back
+                                </button>
+
+                                <button type="submit" class="btn green" id="save_form" style="">Save
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
