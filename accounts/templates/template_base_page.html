@@ -491,6 +491,10 @@ License: You must have a valid license purchased only from themeforest(the above
                                                class="nav-link ">Manage Activity </a>
                                         </li>
                                         <li class="nav-item ">
+                                            <a href="{% url 'masters:calendar_settings' %}"
+                                               class="nav-link ">Manage Calendar </a>
+                                        </li>
+                                        <li class="nav-item ">
                                             <a href="{% url 'masters:student_mode_settings' %}"
                                                class="nav-link ">Manage Student Mode </a>
                                         </li>
@@ -1986,7 +1990,7 @@ License: You must have a valid license purchased only from themeforest(the above
     {% endif %}
 
 
-    {% if request.resolver_match.url_name == 'year_settings' or request.resolver_match.url_name == 'semester_settings' or request.resolver_match.url_name == 'activity_settings' or request.resolver_match.url_name == 'student_mode_settings' %}
+    {% if request.resolver_match.url_name == 'year_settings' or request.resolver_match.url_name == 'semester_settings' or request.resolver_match.url_name == 'activity_settings' or request.resolver_match.url_name == 'student_mode_settings' or request.resolver_match.url_name == 'calendar_settings'  or request.resolver_match.url_name == 'add_calendar' or request.resolver_match.url_name == 'edit_calender' %}
         {
             var element = document.getElementById("b");
             element.classList.add("active");

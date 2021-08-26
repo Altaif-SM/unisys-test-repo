@@ -8,6 +8,7 @@ app_name = 'masters'
 
 
 
+
 urlpatterns = [
 
     # *******------------- Year Master ---------------************
@@ -201,5 +202,9 @@ urlpatterns = [
     path('edit_campus/<int:campus_id>/', views.edit_campus, name='edit_campus'),
     path('delete_campus/', views.delete_campus, name='delete_campus'),
 
-]
+    path('calendar_settings/', views.calendar_settings, name='calendar_settings'),
+    path('add_calendar/', views.add_calendar, name='add_calendar'),
+    path('edit_calender/<int:calender_id>/', views.edit_calender, name='edit_calender'),
+    path('delete_calender/', views.delete_calender, name='delete_calender'),
 
+]

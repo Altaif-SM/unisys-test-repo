@@ -567,8 +567,23 @@ class CampusBranchesDetails(BaseModel):
     country = models.ForeignKey(CountryDetails, null=True, related_name='campus_centers_country_rel',
                                 on_delete=models.PROTECT)
 
+
     class Meta:
         ordering = ('-id',)
 
     def __str__(self):
-        return self.university_name
+        return self.campus_name
+
+
+class CalenderDetails(BaseModel):
+    university = models.ForeignKey(UniversityDetails, null=True, related_name='calender_university_rel',on_delete=models.PROTECT)
+    year = models.ForeignKey(YearDetails, null=True, related_name='calender_year_rel',on_delete=models.PROTECT)
+    branch = models.ForeignKey(CampusBranchesDetails, null=True, related_name='calender_branch_rel',on_delete=models.PROTECT)
+    semester = models.ForeignKey(SemesterDetails, null=True, related_name='calender_semester_rel',on_delete=models.PROTECT)
+    activity = models.ForeignKey(ActivityDetails, null=True, related_name='calender_activity_rel',on_delete=models.PROTECT)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    status = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ('-id',)

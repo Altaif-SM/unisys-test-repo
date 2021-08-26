@@ -2583,3 +2583,90 @@ def delete_campus(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/campus_settings/')
+
+
+def calendar_settings(request):
+    calender_recs = CalenderDetails.objects.all()
+    return render(request, 'calendar_settings.html', {'calender_recs': calender_recs})
+
+
+def add_calendar(request):
+    if request.method == 'POST':
+        university = request.POST.get('university')
+        year = request.POST.get('year')
+        branch = request.POST.get('branch')
+        semester = request.POST.get('semester')
+        activity = request.POST.get('activity')
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+        status = request.POST.get('status')
+        end_dt = datetime.datetime.strptime(str(end_date), "%Y-%m-%d").date()
+        start_dt = datetime.datetime.strptime(str(start_date), "%Y-%m-%d").date()
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            CalenderDetails.objects.create(university_id=university, year_id=year,branch_id = branch,semester_id = semester,
+                                             activity_id = activity,start_date = start_dt,end_date = end_dt,status=status)
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/calendar_settings/')
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True).order_by('-id')
+    year_recs = YearDetails.objects.all()
+    branch_recs = CampusBranchesDetails.objects.all()
+    semester_recs = SemesterDetails.objects.all()
+    activity_recs = ActivityDetails.objects.all()
+    return render(request, 'add_calender.html',{'university_recs':university_recs,'year_recs':year_recs,'branch_recs':branch_recs,'semester_recs':semester_recs,'activity_recs':activity_recs})
+
+
+def edit_calender(request, calender_id=None):
+    calender_obj = CalenderDetails.objects.get(id=calender_id)
+    if request.method == 'POST':
+        university = request.POST.get('university')
+        year = request.POST.get('year')
+        branch = request.POST.get('branch')
+        semester = request.POST.get('semester')
+        activity = request.POST.get('activity')
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+        status = request.POST.get('status')
+        start_dt = datetime.datetime.strptime(str(start_date), "%Y-%m-%d").date()
+        end_dt = datetime.datetime.strptime(str(end_date), "%Y-%m-%d").date()
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            calender_obj.university_id = university
+            calender_obj.year_id = year
+            calender_obj.branch_id = branch
+            calender_obj.semester_id = semester
+            calender_obj.activity_id = activity
+            calender_obj.start_date = start_dt
+            calender_obj.end_date = end_dt
+            calender_obj.status = status
+            calender_obj.save()
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/calendar_settings/')
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True).order_by('-id')
+    year_recs = YearDetails.objects.all()
+    branch_recs = CampusBranchesDetails.objects.all()
+    semester_recs = SemesterDetails.objects.all()
+    activity_recs = ActivityDetails.objects.all()
+    return render(request, 'edit_calender.html',
+                  {'university_recs': university_recs, 'year_recs': year_recs, 'branch_recs': branch_recs,
+                   'semester_recs': semester_recs, 'activity_recs': activity_recs,'calender_obj':calender_obj})
+
+def delete_calender(request):
+    if request.method == 'POST':
+        calender_delete_id = request.POST.get('calender_delete_id')
+        try:
+            CalenderDetails.objects.filter(id=calender_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/calendar_settings/')

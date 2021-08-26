@@ -1,0 +1,264 @@
+{% extends "template_base_page.html" %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css"
+          rel="stylesheet">
+
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+
+    <script>
+        window.onload = function () {
+
+
+            window.setTimeout(function () {
+                $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                    $(this).remove();
+                });
+            }, 4000);
+        }
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'accounts:home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> Master Settings </span>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> Academic Settings</span>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span> Add Calendar </span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">Add Calendar </span>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form action="{% url 'masters:add_calendar' %}"
+                      id="id_form"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-body">
+
+                        <div class="row item_experience" id="item_experience_1">
+                            <div class="row">
+                                <div class="">
+                                    <label class="col-md-2 control-label">University:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select id='university' title="Select University"
+                                                name="university"
+                                                class="form-control" required>
+                                            <option selected="selected" value=""> Please Select</option>
+                                            {% for rec in university_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.university_name|default_if_none:"" }}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="">
+                                    <label class="col-md-2 control-label">Year:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select id='year' title="Select Year"
+                                                name="year"
+                                                class="form-control" required>
+                                            <option selected="selected" value=""> Please Select</option>
+                                            {% for rec in year_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.year_name|default_if_none:"" }}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <br>
+                            <div class="row">
+                                <div class="">
+                                    <label class="col-md-2 control-label">Branch:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select id='branch' title="Select Branch"
+                                                name="branch"
+                                                class="form-control" required>
+                                            <option selected="selected" value=""> Please Select</option>
+                                            {% for rec in branch_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.campus_name|default_if_none:"" }}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="">
+                                    <label class="col-md-2 control-label">Semester:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select id='semester' title="Select Semester"
+                                                name="semester"
+                                                class="form-control" required>
+                                            <option selected="selected" value=""> Please Select</option>
+                                            {% for rec in semester_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.semester_name|default_if_none:"" }}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <br>
+                            <div class="row">
+                                <div class="">
+                                    <label class="col-md-2 control-label">Activity:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select id='activity' title="Select Activity"
+                                                name="activity"
+                                                class="form-control" required>
+                                            <option selected="selected" value=""> Please Select</option>
+                                            {% for rec in activity_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.activity_name|default_if_none:"" }}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <br>
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Start Date:<span
+                                            style="color: red">*</span>
+
+                                </label>
+                                <div class="col-md-3">
+                                    <input type="date" name="start_date" class="form-control" required>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-2 control-label">End Date:<span
+                                            style="color: red">*</span>
+
+                                </label>
+                                <div class="col-md-3" id="EndDate">
+                                    <input type="date" name="end_date" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+
+
+                            <div class="row">
+
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Status:</label>
+                                    <div class="col-md-3">
+
+                                        <input type="checkbox" checked data-toggle="toggle" data-onstyle="success"
+                                               data-offstyle="danger" id="status" name="status">
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                                        onclick="window.location='{% url "masters:calendar_settings" %}'">
+                                    Back
+                                </button>
+
+                                <button type="submit" class="btn green" id="save_form" style="">Save
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
