@@ -587,3 +587,21 @@ class CalenderDetails(BaseModel):
 
     class Meta:
         ordering = ('-id',)
+
+
+
+class DepartmentDetails(BaseModel):
+    department_name = models.CharField(max_length=255, blank=True, null=True)
+    email = models.CharField(max_length=255, blank=True, null=True)
+    telephone = models.CharField(max_length=255, blank=True, null=True)
+    website = models.CharField(max_length=255, blank=True, null=True)
+    logo = models.ImageField(upload_to='department_logo/', null=True, blank=True)
+    status = models.BooleanField(default=True)
+    university = models.ForeignKey(UniversityDetails, null=True, related_name='university_depatment_rel',
+                                   on_delete=models.PROTECT)
+
+    faculty = models.ForeignKey(FacultyDetails, null=True, related_name='faculty_department_rel',
+                                   on_delete=models.PROTECT)
+
+    class Meta:
+        ordering = ('-id',)

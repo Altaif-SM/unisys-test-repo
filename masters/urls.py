@@ -207,4 +207,9 @@ urlpatterns = [
     path('edit_calender/<int:calender_id>/', views.edit_calender, name='edit_calender'),
     path('delete_calender/', views.delete_calender, name='delete_calender'),
 
+    path('department_settings/', views.department_settings, name='department_settings'),
+    path('add_department/', views.add_department, name='add_department'),
+    path('edit_department/<int:department_id>/', views.edit_department, name='edit_department'),
+    path('delete_department/', views.delete_department, name='delete_department'),
+
 ]

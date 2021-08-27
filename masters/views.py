@@ -2672,3 +2672,80 @@ def delete_calender(request):
         return redirect('/masters/calendar_settings/')
 
 
+def department_settings(request):
+    department_recs = DepartmentDetails.objects.all()
+    return render(request, 'department_settings.html', {'department_recs': department_recs})
+
+def add_department(request):
+    if request.method == 'POST':
+        logo = request.FILES.get('logo', None)
+        department_name = request.POST.get('department_name')
+        email = request.POST.get('email')
+        telephone = request.POST.get('telephone')
+        website = request.POST.get('website')
+        university = request.POST.get('university')
+        faculty = request.POST.get('faculty')
+        status = request.POST.get('status')
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            department_obj = DepartmentDetails.objects.create(department_name=department_name,
+                                             email=email,telephone = telephone,website = website,
+                                             university_id = university,faculty_id = faculty,status = status)
+            if department_obj:
+                department_obj.logo = logo
+                department_obj.save()
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/department_settings/')
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True).order_by('-id')
+    faculty_recs = FacultyDetails.objects.filter(status=True).order_by('-id')
+    return render(request, 'add_department.html',{'university_recs':university_recs,'faculty_recs':faculty_recs})
+
+
+def edit_department(request, department_id=None):
+    department_obj = DepartmentDetails.objects.get(id=department_id)
+    if request.method == 'POST':
+        logo = request.FILES.get('logo', None)
+        department_name = request.POST.get('department_name')
+        email = request.POST.get('email')
+        telephone = request.POST.get('telephone')
+        website = request.POST.get('website')
+        university = request.POST.get('university')
+        faculty = request.POST.get('faculty')
+        status = request.POST.get('status')
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            department_obj.department_name = department_name
+            department_obj.email = email
+            department_obj.telephone = telephone
+            department_obj.website = website
+            department_obj.university_id = university
+            department_obj.faculty_id = faculty
+            department_obj.status = status
+            if logo:
+                department_obj.logo = logo
+            department_obj.save()
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/department_settings/')
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True).order_by('-id')
+    faculty_recs = FacultyDetails.objects.filter(status=True).order_by('-id')
+    return render(request, "edit_department.html", {'university_recs': university_recs,'faculty_recs':faculty_recs,'department_obj':department_obj})
+
+def delete_department(request):
+    if request.method == 'POST':
+        department_delete_id = request.POST.get('department_delete_id')
+        try:
+            DepartmentDetails.objects.filter(id=department_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/department_settings/')
