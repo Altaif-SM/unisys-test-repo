@@ -452,6 +452,16 @@ License: You must have a valid license purchased only from themeforest(the above
                                                 <span class="title">Manage Staff</span>
                                             </a>
                                         </li>
+                                        <li class="nav-item  ">
+                                            <a href="/masters/department_settings/" class="nav-link ">
+                                                <span class="title">Manage Department</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item  ">
+                                            <a href="/masters/link_department_staff/" class="nav-link ">
+                                                <span class="title">Link Department to Staff</span>
+                                            </a>
+                                        </li>
 
                                     </ul>
                                 </li>
@@ -483,11 +493,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                                 <span class="title">Manage Campus/Branches</span>
                                             </a>
                                         </li>
-                                         <li class="nav-item  ">
-                                            <a href="/masters/department_settings/" class="nav-link ">
-                                                <span class="title">Manage Department</span>
-                                            </a>
-                                        </li>
+
 
                                     </ul>
                                 </li>
@@ -2027,7 +2033,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-    {% if request.resolver_match.url_name == 'university_settings' or request.resolver_match.url_name == 'edit_university' or request.resolver_match.url_name == 'add_university' or request.resolver_match.url_name == 'university_partner_settings' or request.resolver_match.url_name == 'add_university_partner' or request.resolver_match.url_name == 'edit_university_partner' or request.resolver_match.url_name == 'campus_settings'  or request.resolver_match.url_name == 'add_campus'  or request.resolver_match.url_name == 'edit_campus' or request.resolver_match.url_name == 'department_settings' or request.resolver_match.url_name == 'add_department' or request.resolver_match.url_name == 'edit_department'   %}
+    {% if request.resolver_match.url_name == 'university_settings' or request.resolver_match.url_name == 'edit_university' or request.resolver_match.url_name == 'add_university' or request.resolver_match.url_name == 'university_partner_settings' or request.resolver_match.url_name == 'add_university_partner' or request.resolver_match.url_name == 'edit_university_partner' or request.resolver_match.url_name == 'campus_settings'  or request.resolver_match.url_name == 'add_campus'  or request.resolver_match.url_name == 'edit_campus'   %}
         {
             var element = document.getElementById("b");
             element.classList.add("active");
@@ -2042,7 +2048,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-     {% if request.resolver_match.url_name == 'staff_settings'  or request.resolver_match.url_name == 'add_staff' or request.resolver_match.url_name == 'edit_staff' %}
+     {% if request.resolver_match.url_name == 'staff_settings'  or request.resolver_match.url_name == 'add_staff' or request.resolver_match.url_name == 'edit_staff' or request.resolver_match.url_name == 'department_settings' or request.resolver_match.url_name == 'add_department' or request.resolver_match.url_name == 'edit_department' or request.resolver_match.url_name == 'link_department_staff'  %}
         {
             var element = document.getElementById("b");
             element.classList.add("active");

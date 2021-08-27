@@ -2749,3 +2749,32 @@ def delete_department(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/department_settings/')
+
+
+def link_department_staff(request):
+    if request.method == 'POST':
+        department = request.POST.get('department')
+        staff = request.POST.get('staff')
+        if not DepartmentStaffMapping.objects.filter(department_id = department,staff_id = staff):
+            DepartmentStaffMapping.objects.create(department_id=department, staff_id=staff)
+            messages.success(request, "Record saved.")
+        else:
+            messages.warning(request, "Already Department and Staff exists.")
+        return redirect('/masters/link_department_staff/')
+    role_name_list = ['Admin', 'Student', 'Donor', 'Partner', 'Parent', 'System Admin']
+    user_recs = User.objects.filter().exclude(role__name__in=role_name_list)
+    department_recs = DepartmentDetails.objects.all()
+    department_staff_recs = DepartmentStaffMapping.objects.all()
+    return render(request, 'link_department_to_staff.html', {'department_staff_recs': department_staff_recs,'user_recs':user_recs,'department_recs':department_recs})
+
+
+
+def delete_department_staff(request):
+    if request.method == 'POST':
+        mapping_delete_id = request.POST.get('mapping_delete_id')
+        try:
+            DepartmentStaffMapping.objects.filter(id=mapping_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/link_department_staff/')

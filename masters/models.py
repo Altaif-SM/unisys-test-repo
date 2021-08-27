@@ -605,3 +605,12 @@ class DepartmentDetails(BaseModel):
 
     class Meta:
         ordering = ('-id',)
+
+
+class DepartmentStaffMapping(BaseModel):
+    department = models.ForeignKey(DepartmentDetails, null=True, related_name='department_staff_map', on_delete=models.PROTECT)
+    staff = models.ForeignKey(User, null=True, related_name='staff_department_mapp',
+                                     on_delete=models.PROTECT)
+
+    class Meta:
+        ordering = ('-id',)

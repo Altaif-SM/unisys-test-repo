@@ -211,5 +211,7 @@ urlpatterns = [
     path('add_department/', views.add_department, name='add_department'),
     path('edit_department/<int:department_id>/', views.edit_department, name='edit_department'),
     path('delete_department/', views.delete_department, name='delete_department'),
+    path('link_department_staff/', views.link_department_staff, name='link_department_staff'),
+    path('delete_department_staff/', views.delete_department_staff, name='delete_department_staff'),
 
 ]

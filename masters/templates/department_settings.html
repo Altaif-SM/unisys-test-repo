@@ -147,7 +147,7 @@
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <span> University Settings</span>
+                <span> Staff Settings</span>
                 <i class="fa fa-angle-right"></i>
             </li>
 
@@ -208,7 +208,7 @@
                              <td>{{ rec.telephone|default_if_none:"" }}</td>
                         <td>{{ rec.website|default_if_none:"" }}</td>
                          <td>
-                                {% if rec.is_active == True %}
+                                {% if rec.status == True %}
                                     <i class="fa fa-power-off" aria-hidden="true"
                                        style="margin-left: 30px;margin-top:8px;font-size:18px;color:green"></i>
                                 {% else %}
