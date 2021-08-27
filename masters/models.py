@@ -614,3 +614,13 @@ class DepartmentStaffMapping(BaseModel):
 
     class Meta:
         ordering = ('-id',)
+
+
+class DocumentDetails(BaseModel):
+    document_name = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        ordering = ('-id',)
+
+    def __str__(self):
+        return self.document_name

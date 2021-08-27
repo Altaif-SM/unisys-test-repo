@@ -850,7 +850,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
                             {% if 'partner.can_view_approving_application' in perms %}
                                 <li class="nav-item " id="acd_qli">
-                                    <a href="{% url 'partner:template_approving_application' %}"
+                                    <a href="{% url 'masters:document_settings' %}"
                                        class="nav-link nav-toggle">
                                         <i class="fa fa-file" aria-hidden="true"></i>
 
@@ -1981,7 +1981,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-    {% if request.resolver_match.url_name == 'template_approving_application' %}
+    {% if request.resolver_match.url_name == 'template_approving_application' or request.resolver_match.url_name == 'document_settings'  %}
         {
             var element = document.getElementById("c");
             element.classList.add("active");

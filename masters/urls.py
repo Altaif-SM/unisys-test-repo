@@ -214,4 +214,9 @@ urlpatterns = [
     path('link_department_staff/', views.link_department_staff, name='link_department_staff'),
     path('delete_department_staff/', views.delete_department_staff, name='delete_department_staff'),
 
+    path('document_settings/', views.document_settings, name='document_settings'),
+    path('add_document/', views.add_document, name='add_document'),
+    path('update_documet/', views.update_documet, name='update_documet'),
+    path('delete_document/', views.delete_document, name='delete_document'),
+
 ]
