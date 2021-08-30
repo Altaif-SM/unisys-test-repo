@@ -39,6 +39,7 @@ class User(AbstractUser):
     REGISTRAR = 'Registrar'
     VICE_CHANCELLOR = 'Vice Chancellor'
     DEPUTT_VICE_CHANCELLOR = 'Deputy Vice Chancellor'
+    HR = 'HR'
 
 
     first_name = models.CharField(max_length=256, blank=True, null=True)
