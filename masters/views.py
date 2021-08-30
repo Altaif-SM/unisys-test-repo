@@ -1822,7 +1822,7 @@ def delete_currency(request):
 
 
 def university_settings(request):
-    university_recs = UniversityDetails.objects.filter(is_delete = False)
+    university_recs = UniversityDetails.objects.filter(is_delete = False,is_partner_university = False)
     return render(request, 'university_settings.html', {'university_recs': university_recs})
 
 
@@ -2142,7 +2142,7 @@ def add_program(request):
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/program_settings/')
-    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True).order_by('-id')
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university = False).order_by('-id')
     study_mode_recs = StudyModeDetails.objects.filter().order_by('-id')
     study_level_recs = StudyLevelDetails.objects.filter().order_by('-id')
     study_type_recs = StudyTypeDetails.objects.filter().order_by('-id')
@@ -2190,7 +2190,7 @@ def edit_program(request, program_id=None):
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/program_settings/')
-    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True).order_by('-id')
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university = False).order_by('-id')
     study_mode_recs = StudyModeDetails.objects.filter().order_by('-id')
     study_level_recs = StudyLevelDetails.objects.filter().order_by('-id')
     study_type_recs = StudyTypeDetails.objects.filter().order_by('-id')
@@ -2449,7 +2449,7 @@ def delete_learning_centers(request):
 
 
 def university_partner_settings(request):
-    university_partner_recs = UniversitPartnerDetails.objects.all()
+    university_partner_recs = UniversityDetails.objects.filter(is_partner_university = True,is_delete=False)
     return render(request, 'university_partner_settings.html', {'university_partner_recs': university_partner_recs})
 
 
@@ -2466,7 +2466,7 @@ def add_university_partner(request):
         else:
             status = False
         try:
-            UniversitPartnerDetails.objects.create(
+            UniversityDetails.objects.create(is_partner_university = True,
                                              university_name=university_name, email=email,telephone = telephone,website = website,
                                              university_address = university_address,is_active = status)
             messages.success(request, "Record saved.")
@@ -2477,7 +2477,7 @@ def add_university_partner(request):
 
 
 def edit_university_partner(request, university_id=None):
-    university_obj = UniversitPartnerDetails.objects.get(id=university_id)
+    university_obj = UniversityDetails.objects.get(id=university_id)
     if request.method == 'POST':
         university_name = request.POST.get('university_name')
         email = request.POST.get('email')
@@ -2541,7 +2541,7 @@ def add_campus(request):
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/campus_settings/')
-    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True).order_by('-id')
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university = False).order_by('-id')
     country_recs = CountryDetails.objects.all()
     return render(request, 'add_campus.html',{'university_recs':university_recs,'country_recs':country_recs})
 
@@ -2575,7 +2575,7 @@ def edit_campus(request, campus_id=None):
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/campus_settings/')
-    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True).order_by('-id')
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university = False).order_by('-id')
     country_recs = CountryDetails.objects.all()
     return render(request, "edit_campus.html", {'campus_obj': campus_obj,'university_recs':university_recs,'country_recs':country_recs})
 
@@ -2618,7 +2618,7 @@ def add_calendar(request):
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/calendar_settings/')
-    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True).order_by('-id')
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university=False).order_by('-id')
     year_recs = YearDetails.objects.all()
     branch_recs = CampusBranchesDetails.objects.all()
     semester_recs = SemesterDetails.objects.all()
@@ -2657,7 +2657,7 @@ def edit_calender(request, calender_id=None):
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/calendar_settings/')
-    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True).order_by('-id')
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university = False).order_by('-id')
     year_recs = YearDetails.objects.all()
     branch_recs = CampusBranchesDetails.objects.all()
     semester_recs = SemesterDetails.objects.all()
@@ -2706,7 +2706,7 @@ def add_department(request):
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/department_settings/')
-    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True).order_by('-id')
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university = False).order_by('-id')
     faculty_recs = FacultyDetails.objects.filter(status=True).order_by('-id')
     return render(request, 'add_department.html',{'university_recs':university_recs,'faculty_recs':faculty_recs})
 
@@ -2741,7 +2741,7 @@ def edit_department(request, department_id=None):
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/department_settings/')
-    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True).order_by('-id')
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university=False).order_by('-id')
     faculty_recs = FacultyDetails.objects.filter(status=True).order_by('-id')
     return render(request, "edit_department.html", {'university_recs': university_recs,'faculty_recs':faculty_recs,'department_obj':department_obj})
 
