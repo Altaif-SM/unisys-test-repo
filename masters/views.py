@@ -2882,3 +2882,36 @@ def delete_faculty_user(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/link_faculty_staff/')
+
+
+def link_university_staff(request):
+    if request.method == 'POST':
+        university_type = request.POST.get('university_type')
+        if university_type == 'Main':
+            university = request.POST.get('university')
+        else:
+            university = request.POST.get('university_partner_id')
+        staff = request.POST.get('staff')
+        if not UniversityStaffMapping.objects.filter(university_id = university,staff_id = staff):
+            UniversityStaffMapping.objects.create(university_id=university, staff_id=staff)
+            messages.success(request, "Record saved.")
+        else:
+            messages.warning(request, "Already university and user exists.")
+        return redirect('/masters/link_university_staff/')
+    role_name_list = ['Admin', 'Student', 'Donor', 'Partner', 'Parent', 'System Admin']
+    user_recs = User.objects.filter().exclude(role__name__in=role_name_list)
+    university_staff_recs = UniversityStaffMapping.objects.all()
+    university_recs = UniversityDetails.objects.filter(is_delete=False,is_partner_university=False).order_by('-id')
+    university_partner_recs = UniversityDetails.objects.filter(is_delete=False,is_partner_university=True).order_by('-id')
+    return render(request, 'link_university_staff.html', {'university_staff_recs': university_staff_recs,'user_recs':user_recs,'university_recs':university_recs,'university_partner_recs':university_partner_recs})
+
+
+def delete_university_user(request):
+    if request.method == 'POST':
+        mapping_delete_id = request.POST.get('mapping_delete_id')
+        try:
+            UniversityStaffMapping.objects.filter(id=mapping_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/link_university_staff/')

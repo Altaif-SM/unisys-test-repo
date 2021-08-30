@@ -36,7 +36,7 @@
 
                 {#$("#mother_nationality").chosen();#}
 
-             $(document).on("click", ".delete", function (e) {
+                $(document).on("click", ".delete", function (e) {
 
                     $('#id_delete_staff_model').modal();
                     var parent_id = $(this).closest('tr').attr('id');
@@ -53,12 +53,11 @@
                     var department = $("#department").val()
                     var staff = $("#staff").val()
 
-                     if (department == '') {
+                    if (department == '') {
                         $("#department_error").show();
 
                         return false;
-                    }
-                    else if (staff == '') {
+                    } else if (staff == '') {
                         $("#department_error").hide();
                         $("#staff_error").show();
                         return false;
@@ -67,7 +66,8 @@
                 });
 
 
-                $("#department").chosen();
+                $("#university").chosen();
+                $("#university_partner_id").chosen();
                 $("#staff").chosen();
                 var is_sponsored = "{{ application_obj.is_sponsored }}";
                 if (is_sponsored === 'False' || is_sponsored === '') {
@@ -83,10 +83,14 @@
 
                 $('input[type="radio"]').on('change', function () {
                     var is_sponsored = $('input[name="is_sponsored"]:checked').val();
-                    if (is_sponsored === 'No') {
-                        $(".sponsored").prop("disabled", true);
+                    if (is_sponsored === 'Main') {
+                        $(".university_partner").hide();
+                        $(".university_main").show();
                     } else {
-                        $(".sponsored").prop("disabled", false);
+                        $(".university_main").hide();
+                        $(".university_partner").show();
+                        $("#university_partner_id_chosen").css({"width": "100%"});
+
                     }
                 })
 
@@ -175,7 +179,7 @@
             </li>
 
             <li>
-                <span> Link Department to User </span>
+                <span> Link University to User </span>
             </li>
         </ul>
     </div>
@@ -192,14 +196,14 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> Department to User</span>
+                <span class="caption-subject font-red sbold uppercase"> University to User</span>
             </div>
         </div>
 
 
         <div class="portlet-body">
             <div class="form-body">
-                <form action="{% url 'masters:link_department_staff' %}"
+                <form action="{% url 'masters:link_university_staff' %}"
                       id="department_staff_mapping"
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
@@ -207,27 +211,61 @@
 
                     <div class="form-body">
 
+                        <div class="row" style="margin-left:8%">
+                            <span style="padding:inherit">University Type :  </span>&nbsp;
+                            <input class="current" type="radio" checked name="university_type" id="sponsored_by_yes"
+                                   value="Main">
+                            <span style="padding:inherit">Main</span>&nbsp;&nbsp;
+                            <input class="current" type="radio" name="university_type" value="Partner"
+                                   id="sponsored_by_no">
+                            <span style="padding:inherit">Partner</span>
+                        </div>
+                        <br>
+
 
                         <div class="row">
 
 
-                            <div class="">
-                                <label class="col-md-2 control-label">Department:</label>
+                            <div class="university_main" >
+                                <label class="col-md-2 control-label">University:</label>
                                 <div class="col-md-3">
 
-                                    <select id='department' title="Select Department" name="department"
+                                    <select id='university' title="Select University" name="university"
                                             class="form-control value_check" data-live-search="true">
 
-                                            <option style="display:none" selected="selected" id="" value="">Please
-                                                Select
-                                            </option>
+                                        <option style="display:none" selected="selected" id="" value="">Please
+                                            Select
+                                        </option>
 
-                                        {% for rec in department_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.department_name|default_if_none:"" }}</option>
+                                        {% for rec in university_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.university_name|default_if_none:"" }}</option>
                                         {% endfor %}
                                     </select>
-                                <span id="department_error" style="color: red;display:none">Please select Department</span>
+                                    <span id="department_error"
+                                          style="color: red;display:none">Please select University</span>
 
+
+                                </div>
+
+
+                            </div>
+                        <div class="university_partner" style="display: none" >
+                                <label class="col-md-2 control-label">University:</label>
+                                <div class="col-md-3">
+
+                                    <select id='university_partner_id' title="Select University" name="university_partner_id"
+                                            class="form-control value_check" data-live-search="true">
+
+                                        <option style="display:none" selected="selected" id="" value="">Please
+                                            Select
+                                        </option>
+
+                                        {% for rec in university_partner_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.university_name|default_if_none:"" }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <span id="department_error"
+                                          style="color: red;display:none">Please select Department</span>
 
 
                                 </div>
@@ -241,9 +279,9 @@
                                     <select id='staff' title="Select Staff" name="staff"
                                             class="form-control value_check" data-live-search="true">
 
-                                            <option style="display:none" selected="selected" id="" value="">Please
-                                                Select
-                                            </option>
+                                        <option style="display:none" selected="selected" id="" value="">Please
+                                            Select
+                                        </option>
 
                                         {% for rec in user_recs %}
                                             <option value='{{ rec.id }}'>{{ rec.first_name|default_if_none:"" }} {{ rec.last_name|default_if_none:"" }}
@@ -251,7 +289,7 @@
                                             </option>
                                         {% endfor %}
                                     </select>
-                                <span id="staff_error" style="color: red;display:none">Please select User</span>
+                                    <span id="staff_error" style="color: red;display:none">Please select User</span>
                                 </div>
                             </div>
                             <div class="">
@@ -282,7 +320,8 @@
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th> Email</th>
-                            <th>Department</th>
+                            <th>University Type</th>
+                            <th>University</th>
                             <th> Position</th>
                             <th> Country</th>
                             <th> Address</th>
@@ -291,14 +330,20 @@
                         </thead>
 
                         <tbody id="tbody">
-                        {% for rec in department_staff_recs %}
+                        {% for rec in university_staff_recs %}
                             <tr id="item{{ forloop.counter }}" class="item">
                                 <td style="display: none"><input id="mapping_id" value="{{ rec.id }}"></td>
 
                                 <td>{{ rec.staff.first_name|default_if_none:"" }}</td>
                                 <td>{{ rec.staff.last_name|default_if_none:"" }}</td>
                                 <td>{{ rec.staff.email|default_if_none:"" }}</td>
-                                <td>{{ rec.department.department_name|default_if_none:"" }}</td>
+                                {% if rec.university.is_partner_university == False %}
+                                     <td>Main</td>
+                                {% else %}
+                                    <td>Partner</td>
+                                {% endif %}
+
+                                <td>{{ rec.university.university_name|default_if_none:"" }}</td>
                                 <td>{{ rec.staff.role.all.0.name|default_if_none:"" }}</td>
                                 <td>{{ rec.staff.address.country.country_name|title }}</td>
                                 <td>{{ rec.staff.address.residential_address|default_if_none:"" }}</td>
@@ -324,19 +369,20 @@
     <div id="id_delete_staff_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{% url 'masters:delete_department_staff' %}"
-                        id="form_sample_1"
-                        class="form-horizontal"
-                        method="POST" enctype="multipart/form-data">
+                <form action="{% url 'masters:delete_university_user' %}"
+                      id="form_sample_1"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <input type="hidden" id="mapping_delete_id" name="mapping_delete_id">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                        <h4 class="modal-title" style="color: #2a015e; text-align: center"><b  >Delete Confirmation</b></h4>
+                        <h4 class="modal-title" style="color: #2a015e; text-align: center"><b>Delete Confirmation</b>
+                        </h4>
                     </div>
                     <div class="modal-body">
-                        <p> Are you sure, you want to delete department to user linking? </p>
-                        <p> After delete you will not be able to modify the delete department to user linking. </p>
+                        <p> Are you sure, you want to delete university to user linking? </p>
+                        <p> After delete you will not be able to modify the delete university to user linking. </p>
 
                     </div>
                     <div class="modal-footer">
