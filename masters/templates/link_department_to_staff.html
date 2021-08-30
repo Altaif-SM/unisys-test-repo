@@ -170,12 +170,12 @@
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <span> Staff Settings</span>
+                <span> User Settings</span>
                 <i class="fa fa-angle-right"></i>
             </li>
 
             <li>
-                <span> Link Department to Staff </span>
+                <span> Link Department to User </span>
             </li>
         </ul>
     </div>
@@ -192,7 +192,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> Department to Staff</span>
+                <span class="caption-subject font-red sbold uppercase"> Department to User</span>
             </div>
         </div>
 
@@ -236,7 +236,7 @@
                             </div>
 
                             <div class="">
-                                <label class="col-md-2 control-label">Staff:</label>
+                                <label class="col-md-2 control-label">User:</label>
                                 <div class="col-md-3">
                                     <select id='staff' title="Select Staff" name="staff"
                                             class="form-control value_check" data-live-search="true">
@@ -251,7 +251,7 @@
                                             </option>
                                         {% endfor %}
                                     </select>
-                                <span id="staff_error" style="color: red;display:none">Please select Staff</span>
+                                <span id="staff_error" style="color: red;display:none">Please select User</span>
                                 </div>
                             </div>
                             <div class="">
@@ -278,9 +278,11 @@
                         <thead>
                         <tr>
                             <th style="display: none">Id</th>
-                            <th>Department</th>
-                            <th>Staff Name</th>
+
+                            <th>First Name</th>
+                            <th>Last Name</th>
                             <th> Email</th>
+                            <th>Department</th>
                             <th> Position</th>
                             <th> Country</th>
                             <th> Address</th>
@@ -292,9 +294,11 @@
                         {% for rec in department_staff_recs %}
                             <tr id="item{{ forloop.counter }}" class="item">
                                 <td style="display: none"><input id="mapping_id" value="{{ rec.id }}"></td>
-                                <td>{{ rec.department.department_name|default_if_none:"" }}</td>
-                                <td>{{ rec.staff.first_name|default_if_none:"" }} {{ rec.staff.last_name|default_if_none:"" }}</td>
+
+                                <td>{{ rec.staff.first_name|default_if_none:"" }}</td>
+                                <td>{{ rec.staff.last_name|default_if_none:"" }}</td>
                                 <td>{{ rec.staff.email|default_if_none:"" }}</td>
+                                <td>{{ rec.department.department_name|default_if_none:"" }}</td>
                                 <td>{{ rec.staff.role.all.0.name|default_if_none:"" }}</td>
                                 <td>{{ rec.staff.address.country.country_name|title }}</td>
                                 <td>{{ rec.staff.address.residential_address|default_if_none:"" }}</td>
@@ -331,8 +335,8 @@
                         <h4 class="modal-title" style="color: #2a015e; text-align: center"><b  >Delete Confirmation</b></h4>
                     </div>
                     <div class="modal-body">
-                        <p> Are you sure, you want to delete Department to Staff Linking? </p>
-                        <p> After delete you will not be able to modify the delete Department to Staff Linking. </p>
+                        <p> Are you sure, you want to delete department to user linking? </p>
+                        <p> After delete you will not be able to modify the delete department to user linking. </p>
 
                     </div>
                     <div class="modal-footer">

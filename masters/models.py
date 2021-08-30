@@ -627,6 +627,14 @@ class CampusStaffMapping(BaseModel):
     class Meta:
         ordering = ('-id',)
 
+class FacultyStaffMapping(BaseModel):
+    faculty = models.ForeignKey(FacultyDetails, null=True, related_name='faculty_staff_map', on_delete=models.PROTECT)
+    staff = models.ForeignKey(User, null=True, related_name='staff_faculty_mapp',
+                                     on_delete=models.PROTECT)
+
+    class Meta:
+        ordering = ('-id',)
+
 
 class DocumentDetails(BaseModel):
     document_name = models.CharField(max_length=255, blank=True, null=True)

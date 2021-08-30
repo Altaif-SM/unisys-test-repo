@@ -2764,7 +2764,7 @@ def link_department_staff(request):
             DepartmentStaffMapping.objects.create(department_id=department, staff_id=staff)
             messages.success(request, "Record saved.")
         else:
-            messages.warning(request, "Already Department and Staff exists.")
+            messages.warning(request, "Already department and user exists.")
         return redirect('/masters/link_department_staff/')
     role_name_list = ['Admin', 'Student', 'Donor', 'Partner', 'Parent', 'System Admin']
     user_recs = User.objects.filter().exclude(role__name__in=role_name_list)
@@ -2836,7 +2836,7 @@ def link_campus_staff(request):
             CampusStaffMapping.objects.create(campus_id=campus, staff_id=staff)
             messages.success(request, "Record saved.")
         else:
-            messages.warning(request, "Already Campus and Staff exists.")
+            messages.warning(request, "Already campus and user exists.")
         return redirect('/masters/link_campus_staff/')
     campus_recs = CampusBranchesDetails.objects.all()
     program_recs = ProgramDetails.objects.filter(is_delete=False).order_by('-id')
@@ -2855,3 +2855,30 @@ def delete_campus_staff(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/link_campus_staff/')
+
+
+def link_faculty_staff(request):
+    if request.method == 'POST':
+        faculty = request.POST.get('faculty')
+        staff = request.POST.get('staff')
+        if not FacultyStaffMapping.objects.filter(faculty_id = faculty,staff_id = staff):
+            FacultyStaffMapping.objects.create(faculty_id=faculty, staff_id=staff)
+            messages.success(request, "Record saved.")
+        else:
+            messages.warning(request, "Already faculty and user exists.")
+        return redirect('/masters/link_faculty_staff/')
+    role_name_list = ['Admin', 'Student', 'Donor', 'Partner', 'Parent', 'System Admin']
+    user_recs = User.objects.filter().exclude(role__name__in=role_name_list)
+    faculty_recs = FacultyDetails.objects.all()
+    faculty_user_recs = FacultyStaffMapping.objects.all()
+    return render(request, 'link_faculty_to_user.html', {'faculty_user_recs': faculty_user_recs,'user_recs':user_recs,'faculty_recs':faculty_recs})
+
+def delete_faculty_user(request):
+    if request.method == 'POST':
+        mapping_delete_id = request.POST.get('mapping_delete_id')
+        try:
+            FacultyStaffMapping.objects.filter(id=mapping_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/link_faculty_staff/')

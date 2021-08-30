@@ -222,4 +222,7 @@ urlpatterns = [
     path('link_campus_staff/', views.link_campus_staff, name='link_campus_staff'),
     path('delete_campus_staff/', views.delete_campus_staff, name='delete_campus_staff'),
 
+    path('link_faculty_staff/', views.link_faculty_staff, name='link_faculty_staff'),
+    path('delete_faculty_user/', views.delete_faculty_user, name='delete_faculty_user'),
+
 ]
