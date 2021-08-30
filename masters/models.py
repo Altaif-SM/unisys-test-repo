@@ -361,6 +361,26 @@ class FacultyDetails(BaseModel):
     class Meta:
         ordering = ('-id',)
 
+class CampusBranchesDetails(BaseModel):
+    campus_name = models.CharField(max_length=255, blank=True, null=True)
+    email = models.CharField(max_length=255, blank=True, null=True)
+    telephone = models.CharField(max_length=255, blank=True, null=True)
+    website = models.CharField(max_length=255, blank=True, null=True)
+    address = models.CharField(max_length=255, blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    university = models.ForeignKey(UniversityDetails, null=True, related_name='campus_university_rel',
+                                   on_delete=models.PROTECT)
+    country = models.ForeignKey(CountryDetails, null=True, related_name='campus_centers_country_rel',
+                                on_delete=models.PROTECT)
+
+
+    class Meta:
+        ordering = ('-id',)
+
+    def __str__(self):
+        return self.campus_name
+
+
 class ProgramDetails(BaseModel):
     program_name = models.CharField(max_length=255, blank=True, null=True)
     program_overview = models.TextField(blank=True, null=True)
@@ -382,6 +402,8 @@ class ProgramDetails(BaseModel):
                                    on_delete=models.PROTECT)
     status = models.BooleanField(default=True)
     is_delete = models.BooleanField(default=False)
+    campus = models.ForeignKey(CampusBranchesDetails, null=True, related_name='program_campus_rel',
+                                   on_delete=models.PROTECT)
     class Meta:
         ordering = ('program_name',)
 
@@ -555,24 +577,6 @@ class UniversitPartnerDetails(BaseModel):
         return self.university_name
 
 
-class CampusBranchesDetails(BaseModel):
-    campus_name = models.CharField(max_length=255, blank=True, null=True)
-    email = models.CharField(max_length=255, blank=True, null=True)
-    telephone = models.CharField(max_length=255, blank=True, null=True)
-    website = models.CharField(max_length=255, blank=True, null=True)
-    address = models.CharField(max_length=255, blank=True, null=True)
-    is_active = models.BooleanField(default=True)
-    university = models.ForeignKey(UniversityDetails, null=True, related_name='campus_university_rel',
-                                   on_delete=models.PROTECT)
-    country = models.ForeignKey(CountryDetails, null=True, related_name='campus_centers_country_rel',
-                                on_delete=models.PROTECT)
-
-
-    class Meta:
-        ordering = ('-id',)
-
-    def __str__(self):
-        return self.campus_name
 
 
 class CalenderDetails(BaseModel):
@@ -611,6 +615,14 @@ class DepartmentStaffMapping(BaseModel):
     department = models.ForeignKey(DepartmentDetails, null=True, related_name='department_staff_map', on_delete=models.PROTECT)
     staff = models.ForeignKey(User, null=True, related_name='staff_department_mapp',
                                      on_delete=models.PROTECT)
+
+    class Meta:
+        ordering = ('-id',)
+
+class CampusStaffMapping(BaseModel):
+    campus = models.ForeignKey(CampusBranchesDetails, null=True, related_name='campus_program_map', on_delete=models.PROTECT)
+    staff = models.ForeignKey(User, null=True, related_name='staff_campus_mapp',
+                              on_delete=models.PROTECT)
 
     class Meta:
         ordering = ('-id',)

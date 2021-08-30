@@ -36,7 +36,7 @@
 
                 {#$("#mother_nationality").chosen();#}
 
-             $(document).on("click", ".delete", function (e) {
+                $(document).on("click", ".delete", function (e) {
 
                     $('#id_delete_staff_model').modal();
                     var parent_id = $(this).closest('tr').attr('id');
@@ -48,18 +48,17 @@
                 })
 
 
-                $("#department_staff_mapping").submit(function (e) {
+                $("#campus_staff_mapping").submit(function (e) {
 
-                    var department = $("#department").val()
+                    var campus = $("#campus").val()
                     var staff = $("#staff").val()
 
-                     if (department == '') {
-                        $("#department_error").show();
+                    if (campus == '') {
+                        $("#campus_error").show();
 
                         return false;
-                    }
-                    else if (staff == '') {
-                        $("#department_error").hide();
+                    } else if (staff == '') {
+                        $("#campus_error").hide();
                         $("#staff_error").show();
                         return false;
                     }
@@ -67,7 +66,7 @@
                 });
 
 
-                $("#department").chosen();
+                $("#campus").chosen();
                 $("#staff").chosen();
                 var is_sponsored = "{{ application_obj.is_sponsored }}";
                 if (is_sponsored === 'False' || is_sponsored === '') {
@@ -103,9 +102,7 @@
                     $(row).removeAttr().hide().insertAfter(".item:last").slideDown(300);
                     {#count++;#}
                 });
-
-                /*
-
+            /*
                 $(document).on("click", ".delete", function () {
                     $(this).parents('.item').remove();
                     $(this).parents('.item').next('br').remove();
@@ -170,12 +167,12 @@
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <span> Staff Settings</span>
+                <span> University Settings</span>
                 <i class="fa fa-angle-right"></i>
             </li>
 
             <li>
-                <span> Link Department to Staff </span>
+                <span> Link Campus to Staff </span>
             </li>
         </ul>
     </div>
@@ -192,15 +189,15 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> Department to Staff</span>
+                <span class="caption-subject font-red sbold uppercase"> Campus to Staff</span>
             </div>
         </div>
 
 
         <div class="portlet-body">
             <div class="form-body">
-                <form action="{% url 'masters:link_department_staff' %}"
-                      id="department_staff_mapping"
+                <form action="{% url 'masters:link_campus_staff' %}"
+                      id="campus_staff_mapping"
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
@@ -212,22 +209,22 @@
 
 
                             <div class="">
-                                <label class="col-md-2 control-label">Department:</label>
+                                <label class="col-md-2 control-label">Campus:</label>
                                 <div class="col-md-3">
 
-                                    <select id='department' title="Select Department" name="department"
+                                    <select id='campus' title="Select Campus" name="campus"
                                             class="form-control value_check" data-live-search="true">
 
-                                            <option style="display:none" selected="selected" id="" value="">Please
-                                                Select
-                                            </option>
+                                        <option style="display:none" selected="selected" id="" value="">Please
+                                            Select
+                                        </option>
 
-                                        {% for rec in department_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.department_name|default_if_none:"" }}</option>
+                                        {% for rec in campus_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.campus_name|default_if_none:"" }}</option>
                                         {% endfor %}
                                     </select>
-                                <span id="department_error" style="color: red;display:none">Please select Department</span>
-
+                                    <span id="campus_error"
+                                          style="color: red;display:none">Please select Campus</span>
 
 
                                 </div>
@@ -289,10 +286,10 @@
                         </thead>
 
                         <tbody id="tbody">
-                        {% for rec in department_staff_recs %}
+                        {% for rec in campus_staff_recs %}
                             <tr id="item{{ forloop.counter }}" class="item">
                                 <td style="display: none"><input id="mapping_id" value="{{ rec.id }}"></td>
-                                <td>{{ rec.department.department_name|default_if_none:"" }}</td>
+                                <td>{{ rec.campus.campus_name|default_if_none:"" }}</td>
                                 <td>{{ rec.staff.first_name|default_if_none:"" }} {{ rec.staff.last_name|default_if_none:"" }}</td>
                                 <td>{{ rec.staff.email|default_if_none:"" }}</td>
                                 <td>{{ rec.staff.role.all.0.name|default_if_none:"" }}</td>
@@ -320,19 +317,20 @@
     <div id="id_delete_staff_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{% url 'masters:delete_department_staff' %}"
-                        id="form_sample_1"
-                        class="form-horizontal"
-                        method="POST" enctype="multipart/form-data">
+                <form action="{% url 'masters:delete_campus_staff' %}"
+                      id="form_sample_1"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <input type="hidden" id="mapping_delete_id" name="mapping_delete_id">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                        <h4 class="modal-title" style="color: #2a015e; text-align: center"><b  >Delete Confirmation</b></h4>
+                        <h4 class="modal-title" style="color: #2a015e; text-align: center"><b>Delete Confirmation</b>
+                        </h4>
                     </div>
                     <div class="modal-body">
-                        <p> Are you sure, you want to delete Department to Staff Linking? </p>
-                        <p> After delete you will not be able to modify the delete Department to Staff Linking. </p>
+                        <p> Are you sure, you want to delete Campus to Staff Linking? </p>
+                        <p> After delete you will not be able to modify the delete Campus to Staff Linking. </p>
 
                     </div>
                     <div class="modal-footer">

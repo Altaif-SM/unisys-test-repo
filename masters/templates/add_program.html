@@ -61,7 +61,7 @@
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <span> System Settings</span>
+                <span> University Settings</span>
                 <i class="fa fa-angle-right"></i>
             </li>
 
@@ -136,6 +136,23 @@
                             <br>
                             <div class="row">
                                 <div class="">
+                                    <label class="col-md-2 control-label">Campus:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select id='campus' title="Select Campus"
+                                                name="campus"
+                                                class="form-control" required>
+                                            <option selected="selected" value=""> Please Select</option>
+                                            {% for rec in campus_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.campus_name|default_if_none:"" }}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <div class="">
                                     <label class="col-md-2 control-label">Program ID:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
@@ -147,7 +164,12 @@
 
                                     </div>
                                 </div>
-                                <div class="">
+
+
+                            </div>
+                            <br>
+                            <div class="row">
+                             <div class="">
                                     <label class="col-md-2 control-label">Program Name:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
@@ -159,9 +181,6 @@
                                     </div>
                                 </div>
 
-                            </div>
-                            <br>
-                            <div class="row">
                                 <div class="">
                                     <label class="col-md-2 control-label">Study Mode:<span
                                             style="color: red">*</span></label>
@@ -177,7 +196,16 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="">
+
+
+
+                            </div>
+
+                            <br>
+
+
+                            <div class="row">
+                            <div class="">
                                     <label class="col-md-2 control-label">Study Level:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
@@ -192,14 +220,6 @@
                                         </select>
                                     </div>
                                 </div>
-
-
-                            </div>
-
-                            <br>
-
-
-                            <div class="row">
 
                                 <div class="">
                                     <label class="col-md-2 control-label">Study Type:<span
@@ -218,7 +238,15 @@
                                 </div>
 
 
-                                <div class="">
+
+
+
+
+
+                            </div>
+                            <br>
+                            <div class="row">
+                                 <div class="">
                                     <label class="col-md-2 control-label">Overview:
 
                                     </label>
@@ -229,12 +257,6 @@
                                     </div>
                                 </div>
 
-
-
-
-                            </div>
-                            <br>
-                            <div class="row">
 
                                 <div class="">
                                     <label class="col-md-2 control-label">Objective:
@@ -248,6 +270,14 @@
                                 </div>
 
 
+
+
+
+
+
+                            </div>
+                            <br>
+                            <div class="row">
                                 <div class="">
                                     <label class="col-md-2 control-label">Vision:
 
@@ -260,12 +290,6 @@
                                 </div>
 
 
-
-
-                            </div>
-                            <br>
-                            <div class="row">
-
                                 <div class="">
                                     <label class="col-md-2 control-label">Mission:
 
@@ -277,7 +301,12 @@
                                     </div>
                                 </div>
 
-                                <div class="">
+
+
+                            </div>
+                        <br>
+                        <div class="row">
+                            <div class="">
                                     <label class="col-md-2 control-label">Status:</label>
                                     <div class="col-md-3">
 
@@ -286,8 +315,7 @@
 
                                     </div>
                                 </div>
-
-                            </div>
+                        </div>
 
 
                         </div>

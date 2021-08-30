@@ -2128,13 +2128,14 @@ def add_program(request):
         program_objective = request.POST.get('program_objective')
         program_vision = request.POST.get('program_vision')
         program_mission = request.POST.get('program_mission')
+        campus = request.POST.get('campus')
         status = request.POST.get('status')
         if status == 'on':
             status = True
         else:
             status = False
         try:
-            ProgramDetails.objects.create(faculty_id=faculty,university_id=university,
+            ProgramDetails.objects.create(faculty_id=faculty,university_id=university,campus_id = campus,
                                              program_id=program_id, program_name=program_name,program_overview = program_overview,program_objective = program_objective,
                                              program_vision = program_vision,program_mission = program_mission,status = status,study_type_id = study_type,study_mode_id = study_mode,study_level_id = study_level)
             messages.success(request, "Record saved.")
@@ -2146,7 +2147,8 @@ def add_program(request):
     study_level_recs = StudyLevelDetails.objects.filter().order_by('-id')
     study_type_recs = StudyTypeDetails.objects.filter().order_by('-id')
     faculty_recs = FacultyDetails.objects.filter(status=True).order_by('-id')
-    return render(request, 'add_program.html',{'university_recs':university_recs,'faculty_recs':faculty_recs,'study_level_recs':study_level_recs,'study_mode_recs':study_mode_recs,'study_type_recs':study_type_recs})
+    campus_recs = CampusBranchesDetails.objects.filter().order_by('-id')
+    return render(request, 'add_program.html',{'university_recs':university_recs,'faculty_recs':faculty_recs,'study_level_recs':study_level_recs,'study_mode_recs':study_mode_recs,'study_type_recs':study_type_recs,'campus_recs':campus_recs})
 
 
 def edit_program(request, program_id=None):
@@ -2163,6 +2165,7 @@ def edit_program(request, program_id=None):
         program_objective = request.POST.get('program_objective')
         program_vision = request.POST.get('program_vision')
         program_mission = request.POST.get('program_mission')
+        campus = request.POST.get('campus')
         status = request.POST.get('status')
         if status == 'on':
             status = True
@@ -2171,6 +2174,7 @@ def edit_program(request, program_id=None):
         try:
             program_obj.university_id = university
             program_obj.faculty_id = faculty
+            program_obj.campus_id = campus
             program_obj.program_id = program_id
             program_obj.program_name = program_name
             program_obj.study_type_id = study_type
@@ -2191,7 +2195,8 @@ def edit_program(request, program_id=None):
     study_level_recs = StudyLevelDetails.objects.filter().order_by('-id')
     study_type_recs = StudyTypeDetails.objects.filter().order_by('-id')
     faculty_recs = FacultyDetails.objects.filter(status=True).order_by('-id')
-    return render(request, "edit_program.html", {'program_obj': program_obj,'university_recs':university_recs,'study_mode_recs':study_mode_recs,'study_level_recs':study_level_recs,'study_type_recs':study_type_recs,'faculty_recs':faculty_recs})
+    campus_recs = CampusBranchesDetails.objects.filter().order_by('-id')
+    return render(request, "edit_program.html", {'program_obj': program_obj,'university_recs':university_recs,'study_mode_recs':study_mode_recs,'study_level_recs':study_level_recs,'study_type_recs':study_type_recs,'faculty_recs':faculty_recs,'campus_recs':campus_recs})
 
 
 def delete_program(request):
@@ -2822,3 +2827,31 @@ def delete_document(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/document_settings/')
+
+def link_campus_staff(request):
+    if request.method == 'POST':
+        campus = request.POST.get('campus')
+        staff = request.POST.get('staff')
+        if not CampusStaffMapping.objects.filter(campus_id = campus,staff_id = staff):
+            CampusStaffMapping.objects.create(campus_id=campus, staff_id=staff)
+            messages.success(request, "Record saved.")
+        else:
+            messages.warning(request, "Already Campus and Staff exists.")
+        return redirect('/masters/link_campus_staff/')
+    campus_recs = CampusBranchesDetails.objects.all()
+    program_recs = ProgramDetails.objects.filter(is_delete=False).order_by('-id')
+    role_name_list = ['Admin', 'Student', 'Donor', 'Partner', 'Parent', 'System Admin']
+    user_recs = User.objects.filter().exclude(role__name__in=role_name_list)
+    campus_staff_recs = CampusStaffMapping.objects.all()
+    return render(request, 'link_campus_to_program.html', {'campus_recs': campus_recs,'program_recs':program_recs,'user_recs':user_recs,'campus_staff_recs':campus_staff_recs})
+
+
+def delete_campus_staff(request):
+    if request.method == 'POST':
+        mapping_delete_id = request.POST.get('mapping_delete_id')
+        try:
+            CampusStaffMapping.objects.filter(id=mapping_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/link_campus_staff/')

@@ -422,10 +422,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                             <a href="{% url 'masters:study_type_settings' %}"
                                                class="nav-link ">Manage Study Type </a>
                                         </li>
-                                        <li class="nav-item ">
-                                            <a href="{% url 'masters:program_settings' %}"
-                                               class="nav-link ">Manage Program </a>
-                                        </li>
+
                                         <li class="nav-item ">
                                             <a href="{% url 'masters:country_settings' %}"
                                                class="nav-link ">Manage Country </a>
@@ -490,8 +487,17 @@ License: You must have a valid license purchased only from themeforest(the above
                                         <li class="nav-item  ">
                                             <a href="/masters/campus_settings/" class="nav-link ">
                                                 {#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
-                                                <span class="title">Manage Campus/Branches</span>
+                                                <span class="title">Manage Campus</span>
                                             </a>
+                                        </li>
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:program_settings' %}"
+                                               class="nav-link ">Manage Program </a>
+                                        </li>
+
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:link_campus_staff' %}"
+                                               class="nav-link ">Link Campus to Staff </a>
                                         </li>
 
 
@@ -2002,7 +2008,7 @@ License: You must have a valid license purchased only from themeforest(the above
     {% endif %}
 
 
-    {% if request.resolver_match.url_name == 'language_settings' or request.resolver_match.url_name == 'add_language' or request.resolver_match.url_name == 'edit_language' or request.resolver_match.url_name == 'currency_settings' or request.resolver_match.url_name == 'add_currency' or request.resolver_match.url_name == 'edit_currency'  or request.resolver_match.url_name == 'faculty_settings' or request.resolver_match.url_name == 'add_faculty'  or request.resolver_match.url_name == 'edit_faculty' or request.resolver_match.url_name == 'study_mode_settings'  or request.resolver_match.url_name == 'study_level_settings' or request.resolver_match.url_name == 'study_type_settings' or request.resolver_match.url_name == 'program_settings'  or request.resolver_match.url_name == 'add_program' or request.resolver_match.url_name == 'edit_program'  or request.resolver_match.url_name == 'country_settings'  or request.resolver_match.url_name == 'learning_centers_settings' or request.resolver_match.url_name == 'add_learning_centers' or request.resolver_match.url_name == 'edit_learning_centers'   %}
+    {% if request.resolver_match.url_name == 'language_settings' or request.resolver_match.url_name == 'add_language' or request.resolver_match.url_name == 'edit_language' or request.resolver_match.url_name == 'currency_settings' or request.resolver_match.url_name == 'add_currency' or request.resolver_match.url_name == 'edit_currency'  or request.resolver_match.url_name == 'faculty_settings' or request.resolver_match.url_name == 'add_faculty'  or request.resolver_match.url_name == 'edit_faculty' or request.resolver_match.url_name == 'study_mode_settings'  or request.resolver_match.url_name == 'study_level_settings' or request.resolver_match.url_name == 'study_type_settings'  or request.resolver_match.url_name == 'country_settings'  or request.resolver_match.url_name == 'learning_centers_settings' or request.resolver_match.url_name == 'add_learning_centers' or request.resolver_match.url_name == 'edit_learning_centers'   %}
         {
             var element = document.getElementById("b");
             element.classList.add("active");
@@ -2033,7 +2039,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-    {% if request.resolver_match.url_name == 'university_settings' or request.resolver_match.url_name == 'edit_university' or request.resolver_match.url_name == 'add_university' or request.resolver_match.url_name == 'university_partner_settings' or request.resolver_match.url_name == 'add_university_partner' or request.resolver_match.url_name == 'edit_university_partner' or request.resolver_match.url_name == 'campus_settings'  or request.resolver_match.url_name == 'add_campus'  or request.resolver_match.url_name == 'edit_campus'   %}
+    {% if request.resolver_match.url_name == 'university_settings' or request.resolver_match.url_name == 'edit_university' or request.resolver_match.url_name == 'add_university' or request.resolver_match.url_name == 'university_partner_settings' or request.resolver_match.url_name == 'add_university_partner' or request.resolver_match.url_name == 'edit_university_partner' or request.resolver_match.url_name == 'campus_settings'  or request.resolver_match.url_name == 'add_campus'  or request.resolver_match.url_name == 'edit_campus'   or request.resolver_match.url_name == 'program_settings'  or request.resolver_match.url_name == 'add_program' or request.resolver_match.url_name == 'edit_program' or request.resolver_match.url_name == 'link_campus_staff' %}
         {
             var element = document.getElementById("b");
             element.classList.add("active");

@@ -219,4 +219,7 @@ urlpatterns = [
     path('update_documet/', views.update_documet, name='update_documet'),
     path('delete_document/', views.delete_document, name='delete_document'),
 
+    path('link_campus_staff/', views.link_campus_staff, name='link_campus_staff'),
+    path('delete_campus_staff/', views.delete_campus_staff, name='delete_campus_staff'),
+
 ]
