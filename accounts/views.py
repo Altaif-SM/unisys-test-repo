@@ -639,6 +639,10 @@ def staff_settings(request):
 
 def add_staff(request):
     country_list = CountryDetails.objects.all()
+    system_settings_tuple = ('Manage Language', 'Manage Currency', 'Manage Country', 'Manage Study Mode', 'Manage Study Level','Manage Study Type', 'Manage Student Mode', 'Manage Faculties', 'Link Faculty to User')
+    user_settings_tuple = ('Manage Group', 'Manage Users')
+    university_settings_tuple = ('Manage Universities', 'Manage University Partner', 'Link University to User', 'Manage Program', 'Manage Campus','Link Campus to User', 'Manage Department', 'Link Department to User')
+    academic_settings_tuple = ('Manage Year', 'Manage Semester', 'Manage Activity', 'Manage Calendar')
     if request.method == 'POST':
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -648,6 +652,7 @@ def add_staff(request):
         country = request.POST.get('country')
         residential_address = request.POST.get('address')
         status = request.POST.get('status')
+        permission_list = request.POST.getlist('checks[]')
         if status == 'on':
             status = True
         else:
@@ -663,6 +668,11 @@ def add_staff(request):
                 'country_name': country_obj.country_name,
                 'residential_address': residential_address,
                 'status': status,
+                'system_settings_tuple': system_settings_tuple,
+                'user_settings_tuple': user_settings_tuple,
+                'university_settings_tuple': university_settings_tuple,
+                'academic_settings_tuple': academic_settings_tuple,
+                'permission_list': permission_list
             }
             if User.objects.filter(email=email).exists():
                 messages.warning(request, "Email already exists.")
@@ -678,7 +688,6 @@ def add_staff(request):
                 pass
             staff_obj.save()
 
-            permission_list = request.POST.getlist('checks[]')
             for rec in permission_list:
                 permission_obj = PersmissionDetails.objects.create(permission=rec)
                 staff_obj.permission.add(permission_obj)
@@ -694,6 +703,11 @@ def add_staff(request):
         'country': '',
         'residential_address': '',
         'status': True,
+        'system_settings_tuple': system_settings_tuple,
+        'user_settings_tuple': user_settings_tuple,
+        'university_settings_tuple': university_settings_tuple,
+        'academic_settings_tuple': academic_settings_tuple,
+        'permission_list': []
     }
     return render(request, 'add_staff.html',{'country_list':country_list,'staff_dict':staff_dict})
 
