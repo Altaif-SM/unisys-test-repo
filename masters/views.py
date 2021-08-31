@@ -2915,3 +2915,50 @@ def delete_university_user(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/link_university_staff/')
+
+
+def group_settings(request):
+    group_recs = GroupDetails.objects.all()
+    return render(request, 'group_settings.html', {'group_recs': group_recs})
+
+
+def add_group(request):
+    group_name = request.POST.get('group_name')
+    description = request.POST.get('description')
+    try:
+        if not GroupDetails.objects.filter(group_name=group_name).exists():
+            GroupDetails.objects.create(group_name=group_name,description = description)
+            messages.success(request, "Record saved.")
+        else:
+            messages.warning(request, "Group name already exists.")
+    except:
+        messages.warning(request, "Record not saved.")
+    return redirect('/masters/group_settings/')
+
+def update_group(request):
+    group_id = request.POST.get('group_id')
+    group_name = request.POST.get('group_name')
+    description = request.POST.get('description')
+    try:
+        if not GroupDetails.objects.filter(~Q(id=group_id), group_name=group_name).exists():
+            GroupDetails.objects.filter(id=group_id).update(group_name=group_name,
+                                                                  description=description)
+            messages.success(request, "Record saved.")
+            return HttpResponse(json.dumps({'success': 'Record saved.'}), content_type="application/json")
+        else:
+            messages.warning(request, "Group name already exists.")
+            return HttpResponse(json.dumps({'success': 'Record saved.'}), content_type="application/json")
+    except:
+        messages.warning(request, "Record not saved.")
+    return redirect('/masters/group_settings/')
+
+def delete_group(request):
+    if request.method == 'POST':
+        group_delete_id = request.POST.get('group_delete_id')
+        try:
+            GroupDetails.objects.filter(id=group_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/group_settings/')
+

@@ -33,13 +33,13 @@
                 $(document).on("click", ".update", function (e) {
 
                     var parent_id = $(this).closest('tr').attr('id');
-                    var student_mode_id = $('#' + parent_id + ' #student_mode_id').val();
-                    var student_mode = $('#' + parent_id + ' .student_mode').val();
+                    var group_id = $('#' + parent_id + ' #group_id').val();
+                    var group_name = $('#' + parent_id + ' .group_name').val();
                     var description = $('#' + parent_id + ' .description').val();
 
-                    if (student_mode == '') {
-                        $('#' + parent_id + ' .student_mode').focus();
-                        $('#' + parent_id + ' .student_mode').css('border-color', 'red');
+                    if (group_name == '') {
+                        $('#' + parent_id + ' .group_name').focus();
+                        $('#' + parent_id + ' .group_name').css('border-color', 'red');
                         return false;
                     }
                     else if (description == '') {
@@ -48,18 +48,18 @@
                         return false;
                     }
 
-                    var url = '/masters/update_student_mode/';
-                    update_student_mode_info(url, student_mode_id, student_mode,description)
+                    var url = '/masters/update_group/';
+                    update_group_info(url, group_id, group_name,description)
                 })
 
                 $(document).on("click", ".delete", function (e) {
 
-                     $('#id_delete_student_mode_model').modal();
+                     $('#id_delete_group_model').modal();
 
                     var parent_id = $(this).closest('tr').attr('id');
-                    var student_mode_id = $('#' + parent_id + ' #student_mode_id').val();
+                    var group_id = $('#' + parent_id + ' #group_id').val();
 
-                    $("#student_mode_delete_id").val(student_mode_id)
+                    $("#group_delete_id").val(group_id)
 
 
                     {#var url = '/masters/delete_semester/';#}
@@ -83,13 +83,13 @@
                     });
                 }
 
-                function update_student_mode_info(url, student_mode_id, student_mode, description) {
+                function update_group_info(url, group_id, group_name, description) {
                     $.ajax({
                         type: 'POST',
                         url: url,
                         data: {
-                            student_mode_id: student_mode_id,
-                            student_mode: student_mode,
+                            group_id: group_id,
+                            group_name: group_name,
                             description: description,
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
@@ -115,7 +115,7 @@
 
                     $("#update" + i).show();
                     $("#edit" + i).hide();
-                    $("#student_mode" + i).prop("disabled", false);
+                    $("#group_name" + i).prop("disabled", false);
                     $("#description" + i).prop("disabled", false);
                 });
             });
@@ -152,11 +152,11 @@
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <span> System Settings</span>
+                <span> User Settings</span>
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <span> Manage Student Mode</span>
+                <span> Manage Group</span>
             </li>
 
         </ul>
@@ -173,14 +173,14 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> Manage Student Mode</span>
+                <span class="caption-subject font-red sbold uppercase"> Manage Group</span>
             </div>
         </div>
 
         <div class="portlet-body">
 
             <div class="form-body">
-                <form action="{% url 'masters:add_student_mode' %}" id="form_sample_1" class="form-horizontal"
+                <form action="{% url 'masters:add_group' %}" id="form_sample_1" class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
@@ -188,11 +188,11 @@
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">Student Mode:
+                                <label class="col-md-2 control-label">Group Name:
 
                                 </label>
                                 <div class="col-md-4">
-                                    <input type="text" name="student_mode" class="form-control" required>
+                                    <input type="text" name="group_name" class="form-control" required>
                                 </div>
                             </div>
                             <div class="">
@@ -224,22 +224,22 @@
                     <thead>
                     <tr>
                         <th style="display: none">Id</th>
-                        <th>Student Mode</th>
+                        <th>Group Name</th>
                         <th> Description</th>
                         <th width="10%">Action</th>
                     </tr>
                     </thead>
 
                     <tbody id="tbody">
-                    {% for rec in student_mode_recs %}
+                    {% for rec in group_recs %}
                         <tr id="item{{ forloop.counter }}" class="item">
-                            <td style="display: none"><input id="student_mode_id" value="{{ rec.id }}"></td>
+                            <td style="display: none"><input id="group_id" value="{{ rec.id }}"></td>
                             <td>
-                                <text hidden>{{ rec.student_mode|title }}</text>
-                                <input class="form-control data student_mode" name="student_mode_saved" type="text"
-                                       id="student_mode{{ forloop.counter }}" value="{{ rec.student_mode|title }}"
+                                <text hidden>{{ rec.group_name|default_if_none:"" }}</text>
+                                <input class="form-control data group_name" name="group_name_saved" type="text"
+                                       id="group_name{{ forloop.counter }}" value="{{ rec.group_name|default_if_none:"" }}"
                                        required pattern='[A-Za-z+-]+'
-                                       title='Please enter student mode' disabled></td>
+                                       title='Please enter group name' disabled></td>
                              <td>
                                 <text hidden>{{ rec.description|default_if_none:"" }}</text>
                                 <textarea class="form-control data description" name="description_saved"
@@ -264,22 +264,22 @@
             </form>
         </div>
     </div>
-    <div id="id_delete_student_mode_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+    <div id="id_delete_group_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{% url 'masters:delete_student_mode' %}"
+                <form action="{% url 'masters:delete_group' %}"
                         id="form_sample_1"
                         class="form-horizontal"
                         method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <input type="hidden" id="student_mode_delete_id" name="student_mode_delete_id">
+                    <input type="hidden" id="group_delete_id" name="group_delete_id">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                         <h4 class="modal-title" style="color: #2a015e; text-align: center"><b  >Delete Confirmation</b></h4>
                     </div>
                     <div class="modal-body">
-                        <p> Are you sure, you want to delete Student Mode? </p>
-                        <p> After delete you will not be able to modify the Student Mode. </p>
+                        <p> Are you sure, you want to delete Group? </p>
+                        <p> After delete you will not be able to modify the Group. </p>
 
                     </div>
                     <div class="modal-footer">

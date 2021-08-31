@@ -12,6 +12,9 @@ class UserRole(BaseModel):
     def __str__(self):
         return self.name
 
+class PersmissionDetails(models.Model):
+    permission = models.CharField(max_length=100, blank=True, null=True)
+
 
 class User(AbstractUser):
     ID = 'id'
@@ -55,6 +58,7 @@ class User(AbstractUser):
     program_switch = models.BooleanField(default=False)
     address = models.ForeignKey('masters.AddressDetails', blank=True, null=True, related_name='user_address_rel',
                                 on_delete=models.PROTECT)
+    permission = models.ManyToManyField(PersmissionDetails, blank=True)
 
     class Meta:
         permissions = (

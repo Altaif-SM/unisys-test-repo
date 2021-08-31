@@ -228,4 +228,11 @@ urlpatterns = [
     path('link_university_staff/', views.link_university_staff, name='link_university_staff'),
     path('delete_university_user/', views.delete_university_user, name='delete_university_user'),
 
+    path('group_settings/', views.group_settings, name='group_settings'),
+    path('add_group/', views.add_group, name='add_group'),
+    path('update_group/', views.update_group, name='update_group'),
+    path('delete_group/', views.delete_group, name='delete_group'),
+
+
+
 ]

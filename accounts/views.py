@@ -677,6 +677,11 @@ def add_staff(request):
             except:
                 pass
             staff_obj.save()
+
+            permission_list = request.POST.getlist('checks[]')
+            for rec in permission_list:
+                permission_obj = PersmissionDetails.objects.create(permission=rec)
+                staff_obj.permission.add(permission_obj)
             messages.success(request, "Record saved.")
         except:
             messages.warning(request, "Record not saved.")
@@ -705,6 +710,10 @@ def delete_staff(request):
 def edit_staff(request, staff_id=None):
     country_list = CountryDetails.objects.all()
     user_obj = User.objects.get(id=staff_id)
+    system_settings_tuple = ('Manage Language', 'Manage Currency', 'Manage Country', 'Manage Study Mode', 'Manage Study Level','Manage Study Type','Manage Student Mode', 'Manage Faculties', 'Link Faculty to User')
+    user_settings_tuple = ('Manage Group', 'Manage Users')
+    university_settings_tuple = ('Manage Universities', 'Manage University Partner', 'Link University to User', 'Manage Program', 'Manage Campus','Link Campus to User','Manage Department', 'Link Department to User')
+    academic_settings_tuple = ('Manage Year', 'Manage Semester', 'Manage Activity', 'Manage Calendar')
     if request.method == 'POST':
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -714,11 +723,13 @@ def edit_staff(request, staff_id=None):
         country = request.POST.get('country')
         residential_address = request.POST.get('address')
         status = request.POST.get('status')
+        permission_list = request.POST.getlist('checks[]')
         if status == 'on':
             status = True
         else:
             status = False
         try:
+
             country_obj = CountryDetails.objects.get(id=country)
             user_obj = {
                 'id': user_obj.id,
@@ -730,6 +741,11 @@ def edit_staff(request, staff_id=None):
                 'country_name': country_obj.country_name,
                 'residential_address': residential_address,
                 'status': status,
+                'system_settings_tuple': system_settings_tuple,
+                'user_settings_tuple': user_settings_tuple,
+                'university_settings_tuple': university_settings_tuple,
+                'academic_settings_tuple': academic_settings_tuple,
+                'permission_list': permission_list
             }
             if User.objects.filter(~Q(id=staff_id), email=email).exists():
                 messages.warning(request, "Email already exists.")
@@ -750,12 +766,19 @@ def edit_staff(request, staff_id=None):
             user.username = email
             user.is_active = status
             user.save()
-            # user.role.all().delete()
-            # user.role.add(UserRole.objects.get(name=role))
-            # user.save()
+
+            if permission_list:
+                user.permission.clear()
+
+            for rec in permission_list:
+                permission_obj = PersmissionDetails.objects.create(permission=rec)
+                user.permission.add(permission_obj)
+
+            messages.success(request, "Record saved.")
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/accounts/staff_settings/')
+
     user_obj = {
         'id': user_obj.id,
         'first_name': user_obj.first_name,
@@ -766,6 +789,11 @@ def edit_staff(request, staff_id=None):
         'country_name': user_obj.address.country.country_name,
         'residential_address': user_obj.address.residential_address,
         'status': user_obj.is_active,
+        'system_settings_tuple':system_settings_tuple,
+        'user_settings_tuple':user_settings_tuple,
+        'university_settings_tuple':university_settings_tuple,
+        'academic_settings_tuple':academic_settings_tuple,
+        'permission_list':user_obj.permission.values_list('permission',flat=True)
     }
     return render(request, "edit_staff.html", {'user_obj': user_obj,'country_list':country_list})
 

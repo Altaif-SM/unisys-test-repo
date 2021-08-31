@@ -189,7 +189,6 @@
                                 </div>
 
 
-
                             </div>
                             <br>
 
@@ -274,25 +273,116 @@
                                     </div>
                                 </div>
                             </div>
+                            <br>
+
+                            <div class="portlet-title">
+                                <div class="caption">
+                                    <i class="icon-settings font-red"></i>
+                                    <span class="caption-subject font-red sbold uppercase">User Privilges</span>
+                                </div>
+                            </div>
+                            <br>
+
+                            <div class="row" style="margin-left:100px;margin-right:190px;">
+
+                                <ul class="tabs" style="font-size:18px;">
+                                    <li class="active" rel="tab1">System Settings</li>
+                                    <li rel="tab2">User Settings</li>
+                                    <li rel="tab3">University Settings</li>
+                                    <li rel="tab4">Academic Settings</li>
+                                </ul>
+                                <div class="tab_container" style="font-size:15px;">
+                                    <h3 class="d_active tab_drawer_heading" rel="tab1">Tab 1</h3>
+                                    <div id="tab1" class="tab_content">
+                                        {% for rec in user_obj.system_settings_tuple %}
+                                            {% if forloop.counter == 6 %}
+                                                <br><br>
+                                            {% endif %}
+                                            {% if rec in user_obj.permission_list %}
+                                                <label class="checkbox-inline"><input checked type="checkbox"
+                                                                                      value="{{ rec }}"
+                                                                                      name="checks[]">{{ rec }}</label>
+                                            {% else %}
+                                                <label class="checkbox-inline"><input type="checkbox" value="{{ rec }}"
+                                                                                      name="checks[]">{{ rec }}</label>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <!-- #tab1 -->
+                                    <h3 class="tab_drawer_heading" rel="tab2">Tab 2</h3>
+                                    <div id="tab2" class="tab_content">
+                                        {% for rec in user_obj.user_settings_tuple %}
+                                            {% if rec in user_obj.permission_list %}
+                                                <label class="checkbox-inline"><input type="checkbox" checked
+                                                                                      value="{{ rec }}"
+                                                                                      name="checks[]">{{ rec }}</label>
+                                            {% else %}
+                                                <label class="checkbox-inline"><input type="checkbox" value="{{ rec }}"
+                                                                                      name="checks[]">{{ rec }}</label>
+                                            {% endif %}
+
+                                        {% endfor %}
+
+                                    </div>
+                                    <!-- #tab2 -->
+                                    <h3 class="tab_drawer_heading" rel="tab3">Tab 3</h3>
+                                    <div id="tab3" class="tab_content">
+                                        {% for rec in user_obj.university_settings_tuple %}
+                                            {% if forloop.counter == 5 %}
+                                                <br><br>
+                                            {% endif %}
+                                            {% if rec in user_obj.permission_list %}
+                                                <label class="checkbox-inline"><input checked type="checkbox"
+                                                                                      value="{{ rec }}"
+                                                                                      name="checks[]">{{ rec }}</label>
+                                            {% else %}
+                                                <label class="checkbox-inline"><input type="checkbox" value="{{ rec }}"
+                                                                                      name="checks[]">{{ rec }}</label>
+                                            {% endif %}
+
+                                        {% endfor %}
+
+                                    </div>
+                                    <!-- #tab3 -->
+                                    <h3 class="tab_drawer_heading" rel="tab4">Tab 4</h3>
+                                    <div id="tab4" class="tab_content">
+                                        {% for rec in user_obj.academic_settings_tuple %}
+                                            {% if rec in user_obj.permission_list %}
+                                                <label class="checkbox-inline"><input type="checkbox" checked value="{{ rec }}"
+                                                                                  name="checks[]">{{ rec }}</label>
+                                            {% else %}
+                                                <label class="checkbox-inline"><input type="checkbox" value="{{ rec }}"
+                                                                                  name="checks[]">{{ rec }}</label>
+                                            {% endif %}
+
+                                        {% endfor %}
+                                    </div>
+                                    <!-- #tab4 -->
+                                </div>
+                                <!-- .tab_container -->
+                            </div>
 
 
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-offset-5 col-md-7">
-                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"
-                                        onclick="window.location='{% url "accounts:staff_settings" %}'">
-                                    Back
-                                </button>
 
-                                <button type="submit" class="btn green" id="save_form" style="">Save
-                                </button>
-                            </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-offset-5 col-md-7">
+                            <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                                    onclick="window.location='{% url "accounts:staff_settings" %}'">
+                                Back
+                            </button>
+
+                            <button type="submit" class="btn green" id="save_form" style="">Save
+                            </button>
                         </div>
                     </div>
-                </form>
             </div>
+            </form>
         </div>
+    </div>
     </div>
 {% endblock %}
 
