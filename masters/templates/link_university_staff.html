@@ -82,8 +82,8 @@
                 });
 
                 $('input[type="radio"]').on('change', function () {
-                    var is_sponsored = $('input[name="is_sponsored"]:checked').val();
-                    if (is_sponsored === 'Main') {
+                    var university_type = $('input[name="university_type"]:checked').val();
+                    if (university_type === 'Main') {
                         $(".university_partner").hide();
                         $(".university_main").show();
                     } else {
