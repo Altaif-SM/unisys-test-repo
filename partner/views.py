@@ -270,12 +270,12 @@ def template_approving_application(request):
     applicant_recs = ''
     # messages.success(request, "Records are.... ")
     try:
-        if request.user.is_super_admin():
-            applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission = True,year=get_current_year(request))
-        else:
-            applicant_recs = ApplicationDetails.objects.filter(
-                nationality=request.user.partner_user_rel.get().address.country,
-                is_submitted=True, year=get_current_year(request))
+        # if request.user.is_super_admin():
+        applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission = True,year=get_current_year(request))
+        # else:
+        #     applicant_recs = ApplicationDetails.objects.filter(
+        #         nationality=request.user.partner_user_rel.get().address.country,
+        #         is_submitted=True, year=get_current_year(request))
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
 

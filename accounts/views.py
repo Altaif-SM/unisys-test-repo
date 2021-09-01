@@ -639,10 +639,11 @@ def staff_settings(request):
 
 def add_staff(request):
     country_list = CountryDetails.objects.all()
-    system_settings_tuple = ('Manage Language', 'Manage Currency', 'Manage Country', 'Manage Study Mode', 'Manage Study Level','Manage Study Type', 'Manage Student Mode', 'Manage Faculties', 'Link Faculty to User')
-    user_settings_tuple = ('Manage Group', 'Manage Users')
-    university_settings_tuple = ('Manage Universities', 'Manage University Partner', 'Link University to User', 'Manage Program', 'Manage Campus','Link Campus to User', 'Manage Department', 'Link Department to User')
-    academic_settings_tuple = ('Manage Year', 'Manage Semester', 'Manage Activity', 'Manage Calendar')
+    system_settings_list = ['Manage Language', 'Manage Currency', 'Manage Country', 'Manage Study Mode', 'Manage Study Level','Manage Study Type','Manage Student Mode', 'Manage Learning Centers', 'Manage Faculties', 'Link Faculty to User']
+    user_settings_list = ['Manage Group', 'Manage Users']
+    university_settings_list = ['Manage Universities', 'Manage University Partner', 'Link University to User', 'Manage Program', 'Manage Campus','Link Campus to User', 'Manage Department', 'Link Department to User']
+    academic_settings_list = ['Manage Year', 'Manage Semester', 'Manage Activity', 'Manage Calendar']
+    module_settings_list = ['Manage Applicant Documents', 'Approving Applicant Details']
     if request.method == 'POST':
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -668,10 +669,11 @@ def add_staff(request):
                 'country_name': country_obj.country_name,
                 'residential_address': residential_address,
                 'status': status,
-                'system_settings_tuple': system_settings_tuple,
-                'user_settings_tuple': user_settings_tuple,
-                'university_settings_tuple': university_settings_tuple,
-                'academic_settings_tuple': academic_settings_tuple,
+                'system_settings_list': system_settings_list,
+                'user_settings_list': user_settings_list,
+                'university_settings_list': university_settings_list,
+                'academic_settings_list': academic_settings_list,
+                'module_settings_list': module_settings_list,
                 'permission_list': permission_list
             }
             if User.objects.filter(email=email).exists():
@@ -688,6 +690,22 @@ def add_staff(request):
                 pass
             staff_obj.save()
 
+            system_check = any(item in system_settings_list for item in permission_list)
+            user_check = any(item in user_settings_list for item in permission_list)
+            university_check = any(item in university_settings_list for item in permission_list)
+            academic_check = any(item in academic_settings_list for item in permission_list)
+            module_check = any(item in module_settings_list for item in permission_list)
+            if system_check is True:
+                permission_list.append('System Settings')
+            if user_check is True:
+                permission_list.append('User Settings')
+            if university_check is True:
+                permission_list.append('University Settings')
+            if academic_check is True:
+                permission_list.append('Academic Settings')
+            if module_check is True:
+                permission_list.append('Application Settings')
+
             for rec in permission_list:
                 permission_obj = PersmissionDetails.objects.create(permission=rec)
                 staff_obj.permission.add(permission_obj)
@@ -703,10 +721,11 @@ def add_staff(request):
         'country': '',
         'residential_address': '',
         'status': True,
-        'system_settings_tuple': system_settings_tuple,
-        'user_settings_tuple': user_settings_tuple,
-        'university_settings_tuple': university_settings_tuple,
-        'academic_settings_tuple': academic_settings_tuple,
+        'system_settings_list': system_settings_list,
+        'user_settings_list': user_settings_list,
+        'university_settings_list': university_settings_list,
+        'academic_settings_list': academic_settings_list,
+        'module_settings_list': module_settings_list,
         'permission_list': []
     }
     return render(request, 'add_staff.html',{'country_list':country_list,'staff_dict':staff_dict})
@@ -724,10 +743,11 @@ def delete_staff(request):
 def edit_staff(request, staff_id=None):
     country_list = CountryDetails.objects.all()
     user_obj = User.objects.get(id=staff_id)
-    system_settings_tuple = ('Manage Language', 'Manage Currency', 'Manage Country', 'Manage Study Mode', 'Manage Study Level','Manage Study Type','Manage Student Mode', 'Manage Faculties', 'Link Faculty to User')
-    user_settings_tuple = ('Manage Group', 'Manage Users')
-    university_settings_tuple = ('Manage Universities', 'Manage University Partner', 'Link University to User', 'Manage Program', 'Manage Campus','Link Campus to User','Manage Department', 'Link Department to User')
-    academic_settings_tuple = ('Manage Year', 'Manage Semester', 'Manage Activity', 'Manage Calendar')
+    system_settings_list = ['Manage Language', 'Manage Currency', 'Manage Country', 'Manage Study Mode', 'Manage Study Level','Manage Study Type','Manage Student Mode', 'Manage Learning Centers', 'Manage Faculties', 'Link Faculty to User']
+    user_settings_list = ['Manage Group', 'Manage Users']
+    university_settings_list = ['Manage Universities', 'Manage University Partner', 'Link University to User', 'Manage Program', 'Manage Campus','Link Campus to User','Manage Department', 'Link Department to User']
+    academic_settings_list = ['Manage Year', 'Manage Semester', 'Manage Activity', 'Manage Calendar']
+    module_settings_list = ['Manage Applicant Documents','Approving Applicant Details']
     if request.method == 'POST':
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -738,6 +758,7 @@ def edit_staff(request, staff_id=None):
         residential_address = request.POST.get('address')
         status = request.POST.get('status')
         permission_list = request.POST.getlist('checks[]')
+
         if status == 'on':
             status = True
         else:
@@ -755,10 +776,11 @@ def edit_staff(request, staff_id=None):
                 'country_name': country_obj.country_name,
                 'residential_address': residential_address,
                 'status': status,
-                'system_settings_tuple': system_settings_tuple,
-                'user_settings_tuple': user_settings_tuple,
-                'university_settings_tuple': university_settings_tuple,
-                'academic_settings_tuple': academic_settings_tuple,
+                'system_settings_list': system_settings_list,
+                'user_settings_list': user_settings_list,
+                'university_settings_list': university_settings_list,
+                'academic_settings_list': academic_settings_list,
+                'module_settings_list': module_settings_list,
                 'permission_list': permission_list
             }
             if User.objects.filter(~Q(id=staff_id), email=email).exists():
@@ -780,6 +802,22 @@ def edit_staff(request, staff_id=None):
             user.username = email
             user.is_active = status
             user.save()
+
+            system_check = any(item in system_settings_list for item in permission_list)
+            user_check = any(item in user_settings_list for item in permission_list)
+            university_check = any(item in university_settings_list for item in permission_list)
+            academic_check = any(item in academic_settings_list for item in permission_list)
+            module_check = any(item in module_settings_list for item in permission_list)
+            if system_check is True:
+                permission_list.append('System Settings')
+            if user_check is True:
+                permission_list.append('User Settings')
+            if university_check is True:
+                permission_list.append('University Settings')
+            if academic_check is True:
+                permission_list.append('Academic Settings')
+            if module_check is True:
+                permission_list.append('Application Settings')
 
             if permission_list:
                 user.permission.clear()
@@ -803,11 +841,31 @@ def edit_staff(request, staff_id=None):
         'country_name': user_obj.address.country.country_name,
         'residential_address': user_obj.address.residential_address,
         'status': user_obj.is_active,
-        'system_settings_tuple':system_settings_tuple,
-        'user_settings_tuple':user_settings_tuple,
-        'university_settings_tuple':university_settings_tuple,
-        'academic_settings_tuple':academic_settings_tuple,
+        'system_settings_list': system_settings_list,
+        'user_settings_list': user_settings_list,
+        'university_settings_list': university_settings_list,
+        'academic_settings_list': academic_settings_list,
+        'module_settings_list': module_settings_list,
         'permission_list':user_obj.permission.values_list('permission',flat=True)
     }
     return render(request, "edit_staff.html", {'user_obj': user_obj,'country_list':country_list})
 
+
+def get_user_permission(request):
+    access_list = []
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            system_settings_list = ['Manage Language', 'Manage Currency', 'Manage Country', 'Manage Study Mode',
+                                    'Manage Study Level', 'Manage Study Type', 'Manage Student Mode','Manage Learning Centers',
+                                    'Manage Faculties', 'Link Faculty to User','System Settings']
+            user_settings_list = ['Manage Group', 'Manage Users','User Settings']
+            university_settings_list = ['Manage Universities', 'Manage University Partner', 'Link University to User',
+                                        'Manage Program', 'Manage Campus', 'Link Campus to User', 'Manage Department',
+                                        'Link Department to User','University Settings']
+            academic_settings_list = ['Manage Year', 'Manage Semester', 'Manage Activity', 'Manage Calendar','Academic Settings']
+            module_settings_list = ['Manage Applicant Documents', 'Approving Applicant Details','Application Settings']
+            access_list = system_settings_list + user_settings_list + university_settings_list + academic_settings_list + module_settings_list
+        else:
+            access_list = request.user.permission.values_list('permission', flat=True)
+    print("access_list>>>>>>>>>>>>>>>>>"+str(access_list))
+    return {'access_list': access_list}

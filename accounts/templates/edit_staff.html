@@ -283,19 +283,23 @@
                             </div>
                             <br>
 
-                            <div class="row" style="margin-left:100px;margin-right:190px;">
+                            <div class="row" style="margin-left:100px;margin-right:170px;">
 
                                 <ul class="tabs" style="font-size:18px;">
                                     <li class="active" rel="tab1">System Settings</li>
                                     <li rel="tab2">User Settings</li>
                                     <li rel="tab3">University Settings</li>
                                     <li rel="tab4">Academic Settings</li>
+                                    <li rel="tab5">Module Settings</li>
                                 </ul>
                                 <div class="tab_container" style="font-size:15px;">
                                     <h3 class="d_active tab_drawer_heading" rel="tab1">Tab 1</h3>
                                     <div id="tab1" class="tab_content">
-                                        {% for rec in user_obj.system_settings_tuple %}
+                                        {% for rec in user_obj.system_settings_list %}
                                             {% if forloop.counter == 6 %}
+                                                <br><br>
+                                            {% endif %}
+                                            {% if forloop.counter == 10 %}
                                                 <br><br>
                                             {% endif %}
                                             {% if rec in user_obj.permission_list %}
@@ -311,7 +315,7 @@
                                     <!-- #tab1 -->
                                     <h3 class="tab_drawer_heading" rel="tab2">Tab 2</h3>
                                     <div id="tab2" class="tab_content">
-                                        {% for rec in user_obj.user_settings_tuple %}
+                                        {% for rec in user_obj.user_settings_list %}
                                             {% if rec in user_obj.permission_list %}
                                                 <label class="checkbox-inline"><input type="checkbox" checked
                                                                                       value="{{ rec }}"
@@ -327,7 +331,7 @@
                                     <!-- #tab2 -->
                                     <h3 class="tab_drawer_heading" rel="tab3">Tab 3</h3>
                                     <div id="tab3" class="tab_content">
-                                        {% for rec in user_obj.university_settings_tuple %}
+                                        {% for rec in user_obj.university_settings_list %}
                                             {% if forloop.counter == 5 %}
                                                 <br><br>
                                             {% endif %}
@@ -346,18 +350,34 @@
                                     <!-- #tab3 -->
                                     <h3 class="tab_drawer_heading" rel="tab4">Tab 4</h3>
                                     <div id="tab4" class="tab_content">
-                                        {% for rec in user_obj.academic_settings_tuple %}
+                                        {% for rec in user_obj.academic_settings_list %}
                                             {% if rec in user_obj.permission_list %}
-                                                <label class="checkbox-inline"><input type="checkbox" checked value="{{ rec }}"
-                                                                                  name="checks[]">{{ rec }}</label>
+                                                <label class="checkbox-inline"><input type="checkbox" checked
+                                                                                      value="{{ rec }}"
+                                                                                      name="checks[]">{{ rec }}</label>
                                             {% else %}
                                                 <label class="checkbox-inline"><input type="checkbox" value="{{ rec }}"
-                                                                                  name="checks[]">{{ rec }}</label>
+                                                                                      name="checks[]">{{ rec }}</label>
                                             {% endif %}
 
                                         {% endfor %}
                                     </div>
                                     <!-- #tab4 -->
+                                    <h3 class="tab_drawer_heading" rel="tab5">Tab 5</h3>
+                                    <div id="tab5" class="tab_content">
+                                        {% for rec in user_obj.module_settings_list %}
+                                            {% if rec in user_obj.permission_list %}
+                                                <label class="checkbox-inline"><input type="checkbox" checked
+                                                                                      value="{{ rec }}"
+                                                                                      name="checks[]">{{ rec }}</label>
+                                            {% else %}
+                                                <label class="checkbox-inline"><input type="checkbox" value="{{ rec }}"
+                                                                                      name="checks[]">{{ rec }}</label>
+                                            {% endif %}
+
+                                        {% endfor %}
+                                    </div>
+                                    <!-- #tab5 -->
                                 </div>
                                 <!-- .tab_container -->
                             </div>

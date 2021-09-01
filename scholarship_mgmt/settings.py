@@ -76,6 +76,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 # 'accounts.views.AuthRequiredMiddleware',
+                'accounts.views.get_user_permission',
             ],
         },
     },

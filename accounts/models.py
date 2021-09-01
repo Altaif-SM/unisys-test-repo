@@ -15,6 +15,8 @@ class UserRole(BaseModel):
 class PersmissionDetails(models.Model):
     permission = models.CharField(max_length=100, blank=True, null=True)
 
+    def __str__(self):
+        return self.permission
 
 class User(AbstractUser):
     ID = 'id'
