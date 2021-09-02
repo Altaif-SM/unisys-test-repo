@@ -1081,13 +1081,13 @@ License: You must have a valid license purchased only from themeforest(the above
                         {#<li class="active"><a href="#a" data-toggle="tab">Dashboard</a></li>#}
                         {% if not user.is_student %}
                             {% if 'System Settings' in access_list %}
-                                <li id="setting_anch"><a href="#b" data-toggle="tab">Master Settings</a></li>
+                                <li id="setting_anch" ><a href="#b" data-toggle="tab">Master Settings</a></li>
                             {% elif 'User Settings' in access_list %}
-                                <li id="setting_anch"><a href="#b" data-toggle="tab">Master Settings</a></li>
+                                <li id="setting_anch" ><a href="#b" data-toggle="tab">Master Settings</a></li>
                             {% elif 'University Settings' in access_list %}
-                                <li id="setting_anch"><a href="#b" data-toggle="tab">Master Settings</a></li>
+                                <li id="setting_anch" ><a href="#b" data-toggle="tab">Master Settings</a></li>
                             {% elif 'Academic Settings' in access_list %}
-                                <li id="setting_anch"><a href="#b" data-toggle="tab">Master Settings</a></li>
+                                <li id="setting_anch" ><a href="#b" data-toggle="tab">Master Settings</a></li>
                             {% endif %}
 
                         {% endif %}
@@ -1341,6 +1341,18 @@ License: You must have a valid license purchased only from themeforest(the above
             $(".staff_settings_nav_item").addClass("open");
             $(".staff_settings_arrow").addClass("open");
             $('.staff_settings_sub_menu').css('display', 'block');
+
+        }
+    {% endif %}
+
+    {% if request.resolver_match.url_name == 'home'  %}
+        {
+            var element = document.getElementById("b");
+            element.classList.add("active");
+
+            var element = document.getElementById("setting_anch");
+            element.classList.add("active");
+
 
         }
     {% endif %}
