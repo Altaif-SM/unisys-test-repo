@@ -88,23 +88,20 @@
                     categrory: data[0],
                 },
                     {
-                        AttendanceStatus: "Interview1",
+                        AttendanceStatus: "Conditional Offer Letter",
                         categrory: data[1],
                     },
                     {
-                        AttendanceStatus: "Interview2",
+                        AttendanceStatus: " Full Offer Letter",
                         categrory: data[2],
                     },
                     {
-                        AttendanceStatus: "Psy Test",
+                        AttendanceStatus: "Incomplete",
                         categrory: data[3],
                     },
+
                     {
-                        AttendanceStatus: "Admin Approval",
-                        categrory: data[4],
-                    },
-                    {
-                        AttendanceStatus: "Sponsored",
+                        AttendanceStatus: "Reject",
                         categrory: data[5],
                     },
                     {
@@ -267,16 +264,16 @@
                         },
                         success: function (res) {
 
-{#                            if(res){#}
-{#                                data=JSON.parse(res);#}
-{#                                if(data['flag'] === 'date_over'){#}
-{#                                    alert('Current Academic Year is over.Please Add New Acadmic Year.');#}
-{#                                    $('.s-switch-id-id_registration_switch').removeClass('s-switch-on').addClass('s-switch-off');#}
-{#                                    $('.s-switch-id-id_submission_switch').removeClass('s-switch-on').addClass('s-switch-off');#}
-{#                                    return false;#}
-{#                                }#}
-{##}
-{#                            }#}
+                            {#                            if(res){#}
+                            {#                                data=JSON.parse(res);#}
+                            {#                                if(data['flag'] === 'date_over'){#}
+                            {#                                    alert('Current Academic Year is over.Please Add New Acadmic Year.');#}
+                            {#                                    $('.s-switch-id-id_registration_switch').removeClass('s-switch-on').addClass('s-switch-off');#}
+                            {#                                    $('.s-switch-id-id_submission_switch').removeClass('s-switch-on').addClass('s-switch-off');#}
+                            {#                                    return false;#}
+                            {#                                }#}
+                            {##}
+                            {#                            }#}
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
                             //alert('error!');
@@ -300,6 +297,9 @@
                 <a href="/">Home</a>
                 <i class="fa fa-angle-right"></i>
             </li>
+            <li>
+                <span> Dashboard </span>
+            </li>
 
         </ul>
     </div>
@@ -315,135 +315,107 @@
     <div class="portlet light">
 
         <div class="portlet-body">
-            <div class="form-body">
-                <h3 style="color: darkred; text-align: center;font-size: 20px"><b>Welcome <span style="color: #0c203a">-{{ user.first_name|default_if_none:"" }} {{ user.last_name|default_if_none:"" }} ({{ user.role.all.0.name }})</span></b></h3>
-            </div>
-        <br><br>
+            <div class="row">
 
-{##}
-{#            <div class="row">#}
-{##}
-{#                <div class="col-md-8 col-sm-8">#}
-{#                    <!-- BEGIN PORTLET-->#}
-{#                    <div class="portlet light ">#}
-{#                        <div class="portlet-title">#}
-{#                            <div class="caption">#}
-{#                                <i class="icon-bar-chart font-dark hide"></i>#}
-{#                                <span class="caption-subject font-dark bold uppercase">Statistics </span>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                        <div class="portlet-body">#}
-{#                            <div id="chartdiv" style="width: 52vw; height: 262px;"></div>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                    <!-- END PORTLET-->#}
-{#                </div>#}
-{##}
+                <div class="col-md-10 col-sm-10">
+                    <!-- BEGIN PORTLET-->
+                    <div class="portlet light ">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-bar-chart font-dark hide"></i>
+                                <span class="caption-subject font-dark bold uppercase">Statistics </span>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div id="chartdiv" style="width: 70vw; height: 262px;"></div>
+                        </div>
+                    </div>
+                    <!-- END PORTLET-->
+                </div>
+
+
+
+            </div><hr>
+
+            <div class="row">
 {#                {% if user.is_super_admin %}#}
-{#                    <div class="col-md-4 col-sm-4" style="float: right;">#}
-{#                        <!-- BEGIN PORTLET-->#}
-{#                        <div class="portlet light ">#}
-{#                            <div class="portlet-title">#}
-{#                                <div class="caption">#}
-{#                                    <i class="icon-bar-chart font-dark hide"></i>#}
-{#                                    <span class="caption-subject font-dark bold uppercase">Quick Controls </span>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                            <div class="portlet-body">#}
-{##}
-{##}
-{#                                <div class="row ">#}
-{#                                    <label class="col-md-3 control-label">Registration:</label>#}
-{#                                    <div class="col-md-offset-6" style="">#}
-{##}
-{#                                    {% if active_year %}#}
-{#                                        <input type="checkbox" id="id_registration_switch" >#}
-{#                                        {% else %}#}
-{#                                        <input type="checkbox" id="id_registration_switch"#}
-{#                                                {% if user.registration_switch == True %} checked {% endif %}/>#}
-{#                                        {% endif %}#}
-{##}
-{#                                    </div>#}
-{#                                </div>#}
-{#                                <br>#}
-{##}
-{#                                <div class="row">#}
-{#                                    <label class="col-md-3 control-label">Submission:</label>#}
-{#                                    <div class="col-md-offset-6">#}
-{#                                    {% if active_year %}#}
-{#                                        <input type="checkbox" id="id_submission_switch">#}
-{#                                        {% else %}#}
-{#                                        <input type="checkbox" id="id_submission_switch"#}
-{#                                                {% if user.submission_switch == True %} checked {% endif %}/>#}
-{#                                        {% endif %}#}
-{##}
-{#                                    </div>#}
-{#                                </div>#}
-{#                                <br>#}
-{##}
-{#                                <div class="row">#}
-{#                                    <label class="col-md-3 control-label">Psyc Test:</label>#}
-{#                                    <div class="col-md-offset-6">#}
-{#                                        <input type="checkbox" id="id_psyc_switch" {% if user.psyc_switch == True %}#}
-{#                                               checked {% endif %}/>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                                <br>#}
-{##}
-{#                                <div class="row">#}
-{#                                    <label class="col-md-3 control-label">Agreements:</label>#}
-{#                                    <div class="col-md-offset-6">#}
-{#                                        <input type="checkbox" id="id_agreements_switch"#}
-{#                                                {% if user.agreements_switch == True %} checked {% endif %}/>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                                <br>#}
-{##}
-{#                                <div class="row">#}
-{#                                    <label class="col-md-3 control-label">Semester:</label>#}
-{#                                    <div class="col-md-offset-6">#}
-{#                                        <input type="checkbox" id="id_semester_switch"#}
-{#                                                {% if user.semester_switch == True %} checked {% endif %}/>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                                <br>#}
-{#                                <div class="row">#}
-{#                                    <label class="col-md-3 control-label">Dev Program:</label>#}
-{#                                    <div class="col-md-offset-6">#}
-{#                                        <input type="checkbox" id="id_program_switch"#}
-{#                                                {% if user.program_switch == True %} checked {% endif %}/>#}
-{#                                    </div>#}
-{#                                </div>#}
-{##}
-{#                            </div>#}
-{#                        </div>#}
-{#                        <!-- END PORTLET-->#}
-{#                    </div>#}
+                    <div class="col-md-6 col-sm-6">
+                        <div class="portlet light ">
+                            <div class="portlet-body">
+                                <div id="chartdiv_three" style="width: 100%; height: 262px;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-sm-4" style="float: right;">
+                        <!-- BEGIN PORTLET-->
+                        <div class="portlet light ">
+                            <div class="portlet-title">
+                                <div class="caption">
+                                    <i class="icon-bar-chart font-dark hide"></i>
+                                    <span class="caption-subject font-dark bold uppercase">Quick Controls </span>
+                                </div>
+                            </div>
+                            <div class="portlet-body">
+
+
+                                <div class="row ">
+                                    <label class="col-md-3 control-label">Registration:</label>
+                                    <div class="col-md-offset-6" style="">
+
+                                        {% if active_year %}
+                                            <input type="checkbox" id="id_registration_switch">
+                                        {% else %}
+                                            <input type="checkbox" id="id_registration_switch"
+                                                    {% if user.registration_switch == True %} checked {% endif %}/>
+                                        {% endif %}
+
+                                    </div>
+                                </div>
+                                <br>
+
+                                <div class="row">
+                                    <label class="col-md-3 control-label">Submission:</label>
+                                    <div class="col-md-offset-6">
+                                        {% if active_year %}
+                                            <input type="checkbox" id="id_submission_switch">
+                                        {% else %}
+                                            <input type="checkbox" id="id_submission_switch"
+                                                    {% if user.submission_switch == True %} checked {% endif %}/>
+                                        {% endif %}
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- END PORTLET-->
+                    </div>
+
 {#                {% endif %}#}
-{##}
-{#            </div>#}
-{##}
+            </div>
+
 {#            {% if user.is_super_admin %}#}
-{#                <div class="row">#}
-{#                <div class="col-md-6 col-sm-6">#}
-{#                    <div class="portlet light ">#}
-{#                        <div class="portlet-body">#}
-{#                            <div id="chartdiv_two" style="width: 100%; height: 262px;"></div>#}
+                <div class="row">
+                    <div class="col-md-6 col-sm-6" style="display: none">
+                        <div class="portlet light ">
+                            <div class="portlet-body">
+                                <div id="chartdiv_two" style="width: 100%; height: 262px;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+{#                    <div class="col-md-6 col-sm-6">#}
+{#                        <div class="portlet light ">#}
+{#                            <div class="portlet-body">#}
+{#                                <div id="chartdiv_three" style="width: 100%; height: 262px;"></div>#}
+{#                            </div>#}
 {#                        </div>#}
 {#                    </div>#}
-{#                </div>#}
-{##}
-{##}
-{#                <div class="col-md-6 col-sm-6">#}
-{#                    <div class="portlet light ">#}
-{#                        <div class="portlet-body">#}
-{#                            <div id="chartdiv_three" style="width: 100%; height: 262px;"></div>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
 {#            {% endif %}#}
-{##}
-{#            </div>#}
+
+            </div>
 
 
         </div>

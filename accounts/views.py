@@ -35,25 +35,15 @@ def home(request):
 
         if request.user.is_super_admin():
 
-            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=False,
-                                                              second_interview_approval=False, psychometric_test=False,
-                                                              admin_approval=False, is_sponsored=False).count())
-            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
-                                                              second_interview_approval=False, psychometric_test=False,
-                                                              admin_approval=False, is_sponsored=False).count())
-            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
-                                                              second_interview_approval=True, psychometric_test=False,
-                                                              admin_approval=False, is_sponsored=False).count())
-            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
-                                                              second_interview_approval=True, psychometric_test=True,
-                                                              admin_approval=False, is_sponsored=False).count())
-            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,first_interview=True).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,first_interview_attend=True).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,incomplete=True).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,first_interview_approval=True,
                                                               second_interview_approval=True, psychometric_test=True,
                                                               admin_approval=True, is_sponsored=False).count())
-            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
-                                                              second_interview_approval=True, psychometric_test=True,
-                                                              admin_approval=True, is_sponsored=True).count())
-            raw_list.append(ApplicationDetails.objects.filter().count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,application_rejection=True).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_online_admission=True).count())
 
             scholarship_list = []
             country_list = []
@@ -68,8 +58,8 @@ def home(request):
 
             for country in CountryDetails.objects.all():
                 raw_dict = {}
-                raw_dict['country_name'] = country.country_name
-                raw_dict['country_count'] = ApplicationDetails.objects.filter(address__country=country).count()
+                raw_dict['country_name'] = country.country_name.capitalize()
+                raw_dict['country_count'] = ApplicationDetails.objects.filter(address__country=country,is_online_admission=True).count()
 
                 country_list.append(raw_dict)
 
@@ -137,25 +127,20 @@ def home(request):
                 country_list.append(raw_dict)
 
         else:
-            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=False,
-                                                              second_interview_approval=False, psychometric_test=False,
-                                                              admin_approval=False, is_sponsored=False).count())
-            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
-                                                              second_interview_approval=False, psychometric_test=False,
-                                                              admin_approval=False, is_sponsored=False).count())
-            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
-                                                              second_interview_approval=True, psychometric_test=False,
-                                                              admin_approval=False, is_sponsored=False).count())
-            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
-                                                              second_interview_approval=True, psychometric_test=True,
-                                                              admin_approval=False, is_sponsored=False).count())
-            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
+                                                              first_interview=True).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
+                                                              first_interview_attend=True).count())
+            raw_list.append(
+                ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True, incomplete=True).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
+                                                              first_interview_approval=True,
                                                               second_interview_approval=True, psychometric_test=True,
                                                               admin_approval=True, is_sponsored=False).count())
-            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
-                                                              second_interview_approval=True, psychometric_test=True,
-                                                              admin_approval=True, is_sponsored=True).count())
-            raw_list.append(ApplicationDetails.objects.filter().count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
+                                                              application_rejection=True).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_online_admission=True).count())
 
             scholarship_list = []
             country_list = []
@@ -170,8 +155,8 @@ def home(request):
 
             for country in CountryDetails.objects.all():
                 raw_dict = {}
-                raw_dict['country_name'] = country.country_name
-                raw_dict['country_count'] = ApplicationDetails.objects.filter(address__country=country).count()
+                raw_dict['country_name'] = country.country_name.capitalize()
+                raw_dict['country_count'] = ApplicationDetails.objects.filter(address__country=country,is_online_admission=True).count()
 
                 country_list.append(raw_dict)
 
