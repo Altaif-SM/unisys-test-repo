@@ -71,6 +71,71 @@ License: You must have a valid license purchased only from themeforest(the above
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.5.1/chosen.min.css">
     <link href="{% static 'css/tabs_accordion.css' %}" rel="stylesheet" type="text/css"/>
     {% block styleBlock %}
+         <style type="text/css">
+        .s-switch input[type='checkbox'] {
+            display: none
+        }
+
+        .s-switch {
+            width: 62px;
+            height: 32px;
+            z-index: 0;
+            margin: 0;
+            padding: 0;
+            appearance: none;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            border-radius: 16px;
+            -moz-border-radius: 16px;
+            -webkit-border-radius: 16px;
+        }
+
+        .s-switch:before {
+            content: ' ';
+            background: #D9534F !important;
+            position: absolute;
+            left: 1px;
+            top: 1px;
+            width: 60px;
+            height: 30px;
+            background: #FFFFFF;
+            z-index: 1;
+            border-radius: 16px;
+            -moz-border-radius: 16px;
+            -webkit-border-radius: 16px;
+        }
+
+        .s-switch:after {
+            content: ' ';
+            height: 29px;
+            width: 29px;
+            border-radius: 28px;
+            z-index: 2;
+            background: #FFFFFF;
+            position: absolute;
+            -webkit-transition-duration: 300ms;
+            transition-duration: 300ms;
+            top: 1px;
+            left: 3px;
+            -webkit-box-shadow: 0 2px 5px #999999;
+            box-shadow: 0 2px 5px #999999;
+        }
+
+        .s-switch-on:before {
+            background: #4DAF48 !important;
+        }
+
+        .s-switch-on:after {
+            left: 31px !important;
+        }
+
+        .s-switch-readonly, .s-switch-disabled {
+            opacity: 0.8;
+        }
+
+
+    </style>
     {% endblock %}
 </head>
 

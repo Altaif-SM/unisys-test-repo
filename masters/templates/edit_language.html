@@ -29,6 +29,69 @@
             padding-top: 10px;
         }
 
+        .s-switch input[type='checkbox'] {
+            display: none
+        }
+
+        .s-switch {
+            width: 62px;
+            height: 32px;
+            z-index: 0;
+            margin: 0;
+            padding: 0;
+            appearance: none;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            border-radius: 16px;
+            -moz-border-radius: 16px;
+            -webkit-border-radius: 16px;
+        }
+
+        .s-switch:before {
+            content: ' ';
+            background: #D9534F !important;
+            position: absolute;
+            left: 1px;
+            top: 1px;
+            width: 60px;
+            height: 30px;
+            background: #FFFFFF;
+            z-index: 1;
+            border-radius: 16px;
+            -moz-border-radius: 16px;
+            -webkit-border-radius: 16px;
+        }
+
+        .s-switch:after {
+            content: ' ';
+            height: 29px;
+            width: 29px;
+            border-radius: 28px;
+            z-index: 2;
+            background: #FFFFFF;
+            position: absolute;
+            -webkit-transition-duration: 300ms;
+            transition-duration: 300ms;
+            top: 1px;
+            left: 3px;
+            -webkit-box-shadow: 0 2px 5px #999999;
+            box-shadow: 0 2px 5px #999999;
+        }
+
+        .s-switch-on:before {
+            background: #4DAF48 !important;
+        }
+
+        .s-switch-on:after {
+            left: 31px !important;
+        }
+
+        .s-switch-readonly, .s-switch-disabled {
+            opacity: 0.8;
+        }
+
+
     </style>
 {% endblock %}
 
@@ -36,6 +99,11 @@
 
     <script>
         window.onload = function () {
+
+            $(document).ready(function () {
+                $("#status").Sswitch({});
+
+            });
 
 
             window.setTimeout(function () {
@@ -101,10 +169,11 @@
                             <div class="row">
                                 <div class="">
                                     <label class="col-md-2 control-label">Short Code:<span
-                                        style="color: red">*</span></label>
+                                            style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <input type="text" title="Enter Short Code" id="short_code"
-                                               value="{{ language_obj.short_code|default_if_none:"" }}" name="short_code"
+                                               value="{{ language_obj.short_code|default_if_none:"" }}"
+                                               name="short_code"
                                                class="form-control" required>
 
 
@@ -114,10 +183,11 @@
                                 <div class="">
                                     <label class="col-md-2 control-label">Language
                                         Name:<span
-                                        style="color: red">*</span></label>
+                                                style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <input type="text" title="Enter Language Name" id="language_name"
-                                               value="{{ language_obj.language_name|default_if_none:"" }}" name="language_name"
+                                               value="{{ language_obj.language_name|default_if_none:"" }}"
+                                               name="language_name"
                                                class="form-control" required>
 
                                     </div>
@@ -133,15 +203,16 @@
 
                                 <div class="">
                                     <label class="col-md-2 control-label">Language Direction:<span
-                                        style="color: red">*</span></label>
+                                            style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <select id='language_direction' title="Select Language Direction"
                                                 name="language_direction"
                                                 class="form-control" required>
                                             {% if language_obj.language_direction %}
-                                                 <option style="display: none" selected="selected" value="{{ language_obj.language_direction|default_if_none:"" }}"> {{ language_obj.language_direction|default_if_none:"" }}</option>
+                                                <option style="display: none" selected="selected"
+                                                        value="{{ language_obj.language_direction|default_if_none:"" }}"> {{ language_obj.language_direction|default_if_none:"" }}</option>
                                             {% else %}
-                                                 <option selected="selected" value=""> Please Select</option>
+                                                <option selected="selected" value=""> Please Select</option>
                                             {% endif %}
 
                                             <option value="left to right"> left to right</option>
@@ -151,16 +222,17 @@
                                     </div>
                                 </div>
 
+
                                 <div class="">
-                                    <label class="col-md-2 control-label">Status:</label>
+                                    <label class="col-md-2 control-label">Status:<span
+                                            style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         {% if language_obj.status == True %}
-                                        <input type="checkbox" checked data-toggle="toggle" data-onstyle="success"
-                                               data-offstyle="danger" id="status" name="status">
+                                            <input type="checkbox" id="status" name="status" checked>
                                         {% else %}
-                                            <input type="checkbox"  data-toggle="toggle" data-onstyle="success"
-                                               data-offstyle="danger" id="status" name="status">
+                                            <input type="checkbox" id="status" name="status">
                                         {% endif %}
+
                                     </div>
                                 </div>
 
