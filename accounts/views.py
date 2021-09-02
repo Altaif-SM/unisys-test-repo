@@ -867,5 +867,4 @@ def get_user_permission(request):
             access_list = system_settings_list + user_settings_list + university_settings_list + academic_settings_list + module_settings_list
         else:
             access_list = request.user.permission.values_list('permission', flat=True)
-    print("access_list>>>>>>>>>>>>>>>>>"+str(access_list))
     return {'access_list': access_list}
