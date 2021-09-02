@@ -177,10 +177,16 @@ def home(request):
         # return render(request, "template_admin_dashboard.html",
         #               {'user': user, 'raw_list': raw_list, 'scholarship_list': json.dumps(scholarship_list),'active_year':active_year,
         #                'country_list': json.dumps(country_list)})
+        if User.objects.all():
+            registration_flag = User.objects.filter()[0].registration_switch
+            submission_switch = User.objects.filter()[0].submission_switch
+        else:
+            registration_flag = False
+            submission_switch = False
 
         return render(request, "template_admin_dashboard.html",
                       {'user': user, 'raw_list': raw_list, 'scholarship_list': json.dumps(scholarship_list),
-                       'country_list': json.dumps(country_list)})
+                       'country_list': json.dumps(country_list),'registration_flag':registration_flag,'submission_switch':submission_switch})
 
 
 def template_signup(request):

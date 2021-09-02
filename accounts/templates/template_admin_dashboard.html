@@ -363,11 +363,10 @@
                                     <label class="col-md-3 control-label">Registration:</label>
                                     <div class="col-md-offset-6" style="">
 
-                                        {% if active_year %}
-                                            <input type="checkbox" id="id_registration_switch">
+                                        {% if registration_flag %}
+                                            <input type="checkbox" id="id_registration_switch" checked>
                                         {% else %}
-                                            <input type="checkbox" id="id_registration_switch"
-                                                    {% if user.registration_switch == True %} checked {% endif %}/>
+                                            <input type="checkbox" id="id_registration_switch">
                                         {% endif %}
 
                                     </div>
@@ -377,11 +376,10 @@
                                 <div class="row">
                                     <label class="col-md-3 control-label">Submission:</label>
                                     <div class="col-md-offset-6">
-                                        {% if active_year %}
-                                            <input type="checkbox" id="id_submission_switch">
+                                        {% if submission_switch %}
+                                            <input type="checkbox" id="id_submission_switch" checked>
                                         {% else %}
-                                            <input type="checkbox" id="id_submission_switch"
-                                                    {% if user.submission_switch == True %} checked {% endif %}/>
+                                            <input type="checkbox" id="id_submission_switch">
                                         {% endif %}
 
                                     </div>
