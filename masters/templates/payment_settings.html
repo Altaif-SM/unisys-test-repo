@@ -1,0 +1,320 @@
+{% extends "template_base_page.html" %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+
+            $(document).ready(function () {
+                {#$("#father_nationality").chosen();#}
+
+                {#$("#mother_nationality").chosen();#}
+
+                $(document).on("click", ".delete", function (e) {
+
+                    $('#id_delete_staff_model').modal();
+                    var parent_id = $(this).closest('tr').attr('id');
+                    var mapping_id = $('#' + parent_id + ' #mapping_id').val();
+                    $("#mapping_delete_id").val(mapping_id)
+
+                    {#var url = '/masters/delete_semester/';#}
+                    {#delete_semester_info(url, language_id)#}
+                })
+
+
+                $("#department_staff_mapping").submit(function (e) {
+
+                    var department = $("#department").val()
+                    var staff = $("#staff").val()
+
+                    if (department == '') {
+                        $("#department_error").show();
+
+                        return false;
+                    } else if (staff == '') {
+                        $("#department_error").hide();
+                        $("#staff_error").show();
+                        return false;
+                    }
+
+                });
+
+
+                $("#university").chosen();
+                $("#university_partner_id").chosen();
+                $("#staff").chosen();
+                var is_sponsored = "{{ application_obj.is_sponsored }}";
+                if (is_sponsored === 'False' || is_sponsored === '') {
+                    $(".sponsored").prop("disabled", true);
+                }
+
+                $('#save').click(function () {
+                    var count = $(".item:last").attr('id').split('_')[1];
+                    $('#sibling_count').val(count);
+
+
+                });
+
+                $('input[type="radio"]').on('change', function () {
+                    var payment = $('input[name="payment"]:checked').val();
+                    if (payment === 'Yes') {
+                        $("#amount").prop('disabled', false);
+                        $("#currency").prop('disabled', false);
+                    } else {
+                        $("#amount").prop('disabled', true);
+                        $("#currency").prop('disabled', true);
+
+                    }
+                })
+
+
+                {% if sibling_obj_rec %}
+                    var count = $('.item').length;
+                {% else %}
+                    var count = 1;
+                {% endif %}
+
+                $(".add_row").click(function () {
+                    count = count + 1;
+                    var row = '<div class="row item" id="item_' + count + '" style="margin-top:15px"><div class=""><div class=""><div class="col-md-1"><a href="javascript:;" class="delete btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div><div class=""><label class="col-md-1 control-label">Name:</label><div class="col-md-2"><input type="text" title="Enter Sibling " id="sibling_' + count + '" name="sibling_' + count + '"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Gender:</label><div class="col-md-2"><input type="text" title="Enter age" id="age_' + count + '"name="age_' + count + '"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Status:</label><div class="col-md-2"> <select  title="Enter status" id="status_' + count + '" name="status_' + count + '" class="form-control"><option value="">Please Select</option><option value="Employed">Employed</option><option value="Unemployed">Unemployed</option><option value="Studying">Studying</option><option value="Deceased">Deceased</option></select><input type="text" hidden id="sibling_id_' + count + '" name="sibling_id_' + count + '"></div></div></div>'
+                    $(row).removeAttr().hide().insertAfter(".item:last").slideDown(300);
+                    {#count++;#}
+                });
+
+                /*
+
+                $(document).on("click", ".delete", function () {
+                    $(this).parents('.item').remove();
+                    $(this).parents('.item').next('br').remove();
+                    ;
+                });*/
+
+
+                $(document).on("click", ".remove_doc", function (e) {
+                    var parent_id = $(this).closest('div').attr('id');
+                    $('#' + parent_id + ' .emp').val('');
+                });
+
+                $(document).on("click", ".file", function (e) {
+                    $(this).parent('.form-control').next('.file_type').trigger('click');
+                });
+
+                $('.file_type').change(function (evt) {
+
+                    var files = !!this.files ? this.files : [];
+                    if (!files.length || !window.FileReader) return;
+                    var fileExtension = ['pdf'];
+                    if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                        alert("Only formats are allowed : " + fileExtension.join(', '));
+                        $(this).val('');
+                        return false;
+                    }
+
+                    var file_name = $(this).val().split('\\')[2];
+                    $(this).prev().children().children('.file_value').val(file_name);
+                });
+
+            });
+
+
+            $('#sample_1').dataTable().fnDestroy();
+            $('#sample_1').dataTable({
+                "aoColumnDefs": [
+                    {'bSortable': false}
+                ]
+            });
+        }
+
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'accounts:home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> Module Settings </span>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> Application Settings</span>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span>Payment Setting </span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase"> Payment Setting</span>
+            </div>
+        </div>
+
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form action="{% url 'masters:payment_settings' %}"
+                      id="department_staff_mapping"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" id="payment_id" name="payment_id" {{ payment_obj.id }}>
+                    <div class="form-body">
+
+                        {% if  payment_obj.is_payment == True %}
+                            <div class="row" style="margin-left:8%">
+                                <span style="padding:inherit">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Payment:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;
+                                <input class="current" type="radio" checked name="payment" id="payment"
+                                       value="Yes">
+                                <span style="padding:inherit">Yes</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <input class="current" type="radio" name="payment" value="No"
+                                       id="payment">
+                                <span style="padding:inherit">No</span>
+                            </div>
+                        {% else %}
+                             <div class="row" style="margin-left:8%">
+                            <span style="padding:inherit">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Payment:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;
+                            <input class="current" type="radio"  name="payment" id="payment"
+                                   value="Yes">
+                            <span style="padding:inherit">Yes</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <input class="current" type="radio" name="payment" value="No"
+                                   id="payment" checked>
+                            <span style="padding:inherit">No</span>
+                        </div>
+                        {% endif %}
+
+                        <br>
+
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Amount:
+
+                                </label>
+                                <div class="col-md-2">
+                                    <input type="text" name="amount" id="amount"
+                                           value="{{ payment_obj.amount|default_if_none:"" }}" class="form-control"
+                                           required>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Currency:
+
+                                </label>
+                                <div class="col-md-2">
+                                    <input type="text" name="currency" id="currency"
+                                           value="{{ payment_obj.currency|default_if_none:"" }}" class="form-control"
+                                           required>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <br>
+
+                        <div class="row">
+                            <div class="">
+                                <div class="col-md-4" style="margin-left: 20%">
+                                    <button style="background-color: #3598dc;" type="submit" class="btn green"
+                                            id="save">
+                                        Save
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+    </div>
+
+    <div id="id_delete_staff_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{% url 'masters:delete_university_user' %}"
+                      id="form_sample_1"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" id="mapping_delete_id" name="mapping_delete_id">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h4 class="modal-title" style="color: #2a015e; text-align: center"><b>Delete Confirmation</b>
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <p> Are you sure, you want to delete university to user linking? </p>
+                        <p> After delete you will not be able to modify the delete university to user linking. </p>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancel_model" data-dismiss="modal" class="btn dark btn-outline">
+                            Cancel
+                        </button>
+                        <button type="submit" id="delete_language" class="btn red">Confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

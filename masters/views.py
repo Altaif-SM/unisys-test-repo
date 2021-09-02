@@ -2962,3 +2962,25 @@ def delete_group(request):
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/group_settings/')
 
+
+def payment_settings(request):
+    if request.method == 'POST':
+        payment_id = request.POST.get('payment_id')
+        payment = request.POST.get('payment')
+        amount = request.POST.get('amount')
+        currency = request.POST.get('currency')
+        if payment == 'Yes':
+            payment = True
+        else:
+            payment = False
+        if payment_id:
+            PaymentDetails.objects.filter(id=payment_id).update(amount = amount,currency = currency,is_payment = payment)
+        else:
+            PaymentDetails.objects.create(amount=amount, currency=currency,is_payment = payment)
+        messages.success(request, "Record saved.")
+        return redirect('/masters/payment_settings/')
+    try:
+        payment_obj = PaymentDetails.objects.get()
+    except:
+        payment_obj = None
+    return render(request, 'payment_settings.html',{'payment_obj':payment_obj})

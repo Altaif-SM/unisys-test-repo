@@ -664,3 +664,12 @@ class GroupDetails(BaseModel):
 
     def __str__(self):
         return self.group_name
+
+
+
+class PaymentDetails(BaseModel):
+    amount = models.CharField(max_length=255, blank=True, null=True)
+    is_payment = models.BooleanField(default=True)
+    currency = models.CharField(max_length=255, blank=True, null=True)
+    class Meta:
+        ordering = ('-id',)

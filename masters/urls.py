@@ -233,6 +233,8 @@ urlpatterns = [
     path('update_group/', views.update_group, name='update_group'),
     path('delete_group/', views.delete_group, name='delete_group'),
 
+    path('payment_settings/', views.payment_settings, name='payment_settings'),
+
 
 
 ]
