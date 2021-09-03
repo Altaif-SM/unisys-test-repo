@@ -74,21 +74,28 @@
                     $(".sponsored").prop("disabled", true);
                 }
 
-                $('#save').click(function () {
-                    var count = $(".item:last").attr('id').split('_')[1];
-                    $('#sibling_count').val(count);
 
-
-                });
-
+                var payment = "{{ payment_obj.is_payment }}"
+                if(payment == 'False'){
+                    $("#amount").prop('disabled', true);
+                    $("#currency").prop('disabled', true);
+                }
                 $('input[type="radio"]').on('change', function () {
                     var payment = $('input[name="payment"]:checked').val();
                     if (payment === 'Yes') {
+
                         $("#amount").prop('disabled', false);
                         $("#currency").prop('disabled', false);
+
+                        var bla = $('#amount').val();
+                        console.log("amount" + bla);
+
+
                     } else {
                         $("#amount").prop('disabled', true);
                         $("#currency").prop('disabled', true);
+                        $("#amount").val('');
+                        $("#currency").val('');
 
                     }
                 })
@@ -207,7 +214,7 @@
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <input type="hidden" id="payment_id" name="payment_id" {{ payment_obj.id }}>
+                    <input type="hidden" id="payment_id" name="payment_id" value="{{ payment_obj.id }}">
                     <div class="form-body">
 
                         {% if  payment_obj.is_payment == True %}
@@ -221,15 +228,15 @@
                                 <span style="padding:inherit">No</span>
                             </div>
                         {% else %}
-                             <div class="row" style="margin-left:8%">
-                            <span style="padding:inherit">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Payment:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;
-                            <input class="current" type="radio"  name="payment" id="payment"
-                                   value="Yes">
-                            <span style="padding:inherit">Yes</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <input class="current" type="radio" name="payment" value="No"
-                                   id="payment" checked>
-                            <span style="padding:inherit">No</span>
-                        </div>
+                            <div class="row" style="margin-left:8%">
+                                <span style="padding:inherit">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Payment:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;
+                                <input class="current" type="radio" name="payment" id="payment"
+                                       value="Yes">
+                                <span style="padding:inherit">Yes</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <input class="current" type="radio" name="payment" value="No"
+                                       id="payment" checked>
+                                <span style="padding:inherit">No</span>
+                            </div>
                         {% endif %}
 
                         <br>
