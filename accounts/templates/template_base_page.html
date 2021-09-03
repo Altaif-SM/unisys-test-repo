@@ -678,12 +678,30 @@ License: You must have a valid license purchased only from themeforest(the above
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
 
 
+
+
                             {% if 'student.can_view_student_personal_info' in perms %}
                                 <li class="nav-item " id="personal_info">
                                     <a href="{% url 'student:applicant_personal_info' %}" class="nav-link nav-toggle">
                                         <i class="fa fa-id-card"></i>
                                         <span class="title">Personal Info</span>
                                         {% if user.get_student_application.personal_info_flag %}
+                                            <span class="title glyphicon glyphicon-ok"
+                                                  style="color: #41bc2c;font-size: 16px"></span>
+                                        {% else %}
+                                            <span class="title glyphicon glyphicon-exclamation-sign"
+                                                  style="color: #dc302b; font-size: 16px"></span>{% endif %}
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                        {% if 'student.can_view_student_personal_info' in perms %}
+                                <li class="nav-item " id="personal_info">
+                                    <a href="{% url 'student:applicant_intake_info' %}" class="nav-link nav-toggle">
+                                        <i class="fa fa-tasks"></i>
+                                        <span class="title">Intake Info</span>
+                                        {% if user.get_student_application.intake_flag %}
                                             <span class="title glyphicon glyphicon-ok"
                                                   style="color: #41bc2c;font-size: 16px"></span>
                                         {% else %}
@@ -801,7 +819,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </li>
                                 {% endif %}
 
-                                 {% if 'Approving Applicant Details' in access_list %}
+                                 {% if 'Payment Settings' in access_list %}
                                     <li class="nav-item ">
                                         <a href="{% url 'masters:payment_settings' %}"
                                            class="nav-link ">Payment Settings </a>
@@ -1308,7 +1326,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <script type="text/javascript">
 
 
-    {% if request.resolver_match.url_name == 'student_home' or request.resolver_match.url_name == 'applicant_personal_info' or request.resolver_match.url_name == 'applicant_academic_english_qualification' or request.resolver_match.url_name == 'applicant_curriculum_experience_info' or request.resolver_match.url_name == 'applicant_additional_information' or request.resolver_match.url_name == 'applicant_attachment_submission'  or request.resolver_match.url_name == 'applicant_declaration' or request.resolver_match.url_name == 'my_application'  or request.resolver_match.url_name == 'applicant_employement_history_info'   %}
+    {% if request.resolver_match.url_name == 'student_home' or request.resolver_match.url_name == 'applicant_personal_info' or request.resolver_match.url_name == 'applicant_academic_english_qualification' or request.resolver_match.url_name == 'applicant_curriculum_experience_info' or request.resolver_match.url_name == 'applicant_additional_information' or request.resolver_match.url_name == 'applicant_attachment_submission'  or request.resolver_match.url_name == 'applicant_declaration' or request.resolver_match.url_name == 'my_application'  or request.resolver_match.url_name == 'applicant_employement_history_info'  or request.resolver_match.url_name == 'applicant_intake_info'  %}
         {
             var element = document.getElementById("c");
             element.classList.add("active");

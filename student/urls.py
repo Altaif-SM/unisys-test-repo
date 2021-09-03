@@ -108,7 +108,13 @@ urlpatterns = [
                   path('applicant_declaration/', views.applicant_declaration, name='applicant_declaration'),
                   path('application_offer_letter/', views.application_offer_letter, name='application_offer_letter'),
 
+
                   path('application_offer_letter_pdf/<int:app_id>/', views.application_offer_letter_pdf,
                        name='application_offer_letter_pdf'),
+
+                  path('applicant_intake_info/', views.applicant_intake_info, name='applicant_intake_info'),
+                  path('get_learning_centre_from_country/', views.get_learning_centre_from_country, name='get_learning_centre_from_country'),
+                  path('get_university_from_type/', views.get_university_from_type, name='get_university_from_type'),
+                  path('save_update_applicant_intake_info/', views.save_update_applicant_intake_info, name='save_update_applicant_intake_info'),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

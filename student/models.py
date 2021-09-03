@@ -219,10 +219,19 @@ class ApplicationDetails(BaseModel):
     second_interview_venue = models.CharField(max_length=500, blank=True, null=True)
 
     personal_info_flag = models.BooleanField(default=True)
+    intake_flag = models.BooleanField(default=False)
 
     is_sponsored = models.BooleanField(default=False)
     is_online_admission = models.BooleanField(default=False)
-
+    university = models.ForeignKey('masters.UniversityDetails', blank=True, null=True,
+                                 related_name='applicant_university_rel', on_delete=models.PROTECT)
+    learning_country = models.ForeignKey('masters.CountryDetails', blank=True, null=True,
+                                               related_name='learing_country_rel',
+                                               on_delete=models.PROTECT)
+    learning_centre = models.ForeignKey('masters.LearningCentersDetails', blank=True, null=True, related_name='applicant_learning_centre_rel',
+                                on_delete=models.PROTECT)
+    academic_year = models.ForeignKey('masters.YearDetails', blank=True, null=True, related_name='applicant_academic_year_rel',
+                             on_delete=models.PROTECT)
     # family_info_flag = models.BooleanField(default=False)
     # mother_sibling_info_flag = models.BooleanField(default=False)
 

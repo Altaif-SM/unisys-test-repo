@@ -1,0 +1,390 @@
+{% extends "template_base_page.html" %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        .custom-file-upload {
+            border: 1px solid #ccc;
+            display: inline-block;
+            padding: 6px 12px;
+            cursor: pointer;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+
+        {% comment %} hr {
+     display: block;
+     margin-top: 0.5em;
+     margin-bottom: 0.5em;
+     margin-left: auto;
+     margin-right: auto;
+     border-style: inset;
+     border-width: 0.5px;
+ }{% endcomment %}
+
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+
+
+            $(document).ready(function () {
+
+
+                $(document).on("click", "#country", function (e) {
+                    var country_id = $(this).val();
+                    var url = '/student/get_learning_centre_from_country/';
+                    get_learning_center_from_country(url, country_id)
+                })
+                $('input[type="radio"]').on('change', function () {
+                    var university_type = $('input[name="university_type"]:checked').val();
+                    var url = '/student/get_university_from_type/';
+                    get_university_from_university_type(url, university_type)
+
+
+                })
+
+
+
+
+
+                {% if user.get_application %}
+                    {% if user.get_application.is_submitted %}
+                        $('.submitted').prop('readonly', 'True')
+                    {% endif %}
+                {% endif %}
+
+
+
+
+            });
+
+            function get_learning_center_from_country(url, country_id) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        country_id: country_id,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data) {
+
+                        $('#learning_centre').empty();
+                        $('#learning_centre').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#learning_centre').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['learning_centre_name'] + '</option>')
+                        }
+                    },
+                    error: function (xhr, msg, err) {
+                        alert(xhr.responseJSON.error);
+                    }
+                });
+            }
+
+            function get_university_from_university_type(url, university_type) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        university_type: university_type,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data) {
+
+                        $('#university').empty();
+                        $('#university').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#university').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['university_name'] + '</option>')
+                        }
+                    },
+                    error: function (xhr, msg, err) {
+                        alert(xhr.responseJSON.error);
+                    }
+                });
+            }
+
+
+            $('#sample_1').dataTable().fnDestroy();
+            $('#sample_1').dataTable({
+                "aoColumnDefs": [
+                    {'bSortable': false}
+                ]
+            });
+        }
+
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'student:student_home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span> Intake Info </span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase"> Intake Info</span>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form action="{% url 'student:save_update_applicant_intake_info' %}"
+                      id="form_save"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                <input type="hidden" value="{{ application_obj.id }}" id="application_id" name="application_id">
+
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">University Type: <span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    <input class="current" type="radio" checked name="university_type"
+                                           id="university_main"
+                                           value="Main">
+                                    <span style="padding:inherit">Main</span>&nbsp;&nbsp;
+                                    <input class="current" type="radio" name="university_type" value="Partner"
+                                           id="university_partner">
+                                    <span style="padding:inherit">Partner</span>
+                                </div>
+                            </div>
+                            <div class="">
+                                <label class="col-md-2 control-label">University: <span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    <select id='university' title="Select University" name="university"
+                                            class="form-control value_check" required>
+
+                                        {% if application_obj.university %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.university.id }}"
+                                            >{{ application_obj.university.university_name|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option disabled selected="selected" value="">Please
+                                                Select
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in university_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.university_name|default_if_none:"" }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+                        <div class="row">
+                            <input hidden id="value_check" name="value_check">
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Academic Year: <span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    <select id='year' title="Select Year" name="year"
+                                            class="form-control value_check" required>
+
+                                        {% if application_obj.academic_year %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.year.id }}"
+                                            >{{ application_obj.academic_year.year_name|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option disabled selected="selected" value="">Please
+                                                Select
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in year_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.year_name|default_if_none:"" }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Intake/Semester: <span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    <select id='semester' title="Select Semester" name="semester"
+                                            class="form-control value_check" required>
+
+                                        {% if application_obj.semester %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.semester.id }}"
+                                            >{{ application_obj.semester.semester_name|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option disabled selected="selected" value="">Please
+                                                Select
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in semester_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.semester_name|default_if_none:"" }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+                        <br>
+
+                        <hr>
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-settings font-red"></i>
+                                <span class="caption-subject font-red sbold uppercase"> LEARNING CENTRE
+INFO</span>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Country: <span style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    <select id='country' title="Select Country" name="country"
+                                            class="form-control value_check" data-live-search="true" required>
+
+                                        {% if application_obj.learning_country %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.learning_country.id }}"
+                                                    value="">{{ application_obj.learning_country.country_name|title }}</option>
+                                        {% else %}
+                                            <option disabled selected="selected" id="" value="">Please
+                                                Select
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in country_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Learning Centre: <span style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    <select id='learning_centre' title="Select Learning Centre" name="learning_centre"
+                                            class="form-control value_check" data-live-search="true" required>
+
+                                        {% if application_obj.learning_centre %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.learning_centre.id }}"
+                                                    value="">{{ application_obj.learning_centre.lc_name|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option disabled selected="selected" id="" value="">Please
+                                                Select
+                                            </option>
+                                        {% endif %}
+
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+                        <hr>
+
+{#                        <div class="row">#}
+{#                            <div class="col-md-offset-10 col-md12">#}
+                                {#                                <button type="submit" class="btn green" id="save" style="float: left" >Save</button>#}
+{#                                <button type="submit" class="btn green" id="next" style="float: left"#}
+{#                                        {% comment %}onclick="window.location='{% url "student:applicant_family_info" %}'"{% endcomment %}>#}
+{#                                    Save/Next#}
+{#                                </button>#}
+{#                            </div>#}
+{#                        </div>#}
+
+
+                    <div class="row">
+                        <div class="col-md-offset-5 col-md-7">
+                            <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                                    onclick="window.location='{% url "student:applicant_personal_info" %}'">Back
+                            </button>
+
+{#                            {% if application_obj.application_id %}#}
+                                <button type="submit" class="btn green" id="save">Save/Next</button>
+{#                            {% endif %}#}
+                            {% comment %}
+                                    <button type="button" class="btn blue" id="next"
+                                            onclick="window.location='{% url "student:applicant_academic_english_qualification" %}'">
+                                        Next
+                                    </button>{% endcomment %}
+                        </div>
+                    </div>
+
+
+
+
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -201,7 +201,7 @@
                         <tr id="item{{ forloop.counter }}" class="item">
                             <td style="display: none"><input id="learning_centers_id" value="{{ rec.id }}"></td>
                             <td>{{ rec.lc_name|default_if_none:"" }}</td>
-                            <td>{{ rec.country.country_name|default_if_none:"" }}</td>
+                            <td>{{ rec.country.country_name|title }}</td>
                             <td>{{ rec.lc_email|default_if_none:"" }}</td>
                             <td>{{ rec.lc_tel|default_if_none:"" }}</td>
                         <td>{{ rec.lc_address|default_if_none:"" }}</td>

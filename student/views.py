@@ -76,6 +76,7 @@ def applicant_personal_info(request):
     student_recs = StudentDetails.objects.filter(user__is_active = True)
     agent_recs = AgentDetails.objects.filter()
 
+
     application_obj = ''
 
     if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
@@ -123,48 +124,6 @@ def save_update_applicant_personal_info(request):
                         residential_address=request.POST['permanent_residential_address'],
                         street=request.POST['permanent_street'])
 
-                    address_obj = AddressDetails.objects.get(id=application_obj.address.id)
-
-                    # if same_as:
-                    #     try:
-                    #         if not address_obj.is_same:
-                    #             address_id = application_obj.permanent_address.id
-                    #             application_obj.permanent_address = None
-                    #             application_obj.save()
-                    #             AddressDetails.objects.filter(id=address_id).delete()
-                    #
-                    #     except Exception as e:
-                    #         pass
-                    #
-                    #     address_obj.is_same = True
-                    #     application_obj.permanent_address = address_obj
-                    #     address_obj.save()
-                    #     redirect_flag = True
-                    # else:
-                    #     if application_obj.permanent_address.is_same:
-                    #         address_obj.is_same = False
-                    #         address_obj.save()
-                    #
-                    #         permanent_address_obj = AddressDetails.objects.create(
-                    #             country_id=request.POST['permanent_country'],
-                    #             street=request.POST['permanent_street'],
-                    #             state=request.POST['permanent_state'],
-                    #             district=request.POST['permanent_district'],
-                    #             post_code=request.POST['permanent_post_code'],
-                    #             sub_locality=request.POST['permanent_sub_locality'],
-                    #             residential_address=request.POST['permanent_residential_address'])
-                    #
-                    #         application_obj.permanent_address = permanent_address_obj
-                    #
-                    #     else:
-                    #         AddressDetails.objects.filter(id=application_obj.permanent_address.id).update(
-                    #             country_id=request.POST['permanent_country'],
-                    #             street=request.POST['permanent_street'],
-                    #             state=request.POST['permanent_state'],
-                    #             district=request.POST['permanent_district'],
-                    #             post_code=request.POST['permanent_post_code'],
-                    #             sub_locality=request.POST['permanent_sub_locality'],
-                    #             residential_address=request.POST['permanent_residential_address'])
                     application_obj.save()
 
                     redirect_flag = True
@@ -188,25 +147,7 @@ def save_update_applicant_personal_info(request):
                                                                     residential_address=request.POST['permanent_residential_address'],
                                                                     street=request.POST['permanent_street'])
 
-
-                        # if same_as:
-                        #     address_obj.is_same = True
-                        #     address_obj.save()
-                        #     application_obj.permanent_address = address_obj
-                        # else:
-                        #     permanent_address_obj = AddressDetails.objects.create(
-                        #         country_id=request.POST['permanent_country'],
-                        #         street=request.POST['permanent_street'],
-                        #         state=request.POST['permanent_state'],
-                        #         district=request.POST['permanent_district'],
-                        #         post_code=request.POST['permanent_post_code'],
-                        #         sub_locality=request.POST['permanent_sub_locality'],
-                        #         residential_address=request.POST['permanent_residential_address'])
-                        #
-                        #     application_obj.permanent_address = permanent_address_obj
-
                         application_id = get_application_id(application_obj)
-
                         application_obj.application_id = application_id
                         application_obj.address = address_obj
                         application_obj.save()
@@ -216,20 +157,6 @@ def save_update_applicant_personal_info(request):
                         messages.warning(request, "Form have some error" + str(e))
 
                 try:
-                    # if passport_photo:
-                    #     object_path = media_path(application_obj)
-                    #
-                    #     passport_photo_name = str(passport_photo)
-                    #     handle_uploaded_file(str(object_path) + '/' + passport_photo_name, passport_photo)
-                    #     application_obj.passport_image = passport_photo_name
-
-
-                    # if pic:
-                    #     object_path = media_path(application_obj)
-                    #
-                    #     photo = str(pic)
-                    #     handle_uploaded_file(str(object_path) + '/' + photo, pic)
-                    #     application_obj.image = photo
 
                     application_obj.save()
 
@@ -241,7 +168,7 @@ def save_update_applicant_personal_info(request):
 
     if redirect_flag:
         messages.success(request, "Record saved")
-        return redirect('/student/applicant_academic_english_qualification/')
+        return redirect('/student/applicant_intake_info/')
     else:
         messages.warning(request, "Please fill proper form")
         return redirect('/student/applicant_personal_info/')
@@ -436,9 +363,8 @@ def applicant_academic_english_qualification(request):
     try:
         application_obj = request.user.get_application
     except Exception as e :
-        messages.warning(request, "Please fill the personal details first...")
+        messages.warning(request, "Please fill the personal details first.")
         return redirect('/student/applicant_personal_info/')
-
 
     try:
         if request.user.get_application:
@@ -2230,9 +2156,9 @@ def applicant_additional_information(request):
     sibling_obj = ''
 
     try:
-         request.user.get_application
-    except Exception as e:
-        messages.warning(request, "Please fill the personal details first...")
+        application_obj = request.user.get_application
+    except Exception as e :
+        messages.warning(request, "Please fill the personal details first.")
         return redirect('/student/applicant_personal_info/')
 
     if AdditionInformationDetails.objects.filter(application_id=request.user.get_application).exists():
@@ -2315,9 +2241,9 @@ def save_update_applicant_additional_info(request):
 def applicant_attachment_submission(request):
 
     try:
-       request.user.get_application
-    except Exception as e:
-        messages.warning(request, "Please fill the personal details first...")
+        application_obj = request.user.get_application
+    except Exception as e :
+        messages.warning(request, "Please fill the personal details first.")
         return redirect('/student/applicant_personal_info/')
 
     try:
@@ -2390,9 +2316,9 @@ def save_attachement_submission(request):
 def applicant_declaration(request):
     application_obj = ''
     try:
-         request.user.get_application
-    except Exception as e:
-        messages.warning(request, "Please fill the personal details first...")
+        application_obj = request.user.get_application
+    except Exception as e :
+        messages.warning(request, "Please fill the personal details first.")
         return redirect('/student/applicant_personal_info/')
     try:
         if request.user.get_application:
@@ -2449,3 +2375,88 @@ def application_offer_letter(request):
         return redirect("/")
 
 
+
+@student_login_required
+def applicant_intake_info(request):
+    country_recs = CountryDetails.objects.all()
+    religion_recs = ReligionDetails.objects.all()
+    student_recs = StudentDetails.objects.filter(user__is_active = True)
+    year_recs = YearDetails.objects.all()
+    semester_recs = SemesterDetails.objects.all()
+    learning_centre_recs = LearningCentersDetails.objects.all()
+    try:
+        application_obj = request.user.get_application
+    except Exception as e :
+        messages.warning(request, "Please fill the personal details first.")
+        return redirect('/student/applicant_personal_info/')
+
+    agent_recs = AgentDetails.objects.filter()
+
+    application_obj = ''
+
+    if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
+        application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
+    if application_obj:
+        if application_obj.university:
+            if application_obj.university.is_partner_university == True:
+                university_recs = UniversityDetails.objects.filter(is_delete=False,
+                                                                   is_partner_university=True).order_by('-id')
+            else:
+                university_recs = UniversityDetails.objects.filter(is_delete=False,
+                                                                   is_partner_university=False).order_by('-id')
+        else:
+            university_recs = UniversityDetails.objects.filter(is_delete=False,
+                                                               is_partner_university=False).order_by('-id')
+
+    else:
+        university_recs = UniversityDetails.objects.filter(is_delete=False, is_partner_university=False).order_by('-id')
+
+    return render(request, 'intake_details.html',{'country_recs': country_recs, 'religion_recs': religion_recs, 'application_obj': application_obj,'student_recs':student_recs,'agent_recs':agent_recs,'year_recs':year_recs,'semester_recs':semester_recs,
+                                                  'learning_centre_recs':learning_centre_recs,'university_recs':university_recs})
+
+
+def get_learning_centre_from_country(request):
+    finalDict = []
+    country_id = request.POST.get('country_id', None)
+    learning_centre_recs = LearningCentersDetails.objects.filter(country_id=country_id)
+    for rec in learning_centre_recs:
+        raw_dict = {}
+        raw_dict['learning_centre_name']=rec.lc_name
+        raw_dict['id']=rec.id
+        finalDict.append(raw_dict)
+    return JsonResponse(finalDict, safe=False)
+
+
+def get_university_from_type(request):
+    finalDict = []
+    university_type = request.POST.get('university_type', None)
+    if university_type == 'Main':
+        university_recs = UniversityDetails.objects.filter(is_delete=False, is_partner_university=False).order_by('-id')
+    else:
+        university_recs = UniversityDetails.objects.filter(is_delete=False, is_partner_university=True).order_by('-id')
+    for rec in university_recs:
+        raw_dict = {}
+        raw_dict['university_name']=rec.university_name
+        raw_dict['id']=rec.id
+        finalDict.append(raw_dict)
+    return JsonResponse(finalDict, safe=False)
+
+
+def save_update_applicant_intake_info(request):
+    if request.POST:
+        try:
+            application_id = request.POST['application_id']
+            ApplicationDetails.objects.filter(id=application_id).update(
+                university_id=request.POST['university'],
+                semester_id=request.POST['semester'],
+                learning_centre_id=request.POST['learning_centre'],
+                academic_year_id=request.POST['year'],
+                learning_country_id=request.POST['country'],intake_flag = True
+            )
+            redirect_flag = True
+            if redirect_flag:
+                messages.success(request, "Record saved")
+                return redirect('/student/applicant_academic_english_qualification/')
+        except Exception as e:
+            messages.warning(request, "Form have some error" + str(e))
+    return redirect('/student/applicant_intake_info/')

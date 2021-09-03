@@ -199,6 +199,7 @@ class User(AbstractUser):
             try:
                 applicaton_obj = self.student_user_rel.get().student_applicant_rel.get(year__active_year=True)
                 form_vals['personal_info_flag'] = applicaton_obj.personal_info_flag
+                form_vals['intake_flag'] = applicaton_obj.intake_flag
 
                 if applicaton_obj.father_name == None or applicaton_obj.mother_name == None or applicaton_obj.father_income == None or applicaton_obj.father_occupation == None or applicaton_obj.mother_income == None or applicaton_obj.mother_occupation == None:
                     form_vals['family_flag'] = False
@@ -223,6 +224,7 @@ class User(AbstractUser):
                 return form_vals
             except:
                 form_vals['personal_info_flag'] = False
+                form_vals['intake_flag'] = False
                 form_vals['english_qualification'] = False
                 form_vals['scholarship_selection'] = False
                 form_vals['attachment'] = False

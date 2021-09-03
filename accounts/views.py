@@ -634,7 +634,7 @@ def add_staff(request):
     user_settings_list = ['Manage Group', 'Manage Users']
     university_settings_list = ['Manage Universities', 'Manage University Partner', 'Link University to User', 'Manage Program', 'Manage Campus','Link Campus to User', 'Manage Department', 'Link Department to User']
     academic_settings_list = ['Manage Year', 'Manage Semester', 'Manage Activity', 'Manage Calendar']
-    module_settings_list = ['Manage Applicant Documents', 'Approving Applicant Details']
+    module_settings_list = ['Manage Applicant Documents', 'Approving Applicant Details','Payment Settings']
     if request.method == 'POST':
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -738,7 +738,7 @@ def edit_staff(request, staff_id=None):
     user_settings_list = ['Manage Group', 'Manage Users']
     university_settings_list = ['Manage Universities', 'Manage University Partner', 'Link University to User', 'Manage Program', 'Manage Campus','Link Campus to User','Manage Department', 'Link Department to User']
     academic_settings_list = ['Manage Year', 'Manage Semester', 'Manage Activity', 'Manage Calendar']
-    module_settings_list = ['Manage Applicant Documents','Approving Applicant Details']
+    module_settings_list = ['Manage Applicant Documents','Approving Applicant Details','Payment Settings']
     if request.method == 'POST':
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -854,7 +854,7 @@ def get_user_permission(request):
                                         'Manage Program', 'Manage Campus', 'Link Campus to User', 'Manage Department',
                                         'Link Department to User','University Settings']
             academic_settings_list = ['Manage Year', 'Manage Semester', 'Manage Activity', 'Manage Calendar','Academic Settings']
-            module_settings_list = ['Manage Applicant Documents', 'Approving Applicant Details','Application Settings']
+            module_settings_list = ['Manage Applicant Documents', 'Approving Applicant Details','Payment Settings','Application Settings']
             access_list = system_settings_list + user_settings_list + university_settings_list + academic_settings_list + module_settings_list
         else:
             access_list = request.user.permission.values_list('permission', flat=True)
