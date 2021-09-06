@@ -2393,7 +2393,7 @@ def applicant_intake_info(request):
     agent_recs = AgentDetails.objects.filter()
 
     application_obj = ''
-
+    learning_centre_list = []
     if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
         application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
     if application_obj:
@@ -2407,12 +2407,18 @@ def applicant_intake_info(request):
         else:
             university_recs = UniversityDetails.objects.filter(is_delete=False,
                                                                is_partner_university=False).order_by('-id')
-
+        if application_obj.learning_country:
+            learning_centre_recs = LearningCentersDetails.objects.filter(country_id=application_obj.learning_country.id)
+            for rec in learning_centre_recs:
+                raw_dict = {}
+                raw_dict['learning_centre_name'] = rec.lc_name
+                raw_dict['id'] = rec.id
+                learning_centre_list.append(raw_dict)
     else:
         university_recs = UniversityDetails.objects.filter(is_delete=False, is_partner_university=False).order_by('-id')
 
     return render(request, 'intake_details.html',{'country_recs': country_recs, 'religion_recs': religion_recs, 'application_obj': application_obj,'student_recs':student_recs,'agent_recs':agent_recs,'year_recs':year_recs,'semester_recs':semester_recs,
-                                                  'learning_centre_recs':learning_centre_recs,'university_recs':university_recs})
+                                                  'learning_centre_recs':learning_centre_recs,'university_recs':university_recs,'learning_centre_list':learning_centre_list})
 
 
 def get_learning_centre_from_country(request):

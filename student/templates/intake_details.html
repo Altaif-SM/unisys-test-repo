@@ -53,7 +53,7 @@
             $(document).ready(function () {
 
 
-                $(document).on("click", "#country", function (e) {
+                $(document).on("change", "#country", function (e) {
                     var country_id = $(this).val();
                     var url = '/student/get_learning_centre_from_country/';
                     get_learning_center_from_country(url, country_id)
@@ -187,22 +187,44 @@
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
-                <input type="hidden" value="{{ application_obj.id }}" id="application_id" name="application_id">
+                    <input type="hidden" value="{{ application_obj.id }}" id="application_id" name="application_id">
 
                     <div class="form-body">
                         <div class="row">
                             <div class="">
                                 <label class="col-md-2 control-label">University Type: <span
                                         style="color: red">*</span></label>
-                                <div class="col-md-3">
-                                    <input class="current" type="radio" checked name="university_type"
-                                           id="university_main"
-                                           value="Main">
-                                    <span style="padding:inherit">Main</span>&nbsp;&nbsp;
-                                    <input class="current" type="radio" name="university_type" value="Partner"
-                                           id="university_partner">
-                                    <span style="padding:inherit">Partner</span>
-                                </div>
+                                {% if application_obj.university %}
+                                    <div class="col-md-3">
+                                        {% if  application_obj.university.is_partner_university == False %}
+                                            <input class="current" type="radio" checked name="university_type"
+                                                   id="university_main"
+                                                   value="Main">
+                                            <span style="padding:inherit">Main</span>&nbsp;&nbsp;
+                                            <input class="current" type="radio" name="university_type" value="Partner"
+                                                   id="university_partner">
+                                            <span style="padding:inherit">Partner</span>
+                                        {% else %}
+                                            <input class="current" type="radio"  name="university_type"
+                                                   id="university_main"
+                                                   value="Main">
+                                            <span style="padding:inherit">Main</span>&nbsp;&nbsp;
+                                            <input class="current" type="radio" checked name="university_type" value="Partner"
+                                                   id="university_partner">
+                                            <span style="padding:inherit">Partner</span>
+                                        {% endif %}
+                                    </div>
+                                {% else %}
+                                    <div class="col-md-3">
+                                        <input class="current" type="radio" checked name="university_type"
+                                               id="university_main"
+                                               value="Main">
+                                        <span style="padding:inherit">Main</span>&nbsp;&nbsp;
+                                        <input class="current" type="radio" name="university_type" value="Partner"
+                                               id="university_partner">
+                                        <span style="padding:inherit">Partner</span>
+                                    </div>
+                                {% endif %}
                             </div>
                             <div class="">
                                 <label class="col-md-2 control-label">University: <span
@@ -341,6 +363,10 @@ INFO</span>
                                             </option>
                                         {% endif %}
 
+                                        {% for rec in learning_centre_list %}
+                                            <option value='{{ rec.id }}'>{{ rec.learning_centre_name|default_if_none:"" }}</option>
+                                        {% endfor %}
+
                                     </select>
                                 </div>
 
@@ -350,36 +376,23 @@ INFO</span>
                         </div>
                         <hr>
 
-{#                        <div class="row">#}
-{#                            <div class="col-md-offset-10 col-md12">#}
-                                {#                                <button type="submit" class="btn green" id="save" style="float: left" >Save</button>#}
-{#                                <button type="submit" class="btn green" id="next" style="float: left"#}
-{#                                        {% comment %}onclick="window.location='{% url "student:applicant_family_info" %}'"{% endcomment %}>#}
-{#                                    Save/Next#}
-{#                                </button>#}
-{#                            </div>#}
-{#                        </div>#}
 
+                        <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                                        onclick="window.location='{% url "student:applicant_personal_info" %}'">Back
+                                </button>
 
-                    <div class="row">
-                        <div class="col-md-offset-5 col-md-7">
-                            <button type="button" class="btn blue" id="back" style="margin-left: 70%"
-                                    onclick="window.location='{% url "student:applicant_personal_info" %}'">Back
-                            </button>
-
-{#                            {% if application_obj.application_id %}#}
+                                {#                            {% if application_obj.application_id %}#}
                                 <button type="submit" class="btn green" id="save">Save/Next</button>
-{#                            {% endif %}#}
-                            {% comment %}
+                                {#                            {% endif %}#}
+                                {% comment %}
                                     <button type="button" class="btn blue" id="next"
                                             onclick="window.location='{% url "student:applicant_academic_english_qualification" %}'">
                                         Next
                                     </button>{% endcomment %}
+                            </div>
                         </div>
-                    </div>
-
-
-
 
 
                     </div>
