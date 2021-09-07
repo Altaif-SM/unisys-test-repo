@@ -2384,6 +2384,7 @@ def applicant_intake_info(request):
     year_recs = YearDetails.objects.all()
     semester_recs = SemesterDetails.objects.all()
     learning_centre_recs = LearningCentersDetails.objects.all()
+    program_recs = ProgramDetails.objects.filter(is_delete=False).order_by('-id')
     try:
         application_obj = request.user.get_application
     except Exception as e :
@@ -2394,6 +2395,7 @@ def applicant_intake_info(request):
 
     application_obj = ''
     learning_centre_list = []
+    campus_list = []
     if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
         application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
     if application_obj:
@@ -2414,11 +2416,18 @@ def applicant_intake_info(request):
                 raw_dict['learning_centre_name'] = rec.lc_name
                 raw_dict['id'] = rec.id
                 learning_centre_list.append(raw_dict)
+        if application_obj.program:
+            campus_recs = application_obj.program.campus.all()
+            for rec in campus_recs:
+                raw_dict = {}
+                raw_dict['campus_name'] = rec.campus.campus_name
+                raw_dict['id'] = rec.campus.id
+                campus_list.append(raw_dict)
     else:
         university_recs = UniversityDetails.objects.filter(is_delete=False, is_partner_university=False).order_by('-id')
 
     return render(request, 'intake_details.html',{'country_recs': country_recs, 'religion_recs': religion_recs, 'application_obj': application_obj,'student_recs':student_recs,'agent_recs':agent_recs,'year_recs':year_recs,'semester_recs':semester_recs,
-                                                  'learning_centre_recs':learning_centre_recs,'university_recs':university_recs,'learning_centre_list':learning_centre_list})
+                                                  'learning_centre_recs':learning_centre_recs,'university_recs':university_recs,'learning_centre_list':learning_centre_list,'program_recs':program_recs,'campus_list':campus_list})
 
 
 def get_learning_centre_from_country(request):
@@ -2457,6 +2466,9 @@ def save_update_applicant_intake_info(request):
                 semester_id=request.POST['semester'],
                 learning_centre_id=request.POST['learning_centre'],
                 academic_year_id=request.POST['year'],
+                program_id=request.POST['program'],
+                campus_id=request.POST['campus'],
+                faculty_id=request.POST['faculty'],
                 learning_country_id=request.POST['country'],intake_flag = True
             )
             redirect_flag = True
@@ -2466,3 +2478,21 @@ def save_update_applicant_intake_info(request):
         except Exception as e:
             messages.warning(request, "Form have some error" + str(e))
     return redirect('/student/applicant_intake_info/')
+
+
+def get_branch_campus_from_program(request):
+    finalDict = []
+    program_id = request.POST.get('program_id', None)
+    program_obj = ProgramDetails.objects.get(id=program_id)
+    for rec in program_obj.campus.all():
+        raw_dict = {}
+        raw_dict['campus_name']=rec.campus.campus_name
+        raw_dict['id']=rec.campus.id
+        finalDict.append(raw_dict)
+    faculty_list = []
+    faculty_dict = {}
+    faculty_dict['id'] = program_obj.faculty.id
+    faculty_dict['faculty_name'] = program_obj.faculty.faculty_name
+    faculty_list.append(faculty_dict)
+    main_list = finalDict + faculty_list
+    return JsonResponse(main_list,safe=False)

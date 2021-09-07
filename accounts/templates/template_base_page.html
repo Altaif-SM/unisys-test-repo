@@ -599,14 +599,14 @@ License: You must have a valid license purchased only from themeforest(the above
                                         <li class="nav-item  ">
                                             <a href="/masters/campus_settings/" class="nav-link ">
                                                 {#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
-                                                <span class="title">Manage Campus</span>
+                                                <span class="title">Manage Branch/Campus</span>
                                             </a>
                                         </li>
                                     {% endif %}
                                     {% if 'Link Campus to User' in access_list %}
                                         <li class="nav-item ">
                                             <a href="{% url 'masters:link_campus_staff' %}"
-                                               class="nav-link ">Link Campus to User </a>
+                                               class="nav-link ">Link Branch/Campus to User </a>
                                         </li>
                                     {% endif %}
                                     {% if 'Manage Department' in access_list %}

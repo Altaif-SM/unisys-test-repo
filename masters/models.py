@@ -381,6 +381,12 @@ class CampusBranchesDetails(BaseModel):
     def __str__(self):
         return self.campus_name
 
+class ProgramCampusDetails(models.Model):
+    campus = models.ForeignKey(CampusBranchesDetails, null=True, related_name='program_campus_rel',on_delete=models.PROTECT)
+
+class ProgramStudyModeDetails(models.Model):
+    study_mode = models.CharField(max_length=100, blank=True, null=True)
+
 
 class ProgramDetails(BaseModel):
     program_name = models.CharField(max_length=255, blank=True, null=True)
@@ -395,16 +401,18 @@ class ProgramDetails(BaseModel):
                                    on_delete=models.PROTECT)
     faculty = models.ForeignKey(FacultyDetails, null=True, related_name='program_faculty_rel',
                                    on_delete=models.PROTECT)
-    study_mode = models.ForeignKey(StudyModeDetails, null=True, related_name='program_study_mode_rel',
-                                on_delete=models.PROTECT)
+    # study_mode = models.ForeignKey(StudyModeDetails, null=True, related_name='program_study_mode_rel',
+    #                             on_delete=models.PROTECT)
     study_level = models.ForeignKey(StudyLevelDetails, null=True, related_name='program_study_level_rel',
                                    on_delete=models.PROTECT)
     study_type = models.ForeignKey(StudyTypeDetails, null=True, related_name='program_study_type_rel',
                                    on_delete=models.PROTECT)
     status = models.BooleanField(default=True)
     is_delete = models.BooleanField(default=False)
-    campus = models.ForeignKey(CampusBranchesDetails, null=True, related_name='program_campus_rel',
-                                   on_delete=models.PROTECT)
+    # campus = models.ForeignKey(CampusBranchesDetails, null=True, related_name='program_campus_rel',
+    #                                on_delete=models.PROTECT)
+    campus = models.ManyToManyField(ProgramCampusDetails, blank=True)
+    study_mode = models.ManyToManyField(ProgramStudyModeDetails, blank=True)
     class Meta:
         ordering = ('program_name',)
 

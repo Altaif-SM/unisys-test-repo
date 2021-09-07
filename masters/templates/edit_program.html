@@ -101,6 +101,14 @@
         window.onload = function () {
 
             $(document).ready(function () {
+                var values = "{{ selected_campus_list }}";
+                $('#campus').find('option').filter(function (idx, option) {
+                    if ($.inArray(option.value, values) !== -1) {
+                        return option;
+                    }
+                }).prop('selected', 'true');
+
+
                 $("#status").Sswitch({});
 
             });
@@ -168,6 +176,18 @@
 
                             <div class="row">
                                 <div class="">
+                                    <label class="col-md-2 control-label">Program Name:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter Program Name" id="program_name"
+                                               value="{{ program_obj.program_name|default_if_none:"" }}"
+                                               name="program_name"
+                                               class="form-control" required>
+
+                                    </div>
+                                </div>
+
+                                <div class="">
                                     <label class="col-md-2 control-label">University:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
@@ -189,6 +209,51 @@
                                         </select>
                                     </div>
                                 </div>
+
+
+                            </div>
+
+                            <br>
+                            {#                            <div class="row">#}
+                            {#                                <div class="">#}
+                            {#                                    <label class="col-md-2 control-label">Campus:<span#}
+                            {#                                            style="color: red">*</span></label>#}
+                            {#                                    <div class="col-md-3">#}
+                            {#                                        <select id='campus' title="Select Campus"#}
+                            {#                                                name="campus"#}
+                            {#                                                class="form-control" required>#}
+                            {#                                            {% if program_obj.campus %}#}
+                            {#                                                <option style="display:none;" selected="selected"#}
+                            {#                                                        value="{{ program_obj.campus.id|default_if_none:"" }}"> {{ program_obj.campus.campus_name|default_if_none:"" }}</option>#}
+                            {#                                            {% else %}#}
+                            {#                                                <option selected="selected" value=""> Please Select</option>#}
+                            {#                                            {% endif %}#}
+                            {##}
+                            {#                                            {% for rec in campus_recs %}#}
+                            {#                                                <option value="{{ rec.id }}">{{ rec.campus_name|default_if_none:"" }}</option>#}
+                            {#                                            {% endfor %}#}
+                            {##}
+                            {#                                        </select>#}
+                            {#                                    </div>#}
+                            {#                                </div>#}
+                            {##}
+                            {#                                <div class="">#}
+                            {#                                    <label class="col-md-2 control-label">Program ID:<span#}
+                            {#                                            style="color: red">*</span></label>#}
+                            {#                                    <div class="col-md-3">#}
+                            {#                                        <input type="text" title="Enter Program ID" id="program_id"#}
+                            {#                                               value="{{ program_obj.program_id|default_if_none:"" }}"#}
+                            {#                                               name="program_id"#}
+                            {#                                               class="form-control" required>#}
+                            {##}
+                            {##}
+                            {#                                    </div>#}
+                            {#                                </div>#}
+                            {##}
+                            {##}
+                            {#                            </div>#}
+                            {#                            <br>#}
+                            <div class="row">
                                 <div class="">
                                     <label class="col-md-2 control-label">Faculty:<span
                                             style="color: red">*</span></label>
@@ -212,80 +277,50 @@
                                 </div>
 
 
-                            </div>
+                                {#                                <div class="">#}
+                                {#                                    <label class="col-md-2 control-label">Study Mode:<span#}
+                                {#                                            style="color: red">*</span></label>#}
+                                {#                                    <div class="col-md-3">#}
+                                {#                                        <select id='study_mode' title="Select Study Mode"#}
+                                {#                                                name="study_mode"#}
+                                {#                                                class="form-control" required>#}
+                                {##}
+                                {#                                            {% if program_obj.study_mode %}#}
+                                {#                                                <option style="display:none;" selected="selected"#}
+                                {#                                                        value="{{ program_obj.study_mode.id|default_if_none:"" }}"> {{ program_obj.study_mode.study_mode|default_if_none:"" }}</option>#}
+                                {#                                            {% else %}#}
+                                {#                                                <option selected="selected" value=""> Please Select</option>#}
+                                {#                                            {% endif %}#}
+                                {##}
+                                {#                                            {% for rec in study_mode_recs %}#}
+                                {#                                                <option value="{{ rec.id }}">{{ rec.study_mode|default_if_none:"" }}</option>#}
+                                {#                                            {% endfor %}#}
+                                {##}
+                                {#                                        </select>#}
+                                {#                                    </div>#}
+                                {#                                </div>#}
 
-                            <br>
-                            <div class="row">
                                 <div class="">
-                                    <label class="col-md-2 control-label">Campus:<span
+                                    <label class="col-md-2 control-label">Study Mode: <span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
-                                        <select id='campus' title="Select Campus"
-                                                name="campus"
-                                                class="form-control" required>
-                                            {% if program_obj.campus %}
-                                                <option style="display:none;" selected="selected"
-                                                        value="{{ program_obj.campus.id|default_if_none:"" }}"> {{ program_obj.campus.campus_name|default_if_none:"" }}</option>
+
+                                        {% for rec in study_mode_list %}
+                                            {% if rec in selected_study_mode_list %}
+                                                <input class="current" type="checkbox" checked name="study_mode[]"
+                                                       id="study_mode"
+                                                       value="{{ rec }}">
+                                                <span style="padding:inherit">{{ rec }}</span>&nbsp;&nbsp;
                                             {% else %}
-                                                <option selected="selected" value=""> Please Select</option>
+                                                <input class="current" type="checkbox" name="study_mode[]"
+                                                       id="study_mode"
+                                                       value="{{ rec }}">
+                                                <span style="padding:inherit">{{ rec }}</span>&nbsp;&nbsp;
                                             {% endif %}
 
-                                            {% for rec in campus_recs %}
-                                                <option value="{{ rec.id }}">{{ rec.campus_name|default_if_none:"" }}</option>
-                                            {% endfor %}
-
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="">
-                                    <label class="col-md-2 control-label">Program ID:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <input type="text" title="Enter Program ID" id="program_id"
-                                               value="{{ program_obj.program_id|default_if_none:"" }}"
-                                               name="program_id"
-                                               class="form-control" required>
+                                        {% endfor %}
 
 
-                                    </div>
-                                </div>
-
-
-                            </div>
-                            <br>
-                            <div class="row">
-                                <div class="">
-                                    <label class="col-md-2 control-label">Program Name:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <input type="text" title="Enter Program Name" id="program_name"
-                                               value="{{ program_obj.program_name|default_if_none:"" }}"
-                                               name="program_name"
-                                               class="form-control" required>
-
-                                    </div>
-                                </div>
-                                <div class="">
-                                    <label class="col-md-2 control-label">Study Mode:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <select id='study_mode' title="Select Study Mode"
-                                                name="study_mode"
-                                                class="form-control" required>
-
-                                            {% if program_obj.study_mode %}
-                                                <option style="display:none;" selected="selected"
-                                                        value="{{ program_obj.study_mode.id|default_if_none:"" }}"> {{ program_obj.study_mode.study_mode|default_if_none:"" }}</option>
-                                            {% else %}
-                                                <option selected="selected" value=""> Please Select</option>
-                                            {% endif %}
-
-                                            {% for rec in study_mode_recs %}
-                                                <option value="{{ rec.id }}">{{ rec.study_mode|default_if_none:"" }}</option>
-                                            {% endfor %}
-
-                                        </select>
                                     </div>
                                 </div>
 
@@ -397,6 +432,26 @@
                             <div class="row">
 
                                 <div class="">
+                                    <label class="col-md-2 control-label">Branch/Campus:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-8">
+                                        <select multiple id='campus' title="Select Campus"
+                                                name="campus"
+                                                class="form-control" required>
+                                            {% for rec in campus_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.campus_name|default_if_none:"" }}</option>
+                                            {% endfor %}
+
+                                        </select>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="">
                                     <label class="col-md-2 control-label">Status:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
@@ -408,7 +463,6 @@
 
                                     </div>
                                 </div>
-
 
                             </div>
 

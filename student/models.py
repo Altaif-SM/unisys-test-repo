@@ -232,6 +232,15 @@ class ApplicationDetails(BaseModel):
                                 on_delete=models.PROTECT)
     academic_year = models.ForeignKey('masters.YearDetails', blank=True, null=True, related_name='applicant_academic_year_rel',
                              on_delete=models.PROTECT)
+    program = models.ForeignKey('masters.ProgramDetails', blank=True, null=True,
+                                       related_name='applicant_program_rel',
+                                       on_delete=models.PROTECT)
+    faculty = models.ForeignKey('masters.FacultyDetails', blank=True, null=True,
+                                related_name='applicant_faculty_rel',
+                                on_delete=models.PROTECT)
+    campus = models.ForeignKey('masters.CampusBranchesDetails', blank=True, null=True,
+                                related_name='applicant_campus_branch_rel',
+                                on_delete=models.PROTECT)
     # family_info_flag = models.BooleanField(default=False)
     # mother_sibling_info_flag = models.BooleanField(default=False)
 

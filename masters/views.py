@@ -2119,25 +2119,35 @@ def add_program(request):
     if request.method == 'POST':
         university = request.POST.get('university')
         faculty = request.POST.get('faculty')
-        program_id = request.POST.get('program_id')
         program_name = request.POST.get('program_name')
         study_type = request.POST.get('study_type')
         study_level = request.POST.get('study_level')
-        study_mode = request.POST.get('study_mode')
         program_overview = request.POST.get('program_overview')
         program_objective = request.POST.get('program_objective')
         program_vision = request.POST.get('program_vision')
         program_mission = request.POST.get('program_mission')
-        campus = request.POST.get('campus')
         status = request.POST.get('status')
+        study_mode_recs = request.POST.getlist('study_mode[]')
+        campus_recs = request.POST.getlist('campus')
         if status == 'on':
             status = True
         else:
             status = False
         try:
-            ProgramDetails.objects.create(faculty_id=faculty,university_id=university,campus_id = campus,
-                                             program_id=program_id, program_name=program_name,program_overview = program_overview,program_objective = program_objective,
-                                             program_vision = program_vision,program_mission = program_mission,status = status,study_type_id = study_type,study_mode_id = study_mode,study_level_id = study_level)
+            program_obj = ProgramDetails.objects.create(faculty_id=faculty,university_id=university,
+                                             program_name=program_name,program_overview = program_overview,program_objective = program_objective,
+                                             program_vision = program_vision,program_mission = program_mission,status = status,study_type_id = study_type,study_level_id = study_level)
+
+            program_obj.study_mode.clear()
+            for study_mode in study_mode_recs:
+                program_study_mode_obj = ProgramStudyModeDetails.objects.create(study_mode=study_mode)
+                program_obj.study_mode.add(program_study_mode_obj)
+
+            program_obj.campus.clear()
+            for campus_id in campus_recs:
+                program_campus_obj = ProgramCampusDetails.objects.create(campus_id=campus_id)
+                program_obj.campus.add(program_campus_obj)
+
             messages.success(request, "Record saved.")
         except:
             messages.warning(request, "Record not saved.")
@@ -2148,7 +2158,8 @@ def add_program(request):
     study_type_recs = StudyTypeDetails.objects.filter().order_by('-id')
     faculty_recs = FacultyDetails.objects.filter(status=True).order_by('-id')
     campus_recs = CampusBranchesDetails.objects.filter().order_by('-id')
-    return render(request, 'add_program.html',{'university_recs':university_recs,'faculty_recs':faculty_recs,'study_level_recs':study_level_recs,'study_mode_recs':study_mode_recs,'study_type_recs':study_type_recs,'campus_recs':campus_recs})
+    study_mode_list = ['Online', 'On Campus']
+    return render(request, 'add_program.html',{'university_recs':university_recs,'faculty_recs':faculty_recs,'study_level_recs':study_level_recs,'study_mode_recs':study_mode_recs,'study_type_recs':study_type_recs,'campus_recs':campus_recs,'study_mode_list':study_mode_list})
 
 
 def edit_program(request, program_id=None):
@@ -2156,17 +2167,19 @@ def edit_program(request, program_id=None):
     if request.method == 'POST':
         university = request.POST.get('university')
         faculty = request.POST.get('faculty')
-        program_id = request.POST.get('program_id')
+        # program_id = request.POST.get('program_id')
         program_name = request.POST.get('program_name')
         study_type = request.POST.get('study_type')
         study_level = request.POST.get('study_level')
-        study_mode = request.POST.get('study_mode')
+        # study_mode = request.POST.get('study_mode')
         program_overview = request.POST.get('program_overview')
         program_objective = request.POST.get('program_objective')
         program_vision = request.POST.get('program_vision')
         program_mission = request.POST.get('program_mission')
-        campus = request.POST.get('campus')
+        # campus = request.POST.get('campus')
         status = request.POST.get('status')
+        study_mode_recs = request.POST.getlist('study_mode[]')
+        campus_recs = request.POST.getlist('campus')
         if status == 'on':
             status = True
         else:
@@ -2174,18 +2187,29 @@ def edit_program(request, program_id=None):
         try:
             program_obj.university_id = university
             program_obj.faculty_id = faculty
-            program_obj.campus_id = campus
-            program_obj.program_id = program_id
+            # program_obj.campus_id = campus
+            # program_obj.program_id = program_id
             program_obj.program_name = program_name
             program_obj.study_type_id = study_type
             program_obj.study_level_id = study_level
-            program_obj.study_mode_id = study_mode
+            # program_obj.study_mode_id = study_mode
             program_obj.program_overview = program_overview
             program_obj.program_objective = program_objective
             program_obj.program_vision = program_vision
             program_obj.program_mission = program_mission
             program_obj.status = status
             program_obj.save()
+
+            program_obj.study_mode.clear()
+            for study_mode in study_mode_recs:
+                program_study_mode_obj = ProgramStudyModeDetails.objects.create(study_mode=study_mode)
+                program_obj.study_mode.add(program_study_mode_obj)
+
+            program_obj.campus.clear()
+            for campus_id in campus_recs:
+                program_campus_obj = ProgramCampusDetails.objects.create(campus_id=campus_id)
+                program_obj.campus.add(program_campus_obj)
+
             messages.success(request, "Record saved.")
         except:
             messages.warning(request, "Record not saved.")
@@ -2196,7 +2220,10 @@ def edit_program(request, program_id=None):
     study_type_recs = StudyTypeDetails.objects.filter().order_by('-id')
     faculty_recs = FacultyDetails.objects.filter(status=True).order_by('-id')
     campus_recs = CampusBranchesDetails.objects.filter().order_by('-id')
-    return render(request, "edit_program.html", {'program_obj': program_obj,'university_recs':university_recs,'study_mode_recs':study_mode_recs,'study_level_recs':study_level_recs,'study_type_recs':study_type_recs,'faculty_recs':faculty_recs,'campus_recs':campus_recs})
+    study_mode_list = ['Online', 'On Campus']
+    selected_study_mode_list = program_obj.study_mode.values_list('study_mode',flat = True)
+    selected_campus_list = list(program_obj.campus.values_list('campus_id',flat = True))
+    return render(request, "edit_program.html", {'program_obj': program_obj,'university_recs':university_recs,'study_mode_recs':study_mode_recs,'study_level_recs':study_level_recs,'study_type_recs':study_type_recs,'faculty_recs':faculty_recs,'campus_recs':campus_recs,'study_mode_list':study_mode_list,'selected_study_mode_list':selected_study_mode_list,'selected_campus_list':selected_campus_list})
 
 
 def delete_program(request):

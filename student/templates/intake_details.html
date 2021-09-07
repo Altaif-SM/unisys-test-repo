@@ -52,6 +52,10 @@
 
             $(document).ready(function () {
 
+                $("#program").chosen();
+                {#$("#campus").chosen();#}
+                {#$("#faculty").chosen();#}
+
 
                 $(document).on("change", "#country", function (e) {
                     var country_id = $(this).val();
@@ -64,6 +68,12 @@
                     get_university_from_university_type(url, university_type)
 
 
+                })
+
+                $(document).on("change", "#program", function (e) {
+                    var program_id = $(this).val();
+                    var url = '/student/get_branch_campus_from_program/';
+                    get_branch_from_program(url, program_id)
                 })
 
 
@@ -90,6 +100,7 @@
                         csrfmiddlewaretoken: '{{ csrf_token }}',
                     },
                     success: function (data) {
+
 
                         $('#learning_centre').empty();
                         $('#learning_centre').append(
@@ -124,6 +135,45 @@
                                 '<option value="' + data[i]['id'] + '">'
                                 + data[i]['university_name'] + '</option>')
                         }
+                    },
+                    error: function (xhr, msg, err) {
+                        alert(xhr.responseJSON.error);
+                    }
+                });
+            }
+
+            function get_branch_from_program(url, program_id) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        program_id: program_id,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data) {
+
+                        $('#campus').empty();
+                        $('#campus').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length - 1; i++) {
+                            $('#campus').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['campus_name'] + '</option>')
+                        }
+
+                        $('#faculty').empty();
+                        $('#faculty').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            if (i === (data.length - 1)) {
+                                $('#faculty').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['faculty_name'] + '</option>')
+
+                            }
+
+                        }
+
                     },
                     error: function (xhr, msg, err) {
                         alert(xhr.responseJSON.error);
@@ -205,11 +255,12 @@
                                                    id="university_partner">
                                             <span style="padding:inherit">Partner</span>
                                         {% else %}
-                                            <input class="current" type="radio"  name="university_type"
+                                            <input class="current" type="radio" name="university_type"
                                                    id="university_main"
                                                    value="Main">
                                             <span style="padding:inherit">Main</span>&nbsp;&nbsp;
-                                            <input class="current" type="radio" checked name="university_type" value="Partner"
+                                            <input class="current" type="radio" checked name="university_type"
+                                                   value="Partner"
                                                    id="university_partner">
                                             <span style="padding:inherit">Partner</span>
                                         {% endif %}
@@ -374,7 +425,103 @@ INFO</span>
                             </div>
 
                         </div>
+                        <br>
+
                         <hr>
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-settings font-red"></i>
+                                <span class="caption-subject font-red sbold uppercase"> ACADEMIC PROGRAM
+DETAILS</span>
+                            </div>
+                        </div>
+                        <hr>
+
+                        <div class="row">
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Program: <span style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    <select id='program' title="Select Program" name="program"
+                                            class="form-control value_check" data-live-search="true">
+
+                                        {% if application_obj.program %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.program.id }}"
+                                                    value="">{{ application_obj.program.program_name|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option selected="selected" id="" value="">Please
+                                                Select
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in program_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.program_name|default_if_none:"" }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Faculty: <span style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    <select id='faculty' title="Select Faculty" name="faculty"
+                                            class="form-control value_check" data-live-search="true" required>
+
+                                        {% if application_obj.faculty %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.faculty.id }}"
+                                                    value="">{{ application_obj.faculty.faculty_name|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option disabled selected="selected" id="" value="">Please
+                                                Select
+                                            </option>
+                                        {% endif %}
+
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+                        <br>
+
+                        <div class="row">
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Branch/Campus: <span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    <select id='campus' title="Select Campus" name="campus"
+                                            class="form-control value_check" data-live-search="true" required>
+
+                                        {% if application_obj.campus %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.campus.id }}"
+                                                    value="">{{ application_obj.campus.campus_name|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option disabled selected="selected" id="" value="">Please
+                                                Select
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in campus_list %}
+                                            <option value='{{ rec.id }}'>{{ rec.campus_name|default_if_none:"" }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                        <br>
 
 
                         <div class="row">
