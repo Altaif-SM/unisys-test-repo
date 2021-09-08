@@ -186,12 +186,13 @@
                     <thead>
                     <tr>
                         <th style="display: none">Id</th>
-                        <th>Faculty ID</th>
                         <th> Faculty Name</th>
+                        <th> University Type</th>
+                        <th> University</th>
                         <th> Email</th>
                         <th> Telephone</th>
                         <th> Website</th>
-                        <th> Address</th>
+{#                        <th> Address</th>#}
                         <th> Status</th>
                         <th width="10%">Action</th>
                     </tr>
@@ -201,12 +202,19 @@
                     {% for rec in faculty_recs %}
                         <tr id="item{{ forloop.counter }}" class="item">
                             <td style="display: none"><input id="faculty_id" value="{{ rec.id }}"></td>
-                            <td>{{ rec.faculty_id|default_if_none:"" }}</td>
                             <td>{{ rec.faculty_name|default_if_none:"" }}</td>
+                         {% if rec.university.is_partner_university == True %}
+                                <td>Partner</td>
+                            {% else %}
+                                <td>Main</td>
+                            {% endif %}
+                            <td>{{ rec.university.university_name|default_if_none:"" }}
+
+
                             <td>{{ rec.email|default_if_none:"" }}</td>
                             <td>{{ rec.telephone|default_if_none:"" }}</td>
                              <td>{{ rec.website|default_if_none:"" }}</td>
-                        <td>{{ rec.address|default_if_none:"" }}</td>
+{#                        <td>{{ rec.address|default_if_none:"" }}</td>#}
                          <td>
                                 {% if rec.status == True %}
                                     <i class="fa fa-power-off" aria-hidden="true"

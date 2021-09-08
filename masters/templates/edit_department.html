@@ -101,8 +101,40 @@
         window.onload = function () {
             $(document).ready(function () {
                 $("#status").Sswitch({});
+                $('input[type="radio"]').on('change', function () {
+                    var university_type = $('input[name="university_type"]:checked').val();
+                    var url = '/student/get_university_from_type/';
+                    get_university_from_university_type(url, university_type)
+
+
+                })
 
             });
+
+            function get_university_from_university_type(url, university_type) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        university_type: university_type,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data) {
+
+                        $('#university').empty();
+                        $('#university').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#university').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['university_name'] + '</option>')
+                        }
+                    },
+                    error: function (xhr, msg, err) {
+                        alert(xhr.responseJSON.error);
+                    }
+                });
+            }
 
 
             window.setTimeout(function () {
@@ -166,68 +198,46 @@
                         <div class="row item_experience" id="item_experience_1">
 
                             <div class="row">
-
-                                {% if department_obj.logo %}
-                                    <div class="">
-                                        <label class="col-md-2 control-label">Logo:
-
-                                        </label>
-                                        <div class="col-md-2">
-
-                                            <input name="logo" type="file" title="Select Logo"
-                                                   accept="image/gif, image/jpeg, image/png"
-                                                   id="logo"
-                                                   class="form-control ">
-
-
-                                        </div>
-                                        {% if department_obj.logo %}
-                                            <div class="col-md-1" style="margin-top: 5px;
-    font-size: 20px;">
-                                                <a href="{{ department_obj.logo.url }}" download>
-                                                    <i class="fa fa-download" aria-hidden="true"></i>
-
-                                                </a>
-                                            </div>
+                             <div class="">
+                                <label class="col-md-2 control-label">University Type: <span
+                                        style="color: red">*</span></label>
+                                {% if department_obj.university %}
+                                    <div class="col-md-3">
+                                        {% if  department_obj.university.is_partner_university == False %}
+                                            <input class="current" type="radio" checked name="university_type"
+                                                   id="university_main"
+                                                   value="Main">
+                                            <span style="padding:inherit">Main</span>&nbsp;&nbsp;
+                                            <input class="current" type="radio" name="university_type" value="Partner"
+                                                   id="university_partner">
+                                            <span style="padding:inherit">Partner</span>
+                                        {% else %}
+                                            <input class="current" type="radio" name="university_type"
+                                                   id="university_main"
+                                                   value="Main">
+                                            <span style="padding:inherit">Main</span>&nbsp;&nbsp;
+                                            <input class="current" type="radio" checked name="university_type"
+                                                   value="Partner"
+                                                   id="university_partner">
+                                            <span style="padding:inherit">Partner</span>
                                         {% endif %}
                                     </div>
                                 {% else %}
-                                    <div class="">
-                                        <label class="col-md-2 control-label">Logo:
-
-                                        </label>
-                                        <div class="col-md-3">
-
-                                            <input name="logo" type="file" title="Select Logo"
-                                                   accept="image/gif, image/jpeg, image/png"
-                                                   id="logo"
-                                                   class="form-control ">
-
-
-                                        </div>
-
+                                    <div class="col-md-3">
+                                        <input class="current" type="radio" checked name="university_type"
+                                               id="university_main"
+                                               value="Main">
+                                        <span style="padding:inherit">Main</span>&nbsp;&nbsp;
+                                        <input class="current" type="radio" name="university_type" value="Partner"
+                                               id="university_partner">
+                                        <span style="padding:inherit">Partner</span>
                                     </div>
                                 {% endif %}
-
-                                <div class="">
-                                    <label class="col-md-2 control-label">Department Name:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <input type="text" title="Enter Department Name" id="department_name"
-                                               value="{{ department_obj.department_name|default_if_none:"" }}"
-                                               name="department_name"
-                                               class="form-control" required>
-
-
-                                    </div>
-                                </div>
-
-
                             </div>
 
-                            <br>
 
-                            <div class="row">
+
+
                                 <div class="">
                                     <label class="col-md-2 control-label">University:<span
                                             style="color: red">*</span></label>
@@ -250,6 +260,26 @@
                                         </select>
                                     </div>
                                 </div>
+
+
+                            </div>
+
+                            <br>
+
+                            <div class="row">
+                            <div class="">
+                                    <label class="col-md-2 control-label">Department Name:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter Department Name" id="department_name"
+                                               value="{{ department_obj.department_name|default_if_none:"" }}"
+                                               name="department_name"
+                                               class="form-control" required>
+
+
+                                    </div>
+                                </div>
+
                                 <div class="">
                                     <label class="col-md-2 control-label">Faculty:<span
                                             style="color: red">*</span></label>
@@ -336,6 +366,51 @@
 
 
                             </div>
+                        <br>
+                        <div class="row">
+                            {% if department_obj.logo %}
+                                    <div class="">
+                                        <label class="col-md-2 control-label">Logo:
+
+                                        </label>
+                                        <div class="col-md-2">
+
+                                            <input name="logo" type="file" title="Select Logo"
+                                                   accept="image/gif, image/jpeg, image/png"
+                                                   id="logo"
+                                                   class="form-control ">
+
+
+                                        </div>
+                                        {% if department_obj.logo %}
+                                            <div class="col-md-1" style="margin-top: 5px;
+    font-size: 20px;">
+                                                <a href="{{ department_obj.logo.url }}" download>
+                                                    <i class="fa fa-download" aria-hidden="true"></i>
+
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% else %}
+                                    <div class="">
+                                        <label class="col-md-2 control-label">Logo:
+
+                                        </label>
+                                        <div class="col-md-3">
+
+                                            <input name="logo" type="file" title="Select Logo"
+                                                   accept="image/gif, image/jpeg, image/png"
+                                                   id="logo"
+                                                   class="form-control ">
+
+
+                                        </div>
+
+                                    </div>
+                                {% endif %}
+
+                        </div>
 
 
                         </div>

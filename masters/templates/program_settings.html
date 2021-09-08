@@ -186,14 +186,15 @@
                     <thead>
                     <tr>
                         <th style="display: none">Id</th>
-{#                        <th>Program ID</th>#}
+                        {#                        <th>Program ID</th>#}
                         <th> Program Name</th>
+                        <th> University Type</th>
                         <th> University</th>
                         <th> Branch / Campus</th>
                         <th> Faculty</th>
                         <th> Study Mode</th>
-{#                        <th> Study Level</th>#}
-{#                        <th> Study Type</th>#}
+                        {#                        <th> Study Level</th>#}
+                        {#                        <th> Study Type</th>#}
                         <th> Status</th>
                         <th width="10%">Action</th>
                     </tr>
@@ -203,21 +204,26 @@
                     {% for rec in program_recs %}
                         <tr id="item{{ forloop.counter }}" class="item">
                             <td style="display: none"><input id="program_id" value="{{ rec.id }}"></td>
-{#                            <td>{{ rec.program_id|default_if_none:"" }}</td>#}
+                            {#                            <td>{{ rec.program_id|default_if_none:"" }}</td>#}
                             <td>{{ rec.program_name|default_if_none:"" }}</td>
+                            {% if rec.university.is_partner_university == True %}
+                                <td>Partner</td>
+                            {% else %}
+                                <td>Main</td>
+                            {% endif %}
                             <td>{{ rec.university.university_name|default_if_none:"" }}</td>
                             <td width="20%"> {% for rec in rec.campus.all %}
                                 <span>{{ forloop.counter }}){{ rec.campus.campus_name }}</span><br>
-                                {% endfor %}
+                            {% endfor %}
                             </td>
                             <td>{{ rec.faculty.faculty_name|default_if_none:"" }}</td>
                             <td>{% for rec in rec.study_mode.all %}
                                 <span>{{ forloop.counter }}){{ rec.study_mode }}</span><br>
-                                {% endfor %}
-                                </td>
-{#                             <td>{{ rec.study_level.study_level|default_if_none:"" }}</td>#}
-{#                        <td>{{ rec.study_type.study_type|default_if_none:"" }}</td>#}
-                         <td>
+                            {% endfor %}
+                            </td>
+                            {#                             <td>{{ rec.study_level.study_level|default_if_none:"" }}</td>#}
+                            {#                        <td>{{ rec.study_type.study_type|default_if_none:"" }}</td>#}
+                            <td>
                                 {% if rec.status == True %}
                                     <i class="fa fa-power-off" aria-hidden="true"
                                        style="margin-left: 30px;margin-top:8px;font-size:18px;color:green"></i>
@@ -232,7 +238,7 @@
                                 <span type="button" name="edit" id="edit{{ forloop.counter }}"
                                       class=" edit_btn btn blue glyphicon glyphicon-pencil">
                                 </span>
-                                    </a>
+                                </a>
                                 <span type="button" name="delete" id="delete{{ forloop.counter }}"
                                       class=" delete btn red glyphicon glyphicon-trash">
                                 </span>
@@ -250,14 +256,15 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <form action="{% url 'masters:delete_program' %}"
-                        id="form_sample_1"
-                        class="form-horizontal"
-                        method="POST" enctype="multipart/form-data">
+                      id="form_sample_1"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <input type="hidden" id="program_delete_id" name="program_delete_id">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                        <h4 class="modal-title" style="color: #2a015e; text-align: center"><b  >Delete Confirmation</b></h4>
+                        <h4 class="modal-title" style="color: #2a015e; text-align: center"><b>Delete Confirmation</b>
+                        </h4>
                     </div>
                     <div class="modal-body">
                         <p> Are you sure, you want to delete Program? </p>
