@@ -2608,7 +2608,11 @@ def edit_campus(request, campus_id=None):
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/campus_settings/')
-    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university = False).order_by('-id')
+    if campus_obj.university.is_partner_university == False:
+        university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university = False).order_by('-id')
+    else:
+        university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
+                                                           is_partner_university=True).order_by('-id')
     country_recs = CountryDetails.objects.all()
     return render(request, "edit_campus.html", {'campus_obj': campus_obj,'university_recs':university_recs,'country_recs':country_recs})
 
