@@ -187,6 +187,7 @@
                     <thead>
                     <tr>
                         <th style="display: none">Id</th>
+                        <th> University Type</th>
                         <th> University</th>
                         <th> Year</th>
                         <th> Branch</th>
@@ -195,7 +196,7 @@
                         <th> Start Date</th>
                         <th> End Date</th>
                         <th> Status</th>
-                        <th width="10%">Action</th>
+                        <th width="15%">Action</th>
                     </tr>
                     </thead>
 
@@ -203,6 +204,11 @@
                     {% for rec in calender_recs %}
                         <tr id="item{{ forloop.counter }}" class="item">
                             <td style="display: none"><input id="calender_id" value="{{ rec.id }}"></td>
+                            {% if rec.university.is_partner_university == True %}
+                                <td>Partner</td>
+                                {% else %}
+                                <td>Main</td>
+                            {% endif %}
                             <td>{{ rec.university.university_name|default_if_none:"" }}</td>
                             <td>{{ rec.year.year_name|default_if_none:"" }}</td>
                             <td>{{ rec.branch.campus_name|default_if_none:"" }}</td>

@@ -102,7 +102,41 @@
             $(document).ready(function () {
                 $("#status").Sswitch({});
 
+
+                $('input[type="radio"]').on('change', function () {
+                    var university_type = $('input[name="university_type"]:checked').val();
+                    var url = '/student/get_university_from_type/';
+                    get_university_from_university_type(url, university_type)
+
+
+                })
+
             });
+
+            function get_university_from_university_type(url, university_type) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        university_type: university_type,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data) {
+
+                        $('#university').empty();
+                        $('#university').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#university').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['university_name'] + '</option>')
+                        }
+                    },
+                    error: function (xhr, msg, err) {
+                        alert(xhr.responseJSON.error);
+                    }
+                });
+            }
 
 
             window.setTimeout(function () {
@@ -165,6 +199,45 @@
 
                         <div class="row item_experience" id="item_experience_1">
                             <div class="row">
+
+                            <div class="">
+                                    <label class="col-md-2 control-label">University Type: <span
+                                            style="color: red">*</span></label>
+                                    {% if calender_obj.university %}
+                                        <div class="col-md-3">
+                                            {% if  calender_obj.university.is_partner_university == False %}
+                                                <input class="current" type="radio" checked name="university_type"
+                                                       id="university_main"
+                                                       value="Main">
+                                                <span style="padding:inherit">Main</span>&nbsp;&nbsp;
+                                                <input class="current" type="radio" name="university_type"
+                                                       value="Partner"
+                                                       id="university_partner">
+                                                <span style="padding:inherit">Partner</span>
+                                            {% else %}
+                                                <input class="current" type="radio" name="university_type"
+                                                       id="university_main"
+                                                       value="Main">
+                                                <span style="padding:inherit">Main</span>&nbsp;&nbsp;
+                                                <input class="current" type="radio" checked name="university_type"
+                                                       value="Partner"
+                                                       id="university_partner">
+                                                <span style="padding:inherit">Partner</span>
+                                            {% endif %}
+                                        </div>
+                                    {% else %}
+                                        <div class="col-md-3">
+                                            <input class="current" type="radio" checked name="university_type"
+                                                   id="university_main"
+                                                   value="Main">
+                                            <span style="padding:inherit">Main</span>&nbsp;&nbsp;
+                                            <input class="current" type="radio" name="university_type" value="Partner"
+                                                   id="university_partner">
+                                            <span style="padding:inherit">Partner</span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+
                                 <div class="">
                                     <label class="col-md-2 control-label">University:<span
                                             style="color: red">*</span></label>
@@ -186,7 +259,14 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="">
+
+
+
+                            </div>
+
+                            <br>
+                            <div class="row">
+                            <div class="">
                                     <label class="col-md-2 control-label">Year:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
@@ -207,14 +287,8 @@
                                         </select>
                                     </div>
                                 </div>
-
-
-                            </div>
-
-                            <br>
-                            <div class="row">
                                 <div class="">
-                                    <label class="col-md-2 control-label">Branch:<span
+                                    <label class="col-md-2 control-label">Branch/Campus:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <select id='branch' title="Select Branch"
@@ -234,7 +308,14 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="">
+
+
+
+                            </div>
+
+                            <br>
+                            <div class="row">
+                            <div class="">
                                     <label class="col-md-2 control-label">Semester:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
@@ -254,12 +335,6 @@
                                         </select>
                                     </div>
                                 </div>
-
-
-                            </div>
-
-                            <br>
-                            <div class="row">
                                 <div class="">
                                     <label class="col-md-2 control-label">Activity:<span
                                             style="color: red">*</span></label>

@@ -2694,7 +2694,11 @@ def edit_calender(request, calender_id=None):
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/calendar_settings/')
-    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university = False).order_by('-id')
+    if calender_obj.university.is_partner_university == False:
+        university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university = False).order_by('-id')
+    else:
+        university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
+                                                           is_partner_university=True).order_by('-id')
     year_recs = YearDetails.objects.all()
     branch_recs = CampusBranchesDetails.objects.all()
     semester_recs = SemesterDetails.objects.all()
