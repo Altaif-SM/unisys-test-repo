@@ -236,6 +236,109 @@
                 <hr>
                 <div class="portlet light portlet-fit portlet-form ">
                     <i class="icon-settings font-red"></i>
+                    <span class="caption-subject font-red sbold uppercase"> INTAKE INFO</span>
+                </div>
+
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-1 control-label">University Type:</label>
+                        <div class="col-md-3">
+                            {% if application_obj.university.is_partner_university == True %}
+                            <span class="">Partner</span>
+                            {% else %}
+                                <span class="">Main</span>
+                            {% endif %}
+
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">University:</label>
+                        <div class="col-md-3">
+                            <span class="">{{ application_obj.university.university_name|default_if_none:"" }}</span>
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Academic Year:</label>
+                        <div class="col-md-3">
+                            <span class="">{{ application_obj.academic_year.year_name|default_if_none:"" }}</span>
+                        </div>
+                    </div>
+
+
+                </div>
+                <br>
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-1 control-label">Semester:</label>
+                        <div class="col-md-3">
+                            <span class="">{{ application_obj.semester.semester_name|title|default_if_none:"" }}</span>
+
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+                <hr>
+            <div class="portlet light portlet-fit portlet-form ">
+                    <i class="icon-settings font-red"></i>
+                    <span class="caption-subject font-red sbold uppercase"> LEARNING CENTRE INFO</span>
+                </div>
+
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-1 control-label">Country:</label>
+                        <div class="col-md-3">
+                            <span class="">{{ application_obj.learning_country.country_name|title }}</span>
+
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Learning Centre:</label>
+                        <div class="col-md-3">
+                            <span class="">{{ application_obj.learning_centre.lc_name|default_if_none:"" }}</span>
+                        </div>
+                    </div>
+
+                </div>
+            <hr>
+                <div class="portlet light portlet-fit portlet-form ">
+                    <i class="icon-settings font-red"></i>
+                    <span class="caption-subject font-red sbold uppercase"> ACADEMIC PROGRAM DETAILS</span>
+                </div>
+
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-1 control-label">Program:</label>
+                        <div class="col-md-3">
+                            <span class="">{{ application_obj.program.program_name|default_if_none:"" }}</span>
+
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Faculty:</label>
+                        <div class="col-md-3">
+                            <span class="">{{ application_obj.faculty.faculty_name|default_if_none:"" }}</span>
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Campus:</label>
+                        <div class="col-md-3">
+                            <span class="">{{ application_obj.campus.campus_name|default_if_none:"" }}</span>
+                        </div>
+                    </div>
+
+
+                </div>
+                <hr>
+                <div class="portlet light portlet-fit portlet-form ">
+                    <i class="icon-settings font-red"></i>
                     <span class="caption-subject font-red sbold uppercase"> ACADEMIC QUALIFICATION DETAILS</span>
                 </div>
                 {% for qualification_obj in qualification_recs %}
@@ -337,7 +440,7 @@
 
                 <hr>
 
-             <div class="portlet light portlet-fit portlet-form ">
+                <div class="portlet light portlet-fit portlet-form ">
                     <i class="icon-settings font-red"></i>
                     <span class="caption-subject font-red sbold uppercase">  Professional Qualifications</span>
                 </div>
@@ -404,15 +507,12 @@
                     </div>
 
 
-
                 </div>
 
                 <hr>
 
 
-
-
-            <div class="portlet light portlet-fit portlet-form ">
+                <div class="portlet light portlet-fit portlet-form ">
                     <i class="icon-settings font-red"></i>
                     <span class="caption-subject font-red sbold uppercase">  EMPLOYMENT HISTORY</span>
                 </div>
@@ -436,7 +536,7 @@
                     <div class="">
                         <label class="col-md-1 control-label">From Date:</label>
                         <div class="col-md-3">
-                            <span class="">{{ employement_history_obj.from_date|date:"Y-m-d"  }}</span>
+                            <span class="">{{ employement_history_obj.from_date|date:"Y-m-d" }}</span>
                         </div>
                     </div>
 
@@ -473,18 +573,17 @@
                     <div class="">
                         <label class="col-md-1 control-label">Number of Years Employed:</label>
                         <div class="col-md-3">
-                            <span class="">{{ employement_history_obj.employed_years|default_if_none:""}}</span>
+                            <span class="">{{ employement_history_obj.employed_years|default_if_none:"" }}</span>
 
                         </div>
                     </div>
 
 
-
                 </div>
 
-            <hr>
+                <hr>
 
-            <div class="portlet light portlet-fit portlet-form ">
+                <div class="portlet light portlet-fit portlet-form ">
                     <i class="icon-settings font-red"></i>
                     <span class="caption-subject font-red sbold uppercase">NEXT OF KEN DETAILS</span>
                 </div>
@@ -532,12 +631,11 @@
                     </div>
 
 
-
                 </div>
 
-            <hr>
+                <hr>
 
-            <div class="portlet light portlet-fit portlet-form ">
+                <div class="portlet light portlet-fit portlet-form ">
                     <i class="icon-settings font-red"></i>
                     <span class="caption-subject font-red sbold uppercase">OTHER INFORMATION (How did you know about us)</span>
                 </div>
@@ -559,12 +657,11 @@
                     </div>
 
 
-
                 </div>
 
-            <hr>
+                <hr>
 
-            <div class="portlet light portlet-fit portlet-form ">
+                <div class="portlet light portlet-fit portlet-form ">
                     <i class="icon-settings font-red"></i>
                     <span class="caption-subject font-red sbold uppercase">SPONSORSHIP</span>
                 </div>
@@ -593,110 +690,110 @@
                     </div>
 
 
-
                 </div>
-            <br>
-            <div class="row">
-                <div class="">
+                <br>
+                <div class="row">
+                    <div class="">
                         <label class="col-md-1 control-label">Contact dept/person:</label>
                         <div class="col-md-3">
                             <span class="">{{ addition_info_obj.sponsore_contact|default_if_none:"" }}</span>
                         </div>
                     </div>
-            </div>
+                </div>
 
-            <hr>
+                <hr>
 
 
-            <div class="portlet light portlet-fit portlet-form ">
+                <div class="portlet light portlet-fit portlet-form ">
                     <i class="icon-settings font-red"></i>
                     <span class="caption-subject font-red sbold uppercase">Attachment</span>
                 </div>
 
                 <div class="row">
                     <div class="">
-                            <label class="col-md-2 control-label">Passport ID:</label>
+                        <label class="col-md-2 control-label">Passport ID:</label>
 
-                            <div class="col-md-4">
-                                 {% if attachement_obj.0.passport_image %}
-                                <a href="{{ attachement_obj.0.passport_image.url }}" target="_blank">Preview Passport ID</a>
-                                 {% else %}
-                                     ----
-                                 {% endif %}
-                            </div>
-
+                        <div class="col-md-4">
+                            {% if attachement_obj.0.passport_image %}
+                                <a href="{{ attachement_obj.0.passport_image.url }}" target="_blank">Preview Passport
+                                    ID</a>
+                            {% else %}
+                                ----
+                            {% endif %}
                         </div>
 
-                <div class="">
-                            <label class="col-md-2 control-label">Academic Certificate:</label>
+                    </div>
 
-                            <div class="col-md-4">
-                                {% if attachement_obj.0.level_result_document %}
-                                <a href="{{ attachement_obj.0.level_result_document.url }}" target="_blank">Preview Academic Certificate</a>
-                                     {% else %}
-                                     ----
-                                {% endif %}
-                            </div>
+                    <div class="">
+                        <label class="col-md-2 control-label">Academic Certificate:</label>
 
+                        <div class="col-md-4">
+                            {% if attachement_obj.0.level_result_document %}
+                                <a href="{{ attachement_obj.0.level_result_document.url }}" target="_blank">Preview
+                                    Academic Certificate</a>
+                            {% else %}
+                                ----
+                            {% endif %}
                         </div>
 
+                    </div>
 
 
                 </div>
-            <br>
-            <div class="row">
+                <br>
+                <div class="row">
 
 
-                <div class="">
-                            <label class="col-md-2 control-label">Transcript:</label>
+                    <div class="">
+                        <label class="col-md-2 control-label">Transcript:</label>
 
-                            <div class="col-md-4">
-                                {% if attachement_obj.0.transcript_document %}
-                                <a href="{{ attachement_obj.0.transcript_document.url }}" target="_blank">Preview Transcript</a>
-                                     {% else %}
-                                     ----
-                                {% endif %}
-                            </div>
-
+                        <div class="col-md-4">
+                            {% if attachement_obj.0.transcript_document %}
+                                <a href="{{ attachement_obj.0.transcript_document.url }}" target="_blank">Preview
+                                    Transcript</a>
+                            {% else %}
+                                ----
+                            {% endif %}
                         </div>
 
+                    </div>
 
-                 <div class="">
-                            <label class="col-md-2 control-label">English Language Proficiency Certificate:</label>
 
-                            <div class="col-md-4">
-                                {% if attachement_obj.0.english_test_result_document %}
-                                <a href="{{ attachement_obj.0.english_test_result_document.url }}" target="_blank">Preview English Language Proficiency Certificate</a>
-                                     {% else %}
-                                     ----
-                                {% endif %}
-                            </div>
+                    <div class="">
+                        <label class="col-md-2 control-label">English Language Proficiency Certificate:</label>
 
+                        <div class="col-md-4">
+                            {% if attachement_obj.0.english_test_result_document %}
+                                <a href="{{ attachement_obj.0.english_test_result_document.url }}" target="_blank">Preview
+                                    English Language Proficiency Certificate</a>
+                            {% else %}
+                                ----
+                            {% endif %}
                         </div>
 
+                    </div>
 
-            </div>
-            <br>
-            <div class="row">
 
-            <div class="">
-                            <label class="col-md-2 control-label">Recommendation Letter:</label>
+                </div>
+                <br>
+                <div class="row">
 
-                            <div class="col-md-4">
-                                {% if attachement_obj.0.recommendation_letter %}
-                                <a href="{{ attachement_obj.0.recommendation_letter.url }}" target="_blank">Preview Recommendation Letter</a>
-                                     {% else %}
-                                     ----
-                                {% endif %}
-                            </div>
+                    <div class="">
+                        <label class="col-md-2 control-label">Recommendation Letter:</label>
 
+                        <div class="col-md-4">
+                            {% if attachement_obj.0.recommendation_letter %}
+                                <a href="{{ attachement_obj.0.recommendation_letter.url }}" target="_blank">Preview
+                                    Recommendation Letter</a>
+                            {% else %}
+                                ----
+                            {% endif %}
                         </div>
-            </div>
 
-            <hr>
+                    </div>
+                </div>
 
-
-
+                <hr>
 
 
             </div>
