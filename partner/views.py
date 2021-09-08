@@ -278,9 +278,9 @@ def template_approving_application(request):
         #         is_submitted=True, year=get_current_year(request))
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
-
+    documents_recs = DocumentDetails.objects.all()
     return render(request, 'template_approving_application.html',
-                  {'applicant_recs': applicant_recs})
+                  {'applicant_recs': applicant_recs,'documents_recs':documents_recs})
 
 
 # def change_application_status(request):

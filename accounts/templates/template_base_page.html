@@ -560,7 +560,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             <li class="nav-item organization_settings_nav_item">
                                 {% if 'University Settings' in access_list %}
                                     <a href="javascript:;" class="nav-link nav-toggle">
-                                        <i class="fa fa-building-o" aria-hidden="true"></i>
+                                        <i class="fa fa-university" aria-hidden="true"></i>
 
 
                                         <span class="title">University Settings</span>
@@ -630,7 +630,8 @@ License: You must have a valid license purchased only from themeforest(the above
                             <li class="nav-item program_settings_nav_item">
                                 {% if 'Academic Settings' in access_list %}
                                     <a href="javascript:;" class="nav-link nav-toggle">
-                                        <i class="fa fa-university" aria-hidden="true"></i>
+
+                                        <i class="glyphicon glyphicon-education" aria-hidden="true"></i>
                                         <span class="title">Academic Settings</span>
                                         <span class="arrow program_settings_arrow"></span>
                                     </a>
@@ -699,7 +700,7 @@ License: You must have a valid license purchased only from themeforest(the above
                         {% if 'student.can_view_student_personal_info' in perms %}
                                 <li class="nav-item " id="personal_info">
                                     <a href="{% url 'student:applicant_intake_info' %}" class="nav-link nav-toggle">
-                                        <i class="fa fa-tasks"></i>
+                                        <i class="fa fa-university"></i>
                                         <span class="title">Intake Info</span>
                                         {% if user.get_student_application.intake_flag %}
                                             <span class="title glyphicon glyphicon-ok"

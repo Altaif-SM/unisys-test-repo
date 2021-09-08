@@ -665,47 +665,18 @@
                                         </div>
                                         <br>
                                         <div class="row">
+                                            {% for rec in documents_recs %}
                                             <div class="">
-                                                <label class="col-md-4 control-label">Personal Photo:</label>
+                                                <label class="col-md-4 control-label">{{ rec.document_name|default_if_none:"" }}:</label>
                                                 <div class="col-md-2">
-                                                    <input name="conditional_check" type="checkbox" class="checkboxes" value="Personal Photo">
+                                                    <input name="conditional_check" type="checkbox" class="checkboxes" value="{{ rec.document_name|default_if_none:"" }}">
                                                 </div>
                                             </div>
-                                            <div class="">
-                                                <label class="col-md-4 control-label">Passport ID:</label>
-                                                <div class="col-md-2">
-                                                    <input name="conditional_check" type="checkbox" class="checkboxes" value="Passport ID">
-                                                </div>
-                                            </div>
+                                            {% endfor %}
+
                                         </div>
-                                        <div class="row">
-                                            <div class="">
-                                                <label class="col-md-4 control-label">Academic Certificate:</label>
-                                                <div class="col-md-2">
-                                                    <input name="conditional_check" type="checkbox" class="checkboxes" value="Academic Certificate">
-                                                </div>
-                                            </div>
-                                            <div class="">
-                                                <label class="col-md-4 control-label">Transcript:</label>
-                                                <div class="col-md-2">
-                                                    <input name="conditional_check" type="checkbox" class="checkboxes" value="Transcript">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="">
-                                                <label class="col-md-4 control-label">English Language Proficiency Certificate:</label>
-                                                <div class="col-md-2">
-                                                    <input name="conditional_check" type="checkbox" class="checkboxes" value="English Language Proficiency Certificate">
-                                                </div>
-                                            </div>
-                                            <div class="">
-                                                <label class="col-md-4 control-label">Recommendation Letter:</label>
-                                                <div class="col-md-2">
-                                                    <input name="conditional_check" type="checkbox" class="checkboxes" value="Recommendation Letter">
-                                                </div>
-                                            </div>
-                                        </div>
+
+
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" id="cancel_model" data-dismiss="modal"
