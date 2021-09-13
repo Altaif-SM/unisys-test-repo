@@ -630,7 +630,7 @@ function showOptions(s) {
                                                 </option>
 
                                                 {% for rec in country_recs %}
-                                                    <option value='{{ rec.id }}'>{{ rec.country_name|default_if_none:"" }}</option>
+                                                    <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
