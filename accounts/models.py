@@ -244,6 +244,22 @@ class User(AbstractUser):
 
             return None
 
+    @property
+    def get_student_progress(self):
+        form_vals = {}
+        if self.role.all().filter(name__in=[self.STUDENT]).exists():
+            try:
+                applicaton_obj = self.student_user_rel.get().student_applicant_rel.get(year__active_year=True)
+                form_vals['progress_counter'] = applicaton_obj.progress_counter
+                return form_vals
+            except:
+                form_vals['progress_counter'] = 0
+                return form_vals
+        else:
+
+            form_vals['progress_counter'] = 0
+            return form_vals
+
 
     @property
     def notifications(self):

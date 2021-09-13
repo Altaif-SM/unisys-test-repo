@@ -149,6 +149,7 @@ def save_update_applicant_personal_info(request):
 
                         application_id = get_application_id(application_obj)
                         application_obj.application_id = application_id
+                        application_obj.progress_counter = 20
                         application_obj.address = address_obj
                         application_obj.save()
 
@@ -397,6 +398,13 @@ def save_update_applicant_academic_english_qualification(request):
             if StudentDetails.objects.filter(user=request.user):
                 # if not request.user.get_application.is_submitted:
                 try:
+                    if not AcademicQualificationDetails.objects.filter(applicant_id = request.user.get_application).exists():
+                        application_obj = ApplicationDetails.objects.get(id = request.user.get_application.id)
+                        progress_counter = application_obj.progress_counter
+                        progress_counter = progress_counter + 20
+                        application_obj.progress_counter = progress_counter
+                        application_obj.save()
+
                     for x in range(int(academic_count)):
                         try:
                             x = x + 1
@@ -1343,21 +1351,31 @@ def my_application(request):
 def submit_application(request):
     try:
         app_id = request.POST.get('app_id')
+        application_obj = ApplicationDetails.objects.get(id=app_id)
+        if not application_obj.university:
+            messages.warning(request,"Please fill the Intake Information section before submitting the application.")
+            return redirect('/student/applicant_intake_info/')
         if not AcademicQualificationDetails.objects.filter(applicant_id=request.user.get_application):
-            messages.success(request, "Please fill the academic qualification section before submitting the application  ...")
-            return redirect('/student/my_application/')
+            messages.warning(request, "Please fill the Academic Qualification section before submitting the application.")
+            return redirect('/student/applicant_academic_english_qualification/')
+        if not AdditionInformationDetails.objects.filter(application_id=request.user.get_application):
+            messages.warning(request, "Please fill the Additional Information section before submitting the application.")
+            return redirect('/student/applicant_additional_information/')
+        if not ApplicantAttachementDetails.objects.filter(applicant_id=request.user.get_application):
+            messages.warning(request, "Please fill the Attachement section before submitting the application.")
+            return redirect('/student/applicant_attachment_submission/')
 
-        # if not ApplicantAboutDetails.objects.filter(applicant_id=request.user.get_application):
-        #     messages.success(request, "Please fill the scholarship section before submitting the application  ...")
-        #     return redirect('/student/my_application/')
-
-
+        if application_obj.is_submitted == False:
+            progress_counter = application_obj.progress_counter
+            progress_counter = progress_counter + 10
+            application_obj.progress_counter = progress_counter
+            application_obj.save()
 
         ApplicationDetails.objects.filter(application_id=request.user.get_application_id).update(is_submitted=True,is_online_admission = True)
         ApplicationHistoryDetails.objects.create(applicant_id=request.user.get_application,
                                                  status='Application Submitted',
                                                  remark='Your application is submitted and your University will be notified on further updates regarding your applications.')
-        application_obj = ApplicationDetails.objects.get(id=app_id)
+
         # try:
         #     email_rec = EmailTemplates.objects.get(template_for='Student Application Submission',
         #                                            is_active=True)
@@ -2203,29 +2221,36 @@ def save_update_applicant_additional_info(request):
                             is_sponsored=False
                         )
                 else:
-                    AdditionInformationDetails.objects.create(application_id=request.user.get_application,ken_name=request.POST['ken_name'],
-                        ken_id=request.POST['ken_id'],
-                        ken_relationship=request.POST['ken_relationship'],
-                        ken_tel_no=request.POST['ken_tel_no'],
-                        ken_email=request.POST['ken_email'],
-                        ref_by_student_id=request.POST['student'] if request.POST['student'] else None,
-                        ref_by_agent_id=request.POST['agent'] if request.POST['agent'] else None)
-                    if request.POST['is_sponsored'] == 'Yes':
-                        AdditionInformationDetails.objects.filter(application_id=request.user.get_application).update(
-                            sponsore_organisation=request.POST['sponsore_organisation'],
-                            sponsore_address=request.POST['sponsore_address'],
-                            sponsore_email=request.POST['sponsore_email'],
-                            sponsore_contact=request.POST['sponsore_contact'],
-                            is_sponsored=True
-                        )
-                    else:
-                        AdditionInformationDetails.objects.filter(application_id=request.user.get_application).update(
-                            sponsore_organisation='',
-                            sponsore_address='',
-                            sponsore_email='',
-                            sponsore_contact='',
-                            is_sponsored=False
-                        )
+                    if request.POST['ken_name'] != '' or request.POST['ken_id'] != '' or request.POST['ken_relationship'] != '' or request.POST['ken_tel_no'] != '' or request.POST['ken_email'] != '' or request.POST['student'] != '' or request.POST['agent'] != '' or request.POST['is_sponsored'] != 'No':
+                        application_obj = ApplicationDetails.objects.get(id=request.user.get_application.id)
+                        progress_counter = application_obj.progress_counter
+                        progress_counter = progress_counter + 20
+                        application_obj.progress_counter = progress_counter
+                        application_obj.save()
+
+                        AdditionInformationDetails.objects.create(application_id=request.user.get_application,ken_name=request.POST['ken_name'],
+                            ken_id=request.POST['ken_id'],
+                            ken_relationship=request.POST['ken_relationship'],
+                            ken_tel_no=request.POST['ken_tel_no'],
+                            ken_email=request.POST['ken_email'],
+                            ref_by_student_id=request.POST['student'] if request.POST['student'] else None,
+                            ref_by_agent_id=request.POST['agent'] if request.POST['agent'] else None)
+                        if request.POST['is_sponsored'] == 'Yes':
+                            AdditionInformationDetails.objects.filter(application_id=request.user.get_application).update(
+                                sponsore_organisation=request.POST['sponsore_organisation'],
+                                sponsore_address=request.POST['sponsore_address'],
+                                sponsore_email=request.POST['sponsore_email'],
+                                sponsore_contact=request.POST['sponsore_contact'],
+                                is_sponsored=True
+                            )
+                        else:
+                            AdditionInformationDetails.objects.filter(application_id=request.user.get_application).update(
+                                sponsore_organisation='',
+                                sponsore_address='',
+                                sponsore_email='',
+                                sponsore_contact='',
+                                is_sponsored=False
+                            )
                 redirect_flag = True
             if redirect_flag:
                 messages.success(request, "Record saved")
@@ -2284,28 +2309,40 @@ def save_attachement_submission(request):
             attachment_obj = ApplicantAttachementDetails.objects.get(
                 applicant_id=request.user.get_application)
         else:
-            attachment_obj = ApplicantAttachementDetails.objects.create(
-                applicant_id=request.user.get_application)
-
+            if (passport_photo is not None) or (photo is not None) or (level_result_document is not None) or (transcript_document is not None) or (english_test_result_document is not None) or (recommendation_letter is not None):
+                if not ApplicantAttachementDetails.objects.filter(applicant_id=request.user.get_application).exists():
+                    application_obj = ApplicationDetails.objects.get(id=request.user.get_application.id)
+                    progress_counter = application_obj.progress_counter
+                    progress_counter = progress_counter + 10
+                    application_obj.progress_counter = progress_counter
+                    application_obj.save()
+                attachment_obj = ApplicantAttachementDetails.objects.create(
+                    applicant_id=request.user.get_application)
         if passport_photo:
             attachment_obj.passport_image = passport_photo
+            attachment_obj.save()
 
         if photo:
             attachment_obj.image = photo
+            attachment_obj.save()
 
         if level_result_document:
             attachment_obj.level_result_document = level_result_document
+            attachment_obj.save()
 
         if transcript_document:
             attachment_obj.transcript_document = transcript_document
+            attachment_obj.save()
 
         if english_test_result_document:
             attachment_obj.english_test_result_document = english_test_result_document
+            attachment_obj.save()
 
         if recommendation_letter:
             attachment_obj.recommendation_letter = recommendation_letter
+            attachment_obj.save()
 
-        attachment_obj.save()
+
 
         messages.success(request, "Attachment submitted successfully.")
 
@@ -2423,6 +2460,8 @@ def applicant_intake_info(request):
                 raw_dict['campus_name'] = rec.campus.campus_name
                 raw_dict['id'] = rec.campus.id
                 campus_list.append(raw_dict)
+
+
     else:
         university_recs = UniversityDetails.objects.filter(is_delete=False, is_partner_university=False).order_by('-id')
 
@@ -2461,6 +2500,13 @@ def save_update_applicant_intake_info(request):
     if request.POST:
         try:
             application_id = request.POST['application_id']
+            application_obj = ApplicationDetails.objects.get(id = application_id)
+            if not application_obj.university:
+                progress_counter = application_obj.progress_counter
+                progress_counter = progress_counter + 20
+                application_obj.progress_counter = progress_counter
+                application_obj.save()
+
             ApplicationDetails.objects.filter(id=application_id).update(
                 university_id=request.POST['university'],
                 semester_id=request.POST['semester'],

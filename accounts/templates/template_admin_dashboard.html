@@ -298,7 +298,7 @@
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <span> Dashboard </span>
+                <span> Dashboard</span>
             </li>
 
         </ul>
@@ -315,6 +315,170 @@
     <div class="portlet light">
 
         <div class="portlet-body">
+
+            <h3 class="page-title">
+                Dashboard
+            </h3>
+            <!-- END PAGE HEADER-->
+            <!-- BEGIN DASHBOARD STATS -->
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat blue-madison">
+                        <div class="visual">
+                            <i class="fa fa-comments"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number">
+                                {{ raw_list.0 }}
+                            </div>
+                            <div class="desc">
+                                Applicants
+                            </div>
+                        </div>
+                        <a class="more" href="javascript:;">
+                            View more <i class="m-icon-swapright m-icon-white"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat red-intense">
+                        <div class="visual">
+                            <i class="fa fa-bar-chart-o"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number">
+                                {{ raw_list.1 }}
+                            </div>
+                            <div class="desc">
+                                Conditional Offer Letter
+                            </div>
+                        </div>
+                        <a class="more" href="javascript:;">
+                            View more <i class="m-icon-swapright m-icon-white"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat green-haze">
+                        <div class="visual">
+                            <i class="fa fa-shopping-cart"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number">
+                                {{ raw_list.2 }}
+                            </div>
+                            <div class="desc">
+                                Full Offer Letter
+                            </div>
+                        </div>
+                        <span class="more" href="javascript:;">
+						View more <i class="m-icon-swapright m-icon-white"></i>
+						</span>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat purple-plum">
+                        <div class="visual">
+                            <i class="fa fa-globe"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number">
+                                {{ raw_list.6 }}
+                            </div>
+                            <div class="desc">
+                                Total
+                            </div>
+                        </div>
+                        <a class="more" href="javascript:;">
+                            View more <i class="m-icon-swapright m-icon-white"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+
+            <div class="clearfix">
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-sm-6">
+                    <div class="portlet light ">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-share font-blue-steel hide"></i>
+                                <span class="caption-subject font-blue-steel bold uppercase">Recent Activities</span>
+                            </div>
+
+                        </div>
+                        <div class="portlet-body">
+                            <div class="scroller" style="height: 150px;" data-always-visible="1" data-rail-visible="0">
+                                <ul class="feeds">
+                                    {% for notification in user.notifications.notifications %}
+                                        <li>
+                                        <a href="javascript:;">
+                                            <div class="col1">
+                                                <div class="cont">
+                                                    <div class="cont-col1">
+                                                        <div class="{% if forloop.counter|divisibleby:2 %}label label-sm label-info{% else %}label label-sm label-success{% endif %}" >
+                                                            <i class="fa fa-bell-o"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="cont-col2">
+                                                        <div class="desc">
+                                                            {{ notification.message }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col2">
+                                                <div class="date">
+                                                   {{ notification.last_updated|date:'d-m-y' }}
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+
+                                    {% endfor %}
+
+
+
+
+{#                                    <li>#}
+{#                                        <div class="col1">#}
+{#                                            <div class="cont">#}
+{#                                                <div class="cont-col1">#}
+{#                                                    <div class="label label-sm label-success">#}
+{#                                                        <i class="fa fa-bell-o"></i>#}
+{#                                                    </div>#}
+{#                                                </div>#}
+{#                                                <div class="cont-col2">#}
+{#                                                    <div class="desc">#}
+{#                                                        You have 5 pending membership that requires a quick review.#}
+{#                                                    </div>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                        <div class="col2">#}
+{#                                            <div class="date">#}
+{#                                                24 mins#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </li>#}
+
+
+                                </ul>
+                            </div>
+                            {#							<div class="scroller-footer">#}
+                            {#								<div class="btn-arrow-link pull-right">#}
+                            {#									<a href="javascript:;">See All Records</a>#}
+                            {#									<i class="icon-arrow-right"></i>#}
+                            {#								</div>#}
+                            {#							</div>#}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
             <div class="row">
 
                 <div class="col-md-10 col-sm-10">
@@ -334,84 +498,84 @@
                 </div>
 
 
-
-            </div><hr>
+            </div>
+            <hr>
 
             <div class="row">
-{#                {% if user.is_super_admin %}#}
-                    <div class="col-md-6 col-sm-6">
-                        <div class="portlet light ">
-                            <div class="portlet-body">
-                                <div id="chartdiv_three" style="width: 100%; height: 262px;"></div>
-                            </div>
+                {#                {% if user.is_super_admin %}#}
+                <div class="col-md-6 col-sm-6">
+                    <div class="portlet light ">
+                        <div class="portlet-body">
+                            <div id="chartdiv_three" style="width: 100%; height: 262px;"></div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="col-md-4 col-sm-4" style="float: right;">
-                        <!-- BEGIN PORTLET-->
-                        <div class="portlet light ">
-                            <div class="portlet-title">
-                                <div class="caption">
-                                    <i class="icon-bar-chart font-dark hide"></i>
-                                    <span class="caption-subject font-dark bold uppercase">Quick Controls </span>
-                                </div>
-                            </div>
-                            <div class="portlet-body">
-
-
-                                <div class="row ">
-                                    <label class="col-md-3 control-label">Registration:</label>
-                                    <div class="col-md-offset-6" style="">
-
-                                        {% if registration_flag %}
-                                            <input type="checkbox" id="id_registration_switch" checked>
-                                        {% else %}
-                                            <input type="checkbox" id="id_registration_switch">
-                                        {% endif %}
-
-                                    </div>
-                                </div>
-                                <br>
-
-                                <div class="row">
-                                    <label class="col-md-3 control-label">Submission:</label>
-                                    <div class="col-md-offset-6">
-                                        {% if submission_switch %}
-                                            <input type="checkbox" id="id_submission_switch" checked>
-                                        {% else %}
-                                            <input type="checkbox" id="id_submission_switch">
-                                        {% endif %}
-
-                                    </div>
-                                </div>
-
+                <div class="col-md-4 col-sm-4" style="float: right;">
+                    <!-- BEGIN PORTLET-->
+                    <div class="portlet light ">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-bar-chart font-dark hide"></i>
+                                <span class="caption-subject font-dark bold uppercase">Quick Controls </span>
                             </div>
                         </div>
-                        <!-- END PORTLET-->
-                    </div>
+                        <div class="portlet-body">
 
-{#                {% endif %}#}
+
+                            <div class="row ">
+                                <label class="col-md-3 control-label">Registration:</label>
+                                <div class="col-md-offset-6" style="">
+
+                                    {% if registration_flag %}
+                                        <input type="checkbox" id="id_registration_switch" checked>
+                                    {% else %}
+                                        <input type="checkbox" id="id_registration_switch">
+                                    {% endif %}
+
+                                </div>
+                            </div>
+                            <br>
+
+                            <div class="row">
+                                <label class="col-md-3 control-label">Submission:</label>
+                                <div class="col-md-offset-6">
+                                    {% if submission_switch %}
+                                        <input type="checkbox" id="id_submission_switch" checked>
+                                    {% else %}
+                                        <input type="checkbox" id="id_submission_switch">
+                                    {% endif %}
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- END PORTLET-->
+                </div>
+
+                {#                {% endif %}#}
             </div>
 
-{#            {% if user.is_super_admin %}#}
-                <div class="row">
-                    <div class="col-md-6 col-sm-6" style="display: none">
-                        <div class="portlet light ">
-                            <div class="portlet-body">
-                                <div id="chartdiv_two" style="width: 100%; height: 262px;"></div>
-                            </div>
+            {#            {% if user.is_super_admin %}#}
+            <div class="row">
+                <div class="col-md-6 col-sm-6" style="display: none">
+                    <div class="portlet light ">
+                        <div class="portlet-body">
+                            <div id="chartdiv_two" style="width: 100%; height: 262px;"></div>
                         </div>
                     </div>
+                </div>
 
 
-{#                    <div class="col-md-6 col-sm-6">#}
-{#                        <div class="portlet light ">#}
-{#                            <div class="portlet-body">#}
-{#                                <div id="chartdiv_three" style="width: 100%; height: 262px;"></div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </div>#}
-{#            {% endif %}#}
+                {#                    <div class="col-md-6 col-sm-6">#}
+                {#                        <div class="portlet light ">#}
+                {#                            <div class="portlet-body">#}
+                {#                                <div id="chartdiv_three" style="width: 100%; height: 262px;"></div>#}
+                {#                            </div>#}
+                {#                        </div>#}
+                {#                    </div>#}
+                {#            {% endif %}#}
 
             </div>
 

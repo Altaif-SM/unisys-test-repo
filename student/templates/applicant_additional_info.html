@@ -54,9 +54,19 @@
                     var is_sponsored = $('input[name="is_sponsored"]:checked').val();
                     if(is_sponsored === 'No'){
                          $(".sponsored").prop("disabled", true);
+                         $('#sponsore_organisation').prop("required", false);
+                        $('#sponsore_address').prop("required", false);
+                        $('#sponsore_email').prop("required", false);
+                        $('#sponsore_contact').prop("required", false);
+
                     }
                     else{
                         $(".sponsored").prop("disabled", false);
+                        $('#sponsore_organisation').prop("required", true);
+                        $('#sponsore_address').prop("required", true);
+                        $('#sponsore_email').prop("required", true);
+                        $('#sponsore_contact').prop("required", true);
+
                     }
                 })
 

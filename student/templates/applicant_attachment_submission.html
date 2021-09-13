@@ -84,6 +84,8 @@
 
                             };
                             img.src = objectUrl;
+                             var file_name = $(this).val().split('\\')[2];
+                        $(this).prev().children().children('.file_value').val(file_name);
                         }
 
 
@@ -164,10 +166,10 @@
                     <div class="form-body">
                         <div class="row">
                             <div class="">
-                                <label class="col-md-4 control-label">Personal Photo:<br><span
-                                        style="color:red;font-size: 12px">(photo must be jpg and White background)</span><br><span
-                                        style="color:red;font-size: 12px">(Maximum file height and width must be 280px*217px)<br><span
-                                        style="color:red;font-size: 12px">(Maximum file size must be 66 KB)</span></label>
+                                <label class="col-md-4 control-label">Personal Photo:<br><span style="color:red;font-size: 12px">(photo must be jpg and White background)</span>
+                                    <br><span style="color:red;font-size: 12px">(Maximum file height and width must be 280px*217px)</span>
+                                    <br><span style="color:red;font-size: 12px">(Maximum file size must be 66 KB)</span>
+                                </label>
                                 <div class="col-md-3" id="parent1" style="margin-top:20px;">
                                     {% if attachment_obj.image %}
                                         <label class="form-control"
