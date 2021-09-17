@@ -29,6 +29,7 @@ urlpatterns = [
     path('partner/', include('partner.urls', namespace='partner')),
     path('donor/', include('donor.urls', namespace='donor')),
     path('parent/', include('parent.urls', namespace='parent')),
+    path('payments/', include('payments.urls', namespace='payments')),
     path('admin/', admin.site.urls),
     path('password_reset/', include('password_reset.urls', namespace='password_reset')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

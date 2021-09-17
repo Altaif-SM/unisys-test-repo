@@ -267,7 +267,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                             <li>
                                                 <a href="javascript:;">
                                                     <span class="task">
-                                                    <span class="desc">Application Progress (Poor)</span>
+                                                    <span class="desc">Application Progress (Good)</span>
 
                                                     <span class="percent">{{ user.get_student_progress.progress_counter }}%</span>
                                                     </span>
@@ -285,7 +285,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                             <li>
                                                 <a href="javascript:;">
                                                     <span class="task">
-                                                    <span class="desc">Application Progress (Good)</span>
+                                                    <span class="desc">Application Progress (Better)</span>
                                                     <span class="percent">{{ user.get_student_progress.progress_counter }}%</span>
                                                     </span>
                                                                     <span class="progress">
@@ -1228,6 +1228,29 @@ License: You must have a valid license purchased only from themeforest(the above
                     </div>  <!-- END tabpane -->
 
 
+                <div class="tab-pane " id="payments">
+                        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
+                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+
+
+                            {% if 'student.can_view_student_application_progress_history' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'payments:checkout' %}"
+                                       class="nav-link nav-toggle">
+{#                                        <i class="glyphicon-credit-card"></i>#}
+                                        <span class="glyphicon glyphicon-credit-card" style="font-size: 28px"></span>
+                                        <span class="title">Payments</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+
+                        </ul>
+                        <!-- END SIDEBAR MENU -->
+                    </div>  <!-- END tabpane -->
+
+
                 </div> <!-- tab-content -->
             </div>
             <!-- END SIDEBAR -->
@@ -1268,6 +1291,10 @@ License: You must have a valid license purchased only from themeforest(the above
 
                         {% if user.is_student %}
                             <li id="app_offer_status"><a href="#offer_status" data-toggle="tab">Offer Status</a></li>
+                        {% endif %}
+
+                    {% if user.is_student %}
+                            <li id="app_payments"><a href="#payments" data-toggle="tab">Payments</a></li>
                         {% endif %}
 
                     </ul>
@@ -1441,6 +1468,16 @@ License: You must have a valid license purchased only from themeforest(the above
             element.classList.add("active");
 
             var element = document.getElementById("app_offer_status");
+            element.classList.add("active");
+        }
+    {% endif %}
+
+        {% if request.resolver_match.url_name == 'checkout' %}
+        {
+            var element = document.getElementById("payments");
+            element.classList.add("active");
+
+            var element = document.getElementById("app_payments");
             element.classList.add("active");
         }
     {% endif %}

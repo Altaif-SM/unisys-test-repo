@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'parent.apps.ParentConfig',
     'mathfilters',
     'password_reset.apps.PasswordResetConfig',
+    'payments.apps.PaymentsConfig',
 ]
 
 MIDDLEWARE = [
