@@ -2894,6 +2894,7 @@ def save_students_parent_linking(request):
 #         return redirect('/partner/template_applicant_all_details/' + str(app_id))
 
 
+
 def application_all_details_pdf(request, app_id):
     try:
         year_recs = YearDetails.objects.all()
