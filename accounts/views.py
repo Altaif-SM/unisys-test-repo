@@ -247,7 +247,7 @@ def user_signup(request):
 
                     if request.POST['role'] == "Student":
                         # student_obj = StudentDetails.objects.create(user=user, address=address)
-                        user.is_active = False
+                        user.is_active = True
                         user.save()
                         student_obj = StudentDetails.objects.create(user=user)
 
@@ -258,13 +258,13 @@ def user_signup(request):
                         #                              request, True)
                         # except:
 
-                        subject = 'Sign up Completed'
-                        message = 'Your Sign up completed in NAMA. Please click on the given button to activate your account.'
-                        send_signup_email_to_applicant(student_obj.user.email, student_obj.user.email, subject,
-                                                       message,
-                                                       student_obj.user.first_name, user.id)
-
-                        messages.info(request,"The activation link is sent to your email id ... ")
+                        # subject = 'Sign up Completed'
+                        # message = 'Your Sign up completed in NAMA. Please click on the given button to activate your account.'
+                        # send_signup_email_to_applicant(student_obj.user.email, student_obj.user.email, subject,
+                        #                                message,
+                        #                                student_obj.user.first_name, user.id)
+                        #
+                        # messages.info(request,"The activation link is sent to your email id ... ")
 
                     if request.POST['role'] == "Partner":
                         PartnerDetails.objects.create(user=user, address=address)

@@ -61,6 +61,8 @@ class AddressDetails(BaseModel):
     street = models.CharField(max_length=80, blank=True, null=True)
     country = models.ForeignKey(CountryDetails, null=True, related_name='address_country_rel', on_delete=models.PROTECT)
     is_same = models.BooleanField(default=False)
+    mobile = models.CharField(max_length=80, blank=True, null=True)
+    whats_app = models.CharField(max_length=80, blank=True, null=True)
 
     class Meta:
         ordering = ('country',)
@@ -403,3 +405,40 @@ class EmailTemplates(BaseModel):
 
 class UploadTermCondition(BaseModel):
     term_condition = models.FileField(upload_to='term_condition/pdf', blank=True, null=True)
+
+
+class EnglishCompetencyTestDetails(BaseModel):
+    english_competency_test = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        ordering = ('id',)
+
+    def __str__(self):
+        return self.english_competency_test
+
+    def to_dict(self):
+        res = {
+            'id': self.id if self.id else '',
+            'english_competency_test': self.english_competency_test if self.english_competency_test else '',
+        }
+
+        return res
+
+class ArabicCompetencyTestDetails(BaseModel):
+    arabic_competency_test = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        ordering = ('id',)
+
+    def __str__(self):
+        return self.arabic_competency_test
+
+    def to_dict(self):
+        res = {
+            'id': self.id if self.id else '',
+            'english_competency_test': self.arabic_competency_test if self.arabic_competency_test else '',
+        }
+
+        return res
+
+

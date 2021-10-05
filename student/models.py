@@ -119,7 +119,7 @@ class ApplicationDetails(BaseModel):
     first_name = models.CharField(max_length=255)
     middle_name = models.CharField(max_length=255, blank=True, null=True)
     last_name = models.CharField(max_length=255, blank=True, null=True)
-
+    surname = models.CharField(max_length=255, blank=True, null=True)
     year = models.ForeignKey('masters.YearDetails', blank=True, null=True, related_name='applicant_year_rel',
                              on_delete=models.PROTECT)
     semester = models.ForeignKey('masters.SemesterDetails', blank=True, null=True,
@@ -213,6 +213,7 @@ class ApplicationDetails(BaseModel):
     second_interview_venue = models.CharField(max_length=500, blank=True, null=True)
 
     personal_info_flag = models.BooleanField(default=True)
+    progress_counter = models.IntegerField(default=0)
 
     # family_info_flag = models.BooleanField(default=False)
     # mother_sibling_info_flag = models.BooleanField(default=False)
@@ -464,6 +465,7 @@ class SiblingDetails(BaseModel):
                                      on_delete=models.PROTECT)
 
 
+
 class AcademicQualificationDetails(BaseModel):
     level = models.CharField(max_length=255, blank=True, null=True)
     level_year = models.CharField(max_length=6, blank=True, null=True)
@@ -473,7 +475,7 @@ class AcademicQualificationDetails(BaseModel):
     degree = models.CharField(max_length=256, blank=True, null=True)
     other_degree = models.CharField(max_length=256, blank=True, null=True)
     major = models.CharField(max_length=256, blank=True, null=True)
-
+    country = models.ForeignKey('masters.CountryDetails', null=True, related_name='academic_country_rel', on_delete=models.PROTECT)
     # o_level = models.CharField(max_length=255, blank=True, null=True)
     # o_level_year = models.CharField(max_length=6, blank=True, null=True)
     # o_level_result = models.CharField(max_length=255, blank=True, null=True)
@@ -489,6 +491,7 @@ class AcademicQualificationDetails(BaseModel):
                                      on_delete=models.PROTECT)
 
 
+
 class EnglishQualificationDetails(BaseModel):
     english_test = models.CharField(max_length=255, blank=True, null=True)
     english_test_year = models.CharField(max_length=10, blank=True, null=True)
@@ -502,6 +505,16 @@ class EnglishQualificationDetails(BaseModel):
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='english_applicant_rel',
                                      on_delete=models.PROTECT)
     english_qualification = models.BooleanField(default=True)
+    english_competency_test = models.ForeignKey('masters.EnglishCompetencyTestDetails', null=True, related_name='english_competency_test_rel',
+                                     on_delete=models.PROTECT)
+
+class ArabicQualificationDetails(BaseModel):
+    applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='arabic_applicant_rel',
+                                     on_delete=models.PROTECT)
+    arabic_competency_test = models.ForeignKey('masters.ArabicCompetencyTestDetails', null=True, related_name='arabic_competency_test_rel',
+                                     on_delete=models.PROTECT)
+    arabic_institution = models.CharField(max_length=255, blank=True, null=True)
+    arabic_test_result = models.CharField(max_length=255, blank=True, null=True)
 
 
 class CurriculumDetails(BaseModel):
@@ -657,3 +670,20 @@ class AdminNotifications(BaseModel):
 
     def __str__(self):
         return self.applicant_id.first_name
+
+
+class AgentDetails(BaseModel):
+    first_name = models.CharField(max_length=256, blank=True, null=True)
+    last_name = models.CharField(max_length=256, blank=True, null=True)
+
+class EmployementHistoryDetails(BaseModel):
+    employer_name = models.CharField(max_length=255, blank=True, null=True)
+    designation = models.CharField(max_length=255, blank=True, null=True)
+    country = models.ForeignKey('masters.CountryDetails', null=True, related_name='employement_history_country_rel',
+                                on_delete=models.PROTECT)
+    from_date = models.DateField(null=True, blank=True)
+    to_date = models.DateField(null=True, blank=True)
+    industry_type = models.CharField(max_length=255, blank=True, null=True)
+    employed_years = models.CharField(max_length=255, blank=True, null=True)
+    applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='employement_history_rel',
+                                     on_delete=models.PROTECT)
