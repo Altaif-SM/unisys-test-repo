@@ -1587,3 +1587,105 @@ def save_terms_condition(request):
     except:
         messages.warning(request, "Record not saved.")
     return redirect('/masters/terms_condition_master/')
+
+
+def scholarship_type(request):
+    scholarship_type_recs = ScholarshipType.objects.all()
+    return render(request, 'scholarship_type_list.html', {'scholarship_type_recs': scholarship_type_recs})
+
+def add_scholarship_type(request):
+    if request.method == 'POST':
+        scholarship_type = request.POST.get('scholarship_type')
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+        status = request.POST.get('status')
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            ScholarshipType.objects.create(scholarship_type=scholarship_type, start_date=start_date, end_date=end_date,status = status)
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/template_scholarship_type/')
+    scholarship_type_recs = ScholarshipType.objects.all()
+    return render(request, 'scholarship_type.html', {'scholarship_type_recs': scholarship_type_recs})
+
+
+def edit_scholarship_type(request, scholarship_type_id=None):
+    scholarship_type_obj = ScholarshipType.objects.get(id=scholarship_type_id)
+    if request.method == 'POST':
+        scholarship_type = request.POST.get('scholarship_type')
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+        status = request.POST.get('status')
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            scholarship_type_obj.scholarship_type = scholarship_type
+            scholarship_type_obj.start_date = start_date
+            scholarship_type_obj.end_date = end_date
+            scholarship_type_obj.status = status
+            scholarship_type_obj.save()
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/scholarship_type/')
+    return render(request, "edit_scholarship_type.html", {'scholarship_type_obj': scholarship_type_obj})
+
+
+def scholarship(request):
+    scholarship_recs = ScholarshipDetails.objects.all()
+    return render(request, 'scholarship.html', {'scholarship_recs': scholarship_recs})
+
+
+def add_scholarship(request):
+    if request.method == 'POST':
+        scholarship_type = request.POST.get('scholarship_type')
+        scholarship_name = request.POST.get('scholarship_name')
+        no_of_seats = request.POST.get('no_of_seats')
+        seats_conditions = request.POST.get('seats_conditions')
+        status = request.POST.get('status')
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            ScholarshipDetails.objects.create(scholarship_type_id=scholarship_type, scholarship_name=scholarship_name, no_of_seats=no_of_seats,seats_conditions = seats_conditions,status = status)
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/scholarship/')
+    scholarship_type_recs = ScholarshipType.objects.all()
+    return render(request, 'add_scholarship.html', {'scholarship_type_recs': scholarship_type_recs})
+
+
+def edit_scholarship(request, scholarship_id=None):
+    scholarship_obj = ScholarshipDetails.objects.get(id=scholarship_id)
+
+    if request.method == 'POST':
+        scholarship_type = request.POST.get('scholarship_type')
+        scholarship_name = request.POST.get('scholarship_name')
+        no_of_seats = request.POST.get('no_of_seats')
+        seats_conditions = request.POST.get('seats_conditions')
+        status = request.POST.get('status')
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            scholarship_obj.scholarship_type_id = scholarship_type
+            scholarship_obj.scholarship_name = scholarship_name
+            scholarship_obj.no_of_seats = no_of_seats
+            scholarship_obj.seats_conditions = seats_conditions
+            scholarship_obj.status = status
+            scholarship_obj.save()
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/scholarship/')
+    scholarship_type_recs = ScholarshipType.objects.all()
+    return render(request, "edit_scholarships.html", {'scholarship_obj': scholarship_obj,'scholarship_type_recs':scholarship_type_recs})

@@ -1,0 +1,263 @@
+{% extends "template_base_page.html" %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+            $(document).ready(function () {
+                $(document).on("click", ".update", function (e) {
+
+                    var parent_id = $(this).closest('tr').attr('id');
+                    var semester_id = $('#' + parent_id + ' #semester_id').val();
+                    var semester_name = $('#' + parent_id + ' .semester_name').val();
+                    var start_date = $('#' + parent_id + ' .start_date').val();
+                    var end_date = $('#' + parent_id + ' .end_date').val();
+
+                    if (semester_name == '') {
+                        $('#' + parent_id + ' .semester_name').focus();
+                        $('#' + parent_id + ' .semester_name').css('border-color', 'red');
+                        return false;
+                    }
+
+                    var url = '/masters/update_semester/';
+                    update_semester_info(url, semester_id, semester_name, start_date, end_date)
+                })
+
+                $(document).on("click", ".delete", function (e) {
+
+                    $('#id_delete_university_model').modal();
+                    var parent_id = $(this).closest('tr').attr('id');
+                    var university_id = $('#' + parent_id + ' #university_id').val();
+                    $("#university_delete_id").val(university_id)
+
+                    {#var url = '/masters/delete_semester/';#}
+                    {#delete_semester_info(url, language_id)#}
+                })
+
+                function delete_semester_info(url, semester_id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            semester_id: semester_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+                            location.reload(true)
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+                function update_semester_info(url, semester_id, semester_name, start_date, end_date) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            semester_id: semester_id,
+                            semester_name: semester_name,
+                            start_date: start_date,
+                            end_date: end_date,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+                            location.reload(true)
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+
+                $(document).on("click", ".edit", function (e) {
+                    var parent_id = $(this).closest('tr').attr('id');
+                    $('.semester_name').css('border-color', '');
+                    var id = $(this).attr('id');
+                    var i = id.split("edit")[1]
+
+                    $(".data").prop("disabled", true);
+                    $(".edit").show();
+                    $(".update").hide();
+
+                    $("#update" + i).show();
+                    $("#edit" + i).hide();
+                    $("#semester_name" + i).prop("disabled", false);
+                    $("#start_date" + i).prop("disabled", false);
+                    $("#end_date" + i).prop("disabled", false);
+                });
+            });
+
+
+            $('#sample_1').dataTable().fnDestroy();
+            $('#sample_1').dataTable({
+                "aoColumnDefs": [
+                    {'bSortable': false}
+                ]
+            });
+        }
+
+
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'accounts:home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> Settings </span>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> Scholarship Settings </span>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span> Scholarship Type </span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase"> Manage Scholarship Type</span>
+            </div>
+            <a href="{% url 'masters:add_scholarship_type' %}">
+                <button type="submit" class="btn green" id="save" style="margin-left:75%;background-color: #3598dc">Add
+                </button>
+            </a>
+        </div>
+
+        <div class="portlet-body">
+
+
+            <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <table class="table table-striped table-hover table-bordered" id="sample_1">
+                    <thead>
+                    <tr>
+                        <th style="display: none">Id</th>
+                        <th>Scholarship Type</th>
+                        <th> Start Date</th>
+                        <th> End Date</th>
+                        <th> Status</th>
+                        <th width="10%">Action</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="tbody">
+                    {% for rec in scholarship_type_recs %}
+                        <tr id="item{{ forloop.counter }}" class="item">
+                            <td style="display: none"><input id="university_id" value="{{ rec.id }}"></td>
+                            <td>{{ rec.scholarship_type|default_if_none:"" }}</td>
+                            <td>{{ rec.start_date|date:"d/m/Y" }}</td>
+                            <td>{{ rec.end_date|date:"d/m/Y" }}</td>
+                            <td>
+                                {% if rec.status == True %}
+                                    <i class="fa fa-power-off" aria-hidden="true"
+                                       style="margin-left: 30px;margin-top:8px;font-size:18px;color:green"></i>
+                                {% else %}
+                                    <i class="fa fa-power-off" aria-hidden="true"
+                                       style="margin-left: 30px;margin-top:8px;font-size:18px;color:red"></i>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'masters:edit_scholarship_type' rec.id %}">
+                                <span type="button" name="edit" id="edit{{ forloop.counter }}"
+                                      class=" edit_btn btn blue glyphicon glyphicon-pencil">
+                                </span>
+                                </a>
+                                <span type="button" name="delete" id="delete{{ forloop.counter }}"
+                                      class=" delete btn red glyphicon glyphicon-trash">
+                                </span>
+                            </td>
+
+
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+
+    <div id="id_delete_university_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{% url 'masters:delete_university' %}"
+                      id="form_sample_1"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" id="university_delete_id" name="university_delete_id">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h4 class="modal-title" style="color: #2a015e; text-align: center"><b>Delete Confirmation</b>
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <p> Are you sure, you want to delete university? </p>
+                        <p> After delete you will not be able to modify the university. </p>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancel_model" data-dismiss="modal" class="btn dark btn-outline">
+                            Cancel
+                        </button>
+                        <button type="submit" id="delete_language" class="btn red">Confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

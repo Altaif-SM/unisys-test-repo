@@ -365,12 +365,33 @@ License: You must have a valid license purchased only from themeforest(the above
                                         <span class="title">Manage Year</span>
                                     </a>
                                 </li>
-                                <li class="nav-item  ">
-                                    <a href="/masters/template_scholarship_master/" class="nav-link ">
+{#                                <li class="nav-item  ">#}
+{#                                    <a href="/masters/template_scholarship_master/" class="nav-link ">#}
+{#                                        <i class="icon-bulb"></i>#}
+{#                                        <span class="title">Manage Scholarships</span>#}
+{#                                    </a>#}
+{#                                </li>#}
+                                <li class="nav-item  template_scholarship_nav_item">
+                                    <a href="javascript:;" class="nav-link nav-toggle">
                                         <i class="icon-bulb"></i>
-                                        <span class="title">Manage Scholarships</span>
+                                        <span class="title">Scholarship Settings</span>
+                                        <span class="arrow template_scholarship_arrow"></span>
                                     </a>
+                                    <ul class="sub-menu template_scholarship_sub_menu">
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:scholarship_type' %}"
+                                               class="nav-link ">
+                                                Scholarship Type </a>
+                                        </li>
+
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:scholarship' %}"
+                                               class="nav-link ">
+                                                Scholarship </a>
+                                        </li>
+                                    </ul>
                                 </li>
+
                                 <li class="nav-item  ">
                                     <a href="javascript:;" class="nav-link nav-toggle">
                                         <i class="icon-graph"></i>
@@ -1240,183 +1261,161 @@ License: You must have a valid license purchased only from themeforest(the above
     {% endif %}
 
     var base_url = window.location.href;
-    if (base_url == 'http://namafund.namafoundation.org/masters/template_year_master/') {
+    if (base_url == 'http://127.0.0.1:8082/masters/template_year_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/masters/template_scholarship_master/') {
+    else if (base_url == 'http://127.0.0.1:8082/masters/template_scholarship_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/masters/terms_condition_master/') {
+    else if (base_url == 'http://127.0.0.1:8082/masters/terms_condition_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/masters/formula_type_master/') {
+    else if (base_url == 'http://127.0.0.1:8082/masters/formula_type_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/masters/template_master_and_phd_master/') {
+    else if (base_url == 'http://127.0.0.1:8082/masters/template_master_and_phd_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/masters/template_scholarship_master/') {
+    else if (base_url == 'http://127.0.0.1:8082/masters/template_scholarship_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/masters/template_master_course_work_master/') {
+    else if (base_url == 'http://127.0.0.1:8082/masters/template_master_course_work_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/masters/template_master_course_work_master/') {
+    else if (base_url == 'http://127.0.0.1:8082/masters/template_master_course_work_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/masters/template_master_course_work_master/') {
+    else if (base_url == 'http://127.0.0.1:8082/masters/template_master_course_work_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/masters/template_master_course_work_master/') {
+    else if (base_url == 'http://127.0.0.1:8082/masters/template_master_course_work_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/masters/template_country_master/') {
+    else if (base_url == 'http://127.0.0.1:8082/masters/template_country_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/masters/template_manage_partner_master/') {
+    else if (base_url == 'http://127.0.0.1:8082/masters/template_manage_partner_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/masters/template_manage_donor_master/') {
+    else if (base_url == 'http://127.0.0.1:8082/masters/template_manage_donor_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/template_link_students_donor/') {
+    else if (base_url == 'http://127.0.0.1:8082/partner/template_link_students_donor/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/template_donor_students_linking/') {
+    else if (base_url == 'http://127.0.0.1:8082/partner/template_donor_students_linking/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/masters/save_degree_formula_master/') {
+    else if (base_url == 'http://127.0.0.1:8082/masters/save_degree_formula_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/filter_donor_student_linking/') {
+    else if (base_url == 'http://127.0.0.1:8082/partner/filter_donor_student_linking/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
     }
-     else if (base_url == 'http://namafund.namafoundation.org/masters/template_university_master/') {
+     else if (base_url == 'http://127.0.0.1:8082/masters/template_university_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
     }
-     else if (base_url == 'http://namafund.namafoundation.org/masters/template_semester_master/') {
+     else if (base_url == 'http://127.0.0.1:8082/masters/template_semester_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
     }
-     else if (base_url == 'http://namafund.namafoundation.org/masters/template_degree_master/') {
+     else if (base_url == 'http://127.0.0.1:8082/masters/template_degree_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
     }
-     else if (base_url == 'http://namafund.namafoundation.org/masters/template_program_master/') {
+     else if (base_url == 'http://127.0.0.1:8082/masters/template_program_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
     }
-     else if (base_url == 'http://namafund.namafoundation.org/masters/template_module_master/') {
+     else if (base_url == 'http://127.0.0.1:8082/masters/template_module_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
         var element = document.getElementById("setting_anch");
         element.classList.add("active");
     }
-     else if (base_url == 'http://namafund.namafoundation.org/masters/template_development_program_master/') {
-        var element = document.getElementById("b");
-        element.classList.add("active");
-
-        var element = document.getElementById("setting_anch");
-        element.classList.add("active");
-    }
-
-    else if (base_url == 'http://namafund.namafoundation.org/accounts/template_manage_user/') {
-        var element = document.getElementById("b");
-        element.classList.add("active");
-
-        var element = document.getElementById("setting_anch");
-        element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/template_link_students_parent/') {
-        var element = document.getElementById("b");
-        element.classList.add("active");
-
-        var element = document.getElementById("setting_anch");
-        element.classList.add("active");
-    }
-    else if (base_url == 'http://namafund.namafoundation.org/masters/email_templates_list/') {
+     else if (base_url == 'http://127.0.0.1:8082/masters/template_development_program_master/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
@@ -1424,8 +1423,21 @@ License: You must have a valid license purchased only from themeforest(the above
         element.classList.add("active");
     }
 
+    else if (base_url == 'http://127.0.0.1:8082/accounts/template_manage_user/') {
+        var element = document.getElementById("b");
+        element.classList.add("active");
 
-    else if (base_url == 'http://namafund.namafoundation.org/masters/create_email_template/') {
+        var element = document.getElementById("setting_anch");
+        element.classList.add("active");
+    }
+    else if (base_url == 'http://127.0.0.1:8082/partner/template_link_students_parent/') {
+        var element = document.getElementById("b");
+        element.classList.add("active");
+
+        var element = document.getElementById("setting_anch");
+        element.classList.add("active");
+    }
+    else if (base_url == 'http://127.0.0.1:8082/masters/email_templates_list/') {
         var element = document.getElementById("b");
         element.classList.add("active");
 
@@ -1433,175 +1445,184 @@ License: You must have a valid license purchased only from themeforest(the above
         element.classList.add("active");
     }
 
-    else if (base_url == 'http://namafund.namafoundation.org/student/applicant_personal_info/') {
+
+    else if (base_url == 'http://127.0.0.1:8082/masters/create_email_template/') {
+        var element = document.getElementById("b");
+        element.classList.add("active");
+
+        var element = document.getElementById("setting_anch");
+        element.classList.add("active");
+    }
+
+    else if (base_url == 'http://127.0.0.1:8082/student/applicant_personal_info/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/student/applicant_academic_progress/') {
+    else if (base_url == 'http://127.0.0.1:8082/student/applicant_academic_progress/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/student/applicant_family_info/') {
+    else if (base_url == 'http://127.0.0.1:8082/student/applicant_family_info/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/student/applicant_family_mother_sibling_info/') {
+    else if (base_url == 'http://127.0.0.1:8082/student/applicant_family_mother_sibling_info/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
     }
-     else if (base_url == 'http://namafund.namafoundation.org/student/applicant_curriculum_experience_info/') {
+     else if (base_url == 'http://127.0.0.1:8082/student/applicant_curriculum_experience_info/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/student/applicant_academic_english_qualification/') {
+    else if (base_url == 'http://127.0.0.1:8082/student/applicant_academic_english_qualification/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/student/applicant_scholarship_about_yourself_info/') {
+    else if (base_url == 'http://127.0.0.1:8082/student/applicant_scholarship_about_yourself_info/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/student/my_application/') {
+    else if (base_url == 'http://127.0.0.1:8082/student/my_application/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/student/applicant_psychometric_test/') {
+    else if (base_url == 'http://127.0.0.1:8082/student/applicant_psychometric_test/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/student/applicant_agreement_submission/') {
+    else if (base_url == 'http://127.0.0.1:8082/student/applicant_agreement_submission/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/student/applicant_program_certificate_submission/') {
+    else if (base_url == 'http://127.0.0.1:8082/student/applicant_program_certificate_submission/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/student/applicant_progress_history/') {
+    else if (base_url == 'http://127.0.0.1:8082/student/applicant_progress_history/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/template_registered_application/') {
+    else if (base_url == 'http://127.0.0.1:8082/partner/template_registered_application/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/template_applicant_scholarship/') {
+    else if (base_url == 'http://127.0.0.1:8082/partner/template_applicant_scholarship/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/template_applicant_scholarship/') {
+    else if (base_url == 'http://127.0.0.1:8082/partner/template_applicant_scholarship/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/filter_application_status/') {
+    else if (base_url == 'http://127.0.0.1:8082/partner/filter_application_status/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/template_approving_application/') {
+    else if (base_url == 'http://127.0.0.1:8082/partner/template_approving_application/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/template_accepted_students/') {
+    else if (base_url == 'http://127.0.0.1:8082/partner/template_accepted_students/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/template_student_progress_history/') {
+    else if (base_url == 'http://127.0.0.1:8082/partner/template_student_progress_history/') {
         var element = document.getElementById("d");
         element.classList.add("active");
 
         var element = document.getElementById("acad_app");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/filter_application_history/') {
+    else if (base_url == 'http://127.0.0.1:8082/partner/filter_application_history/') {
         var element = document.getElementById("d");
         element.classList.add("active");
 
         var element = document.getElementById("acad_app");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/template_psychometric_test_report/') {
+    else if (base_url == 'http://127.0.0.1:8082/partner/template_psychometric_test_report/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/filter_psychometric_test_report/') {
+    else if (base_url == 'http://127.0.0.1:8082/partner/filter_psychometric_test_report/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/template_student_agreement/') {
+    else if (base_url == 'http://127.0.0.1:8082/partner/template_student_agreement/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/filter_student_agreement/') {
+    else if (base_url == 'http://127.0.0.1:8082/partner/filter_student_agreement/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/template_semester_result/') {
+    else if (base_url == 'http://127.0.0.1:8082/partner/template_semester_result/') {
         var element = document.getElementById("d");
         element.classList.add("active");
 
@@ -1609,28 +1630,28 @@ License: You must have a valid license purchased only from themeforest(the above
         element.classList.add("active");
     }
 
-    else if (base_url == 'http://namafund.namafoundation.org/partner/template_attendance_report/') {
+    else if (base_url == 'http://127.0.0.1:8082/partner/template_attendance_report/') {
         var element = document.getElementById("f");
         element.classList.add("active");
 
         var element = document.getElementById("soft_skill");
         element.classList.add("active");
     }
-     else if (base_url == 'http://namafund.namafoundation.org/partner/filter_attendance_report/') {
+     else if (base_url == 'http://127.0.0.1:8082/partner/filter_attendance_report/') {
         var element = document.getElementById("f");
         element.classList.add("active");
 
         var element = document.getElementById("soft_skill");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/donor/template_student_selection/') {
+    else if (base_url == 'http://127.0.0.1:8082/donor/template_student_selection/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/donor/template_student_reports/') {
+    else if (base_url == 'http://127.0.0.1:8082/donor/template_student_reports/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
@@ -1638,49 +1659,49 @@ License: You must have a valid license purchased only from themeforest(the above
         element.classList.add("active");
     }
 
-    else if (base_url == 'http://namafund.namafoundation.org/donor/template_application_progress_history/') {
+    else if (base_url == 'http://127.0.0.1:8082/donor/template_application_progress_history/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/donor/template_my_payments/') {
+    else if (base_url == 'http://127.0.0.1:8082/donor/template_my_payments/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/donor/template_students_receipts/') {
+    else if (base_url == 'http://127.0.0.1:8082/donor/template_students_receipts/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/parent/template_student_academic_report/') {
+    else if (base_url == 'http://127.0.0.1:8082/parent/template_student_academic_report/') {
         var element = document.getElementById("d");
         element.classList.add("active");
 
         var element = document.getElementById("acad_app");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/parent/template_student_application_progress_history/') {
+    else if (base_url == 'http://127.0.0.1:8082/parent/template_student_application_progress_history/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/student/import_applicant_records_tile/') {
+    else if (base_url == 'http://127.0.0.1:8082/student/import_applicant_records_tile/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
         var element = document.getElementById("app_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/student/export_templates/') {
+    else if (base_url == 'http://127.0.0.1:8082/student/export_templates/') {
         var element = document.getElementById("c");
         element.classList.add("active");
 
@@ -1688,77 +1709,77 @@ License: You must have a valid license purchased only from themeforest(the above
         element.classList.add("active");
     }
 
-     else if (base_url == 'http://namafund.namafoundation.org/partner/template_academic_progress/') {
+     else if (base_url == 'http://127.0.0.1:8082/partner/template_academic_progress/') {
         var element = document.getElementById("d");
         element.classList.add("active");
 
         var element = document.getElementById("acad_app");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/filter_academic_progress/') {
+    else if (base_url == 'http://127.0.0.1:8082/partner/filter_academic_progress/') {
         var element = document.getElementById("d");
         element.classList.add("active");
 
         var element = document.getElementById("acad_app");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/accounting/get_student_payment_voucher/') {
+    else if (base_url == 'http://127.0.0.1:8082/accounting/get_student_payment_voucher/') {
         var element = document.getElementById("e");
         element.classList.add("active");
 
         var element = document.getElementById("account_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/accounting/get_student_receipt_voucher/') {
+    else if (base_url == 'http://127.0.0.1:8082/accounting/get_student_receipt_voucher/') {
         var element = document.getElementById("e");
         element.classList.add("active");
 
         var element = document.getElementById("account_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/accounting/get_donor_receipt_voucher/') {
+    else if (base_url == 'http://127.0.0.1:8082/accounting/get_donor_receipt_voucher/') {
         var element = document.getElementById("e");
         element.classList.add("active");
 
         var element = document.getElementById("account_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/accounting/get_student_payment_and_receipt_report/') {
+    else if (base_url == 'http://127.0.0.1:8082/accounting/get_student_payment_and_receipt_report/') {
         var element = document.getElementById("e");
         element.classList.add("active");
 
         var element = document.getElementById("account_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/accounting/get_student_report/') {
+    else if (base_url == 'http://127.0.0.1:8082/accounting/get_student_report/') {
         var element = document.getElementById("e");
         element.classList.add("active");
 
         var element = document.getElementById("account_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/accounting/get_repayment_report/') {
+    else if (base_url == 'http://127.0.0.1:8082/accounting/get_repayment_report/') {
         var element = document.getElementById("e");
         element.classList.add("active");
 
         var element = document.getElementById("account_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/accounting/get_approval_and_paid_total/') {
+    else if (base_url == 'http://127.0.0.1:8082/accounting/get_approval_and_paid_total/') {
         var element = document.getElementById("e");
         element.classList.add("active");
 
         var element = document.getElementById("account_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/accounting/get_donor_report/') {
+    else if (base_url == 'http://127.0.0.1:8082/accounting/get_donor_report/') {
         var element = document.getElementById("e");
         element.classList.add("active");
 
         var element = document.getElementById("account_anch");
         element.classList.add("active");
     }
-    else if (base_url == 'http://namafund.namafoundation.org/partner/template_link_student_program/') {
+    else if (base_url == 'http://127.0.0.1:8082/partner/template_link_student_program/') {
         var element = document.getElementById("f");
         element.classList.add("active");
 
@@ -1827,6 +1848,24 @@ License: You must have a valid license purchased only from themeforest(the above
         var element = document.getElementById("acad_app");
         element.classList.add("active");
     }
+    {% endif %}
+
+
+    {% if request.resolver_match.url_name == 'template_scholarship_type' or request.resolver_match.url_name == 'scholarship_type' or request.resolver_match.url_name == 'add_scholarship_type' or request.resolver_match.url_name == 'edit_scholarship_type' or request.resolver_match.url_name == 'scholarship'  or request.resolver_match.url_name == 'add_scholarship' or request.resolver_match.url_name == 'edit_scholarship'  %}
+        {
+            var element = document.getElementById("b");
+            element.classList.add("active");
+
+            var element = document.getElementById("setting_anch");
+            element.classList.add("active");
+
+
+             $(".template_scholarship_nav_item").addClass("open");
+            $(".template_scholarship_arrow").addClass("open");
+            $('.template_scholarship_sub_menu').css('display', 'block');
+
+
+        }
     {% endif %}
 
 

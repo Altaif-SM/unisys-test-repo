@@ -1,0 +1,407 @@
+{% extends "template_base_page.html" %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+
+        .s-switch input[type='checkbox'] {
+            display: none
+        }
+
+        .s-switch {
+            width: 62px;
+            height: 32px;
+            z-index: 0;
+            margin: 0;
+            padding: 0;
+            appearance: none;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            border-radius: 16px;
+            -moz-border-radius: 16px;
+            -webkit-border-radius: 16px;
+        }
+
+        .s-switch:before {
+            content: ' ';
+            background: #D9534F !important;
+            position: absolute;
+            left: 1px;
+            top: 1px;
+            width: 60px;
+            height: 30px;
+            background: #FFFFFF;
+            z-index: 1;
+            border-radius: 16px;
+            -moz-border-radius: 16px;
+            -webkit-border-radius: 16px;
+        }
+
+        .s-switch:after {
+            content: ' ';
+            height: 29px;
+            width: 29px;
+            border-radius: 28px;
+            z-index: 2;
+            background: #FFFFFF;
+            position: absolute;
+            -webkit-transition-duration: 300ms;
+            transition-duration: 300ms;
+            top: 1px;
+            left: 3px;
+            -webkit-box-shadow: 0 2px 5px #999999;
+            box-shadow: 0 2px 5px #999999;
+        }
+
+        .s-switch-on:before {
+            background: #4DAF48 !important;
+        }
+
+        .s-switch-on:after {
+            left: 31px !important;
+        }
+
+        .s-switch-readonly, .s-switch-disabled {
+            opacity: 0.8;
+        }
+
+
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+
+    <script>
+        window.onload = function () {
+            $(document).ready(function () {
+
+                /*
+
+                var curriculum_count = 1;
+
+                $(document).on("click", ".add_curriculum_row", function (e) {
+                    curriculum_count = curriculum_count + 1;
+                    var row = '<div class="row curriculum_item" id="check_' + curriculum_count + '" style="margin-top: 30px"><div class=""> <label class="col-md-2 control-label">Seats condition ' + curriculum_count + ':</label> <div class="col-md-4"> <input type="text" title="Enter Co-Curriculum" id="curriculum_name_' + curriculum_count + '" name="curriculum_name_' + curriculum_count + '" value="" class="form-control"> <input hidden type="text" name="curriculum_obj_' + curriculum_count + '" id="curriculum_obj_' + curriculum_count + '"></div> </div><div class=""><div class="col-md-1"><a href="javascript:;" class="delete_seat_condition btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div>';
+                    $(row).removeAttr().hide().insertAfter(".curriculum_item:last").slideDown(300);
+                });
+
+                 $(document).on("click", ".delete_seat_condition", function () {
+
+
+
+
+                {#$(this).parents('.curriculum_item').next().closest('br').remove();#}
+                    $(this).parents('.curriculum_item').remove();
+                });
+            */
+
+
+                $("#status").Sswitch({});
+
+                $(document).on("click", ".update", function (e) {
+
+                    var parent_id = $(this).closest('tr').attr('id');
+                    var scholarship_type_id = $('#' + parent_id + ' #scholarship_type_id').val();
+                    var year_name = $('#' + parent_id + ' .year_name').val();
+                    var start_date = $('#' + parent_id + ' .start_date').val();
+                    var end_date = $('#' + parent_id + ' .end_date').val();
+
+                    var url = '/masters/update_year/';
+                    update_year_info(url, scholarship_type_id, year_name, start_date, end_date)
+                })
+
+                $(document).on("click", ".delete", function (e) {
+
+                    var parent_id = $(this).closest('tr').attr('id');
+                    var scholarship_type_id = $('#' + parent_id + ' #scholarship_type_id').val();
+
+                    var url = '/masters/delete_year/';
+                    delete_year_info(url, scholarship_type_id)
+                })
+
+                function delete_year_info(url, scholarship_type_id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            scholarship_type_id: scholarship_type_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+                            location.reload(true)
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+                function update_year_info(url, scholarship_type_id, year_name, start_date, end_date) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            scholarship_type_id: scholarship_type_id,
+                            year_name: year_name,
+                            start_date: start_date,
+                            end_date: end_date,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+                            location.reload(true)
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+
+                $(document).on("click", ".edit", function (e) {
+                    var parent_id = $(this).closest('tr').attr('id');
+                    var id = $(this).attr('id');
+                    var i = id.split("edit")[1]
+
+                    $(".data").prop("disabled", true);
+                    $(".edit").show();
+                    $(".update").hide();
+
+                    $("#update" + i).show();
+                    $("#edit" + i).hide();
+                    $("#scholarship_type" + i).prop("disabled", false);
+                    $("#start_date" + i).prop("disabled", false);
+                    $("#end_date" + i).prop("disabled", false);
+                });
+            });
+
+
+            $('#sample_1').dataTable().fnDestroy();
+            $('#sample_1').dataTable({
+                "aoColumnDefs": [
+                    {'bSortable': false}
+                ]
+            });
+        }
+
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'accounts:home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> Settings </span>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> Scholarship Settings </span>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span> Edit Scholarship </span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase"> Edit Scholarship</span>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+
+            <!-- BEGIN FORM-->
+            <div class="form-body">
+
+                <form action="{% url 'masters:edit_scholarship' scholarship_obj.id %}" id="form_sample_1"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-body">
+
+                        <div class="row">
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Scholarship Type:</label>
+                                <div class="col-md-3">
+                                    <select id='scholarship_type' title="Select Scholarship Type"
+                                            name="scholarship_type"
+                                            class="form-control" required>
+                                        {% if scholarship_obj.scholarship_type %}
+                                            <option style="display: none;" selected="selected" value="{{ scholarship_obj.scholarship_type.id }}">{{ scholarship_obj.scholarship_type.scholarship_type|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option selected="selected" value=""> Please Select</option>
+                                        {% endif %}
+
+                                        {% for rec in scholarship_type_recs %}
+                                            <option value="{{ rec.id }}">{{ rec.scholarship_type|default_if_none:"" }}</option>
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Scholarship Name:
+
+                                </label>
+                                <div class="col-md-3">
+                                    <input type="text" name="scholarship_name" id="scholarship_name"
+                                           value="{{ scholarship_obj.scholarship_name|default_if_none:"" }}"
+                                           class="form-control" required>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <hr>
+
+
+                        <div class="portlet-title" style="margin-left:-15px;font-size: 16px;">
+                            <div class="caption">
+                                <i class="icon-settings font-red"></i>
+                                <span class="caption-subject font-red sbold uppercase">Scholarship Requirements</span>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+
+                            <div class="">
+                                <label class="col-md-2 control-label">No. of seats available:
+
+                                </label>
+                                <div class="col-md-3">
+                                    <input type="text" name="no_of_seats" id="no_of_seats"
+                                           value="{{ scholarship_obj.no_of_seats|default_if_none:"" }}"
+                                           class="form-control" required>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Seats conditions:
+
+                                </label>
+                                <div class="col-md-3">
+                                        <textarea rows="2" class="form-control " id="seats_conditions"
+                                                  name="seats_conditions">{{ scholarship_obj.seats_conditions|default_if_none:"" }}</textarea>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Status:</label>
+                                <div class="col-md-3">
+                                    {% if scholarship_obj.status == True %}
+                                        <input type="checkbox" id="status" name="status" checked>
+                                    {% else %}
+                                        <input type="checkbox" id="status" name="status">
+                                    {% endif %}
+
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+
+
+                        {#                    <input id="curriculum_count" name="curriculum_count" hidden>#}
+                        {##}
+                        {#                        <div class="" style="float: right; padding-right: 500px">#}
+                        {#                            <div class="">#}
+                        {#                                <a href="javascript:;" id="add" class="btn btn-icon-only green add_curriculum_row"#}
+                        {#                                   style="">#}
+                        {#                                    <i class="fa fa-plus "></i>#}
+                        {#                                </a>#}
+                        {#                            </div>#}
+                        {#                        </div>#}
+
+                        {#                            <div class="row curriculum_item" id="check_1">#}
+                        {#                                <div class="">#}
+                        {#                                    <label class="col-md-2 control-label">Seats condition 1:</label>#}
+                        {#                                    <div class="col-md-4">#}
+                        {#                                        <input type="text" title="Enter Co-Curriculum" id="curriculum_name_1"#}
+                        {#                                               name="curriculum_name_1"#}
+                        {#                                               value="" class="form-control">#}
+                        {##}
+                        {#                                        <input hidden type="text" name="curriculum_obj_{{ forloop.counter }}"#}
+                        {#                                               id="curriculum_obj_1">#}
+                        {#                                    </div>#}
+                        {#                                </div>#}
+                        {##}
+                        {##}
+                        {##}
+                        {#                            </div>#}
+
+
+                        <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                                        onclick="window.location='{% url "masters:scholarship" %}'">
+                                    Back
+                                </button>
+
+                                <button type="submit" class="btn green" id="save_form" style="">Save
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
+
+
+        </div>
+    </div>
+{% endblock %}

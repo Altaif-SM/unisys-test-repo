@@ -138,8 +138,32 @@ class DegreeTypeDetails(BaseModel):
         return res
 
 
+class ScholarshipType(BaseModel):
+    scholarship_type = models.CharField(max_length=255, blank=True, null=True)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    status = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ('id',)
+
+    def __str__(self):
+        return self.scholarship_type
+
+    def to_dict(self):
+        res = {
+            'id': self.id if self.id else '',
+            'scholarship_type': self.scholarship_type if self.scholarship_type else '',
+        }
+
+        return res
+
 class ScholarshipDetails(BaseModel):
     scholarship_name = models.CharField(max_length=255, blank=True, null=True)
+    no_of_seats = models.CharField(max_length=255, blank=True, null=True)
+    scholarship_type = models.ForeignKey(ScholarshipType, null=True, related_name='scholarship_type_rel', on_delete=models.PROTECT)
+    seats_conditions = models.TextField(blank=True, null=True)
+    status = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('scholarship_name',)

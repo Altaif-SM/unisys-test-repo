@@ -116,9 +116,18 @@ urlpatterns = [
 
     path('get_table_data/', views.get_table_data, name='get_table_data'),
 
+
     path('template_partner_details/<int:partner_id>/', views.template_partner_details, name='template_partner_details'),
     path('partner_all_details_pdf/<int:partner_id>/', views.partner_all_details_pdf, name='partner_all_details_pdf'),
     path('template_donar_details/<int:donor_id>/', views.template_donar_details, name='template_donar_details'),
     path('donar_all_details_pdf/<int:donor_id>/', views.donar_all_details_pdf, name='donar_all_details_pdf'),
+
+    path('scholarship_type/', views.scholarship_type, name='scholarship_type'),
+    path('add_scholarship_type/', views.add_scholarship_type, name='add_scholarship_type'),
+    path('edit_scholarship_type/<int:scholarship_type_id>/', views.edit_scholarship_type, name='edit_scholarship_type'),
+
+    path('scholarship/', views.scholarship, name='scholarship'),
+    path('add_scholarship/', views.add_scholarship, name='add_scholarship'),
+    path('edit_scholarship/<int:scholarship_id>/', views.edit_scholarship, name='edit_scholarship'),
 
 ]
