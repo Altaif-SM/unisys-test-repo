@@ -4,6 +4,7 @@ from . import views
 from accounts import views as account_view
 app_name = 'masters'
 
+
 urlpatterns = [
 
     # *******------------- Year Master ---------------************
@@ -129,5 +130,8 @@ urlpatterns = [
     path('scholarship/', views.scholarship, name='scholarship'),
     path('add_scholarship/', views.add_scholarship, name='add_scholarship'),
     path('edit_scholarship/<int:scholarship_id>/', views.edit_scholarship, name='edit_scholarship'),
+
+    path('delete_scholarship_type/', views.delete_scholarship_type, name='delete_scholarship_type'),
+    path('delete_scholarships/', views.delete_scholarships, name='delete_scholarships'),
 
 ]

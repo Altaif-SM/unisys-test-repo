@@ -116,6 +116,14 @@
                 });
             });
 
+            $('#sample_1').dataTable().fnDestroy();
+            $('#sample_1').dataTable({
+                "aoColumnDefs": [
+                    {'bSortable': false}
+                ]
+            });
+
+            /*
 
             $('#sample_1').dataTable().fnDestroy();
             $('#sample_1').dataTable({
@@ -149,6 +157,8 @@
                     //'colvis'
                 ],
             });
+
+            */
         }
 
         window.setTimeout(function () {
@@ -173,7 +183,7 @@
                 <i class="fa fa-angle-right"></i>
             </li>
              <li>
-                <span> Manage Universities</span>
+                <span>University Settings</span>
                 <i class="fa fa-angle-right"></i>
             </li>
 
@@ -210,6 +220,15 @@
                     <div class="form-body">
 
                         <div class="row">
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">University Name:</label>
+                                <div class="col-md-3">
+                                    <input type="text" name="university_name" class="form-control" required>
+                                </div>
+                            </div>
+
                             <div class="">
                                 <label class="col-md-2 control-label">Country:</label>
                                 <div class="col-md-3">
@@ -225,16 +244,9 @@
                                 </div>
                             </div>
 
-                            <div class="">
-                                <label class="col-md-2 control-label">University Name:</label>
-                                <div class="col-md-3">
-                                    <input type="text" name="university_name" class="form-control" required>
-                                </div>
-                            </div>
                         </div>
-                        <br><br>
+                      <br>
 
-                        <br><br>
 
                         <div class="row">
                             <div class="col-md-offset-5 col-md-7">
@@ -245,7 +257,7 @@
                 </form>
             </div>
 
-            <br><br>
+
 
             <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -257,7 +269,7 @@
                         <th style="width: 50%">University</th>
                         <th hidden style="width: 50%">Country</th>
                         <th>Country</th>
-                        <th width="10%"></th>
+                        <th width="10%">Acttion</th>
                     </tr>
                     </thead>
 

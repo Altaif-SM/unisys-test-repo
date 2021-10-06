@@ -174,21 +174,19 @@
                                     <input type="text" name="country_name" class="form-control">
                                 </div>
                             </div>
-                        </div>
-                        <br><br>
 
-                        <br><br>
-
-                        <div class="row">
-                            <div class="col-md-offset-5 col-md-7">
+                            <div class="col-md-2">
                                 <button type="submit" class="btn green" id="save">Add</button>
                             </div>
+
+
                         </div>
+
+
                     </div>
                 </form>
             </div>
 
-            <br><br>
 
             <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -210,19 +208,21 @@
                     {% for rec in country_recs %}
                         <tr id="item{{ forloop.counter }}" class="item">
                             <td style="display: none"><input id="country_id" value="{{ rec.id }}"></td>
-                            <td><text hidden>{{ rec.country_name|title }}</text> <input class="form-control data country_name" name="country_name_saved" type="text"
+                            <td>
+                                <text hidden>{{ rec.country_name|title }}</text>
+                                <input class="form-control data country_name" name="country_name_saved" type="text"
                                        id="country_name{{ forloop.counter }}" value="{{ rec.country_name|title }}"
                                        required="True" pattern='[A-Za-z+-]+'
                                        title='Please enter country name' disabled></td>
                             <td>
                                 <span type="button" name="updt" id="update{{ forloop.counter }}"
-                                        class=" update btn green glyphicon glyphicon-ok" style="display:none;">
+                                      class=" update btn green glyphicon glyphicon-ok" style="display:none;">
                                 </span>
                                 <span type="button" name="edit" id="edit{{ forloop.counter }}"
-                                        class=" edit btn blue glyphicon glyphicon-pencil">
+                                      class=" edit btn blue glyphicon glyphicon-pencil">
                                 </span>
                                 <span type="button" name="delete" id="delete{{ forloop.counter }}"
-                                        class=" delete btn red glyphicon glyphicon-trash">
+                                      class=" delete btn red glyphicon glyphicon-trash">
                                 </span>
                             </td>
                         </tr>

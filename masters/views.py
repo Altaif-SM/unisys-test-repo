@@ -1689,3 +1689,23 @@ def edit_scholarship(request, scholarship_id=None):
         return redirect('/masters/scholarship/')
     scholarship_type_recs = ScholarshipType.objects.all()
     return render(request, "edit_scholarships.html", {'scholarship_obj': scholarship_obj,'scholarship_type_recs':scholarship_type_recs})
+
+def delete_scholarship_type(request):
+    if request.method == 'POST':
+        scholarship_type_delete_id = request.POST.get('scholarship_type_delete_id')
+        try:
+            ScholarshipType.objects.filter(id=scholarship_type_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/scholarship_type/')
+
+def delete_scholarships(request):
+    if request.method == 'POST':
+        scholarship_delete_id = request.POST.get('scholarship_delete_id')
+        try:
+            ScholarshipDetails.objects.filter(id=scholarship_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/scholarship/')

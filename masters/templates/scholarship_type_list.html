@@ -50,10 +50,10 @@
 
                 $(document).on("click", ".delete", function (e) {
 
-                    $('#id_delete_university_model').modal();
+                    $('#scholarship_type_model').modal();
                     var parent_id = $(this).closest('tr').attr('id');
-                    var university_id = $('#' + parent_id + ' #university_id').val();
-                    $("#university_delete_id").val(university_id)
+                    var scholarship_type_id = $('#' + parent_id + ' #scholarship_type_id').val();
+                    $("#scholarship_type_delete_id").val(scholarship_type_id)
 
                     {#var url = '/masters/delete_semester/';#}
                     {#delete_semester_info(url, language_id)#}
@@ -197,7 +197,7 @@
                     <tbody id="tbody">
                     {% for rec in scholarship_type_recs %}
                         <tr id="item{{ forloop.counter }}" class="item">
-                            <td style="display: none"><input id="university_id" value="{{ rec.id }}"></td>
+                            <td style="display: none"><input id="scholarship_type_id" value="{{ rec.id }}"></td>
                             <td>{{ rec.scholarship_type|default_if_none:"" }}</td>
                             <td>{{ rec.start_date|date:"d/m/Y" }}</td>
                             <td>{{ rec.end_date|date:"d/m/Y" }}</td>
@@ -230,23 +230,23 @@
         </div>
     </div>
 
-    <div id="id_delete_university_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+    <div id="scholarship_type_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{% url 'masters:delete_university' %}"
+                <form action="{% url 'masters:delete_scholarship_type' %}"
                       id="form_sample_1"
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <input type="hidden" id="university_delete_id" name="university_delete_id">
+                    <input type="hidden" id="scholarship_type_delete_id" name="scholarship_type_delete_id">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                         <h4 class="modal-title" style="color: #2a015e; text-align: center"><b>Delete Confirmation</b>
                         </h4>
                     </div>
                     <div class="modal-body">
-                        <p> Are you sure, you want to delete university? </p>
-                        <p> After delete you will not be able to modify the university. </p>
+                        <p> Are you sure, you want to delete scholarship type? </p>
+                        <p> After delete you will not be able to modify the scholarship type. </p>
 
                     </div>
                     <div class="modal-footer">

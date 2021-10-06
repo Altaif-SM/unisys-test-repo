@@ -373,7 +373,7 @@ License: You must have a valid license purchased only from themeforest(the above
 {#                                </li>#}
                                 <li class="nav-item  template_scholarship_nav_item">
                                     <a href="javascript:;" class="nav-link nav-toggle">
-                                        <i class="icon-bulb"></i>
+                                         <i class="fa fa-graduation-cap"></i>
                                         <span class="title">Scholarship Settings</span>
                                         <span class="arrow template_scholarship_arrow"></span>
                                     </a>
@@ -390,6 +390,41 @@ License: You must have a valid license purchased only from themeforest(the above
                                                 Scholarship </a>
                                         </li>
                                     </ul>
+                                </li>
+
+                                <li class="nav-item  universities_nav_item">
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+                                        <i class="fa fa-university"></i>
+                                        <span class="title">University Settings</span>
+                                        <span class="arrow universities_arrow"></span>
+                                    </a>
+                                    <ul class="sub-menu universities_sub_menu">
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:template_university_master' %}" class="nav-link ">
+                                                Manage Universities </a>
+                                        </li>
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:template_semester_master' %}" class="nav-link ">
+                                                Manage
+                                                Semesters </a>
+                                        </li>
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:template_degree_master' %}" class="nav-link ">
+                                                Manage
+                                                Degrees </a>
+                                        </li>
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:template_program_master' %}" class="nav-link ">
+                                                Manage Course </a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li class="nav-item  ">
+                                    <a href="{% url 'masters:template_country_master' %}" class="nav-link ">
+                                        <i class="fa fa-flag"></i>
+                                        <span class="title">Manage Countries</span>
+                                    </a>
                                 </li>
 
                                 <li class="nav-item  ">
@@ -415,12 +450,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                         </li>
                                     </ul>
                                 </li>
-                                <li class="nav-item  ">
-                                    <a href="{% url 'masters:template_country_master' %}" class="nav-link ">
-                                        <i class="icon-graph"></i>
-                                        <span class="title">Manage Countries</span>
-                                    </a>
-                                </li>
+
                                 <li class="nav-item  ">
                                     <a href="{% url 'masters:template_manage_partner_master' %}" class="nav-link ">
                                         <i class="icon-graph"></i>
@@ -451,33 +481,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                         </li>
                                     </ul>
                                 </li>
-                                <li class="nav-item  ">
-                                    <a href="javascript:;" class="nav-link nav-toggle">
-                                        <i class="fa fa-university"></i>
-                                        <span class="title">Manage Universities</span>
-                                        <span class="arrow"></span>
-                                    </a>
-                                    <ul class="sub-menu">
-                                        <li class="nav-item ">
-                                            <a href="{% url 'masters:template_university_master' %}" class="nav-link ">
-                                                Manage Universities </a>
-                                        </li>
-                                        <li class="nav-item ">
-                                            <a href="{% url 'masters:template_semester_master' %}" class="nav-link ">
-                                                Manage
-                                                Semesters </a>
-                                        </li>
-                                        <li class="nav-item ">
-                                            <a href="{% url 'masters:template_degree_master' %}" class="nav-link ">
-                                                Manage
-                                                Degrees </a>
-                                        </li>
-                                        <li class="nav-item ">
-                                            <a href="{% url 'masters:template_program_master' %}" class="nav-link ">
-                                                Manage Course </a>
-                                        </li>
-                                    </ul>
-                                </li>
+
 
                                 <li class="nav-item  ">
                                     <a href="javascript:;" class="nav-link nav-toggle">
@@ -1863,6 +1867,24 @@ License: You must have a valid license purchased only from themeforest(the above
              $(".template_scholarship_nav_item").addClass("open");
             $(".template_scholarship_arrow").addClass("open");
             $('.template_scholarship_sub_menu').css('display', 'block');
+
+
+        }
+    {% endif %}
+
+
+ {% if request.resolver_match.url_name == 'template_university_master'  or request.resolver_match.url_name == 'template_semester_master' or request.resolver_match.url_name == 'template_degree_master' or request.resolver_match.url_name == 'template_program_master'  %}
+        {
+            var element = document.getElementById("b");
+            element.classList.add("active");
+
+            var element = document.getElementById("setting_anch");
+            element.classList.add("active");
+
+
+             $(".universities_nav_item").addClass("open");
+            $(".universities_arrow").addClass("open");
+            $('.universities_sub_menu').css('display', 'block');
 
 
         }
