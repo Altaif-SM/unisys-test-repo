@@ -466,3 +466,19 @@ class ArabicCompetencyTestDetails(BaseModel):
         return res
 
 
+class CourseDetails(BaseModel):
+    course_name = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        ordering = ('id',)
+
+    def __str__(self):
+        return self.course_name
+
+    def to_dict(self):
+        res = {
+            'id': self.id if self.id else '',
+            'course_name': self.course_name if self.course_name else '',
+        }
+
+        return res

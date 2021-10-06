@@ -1709,3 +1709,41 @@ def delete_scholarships(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/scholarship/')
+
+
+def courses(request):
+    course_recs = CourseDetails.objects.all()
+    return render(request, 'courses.html', {'course_recs': course_recs})
+
+
+def add_course(request):
+    course_name = request.POST.get('course_name')
+    try:
+        CourseDetails.objects.create(course_name=course_name)
+        messages.success(request, "Record saved.")
+    except:
+        messages.warning(request, "Record not saved.")
+    return redirect('/masters/courses/')
+
+
+def edit_course(request):
+    course_id = request.POST.get('course_id')
+    course_name = request.POST.get('course_name')
+    try:
+        CourseDetails.objects.filter(id=course_id).update(course_name=course_name)
+        messages.success(request, "Record updated.")
+        return HttpResponse(json.dumps({'success': 'Record updated.'}), content_type="application/json")
+    except:
+        messages.warning(request, "Record not updated.")
+    return HttpResponse(json.dumps({'error': 'Record not updated.'}), content_type="application/json")
+
+
+def delete_course(request):
+    course_id = request.POST.get('course_id')
+    try:
+        CourseDetails.objects.filter(id=course_id).delete()
+        messages.success(request, "Record deleted.")
+        return HttpResponse(json.dumps({'success': 'Record deleted.'}), content_type="application/json")
+    except Exception as e:
+        messages.warning(request, "Record not deleted.")
+    return HttpResponse(json.dumps({'error': 'Record not deleted.'}), content_type="application/json")

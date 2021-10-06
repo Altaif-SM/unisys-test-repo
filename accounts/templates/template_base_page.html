@@ -414,8 +414,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                                 Degrees </a>
                                         </li>
                                         <li class="nav-item ">
-                                            <a href="{% url 'masters:template_program_master' %}" class="nav-link ">
-                                                Manage Course </a>
+                                            <a href="{% url 'masters:courses' %}" class="nav-link ">
+                                                Manage Course/Program </a>
                                         </li>
                                     </ul>
                                 </li>
@@ -1873,7 +1873,7 @@ License: You must have a valid license purchased only from themeforest(the above
     {% endif %}
 
 
- {% if request.resolver_match.url_name == 'template_university_master'  or request.resolver_match.url_name == 'template_semester_master' or request.resolver_match.url_name == 'template_degree_master' or request.resolver_match.url_name == 'template_program_master'  %}
+ {% if request.resolver_match.url_name == 'template_university_master'  or request.resolver_match.url_name == 'template_semester_master' or request.resolver_match.url_name == 'template_degree_master' or request.resolver_match.url_name == 'template_program_master'  or request.resolver_match.url_name == 'courses' %}
         {
             var element = document.getElementById("b");
             element.classList.add("active");

@@ -134,4 +134,9 @@ urlpatterns = [
     path('delete_scholarship_type/', views.delete_scholarship_type, name='delete_scholarship_type'),
     path('delete_scholarships/', views.delete_scholarships, name='delete_scholarships'),
 
+    path('courses/', views.courses, name='courses'),
+    path('add_course/', views.add_course, name='add_course'),
+    path('edit_course/', views.edit_course, name='edit_course'),
+    path('delete_course/', views.delete_course, name='delete_course'),
+
 ]
