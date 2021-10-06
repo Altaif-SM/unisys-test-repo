@@ -325,16 +325,50 @@ class DegreeDetails(BaseModel):
 
         return res
 
+class CourseDetails(BaseModel):
+    course_name = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        ordering = ('id',)
+
+    def __str__(self):
+        return self.course_name
+
+    def to_dict(self):
+        res = {
+            'id': self.id if self.id else '',
+            'course_name': self.course_name if self.course_name else '',
+        }
+
+        return res
+
+class ProgramUniversityDetails(models.Model):
+    university = models.ForeignKey(UniversityDetails, null=True, related_name='program_university_rel',on_delete=models.PROTECT)
+
+class ProgramDegreeTypeDetails(models.Model):
+    degree_type = models.ForeignKey(DegreeTypeDetails, null=True, related_name='program_degree_type_rel',on_delete=models.PROTECT)
 
 class ProgramDetails(BaseModel):
     program_name = models.CharField(max_length=255, blank=True, null=True)
-    degree_type = models.ForeignKey(DegreeTypeDetails, null=True, related_name='program_degree_type_rel',
-                                    on_delete=models.PROTECT)
-    university = models.ForeignKey(UniversityDetails, null=True, related_name='program_university_rel',
+    # degree_type = models.ForeignKey(DegreeTypeDetails, null=True, related_name='program_degree_type_rel',
+    #                                 on_delete=models.PROTECT)
+    # university = models.ForeignKey(UniversityDetails, null=True, related_name='program_university_rel',
+    #                                on_delete=models.PROTECT)
+    university = models.ManyToManyField(ProgramUniversityDetails, blank=True)
+    degree_type = models.ManyToManyField(ProgramDegreeTypeDetails, blank=True)
+    country = models.ForeignKey(CountryDetails, null=True, related_name='program_country_rel',
                                    on_delete=models.PROTECT)
 
+    scholarship = models.ForeignKey(ScholarshipDetails, null=True, related_name='program_scholarship_rel',
+                                on_delete=models.PROTECT)
+    course = models.ForeignKey(CourseDetails, null=True, related_name='program_course_rel',
+                                    on_delete=models.PROTECT)
+    is_admission_letter = models.BooleanField(default=True)
+    is_language_proficiency = models.BooleanField(default=True)
+    status = models.BooleanField(default=True)
+
     class Meta:
-        ordering = ('program_name',)
+        ordering = ('-id',)
 
     def __str__(self):
         return self.program_name
@@ -466,19 +500,3 @@ class ArabicCompetencyTestDetails(BaseModel):
         return res
 
 
-class CourseDetails(BaseModel):
-    course_name = models.CharField(max_length=255, blank=True, null=True)
-
-    class Meta:
-        ordering = ('id',)
-
-    def __str__(self):
-        return self.course_name
-
-    def to_dict(self):
-        res = {
-            'id': self.id if self.id else '',
-            'course_name': self.course_name if self.course_name else '',
-        }
-
-        return res

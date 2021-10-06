@@ -1747,3 +1747,115 @@ def delete_course(request):
     except Exception as e:
         messages.warning(request, "Record not deleted.")
     return HttpResponse(json.dumps({'error': 'Record not deleted.'}), content_type="application/json")
+
+
+def link_scholarship_program(request):
+    program_recs = ProgramDetails.objects.all()
+    return render(request, 'link_scholarship_program.html', {'program_recs': program_recs})
+
+def add_scholarship_program(request):
+    if request.method == 'POST':
+        scholarship = request.POST.get('scholarship')
+        program = request.POST.get('program')
+        country = request.POST.get('country')
+        admission_letter = request.POST.get('admission_letter')
+        language_proficiency = request.POST.get('language_proficiency')
+        status = request.POST.get('status')
+        degree_type = request.POST.getlist('degree_type')
+        universities = request.POST.getlist('universities')
+        if admission_letter == 'Yes':
+            admission_letter = True
+        else:
+            admission_letter = False
+        if language_proficiency == 'Yes':
+            language_proficiency = True
+        else:
+            language_proficiency = False
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            program_obj = ProgramDetails.objects.create(course_id=program,scholarship_id=scholarship,country_id = country,
+                                                        is_admission_letter = admission_letter,
+                                                        is_language_proficiency = language_proficiency,status = status)
+            program_obj.degree_type.clear()
+            for degree in degree_type:
+                program_degree_type_obj = ProgramDegreeTypeDetails.objects.create(degree_type_id=degree)
+                program_obj.degree_type.add(program_degree_type_obj)
+
+            program_obj.university.clear()
+            for university in universities:
+                program_university_obj = ProgramUniversityDetails.objects.create(university_id=university)
+                program_obj.university.add(program_university_obj)
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/link_scholarship_program/')
+    course_recs = CourseDetails.objects.all()
+    country_recs = CountryDetails.objects.all()
+    degree_type_recs = DegreeTypeDetails.objects.all()
+    university_recs = UniversityDetails.objects.all()
+    scholarship_recs = ScholarshipDetails.objects.all()
+    return render(request, 'add_scholarship_program.html', {'course_recs':course_recs, 'country_recs':country_recs,
+                                                            'university_recs':university_recs,'degree_type_recs':degree_type_recs,
+                                                            'scholarship_recs':scholarship_recs})
+
+
+def edit_scholarship_program(request, scholarship_id=None):
+    scholarship_program_obj = ProgramDetails.objects.get(id=scholarship_id)
+    if request.method == 'POST':
+        scholarship = request.POST.get('scholarship')
+        program = request.POST.get('program')
+        country = request.POST.get('country')
+        admission_letter = request.POST.get('admission_letter')
+        language_proficiency = request.POST.get('language_proficiency')
+        status = request.POST.get('status')
+        degree_type = request.POST.getlist('degree_type')
+        universities = request.POST.getlist('universities')
+        if admission_letter == 'Yes':
+            admission_letter = True
+        else:
+            admission_letter = False
+        if language_proficiency == 'Yes':
+            language_proficiency = True
+        else:
+            language_proficiency = False
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            scholarship_program_obj.course_id = program
+            scholarship_program_obj.scholarship_id = scholarship
+            scholarship_program_obj.country_id = country
+            scholarship_program_obj.is_admission_letter = admission_letter
+            scholarship_program_obj.is_language_proficiency = language_proficiency
+            scholarship_program_obj.status = status
+            scholarship_program_obj.save()
+
+            scholarship_program_obj.degree_type.clear()
+            for degree in degree_type:
+                program_degree_type_obj = ProgramDegreeTypeDetails.objects.create(degree_type_id=degree)
+                scholarship_program_obj.degree_type.add(program_degree_type_obj)
+
+            scholarship_program_obj.university.clear()
+            for university in universities:
+                program_university_obj = ProgramUniversityDetails.objects.create(university_id=university)
+                scholarship_program_obj.university.add(program_university_obj)
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/link_scholarship_program/')
+    course_recs = CourseDetails.objects.all()
+    country_recs = CountryDetails.objects.all()
+    degree_type_recs = DegreeTypeDetails.objects.all()
+    university_recs = UniversityDetails.objects.all()
+    scholarship_recs = ScholarshipDetails.objects.all()
+    degree_type_list = list(scholarship_program_obj.degree_type.values_list('degree_type_id', flat=True))
+    university_list = list(scholarship_program_obj.university.values_list('university_id', flat=True))
+    return render(request, 'edit_scholarship_program.html', {'course_recs': course_recs, 'country_recs': country_recs,
+                                                            'university_recs': university_recs,
+                                                            'degree_type_recs': degree_type_recs,
+                                                            'scholarship_recs': scholarship_recs,'scholarship_program_obj':scholarship_program_obj,
+                                                             'degree_type_list':degree_type_list,'university_list':university_list})

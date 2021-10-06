@@ -139,4 +139,10 @@ urlpatterns = [
     path('edit_course/', views.edit_course, name='edit_course'),
     path('delete_course/', views.delete_course, name='delete_course'),
 
+    path('link_scholarship_program/', views.link_scholarship_program, name='link_scholarship_program'),
+    path('add_scholarship_program/', views.add_scholarship_program, name='add_scholarship_program'),
+    path('edit_scholarship_program/<int:scholarship_id>/', views.edit_scholarship_program, name='edit_scholarship_program'),
+
+
+
 ]

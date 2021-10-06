@@ -1,0 +1,448 @@
+{% extends "template_base_page.html" %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css"
+          rel="stylesheet">
+
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+
+        .s-switch input[type='checkbox'] {
+            display: none
+        }
+
+        .s-switch {
+            width: 62px;
+            height: 32px;
+            z-index: 0;
+            margin: 0;
+            padding: 0;
+            appearance: none;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            border-radius: 16px;
+            -moz-border-radius: 16px;
+            -webkit-border-radius: 16px;
+        }
+
+        .s-switch:before {
+            content: ' ';
+            background: #D9534F !important;
+            position: absolute;
+            left: 1px;
+            top: 1px;
+            width: 60px;
+            height: 30px;
+            background: #FFFFFF;
+            z-index: 1;
+            border-radius: 16px;
+            -moz-border-radius: 16px;
+            -webkit-border-radius: 16px;
+        }
+
+        .s-switch:after {
+            content: ' ';
+            height: 29px;
+            width: 29px;
+            border-radius: 28px;
+            z-index: 2;
+            background: #FFFFFF;
+            position: absolute;
+            -webkit-transition-duration: 300ms;
+            transition-duration: 300ms;
+            top: 1px;
+            left: 3px;
+            -webkit-box-shadow: 0 2px 5px #999999;
+            box-shadow: 0 2px 5px #999999;
+        }
+
+        .s-switch-on:before {
+            background: #4DAF48 !important;
+        }
+
+        .s-switch-on:after {
+            left: 31px !important;
+        }
+
+        .s-switch-readonly, .s-switch-disabled {
+            opacity: 0.8;
+        }
+
+
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+
+    <script>
+        window.onload = function () {
+            $(document).ready(function () {
+
+
+                var values = "{{ degree_type_list }}";
+                $('#degree_type').find('option').filter(function (idx, option) {
+                    if ($.inArray(option.value, values) !== -1) {
+                        return option;
+                    }
+                }).prop('selected', 'true');
+
+                var values = "{{ university_list }}";
+                $('#universities').find('option').filter(function (idx, option) {
+                    if ($.inArray(option.value, values) !== -1) {
+                        return option;
+                    }
+                }).prop('selected', 'true');
+
+
+                $("#status").Sswitch({});
+
+                $('input[type="radio"]').on('change', function () {
+                    var university_type = $('input[name="university_type"]:checked').val();
+                    var url = '/student/get_university_from_type/';
+                    get_university_from_university_type(url, university_type)
+
+
+                })
+
+            });
+
+            function get_university_from_university_type(url, university_type) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        university_type: university_type,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data) {
+
+                        $('#university').empty();
+                        $('#university').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#university').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['university_name'] + '</option>')
+                        }
+                    },
+                    error: function (xhr, msg, err) {
+                        alert(xhr.responseJSON.error);
+                    }
+                });
+            }
+
+
+            window.setTimeout(function () {
+                $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                    $(this).remove();
+                });
+            }, 4000);
+        }
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'accounts:home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> Settings </span>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> Scholarship Settings</span>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span> Edit  Scholarship to Program </span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">Edit Scholarship to Program </span>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form action="{% url 'masters:edit_scholarship_program' scholarship_program_obj.id %}"
+                      id="id_form"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-body">
+
+                        <div class="row item_experience" id="item_experience_1">
+
+                            <div class="row">
+
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Scholarship:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select id='scholarship' title="Select Scholarship"
+                                                name="scholarship"
+                                                class="form-control" required>
+                                            {% if scholarship_program_obj.scholarship %}
+                                                <option style="display: none" selected="selected"
+                                                        value="{{ scholarship_program_obj.scholarship.id }}"> {{ scholarship_program_obj.scholarship.scholarship_name|default_if_none:"" }}</option>
+                                            {% else %}
+                                                <option selected="selected" value=""> Please Select</option>
+                                            {% endif %}
+
+                                            {% for rec in scholarship_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.scholarship_name|default_if_none:"" }}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Program/courses:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select id='program' title="Select Program/courses"
+                                                name="program"
+                                                class="form-control" required>
+                                            {% if scholarship_program_obj.course %}
+                                                <option style="display: none" selected="selected"
+                                                        value="{{ scholarship_program_obj.course.id }}"> {{ scholarship_program_obj.course.course_name|default_if_none:"" }}</option>
+                                            {% else %}
+                                                <option selected="selected" value=""> Please Select</option>
+                                            {% endif %}
+                                            {% for rec in course_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.course_name|default_if_none:"" }}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <br>
+                            <div class="row">
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Country:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select id='country' title="Select Country"
+                                                name="country"
+                                                class="form-control" required>
+                                            {% if scholarship_program_obj.country %}
+                                                <option style="display: none" selected="selected"
+                                                        value="{{ scholarship_program_obj.country.id }}"> {{ scholarship_program_obj.country.country_name|title }}</option>
+                                            {% else %}
+                                                <option selected="selected" value=""> Please Select</option>
+                                            {% endif %}
+
+                                            {% for rec in country_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.country_name|title }}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Admission Letter: <span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+
+
+                                        {% if  scholarship_program_obj.is_admission_letter == True %}
+                                            <input class="current" type="radio" checked name="admission_letter"
+                                                   id="admission_letter"
+                                                   value="Yes">
+                                            <span style="padding:inherit">Yes</span>&nbsp;&nbsp;
+                                            <input class="current" type="radio" name="admission_letter" value="No"
+                                                   id="admission_letter">
+                                            <span style="padding:inherit">No</span>
+                                        {% else %}
+                                            <input class="current" type="radio" name="admission_letter"
+                                                   id="admission_letter"
+                                                   value="Yes">
+                                            <span style="padding:inherit">Yes</span>&nbsp;&nbsp;
+                                            <input class="current" type="radio" checked name="admission_letter"
+                                                   value="No"
+                                                   id="admission_letter">
+                                            <span style="padding:inherit">No</span>
+                                        {% endif %}
+
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <br>
+
+                            <div class="row">
+                                <div class="">
+                                    <label class="col-md-2 control-label">Language Proficiency: <span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        {% if  scholarship_program_obj.is_language_proficiency == True %}
+                                            <input class="current" type="radio" checked name="language_proficiency"
+                                                   id="language_proficiency"
+                                                   value="Yes">
+                                            <span style="padding:inherit">Yes</span>&nbsp;&nbsp;
+                                            <input class="current" type="radio" name="language_proficiency" value="No"
+                                                   id="language_proficiency">
+                                            <span style="padding:inherit">No</span>
+                                        {% else %}
+                                            <input class="current" type="radio" name="language_proficiency"
+                                                   id="language_proficiency"
+                                                   value="Yes">
+                                            <span style="padding:inherit">Yes</span>&nbsp;&nbsp;
+                                            <input class="current" type="radio" checked name="language_proficiency"
+                                                   value="No"
+                                                   id="language_proficiency">
+                                            <span style="padding:inherit">No</span>
+                                        {% endif %}
+
+                                    </div>
+                                </div>
+
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Status:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        {% if scholarship_program_obj.status == True %}
+                                            <input type="checkbox" id="status" name="status" checked>
+                                        {% else %}
+                                            <input type="checkbox" id="status" name="status">
+                                        {% endif %}
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <br>
+                            <div class="row">
+
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Degree Type:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-8">
+                                        <select multiple id='degree_type' title="Select Degree Type"
+                                                name="degree_type"
+                                                class="form-control" required>
+                                            {% for rec in degree_type_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.degree_name|title }}</option>
+                                            {% endfor %}
+
+                                        </select>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <br>
+                            <div class="row">
+
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Universities:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-8">
+                                        <select multiple id='universities' title="Select Universities"
+                                                name="universities"
+                                                class="form-control" required>
+                                            {% for rec in university_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.university_name|title }}</option>
+                                            {% endfor %}
+
+                                        </select>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                        <br>
+
+                        <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                                        onclick="window.location='{% url "masters:link_scholarship_program" %}'">
+                                    Back
+                                </button>
+
+                                <button type="submit" class="btn green" id="save_form" style="">Save
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
