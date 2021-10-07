@@ -1756,8 +1756,8 @@ def link_scholarship_program(request):
 def add_scholarship_program(request):
     if request.method == 'POST':
         scholarship = request.POST.get('scholarship')
-        program = request.POST.get('program')
-        country = request.POST.get('country')
+        programs = request.POST.getlist('program')
+        countries = request.POST.getlist('country')
         admission_letter = request.POST.get('admission_letter')
         language_proficiency = request.POST.get('language_proficiency')
         status = request.POST.get('status')
@@ -1776,7 +1776,7 @@ def add_scholarship_program(request):
         else:
             status = False
         try:
-            program_obj = ProgramDetails.objects.create(course_id=program,scholarship_id=scholarship,country_id = country,
+            program_obj = ProgramDetails.objects.create(scholarship_id=scholarship,
                                                         is_admission_letter = admission_letter,
                                                         is_language_proficiency = language_proficiency,status = status)
             program_obj.degree_type.clear()
@@ -1788,6 +1788,18 @@ def add_scholarship_program(request):
             for university in universities:
                 program_university_obj = ProgramUniversityDetails.objects.create(university_id=university)
                 program_obj.university.add(program_university_obj)
+
+            program_obj.course.clear()
+            for program in programs:
+                program_course_obj = ProgramCourseDetails.objects.create(course_id=program)
+                program_obj.course.add(program_course_obj)
+
+            program_obj.country.clear()
+            for country in countries:
+                program_country_obj = ProgramCountryDetails.objects.create(country_id=country)
+                program_obj.country.add(program_country_obj)
+
+
             messages.success(request, "Record saved.")
         except:
             messages.warning(request, "Record not saved.")
@@ -1806,8 +1818,8 @@ def edit_scholarship_program(request, scholarship_id=None):
     scholarship_program_obj = ProgramDetails.objects.get(id=scholarship_id)
     if request.method == 'POST':
         scholarship = request.POST.get('scholarship')
-        program = request.POST.get('program')
-        country = request.POST.get('country')
+        programs = request.POST.getlist('program')
+        countries = request.POST.getlist('country')
         admission_letter = request.POST.get('admission_letter')
         language_proficiency = request.POST.get('language_proficiency')
         status = request.POST.get('status')
@@ -1826,9 +1838,7 @@ def edit_scholarship_program(request, scholarship_id=None):
         else:
             status = False
         try:
-            scholarship_program_obj.course_id = program
             scholarship_program_obj.scholarship_id = scholarship
-            scholarship_program_obj.country_id = country
             scholarship_program_obj.is_admission_letter = admission_letter
             scholarship_program_obj.is_language_proficiency = language_proficiency
             scholarship_program_obj.status = status
@@ -1843,6 +1853,17 @@ def edit_scholarship_program(request, scholarship_id=None):
             for university in universities:
                 program_university_obj = ProgramUniversityDetails.objects.create(university_id=university)
                 scholarship_program_obj.university.add(program_university_obj)
+
+            scholarship_program_obj.course.clear()
+            for program in programs:
+                program_course_obj = ProgramCourseDetails.objects.create(course_id=program)
+                scholarship_program_obj.course.add(program_course_obj)
+
+            scholarship_program_obj.country.clear()
+            for country in countries:
+                program_country_obj = ProgramCountryDetails.objects.create(country_id=country)
+                scholarship_program_obj.country.add(program_country_obj)
+
             messages.success(request, "Record saved.")
         except:
             messages.warning(request, "Record not saved.")
@@ -1854,8 +1875,11 @@ def edit_scholarship_program(request, scholarship_id=None):
     scholarship_recs = ScholarshipDetails.objects.all()
     degree_type_list = list(scholarship_program_obj.degree_type.values_list('degree_type_id', flat=True))
     university_list = list(scholarship_program_obj.university.values_list('university_id', flat=True))
+    course_list = list(scholarship_program_obj.course.values_list('course_id', flat=True))
+    country_list = list(scholarship_program_obj.country.values_list('country_id', flat=True))
     return render(request, 'edit_scholarship_program.html', {'course_recs': course_recs, 'country_recs': country_recs,
                                                             'university_recs': university_recs,
                                                             'degree_type_recs': degree_type_recs,
                                                             'scholarship_recs': scholarship_recs,'scholarship_program_obj':scholarship_program_obj,
-                                                             'degree_type_list':degree_type_list,'university_list':university_list})
+                                                             'degree_type_list':degree_type_list,'university_list':university_list,
+                                                             'course_list':course_list,'country_list':country_list})

@@ -189,8 +189,10 @@
                         <th>Scholarship</th>
                         <th>Program/courses</th>
                         <th>Country</th>
-                        <th>Admission Letter</th>
-                        <th>Language Proficiency</th>
+                        <th>Degree Type</th>
+                        <th>Universities</th>
+{#                        <th>Admission Letter</th>#}
+{#                        <th>Language Proficiency</th>#}
                         <th>Status</th>
                         <th width="10%">Action</th>
                     </tr>
@@ -201,18 +203,35 @@
                         <tr id="item{{ forloop.counter }}" class="item">
                             <td style="display: none"><input id="scholarship_id" value="{{ rec.id }}"></td>
                             <td>{{ rec.scholarship.scholarship_name|default_if_none:"" }}</td>
-                            <td>{{ rec.course.course_name|default_if_none:"" }}</td>
-                            <td>{{ rec.country.country_name|title }}</td>
-                            {% if rec.is_admission_letter == True %}
-                                <td>Yes</td>
-                            {% else %}
-                                <td>No</td>
-                            {% endif %}
-                            {% if rec.is_language_proficiency == True %}
-                                <td>Yes</td>
-                            {% else %}
-                                <td>No</td>
-                            {% endif %}
+                            <td>{% for rec in rec.course.all %}
+                                <span>{{ forloop.counter }}){{ rec.course|default_if_none:"" }}</span><br>
+                            {% endfor %}
+                            </td>
+
+
+                            <td>{% for rec in rec.country.all %}
+                                <span>{{ forloop.counter }}){{ rec.country|title }}</span><br>
+                            {% endfor %}
+                            </td>
+                        <td>{% for rec in rec.degree_type.all %}
+                                <span>{{ forloop.counter }}){{ rec.degree_type|title }}</span><br>
+                            {% endfor %}
+                            </td>
+                        <td>{% for rec in rec.university.all %}
+                                <span>{{ forloop.counter }}){{ rec.university|title }}</span><br>
+                            {% endfor %}
+                            </td>
+
+{#                            {% if rec.is_admission_letter == True %}#}
+{#                                <td>Yes</td>#}
+{#                            {% else %}#}
+{#                                <td>No</td>#}
+{#                            {% endif %}#}
+{#                            {% if rec.is_language_proficiency == True %}#}
+{#                                <td>Yes</td>#}
+{#                            {% else %}#}
+{#                                <td>No</td>#}
+{#                            {% endif %}#}
                             <td>
                                 {% if rec.status == True %}
                                     <i class="fa fa-power-off" aria-hidden="true"

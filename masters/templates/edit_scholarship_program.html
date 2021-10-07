@@ -116,6 +116,20 @@
                     }
                 }).prop('selected', 'true');
 
+                var values = "{{ course_list }}";
+                $('#program').find('option').filter(function (idx, option) {
+                    if ($.inArray(option.value, values) !== -1) {
+                        return option;
+                    }
+                }).prop('selected', 'true');
+
+                var values = "{{ country_list }}";
+                $('#country').find('option').filter(function (idx, option) {
+                    if ($.inArray(option.value, values) !== -1) {
+                        return option;
+                    }
+                }).prop('selected', 'true');
+
 
                 $("#status").Sswitch({});
 
@@ -241,23 +255,15 @@
                                 </div>
 
                                 <div class="">
-                                    <label class="col-md-2 control-label">Program/courses:<span
+                                    <label class="col-md-2 control-label">Status:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
-                                        <select id='program' title="Select Program/courses"
-                                                name="program"
-                                                class="form-control" required>
-                                            {% if scholarship_program_obj.course %}
-                                                <option style="display: none" selected="selected"
-                                                        value="{{ scholarship_program_obj.course.id }}"> {{ scholarship_program_obj.course.course_name|default_if_none:"" }}</option>
-                                            {% else %}
-                                                <option selected="selected" value=""> Please Select</option>
-                                            {% endif %}
-                                            {% for rec in course_recs %}
-                                                <option value="{{ rec.id }}">{{ rec.course_name|default_if_none:"" }}</option>
-                                            {% endfor %}
+                                        {% if scholarship_program_obj.status == True %}
+                                            <input type="checkbox" id="status" name="status" checked>
+                                        {% else %}
+                                            <input type="checkbox" id="status" name="status">
+                                        {% endif %}
 
-                                        </select>
                                     </div>
                                 </div>
 
@@ -266,28 +272,6 @@
 
                             <br>
                             <div class="row">
-
-                                <div class="">
-                                    <label class="col-md-2 control-label">Country:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <select id='country' title="Select Country"
-                                                name="country"
-                                                class="form-control" required>
-                                            {% if scholarship_program_obj.country %}
-                                                <option style="display: none" selected="selected"
-                                                        value="{{ scholarship_program_obj.country.id }}"> {{ scholarship_program_obj.country.country_name|title }}</option>
-                                            {% else %}
-                                                <option selected="selected" value=""> Please Select</option>
-                                            {% endif %}
-
-                                            {% for rec in country_recs %}
-                                                <option value="{{ rec.id }}">{{ rec.country_name|title }}</option>
-                                            {% endfor %}
-
-                                        </select>
-                                    </div>
-                                </div>
 
 
                                 <div class="">
@@ -319,12 +303,6 @@
                                     </div>
                                 </div>
 
-
-                            </div>
-
-                            <br>
-
-                            <div class="row">
                                 <div class="">
                                     <label class="col-md-2 control-label">Language Proficiency: <span
                                             style="color: red">*</span></label>
@@ -352,20 +330,55 @@
                                 </div>
 
 
+                            </div>
+
+
+                            <br>
+
+                            <div class="row">
+
+
                                 <div class="">
-                                    <label class="col-md-2 control-label">Status:<span
+                                    <label class="col-md-2 control-label">Program/courses:<span
                                             style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        {% if scholarship_program_obj.status == True %}
-                                            <input type="checkbox" id="status" name="status" checked>
-                                        {% else %}
-                                            <input type="checkbox" id="status" name="status">
-                                        {% endif %}
+                                    <div class="col-md-8">
+                                        <select multiple id='program' title="Select Program/courses"
+                                                name="program"
+                                                class="form-control" required>
+                                            {% for rec in course_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.course_name|default_if_none:"" }}</option>
+                                            {% endfor %}
+
+                                        </select>
 
                                     </div>
                                 </div>
 
+
                             </div>
+                            <br>
+                            <div class="row">
+
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Country:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-8">
+                                        <select multiple id='country' title="Select Country"
+                                                name="country"
+                                                class="form-control" required>
+                                            {% for rec in country_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.country_name|title }}</option>
+                                            {% endfor %}
+
+                                        </select>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+
                             <br>
                             <div class="row">
 
