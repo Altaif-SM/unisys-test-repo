@@ -365,6 +365,8 @@ class ProgramDetails(BaseModel):
     is_admission_letter = models.BooleanField(default=True)
     is_language_proficiency = models.BooleanField(default=True)
     status = models.BooleanField(default=True)
+    cgpa_min = models.DecimalField(blank=True, null=True, decimal_places=2, max_digits=10)
+    cgpa_max = models.DecimalField(blank=True, null=True, decimal_places=2, max_digits=10)
 
     class Meta:
         ordering = ('-id',)

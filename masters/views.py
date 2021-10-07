@@ -1756,6 +1756,8 @@ def link_scholarship_program(request):
 def add_scholarship_program(request):
     if request.method == 'POST':
         scholarship = request.POST.get('scholarship')
+        cgpa_min = request.POST.get('cgpa_min')
+        cgpa_max = request.POST.get('cgpa_max')
         programs = request.POST.getlist('program')
         countries = request.POST.getlist('country')
         admission_letter = request.POST.get('admission_letter')
@@ -1778,7 +1780,7 @@ def add_scholarship_program(request):
         try:
             program_obj = ProgramDetails.objects.create(scholarship_id=scholarship,
                                                         is_admission_letter = admission_letter,
-                                                        is_language_proficiency = language_proficiency,status = status)
+                                                        is_language_proficiency = language_proficiency,status = status,cgpa_min = cgpa_min,cgpa_max = cgpa_max)
             program_obj.degree_type.clear()
             for degree in degree_type:
                 program_degree_type_obj = ProgramDegreeTypeDetails.objects.create(degree_type_id=degree)
@@ -1825,6 +1827,8 @@ def edit_scholarship_program(request, scholarship_id=None):
         status = request.POST.get('status')
         degree_type = request.POST.getlist('degree_type')
         universities = request.POST.getlist('universities')
+        cgpa_min = request.POST.get('cgpa_min')
+        cgpa_max = request.POST.get('cgpa_max')
         if admission_letter == 'Yes':
             admission_letter = True
         else:
@@ -1842,6 +1846,8 @@ def edit_scholarship_program(request, scholarship_id=None):
             scholarship_program_obj.is_admission_letter = admission_letter
             scholarship_program_obj.is_language_proficiency = language_proficiency
             scholarship_program_obj.status = status
+            scholarship_program_obj.cgpa_min = cgpa_min
+            scholarship_program_obj.cgpa_max = cgpa_max
             scholarship_program_obj.save()
 
             scholarship_program_obj.degree_type.clear()

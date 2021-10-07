@@ -269,6 +269,36 @@
 
 
                             </div>
+                            <br>
+                            <div class="row">
+                                <div class="">
+                                    <label class="col-md-2 control-label">CGPA between:
+
+                                    </label>
+                                    <div class="col-md-3">
+
+                                        <input class="form-control cgpa_min" name="cgpa_min"
+                                               type="number" step="0.01" min="0" max="100"
+                                               id="cgpa_min"
+                                               required
+                                               title='Please enter cgpa minimum' value="{{ scholarship_program_obj.cgpa_min|default_if_none:"" }}">
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">And:
+
+                                    </label>
+                                    <div class="col-md-3">
+                                        <input class="form-control cgpa_max" name="cgpa_max"
+                                               type="number" step="0.01" min="0" max="100"
+                                               id="cgpa_max" value="{{ scholarship_program_obj.cgpa_max|default_if_none:"" }}"
+                                               required
+                                               title='Please enter cgpa mark'>
+                                    </div>
+                                </div>
+                            </div>
+
 
                             <br>
                             <div class="row">
