@@ -134,6 +134,7 @@ urlpatterns = [
     path('delete_scholarship_type/', views.delete_scholarship_type, name='delete_scholarship_type'),
     path('delete_scholarships/', views.delete_scholarships, name='delete_scholarships'),
 
+
     path('courses/', views.courses, name='courses'),
     path('add_course/', views.add_course, name='add_course'),
     path('edit_course/', views.edit_course, name='edit_course'),
@@ -142,6 +143,7 @@ urlpatterns = [
     path('link_scholarship_program/', views.link_scholarship_program, name='link_scholarship_program'),
     path('add_scholarship_program/', views.add_scholarship_program, name='add_scholarship_program'),
     path('edit_scholarship_program/<int:scholarship_id>/', views.edit_scholarship_program, name='edit_scholarship_program'),
+    path('delete_scholarships_program/', views.delete_scholarships_program, name='delete_scholarships_program'),
 
 
 

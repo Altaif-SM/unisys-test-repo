@@ -1889,3 +1889,13 @@ def edit_scholarship_program(request, scholarship_id=None):
                                                             'scholarship_recs': scholarship_recs,'scholarship_program_obj':scholarship_program_obj,
                                                              'degree_type_list':degree_type_list,'university_list':university_list,
                                                              'course_list':course_list,'country_list':country_list})
+
+def delete_scholarships_program(request):
+    if request.method == 'POST':
+        scholarship_delete_id = request.POST.get('scholarship_delete_id')
+        try:
+            ProgramDetails.objects.filter(id=scholarship_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/link_scholarship_program/')
