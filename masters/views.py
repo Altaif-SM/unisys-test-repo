@@ -1899,3 +1899,50 @@ def delete_scholarships_program(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/link_scholarship_program/')
+
+
+def document_settings(request):
+    documents_recs = DocumentDetails.objects.all()
+    return render(request, 'document_settings.html', {'documents_recs': documents_recs})
+
+def add_document(request):
+    document_name = request.POST.get('document_name')
+    is_document_required = request.POST.get('is_document_required')
+    try:
+        if not DocumentDetails.objects.filter(document_name=document_name).exists():
+            DocumentDetails.objects.create(document_name=document_name,is_document_required = is_document_required)
+            messages.success(request, "Record saved.")
+        else:
+            messages.warning(request, "Document name already exists.")
+    except:
+        messages.warning(request, "Record not saved.")
+    return redirect('/masters/document_settings/')
+
+
+def update_documet(request):
+    document_id = request.POST.get('document_id')
+    document_name = request.POST.get('document_name')
+    is_document_required = request.POST.get('is_document_required')
+    try:
+        if not DocumentDetails.objects.filter(~Q(id=document_id), document_name=document_name).exists():
+            DocumentDetails.objects.filter(id=document_id).update(document_name=document_name,is_document_required = is_document_required
+                                                                  )
+            messages.success(request, "Record saved.")
+            return HttpResponse(json.dumps({'success': 'Record saved.'}), content_type="application/json")
+        else:
+            messages.warning(request, "Document name already exists.")
+            return HttpResponse(json.dumps({'success': 'Record saved.'}), content_type="application/json")
+    except:
+        messages.warning(request, "Record not saved.")
+    return redirect('/masters/document_settings/')
+
+
+def delete_document(request):
+    if request.method == 'POST':
+        document_delete_id = request.POST.get('document_delete_id')
+        try:
+            DocumentDetails.objects.filter(id=document_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/document_settings/')

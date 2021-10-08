@@ -145,6 +145,11 @@ urlpatterns = [
     path('edit_scholarship_program/<int:scholarship_id>/', views.edit_scholarship_program, name='edit_scholarship_program'),
     path('delete_scholarships_program/', views.delete_scholarships_program, name='delete_scholarships_program'),
 
+    path('document_settings/', views.document_settings, name='document_settings'),
+    path('add_document/', views.add_document, name='add_document'),
+    path('update_documet/', views.update_documet, name='update_documet'),
+    path('delete_document/', views.delete_document, name='delete_document'),
+
 
 
 ]
