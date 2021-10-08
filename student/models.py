@@ -573,9 +573,9 @@ class ScholarshipSelectionDetails(BaseModel):
                                    related_name='university_scholarship_rel',
                                    on_delete=models.PROTECT)
 
-    # course_applied = models.ForeignKey('masters.CourseDetails', blank=True, null=True,
-    #                                    related_name='course_scholarship_program_rel',
-    #                                    on_delete=models.PROTECT)
+    course_applied = models.ForeignKey('masters.CourseDetails', blank=True, null=True,
+                                       related_name='course_scholarship_program_rel',
+                                       on_delete=models.PROTECT)
 
     admission_letter_document = models.FileField(upload_to=content_aplicant_file_name_report)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_scholarship_rel',
@@ -698,12 +698,12 @@ class EmployementHistoryDetails(BaseModel):
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='employement_history_rel',
                                      on_delete=models.PROTECT)
 
-# class ApplicantAttachementDetails(BaseModel):
-#     image = models.FileField(upload_to='photo/', null=True, blank=True)
-#     passport_image = models.FileField(upload_to='document/', null=True, blank=True)
-#     level_result_document = models.FileField(upload_to='document/', null=True, blank=True)
-#     transcript_document = models.FileField(upload_to='document/', null=True, blank=True)
-#     english_test_result_document = models.FileField(upload_to='document/', null=True, blank=True)
-#     recommendation_letter = models.FileField(upload_to='document/', null=True, blank=True)
-#     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_attachement_rel',
-#                                      on_delete=models.PROTECT)
+class ApplicantAttachementDetails(BaseModel):
+    image = models.FileField(upload_to='photo/', null=True, blank=True)
+    passport_image = models.FileField(upload_to='document/', null=True, blank=True)
+    level_result_document = models.FileField(upload_to='document/', null=True, blank=True)
+    transcript_document = models.FileField(upload_to='document/', null=True, blank=True)
+    english_test_result_document = models.FileField(upload_to='document/', null=True, blank=True)
+    recommendation_letter = models.FileField(upload_to='document/', null=True, blank=True)
+    applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_attachement_rel',
+                                     on_delete=models.PROTECT)
