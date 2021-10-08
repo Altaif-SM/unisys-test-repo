@@ -2506,6 +2506,12 @@ def save_attachement_submission(request):
         transcript_document = request.FILES.get('transcript_document')
         english_test_result_document = request.FILES.get('english_test_result_document')
         recommendation_letter = request.FILES.get('recommendation_letter')
+        arabic_language_proficiency_certificate = request.FILES.get('arabic_language_proficiency_certificate')
+        admission_letter = request.FILES.get('admission_letter')
+        letter_of_agreement = request.FILES.get('letter_of_agreement')
+        declaration_letter = request.FILES.get('declaration_letter')
+        student_acceptance_form = request.FILES.get('student_acceptance_form')
+        health_declaration_form = request.FILES.get('health_declaration_form')
     except:
         passport_photo = ''
         photo = ''
@@ -2520,7 +2526,7 @@ def save_attachement_submission(request):
             attachment_obj = ApplicantAttachementDetails.objects.get(
                 applicant_id=request.user.get_application)
         else:
-            if (passport_photo is not None) or (photo is not None) or (level_result_document is not None) or (transcript_document is not None) or (english_test_result_document is not None) or (recommendation_letter is not None):
+            if (passport_photo is not None) or (photo is not None) or (level_result_document is not None) or (transcript_document is not None) or (english_test_result_document is not None) or (recommendation_letter is not None) or (arabic_language_proficiency_certificate is not None) or (admission_letter is not None) or (letter_of_agreement is not None) or (declaration_letter is not None) or (student_acceptance_form is not None) or (health_declaration_form is not None):
                 if not ApplicantAttachementDetails.objects.filter(applicant_id=request.user.get_application).exists():
                     application_obj = ApplicationDetails.objects.get(id=request.user.get_application.id)
                     progress_counter = application_obj.progress_counter
@@ -2552,6 +2558,31 @@ def save_attachement_submission(request):
         if recommendation_letter:
             attachment_obj.recommendation_letter = recommendation_letter
             attachment_obj.save()
+
+        if arabic_language_proficiency_certificate:
+            attachment_obj.arabic_language_proficiency_certificate = arabic_language_proficiency_certificate
+            attachment_obj.save()
+
+        if admission_letter:
+            attachment_obj.admission_letter = admission_letter
+            attachment_obj.save()
+
+        if letter_of_agreement:
+            attachment_obj.letter_of_agreement = letter_of_agreement
+            attachment_obj.save()
+
+        if declaration_letter:
+            attachment_obj.declaration_letter = declaration_letter
+            attachment_obj.save()
+
+        if student_acceptance_form:
+            attachment_obj.student_acceptance_form = student_acceptance_form
+            attachment_obj.save()
+
+        if health_declaration_form:
+            attachment_obj.health_declaration_form = health_declaration_form
+            attachment_obj.save()
+
 
 
 

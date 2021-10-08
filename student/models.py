@@ -704,6 +704,12 @@ class ApplicantAttachementDetails(BaseModel):
     level_result_document = models.FileField(upload_to='document/', null=True, blank=True)
     transcript_document = models.FileField(upload_to='document/', null=True, blank=True)
     english_test_result_document = models.FileField(upload_to='document/', null=True, blank=True)
+    arabic_language_proficiency_certificate = models.FileField(upload_to='document/', null=True, blank=True)
+    admission_letter = models.FileField(upload_to='document/', null=True, blank=True)
+    declaration_letter = models.FileField(upload_to='document/', null=True, blank=True)
+    letter_of_agreement = models.FileField(upload_to='document/', null=True, blank=True)
+    student_acceptance_form = models.FileField(upload_to='document/', null=True, blank=True)
+    health_declaration_form = models.FileField(upload_to='document/', null=True, blank=True)
     recommendation_letter = models.FileField(upload_to='document/', null=True, blank=True)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_attachement_rel',
                                      on_delete=models.PROTECT)

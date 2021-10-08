@@ -72,8 +72,8 @@
                                 var width = img.naturalWidth,
                                     height = img.naturalHeight;
                                 _URL.revokeObjectURL(objectUrl);
-                                if(width <= 217 && height <= 280){
-                                     var file_name = $(this).val().split('\\')[2];
+                                if (width <= 217 && height <= 280) {
+                                    var file_name = $(this).val().split('\\')[2];
                                     $(this).prev().children().children('.file_value').val(file_name);
                                 } else {
                                     alert('Maximum file height and width must be 280px*217px');
@@ -84,8 +84,8 @@
 
                             };
                             img.src = objectUrl;
-                             var file_name = $(this).val().split('\\')[2];
-                        $(this).prev().children().children('.file_value').val(file_name);
+                            var file_name = $(this).val().split('\\')[2];
+                            $(this).prev().children().children('.file_value').val(file_name);
                         }
 
 
@@ -166,7 +166,8 @@
                     <div class="form-body">
                         <div class="row">
                             <div class="">
-                                <label class="col-md-4 control-label">Personal Photo:<br><span style="color:red;font-size: 12px">(photo must be jpg and White background)</span>
+                                <label class="col-md-4 control-label">Personal Photo:<br><span
+                                        style="color:red;font-size: 12px">(photo must be jpg and White background)</span>
                                     <br><span style="color:red;font-size: 12px">(Maximum file height and width must be 280px*217px)</span>
                                     <br><span style="color:red;font-size: 12px">(Maximum file size must be 66 KB)</span>
                                 </label>
@@ -363,6 +364,45 @@
                         <br>
                         <div class="row">
                             <div class="">
+                                <label class="col-md-4 control-label">Arabic Language
+                                    Proficiency Certificate:<br><span
+                                            style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
+                                <div class="col-md-3" id="parent4">
+                                    {% if attachment_obj.arabic_language_proficiency_certificate %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a target="_blank"
+                                                                                      href="{{ attachment_obj.arabic_language_proficiency_certificate.url }}"><input
+                                                type="text"
+                                                readonly name="arabic_language_proficiency_certificate_text"
+                                                class="file_value emp"
+                                                style="cursor: pointer;border: none; width: 50%"
+                                                value="{{ attachment_obj.arabic_language_proficiency_certificate }}"></a>
+                                        </label>
+                                    {% else %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a><input type="text"
+                                                                                             readonly
+                                                                                             name="arabic_language_proficiency_certificate_text"
+                                                                                             class="file_value emp"
+                                                                                             style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
+                                    {% endif %}
+                                    <input type="file" style="display: none" class="file_type" accept="application/pdf,"
+                                           title="Select Arabic Language Proficiency Certificate"
+                                           id="arabic_language_proficiency_certificate"
+                                           name="arabic_language_proficiency_certificate">
+                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                                          class="remove_doc fa fa-close"></span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="">
                                 <label class="col-md-4 control-label">Recommendation
                                     Letter:<br><span
                                             style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
@@ -400,21 +440,216 @@
                             </div>
                         </div>
 
+                        <br>
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-4 control-label">Admission
+                                    Letter:<br><span
+                                            style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
+                                <div class="col-md-3" id="parent5">
+                                    {% if attachment_obj.admission_letter %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a
+                                                href="
+                                                        {{ attachment_obj.admission_letter.url }}"><input
+                                                type="text"
+                                                readonly name="admission_letter_text"
+                                                class="file_value emp"
+                                                style="cursor: pointer;border: none; width: 50%"
+                                                value="{{ attachment_obj.admission_letter }}"></a>
+                                        </label>
+                                    {% else %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a><input type="text"
+                                                                                             readonly
+                                                                                             name="admission_letter_text"
+                                                                                             class="file_value emp"
+                                                                                             style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
+                                    {% endif %}
+                                    <input type="file" style="display: none" class="file_type" accept="application/pdf,"
+                                           title="Select Admission Letter" id="admission_letter"
+                                           name="admission_letter">
+                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                                          class="remove_doc fa fa-close"></span>
+                                </div>
 
-{#                        <div class="row">#}
-{#                            <div class="col-md-offset-4 col-md-7">#}
-{#                                {% if user.get_application %}#}
-{#                                                                        {% if user.get_application.is_submitted %}#}
-{#                                    <button type="submit" class="btn green" id="save" style="">Submit</button>#}
-{#                                                                        <button type="submit" class="btn green" id="save" style="">Submit</button>#}
-{#                                                                        {% endif %}#}
-{#                                {% endif %}#}
-{#                            </div>#}
-{#                        </div>#}
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-4 control-label">Letter of Agreement:<br><span
+                                        style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
+                                <div class="col-md-3" id="parent5">
+                                    {% if attachment_obj.letter_of_agreement %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a
+                                                href="
+                                                        {{ attachment_obj.letter_of_agreement.url }}"><input
+                                                type="text"
+                                                readonly name="letter_of_agreement_text"
+                                                class="file_value emp"
+                                                style="cursor: pointer;border: none; width: 50%"
+                                                value="{{ attachment_obj.letter_of_agreement }}"></a>
+                                        </label>
+                                    {% else %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a><input type="text"
+                                                                                             readonly
+                                                                                             name="letter_of_agreement_text"
+                                                                                             class="file_value emp"
+                                                                                             style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
+                                    {% endif %}
+                                    <input type="file" style="display: none" class="file_type" accept="application/pdf,"
+                                           title="Select Letter of Agreement" id="letter_of_agreement"
+                                           name="letter_of_agreement">
+                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                                          class="remove_doc fa fa-close"></span>
+                                </div>
 
-                    <hr>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-4 control-label">Declaration
+                                    Letter:<br><span
+                                            style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
+                                <div class="col-md-3" id="parent5">
+                                    {% if attachment_obj.declaration_letter %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a
+                                                href="
+                                                        {{ attachment_obj.declaration_letter.url }}"><input
+                                                type="text"
+                                                readonly name="declaration_letter_text"
+                                                class="file_value emp"
+                                                style="cursor: pointer;border: none; width: 50%"
+                                                value="{{ attachment_obj.declaration_letter }}"></a>
+                                        </label>
+                                    {% else %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a><input type="text"
+                                                                                             readonly
+                                                                                             name="declaration_letter_text"
+                                                                                             class="file_value emp"
+                                                                                             style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
+                                    {% endif %}
+                                    <input type="file" style="display: none" class="file_type" accept="application/pdf,"
+                                           title="Select Declaration Letter" id="declaration_letter"
+                                           name="declaration_letter">
+                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                                          class="remove_doc fa fa-close"></span>
+                                </div>
 
-                    <div class="row">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-4 control-label">Student Acceptance
+                                    Form:<br><span
+                                            style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
+                                <div class="col-md-3" id="parent5">
+                                    {% if attachment_obj.student_acceptance_form %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a
+                                                href="
+                                                        {{ attachment_obj.student_acceptance_form.url }}"><input
+                                                type="text"
+                                                readonly name="student_acceptance_form_text"
+                                                class="file_value emp"
+                                                style="cursor: pointer;border: none; width: 50%"
+                                                value="{{ attachment_obj.student_acceptance_form }}"></a>
+                                        </label>
+                                    {% else %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a><input type="text"
+                                                                                             readonly
+                                                                                             name="student_acceptance_form_text"
+                                                                                             class="file_value emp"
+                                                                                             style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
+                                    {% endif %}
+                                    <input type="file" style="display: none" class="file_type" accept="application/pdf,"
+                                           title="Select Student Acceptance Form" id="student_acceptance_form"
+                                           name="student_acceptance_form">
+                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                                          class="remove_doc fa fa-close"></span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-4 control-label">Health Declaration
+Form:<br><span
+                                            style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
+                                <div class="col-md-3" id="parent5">
+                                    {% if attachment_obj.health_declaration_form %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a
+                                                href="
+                                                        {{ attachment_obj.health_declaration_form.url }}"><input
+                                                type="text"
+                                                readonly name="health_declaration_form_text"
+                                                class="file_value emp"
+                                                style="cursor: pointer;border: none; width: 50%"
+                                                value="{{ attachment_obj.health_declaration_form }}"></a>
+                                        </label>
+                                    {% else %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a><input type="text"
+                                                                                             readonly
+                                                                                             name="health_declaration_form_text"
+                                                                                             class="file_value emp"
+                                                                                             style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
+                                    {% endif %}
+                                    <input type="file" style="display: none" class="file_type" accept="application/pdf,"
+                                           title="Select Health Declaration Form" id="health_declaration_form"
+                                           name="health_declaration_form">
+                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                                          class="remove_doc fa fa-close"></span>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        {#                        <div class="row">#}
+                        {#                            <div class="col-md-offset-4 col-md-7">#}
+                        {#                                {% if user.get_application %}#}
+                        {#                                                                        {% if user.get_application.is_submitted %}#}
+                        {#                                    <button type="submit" class="btn green" id="save" style="">Submit</button>#}
+                        {#                                                                        <button type="submit" class="btn green" id="save" style="">Submit</button>#}
+                        {#                                                                        {% endif %}#}
+                        {#                                {% endif %}#}
+                        {#                            </div>#}
+                        {#                        </div>#}
+
+                        <hr>
+
+                        <div class="row">
                             <div class="col-md-offset-5 col-md-7">
                                 <button type="button" class="btn blue" id="save" style="margin-left: 70%"
                                         onclick="window.location='{% url "student:applicant_scholarship_about_yourself_info" %}'">
@@ -422,11 +657,11 @@
                                 </button>
 
                                 {% if user.get_application %}
-{#                                    {% if not user.get_application.is_submitted %}#}
-                                        <button type="submit" class="btn green" id="save" style="">Save/Next
+                                    {#                                    {% if not user.get_application.is_submitted %}#}
+                                    <button type="submit" class="btn green" id="save" style="">Save/Next
 
-                                        </button>
-{#                                    {% endif %}#}
+                                    </button>
+                                    {#                                    {% endif %}#}
                                 {% endif %}
 
                             </div>
