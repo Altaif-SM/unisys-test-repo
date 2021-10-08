@@ -604,11 +604,29 @@ License: You must have a valid license purchased only from themeforest(the above
                         </li>
                     {% endif %}
 
+                         {% if 'student.can_view_student_academic_qualification' in perms %}
+                        <li class="nav-item " id="acd_qli">
+                            <a href="{% url 'student:applicant_curriculum_experience_info' %}"
+                               class="nav-link nav-toggle">
+                            <i class="fa fa-trophy" aria-hidden="true"></i>
+                                <span class="title">Achievments/Employment</span>
+                                {% if user.get_student_application.english_qualification %}
+                                    <span class="title glyphicon glyphicon-ok"
+                                          style="color: #41bc2c;font-size: 16px"></span>{% else %}
+                                    <span class="title glyphicon glyphicon-exclamation-sign"
+                                          style="color: #dc302b; font-size: 16px"></span>{% endif %}
+                                <span class="selected"></span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+
+
                             {% if 'student.can_view_scholarship_selection' in perms %}
                         <li class="nav-item " id="acd_qli">
                             <a href="{% url 'student:applicant_scholarship_about_yourself_info' %}"
                                class="nav-link nav-toggle">
-                                <i class="glyphicon glyphicon-star"></i>
+                            <i class="fa fa-graduation-cap"></i>
                                 <span class="title">Scholarship Selection</span>
                                 {% if user.get_student_application.scholarship_selection %}
                                     <span class="title glyphicon glyphicon-ok"
@@ -619,6 +637,39 @@ License: You must have a valid license purchased only from themeforest(the above
                             </a>
                         </li>
                     {% endif %}
+
+                        {% if 'student.can_view_student_psychometric_test' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'student:applicant_attachment_submission' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-copy"></i>
+                                        <span class="title">Attachment</span>
+                                        {% if user.get_student_application.attachment %}
+                                            <span class="title glyphicon glyphicon-ok"
+                                                  style="color: #41bc2c;font-size: 16px"></span>{% else %}
+                                            <span class="title glyphicon glyphicon-exclamation-sign"
+                                                  style="color: #dc302b; font-size: 16px"></span>{% endif %}
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                        {% if 'student.can_view_student_psychometric_test' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'student:applicant_declaration' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-pencil"></i>
+                                        <span class="title">Declaration</span>
+                                        {% if user.get_student_application.declaration %}
+                                            <span class="title glyphicon glyphicon-ok"
+                                                  style="color: #41bc2c;font-size: 16px"></span>{% else %}
+                                            <span class="title glyphicon glyphicon-exclamation-sign"
+                                                  style="color: #dc302b; font-size: 16px"></span>{% endif %}
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
 
                             {% if 'student.can_view_my_application' in perms %}
                         <li class="nav-item " id="acd_qli">

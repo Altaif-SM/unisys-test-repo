@@ -32,32 +32,30 @@
         window.onload = function () {
 
 
-
-
-
             $(document).ready(function () {
 
-                 if($('.aggre_term').is(":checked")){
-                $('#save_id').attr("disabled", false);
-            }
-            else{
-                $('#save_id').attr("disabled", true);
-            }
-
-
-            $("#about_yourself").on('keydown', function(e) {
-                var words = $.trim(this.value).length ? this.value.match(/\S+/g).length : 0;
-                if (words <= 600) {
-                    $('#display_count').text(words);
-                    $('#word_left').text(600-words)
-                }else{
-                    if (e.which !== 8) e.preventDefault();
+                /*
+                if ($('.aggre_term').is(":checked")) {
+                    $('#save_id').attr("disabled", false);
+                } else {
+                    $('#save_id').attr("disabled", true);
                 }
-            });
+                */
 
-                 var words = $.trim($("textarea").val()).split(" ");
-                 $('#display_count').text(words.length);
-                 $('#word_left').text(600-words.length)
+
+                $("#about_yourself").on('keydown', function (e) {
+                    var words = $.trim(this.value).length ? this.value.match(/\S+/g).length : 0;
+                    if (words <= 600) {
+                        $('#display_count').text(words);
+                        $('#word_left').text(600 - words)
+                    } else {
+                        if (e.which !== 8) e.preventDefault();
+                    }
+                });
+
+                var words = $.trim($("textarea").val()).split(" ");
+                $('#display_count').text(words.length);
+                $('#word_left').text(600 - words.length)
 
 
                 {% if user.get_application %}
@@ -80,16 +78,6 @@
                     }
                 });
 
-
-                $(".aggre_term").click(function(){
-                 if($(this).is(":checked")) {
-                    $('#save_id').attr("disabled", false);
-                   }
-
-                 else{
-                     $('#save_id').attr("disabled", true);
-                 }
-                });
 
                 {% comment %}$(document).on("click", ".remove_doc", function (e) {
                     {#alert($(this).prev().attr('id'))#}
@@ -124,26 +112,79 @@
                 });
 
 
-                $(document).on("change", "#university", function (s) {
+                $(document).on("change", "#university1", function (s) {
+                    /*
                     if (this.options[this.selectedIndex].id == 'add_university') {
                         $('#id_accept_student_model').modal();
-                    }
-                    else{
-                        var university_id = $(this).val()
-                         var url = '/student/get_degrees_from_universities/';
-                        get_degrees_from_universities(url, university_id)
+                    } else {
+
 
                     }
+                    */
+                    var university_id = $(this).val()
+                    var url = '/student/get_degrees_from_universities/';
+                    get_degrees_from_universities(url, university_id)
+
                 });
 
+                $(document).on("change", "#scholarship", function (s) {
+                    var scholarship_id = $(this).val()
+                    var url = '/student/get_universities_from_scholarship/';
+                    get_universities_from_scholarship(url, scholarship_id)
 
-                $(document).on("click", "#degree_applied", function (e) {
+                });
+
+                function get_universities_from_scholarship(url, scholarship_id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            scholarship_id: scholarship_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+                            $('#university').empty();
+                            $('#university').append(
+                                '<option value="">Please select</option>');
+                            for (var i = 0; i < data['university_list'].length; i++) {
+                                $('#university').append(
+                                    '<option value="' + data['university_list'][i]['id'] + '">'
+                                    + data['university_list'][i]['name'] + '</option>')
+                            }
+
+                            $('#degree_applied').empty();
+                            $('#degree_applied').append(
+                                '<option value="">Please select</option>');
+                            for (var i = 0; i < data['degree_list'].length; i++) {
+                                $('#degree_applied').append(
+                                    '<option value="' + data['degree_list'][i]['id'] + '">'
+                                    + data['degree_list'][i]['name'] + '</option>')
+                            }
+
+                            $('#course_applied').empty();
+                            $('#course_applied').append(
+                                '<option value="">Please select</option>');
+                            for (var i = 0; i < data['course_list'].length; i++) {
+                                $('#course_applied').append(
+                                    '<option value="' + data['course_list'][i]['id'] + '">'
+                                    + data['course_list'][i]['name'] + '</option>')
+                            }
+
+
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+
+                $(document).on("click", "#degree_applied1", function (e) {
                     var degree_applied_id = $(this).val();
                     var university_id = $('#university').val();
                     var url = '/student/get_courses_from_degrees/';
-                    get_courses_from_degrees(url,university_id, degree_applied_id)
+                    get_courses_from_degrees(url, university_id, degree_applied_id)
                 })
-
 
 
                 $('#cancel_model').click(function () {
@@ -159,8 +200,7 @@
                         if ($(this).val() == '') {
                             if ($(this).hasClass('file_value')) {
                                 $(this).parents('label:eq(0)').css('border-color', 'red');
-                            }
-                            else {
+                            } else {
                                 $(this).css('border-color', 'red');
                             }
                             flag_emp = true;
@@ -169,15 +209,14 @@
 
                     if (flag_emp) {
                         return false;
-                    }
-                    else {
+                    } else {
                         $('#id_form').submit();
                     }
 
                 })
 
 
-                  function get_degrees_from_universities(url, university_id) {
+                function get_degrees_from_universities(url, university_id) {
                     $.ajax({
                         type: 'POST',
                         url: url,
@@ -186,6 +225,7 @@
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
+                            var data = data['degree_list']
 
                             $('#degree_applied').empty();
                             $('#degree_applied').append(
@@ -203,7 +243,7 @@
                 }
 
 
-                 function get_courses_from_degrees(url, university_id, degree_applied_id) {
+                function get_courses_from_degrees(url, university_id, degree_applied_id) {
                     $.ajax({
                         type: 'POST',
                         url: url,
@@ -230,7 +270,6 @@
                 }
 
 
-
                 $('#sample_1').dataTable().fnDestroy();
                 $('#sample_1').dataTable({
                     "aoColumnDefs": [
@@ -245,8 +284,6 @@
                 $(this).remove();
             });
         }, 4000);
-
-
 
 
     </script>
@@ -264,7 +301,7 @@
             </li>
 
             <li>
-                <span> Qualification Info </span>
+                <span> Scholarship Info </span>
             </li>
         </ul>
     </div>
@@ -303,7 +340,7 @@
                                         {% if scholarship_obj %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ scholarship_obj.scholarship.id }}">
-                                                {{ scholarship_obj.scholarship.scholarship_name}}</option>
+                                                {{ scholarship_obj.scholarship.scholarship_name }}</option>
                                         {% else %}
                                             <option style="display:none" selected="selected" id="" value="">Please
                                                 Select
@@ -319,7 +356,7 @@
                         </div>
 
                         <br>
-                    <div class="row">
+                        <div class="row">
                             <div class="">
                                 <label class="col-md-2 control-label">University:<span
                                         style="color: red">*</span></label>
@@ -338,12 +375,13 @@
                                             </option>
                                         {% endif %}
 
-                                        {% for rec in university_obj %}
-                                            <option value='{{ rec.id }}'>{{ rec.university_name|title }}</option>
+                                        {% for rec in university_recs %}
+                                            <option value='{{ rec.university.id }}'>{{ rec.university.university_name|title }}</option>
                                         {% endfor %}
-{#                                        <option id="add_university" value="" style="color: #0000C0" class="fa fa-plus">#}
-{#                                            Add University +#}
-{#                                        </option>#}
+
+                                        {#                                        <option id="add_university" value="" style="color: #0000C0" class="fa fa-plus">#}
+                                        {#                                            Add University +#}
+                                        {#                                        </option>#}
                                     </select>
 
                                     {#                                    <input type="text" title="Enter University" id="university" name="university"#}
@@ -351,7 +389,7 @@
                                 </div>
                             </div>
                         </div>
-                    <br>
+                        <br>
                         <div class="row">
                             <div class="">
                                 <label class="col-md-2 control-label">Degree:<span style="color: red">*</span></label>
@@ -368,16 +406,17 @@
                                             </option>
                                         {% endif %}
 
-                                        {% comment %}{% for rec in degree_obj %}
-                                            <option value='{{ rec.id }}'>{{ rec.degree_name|title }}</option>
-                                        {% endfor %}{% endcomment %}
+
+                                        {% for rec in degree_recs %}
+                                            <option value='{{ rec.degree_type.id }}'>{{ rec.degree_type.degree_name|title }}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                             </div>
                         </div>
-                    <br>
+                        <br>
 
-                    <div class="row">
+                        <div class="row">
                             <div class="">
                                 <label class="col-md-2 control-label">Course Applied:<span
                                         style="color: red">*</span></label>
@@ -387,126 +426,131 @@
                                         {% if scholarship_obj %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ scholarship_obj.course_applied.id }}"
-                                                    value="">{{ scholarship_obj.course_applied.program_name|title }}</option>
+                                                    value="">{{ scholarship_obj.course_applied.course_name|title }}</option>
                                         {% else %}
                                             <option style="display:none" selected="selected" id="" value="">Please
                                                 Select
                                             </option>
                                         {% endif %}
+                                    {% for rec in course_recs %}
+                                            <option value='{{ rec.course.id }}'>{{ rec.course.course_name|title }}</option>
+                                        {% endfor %}
 
-{#                                        {% for rec in course_recs %}#}
-{#                                            <option value='{{ rec.id }}'>{{ rec.program_name|title }}</option>#}
-{#                                        {% endfor %}#}
+                                        {#                                        {% for rec in course_recs %}#}
+                                        {#                                            <option value='{{ rec.id }}'>{{ rec.program_name|title }}</option>#}
+                                        {#                                        {% endfor %}#}
                                     </select>
                                 </div>
                             </div>
                         </div>
-
-                        <br>
-
-                        <br>
-
-
-                        <div class="row">
-                            <div class="">
-                                <label class="col-md-2 control-label">Admission Letter: <span
-                                        style="color: red">*</span></label>
-                                <div class="col-md-3" id="item1">
-
-                                    {% if scholarship_obj.admission_letter_document %}
-                                        <label class="form-control"
-                                               style="border-color: #b1ad9f;  width: 100%;text-align: left"><input
-                                                style="width: 50%"
-                                                type='button' class="file" value='Choose File:'><a
-                                                href="
+                        {##}
+                        {#                        <br>#}
+                        {##}
+                        {#                        <br>#}
 
 
+                        {#                        <div class="row">#}
+                        {#                            <div class="">#}
+                        {#                                <label class="col-md-2 control-label">Admission Letter: <span#}
+                        {#                                        style="color: red">*</span></label>#}
+                        {#                                <div class="col-md-3" id="item1">#}
+                        {##}
+                        {#                                    {% if scholarship_obj.admission_letter_document %}#}
+                        {#                                        <label class="form-control"#}
+                        {#                                               style="border-color: #b1ad9f;  width: 100%;text-align: left"><input#}
+                        {#                                                style="width: 50%"#}
+                        {#                                                type='button' class="file" value='Choose File:'><a#}
+                        {#                                                href="#}
+                        {##}
+                        {##}
+                        {##}
+                        {##}
+                        {##}
+                        {#                                                        {{ scholarship_obj.applicant_id.report_path }}{{ scholarship_obj.admission_letter_document }}"><input#}
+                        {#                                                readonly#}
+                        {#                                                class="file_value emp eng_emp" name="admission_letter_document_text"#}
+                        {#                                                style="border: red; width: 50%"#}
+                        {#                                                value="{{ scholarship_obj.admission_letter_document }}"></a></label>#}
+                        {#                                    {% else %}#}
+                        {#                                        <label class="form-control"#}
+                        {#                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input#}
+                        {#                                                class="file" style="width: 50%"#}
+                        {#                                                type='button' value='Choose File:'><a><input type="text"#}
+                        {#                                                                                             readonly#}
+                        {#                                                                                             name="admission_letter_document_text"#}
+                        {#                                                                                             class="file_value emp eng_emp"#}
+                        {#                                                                                             style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>#}
+                        {#                                    {% endif %}#}
+                        {#                                    <input style="display: none" type="file" title="Select admission letter"#}
+                        {#                                           id="admission_letter_document"#}
+                        {#                                           value="{{ scholarship_obj.admission_letter_document }}"#}
+                        {#                                           name="admission_letter_document" class="file_type">#}
+                        {##}
+                        {#                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"#}
+                        {#                                          class="remove_doc fa fa-close"></span>#}
+                        {#                                </div>#}
+                        {#                            </div>#}
+                        {#                        </div>#}
+
+                        {#                        <br>#}
+                        {#                        <br>#}
+                        {#                        <br>#}
+                        {#                        <hr>#}
+                        {#                        <div class="portlet-title">#}
+                        {#                            <div class="caption">#}
+                        {#                                <i class="icon-settings font-red"></i>#}
+                        {#                                <span class="caption-subject font-red sbold uppercase"> About Yourself:<span#}
+                        {#                                        style="color: red">*</span></span>#}
+                        {#                            </div>#}
+                        {#                        </div>#}
+                        {#                        <hr>#}
+
+                        {#                        <div class="row">#}
+                        {#                            <div class="">#}
+                        {#                                <label class="col-md-2 control-label"></label>#}
+                        {#                                <div class="col-md-6">#}
+                        {#                                    <label>Write 600 word about yourself</label>#}
+                        {#                                    <label>About yourself : </label>#}
+                        {#                                    <textarea id="about_yourself" style="height: 200px" name="about_yourself"#}
+                        {#                                              class="form-control eng_emp">{{ about_obj.about_yourself }}</textarea>#}
+                        {#                                    <span id="display_count">0</span> words. Words left : <span#}
+                        {#                                        id="word_left">600</span>#}
+                        {#                                </div>#}
+                        {#                            </div>#}
+                        {#                        </div>#}
+                        {#                        <br><br>#}
+
+                        {#                        <div class="row">#}
+                        {#                            <div class="">#}
+                        {#                                <label class="col-md-2 control-label"><input type="checkbox" class="form-control" required></label>#}
+                        {#                                <div class="col-md-3">#}
+                        {#                                    I have read and agree with <a>Personal Data Protection Notice</a>#}
+                        {#                                </div>#}
+                        {#                            </div>#}
+                        {#                        </div>#}
+
+                        {#                        <div class="row">#}
+                        {#                            <div class="">#}
+                        {#                                <div class="col-md-6" style="margin-left: 10%">#}
+                        {#                                    {% if scholarship_obj %}#}
+                        {#                                        <span style="color: red"><sup>*</sup></span>#}
+                        {#                                        <input type="checkbox" checked class="aggre_term">#}
+                        {##}
+                        {#                                    {% else %}#}
+                        {#                                        <input type="checkbox" class="aggre_term">#}
+                        {#                                    {% endif %}#}
+                        {##}
+                        {#                                    I have read and agree with <a target="_blank"#}
+                        {#                                                                  href="{{ terms_condition_recs.0.term_condition.url }} ">Personal#}
+                        {#                                    Data Protection Notice</a>#}
+                        {##}
+                        {#                                </div>#}
+                        {#                            </div>#}
+                        {#                        </div>#}
 
 
-                                                        {{ scholarship_obj.applicant_id.report_path }}{{ scholarship_obj.admission_letter_document }}"><input
-                                                readonly
-                                                class="file_value emp eng_emp" name="admission_letter_document_text"
-                                                style="border: red; width: 50%"
-                                                value="{{ scholarship_obj.admission_letter_document }}"></a></label>
-                                    {% else %}
-                                        <label class="form-control"
-                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
-                                                class="file" style="width: 50%"
-                                                type='button' value='Choose File:'><a><input type="text"
-                                                                                             readonly
-                                                                                             name="admission_letter_document_text"
-                                                                                             class="file_value emp eng_emp"
-                                                                                             style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>
-                                    {% endif %}
-                                    <input style="display: none" type="file" title="Select admission letter"
-                                           id="admission_letter_document"
-                                           value="{{ scholarship_obj.admission_letter_document }}"
-                                           name="admission_letter_document" class="file_type">
-
-                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
-                                          class="remove_doc fa fa-close"></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <br>
-                        <br>
-                        <br>
-                        <hr>
-                        <div class="portlet-title">
-                            <div class="caption">
-                                <i class="icon-settings font-red"></i>
-                                <span class="caption-subject font-red sbold uppercase"> About Yourself:<span
-                                        style="color: red">*</span></span>
-                            </div>
-                        </div>
-                        <hr>
-
-                        <div class="row">
-                            <div class="">
-                                <label class="col-md-2 control-label"></label>
-                                <div class="col-md-6">
-{#                                    <label>Write 600 word about yourself</label>#}
-                                    <label>About yourself : </label>
-                                    <textarea id="about_yourself" style="height: 200px" name="about_yourself"
-                                              class="form-control eng_emp">{{ about_obj.about_yourself }}</textarea>
-                                    <span id="display_count">0</span> words. Words left : <span id="word_left">600</span>
-                                </div>
-                            </div>
-                        </div>
-                        <br><br>
-
-{#                        <div class="row">#}
-{#                            <div class="">#}
-{#                                <label class="col-md-2 control-label"><input type="checkbox" class="form-control" required></label>#}
-{#                                <div class="col-md-3">#}
-{#                                    I have read and agree with <a>Personal Data Protection Notice</a>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-
-                        <div class="row">
-                             <div class="">
-                                 <div class="col-md-6" style="margin-left: 10%">
-                                    {% if scholarship_obj%}
-                                     <span style="color: red"><sup>*</sup></span>
-                                      <input type="checkbox" checked class="aggre_term">
-
-                                 {% else %}
-                                  <input type="checkbox" class="aggre_term">
-                                  {% endif %}
-
-                                   I have read and agree with <a target="_blank" href="{{ terms_condition_recs.0.term_condition.url }} ">Personal Data Protection Notice</a>
-
-                                </div>
-                             </div>
-                        </div>
-
-
-
-
-                        <br><br>
-                        <br><br>
+                        {#                        <br><br>#}
+                        {#                        <br><br>#}
 
                         <div class="row">
                             <div class="col-md-offset-5 col-md-7">

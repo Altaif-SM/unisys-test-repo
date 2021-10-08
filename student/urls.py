@@ -89,8 +89,13 @@ urlpatterns = [
 
                   path('get_degrees_from_universities/', views.get_degrees_from_universities,name='get_degrees_from_universities'),
                   path('get_courses_from_degrees/', views.get_courses_from_degrees,name='get_courses_from_degrees'),
+                  path('get_universities_from_scholarship/', views.get_universities_from_scholarship,name='get_universities_from_scholarship'),
 
+                  path('applicant_attachment_submission/', views.applicant_attachment_submission,
+                       name='applicant_attachment_submission'),
+                  path('save_attachement_submission/', views.save_attachement_submission, name='save_attachement_submission'),
 
+                  path('applicant_declaration/', views.applicant_declaration, name='applicant_declaration'),
 
 
 

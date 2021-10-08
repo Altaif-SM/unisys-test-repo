@@ -1525,7 +1525,9 @@ def applicant_scholarship_about_yourself_info(request):
     scholarship_obj = ''
     about_obj = ''
     application_obj = ''
-
+    university_recs = ''
+    degree_recs = ''
+    course_recs = ''
     try:
          request.user.get_application
     except Exception as e:
@@ -1539,6 +1541,9 @@ def applicant_scholarship_about_yourself_info(request):
 
             if ScholarshipSelectionDetails.objects.filter(applicant_id=request.user.get_application).exists():
                 scholarship_obj = ScholarshipSelectionDetails.objects.get(applicant_id=request.user.get_application)
+                university_recs = ProgramDetails.objects.get(scholarship_id=scholarship_obj.scholarship.id).university.all()
+                degree_recs = ProgramDetails.objects.get(scholarship_id=scholarship_obj.scholarship.id).degree_type.all()
+                course_recs = ProgramDetails.objects.get(scholarship_id=scholarship_obj.scholarship.id).course.all()
 
             if ApplicantAboutDetails.objects.filter(applicant_id=request.user.get_application).exists():
                 about_obj = ApplicantAboutDetails.objects.get(applicant_id=request.user.get_application)
@@ -1547,7 +1552,8 @@ def applicant_scholarship_about_yourself_info(request):
     return render(request, 'applicant_scholarship_about_yourself_info.html',
                   {'scholarship_recs': scholarship_recs, 'scholarship_obj': scholarship_obj, 'about_obj': about_obj,
                    'university_obj': university_obj, 'degree_obj': degree_obj, 'course_recs': course_recs,
-                   'application_obj': application_obj,'terms_condition_recs':terms_condition_recs})
+                   'application_obj': application_obj,'terms_condition_recs':terms_condition_recs,'university_recs':university_recs,
+                   'degree_recs':degree_recs,'course_recs':course_recs})
 
 
 def get_degrees(request):
@@ -1605,8 +1611,8 @@ def save_update_applicant_scholarship_about_yourself_info(request):
                                 scholarship_obj.admission_letter_document = ''
                             scholarship_obj.save()
 
-                            ApplicantAboutDetails.objects.filter(applicant_id=request.user.get_application).update(
-                                about_yourself=request.POST['about_yourself'])
+                            # ApplicantAboutDetails.objects.filter(applicant_id=request.user.get_application).update(
+                            #     about_yourself=request.POST['about_yourself'])
 
                             redirect_flag = True
                         except Exception as e:
@@ -1633,9 +1639,9 @@ def save_update_applicant_scholarship_about_yourself_info(request):
                                 scholarship_obj.admission_letter_document = ''
                             scholarship_obj.save()
 
-                            ApplicantAboutDetails.objects.create(
-                                about_yourself=request.POST['about_yourself'],
-                                applicant_id=request.user.get_application)
+                            # ApplicantAboutDetails.objects.create(
+                            #     about_yourself=request.POST['about_yourself'],
+                            #     applicant_id=request.user.get_application)
 
                             redirect_flag = True
                         except Exception as e:
@@ -1646,7 +1652,7 @@ def save_update_applicant_scholarship_about_yourself_info(request):
 
                 if redirect_flag:
                     messages.success(request, "Record saved")
-                    return redirect('/student/my_application/')
+                    return redirect('/student/applicant_attachment_submission/')
         except Exception as e:
             messages.warning(request, "Form have some error" + str(e))
 
@@ -2426,5 +2432,147 @@ def get_courses_from_degrees(request):
         finalDict.append(raw_dict)
     return JsonResponse(finalDict, safe=False)
 
+
+def get_universities_from_scholarship(request):
+    university_dict = []
+    degree_dict = []
+    course_dict = []
+    scholarship_id = request.POST.get('scholarship_id', None)
+    scholarship_dict = {'university_list': '', 'degree_list': '','course_list':''}
+    try:
+        university_recs = ProgramDetails.objects.get(scholarship_id=scholarship_id).university.all()
+        for university in university_recs:
+            raw_dict = {}
+            raw_dict['name'] =university.university.university_name.title()
+            raw_dict['id'] = university.university.id
+            university_dict.append(raw_dict)
+        scholarship_dict['university_list'] = university_dict
+    except:
+        pass
+    try:
+        degree_recs = ProgramDetails.objects.get(scholarship_id=scholarship_id).degree_type.all()
+        for degree in degree_recs:
+            raw_dict = {}
+            raw_dict['name'] =degree.degree_type.degree_name.title()
+            raw_dict['id'] = degree.degree_type.id
+            degree_dict.append(raw_dict)
+        scholarship_dict['degree_list'] = degree_dict
+    except:
+        pass
+    try:
+        course_recs = ProgramDetails.objects.get(scholarship_id=scholarship_id).course.all()
+        for course in course_recs:
+            raw_dict = {}
+            raw_dict['name'] =course.course.course_name.title()
+            raw_dict['id'] = course.course.id
+            course_dict.append(raw_dict)
+        scholarship_dict['course_list'] = course_dict
+    except:
+        pass
+    return JsonResponse(scholarship_dict, safe=False)
+
+
+
+@agreements_required
+def applicant_attachment_submission(request):
+
+    try:
+        application_obj = request.user.get_application
+    except Exception as e :
+        messages.warning(request, "Please fill the personal details first.")
+        return redirect('/student/applicant_personal_info/')
+
+    try:
+        attachment_obj = ''
+        if request.user.get_application:
+            # if request.user.get_application.is_submitted:
+            if ApplicantAttachementDetails.objects.filter(applicant_id=request.user.get_application).exists():
+                attachment_obj = ApplicantAttachementDetails.objects.get(
+                    applicant_id=request.user.get_application)
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+        return redirect('/student/student_home/')
+    return render(request, 'applicant_attachment_submission.html',
+                  {'attachment_obj': attachment_obj})
+
+
+@agreements_required
+def save_attachement_submission(request):
+    try:
+        passport_photo = request.FILES.get('passport_photo')
+        photo = request.FILES.get('photo')
+        level_result_document = request.FILES.get('level_result_document')
+        transcript_document = request.FILES.get('transcript_document')
+        english_test_result_document = request.FILES.get('english_test_result_document')
+        recommendation_letter = request.FILES.get('recommendation_letter')
+    except:
+        passport_photo = ''
+        photo = ''
+        level_result_document = ''
+        transcript_document = ''
+        english_test_result_document = ''
+        recommendation_letter = ''
+
+    try:
+
+        if ApplicantAttachementDetails.objects.filter(applicant_id=request.user.get_application).exists():
+            attachment_obj = ApplicantAttachementDetails.objects.get(
+                applicant_id=request.user.get_application)
+        else:
+            if (passport_photo is not None) or (photo is not None) or (level_result_document is not None) or (transcript_document is not None) or (english_test_result_document is not None) or (recommendation_letter is not None):
+                if not ApplicantAttachementDetails.objects.filter(applicant_id=request.user.get_application).exists():
+                    application_obj = ApplicationDetails.objects.get(id=request.user.get_application.id)
+                    progress_counter = application_obj.progress_counter
+                    progress_counter = progress_counter + 10
+                    application_obj.progress_counter = progress_counter
+                    application_obj.save()
+                attachment_obj = ApplicantAttachementDetails.objects.create(
+                    applicant_id=request.user.get_application)
+        if passport_photo:
+            attachment_obj.passport_image = passport_photo
+            attachment_obj.save()
+
+        if photo:
+            attachment_obj.image = photo
+            attachment_obj.save()
+
+        if level_result_document:
+            attachment_obj.level_result_document = level_result_document
+            attachment_obj.save()
+
+        if transcript_document:
+            attachment_obj.transcript_document = transcript_document
+            attachment_obj.save()
+
+        if english_test_result_document:
+            attachment_obj.english_test_result_document = english_test_result_document
+            attachment_obj.save()
+
+        if recommendation_letter:
+            attachment_obj.recommendation_letter = recommendation_letter
+            attachment_obj.save()
+
+
+
+        messages.success(request, "Attachment submitted successfully.")
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+    return redirect('/student/applicant_declaration/')
+
+def applicant_declaration(request):
+    application_obj = ''
+    try:
+        application_obj = request.user.get_application
+    except Exception as e :
+        messages.warning(request, "Please fill the personal details first.")
+        return redirect('/student/applicant_personal_info/')
+    try:
+        if request.user.get_application:
+            application_obj = request.user.get_application
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+    return render(request, 'applicant_declaration.html', {'application_obj':application_obj})
 
 
