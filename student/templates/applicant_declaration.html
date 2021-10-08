@@ -39,10 +39,9 @@
                     $('#id_accept_student_model').modal();
                 });
 
-                 $(document).on("click", "#submit_appplication", function () {
+                $(document).on("click", "#submit_appplication", function () {
                     $("#form_sample_1").submit();
                 });
-
 
 
                 if ($('.aggre_term').is(":checked")) {
@@ -59,9 +58,6 @@
                         $('#save_id').attr("disabled", true);
                     }
                 });
-
-
-
 
 
                 $('#sample_1').dataTable().fnDestroy();
@@ -144,15 +140,19 @@
                             </div>
                             <br><br>
 
-                        <div class="">
+                            <div class="">
                                 <div class="col-md-8" style="margin-left: 10%;font-size:15px">
 
 
-                                    I declare that all the information provided is correct and complete. I hereby give my consent to
-the University to obtain information relating to my admission into #Uni Name from relevant
-authorities. I understand that #Uni Name reserves the right to request any additional
-information before a decision on admission is made. I understand that any misinformation or
-incomplete application could result in the rejection of my application.
+                                    I declare that all the information provided is correct and complete. I hereby give
+                                    my consent to
+                                    the University to obtain information relating to my admission into #Uni Name from
+                                    relevant
+                                    authorities. I understand that #Uni Name reserves the right to request any
+                                    additional
+                                    information before a decision on admission is made. I understand that any
+                                    misinformation or
+                                    incomplete application could result in the rejection of my application.
                                 </div>
                             </div>
                             <br><br><br><br><br><br>
@@ -173,10 +173,7 @@ incomplete application could result in the rejection of my application.
                                 </div>
                             </div>
                         </div>
-
-
-                        <br><br>
-
+                        <hr>
                         <div class="row">
                             <div class="col-md-offset-3 col-md-9">
                                 <button type="button" class="btn blue" id="save" style="margin-left: 70%"
@@ -204,9 +201,9 @@ incomplete application could result in the rejection of my application.
         <div class="modal-dialog">
             <div class="modal-content">
                 <form action="{% url 'student:submit_application' %}"
-                        id="form_sample_1"
-                        class="form-horizontal"
-                        method="POST" enctype="multipart/form-data">
+                      id="form_sample_1"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
@@ -215,7 +212,7 @@ incomplete application could result in the rejection of my application.
                     <div class="modal-body">
                         <p> Are you sure, you want to submit application? </p>
                         <p> After submission you will not be able to modify the application. </p>
-                                                <input type="hidden" name="app_id" value="{{ application_obj.id }}">
+                        <input type="hidden" name="app_id" value="{{ application_obj.id }}">
 
                     </div>
                     <div class="modal-footer">
