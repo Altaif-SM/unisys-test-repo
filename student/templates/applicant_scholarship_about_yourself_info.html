@@ -57,7 +57,7 @@
                 $('#display_count').text(words.length);
                 $('#word_left').text(600 - words.length)
 
-
+                /*
                 {% if user.get_application %}
                     {% if user.get_application.is_submitted %}
                         $('input').prop('disabled', 'true')
@@ -66,6 +66,7 @@
                         $('textarea').prop('readonly', 'true')
                     {% endif %}
                 {% endif %}
+                */
 
                 $(document).on("change", ".doc", function (e) {
                     var files = !!this.files ? this.files : [];
@@ -560,9 +561,9 @@
                                 </button>
 
                                 {% if application_obj %}
-                                    {% if not application_obj.is_submitted %}
+{#                                    {% if not application_obj.is_submitted %}#}
                                         <button type="button" class="btn green" id="save_id" style="">Save/Next</button>
-                                    {% endif %}
+{#                                    {% endif %}#}
                                 {% endif %}
 
                                 {% comment %}{% if application_obj %}

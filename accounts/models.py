@@ -196,6 +196,7 @@ class User(AbstractUser):
                 form_vals[
                     'english_qualification'] = applicaton_obj.english_applicant_rel.filter()[0].english_qualification if applicaton_obj.english_applicant_rel.all() else False
                 form_vals['attachment'] = True if applicaton_obj.applicant_attachement_rel.all() else False
+                form_vals['declaration'] = True if applicaton_obj.is_submitted else False
                 form_vals[
                     'scholarship_selection'] = applicaton_obj.applicant_scholarship_rel.get().scholarship_selection if applicaton_obj.applicant_scholarship_rel.all() else False
                 form_vals['my_application'] = applicaton_obj.is_submitted if applicaton_obj.is_submitted else False
@@ -207,6 +208,7 @@ class User(AbstractUser):
                 form_vals['personal_info_flag'] = False
                 form_vals['english_qualification'] = False
                 form_vals['attachment'] = False
+                form_vals['declaration'] = False
                 form_vals['scholarship_selection'] = False
                 form_vals['my_application'] = False
                 form_vals['psychometric_test'] = False

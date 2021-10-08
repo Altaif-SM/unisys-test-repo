@@ -1584,71 +1584,71 @@ def save_update_applicant_scholarship_about_yourself_info(request):
     if request.POST:
         try:
             if StudentDetails.objects.filter(user=request.user):
-                if not request.user.get_application.is_submitted:
+                # if not request.user.get_application.is_submitted:
                     # application_obj = ApplicationDetails.objects.get(student=student, is_submitted=False)
-                    if ScholarshipSelectionDetails.objects.filter(applicant_id=request.user.get_application).exists():
-                        try:
-                            ScholarshipSelectionDetails.objects.filter(
-                                applicant_id=request.user.get_application).update(
-                                scholarship_id=request.POST['scholarship'],
-                                course_applied_id=request.POST['course_applied'],
-                                degree_id=request.POST['degree_applied'],
-                                university_id=request.POST['university'])
+                if ScholarshipSelectionDetails.objects.filter(applicant_id=request.user.get_application).exists():
+                    try:
+                        ScholarshipSelectionDetails.objects.filter(
+                            applicant_id=request.user.get_application).update(
+                            scholarship_id=request.POST['scholarship'],
+                            course_applied_id=request.POST['course_applied'],
+                            degree_id=request.POST['degree_applied'],
+                            university_id=request.POST['university'])
 
-                            scholarship_obj = ScholarshipSelectionDetails.objects.get(
-                                applicant_id=request.user.get_application)
+                        scholarship_obj = ScholarshipSelectionDetails.objects.get(
+                            applicant_id=request.user.get_application)
 
-                            if admission_letter_document:
-                                admission_letter = str(admission_letter_document)
-                                object_path = media_path(scholarship_obj.applicant_id)
-                                handle_uploaded_file(str(object_path) + '/' + admission_letter,
-                                                     admission_letter_document)
+                        if admission_letter_document:
+                            admission_letter = str(admission_letter_document)
+                            object_path = media_path(scholarship_obj.applicant_id)
+                            handle_uploaded_file(str(object_path) + '/' + admission_letter,
+                                                 admission_letter_document)
 
-                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + admission_letter),admission_letter_document)
-                                scholarship_obj.admission_letter_document = admission_letter
+                            # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + admission_letter),admission_letter_document)
+                            scholarship_obj.admission_letter_document = admission_letter
 
-                            if not admission_letter_document_text:
-                                scholarship_obj.admission_letter_document = ''
-                            scholarship_obj.save()
+                        if not admission_letter_document_text:
+                            scholarship_obj.admission_letter_document = ''
+                        scholarship_obj.save()
 
-                            # ApplicantAboutDetails.objects.filter(applicant_id=request.user.get_application).update(
-                            #     about_yourself=request.POST['about_yourself'])
+                        # ApplicantAboutDetails.objects.filter(applicant_id=request.user.get_application).update(
+                        #     about_yourself=request.POST['about_yourself'])
 
-                            redirect_flag = True
-                        except Exception as e:
-                            messages.warning(request, "Form have some error" + str(e))
-                    else:
-                        try:
-                            scholarship_obj = ScholarshipSelectionDetails.objects.create(
-                                scholarship_id=request.POST['scholarship'],
-                                course_applied_id=request.POST['course_applied'],
-                                degree_id=request.POST['degree_applied'],
-                                university_id=request.POST['university'],
-                                applicant_id=request.user.get_application)
-
-                            if admission_letter_document:
-                                admission_letter = str(admission_letter_document)
-                                object_path = media_path(scholarship_obj.applicant_id)
-                                handle_uploaded_file(str(object_path) + '/' + admission_letter,
-                                                     admission_letter_document)
-
-                                # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + admission_letter),admission_letter_document)
-                                scholarship_obj.admission_letter_document = admission_letter
-
-                            if not admission_letter_document_text:
-                                scholarship_obj.admission_letter_document = ''
-                            scholarship_obj.save()
-
-                            # ApplicantAboutDetails.objects.create(
-                            #     about_yourself=request.POST['about_yourself'],
-                            #     applicant_id=request.user.get_application)
-
-                            redirect_flag = True
-                        except Exception as e:
-                            messages.warning(request, "Form have some error" + str(e))
+                        redirect_flag = True
+                    except Exception as e:
+                        messages.warning(request, "Form have some error" + str(e))
                 else:
-                    messages.success(request, "Please fill the record.")
-                    return redirect('/student/applicant_personal_info/')
+                    try:
+                        scholarship_obj = ScholarshipSelectionDetails.objects.create(
+                            scholarship_id=request.POST['scholarship'],
+                            course_applied_id=request.POST['course_applied'],
+                            degree_id=request.POST['degree_applied'],
+                            university_id=request.POST['university'],
+                            applicant_id=request.user.get_application)
+
+                        if admission_letter_document:
+                            admission_letter = str(admission_letter_document)
+                            object_path = media_path(scholarship_obj.applicant_id)
+                            handle_uploaded_file(str(object_path) + '/' + admission_letter,
+                                                 admission_letter_document)
+
+                            # handle_uploaded_file(settings.MEDIA_ROOT + os.path.join('reports/' + admission_letter),admission_letter_document)
+                            scholarship_obj.admission_letter_document = admission_letter
+
+                        if not admission_letter_document_text:
+                            scholarship_obj.admission_letter_document = ''
+                        scholarship_obj.save()
+
+                        # ApplicantAboutDetails.objects.create(
+                        #     about_yourself=request.POST['about_yourself'],
+                        #     applicant_id=request.user.get_application)
+
+                        redirect_flag = True
+                    except Exception as e:
+                        messages.warning(request, "Form have some error" + str(e))
+                # else:
+                #     messages.success(request, "Please fill the record.")
+                #     return redirect('/student/applicant_personal_info/')
 
                 if redirect_flag:
                     messages.success(request, "Record saved")
@@ -1683,37 +1683,87 @@ def my_application(request):
         messages.warning(request, "Please Fill The Application Form First ... ")
     return redirect('/')
 
+# @submission_required
+# def submit_application(request):
+#     try:
+#         app_id = request.POST.get('app_id')
+#         if not AcademicQualificationDetails.objects.filter(applicant_id=request.user.get_application):
+#             messages.success(request, "Please fill the academic qualification section before submitting the application  ...")
+#             return redirect('/student/my_application/')
+#
+#         if not ApplicantAboutDetails.objects.filter(applicant_id=request.user.get_application):
+#             messages.success(request, "Please fill the scholarship section before submitting the application  ...")
+#             return redirect('/student/my_application/')
+#
+#
+#
+#         ApplicationDetails.objects.filter(application_id=request.user.get_application_id).update(is_submitted=True)
+#         ApplicationHistoryDetails.objects.create(applicant_id=request.user.get_application,
+#                                                  status='Application Submitted',
+#                                                  remark='Your application is submitted and your institution will be notified on further updates regarding your applications.')
+#         application_obj = ApplicationDetails.objects.get(id=app_id)
+#         try:
+#             email_rec = EmailTemplates.objects.get(template_for='Student Application Submission',
+#                                                    is_active=True)
+#             context = {'first_name': application_obj.first_name}
+#             send_email_with_template(application_obj, context, email_rec.subject, email_rec.email_body,
+#                                      request)
+#         except:
+#             subject = 'Student Application Submission'
+#             message = 'This mail is to notify that you have submitted application. We will update you application related info soon.'
+#
+#             send_email_to_applicant(request.user.email, application_obj.email, subject, message,
+#                                     application_obj.first_name)
+#
+#         application_notification(request.user.get_application.id,
+#                                  'You have successfully submitted your application.')
+#         admin_notification(request.user.get_application.id,
+#                            str(request.user.get_application.get_full_name()) + ' have submitted application.')
+#
+#         messages.success(request, "Application submitted successfully.")
+#
+#     except Exception as e:
+#         messages.warning(request, "Form have some error" + str(e))
+#     return redirect('/student/student_home/')
+
 @submission_required
 def submit_application(request):
     try:
         app_id = request.POST.get('app_id')
+        application_obj = ApplicationDetails.objects.get(id=app_id)
         if not AcademicQualificationDetails.objects.filter(applicant_id=request.user.get_application):
-            messages.success(request, "Please fill the academic qualification section before submitting the application  ...")
-            return redirect('/student/my_application/')
+            messages.warning(request, "Please fill the Academic Qualification section before submitting the application.")
+            return redirect('/student/applicant_academic_english_qualification/')
+        if not ScholarshipSelectionDetails.objects.filter(applicant_id=request.user.get_application):
+            messages.warning(request, "Please fill the Scholarship Information section before submitting the application.")
+            return redirect('/student/applicant_scholarship_about_yourself_info/')
+        if not ApplicantAttachementDetails.objects.filter(applicant_id=request.user.get_application):
+            messages.warning(request, "Please fill the Attachement section before submitting the application.")
+            return redirect('/student/applicant_attachment_submission/')
 
-        if not ApplicantAboutDetails.objects.filter(applicant_id=request.user.get_application):
-            messages.success(request, "Please fill the scholarship section before submitting the application  ...")
-            return redirect('/student/my_application/')
-
-
+        if application_obj.is_submitted == False:
+            progress_counter = application_obj.progress_counter
+            progress_counter = progress_counter + 10
+            application_obj.progress_counter = progress_counter
+            application_obj.save()
 
         ApplicationDetails.objects.filter(application_id=request.user.get_application_id).update(is_submitted=True)
         ApplicationHistoryDetails.objects.create(applicant_id=request.user.get_application,
                                                  status='Application Submitted',
-                                                 remark='Your application is submitted and your institution will be notified on further updates regarding your applications.')
-        application_obj = ApplicationDetails.objects.get(id=app_id)
-        try:
-            email_rec = EmailTemplates.objects.get(template_for='Student Application Submission',
-                                                   is_active=True)
-            context = {'first_name': application_obj.first_name}
-            send_email_with_template(application_obj, context, email_rec.subject, email_rec.email_body,
-                                     request)
-        except:
-            subject = 'Student Application Submission'
-            message = 'This mail is to notify that you have submitted application. We will update you application related info soon.'
+                                                 remark='Your application is submitted and your University will be notified on further updates regarding your applications.')
 
-            send_email_to_applicant(request.user.email, application_obj.email, subject, message,
-                                    application_obj.first_name)
+        # try:
+        #     email_rec = EmailTemplates.objects.get(template_for='Student Application Submission',
+        #                                            is_active=True)
+        #     context = {'first_name': application_obj.first_name}
+        #     send_email_with_template(application_obj, context, email_rec.subject, email_rec.email_body,
+        #                              request)
+        # except:
+        #     subject = 'Student Application Submission'
+        #     message = 'This mail is to notify that you have submitted application. We will update you application related info soon.'
+        #
+        #     send_email_to_applicant(request.user.email, application_obj.email, subject, message,
+        #                             application_obj.first_name)
 
         application_notification(request.user.get_application.id,
                                  'You have successfully submitted your application.')
