@@ -573,9 +573,9 @@ class ScholarshipSelectionDetails(BaseModel):
                                    related_name='university_scholarship_rel',
                                    on_delete=models.PROTECT)
 
-    course_applied = models.ForeignKey('masters.CourseDetails', blank=True, null=True,
-                                       related_name='course_scholarship_program_rel',
-                                       on_delete=models.PROTECT)
+    # course_applied = models.ForeignKey('masters.CourseDetails', blank=True, null=True,
+    #                                    related_name='course_scholarship_program_rel',
+    #                                    on_delete=models.PROTECT)
 
     admission_letter_document = models.FileField(upload_to=content_aplicant_file_name_report)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_scholarship_rel',
