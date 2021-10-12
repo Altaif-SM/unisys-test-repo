@@ -510,3 +510,19 @@ class DocumentDetails(BaseModel):
 
     def __str__(self):
         return self.document_name
+
+class PersmissionDetails(models.Model):
+    permission = models.CharField(max_length=100, blank=True, null=True)
+
+    def __str__(self):
+        return self.permission
+
+class GroupDetails(BaseModel):
+    group_name = models.CharField(max_length=255, blank=True, null=True)
+    permission = models.ManyToManyField(PersmissionDetails, blank=True)
+    user = models.ForeignKey('accounts.User', null=True, related_name='group_user_rel', on_delete=models.PROTECT)
+    class Meta:
+        ordering = ('-id',)
+
+    def __str__(self):
+        return self.group_name

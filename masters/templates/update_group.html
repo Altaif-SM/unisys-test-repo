@@ -1,0 +1,399 @@
+{% extends "template_base_page.html" %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+            $(document).ready(function () {
+                $(document).on("click", ".update", function (e) {
+
+                    var parent_id = $(this).closest('tr').attr('id');
+                    var group_id = $('#' + parent_id + ' #group_id').val();
+                    var group_name = $('#' + parent_id + ' .group_name').val();
+                    var description = $('#' + parent_id + ' .description').val();
+
+                    if (group_name == '') {
+                        $('#' + parent_id + ' .group_name').focus();
+                        $('#' + parent_id + ' .group_name').css('border-color', 'red');
+                        return false;
+                    } else if (description == '') {
+                        $('#' + parent_id + ' .description').focus();
+                        $('#' + parent_id + ' .description').css('border-color', 'red');
+                        return false;
+                    }
+
+                    var url = '/masters/update_group/';
+                    update_group_info(url, group_id, group_name, description)
+                })
+
+                $(document).on("click", ".delete", function (e) {
+
+                    $('#id_delete_group_model').modal();
+
+                    var parent_id = $(this).closest('tr').attr('id');
+                    var group_id = $('#' + parent_id + ' #group_id').val();
+
+                    $("#group_delete_id").val(group_id)
+
+
+                    {#var url = '/masters/delete_semester/';#}
+                    {#delete_semester_info(url, semester_id)#}
+                })
+
+                function delete_semester_info(url, semester_id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            semester_id: semester_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+                            location.reload(true)
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+                function update_group_info(url, group_id, group_name, description) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            group_id: group_id,
+                            group_name: group_name,
+                            description: description,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+                            location.reload(true)
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+
+                $(document).on("click", ".edit", function (e) {
+                    var parent_id = $(this).closest('tr').attr('id');
+                    $('.semester_name').css('border-color', '');
+                    var id = $(this).attr('id');
+                    var i = id.split("edit")[1]
+
+                    $(".data").prop("disabled", true);
+                    $(".edit").show();
+                    $(".update").hide();
+
+                    $("#update" + i).show();
+                    $("#edit" + i).hide();
+                    $("#group_name" + i).prop("disabled", false);
+                    $("#description" + i).prop("disabled", false);
+                });
+            });
+
+
+            $('#sample_1').dataTable().fnDestroy();
+            $('#sample_1').dataTable({
+                "aoColumnDefs": [
+                    {'bSortable': false}
+                ]
+            });
+        }
+
+
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'accounts:home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span>Settings </span>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> User Settings</span>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> Add Group</span>
+            </li>
+
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase"> Add Group</span>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+
+            <div class="form-body">
+                <form action="{% url 'masters:update_group' group_obj.id %}" id="form_sample_1" class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-body">
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Group Name:
+
+                                </label>
+                                <div class="col-md-4">
+                                    <input type="text" name="group_name" class="form-control" value="{{ group_obj.group_name|default_if_none:"" }}" required>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <br><br>
+                        <div class="row" style="margin-left:60px;margin-right:170px;">
+
+                            <div class="col-md-12">
+                                <!-- BEGIN TAB PORTLET-->
+                                <div class="portlet box blue">
+                                    <div class="portlet-title">
+                                        <div class="caption">
+                                            <i class="fa fa-gift"></i>Group Privileges
+                                        </div>
+
+                                    </div>
+                                    <div class="portlet-body">
+                                        <div class="tabbable tabbable-tabdrop">
+                                            <ul class="nav nav-tabs">
+                                                <li class="active">
+                                                    <a href="#tab1" data-toggle="tab">Settings</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#tab2" data-toggle="tab">Application Management</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#tab3" data-toggle="tab">Academic</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#tab4" data-toggle="tab">Accounting</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#tab5" data-toggle="tab">Softs Skill Programs</a>
+                                                </li>
+                                            </ul>
+                                            <div class="tab-content">
+                                                <div class="tab-pane active" id="tab1">
+
+                                                    {% for rec in settings_list %}
+                                                        {% if forloop.counter == 6 %}
+                                                            <br><br>
+                                                        {% endif %}
+                                                        {% if forloop.counter == 11 %}
+                                                            <br><br>
+                                                        {% endif %}
+                                                        {% if forloop.counter == 16 %}
+                                                            <br><br>
+                                                        {% endif %}
+                                                        {% if forloop.counter == 21 %}
+                                                            <br><br>
+                                                        {% endif %}
+
+                                                        {% if rec in permission_list %}
+                                                            <label class="checkbox-inline"><input checked
+                                                                                                  type="checkbox"
+                                                                                                  value="{{ rec }}"
+                                                                                                  name="checks[]">{{ rec }}
+                                                            </label>
+                                                        {% else %}
+                                                            <label class="checkbox-inline"><input type="checkbox"
+                                                                                                  value="{{ rec }}"
+                                                                                                  name="checks[]">{{ rec }}
+                                                            </label>
+                                                        {% endif %}
+
+                                                    {% endfor %}
+
+                                                </div>
+                                                <div class="tab-pane" id="tab2">
+                                                    {% for rec in applicant_list %}
+                                                        {% if forloop.counter == 5 %}
+                                                            <br><br>
+                                                        {% endif %}
+
+                                                        {% if rec in permission_list %}
+                                                            <label class="checkbox-inline"><input checked
+                                                                                                  type="checkbox"
+                                                                                                  value="{{ rec }}"
+                                                                                                  name="checks[]">{{ rec }}
+                                                            </label>
+                                                        {% else %}
+                                                            <label class="checkbox-inline"><input type="checkbox"
+                                                                                                  value="{{ rec }}"
+                                                                                                  name="checks[]">{{ rec }}
+                                                            </label>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                                <div class="tab-pane" id="tab3">
+                                                    {% for rec in academic_list %}
+                                                        {% if forloop.counter == 5 %}
+                                                            <br><br>
+                                                        {% endif %}
+
+                                                        {% if rec in permission_list %}
+                                                            <label class="checkbox-inline"><input checked
+                                                                                                  type="checkbox"
+                                                                                                  value="{{ rec }}"
+                                                                                                  name="checks[]">{{ rec }}
+                                                            </label>
+                                                        {% else %}
+                                                            <label class="checkbox-inline"><input type="checkbox"
+                                                                                                  value="{{ rec }}"
+                                                                                                  name="checks[]">{{ rec }}
+                                                            </label>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                                <div class="tab-pane" id="tab4">
+                                                    {% for rec in accounting_list %}
+                                                        {% if forloop.counter == 5 %}
+                                                            <br><br>
+                                                        {% endif %}
+
+                                                        {% if rec in permission_list %}
+                                                            <label class="checkbox-inline"><input checked
+                                                                                                  type="checkbox"
+                                                                                                  value="{{ rec }}"
+                                                                                                  name="checks[]">{{ rec }}
+                                                            </label>
+                                                        {% else %}
+                                                            <label class="checkbox-inline"><input type="checkbox"
+                                                                                                  value="{{ rec }}"
+                                                                                                  name="checks[]">{{ rec }}
+                                                            </label>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                                <div class="tab-pane" id="tab5">
+                                                    {% for rec in softs_skill_programs_list %}
+                                                        {% if forloop.counter == 5 %}
+                                                            <br><br>
+                                                        {% endif %}
+
+                                                        {% if rec in permission_list %}
+                                                            <label class="checkbox-inline"><input checked
+                                                                                                  type="checkbox"
+                                                                                                  value="{{ rec }}"
+                                                                                                  name="checks[]">{{ rec }}
+                                                            </label>
+                                                        {% else %}
+                                                            <label class="checkbox-inline"><input type="checkbox"
+                                                                                                  value="{{ rec }}"
+                                                                                                  name="checks[]">{{ rec }}
+                                                            </label>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <!-- END TAB PORTLET-->
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button style="background-color: #3598dc;" type="submit" class="btn green" id="save">
+                                    Save
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
+        </div>
+    </div>
+    <div id="id_delete_group_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{% url 'masters:delete_group' %}"
+                      id="form_sample_1"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" id="group_delete_id" name="group_delete_id">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h4 class="modal-title" style="color: #2a015e; text-align: center"><b>Delete Confirmation</b>
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <p> Are you sure, you want to delete Group? </p>
+                        <p> After delete you will not be able to modify the Group. </p>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancel_model" data-dismiss="modal" class="btn dark btn-outline">
+                            Cancel
+                        </button>
+                        <button type="submit" id="delete_language" class="btn red">Confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

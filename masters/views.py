@@ -1946,3 +1946,142 @@ def delete_document(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/document_settings/')
+
+
+
+def group_settings(request):
+    group_recs = GroupDetails.objects.all()
+    return render(request, 'group_list.html', {'group_recs': group_recs})
+
+
+def add_group(request):
+    settings_list = ['Manage Group', 'Manage Users', 'Scholarship Type', 'Scholarship',
+                     'Link Scholarship to Program', 'Manage Universities', 'Manage Semesters',
+                     'Manage Degrees', 'Manage Course/Program', 'Manage Year', 'Manage Countries', 'Degree Formula',
+                     'Msr & Phd Formula', 'Msr crs work Formula', 'Manage Partners', 'Manage Donors',
+                     'Link Student to Donor',
+                     'Donors Student', 'Manage Modules', 'Soft Skills Programs', 'Manage Guardians', 'Email Template',
+                     'Manage Terms and Condition']
+    applicant_list = ['Manage Applicant Documents', 'Applicant Details', 'Applicant Scholarship',
+                      'Approving Applicant Details',
+                      'Accepted Applicants', 'Psychometric Test Report', 'Agreements',
+                      'Import Applicant Records', 'Export Templates']
+    academic_list = ['Academic Progress', 'Applications Progress History', 'Semester Result', 'Student Report']
+    accounting_list = ['Individual Summary Report', 'Disbursement Report', 'Repayment Report']
+    softs_skill_programs_list = ['Link Students & Program', 'Attendance Report']
+
+    if request.method == 'POST':
+        group_name = request.POST.get('group_name')
+        permission_list = request.POST.getlist('checks[]')
+        try:
+            if not GroupDetails.objects.filter(group_name=group_name).exists():
+                group_obj = GroupDetails.objects.create(group_name=group_name,user=request.user)
+
+                settings_flag = any(item in settings_list for item in permission_list)
+                applicant_flag = any(item in applicant_list for item in permission_list)
+                academic_flag = any(item in academic_list for item in permission_list)
+                accounting_flag = any(item in accounting_list for item in permission_list)
+                softs_skill_programs_flag = any(item in softs_skill_programs_list for item in permission_list)
+
+                if settings_flag is True:
+                    permission_list.append('Settings')
+                if applicant_flag is True:
+                    permission_list.append('Application Management')
+                if academic_flag is True:
+                    permission_list.append('Academic')
+                if accounting_flag is True:
+                    permission_list.append('Accounting')
+                if softs_skill_programs_flag is True:
+                    permission_list.append('Softs Skill Programs')
+
+                for rec in permission_list:
+                    permission_obj = PersmissionDetails.objects.create(permission=rec)
+                    group_obj.permission.add(permission_obj)
+
+                messages.success(request, "Record saved.")
+            else:
+                messages.warning(request, "Group name already exists.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/group_settings/')
+    else:
+        return render(request, 'group_settings.html',{'settings_list':settings_list,
+                                                      'applicant_list':applicant_list,
+                                                      'academic_list':academic_list,
+                                                      'accounting_list':accounting_list,
+                                                      'softs_skill_programs_list':softs_skill_programs_list})
+
+def update_group(request, group_id=None):
+    settings_list = ['Manage Group', 'Manage Users', 'Scholarship Type', 'Scholarship',
+                     'Link Scholarship to Program', 'Manage Universities', 'Manage Semesters',
+                     'Manage Degrees', 'Manage Course/Program', 'Manage Year', 'Manage Countries', 'Degree Formula',
+                     'Msr & Phd Formula', 'Msr crs work Formula', 'Manage Partners', 'Manage Donors',
+                     'Link Student to Donor',
+                     'Donors Student', 'Manage Modules', 'Soft Skills Programs', 'Manage Guardians', 'Email Template',
+                     'Manage Terms and Condition']
+    applicant_list = ['Manage Applicant Documents', 'Applicant Details', 'Applicant Scholarship',
+                      'Approving Applicant Details',
+                      'Accepted Applicants', 'Psychometric Test Report', 'Agreements',
+                      'Import Applicant Records', 'Export Templates']
+    academic_list = ['Academic Progress', 'Applications Progress History', 'Semester Result', 'Student Report']
+    accounting_list = ['Individual Summary Report', 'Disbursement Report', 'Repayment Report']
+    softs_skill_programs_list = ['Link Students & Program', 'Attendance Report']
+    group_obj = GroupDetails.objects.get(id = group_id)
+    if request.method == 'POST':
+        group_name = request.POST.get('group_name')
+        permission_list = request.POST.getlist('checks[]')
+        try:
+            if not GroupDetails.objects.filter(~Q(id=group_id), group_name=group_name).exists():
+                GroupDetails.objects.filter(id=group_id).update(group_name=group_name,
+                                                                      )
+
+                settings_flag = any(item in settings_list for item in permission_list)
+                applicant_flag = any(item in applicant_list for item in permission_list)
+                academic_flag = any(item in academic_list for item in permission_list)
+                accounting_flag = any(item in accounting_list for item in permission_list)
+                softs_skill_programs_flag = any(item in softs_skill_programs_list for item in permission_list)
+                if settings_flag is True:
+                    permission_list.append('Settings')
+                if applicant_flag is True:
+                    permission_list.append('Application Management')
+                if academic_flag is True:
+                    permission_list.append('Academic')
+                if accounting_flag is True:
+                    permission_list.append('Accounting')
+                if softs_skill_programs_flag is True:
+                    permission_list.append('Softs Skill Programs')
+
+                if permission_list:
+                    group_obj.permission.clear()
+
+                for rec in permission_list:
+                    permission_obj = PersmissionDetails.objects.create(permission=rec)
+                    group_obj.permission.add(permission_obj)
+
+                messages.success(request, "Record saved.")
+                return redirect('/masters/group_settings/')
+            else:
+                messages.warning(request, "Group name already exists.")
+                return redirect('/masters/group_settings/')
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/group_settings/')
+    else:
+        permission_list = GroupDetails.objects.get(user = request.user).permission.values_list('permission', flat=True)
+        return render(request, 'update_group.html', {'settings_list': settings_list,
+                                                       'applicant_list': applicant_list,
+                                                       'academic_list': academic_list,
+                                                       'accounting_list': accounting_list,
+                                                       'softs_skill_programs_list': softs_skill_programs_list,
+                                                     'permission_list':permission_list,
+                                                     'group_obj':group_obj})
+
+def delete_group(request):
+    if request.method == 'POST':
+        group_delete_id = request.POST.get('group_delete_id')
+        try:
+            GroupDetails.objects.filter(id=group_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/group_settings/')

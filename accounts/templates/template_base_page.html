@@ -359,12 +359,32 @@ License: You must have a valid license purchased only from themeforest(the above
 
                             {% if user.is_super_admin %}
 
-                                <li class="nav-item  ">
-                                    <a href="/masters/template_year_master/" class="nav-link ">
-                                        <i class="icon-calendar"></i>
-                                        <span class="title">Manage Year</span>
+                                 <li class="nav-item  user_nav_item">
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+                                        <i class="fa fa-users"></i>
+                                        <span class="title">Account Settings</span>
+                                        <span class="arrow user_arrow"></span>
                                     </a>
+                                    <ul class="sub-menu user_sub_menu">
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:group_settings' %}"
+                                               class="nav-link ">
+                                                Manage Group </a>
+                                        </li>
+
+                                        <li class="nav-item ">
+                                            <a href="{% url 'accounts:template_manage_user' %}"
+                                               class="nav-link ">
+                                                Manage Users </a>
+                                        </li>
+
+
+
+                                    </ul>
                                 </li>
+
+
+
                                 {#                                <li class="nav-item  ">#}
                                 {#                                    <a href="/masters/template_scholarship_master/" class="nav-link ">#}
                                 {#                                        <i class="icon-bulb"></i>#}
@@ -423,6 +443,13 @@ License: You must have a valid license purchased only from themeforest(the above
                                                 Manage Course/Program </a>
                                         </li>
                                     </ul>
+                                </li>
+
+                                <li class="nav-item  ">
+                                    <a href="/masters/template_year_master/" class="nav-link ">
+                                        <i class="icon-calendar"></i>
+                                        <span class="title">Manage Year</span>
+                                    </a>
                                 </li>
 
                                 <li class="nav-item  ">
@@ -507,12 +534,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </ul>
                                 </li>
 
-                                <li class="nav-item  ">
-                                    <a href="{% url 'accounts:template_manage_user' %}" class="nav-link ">
-                                        <i class="fa fa-users"></i>
-                                        <span class="title">Manage Users</span>
-                                    </a>
-                                </li>
+
                                 </li>
                                 <li class="nav-item  ">
                                     <a href="{% url 'partner:template_link_students_parent' %}" class="nav-link ">
@@ -1862,6 +1884,25 @@ License: You must have a valid license purchased only from themeforest(the above
     {% endif %}
 
 
+
+    {% if request.resolver_match.url_name == 'group_settings'  or request.resolver_match.url_name == 'add_group'  or request.resolver_match.url_name == 'update_group' %}
+        {
+            var element = document.getElementById("b");
+            element.classList.add("active");
+
+            var element = document.getElementById("setting_anch");
+            element.classList.add("active");
+
+
+            $(".user_nav_item").addClass("open");
+            $(".user_arrow").addClass("open");
+            $('.user_sub_menu').css('display', 'block');
+
+
+        }
+    {% endif %}
+
+
     {% if request.resolver_match.url_name == 'template_university_master'  or request.resolver_match.url_name == 'template_semester_master' or request.resolver_match.url_name == 'template_degree_master' or request.resolver_match.url_name == 'template_program_master'  or request.resolver_match.url_name == 'courses'  %}
         {
             var element = document.getElementById("b");
@@ -1890,6 +1931,8 @@ License: You must have a valid license purchased only from themeforest(the above
 
         }
     {% endif %}
+
+
 
 
 

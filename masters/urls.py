@@ -150,6 +150,11 @@ urlpatterns = [
     path('update_documet/', views.update_documet, name='update_documet'),
     path('delete_document/', views.delete_document, name='delete_document'),
 
+    path('group_settings/', views.group_settings, name='group_settings'),
+    path('add_group/', views.add_group, name='add_group'),
+    path('delete_group/', views.delete_group, name='delete_group'),
+    path('update_group/<int:group_id>/', views.update_group, name='update_group'),
+
 
 
 ]

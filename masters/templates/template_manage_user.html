@@ -119,47 +119,42 @@
                             <div class="">
                                 <input hidden name="admin_page" value="True">
                                 <label class="col-md-2 control-label">First Name:</label>
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <input type="text" title="Enter First Name" id="id_first_name"
                                            name="first_name"
                                            class="form-control" required>
                                 </div>
                             </div>
 
-                            <div class="">
-                                <label class="col-md-2 control-label">Account Type</label>
-                                 <div class="col-md-2">
-                                     <select name="role" class="form-control" required id="id_account_type">
-                                        <option value="">Account Type</option>
-{#                                        <option value="Student">Student</option>#}
-                                        <option value="Partner">Partner</option>
-                                        <option value="Donor">Donor</option>
-                                        <option value="Parent">Parent</option>
-                                        <option value="Accountant">Accountant</option>
-                                     </select>
-                                 </div>
-                            </div>
-
-                        </div>
-
-                        <br><br>
-
-                        <div class="row">
-
-                            <div class="">
+                             <div class="">
                                 <label class="col-md-2 control-label">Last Name:</label>
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <input type="text" title="Enter Last Name" id="id_last_name"
                                            name="last_name"
                                            class="form-control" required>
                                 </div>
                             </div>
 
-                            <div class="" id="hide_country">
+
+
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+                        <div class="">
+                                <label class="col-md-2 control-label">Email:</label>
+                                <div class="col-md-3">
+                                    <input type="email" title="Enter Email" id="id_email"
+                                           name="email"
+                                           class="form-control" required>
+                                </div>
+                            </div>
+                             <div class="" id="hide_country">
                                 <label class="col-md-2 control-label">Country:
 
                                 </label>
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <select id='country_name' title="Select country" name="country"
                                             class="form-control"
                                             required>
@@ -174,23 +169,47 @@
                                 </div>
                             </div>
 
+
+
+
+
+
                         </div>
 
-                        <br><br>
+                        <br>
 
                         <div class="row">
+
+
+                        <div class="">
+                                <label class="col-md-2 control-label">Account Type</label>
+                                 <div class="col-md-3">
+                                     <select name="role" class="form-control" required id="id_account_type">
+                                        <option value="">Please Select</option>
+{#                                        <option value="Student">Student</option>#}
+                                        <option value="Partner">Partner</option>
+                                        <option value="Donor">Donor</option>
+                                        <option value="Parent">Parent</option>
+                                        <option value="Accountant">Accountant</option>
+                                     </select>
+                                 </div>
+                            </div>
+
                             <div class="">
-                                <label class="col-md-2 control-label">Email:</label>
-                                <div class="col-md-2">
-                                    <input type="email" title="Enter Email" id="id_email"
-                                           name="email"
-                                           class="form-control" required>
-                                </div>
+                                <label class="col-md-2 control-label">Group Privileges</label>
+                                 <div class="col-md-3">
+                                     <select name="role" class="form-control" required id="id_account_type">
+                                        <option value="">Please Select</option>
+{#                                        <option value="Student">Student</option>#}
+                                        <option value="Partner">Partner Privalge</option>
+                                        <option value="Donor">Donor Privalge</option>
+                                     </select>
+                                 </div>
                             </div>
 
                             <div class="" id="id_org_display" style="display: none;">
                                 <label class="col-md-2 control-label">Organisation:</label>
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <input type="text" title="Enter organisation name" id="organisation_name"
                                            name="organisation"
                                            class="form-control">
@@ -198,31 +217,29 @@
                             </div>
 
                         </div>
-                        <br><br>
+                        <br>
 
                         <div class="row">
                              <div class="">
                                 <label class="col-md-2 control-label">Password:</label>
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <input type="password" title="Enter Password"
                                            id="id_password" name="password"
                                            class="form-control" required>
                                 </div>
                             </div>
-                        </div>
 
-                        <br><br>
-
-                        <div class="row">
                             <div class="">
                                 <label class="col-md-2 control-label">Re-Password:</label>
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <input type="password" title="Enter Re-Password"
                                            id="id_confirm_password" name="confirm_password"
                                            class="form-control" required>
                                 </div>
                             </div>
                         </div>
+
+                      <br>
 
 
                         <div class="row">
@@ -234,7 +251,6 @@
                 </form>
             </div>
 
-            <br><br>
 
             <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
