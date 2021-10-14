@@ -11,7 +11,7 @@ from accounts.service import *
 from accounts.models import UserRole
 from student.models import StudentDetails, ApplicationDetails, ScholarshipSelectionDetails
 from masters.models import AddressDetails, CountryDetails, ScholarshipDetails, GuardianDetails, EmailTemplates, \
-    YearDetails
+    YearDetails,GroupDetails
 from partner.models import PartnerDetails
 from donor.models import DonorDetails
 import json
@@ -621,3 +621,30 @@ def CheckActiveYear(request):
                         YearDetails.objects.filter().update(active_year=False)
                         YearDetails.objects.filter(id=next_acd_year_obj.id).update(active_year=True,base_date = True)
         return HttpResponse('')
+
+def get_user_permission(request):
+    access_list = []
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            settings_list = ['Manage Group', 'Manage Users', 'Scholarship Type', 'Scholarship',
+                             'Link Scholarship to Program', 'Manage Universities', 'Manage Semesters',
+                             'Manage Degrees', 'Manage Course/Program', 'Manage Year', 'Manage Countries',
+                             'Degree Formula',
+                             'Msr & Phd Formula', 'Msr crs work Formula', 'Manage Partners', 'Manage Donors',
+                             'Link Student to Donor',
+                             'Donors Student', 'Manage Modules', 'Soft Skills Programs', 'Manage Guardians',
+                             'Email Template',
+                             'Manage Terms and Condition','Settings']
+            applicant_list = ['Manage Applicant Documents', 'Applicant Details', 'Applicant Scholarship',
+                              'Approving Applicant Details',
+                              'Accepted Applicants', 'Psychometric Test Report', 'Agreements',
+                              'Import Applicant Records', 'Export Templates','Application Management']
+            academic_list = ['Academic Progress', 'Applications Progress History', 'Semester Result', 'Student Report','Academic']
+            accounting_list = ['Individual Summary Report', 'Disbursement Report', 'Repayment Report','Accounting']
+            softs_skill_programs_list = ['Link Students & Program', 'Attendance Report','Softs Skill Programs']
+
+            access_list = settings_list + applicant_list + academic_list + accounting_list + softs_skill_programs_list
+        else:
+            if GroupDetails.objects.filter(user=request.user).exists():
+                access_list = GroupDetails.objects.get(user=request.user).permission.values_list('permission', flat=True)
+    return {'access_list': access_list}

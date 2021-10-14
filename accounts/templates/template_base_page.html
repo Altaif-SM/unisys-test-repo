@@ -1199,7 +1199,9 @@ License: You must have a valid license purchased only from themeforest(the above
                     <ul class="nav nav-tabs menu" style="border-bottom: none">
                         {#<li class="active"><a href="#a" data-toggle="tab">Dashboard</a></li>#}
                         {% if not user.is_student %}
+                            {% if 'Settings' in access_list %}
                             <li id="setting_anch"><a href="#b" data-toggle="tab">Settings</a></li>
+                            {% endif %}
                         {% endif %}
                         {% if user.is_student %}
                             <li id="app_anch"><a href="#c" data-toggle="tab">Application Management</a></li>
@@ -1885,7 +1887,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
 
 
-    {% if request.resolver_match.url_name == 'group_settings'  or request.resolver_match.url_name == 'add_group'  or request.resolver_match.url_name == 'update_group' %}
+    {% if request.resolver_match.url_name == 'group_settings'  or request.resolver_match.url_name == 'add_group'  or request.resolver_match.url_name == 'update_group' or request.resolver_match.url_name == 'template_manage_user' %}
         {
             var element = document.getElementById("b");
             element.classList.add("active");
