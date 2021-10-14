@@ -649,6 +649,7 @@ def get_user_permission(request):
 
             access_list = settings_list + applicant_list + academic_list + accounting_list + softs_skill_programs_list
         else:
-            if GroupDetails.objects.filter(user=request.user).exists():
-                access_list = GroupDetails.objects.get(user=request.user).permission.values_list('permission', flat=True)
+            group_id = request.user.group_id
+            if group_id:
+                access_list = GroupDetails.objects.get(id=group_id).permission.values_list('permission', flat=True)
     return {'access_list': access_list}
