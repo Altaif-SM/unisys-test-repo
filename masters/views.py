@@ -1967,7 +1967,7 @@ def add_group(request):
                       'Accepted Applicants', 'Psychometric Test Report', 'Agreements',
                       'Import Applicant Records', 'Export Templates']
     academic_list = ['Academic Progress', 'Applications Progress History', 'Semester Result', 'Student Report']
-    accounting_list = ['Individual Summary Report', 'Disbursement Report', 'Repayment Report']
+    accounting_list = ['Disbursement Register', 'Repayment Register', 'Individual Summary Report','Disbursement Report','Repayment Report','Group Summary Report']
     softs_skill_programs_list = ['Link Students & Program', 'Attendance Report']
 
     if request.method == 'POST':
@@ -2024,7 +2024,8 @@ def update_group(request, group_id=None):
                       'Accepted Applicants', 'Psychometric Test Report', 'Agreements',
                       'Import Applicant Records', 'Export Templates']
     academic_list = ['Academic Progress', 'Applications Progress History', 'Semester Result', 'Student Report']
-    accounting_list = ['Individual Summary Report', 'Disbursement Report', 'Repayment Report']
+    accounting_list = ['Disbursement Register', 'Repayment Register', 'Individual Summary Report',
+                       'Disbursement Report', 'Repayment Report', 'Group Summary Report']
     softs_skill_programs_list = ['Link Students & Program', 'Attendance Report']
     group_obj = GroupDetails.objects.get(id = group_id)
     if request.method == 'POST':
