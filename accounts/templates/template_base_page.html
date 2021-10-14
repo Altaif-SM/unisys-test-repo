@@ -1206,16 +1206,24 @@ License: You must have a valid license purchased only from themeforest(the above
                         {% if user.is_student %}
                             <li id="app_anch"><a href="#c" data-toggle="tab">Application Management</a></li>
                         {% else %}
+                             {% if 'Application Management' in access_list %}
                             <li id="app_anch"><a href="#c" data-toggle="tab">Application Management</a></li>
+                             {% endif %}
                         {% endif %}
                         {% if not user.is_student %}
+                             {% if 'Academic' in access_list %}
                             <li id="acad_app"><a href="#d" data-toggle="tab">Academic</a></li>
+                             {% endif %}
                         {% endif %}
                         {% if not user.is_student %}
+                            {% if 'Accounting' in access_list %}
                             <li id="account_anch"><a href="#e" data-toggle="tab">Accounting</a></li>
+                            {% endif %}
                         {% endif %}
                         {% if not user.is_student %}
+                             {% if 'Softs Skill Programs' in access_list %}
                             <li id="soft_skill"><a href="#f" data-toggle="tab">Softs Skill Programs</a></li>
+                             {% endif %}
                         {% endif %}
                     </ul>
 

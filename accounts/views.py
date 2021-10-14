@@ -238,6 +238,9 @@ def user_signup(request):
                     pass
 
                 user.role.add(UserRole.objects.get(name=request.POST['role']))
+                group_privalge = request.POST['group_privalge']
+                user.group_id = group_privalge
+                user.save()
                 if str(request.POST['role']) not in ["Accountant"]:
                     try:
                         country = CountryDetails.objects.get(id=request.POST['country'])
@@ -289,7 +292,7 @@ def user_signup(request):
                     messages.error(request, msg)
         if request.POST.get('admin_page'):
             return redirect('/accounts/template_manage_user/')
-        return redirect('/')
+        return redirect('/accounts/template_manage_user/')
         # return render(request, 'template_manage_user.html', {'form': signup_form})
         # return render(request, 'template_login.html', {'form': signup})
 
@@ -414,9 +417,10 @@ def change_password(request):
 
 def template_manage_user(request):
     country_list = CountryDetails.objects.all()
-    user_recs = User.objects.filter().exclude(role__name='Admin')
+    group_privalge_list = GroupDetails.objects.all()
+    user_recs = User.objects.filter().exclude(role__name='Admin').order_by('-id')
     return render(request, 'template_manage_user.html',
-                  {'country_list': country_list, 'user_recs': user_recs})
+                  {'country_list': country_list, 'user_recs': user_recs,'group_privalge_list':group_privalge_list})
 
 
 def account_activate(request, user_id):

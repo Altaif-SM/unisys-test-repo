@@ -44,6 +44,7 @@ class User(AbstractUser):
     agreements_switch = models.BooleanField(default=False)
     semester_switch = models.BooleanField(default=False)
     program_switch = models.BooleanField(default=False)
+    group = models.ForeignKey('masters.GroupDetails', null=True, related_name='group_user_rel', on_delete=models.PROTECT)
 
     class Meta:
         permissions = (

@@ -126,7 +126,7 @@
                                 </div>
                             </div>
 
-                             <div class="">
+                            <div class="">
                                 <label class="col-md-2 control-label">Last Name:</label>
                                 <div class="col-md-3">
                                     <input type="text" title="Enter Last Name" id="id_last_name"
@@ -136,13 +136,12 @@
                             </div>
 
 
-
                         </div>
 
                         <br>
 
                         <div class="row">
-                        <div class="">
+                            <div class="">
                                 <label class="col-md-2 control-label">Email:</label>
                                 <div class="col-md-3">
                                     <input type="email" title="Enter Email" id="id_email"
@@ -150,7 +149,7 @@
                                            class="form-control" required>
                                 </div>
                             </div>
-                             <div class="" id="hide_country">
+                            <div class="" id="hide_country">
                                 <label class="col-md-2 control-label">Country:
 
                                 </label>
@@ -170,10 +169,6 @@
                             </div>
 
 
-
-
-
-
                         </div>
 
                         <br>
@@ -181,30 +176,31 @@
                         <div class="row">
 
 
-                        <div class="">
+                            <div class="">
                                 <label class="col-md-2 control-label">Account Type</label>
-                                 <div class="col-md-3">
-                                     <select name="role" class="form-control" required id="id_account_type">
+                                <div class="col-md-3">
+                                    <select name="role" class="form-control" required id="id_account_type">
                                         <option value="">Please Select</option>
-{#                                        <option value="Student">Student</option>#}
+                                        {#                                        <option value="Student">Student</option>#}
                                         <option value="Partner">Partner</option>
                                         <option value="Donor">Donor</option>
                                         <option value="Parent">Parent</option>
                                         <option value="Accountant">Accountant</option>
-                                     </select>
-                                 </div>
+                                    </select>
+                                </div>
                             </div>
 
                             <div class="">
                                 <label class="col-md-2 control-label">Group Privileges</label>
-                                 <div class="col-md-3">
-                                     <select name="role" class="form-control" required id="id_account_type">
+                                <div class="col-md-3">
+                                    <select name="group_privalge" class="form-control" required id="group_privalge">
+
                                         <option value="">Please Select</option>
-{#                                        <option value="Student">Student</option>#}
-                                        <option value="Partner">Partner Privalge</option>
-                                        <option value="Donor">Donor Privalge</option>
-                                     </select>
-                                 </div>
+                                        {% for rec in group_privalge_list %}
+                                            <option value='{{ rec.id }}'>{{ rec.group_name|title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
                             </div>
 
                             <div class="" id="id_org_display" style="display: none;">
@@ -220,7 +216,7 @@
                         <br>
 
                         <div class="row">
-                             <div class="">
+                            <div class="">
                                 <label class="col-md-2 control-label">Password:</label>
                                 <div class="col-md-3">
                                     <input type="password" title="Enter Password"
@@ -239,7 +235,7 @@
                             </div>
                         </div>
 
-                      <br>
+                        <br>
 
 
                         <div class="row">
@@ -263,6 +259,7 @@
                         <th>Email</th>
                         <th>Country</th>
                         <th>Account Type</th>
+                        <th>Group Privileges</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -278,12 +275,12 @@
                                        type="text"
                                        id="user{{ forloop.counter }}" value="{{ rec.get_full_name|title }}"
                                        required
-                                     disabled>
+                                       disabled>
                             </td>
 
                             <td>
                                 <text hidden>{{ rec.email }}</text>
-                                 <input class="form-control data email" name="email"
+                                <input class="form-control data email" name="email"
                                        type="text"
                                        id="email{{ forloop.counter }}" value="{{ rec.email }}"
                                        required
@@ -293,33 +290,36 @@
 
                             <td>
                                 {% if rec.partner_user_rel.all %}
-                                <text hidden>{{ rec.partner_user_rel.all.0.address.country.country_name|title }}</text>
-                                <input class="form-control data person" name="person"
-                                       type="text"
-                                       id="person{{ forloop.counter }}" value="{{ rec.partner_user_rel.all.0.address.country.country_name|title }}"
-                                       required
-                                       disabled>
+                                    <text hidden>{{ rec.partner_user_rel.all.0.address.country.country_name|title }}</text>
+                                    <input class="form-control data person" name="person"
+                                           type="text"
+                                           id="person{{ forloop.counter }}"
+                                           value="{{ rec.partner_user_rel.all.0.address.country.country_name|title }}"
+                                           required
+                                           disabled>
                                 {% elif rec.donor_user_rel.all %}
                                     <text hidden>{{ rec.donor_user_rel.all.0.address.country.country_name|title }}</text>
                                     <input class="form-control data person" name="person"
-                                       type="text"
-                                       id="person{{ forloop.counter }}" value="{{ rec.donor_user_rel.all.0.address.country.country_name|title }}"
-                                       required
-                                       disabled>
+                                           type="text"
+                                           id="person{{ forloop.counter }}"
+                                           value="{{ rec.donor_user_rel.all.0.address.country.country_name|title }}"
+                                           required
+                                           disabled>
                                 {% elif rec.student_user_rel.all %}
                                     <text hidden>{{ rec.student_user_rel.all.0.address.country.country_name|title }}</text>
                                     <input class="form-control data person" name="person"
-                                       type="text"
-                                       id="person{{ forloop.counter }}" value="{{ rec.student_user_rel.all.0.address.country.country_name|title }}"
-                                       required
-                                       disabled>
+                                           type="text"
+                                           id="person{{ forloop.counter }}"
+                                           value="{{ rec.student_user_rel.all.0.address.country.country_name|title }}"
+                                           required
+                                           disabled>
                                 {% else %}
                                     <text hidden></text>
                                     <input class="form-control data person" name="country"
-                                       type="text"
-                                       id="person{{ forloop.counter }}" value=""
-                                       required
-                                       disabled>
+                                           type="text"
+                                           id="person{{ forloop.counter }}" value=""
+                                           required
+                                           disabled>
                                 {% endif %}
                             </td>
 
@@ -333,7 +333,19 @@
                             </td>
 
                             <td>
-                                <button type="button" onclick="window.location='{% url "accounts:delete_user" rec.id %}'" {% comment %}onclick="window.location={% url 'accounts:delete_user' rec.id %}"{% endcomment %}>Delete</button>
+                                <text hidden>{{ rec.group.group_name|default_if_none:"" }}</text>
+                                <input class="form-control data user" name="user"
+                                       type="text"
+                                       id="user{{ forloop.counter }}" value="{{ rec.group.group_name|default_if_none:"" }}"
+                                       required
+                                       disabled>
+                            </td>
+
+                            <td>
+                                <button type="button"
+                                        onclick="window.location='{% url "accounts:delete_user" rec.id %}'" {% comment %}onclick="window.location={% url 'accounts:delete_user' rec.id %}"{% endcomment %}>
+                                    Delete
+                                </button>
                             </td>
 
                         </tr>
