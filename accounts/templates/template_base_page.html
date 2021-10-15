@@ -901,6 +901,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </ul>
                             </li>
 
+                        {% if user.is_super_admin %}
+
 
                             <li class="nav-item accounting_nav_item">
                                 <a href="javascript:;" class="nav-link nav-toggle">
@@ -926,6 +928,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
                                 </ul>
                             </li>
+                        {% endif %}
 
 
 
