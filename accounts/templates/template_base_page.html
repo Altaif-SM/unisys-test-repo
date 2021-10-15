@@ -340,16 +340,16 @@ License: You must have a valid license purchased only from themeforest(the above
                     <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                         data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
 
-                        {#                        {% if user.is_super_admin %}#}
-                        <li class="nav-item " id="dashboard">
-                            <a href="/accounts/home/" class="nav-link nav-toggle">
-                                <i class="glyphicon glyphicon-stats"></i>
-                                <span class="title">Dashboard</span>
-                                <span class="selected"></span>
-                            </a>
+                        {% if not user.is_student %}
+                            <li class="nav-item " id="dashboard">
+                                <a href="/accounts/home/" class="nav-link nav-toggle">
+                                    <i class="glyphicon glyphicon-stats"></i>
+                                    <span class="title">Dashboard</span>
+                                    <span class="selected"></span>
+                                </a>
 
-                        </li>
-                        {#                        {% endif %}#}
+                            </li>
+                        {% endif %}
                     </ul>
 
 
@@ -419,169 +419,169 @@ License: You must have a valid license purchased only from themeforest(the above
                                                 Scholarship </a>
                                         </li>
                                     {% endif %}
-                                {% if 'Link Scholarship to Program' in access_list %}
-                                    <li class="nav-item ">
-                                        <a href="{% url 'masters:link_scholarship_program' %}"
-                                           class="nav-link ">
-                                            Link Scholarship to Program </a>
-                                    </li>
-                                {% endif %}
+                                    {% if 'Link Scholarship to Program' in access_list %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:link_scholarship_program' %}"
+                                               class="nav-link ">
+                                                Link Scholarship to Program </a>
+                                        </li>
+                                    {% endif %}
                                 </ul>
                             </li>
 
                             <li class="nav-item  universities_nav_item">
-                                 {% if 'Manage Universities' in access_list  or 'Manage Semesters' in access_list or 'Manage Degrees' in access_list or 'Manage Course/Program' in access_list %}
-                                <a href="javascript:;" class="nav-link nav-toggle">
-                                    <i class="fa fa-university"></i>
-                                    <span class="title">University Settings</span>
-                                    <span class="arrow universities_arrow"></span>
-                                </a>
+                                {% if 'Manage Universities' in access_list  or 'Manage Semesters' in access_list or 'Manage Degrees' in access_list or 'Manage Course/Program' in access_list %}
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+                                        <i class="fa fa-university"></i>
+                                        <span class="title">University Settings</span>
+                                        <span class="arrow universities_arrow"></span>
+                                    </a>
                                 {% endif %}
                                 <ul class="sub-menu universities_sub_menu">
-                                     {% if 'Manage Universities' in access_list %}
-                                    <li class="nav-item ">
-                                        <a href="{% url 'masters:template_university_master' %}" class="nav-link ">
-                                            Manage Universities </a>
-                                    </li>
+                                    {% if 'Manage Universities' in access_list %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:template_university_master' %}" class="nav-link ">
+                                                Manage Universities </a>
+                                        </li>
                                     {% endif %}
-                                {% if 'Manage Semesters' in access_list %}
-                                    <li class="nav-item ">
-                                        <a href="{% url 'masters:template_semester_master' %}" class="nav-link ">
-                                            Manage
-                                            Semesters </a>
-                                    </li>
-                                {% endif %}
-                                {% if 'Manage Degrees' in access_list %}
-                                    <li class="nav-item ">
-                                        <a href="{% url 'masters:template_degree_master' %}" class="nav-link ">
-                                            Manage
-                                            Degrees </a>
-                                    </li>
-                                {% endif %}
-                                {% if 'Manage Course/Program' in access_list %}
-                                    <li class="nav-item ">
-                                        <a href="{% url 'masters:courses' %}" class="nav-link ">
-                                            Manage Course/Program </a>
-                                    </li>
-                                {% endif %}
+                                    {% if 'Manage Semesters' in access_list %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:template_semester_master' %}" class="nav-link ">
+                                                Manage
+                                                Semesters </a>
+                                        </li>
+                                    {% endif %}
+                                    {% if 'Manage Degrees' in access_list %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:template_degree_master' %}" class="nav-link ">
+                                                Manage
+                                                Degrees </a>
+                                        </li>
+                                    {% endif %}
+                                    {% if 'Manage Course/Program' in access_list %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:courses' %}" class="nav-link ">
+                                                Manage Course/Program </a>
+                                        </li>
+                                    {% endif %}
                                 </ul>
                             </li>
 
                             <li class="nav-item  ">
                                 {% if 'Manage Year' in access_list %}
-                                <a href="/masters/template_year_master/" class="nav-link ">
-                                    <i class="icon-calendar"></i>
-                                    <span class="title">Manage Year</span>
-                                </a>
+                                    <a href="/masters/template_year_master/" class="nav-link ">
+                                        <i class="icon-calendar"></i>
+                                        <span class="title">Manage Year</span>
+                                    </a>
                                 {% endif %}
                             </li>
 
                             {% if 'Manage Countries' in access_list %}
 
-                            <li class="nav-item  ">
-                                <a href="{% url 'masters:template_country_master' %}" class="nav-link ">
-                                    <i class="fa fa-flag"></i>
-                                    <span class="title">Manage Countries</span>
-                                </a>
-                            </li>
+                                <li class="nav-item  ">
+                                    <a href="{% url 'masters:template_country_master' %}" class="nav-link ">
+                                        <i class="fa fa-flag"></i>
+                                        <span class="title">Manage Countries</span>
+                                    </a>
+                                </li>
                             {% endif %}
 
                             <li class="nav-item  ">
                                 {% if 'Degree Formula' in access_list  or 'Msr & Phd Formula' in access_list or 'Msr crs work Formula' in access_list %}
-                                <a href="javascript:;" class="nav-link nav-toggle">
-                                    <i class="icon-graph"></i>
-                                    <span class="title">Manage Formulas</span>
-                                    <span class="arrow"></span>
-                                </a>
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+                                        <i class="icon-graph"></i>
+                                        <span class="title">Manage Formulas</span>
+                                        <span class="arrow"></span>
+                                    </a>
                                 {% endif %}
                                 <ul class="sub-menu">
-                                     {% if 'Degree Formula' in access_list %}
-                                    <li class="nav-item ">
-                                        <a href="{% url 'masters:formula_type_master' %}"
-                                           class="nav-link ">
-                                            Degree Formula </a>
-                                    </li>
+                                    {% if 'Degree Formula' in access_list %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:formula_type_master' %}"
+                                               class="nav-link ">
+                                                Degree Formula </a>
+                                        </li>
                                     {% endif %}
-                                {% if 'Msr & Phd Formula' in access_list %}
-                                    <li class="nav-item ">
-                                        <a href="{% url 'masters:template_master_and_phd_master' %}"
-                                           class="nav-link ">
-                                            Msr & Phd Formula </a>
-                                    </li>
-                                {% endif %}
-                                {% if 'Msr crs work Formula' in access_list %}
-                                    <li class="nav-item ">
-                                        <a href="{% url 'masters:template_master_course_work_master' %}"
-                                           class="nav-link "> Msr crs work Formula </a>
-                                    </li>
-                                {% endif %}
+                                    {% if 'Msr & Phd Formula' in access_list %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:template_master_and_phd_master' %}"
+                                               class="nav-link ">
+                                                Msr & Phd Formula </a>
+                                        </li>
+                                    {% endif %}
+                                    {% if 'Msr crs work Formula' in access_list %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:template_master_course_work_master' %}"
+                                               class="nav-link "> Msr crs work Formula </a>
+                                        </li>
+                                    {% endif %}
                                 </ul>
                             </li>
-                        {% if 'Manage Partners' in access_list %}
+                            {% if 'Manage Partners' in access_list %}
 
-                            <li class="nav-item  ">
-                                <a href="{% url 'masters:template_manage_partner_master' %}" class="nav-link ">
-                                    <i class="icon-graph"></i>
-                                    <span class="title">Manage Partners</span>
-                                </a>
-                            </li>
-                        {% endif %}
+                                <li class="nav-item  ">
+                                    <a href="{% url 'masters:template_manage_partner_master' %}" class="nav-link ">
+                                        <i class="icon-graph"></i>
+                                        <span class="title">Manage Partners</span>
+                                    </a>
+                                </li>
+                            {% endif %}
                             <li class="nav-item  ">
                                 {% if 'Manage Donors' in access_list  or 'Link Student to Donor' in access_list or 'Donors Student' in access_list %}
-                                <a href="javascript:;" class="nav-link nav-toggle">
-                                    <i class="fa fa-money"></i>
-                                    <span class="title">Manage Donors</span>
-                                    <span class="arrow"></span>
-                                </a>
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+                                        <i class="fa fa-money"></i>
+                                        <span class="title">Manage Donors</span>
+                                        <span class="arrow"></span>
+                                    </a>
                                 {% endif %}
                                 <ul class="sub-menu">
                                     {% if 'Manage Donors' in access_list %}
-                                    <li class="nav-item ">
-                                        <a href="{% url 'masters:template_manage_donor_master' %}"
-                                           class="nav-link ">
-                                            Manage Donors </a>
-                                    </li>
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:template_manage_donor_master' %}"
+                                               class="nav-link ">
+                                                Manage Donors </a>
+                                        </li>
                                     {% endif %}
-                                {% if 'Link Student to Donor' in access_list %}
-                                    <li class="nav-item ">
-                                        <a href="{% url 'partner:template_link_students_donor' %}"
-                                           class="nav-link ">
-                                            Link Student to Donor </a>
-                                    </li>
-                                {% endif %}
-                                {% if 'Donors Student' in access_list %}
-                                    <li class="nav-item ">
-                                        <a href="{% url 'partner:template_donor_students_linking' %}"
-                                           class="nav-link ">
-                                            Donors Student </a>
-                                    </li>
-                                {% endif %}
+                                    {% if 'Link Student to Donor' in access_list %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'partner:template_link_students_donor' %}"
+                                               class="nav-link ">
+                                                Link Student to Donor </a>
+                                        </li>
+                                    {% endif %}
+                                    {% if 'Donors Student' in access_list %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'partner:template_donor_students_linking' %}"
+                                               class="nav-link ">
+                                                Donors Student </a>
+                                        </li>
+                                    {% endif %}
                                 </ul>
                             </li>
 
 
                             <li class="nav-item  ">
-                                {% if 'Manage Modules' in access_list  or 'Soft Skills Programs' in access_list  %}
-                                <a href="javascript:;" class="nav-link nav-toggle">
-                                    <i class="icon-graph"></i>
-                                    <span class="title">Manage Soft Skills Programs</span>
-                                    <span class="arrow"></span>
-                                </a>
+                                {% if 'Manage Modules' in access_list  or 'Soft Skills Programs' in access_list %}
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+                                        <i class="icon-graph"></i>
+                                        <span class="title">Manage Soft Skills Programs</span>
+                                        <span class="arrow"></span>
+                                    </a>
                                 {% endif %}
                                 <ul class="sub-menu">
-                                     {% if 'Manage Modules' in access_list %}
-                                    <li class="nav-item ">
-                                        <a href="{% url 'masters:template_module_master' %}" class="nav-link ">
-                                            Manage
-                                            Modules </a>
-                                    </li>
+                                    {% if 'Manage Modules' in access_list %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:template_module_master' %}" class="nav-link ">
+                                                Manage
+                                                Modules </a>
+                                        </li>
                                     {% endif %}
-                                 {% if 'Soft Skills Programs' in access_list %}
-                                    <li class="nav-item ">
-                                        <a href="{% url 'masters:template_development_program_master' %}"
-                                           class="nav-link "> Soft Skills Programs </a>
-                                    </li>
-                                {% endif %}
+                                    {% if 'Soft Skills Programs' in access_list %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:template_development_program_master' %}"
+                                               class="nav-link "> Soft Skills Programs </a>
+                                        </li>
+                                    {% endif %}
                                 </ul>
                             </li>
 
@@ -589,39 +589,39 @@ License: You must have a valid license purchased only from themeforest(the above
                             </li>
                             <li class="nav-item  ">
                                 {% if 'Manage Guardians' in access_list %}
-                                <a href="{% url 'partner:template_link_students_parent' %}" class="nav-link ">
-                                    <i class="icon-graph"></i>
-                                    <span class="title">Manage Guardians</span>
-                                </a>
+                                    <a href="{% url 'partner:template_link_students_parent' %}" class="nav-link ">
+                                        <i class="icon-graph"></i>
+                                        <span class="title">Manage Guardians</span>
+                                    </a>
                                 {% endif %}
                             </li>
 
-                         {% if 'Email Template' in access_list %}
+                            {% if 'Email Template' in access_list %}
 
-                            <li class="nav-item  ">
-                                <a href="javascript:;" class="nav-link nav-toggle">
-                                    <i class="icon-graph"></i>
-                                    <span class="title">Email Template</span>
-                                    <span class="icon-wrench"></span>
-                                </a>
-                                <ul class="sub-menu">
-                                    <li class="nav-item ">
-                                        {#                                            <a href="{% url 'masters:email_templates' %}" class="nav-link ">Email templates</a>#}
-                                        <a href="{% url 'masters:email_templates_list' %}"
-                                           class="nav-link ">Template</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        {% endif %}
-                        {% if 'Manage Terms and Condition' in access_list %}
+                                <li class="nav-item  ">
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+                                        <i class="icon-graph"></i>
+                                        <span class="title">Email Template</span>
+                                        <span class="icon-wrench"></span>
+                                    </a>
+                                    <ul class="sub-menu">
+                                        <li class="nav-item ">
+                                            {#                                            <a href="{% url 'masters:email_templates' %}" class="nav-link ">Email templates</a>#}
+                                            <a href="{% url 'masters:email_templates_list' %}"
+                                               class="nav-link ">Template</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+                            {% if 'Manage Terms and Condition' in access_list %}
 
-                            <li class="nav-item  ">
-                                <a href="/masters/terms_condition_master/" class="nav-link ">
-                                    <i class="icon-bulb"></i>
-                                    <span class="title">Manage Terms and Condition</span>
-                                </a>
-                            </li>
-                        {% endif %}
+                                <li class="nav-item  ">
+                                    <a href="/masters/terms_condition_master/" class="nav-link ">
+                                        <i class="icon-bulb"></i>
+                                        <span class="title">Manage Terms and Condition</span>
+                                    </a>
+                                </li>
+                            {% endif %}
 
 
                             {#                            {% endif %}#}
@@ -844,7 +844,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
                             {% if 'Manage Applicant Documents' in access_list %}
 
-{#                            {% if 'partner.can_view_applicant_details' in perms %}#}
+                                {#                            {% if 'partner.can_view_applicant_details' in perms %}#}
                                 <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'masters:document_settings' %}"
                                        class="nav-link nav-toggle">
@@ -855,9 +855,9 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </a>
                                 </li>
                             {% endif %}
-                        {% if 'Applicant Details' in access_list %}
+                            {% if 'Applicant Details' in access_list %}
 
-{#                            {% if 'partner.can_view_applicant_details' in perms %}#}
+                                {#                            {% if 'partner.can_view_applicant_details' in perms %}#}
                                 <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'partner:template_registered_application' %}"
                                        class="nav-link nav-toggle">
@@ -869,11 +869,11 @@ License: You must have a valid license purchased only from themeforest(the above
                             {% endif %}
 
 
-                        {% if 'Applicant Scholarship' in access_list %}
+                            {% if 'Applicant Scholarship' in access_list %}
 
 
 
-{#                            {% if 'partner.can_view_applicant_scholarship' in perms %}#}
+                                {#                            {% if 'partner.can_view_applicant_scholarship' in perms %}#}
                                 <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'partner:template_applicant_scholarship' %}"
                                        class="nav-link nav-toggle">
@@ -884,9 +884,9 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </li>
                             {% endif %}
 
-                        {% if 'Approving Applicant Details' in access_list %}
+                            {% if 'Approving Applicant Details' in access_list %}
 
-{#                            {% if 'partner.can_view_approving_application' in perms %}#}
+                                {#                            {% if 'partner.can_view_approving_application' in perms %}#}
                                 <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'partner:template_approving_application' %}"
                                        class="nav-link nav-toggle">
@@ -898,9 +898,9 @@ License: You must have a valid license purchased only from themeforest(the above
                             {% endif %}
 
 
-                        {% if 'Accepted Applicants' in access_list %}
+                            {% if 'Accepted Applicants' in access_list %}
 
-{#                            {% if 'partner.can_view_accepted_students' in perms %}#}
+                                {#                            {% if 'partner.can_view_accepted_students' in perms %}#}
                                 <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'partner:template_accepted_students' %}"
                                        class="nav-link nav-toggle">
@@ -916,7 +916,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
                             {% if 'Psychometric Test Report' in access_list %}
 
-{#                            {% if 'partner.can_view_psychometric_test_report' in perms %}#}
+                                {#                            {% if 'partner.can_view_psychometric_test_report' in perms %}#}
                                 <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'partner:template_psychometric_test_report' %}"
                                        class="nav-link nav-toggle">
@@ -927,9 +927,9 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </li>
                             {% endif %}
 
-                        {% if 'Agreements' in access_list %}
+                            {% if 'Agreements' in access_list %}
 
-{#                            {% if 'partner.can_view_student_agreement' in perms %}#}
+                                {#                            {% if 'partner.can_view_student_agreement' in perms %}#}
                                 <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'partner:template_student_agreement' %}"
                                        class="nav-link nav-toggle">
@@ -1062,9 +1062,9 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </li>
                             {% endif %}
 
-                        {% if 'Import Applicant Records' in access_list %}
+                            {% if 'Import Applicant Records' in access_list %}
 
-{#                            {% if user.is_super_admin %}#}
+                                {#                            {% if user.is_super_admin %}#}
                                 <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'student:import_applicant_records_tile' %}"
                                        class="nav-link nav-toggle">
@@ -1075,9 +1075,9 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </li>
                             {% endif %}
 
-                        {% if 'Export Templates' in access_list %}
+                            {% if 'Export Templates' in access_list %}
 
-{#                            {% if user.is_super_admin %}#}
+                                {#                            {% if user.is_super_admin %}#}
                                 <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'student:export_templates' %}"
                                        class="nav-link nav-toggle">
@@ -1096,9 +1096,9 @@ License: You must have a valid license purchased only from themeforest(the above
                         <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
 
-                        {% if 'Academic Progress' in access_list %}
+                            {% if 'Academic Progress' in access_list %}
 
-{#                            {% if 'partner.can_view_academic_progress' in perms %}#}
+                                {#                            {% if 'partner.can_view_academic_progress' in perms %}#}
 
                                 <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'partner:template_academic_progress' %}"
@@ -1110,9 +1110,9 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </li>
                             {% endif %}
 
-                        {% if 'Applications Progress History' in access_list %}
+                            {% if 'Applications Progress History' in access_list %}
 
-{#                            {% if 'partner.can_view_progress_history' in perms %}#}
+                                {#                            {% if 'partner.can_view_progress_history' in perms %}#}
                                 <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'partner:template_student_progress_history' %}"
                                        class="nav-link nav-toggle">
@@ -1123,9 +1123,9 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </li>
                             {% endif %}
 
-                        {% if 'Semester Result' in access_list %}
+                            {% if 'Semester Result' in access_list %}
 
-{#                            {% if 'partner.can_view_semester_result' in perms %}#}
+                                {#                            {% if 'partner.can_view_semester_result' in perms %}#}
                                 <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'partner:template_semester_result' %}"
                                        class="nav-link nav-toggle">
@@ -1136,9 +1136,9 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </li>
                             {% endif %}
 
-                         {% if 'Student Report' in access_list %}
+                            {% if 'Student Report' in access_list %}
 
-{#                            {% if 'masters.can_view_student_academic_reports' in perms %}#}
+                                {#                            {% if 'masters.can_view_student_academic_reports' in perms %}#}
                                 <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'parent:template_student_academic_report' %}"
                                        class="nav-link nav-toggle">
@@ -1159,86 +1159,86 @@ License: You must have a valid license purchased only from themeforest(the above
                         <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
 
-{#                            {% if 'accounting.can_view_student_payment_voucher' in perms %}#}
-                                <li class="nav-item start ">
-                                 {% if 'Disbursement Register' in access_list  or 'Repayment Register' in access_list or 'Individual Summary Report' in access_list or 'Disbursement Report' in access_list or 'Repayment Report' in access_list or 'Group Summary Report' in access_list %}
+                            {#                            {% if 'accounting.can_view_student_payment_voucher' in perms %}#}
+                            <li class="nav-item start ">
+                                {% if 'Disbursement Register' in access_list  or 'Repayment Register' in access_list or 'Individual Summary Report' in access_list or 'Disbursement Report' in access_list or 'Repayment Report' in access_list or 'Group Summary Report' in access_list %}
                                     <a href="javascript:;" class="nav-link nav-toggle">
                                         <i class="fa fa-briefcase"></i>
                                         <span class="title">Accounting</span>
                                         <span class="arrow"></span>
                                     </a>
                                 {% endif %}
-                                    <ul class="sub-menu" style="display: block">
+                                <ul class="sub-menu" style="display: block">
                                     {% if 'Disbursement Register' in access_list %}
-{#                                        {% if 'accounting.can_view_student_receipt_voucher' in perms %}#}
-                                            <li class="nav-item ">
-                                                <a href="{% url 'accounting:get_student_payment_voucher' %}"
-                                                   class="nav-link ">
-                                                    Disbursement Register </a>
-                                            </li>
-                                        {% endif %}
+                                        {#                                        {% if 'accounting.can_view_student_receipt_voucher' in perms %}#}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'accounting:get_student_payment_voucher' %}"
+                                               class="nav-link ">
+                                                Disbursement Register </a>
+                                        </li>
+                                    {% endif %}
                                     {% if 'Repayment Register' in access_list %}
 
-{#                                        {% if 'accounting.can_view_student_receipt_voucher' in perms %}#}
-                                            <li class="nav-item ">
-                                                <a href="{% url 'accounting:get_student_receipt_voucher' %}"
-                                                   class="nav-link ">
-                                                    Repayment Register </a>
-                                            </li>
-                                        {% endif %}
+                                        {#                                        {% if 'accounting.can_view_student_receipt_voucher' in perms %}#}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'accounting:get_student_receipt_voucher' %}"
+                                               class="nav-link ">
+                                                Repayment Register </a>
+                                        </li>
+                                    {% endif %}
                                     {% if 'Individual Summary Report' in access_list %}
-{#                                        {% if 'accounting.can_view_student_reciept_payment_voucher' in perms %}#}
+                                        {#                                        {% if 'accounting.can_view_student_reciept_payment_voucher' in perms %}#}
 
-                                            <li class="nav-item ">
-                                                <a href="{% url 'accounting:get_student_payment_and_receipt_report' %}"
-                                                   class="nav-link ">
-                                                    Individual Summary Report </a>
-                                            </li>
-                                        {% endif %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'accounting:get_student_payment_and_receipt_report' %}"
+                                               class="nav-link ">
+                                                Individual Summary Report </a>
+                                        </li>
+                                    {% endif %}
                                     {% if 'Disbursement Report' in access_list %}
-{#                                        {% if 'accounting.can_view_student_report' in perms %}#}
-                                            <li class="nav-item ">
-                                                <a href="{% url 'accounting:get_student_report' %}" class="nav-link ">
-                                                    Disbursement Report </a>
-                                            </li>
-                                        {% endif %}
+                                        {#                                        {% if 'accounting.can_view_student_report' in perms %}#}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'accounting:get_student_report' %}" class="nav-link ">
+                                                Disbursement Report </a>
+                                        </li>
+                                    {% endif %}
                                     {% if 'Repayment Report' in access_list %}
-{#                                        {% if 'accounting.can_view_student_repayment_report' in perms %}#}
-                                            <li class="nav-item ">
-                                                <a href="{% url 'accounting:get_repayment_report' %}" class="nav-link ">
-                                                    Repayment Report
-                                                </a>
-                                            </li>
-                                        {% endif %}
+                                        {#                                        {% if 'accounting.can_view_student_repayment_report' in perms %}#}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'accounting:get_repayment_report' %}" class="nav-link ">
+                                                Repayment Report
+                                            </a>
+                                        </li>
+                                    {% endif %}
                                     {% if 'Group Summary Report' in access_list %}
-{#                                        {% if 'accounting.can_view_approve_and_paid_total' in perms %}#}
-                                            <li class="nav-item ">
-                                                <a href="{% url 'accounting:get_approval_and_paid_total' %}"
-                                                   class="nav-link ">
-                                                    Group Summary Report </a>
-                                            </li>
-{#                                        {% endif %}
+                                        {#                                        {% if 'accounting.can_view_approve_and_paid_total' in perms %}#}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'accounting:get_approval_and_paid_total' %}"
+                                               class="nav-link ">
+                                                Group Summary Report </a>
+                                        </li>
+                                        {#                                        {% endif %}
 
-                                        {% if not user.is_partner %}
-{#                                            {% if 'accounting.can_view_donor_receipt_voucher' in perms %}#}
+                                    {% if not user.is_partner %}
+                                        {#                                            {% if 'accounting.can_view_donor_receipt_voucher' in perms %}#}
 
-                                                <li class="nav-item ">
-                                                    <a href="{% url 'accounting:get_donor_receipt_voucher' %}"
-                                                       class="nav-link ">
-                                                        Donor Register </a>
-                                                </li>
-{#                                            {% endif %}#}
-{#                                            {% if 'accounting.can_view_donor_report' in perms %}#}
-                                                <li class="nav-item ">
-                                                    <a href="{% url 'accounting:get_donor_report' %}" class="nav-link ">
-                                                        Donor Report </a>
-                                                </li>
+                                        <li class="nav-item ">
+                                            <a href="{% url 'accounting:get_donor_receipt_voucher' %}"
+                                               class="nav-link ">
+                                                Donor Register </a>
+                                        </li>
+                                        {#                                            {% endif %}#}
+                                        {#                                            {% if 'accounting.can_view_donor_report' in perms %}#}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'accounting:get_donor_report' %}" class="nav-link ">
+                                                Donor Report </a>
+                                        </li>
 
-{#                                            {% endif %}#}
-                                        {% endif %}
-                                    </ul>
-                                </li>
-{#                            {% endif %}#}
+                                        {#                                            {% endif %}#}
+                                    {% endif %}
+                                </ul>
+                            </li>
+                            {#                            {% endif %}#}
 
 
                         </ul>
@@ -1249,10 +1249,10 @@ License: You must have a valid license purchased only from themeforest(the above
                         <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
 
-                         {% if 'Link Students & Program' in access_list %}
+                            {% if 'Link Students & Program' in access_list %}
 
 
-{#                            {% if 'partner.can_view_link_student_program' in perms %}#}
+                                {#                            {% if 'partner.can_view_link_student_program' in perms %}#}
                                 <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'partner:template_link_student_program' %}"
                                        class="nav-link nav-toggle">
@@ -1263,9 +1263,9 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </li>
                             {% endif %}
 
-                         {% if 'Attendance Report' in access_list %}
+                            {% if 'Attendance Report' in access_list %}
 
-{#                            {% if 'partner.can_view_attendance_report' in perms %}#}
+                                {#                            {% if 'partner.can_view_attendance_report' in perms %}#}
                                 <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'partner:template_attendance_report' %}"
                                        class="nav-link nav-toggle">
