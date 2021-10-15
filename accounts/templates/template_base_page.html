@@ -340,7 +340,7 @@ License: You must have a valid license purchased only from themeforest(the above
                     <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                         data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
 
-                        {% if not user.is_student %}
+                        {% if  user.is_super_admin %}
                             <li class="nav-item " id="dashboard">
                                 <a href="/accounts/home/" class="nav-link nav-toggle">
                                     <i class="glyphicon glyphicon-stats"></i>

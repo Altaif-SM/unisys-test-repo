@@ -33,13 +33,13 @@
             $(document).ready(function () {
 
                 $(document).on("change", "#id_account_type", function (e) {
-                    if ($(this).val() == "Donor") {
+                    if ($(this).val() == "Donor1") {
                         $("#id_org_display").show();
                     } else {
                         $("#id_org_display").hide();
                     }
 
-                    if ($(this).val() == "Student" || $(this).val() == "Accountant") {
+                    if ($(this).val() == "Student1" || $(this).val() == "Accountant1") {
                         $("#hide_country").hide();
                         document.getElementById("country_name").required = false;
                     } else {
