@@ -645,7 +645,7 @@ def get_user_permission(request):
                               'Import Applicant Records', 'Export Templates','Application Management']
             academic_list = ['Academic Progress', 'Applications Progress History', 'Semester Result', 'Student Report','Academic']
             accounting_list = ['Disbursement Register', 'Repayment Register', 'Individual Summary Report',
-                               'Disbursement Report', 'Repayment Report', 'Group Summary Report']
+                               'Disbursement Report', 'Repayment Report', 'Group Summary Report','Accounting']
             softs_skill_programs_list = ['Link Students & Program', 'Attendance Report','Softs Skill Programs']
 
             access_list = settings_list + applicant_list + academic_list + accounting_list + softs_skill_programs_list

@@ -165,6 +165,21 @@ def export_registered_application(request):
 
 def template_applicant_all_details(request, app_id):
     try:
+        # application_obj = ApplicationDetails.objects.get(id=app_id)
+        # siblings_obj = application_obj.sibling_applicant_rel.all() if application_obj.sibling_applicant_rel.all() else ''
+        # qualification_obj = application_obj.academic_applicant_rel.all() if application_obj.academic_applicant_rel.all() else ''
+        # english_obj = application_obj.english_applicant_rel.all() if application_obj.english_applicant_rel.all() else ''
+        # curriculum_obj = application_obj.curriculum_applicant_rel.all() if application_obj.curriculum_applicant_rel.all() else ''
+        # applicant_experience_obj = application_obj.applicant_experience_rel.all() if application_obj.applicant_experience_rel.all() else ''
+        # scholarship_obj = application_obj.applicant_scholarship_rel.get() if application_obj.applicant_scholarship_rel.all() else ''
+        # about_obj = application_obj.applicant_about_rel.get()
+        #
+        # return render(request, 'template_applicant_all_details.html',
+        #               {'siblings_obj': siblings_obj, 'application_obj': application_obj,
+        #                'qualification_recs': qualification_obj, 'english_recs': english_obj,
+        #                'curriculum_recs': curriculum_obj,
+        #                'applicant_experience_recs': applicant_experience_obj,
+        #                'scholarship_obj': scholarship_obj, 'about_obj': about_obj})
         application_obj = ApplicationDetails.objects.get(id=app_id)
         siblings_obj = application_obj.sibling_applicant_rel.all() if application_obj.sibling_applicant_rel.all() else ''
         qualification_obj = application_obj.academic_applicant_rel.all() if application_obj.academic_applicant_rel.all() else ''
@@ -172,14 +187,23 @@ def template_applicant_all_details(request, app_id):
         curriculum_obj = application_obj.curriculum_applicant_rel.all() if application_obj.curriculum_applicant_rel.all() else ''
         applicant_experience_obj = application_obj.applicant_experience_rel.all() if application_obj.applicant_experience_rel.all() else ''
         scholarship_obj = application_obj.applicant_scholarship_rel.get() if application_obj.applicant_scholarship_rel.all() else ''
-        about_obj = application_obj.applicant_about_rel.get()
+        about_obj = application_obj.applicant_about_rel.get() if application_obj.applicant_about_rel.all() else ''
+        employement_history_obj = application_obj.employement_history_rel.get() if application_obj.employement_history_rel.all() else ''
+        attachement_obj = application_obj.applicant_attachement_rel.all() if application_obj.applicant_attachement_rel.all() else ''
+        arabic_applicant_recs = application_obj.arabic_applicant_rel.all() if application_obj.arabic_applicant_rel.all() else ''
 
-        return render(request, 'template_applicant_all_details.html',
+        # path = str(settings.MEDIA_URL) + str('reports/Donors.pdf')
+        # path =str('/home/redbytes/scholarship_proj/scholarship_mgmt/media/reports/Donors.pdf')
+        return render(request, 'template_applicant_details.html',
                       {'siblings_obj': siblings_obj, 'application_obj': application_obj,
-                       'qualification_recs': qualification_obj, 'english_recs': english_obj,
+                       'qualification_recs': qualification_obj,
+                       'english_recs': english_obj,
                        'curriculum_recs': curriculum_obj,
                        'applicant_experience_recs': applicant_experience_obj,
-                       'scholarship_obj': scholarship_obj, 'about_obj': about_obj})
+                       'scholarship_obj': scholarship_obj, 'about_obj': about_obj,
+                       'attachement_obj': attachement_obj,
+                       'arabic_applicant_recs': arabic_applicant_recs,
+                       'employement_history_obj': employement_history_obj})
 
     except Exception as e:
         messages.warning(request, "Form have some error " + str(e))
