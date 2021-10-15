@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 
 import os
+import stripe
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -51,6 +52,8 @@ INSTALLED_APPS = [
     'mathfilters',
     'password_reset.apps.PasswordResetConfig',
     'payments.apps.PaymentsConfig',
+    'rest_api',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -62,6 +65,14 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+
+}
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880
 
@@ -83,6 +94,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'scholarship_mgmt.wsgi.application'
 
@@ -189,3 +201,8 @@ EMAIL_USE_TLS = True
 # EMAIL_HOST_PASSWORD = 'namafund123'
 # EMAIL_PORT = 587
 SERVER_HOST_NAME = "http://159.65.159.193:8082/"
+
+stripe.api_key = 'sk_test_51JcmDhSIeVZrpBOQmSMJtfkhTDY8JkkrbnjdEw2wurzt9nQdK74CGYCX90l5q0VfEUuq4oLzQHMA1mgpeUqsKK6G00fUXuYOIG'
+
+STRIPE_SECRET_KEY = 'sk_test_51JcmDhSIeVZrpBOQmSMJtfkhTDY8JkkrbnjdEw2wurzt9nQdK74CGYCX90l5q0VfEUuq4oLzQHMA1mgpeUqsKK6G00fUXuYOIG'
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51JcmDhSIeVZrpBOQvbNkpUdU9H7l6iGwMyHzsASeNF6howwGwp9asyxWfjukiP7bHqB5EnGKIwGBR02f5431Qni700Zf86Q6VI'

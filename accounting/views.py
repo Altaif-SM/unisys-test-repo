@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadReque
 from student.models import StudentDetails, ApplicationDetails
 from masters.models import CountryDetails, ScholarshipDetails, StudentDonorMapping, DegreeDetails, SemesterDetails
 from .models import StudentPaymentReceiptVoucher, DonorReceiptVoucher
+from payments.models import *
 import json
 from common.utils import create_voucher_number
 from django.db.models import Sum
@@ -134,98 +135,10 @@ def get_student_payment_and_receipt_report(request):
                   {'student_list': student_list, 'raw_dict': raw_dict})
 
 
-def get_student_report(request):
-    query_country = request.GET.get("country") or None
-    query_scholarship = request.GET.get("scholarship") or None
-    query_voucher_beneficiary = request.GET.get("voucher_beneficiary") or None
-
-    query_degree = request.GET.get("degree") or None
-    query_semester = request.GET.get("semester") or None
-
-    credit_total = 0
-    balance_total = 0
-    debit_total = 0
-    voucher_rec_list = []
-    partner_flag = False
-
-    if request.user.is_partner():
-        stud_pay_voucher_list = StudentPaymentReceiptVoucher.objects.filter(application__year=get_current_year(request),
-                                                                            application__nationality=request.user.partner_user_rel.get().address.country)
-        query_country = request.user.partner_user_rel.get().address.country.id
-        partner_flag = True
-    else:
-        stud_pay_voucher_list = StudentPaymentReceiptVoucher.objects.filter(application__year=get_current_year(request))
-
-    if query_country:
-        stud_pay_voucher_list = stud_pay_voucher_list.filter(application__address__country_id=query_country)
-
-    if query_scholarship:
-        stud_pay_voucher_list = stud_pay_voucher_list.filter(
-            application__applicant_scholarship_rel__scholarship_id=query_scholarship)
-    if query_voucher_beneficiary:
-        stud_pay_voucher_list = stud_pay_voucher_list.filter(voucher_beneficiary=query_voucher_beneficiary)
-
-    if query_degree:
-        stud_pay_voucher_list = stud_pay_voucher_list.filter(
-            application__applicant_scholarship_rel__degree_id=query_degree)
-
-    if query_semester:
-        ids_list = stud_pay_voucher_list.filter(application__applicant_progress_rel__semester_id=query_semester).values(
-            "id").distinct()
-        stud_pay_voucher_list = stud_pay_voucher_list.filter(id__in=ids_list)
-
-    voucher_record = {}
-    all_country_obj = type('', (object,), {"id": "", "country_name": "All"})()
-    country = [all_country_obj]
-    for co in CountryDetails.objects.all():
-        country.append(co)
-
-    all_scholarship_obj = type('', (object,), {"id": "", "scholarship_name": "All"})()
-    scholarship = [all_scholarship_obj]
-    for scho in ScholarshipDetails.objects.all():
-        scholarship.append(scho)
-
-    all_degree_obj = type('', (object,), {"id": "", "degree_name": "All"})()
-    degree = [all_degree_obj]
-    for scho in DegreeDetails.objects.all():
-        degree.append(scho)
-
-    all_semester_obj = type('', (object,), {"id": "", "semester_name": "All"})()
-    semester = [all_semester_obj]
-    for scho in SemesterDetails.objects.all():
-        semester.append(scho)
-
-    for obj in stud_pay_voucher_list:
-        if obj.voucher_type == "debit":
-            debit_total += float(obj.voucher_amount)
-
-        if obj.voucher_type == "credit":
-            credit_total += float(obj.voucher_amount)
-
-        voucher_rec_list.append(obj)
-    if request.user.is_partner():
-        balance_total = StudentPaymentReceiptVoucher.objects.filter(application__year=get_current_year(request),
-                                                                    application__nationality=request.user.partner_user_rel.get().address.country).values(
-            "application__scholarship_fee").distinct().aggregate(total_price=Sum('application__scholarship_fee'))
-    else:
-        balance_total = StudentPaymentReceiptVoucher.objects.filter(application__year=get_current_year(request)).values(
-            "application__scholarship_fee").distinct().aggregate(total_price=Sum('application__scholarship_fee'))
-
-    if balance_total['total_price'] and stud_pay_voucher_list:
-        voucher_record['debit_total'] = debit_total
-        voucher_record['credit_total'] = credit_total
-        # voucher_record['balance_total'] = (float(balance_total['total_price']) - debit_total)
-        voucher_record['balance_total'] = (float(debit_total) - float(credit_total))
-        voucher_record['voucher_record'] = voucher_rec_list
-
-    return render(request, "template_student_report.html",
-                  {'voucher_record': voucher_record, 'country_list': country, 'scholarship_list': scholarship,
-                   'degree_list': degree, 'semester_list': semester,
-                   'selected_country': CountryDetails.objects.filter(id=query_country),
-                   'selected_degree': DegreeDetails.objects.filter(id=query_degree),
-                   'selected_semester': SemesterDetails.objects.filter(id=query_semester),
-                   'selected_scholarship': ScholarshipDetails.objects.filter(id=query_scholarship),
-                   'partner_flag': partner_flag})
+def get_payment_report(request):
+    order_recs = OrderDetails.objects.filter().order_by('-created_on')
+    return render(request, "get_payment_report.html",
+                  {'order_recs': order_recs})
 
 
 def get_repayment_report(request):

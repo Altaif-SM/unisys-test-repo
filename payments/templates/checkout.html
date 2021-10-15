@@ -1,6 +1,7 @@
 {% extends "template_base_page.html" %}
 {% load staticfiles %}
 {% block styleBlock %}
+
     </head>
     <!-- END HEAD -->
     <style type="text/css">
@@ -38,11 +39,13 @@
                             <h4>Student Details</h4>
                             <ul class="list-unstyled">
                                 <li>
-                                    <strong>Student ID #:</strong> {{ application_obj.application_id|default_if_none:"" }}
+                                    <strong>Student ID
+                                        #:</strong> {{ application_obj.application_id|default_if_none:"" }}
                                 </li>
                                 <br>
                                 <li>
-                                    <strong>Full Name:</strong> {{ application_obj.first_name|default_if_none:"" }} {{ application_obj.middle_name|default_if_none:"" }} {{ application_obj.last_name|default_if_none:"" }}
+                                    <strong>Full
+                                        Name:</strong> {{ application_obj.first_name|default_if_none:"" }} {{ application_obj.middle_name|default_if_none:"" }} {{ application_obj.last_name|default_if_none:"" }}
                                 </li>
                                 <br>
                                 <li>
@@ -81,9 +84,27 @@
                     </div>
 
                     <div class="col-xs-4 invoice-block">
-                        <div id="paypal-button-container">
+                        <div id="paypal-button-container"></div>
+
+                        <button type="button"
+                                style="background-color: #5b2c6f;border-color:#5b2c6f;padding: 10px 20px;font-size: 15px;"
+                                id="checkout-button" class="btn purple btn-block" value="Checkout with stripe">Checkout
+                            with <i style="font-size: 24px;" class="fa fa-cc-stripe" aria-hidden="true"></i>
+
+                        </button>
+
+                        <div id="client_logos" style="display: inline-block;margin-left:110px;margin-top:6px;">
+                            <img src="//www.powrcdn.com/app_specific/paypal/dark_icons/visa.svg">
+                            <img src="//www.powrcdn.com/app_specific/paypal/dark_icons/mastercard.svg">
+                            <img src="//www.powrcdn.com/app_specific/paypal/dark_icons/discover.svg">
+                            <img style="height: 35px;" src="{% static 'images/american-express.svg' %}">
                         </div>
+
+
                     </div>
+
+                    {#                    <button type="button" id="checkout-button">Checkout</button>#}
+
 
                 </div>
 
@@ -91,8 +112,15 @@
         </div>
     </div>
 
+
+
+
+
     <!-- Include the PayPal JavaScript SDK -->
-    <script src="https://www.paypal.com/sdk/js?client-id=AfDm-2UA2_YtRgvVkSGeWBnKi6ZvhioTjgBQ-IdcJVGLQ7TVRVLM3IJxJnwREoXvkNxLl99E2B0EG1WO&currency=USD"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=ASNG2WkQcuI1FrVwGqCeinjIC2WUj061QIpbKpuN8X7EbnwuZhId_M57GZkh8JjNuNFflXVCHIlP7qn5&currency=USD"
+            data-order-id="{{ application_obj.application_id }}"></script>
+
+
     <script>
         function getCookie(name) {
             var cookieValue = null;
@@ -120,11 +148,24 @@
             // Set up the transaction
             createOrder: function (data, actions) {
                 return actions.order.create({
+                    application_context: {
+                        brand_name: 'Our Club Name',
+                        shipping_preference: 'NO_SHIPPING'
+                    },
+                    payer: {
+                        name: {
+                            given_name: "{{ application_obj.first_name }}",
+                            surname: "{{ application_obj.last_name }}"
+                        },
+                        email_address: "{{ application_obj.email }}"
+                    },
                     purchase_units: [{
+                        reference_id: '{{ application_obj.application_id }}',
                         amount: {
-                            value: amount
+                            value: amount,
+                            currency_code: 'USD'
                         }
-                    }]
+                    }],
                 });
             },
 
@@ -136,6 +177,7 @@
                     var transaction = orderData.purchase_units[0].payments.captures[0];
                     console.log(orderData);
                     sendData();
+
                     function sendData() {
                         fetch(url, {
                             method: "POST",
@@ -149,7 +191,7 @@
                             .then((data) => {
                                 console.log('Success:', data); // Just for testing, you can delete
                                 {#alert(data);#}
-                                alert('Transaction ' + transaction.status + ': ' + transaction.id);
+                                {#alert('Transaction ' + transaction.status + ': ' + transaction.id);#}
                                 {#var transaction_id = transaction.id;#}
                                 {#document.location.href = order_complete_url + "/" + transaction_id;#}
                                 // Just for testing, you can delete
@@ -157,16 +199,50 @@
                                 var order_complete_url = '/payments/order_complete';
                                 document.location.href = order_complete_url + "/" + transaction.id;
 
-                                {#$('#btn_delete').attr('href', 'payments/order_complete/' + transaction.id);#}
 
                             });
                     }
+
                     // Show a success message to the buyer
                     {#alert('Transaction ' + transaction.status + ': ' + transaction.id + '\n\nSee console for all available details');#}
                 });
             }
 
         }).render('#paypal-button-container');
+    </script>
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+
+    <script type="text/javascript">
+        var CheckoutButton = document.getElementById("checkout-button");
+        var stripe = Stripe('pk_test_51JcmDhSIeVZrpBOQvbNkpUdU9H7l6iGwMyHzsASeNF6howwGwp9asyxWfjukiP7bHqB5EnGKIwGBR02f5431Qni700Zf86Q6VI');
+        CheckoutButton.addEventListener("click", function () {
+            fetch('{% url 'payments:create_checkout_session' %}',
+                {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken
+                    }
+                })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (session) {
+                    return stripe.redirectToCheckout({sessionId: session.id});
+                })
+                .then(function (result) {
+                    // If `redirectToCheckout` fails due to a browser or network
+                    // error, you should display the localized error message to your
+                    // customer using `error.message`.
+                    if (result.error) {
+                        alert(result.error.message);
+                    }
+                });
+        });
+
+
     </script>
 
 {% endblock %}

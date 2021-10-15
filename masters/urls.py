@@ -234,6 +234,7 @@ urlpatterns = [
     path('delete_group/', views.delete_group, name='delete_group'),
 
     path('payment_settings/', views.payment_settings, name='payment_settings'),
+    path('api_test/', views.api_test, name='api_test'),
 
 
 

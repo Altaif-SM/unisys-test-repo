@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Buy cool new product</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+<section>
+    <div class="product">
+        <img
+                src="http://159.65.159.193:8082/static/images/university_logo.png"
+                alt="The cover of Stubborn Attachments"
+        />
+        <div class="description">
+            <h3>Stubborn Attachments</h3>
+            <h5>$20.00</h5>
+        </div>
+    </div>
+{#    <form action="/create-checkout-session" method="POST">#}
+        <button type="button" id="checkout-button">Checkout</button>
+    {% csrf_token %}
+{#    </form>#}
+</section>
+</body>
+
+<script type="text/javascript">
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    var stripe = Stripe('pk_test_51JcmDhSIeVZrpBOQvbNkpUdU9H7l6iGwMyHzsASeNF6howwGwp9asyxWfjukiP7bHqB5EnGKIwGBR02f5431Qni700Zf86Q6VI');
+    var CheckoutButton = document.getElementById("checkout-button");
+    CheckoutButton.addEventListener("click", function () {
+        fetch('{% url 'payments:create_checkout_session' %}',
+            {
+            method: 'POST',
+                headers:{
+                'X-CSRFToken':csrftoken
+                }
+        })
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (session) {
+                return stripe.redirectToCheckout({sessionId: session.id});
+            })
+            .then(function (result) {
+                // If `redirectToCheckout` fails due to a browser or network
+                // error, you should display the localized error message to your
+                // customer using `error.message`.
+                if (result.error) {
+                    alert(result.error.message);
+                }
+            });
+    });
+
+
+</script>
+
+
+</html>

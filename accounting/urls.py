@@ -11,7 +11,7 @@ urlpatterns = [
                   path('get_student_receipt_voucher/', views.get_student_receipt_voucher, name='get_student_receipt_voucher'),
                   path('get_student_payment_and_receipt_report/', views.get_student_payment_and_receipt_report, name='get_student_payment_and_receipt_report'),
 
-                  path('get_student_report/', views.get_student_report, name='get_student_report'),
+                  path('get_payment_report/', views.get_payment_report, name='get_payment_report'),
                   path('get_repayment_report/', views.get_repayment_report, name='get_repayment_report'),
                   path('get_filtered_student_report/', views.get_filtered_student_report, name='get_filtered_student_report'),
 

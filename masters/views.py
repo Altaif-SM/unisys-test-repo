@@ -3029,3 +3029,25 @@ def payment_settings(request):
     except:
         payment_obj = None
     return render(request, 'payment_settings.html',{'payment_obj':payment_obj})
+
+import requests
+import json
+def api_test(request):
+    url = 'http://159.65.159.193:18000/api/user/v2/account/registration/'
+    body = {
+        "email": "it.support1@ust.edu",
+        "name": "Ezz",
+        "username": "Ezz551",
+        "password": "Ezz@123",
+        "level_of_education": "",
+        "gender": "",
+        "year_of_birth": "",
+        "mailing_address": "",
+        "goals": "",
+        "country": "IN",
+        "honor_code": "true",
+        "terms_of_service": "true"
+    }
+    headers = {'content-type': 'application/json'}
+    r = requests.post(url, data=json.dumps(body), headers=headers)
+    print(r.content)

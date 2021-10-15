@@ -32,5 +32,6 @@ urlpatterns = [
     path('payments/', include('payments.urls', namespace='payments')),
     path('admin/', admin.site.urls),
     path('password_reset/', include('password_reset.urls', namespace='password_reset')),
+    path('api/', include('rest_api.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
