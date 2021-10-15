@@ -13,14 +13,19 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 # Create your views here.
 
 def checkout(request):
-    application_obj = None
-    if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
-        application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
     try:
-        payement_obj = PaymentDetails.objects.get()
-    except:
-        payement_obj = None
-    return render(request, 'checkout.html', {'application_obj': application_obj, 'payement_obj': payement_obj})
+        application_obj = request.user.get_application
+        if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
+            application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
+        try:
+            payement_obj = PaymentDetails.objects.get()
+        except:
+            payement_obj = None
+        return render(request, 'checkout.html', {'application_obj': application_obj, 'payement_obj': payement_obj})
+    except Exception as e:
+        messages.warning(request, "Please Fill The Application Form First ... ")
+        return redirect("/")
+
 
 
 def payment_complete(request):
