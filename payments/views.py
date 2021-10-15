@@ -85,7 +85,7 @@ def charge(request):  # new
 
 class CreateCheckoutSessionView(View):
     def post(self, request, *args, **kwargs):
-        YOUR_DOMAIN = 'http://127.0.0.1:3000'
+        YOUR_DOMAIN = settings.SERVER_HOST_NAME
         try:
             payement_obj = PaymentDetails.objects.get()
         except:
@@ -107,8 +107,8 @@ class CreateCheckoutSessionView(View):
                 ],
                 payment_method_types=['card'],
                 mode='payment',
-                success_url=YOUR_DOMAIN + '/payments/checkout/',
-                cancel_url=YOUR_DOMAIN + '/payments/checkout/',
+                success_url=YOUR_DOMAIN + 'payments/checkout/',
+                cancel_url=YOUR_DOMAIN + 'payments/checkout/',
             )
             return JsonResponse({'id': checkout_session.id})
         except Exception as e:
