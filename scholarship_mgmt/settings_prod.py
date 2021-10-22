@@ -187,4 +187,4 @@ EMAIL_USE_TLS = True
 # EMAIL_HOST_USER = 'namafund@namafoundation.org'
 # EMAIL_HOST_PASSWORD = 'namafund123'
 # EMAIL_PORT = 587
-SERVER_HOST_NAME = "http://159.65.159.193:8000/"
+SERVER_HOST_NAME = "http://51.75.54.229:9090/"
