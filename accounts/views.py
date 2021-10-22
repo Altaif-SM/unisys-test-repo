@@ -238,47 +238,56 @@ def user_signup(request):
                     pass
 
                 user.role.add(UserRole.objects.get(name=request.POST['role']))
-                group_privalge = request.POST['group_privalge']
-                user.group_id = group_privalge
-                user.save()
-                if str(request.POST['role']) not in ["Accountant"]:
-                    try:
-                        country = CountryDetails.objects.get(id=request.POST['country'])
-                        address = AddressDetails.objects.create(country=country)
-                    except:
-                        pass
+                # if str(request.POST['role']) not in ["Accountant"]:
+                try:
+                    country = CountryDetails.objects.get(id=request.POST['country'])
+                    address = AddressDetails.objects.create(country=country)
+                except:
+                    pass
 
-                    if request.POST['role'] == "Student":
-                        # student_obj = StudentDetails.objects.create(user=user, address=address)
-                        user.is_active = True
-                        user.save()
-                        student_obj = StudentDetails.objects.create(user=user)
+                if request.POST['role'] == "Student":
+                    # student_obj = StudentDetails.objects.create(user=user, address=address)
+                    user.is_active = True
+                    user.save()
+                    student_obj = StudentDetails.objects.create(user=user)
 
-                        # try:
-                        #     email_rec = EmailTemplates.objects.get(template_for='Student Signup', is_active=True)
-                        #     context = {'first_name': student_obj.user.first_name}
-                        #     send_email_with_template(student_obj, context, email_rec.subject, email_rec.email_body,
-                        #                              request, True)
-                        # except:
+                    # try:
+                    #     email_rec = EmailTemplates.objects.get(template_for='Student Signup', is_active=True)
+                    #     context = {'first_name': student_obj.user.first_name}
+                    #     send_email_with_template(student_obj, context, email_rec.subject, email_rec.email_body,
+                    #                              request, True)
+                    # except:
 
-                        # subject = 'Sign up Completed'
-                        # message = 'Your Sign up completed in NAMA. Please click on the given button to activate your account.'
-                        # send_signup_email_to_applicant(student_obj.user.email, student_obj.user.email, subject,
-                        #                                message,
-                        #                                student_obj.user.first_name, user.id)
-                        #
-                        # messages.info(request,"The activation link is sent to your email id ... ")
+                    # subject = 'Sign up Completed'
+                    # message = 'Your Sign up completed in NAMA. Please click on the given button to activate your account.'
+                    # send_signup_email_to_applicant(student_obj.user.email, student_obj.user.email, subject,
+                    #                                message,
+                    #                                student_obj.user.first_name, user.id)
+                    #
+                    # messages.info(request,"The activation link is sent to your email id ... ")
 
-                    if request.POST['role'] == "Partner":
-                        PartnerDetails.objects.create(user=user, address=address)
+                if request.POST['role'] == "Partner":
+                    PartnerDetails.objects.create(user=user, address=address)
+                    group_privalge = request.POST['group_privalge']
+                    user.group_id = group_privalge
+                    user.save()
 
-                    if request.POST['role'] == "Parent":
-                        GuardianDetails.objects.create(user=user, address=address)
+                if request.POST['role'] == "Parent":
+                    GuardianDetails.objects.create(user=user, address=address)
+                    group_privalge = request.POST['group_privalge']
+                    user.group_id = group_privalge
+                    user.save()
 
-                    if request.POST['role'] == "Donor":
-                        organisation = request.POST.get('organisation')
-                        DonorDetails.objects.create(user=user, address=address, organisation=organisation)
+                if request.POST['role'] == "Donor":
+                    DonorDetails.objects.create(user=user, address=address)
+                    group_privalge = request.POST['group_privalge']
+                    user.group_id = group_privalge
+                    user.save()
 
+                if request.POST['role'] == "Accountant":
+                    group_privalge = request.POST['group_privalge']
+                    user.group_id = group_privalge
+                    user.save()
             except Exception as e:
                 if user:
                     user.delete()
