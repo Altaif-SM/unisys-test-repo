@@ -1,4 +1,5 @@
 {% extends "template_base_page.html" %}
+{% load  i18n %}
 {% load staticfiles %}
 
 {% block styleBlock %}
@@ -152,7 +153,7 @@
             </li>
 
             <li>
-                <span> Manage User </span>
+                <span>{% trans 'Manage User' %}</span>
             </li>
         </ul>
     </div>
@@ -168,10 +169,10 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> Manage User</span>
+                <span class="caption-subject font-red sbold uppercase">{% trans 'Manage User' %}</span>
             </div>
             <a href="{% url 'accounts:add_staff' %}">
-                <button type="submit" class="btn green" id="save" style="margin-left:83%;background-color: #3598dc">Add
+                <button type="submit" class="btn green" id="save" style="margin-left:83%;background-color: #3598dc">{% trans 'Add' %}
                 </button>
             </a>
         </div>
@@ -186,13 +187,13 @@
                     <thead>
                     <tr>
                         <th style="display: none">Id</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th> Email</th>
-                        <th> Position</th>
-                        <th> Country</th>
-                        <th> Status</th>
-                        <th width="10%">Action</th>
+                        <th>{% trans 'First Name' %}</th>
+                        <th>{% trans 'Last Name' %}</th>
+                        <th>{% trans 'Email' %}</th>
+                        <th>{% trans 'Position' %}</th>
+                        <th>{% trans 'Country' %}</th>
+                        <th>{% trans 'Status' %}</th>
+                        <th width="10%">{% trans 'Action' %}</th>
                     </tr>
                     </thead>
 
@@ -248,8 +249,8 @@
                         <h4 class="modal-title" style="color: #2a015e; text-align: center"><b  >Delete Confirmation</b></h4>
                     </div>
                     <div class="modal-body">
-                        <p> Are you sure, you want to delete Staff? </p>
-                        <p> After delete you will not be able to modify the Staff. </p>
+                        <p> {% trans 'Are you sure, you want to delete Staff?' %} </p>
+                        <p> {% trans 'After delete you will not be able to modify the Staff.' %} </p>
 
                     </div>
                     <div class="modal-footer">

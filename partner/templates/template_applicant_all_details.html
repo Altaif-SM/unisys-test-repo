@@ -1,4 +1,5 @@
 {% extends "template_base_page.html" %}
+{% load  i18n %}
 {% load staticfiles %}
 {% load custom_tags %}
 
@@ -47,23 +48,23 @@
 
                 </li>
                 <li>
-                    <a href="{% url 'donor:template_student_reports' %}">Student Report </a>
+                    <a href="{% url 'donor:template_student_reports' %}">{% trans 'Student Report' %} </a>
                     <i class="fa fa-angle-right"></i>
                 </li>
             {% elif user.is_partner %}
                 <li>
-                    <a href="{% url 'partner:template_approving_application' %}">Approving Applications</a>
+                    <a href="{% url 'partner:template_approving_application' %}">{% trans 'Approving Applications' %}</a>
                     <i class="fa fa-angle-right"></i>
                 </li>
             {% else %}
                 <li>
-                    <a href="{% url 'partner:template_approving_application' %}">Applicant Details</a>
+                    <a href="{% url 'partner:template_approving_application' %}">{% trans 'Applicant Details' %}</a>
                     <i class="fa fa-angle-right"></i>
                 </li>
             {% endif %}
 
             <li>
-                <span> Applications Details</span>
+                <span> {% trans 'Applications Details' %}</span>
 
             </li>
         </ul>
@@ -80,7 +81,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> Applications Details</span>
+                <span class="caption-subject font-red sbold uppercase"> {% trans 'Applications Details' %}</span>
 
             </div>
             {#            <span style="margin-left: 10%">#}

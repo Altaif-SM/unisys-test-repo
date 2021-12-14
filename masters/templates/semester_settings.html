@@ -1,4 +1,5 @@
 {% extends "template_base_page.html" %}
+{% load  i18n %}
 {% load staticfiles %}
 
 {% block styleBlock %}
@@ -153,7 +154,7 @@
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <span> Manage Semester</span>
+                <span> {% trans 'Manage Semester' %}</span>
             </li>
 
         </ul>
@@ -170,7 +171,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> Manage Semester</span>
+                <span class="caption-subject font-red sbold uppercase"> {% trans 'Manage Semester' %}</span>
             </div>
         </div>
 
@@ -185,7 +186,7 @@
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">Semester Name:
+                                <label class="col-md-2 control-label">{% trans 'Semester Name' %}:
 
                                 </label>
                                 <div class="col-md-4">
@@ -198,7 +199,7 @@
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">Start Date:
+                                <label class="col-md-2 control-label">{% trans 'Start Date' %}:
 
                                 </label>
                                 <div class="col-md-4">
@@ -207,7 +208,7 @@
                             </div>
 
                             <div class="">
-                                <label class="col-md-2 control-label">End Date:
+                                <label class="col-md-2 control-label">{% trans 'End Date' %}:
 
                                 </label>
                                 <div class="col-md-4" id="EndDate">
@@ -233,9 +234,9 @@
                     <thead>
                     <tr>
                         <th style="display: none">Id</th>
-                        <th>Semester Name</th>
-                        <th> Start Date</th>
-                        <th> End Date</th>
+                        <th>{% trans 'Semester Name' %}</th>
+                        <th> {% trans 'Start Date' %}</th>
+                        <th> {% trans 'End Date' %}</th>
                         <th width="10%">Action</th>
                     </tr>
                     </thead>
@@ -288,8 +289,8 @@
                         <h4 class="modal-title" style="color: #2a015e; text-align: center"><b  >Delete Confirmation</b></h4>
                     </div>
                     <div class="modal-body">
-                        <p> Are you sure, you want to delete Semester? </p>
-                        <p> After delete you will not be able to modify the Semester. </p>
+                        <p> {% trans 'Are you sure, you want to delete Semester?' %} </p>
+                        <p> {% trans 'After delete you will not be able to modify the Semester.' %} </p>
 
                     </div>
                     <div class="modal-footer">

@@ -1,4 +1,5 @@
 {% extends "template_base_page.html" %}
+{% load  i18n %}
 {% load staticfiles %}
 
 {% block styleBlock %}
@@ -145,12 +146,12 @@
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <span> User Settings</span>
+                <span> {% trans 'User Settings' %}</span>
                 <i class="fa fa-angle-right"></i>
             </li>
 
             <li>
-                <span> Add User </span>
+                <span> {% trans 'Add User' %} </span>
             </li>
         </ul>
     </div>
@@ -186,7 +187,7 @@
 
 
                                 <div class="">
-                                    <label class="col-md-2 control-label">First Name:<span
+                                    <label class="col-md-2 control-label">{% trans 'First Name' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <input type="text" title="Enter First Name" id="first_name"
@@ -199,7 +200,7 @@
                                 </div>
 
                                 <div class="">
-                                    <label class="col-md-2 control-label">Last Name:<span
+                                    <label class="col-md-2 control-label">{% trans 'Last Name' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <input type="text" title="Enter Last Name" id="last_name"
@@ -218,7 +219,7 @@
                             <div class="row">
 
                                 <div class="">
-                                    <label class="col-md-2 control-label">Email:<span
+                                    <label class="col-md-2 control-label">{% trans 'Email' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <input type="text" title="Enter Email" id="email"
@@ -231,7 +232,7 @@
                                 </div>
 
                                 <div class="">
-                                    <label class="col-md-2 control-label">Position:<span
+                                    <label class="col-md-2 control-label">{% trans 'Position' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <select name="role" class="form-control" required id="id_account_type">
@@ -262,7 +263,7 @@
                             <div class="row">
 
                                 <div class="">
-                                    <label class="col-md-2 control-label">Password:<span
+                                    <label class="col-md-2 control-label">{% trans 'Password' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <input type="password" title="Enter Password"
@@ -272,7 +273,7 @@
                                 </div>
 
                                 <div class="">
-                                    <label class="col-md-2 control-label">Re-Password:<span
+                                    <label class="col-md-2 control-label">{% trans 'Re-Password' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <input type="password" title="Enter Re-Password"
@@ -290,7 +291,7 @@
                             <div class="row">
 
                                 <div class="">
-                                    <label class="col-md-2 control-label">Country:<span
+                                    <label class="col-md-2 control-label">{% trans 'Country' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <select id='country' title="Select Country"
@@ -313,7 +314,7 @@
                                 </div>
 
                                 <div class="">
-                                    <label class="col-md-2 control-label">Office Details:<span
+                                    <label class="col-md-2 control-label">{% trans 'Office Details' %}:<span
                                             style="color: red">*</span>
 
                                     </label>
@@ -329,7 +330,7 @@
                             <div class="row">
 
                                 <div class="">
-                                    <label class="col-md-2 control-label">Status:<span
+                                    <label class="col-md-2 control-label">{% trans 'Status' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         {% if staff_dict.status == True %}
@@ -347,7 +348,7 @@
                             <div class="portlet-title">
                                 <div class="caption">
                                     <i class="icon-settings font-red"></i>
-                                    <span class="caption-subject font-red sbold uppercase">User Privilges</span>
+                                    <span class="caption-subject font-red sbold uppercase">{% trans 'User Privilges' %}</span>
                                 </div>
                             </div>
                             <br>

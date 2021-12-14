@@ -1,4 +1,5 @@
 {% extends "template_base_page.html" %}
+{% load  i18n %}
 {% load staticfiles %}
 
 {% block styleBlock %}
@@ -122,20 +123,20 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{% url 'accounts:home' %}">Home</a>
+                <a href="{% url 'accounts:home' %}">{% trans 'Home' %}</a>
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <span> Master Settings </span>
+                <span>{% trans 'Master Settings' %}</span>
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <span> System Settings</span>
+                <span>{% trans 'System Settings' %}</span>
                 <i class="fa fa-angle-right"></i>
             </li>
 
             <li>
-                <span> Add Language </span>
+                <span>{% trans 'Add Language' %}</span>
             </li>
         </ul>
     </div>
@@ -151,7 +152,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase">Add Language </span>
+                <span class="caption-subject font-red sbold uppercase">{% trans 'Add Language' %}</span>
             </div>
         </div>
 
@@ -169,7 +170,7 @@
 
                             <div class="row">
                                 <div class="">
-                                    <label class="col-md-2 control-label">Short Code:<span
+                                    <label class="col-md-2 control-label">{% trans 'Short Code' %}:<span
                                         style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <input type="text" title="Enter Short Code" id="short_code"
@@ -181,8 +182,7 @@
                                 </div>
 
                                 <div class="">
-                                    <label class="col-md-2 control-label">Language
-                                        Name:<span
+                                    <label class="col-md-2 control-label">{% trans 'Language Name' %}:<span
                                         style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <input type="text" title="Enter Language Name" id="language_name"
@@ -201,7 +201,7 @@
 
 
                                 <div class="">
-                                    <label class="col-md-2 control-label">Language Direction:<span
+                                    <label class="col-md-2 control-label">{% trans 'Language Direction' %}:<span
                                         style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <select id='language_direction' title="Select Language Direction"
@@ -211,7 +211,7 @@
                                                  <option  style="display:none;" selected="selected" value="{{ language_dict.language_direction|default_if_none:"" }}"> {{ language_dict.language_direction|default_if_none:"" }}</option>
                                                  <option value=""> Please Select</option>
                                             {% else %}
-                                                 <option selected="selected" value=""> Please Select</option>
+                                                 <option selected="selected" value="">{% trans 'Please Select' %}</option>
                                             {% endif %}
 
                                             <option value="left to right"> left to right</option>
@@ -238,7 +238,7 @@
 
 
                                     <div class="">
-                                    <label class="col-md-2 control-label">Status:<span
+                                    <label class="col-md-2 control-label">{% trans 'Status' %}:<span
                                         style="color: red">*</span></label>
                                     <div class="col-md-3">
                                           {% if language_dict.status == True %}
@@ -261,10 +261,10 @@
                             <div class="col-md-offset-5 col-md-7">
                                 <button type="button" class="btn blue" id="back" style="margin-left: 70%"
                                         onclick="window.location='{% url "masters:language_settings" %}'">
-                                    Back
+                                    {% trans 'Back' %}
                                 </button>
 
-                                <button type="submit" class="btn green" id="save_form" style="">Save
+                                <button type="submit" class="btn green" id="save_form" style="">{% trans 'Save' %}
                                 </button>
                             </div>
                         </div>

@@ -1,4 +1,5 @@
 {% extends "template_base_page.html" %}
+{% load  i18n %}
 {% load staticfiles %}
 
 {% block styleBlock %}
@@ -133,7 +134,7 @@
             </li>
 
             <li>
-                <span> Add Learning Centers </span>
+                <span>{% trans 'Add Learning Centers' %}</span>
             </li>
         </ul>
     </div>
@@ -149,7 +150,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase">Add Learning Centers </span>
+                <span class="caption-subject font-red sbold uppercase">{% trans 'Add Learning Centers' %}</span>
             </div>
         </div>
 
@@ -167,7 +168,7 @@
 
                             <div class="row">
                                 <div class="">
-                                    <label class="col-md-2 control-label">Country:<span
+                                    <label class="col-md-2 control-label">{% trans 'Country' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <select id='country' title="Select Country"
@@ -182,7 +183,7 @@
                                     </div>
                                 </div>
                                 <div class="">
-                                    <label class="col-md-2 control-label">Learning Center Name:<span
+                                    <label class="col-md-2 control-label">{% trans 'Learning Center Name' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <input type="text" title="Enter Learning Center Name" id="lc_name"
@@ -199,7 +200,7 @@
                             <br>
                             <div class="row">
                                 <div class="">
-                                    <label class="col-md-2 control-label">Email:<span
+                                    <label class="col-md-2 control-label">{% trans 'Email' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <input type="text" title="Enter Email" id="lc_email"
@@ -210,7 +211,7 @@
                                     </div>
                                 </div>
                                 <div class="">
-                                    <label class="col-md-2 control-label">Telephone:<span
+                                    <label class="col-md-2 control-label">{% trans 'Telephone' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <input type="text" title="Enter Telephone" id="lc_tel"
@@ -230,7 +231,7 @@
                             <div class="row">
 
                                 <div class="">
-                                    <label class="col-md-2 control-label">Address:
+                                    <label class="col-md-2 control-label">{% trans 'Address' %}:
 
                                     </label>
                                     <div class="col-md-3">
@@ -242,7 +243,7 @@
 
 
                                 <div class="">
-                                    <label class="col-md-2 control-label">Status:<span
+                                    <label class="col-md-2 control-label">{% trans 'Status' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                             <input type="checkbox" id="status" name="status" checked>

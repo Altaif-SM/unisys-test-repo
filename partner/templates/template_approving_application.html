@@ -1,4 +1,5 @@
 {% extends "template_base_page.html" %}
+{% load  i18n %}
 {% load staticfiles %}
 
 {% block styleBlock %}
@@ -328,7 +329,7 @@
             </li>
 
             <li>
-                <span> Approving Applicant Details </span>
+                <span> {% trans 'Approving Applicant Details' %} </span>
             </li>
         </ul>
     </div>
@@ -344,7 +345,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> Approving Applications</span>
+                <span class="caption-subject font-red sbold uppercase"> {% trans 'Approving Applications' %}</span>
             </div>
         </div>
 
@@ -408,15 +409,15 @@
                                         <i class="fa fa-angle-down"></i>
                                     </a>
                                     <ul class="dropdown-menu pull-right" id="action">
-                                        <li><a class="status_change" id="First Interview">Conditional Offer Letter</a></li>
-                                        <li><a class="status_change" id="First Interview attended"> Full Offer Letter</a></li>
-                                        <li><a class="status_change" id="Incomplete"> Incomplete</a></li>
+                                        <li><a class="status_change" id="First Interview">{% trans 'Conditional Offer Letter' %}</a></li>
+                                        <li><a class="status_change" id="First Interview attended"> {% trans 'Full Offer Letter' %}</a></li>
+                                        <li><a class="status_change" id="Incomplete"> {% trans 'Incomplete' %}</a></li>
 {#                                        <li><a class="status_change" id="First Interview approval">First Interview approval</a></li>#}
 {#                                        <li><a class="status_change" id="Psychometric Test">Psychometric Test</a></li>#}
 {#                                        <li><a class="status_change" id="Second Interview attended">Second Interview attended</a></li>#}
 {#                                        <li><a class="status_change" id="Second Interview approval">Second Interview approval</a></li>#}
 {#                                        <li><a href="javascript:;" class="action" id="Admin approval">Admin approval</a></li>#}
-                                        <li><a class="status_change" id="Reject">Reject</a></li>
+                                        <li><a class="status_change" id="Reject">{% trans 'Reject' %}</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -442,10 +443,10 @@
                                                 <span></span>
                                             </label>{% endcomment %}
                                         </th>
-                                        <th>Student Name</th>
-                                        <th>Conditional Offer Letter</th>
-                                        <th>Full Offer Letter</th>
-                                        <th>Incomplete</th>
+                                        <th>{% trans 'Student Name' %}</th>
+                                        <th>{% trans 'Conditional Offer Letter' %}</th>
+                                        <th>{% trans 'Full Offer Letter' %}</th>
+                                        <th>{% trans 'Incomplete' %}</th>
 {#                                        <th>1st Interview Approval</th>#}
 {#                                        <th>Test</th>#}
 {#                                        <th>2nd Interview</th>#}
@@ -654,13 +655,13 @@
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal"
                                                 aria-hidden="true"></button>
-                                        <h4 class="modal-title">Conditional Offer Letter Details</h4>
+                                        <h4 class="modal-title">{% trans 'Conditional Offer Letter Details' %}</h4>
                                     </div>
                                     <div class="modal-body">
 
                                         <div class="row">
                                             <div class="">
-                                                <label class="col-md-12 control-label" style="text-align: center!important;"><b>Please Select required documents for Conditional Offer Letter.</b></label>
+                                                <label class="col-md-12 control-label" style="text-align: center!important;"><b>{% trans 'Please Select required documents for Conditional Offer Letter.' %}</b></label>
                                             </div>
                                         </div>
                                         <br>

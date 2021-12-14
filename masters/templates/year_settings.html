@@ -1,4 +1,5 @@
 {% extends "template_base_page.html" %}
+{% load  i18n %}
 {% load staticfiles %}
 
 {% block styleBlock %}
@@ -141,11 +142,11 @@
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <span> Academic Settings</span>
+                <span> {% trans 'Academic Settings' %}</span>
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <span> Manage Year</span>
+                <span> {% trans 'Manage Year' %}</span>
             </li>
 
         </ul>
@@ -162,7 +163,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> Manage Year</span>
+                <span class="caption-subject font-red sbold uppercase"> {% trans 'Manage Year' %}</span>
             </div>
         </div>
 
@@ -180,7 +181,7 @@
                         <div class="row">
 
                             <div class="">
-                                <label class="col-md-2 control-label">Year Name:
+                                <label class="col-md-2 control-label">{% trans 'Year Name' %}:
 
                                 </label>
                                 <div class="col-md-4">
@@ -192,7 +193,7 @@
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">Start Date:
+                                <label class="col-md-2 control-label">{% trans 'Start Date' %}:
 
                                 </label>
                                 <div class="col-md-4">
@@ -201,7 +202,7 @@
                             </div>
 
                             <div class="">
-                                <label class="col-md-2 control-label">End Date:
+                                <label class="col-md-2 control-label">{% trans 'End Date' %}:
 
                                 </label>
                                 <div class="col-md-4" id="EndDate">
@@ -229,9 +230,9 @@
                     <thead>
                     <tr>
                         <th style="display: none">Id</th>
-                        <th>Year Name</th>
-                        <th> Start Date</th>
-                        <th> End Date</th>
+                        <th>{% trans 'Year Name' %}</th>
+                        <th> {% trans 'Start Date' %}</th>
+                        <th> {% trans 'End Date' %}</th>
 {#                        <th> Active Year</th>#}
                         <th width="10%">Action</th>
                     </tr>
@@ -289,8 +290,8 @@
                         <h4 class="modal-title" style="color: #2a015e; text-align: center"><b  >Delete Confirmation</b></h4>
                     </div>
                     <div class="modal-body">
-                        <p> Are you sure, you want to delete Year? </p>
-                        <p> After delete you will not be able to modify the Year. </p>
+                        <p> {% trans 'Are you sure, you want to delete Year?' %} </p>
+                        <p> {% trans 'After delete you will not be able to modify the Year.' %} </p>
 
                     </div>
                     <div class="modal-footer">

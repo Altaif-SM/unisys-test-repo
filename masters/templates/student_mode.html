@@ -1,4 +1,5 @@
 {% extends "template_base_page.html" %}
+{% load  i18n %}
 {% load staticfiles %}
 
 {% block styleBlock %}
@@ -156,7 +157,7 @@
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <span> Manage Student Mode</span>
+                <span>{% trans 'Manage Student Mode' %}</span>
             </li>
 
         </ul>
@@ -173,7 +174,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> Manage Student Mode</span>
+                <span class="caption-subject font-red sbold uppercase">{% trans 'Manage Student Mode' %}</span>
             </div>
         </div>
 
@@ -188,7 +189,7 @@
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">Student Mode:
+                                <label class="col-md-2 control-label">{% trans 'Student Mode' %}:
 
                                 </label>
                                 <div class="col-md-4">
@@ -196,7 +197,7 @@
                                 </div>
                             </div>
                             <div class="">
-                                <label class="col-md-2 control-label">Description:
+                                <label class="col-md-2 control-label">{% trans 'Description' %}:
 
                                 </label>
                                 <div class="col-md-4">
@@ -209,7 +210,7 @@
 
                         <div class="row">
                             <div class="col-md-offset-5 col-md-7">
-                                <button style="background-color: #3598dc;" type="submit" class="btn green" id="save">Add</button>
+                                <button style="background-color: #3598dc;" type="submit" class="btn green" id="save">{% trans 'Add' %}</button>
                             </div>
                         </div>
                     </div>
@@ -224,9 +225,9 @@
                     <thead>
                     <tr>
                         <th style="display: none">Id</th>
-                        <th>Student Mode</th>
-                        <th> Description</th>
-                        <th width="10%">Action</th>
+                        <th>{% trans 'Student Mode' %}</th>
+                        <th> {% trans 'Description' %}</th>
+                        <th width="10%">{% trans 'Action' %}</th>
                     </tr>
                     </thead>
 

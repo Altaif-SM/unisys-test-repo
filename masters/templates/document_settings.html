@@ -1,4 +1,5 @@
 {% extends "template_base_page.html" %}
+{% load  i18n %}
 {% load staticfiles %}
 
 {% block styleBlock %}
@@ -141,11 +142,11 @@
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <span> Module Settings </span>
+                <span> {% trans 'Module Settings' %} </span>
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <span> Manage Applicant Documents</span>
+                <span> {% trans 'Manage Applicant Documents' %}</span>
             </li>
 
         </ul>
@@ -162,7 +163,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> Manage Documents</span>
+                <span class="caption-subject font-red sbold uppercase"> {% trans 'Manage Documents' %}</span>
             </div>
         </div>
 
@@ -177,7 +178,7 @@
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">Document Name:
+                                <label class="col-md-2 control-label">{% trans 'Document Name' %}:
 
                                 </label>
                                 <div class="col-md-4">
@@ -188,7 +189,7 @@
                             <div class="">
 {#                                <label class="col-md-2 control-label">Document Name:</label>#}
                                 <div class="col-md-4">
-                                    <button style="background-color: #3598dc;" type="submit" class="btn green" id="save">Add</button>
+                                    <button style="background-color: #3598dc;" type="submit" class="btn green" id="save">{% trans 'Add' %}</button>
                                 </div>
                             </div>
 
@@ -213,8 +214,8 @@
                     <thead>
                     <tr>
                         <th style="display: none">Id</th>
-                        <th>Document Name</th>
-                        <th width="10%">Action</th>
+                        <th>{% trans 'Document Name' %}</th>
+                        <th width="10%">{% trans 'Action' %}</th>
                     </tr>
                     </thead>
 
@@ -261,8 +262,8 @@
                         <h4 class="modal-title" style="color: #2a015e; text-align: center"><b  >Delete Confirmation</b></h4>
                     </div>
                     <div class="modal-body">
-                        <p> Are you sure, you want to delete Document? </p>
-                        <p> After delete you will not be able to modify the Document. </p>
+                        <p> {% trans 'Are you sure, you want to delete Document?' %} </p>
+                        <p> {% trans 'After delete you will not be able to modify the Document.' %} </p>
 
                     </div>
                     <div class="modal-footer">

@@ -1,4 +1,5 @@
 {% extends "template_base_page.html" %}
+{% load  i18n %}
 {% load staticfiles %}
 
 {% block styleBlock %}
@@ -180,12 +181,12 @@
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <span> Accounting</span>
+                <span> {% trans 'Accounting' %}</span>
                 <i class="fa fa-angle-right"></i>
             </li>
 
             <li>
-                <span>Payment Setting </span>
+                <span>{% trans 'Payment Setting' %} </span>
             </li>
         </ul>
     </div>
@@ -202,7 +203,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> Payment Setting</span>
+                <span class="caption-subject font-red sbold uppercase"> {% trans 'Payment Setting' %}</span>
             </div>
         </div>
 
@@ -222,20 +223,20 @@
                                 <span style="padding:inherit">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Payment:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;
                                 <input class="current" type="radio" checked name="payment" id="payment"
                                        value="Yes">
-                                <span style="padding:inherit">Yes</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <span style="padding:inherit">{% trans 'Yes' %}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 <input class="current" type="radio" name="payment" value="No"
                                        id="payment">
-                                <span style="padding:inherit">No</span>
+                                <span style="padding:inherit">{% trans 'No' %}</span>
                             </div>
                         {% else %}
                             <div class="row" style="margin-left:8%">
                                 <span style="padding:inherit">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Payment:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;
                                 <input class="current" type="radio" name="payment" id="payment"
                                        value="Yes">
-                                <span style="padding:inherit">Yes</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <span style="padding:inherit">{% trans 'Yes' %}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 <input class="current" type="radio" name="payment" value="No"
                                        id="payment" checked>
-                                <span style="padding:inherit">No</span>
+                                <span style="padding:inherit">{% trans 'No' %}</span>
                             </div>
                         {% endif %}
 
@@ -244,7 +245,7 @@
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">Amount:
+                                <label class="col-md-2 control-label">{% trans 'Amount' %}:
 
                                 </label>
                                 <div class="col-md-2">
@@ -259,7 +260,7 @@
                         <br>
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">Currency:
+                                <label class="col-md-2 control-label">{% trans 'Currency' %}:
 
                                 </label>
                                 <div class="col-md-2">
