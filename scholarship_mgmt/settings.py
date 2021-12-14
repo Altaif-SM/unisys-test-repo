@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import stripe
+from django.utils.translation import ugettext_lazy as _
+
 # import psycopg2
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -44,11 +47,14 @@ INSTALLED_APPS = [
     'student.apps.StudentConfig',
     'accounting.apps.AccountingConfig',
     'partner.apps.PartnerConfig',
+    'payments.apps.PaymentsConfig',
     'donor.apps.DonorConfig',
     'computed_property',
     'parent.apps.ParentConfig',
     'mathfilters',
     'password_reset.apps.PasswordResetConfig',
+    'rest_api',
+    'rest_framework',
 
 ]
 
@@ -60,6 +66,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 ]
 
 ROOT_URLCONF = 'scholarship_mgmt.urls'
@@ -106,7 +113,13 @@ DATABASES = {
      }
  }
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ),
 
+}
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
@@ -182,4 +195,22 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'redbytes.test@gmail.com'
 EMAIL_HOST_PASSWORD = 'redbytes@123'
 
-SERVER_HOST_NAME = "http://159.65.159.193:8000/"
+SERVER_HOST_NAME = "http://127.0.0.1:3000/"
+
+stripe.api_key = 'sk_test_51JcmDhSIeVZrpBOQmSMJtfkhTDY8JkkrbnjdEw2wurzt9nQdK74CGYCX90l5q0VfEUuq4oLzQHMA1mgpeUqsKK6G00fUXuYOIG'
+
+STRIPE_SECRET_KEY = 'sk_test_51JcmDhSIeVZrpBOQmSMJtfkhTDY8JkkrbnjdEw2wurzt9nQdK74CGYCX90l5q0VfEUuq4oLzQHMA1mgpeUqsKK6G00fUXuYOIG'
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51JcmDhSIeVZrpBOQvbNkpUdU9H7l6iGwMyHzsASeNF6howwGwp9asyxWfjukiP7bHqB5EnGKIwGBR02f5431Qni700Zf86Q6VI'
+
+USE_I18N = True
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
+)
+
+LANGUAGE_CODE = 'en-us'
+
+LANGUAGES = (
+    ('en-us', _('English')),
+    ('id', _('Indonesian')),
+)
