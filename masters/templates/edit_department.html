@@ -1,4 +1,5 @@
 {% extends "template_base_page.html" %}
+{% load  i18n %}
 {% load staticfiles %}
 
 {% block styleBlock %}
@@ -165,7 +166,7 @@
             </li>
 
             <li>
-                <span> Edit Department </span>
+                <span> {% trans 'Edit Department' %} </span>
             </li>
         </ul>
     </div>
@@ -181,7 +182,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase">Edit Department </span>
+                <span class="caption-subject font-red sbold uppercase">{% trans 'Edit Department' %} </span>
             </div>
         </div>
 

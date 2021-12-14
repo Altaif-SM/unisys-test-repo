@@ -1,4 +1,5 @@
 {% extends "template_base_page.html" %}
+{% load  i18n %}
 {% load staticfiles %}
 
 {% block styleBlock %}
@@ -172,7 +173,7 @@
             </li>
 
             <li>
-                <span> Link Campus to User </span>
+                <span> {% trans 'Link Campus to User' %} </span>
             </li>
         </ul>
     </div>
@@ -189,7 +190,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> Campus to User</span>
+                <span class="caption-subject font-red sbold uppercase"> {% trans 'Campus to User' %}</span>
             </div>
         </div>
 
@@ -209,7 +210,7 @@
 
 
                             <div class="">
-                                <label class="col-md-2 control-label">Campus:</label>
+                                <label class="col-md-2 control-label">{% trans 'Campus' %}:</label>
                                 <div class="col-md-3">
 
                                     <select id='campus' title="Select Campus" name="campus"
@@ -224,7 +225,7 @@
                                         {% endfor %}
                                     </select>
                                     <span id="campus_error"
-                                          style="color: red;display:none">Please select Campus</span>
+                                          style="color: red;display:none">{% trans 'Please select Campus' %}</span>
 
 
                                 </div>
@@ -233,7 +234,7 @@
                             </div>
 
                             <div class="">
-                                <label class="col-md-2 control-label">User:</label>
+                                <label class="col-md-2 control-label">{% trans 'User' %}:</label>
                                 <div class="col-md-3">
                                     <select id='staff' title="Select Staff" name="staff"
                                             class="form-control value_check" data-live-search="true">
@@ -248,7 +249,7 @@
                                             </option>
                                         {% endfor %}
                                     </select>
-                                <span id="staff_error" style="color: red;display:none">Please select User</span>
+                                <span id="staff_error" style="color: red;display:none">{% trans 'Please select User' %}</span>
                                 </div>
                             </div>
                             <div class="">
@@ -275,14 +276,14 @@
                         <thead>
                         <tr>
                             <th style="display: none">Id</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th> Email</th>
-                            <th>Campus</th>
-                            <th> Position</th>
-                            <th> Country</th>
-                            <th> Address</th>
-                            <th width="10%">Action</th>
+                            <th>{% trans 'First Name' %}</th>
+                            <th>{% trans 'Last Name' %}</th>
+                            <th> {% trans 'Email' %}</th>
+                            <th>{% trans 'Campus' %}</th>
+                            <th> {% trans 'Position' %}</th>
+                            <th> {% trans 'Country' %}</th>
+                            <th> {% trans 'Address' %}</th>
+                            <th width="10%">{% trans 'Action' %}</th>
                         </tr>
                         </thead>
 
@@ -332,8 +333,8 @@
                         </h4>
                     </div>
                     <div class="modal-body">
-                        <p> Are you sure, you want to delete campus to user linking? </p>
-                        <p> After delete you will not be able to modify the delete campus to user linking. </p>
+                        <p> {% trans 'Are you sure, you want to delete campus to user linking?' %} </p>
+                        <p> {% trans 'After delete you will not be able to modify the delete campus to user linking.' %} </p>
 
                     </div>
                     <div class="modal-footer">

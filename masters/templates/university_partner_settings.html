@@ -1,4 +1,5 @@
 {% extends "template_base_page.html" %}
+{% load  i18n %}
 {% load staticfiles %}
 
 {% block styleBlock %}
@@ -152,7 +153,7 @@
             </li>
 
             <li>
-                <span> Manage University Partner </span>
+                <span> {% trans 'Manage University Partner' %} </span>
             </li>
         </ul>
     </div>
@@ -168,7 +169,7 @@
         <div class="portlet-title" style="padding: 15px 20px 0px;">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> Manage University Partner</span>
+                <span class="caption-subject font-red sbold uppercase"> {% trans 'Manage University Partner' %}</span>
             </div>
             <a href="{% url 'masters:add_university_partner' %}">
                 <button type="submit" class="btn green" id="save" style="margin-left:94%;margin-top:-6%;background-color: #3598dc">Add
@@ -186,13 +187,13 @@
                     <thead>
                     <tr>
                         <th style="display: none">Id</th>
-                        <th> University Name</th>
-                        <th> Email</th>
-                        <th> Telephone</th>
-                        <th> Website</th>
-                        <th> Address</th>
-                        <th> Status</th>
-                        <th width="10%">Action</th>
+                        <th> {% trans 'University Name' %}</th>
+                        <th> {% trans 'Email' %}</th>
+                        <th> {% trans 'Telephone' %}</th>
+                        <th> {% trans 'Website' %}</th>
+                        <th> {% trans 'Address' %}</th>
+                        <th> {% trans 'Status' %}</th>
+                        <th width="10%">{% trans 'Action' %}</th>
                     </tr>
                     </thead>
 
@@ -248,8 +249,8 @@
                         <h4 class="modal-title" style="color: #2a015e; text-align: center"><b  >Delete Confirmation</b></h4>
                     </div>
                     <div class="modal-body">
-                        <p> Are you sure, you want to delete University Partner? </p>
-                        <p> After delete you will not be able to modify the University Partner. </p>
+                        <p> {% trans 'Are you sure, you want to delete University Partner?' %} </p>
+                        <p> {% trans 'After delete you will not be able to modify the University Partner.' %} </p>
 
                     </div>
                     <div class="modal-footer">

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-14 13:01+0000\n"
+"POT-Creation-Date: 2021-12-14 13:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -74,7 +74,10 @@ msgstr ""
 #: accounts/templates/add_staff.html:190
 #: accounts/templates/staff_settings.html:190
 #: accounts/templates/template_login.html:159
+#: masters/templates/link_campus_to_program.html:279
+#: masters/templates/link_department_to_staff.html:283
 #: masters/templates/link_faculty_to_user.html:283
+#: masters/templates/link_university_staff.html:321
 #: student/templates/applicant_personal_info.html:207
 #: student/templates/my_application.html:119
 msgid "First Name"
@@ -83,7 +86,10 @@ msgstr "Nama depan"
 #: accounts/templates/add_staff.html:203
 #: accounts/templates/staff_settings.html:191
 #: accounts/templates/template_login.html:163
+#: masters/templates/link_campus_to_program.html:280
+#: masters/templates/link_department_to_staff.html:284
 #: masters/templates/link_faculty_to_user.html:284
+#: masters/templates/link_university_staff.html:322
 #: student/templates/applicant_personal_info.html:232
 #: student/templates/my_application.html:134
 msgid "Last Name"
@@ -92,11 +98,22 @@ msgstr ""
 #: accounts/templates/add_staff.html:222
 #: accounts/templates/staff_settings.html:192
 #: accounts/templates/template_login.html:187
+#: masters/templates/add_campus.html:277
+#: masters/templates/add_department.html:282
 #: masters/templates/add_faculty.html:268
 #: masters/templates/add_learning_centers.html:203
+#: masters/templates/add_university.html:225
+#: masters/templates/add_university_partner.html:183
+#: masters/templates/campus_settings.html:194
+#: masters/templates/department_settings.html:194
 #: masters/templates/faculty_settings.html:193
 #: masters/templates/learning_centers_settings.html:192
-#: masters/templates/link_faculty_to_user.html:285 password_reset/forms.py:34
+#: masters/templates/link_campus_to_program.html:281
+#: masters/templates/link_department_to_staff.html:285
+#: masters/templates/link_faculty_to_user.html:285
+#: masters/templates/link_university_staff.html:323
+#: masters/templates/university_partner_settings.html:191
+#: masters/templates/university_settings.html:192 password_reset/forms.py:34
 #: payments/templates/checkout.html:52
 #: student/templates/applicant_additional_info.html:242
 #: student/templates/applicant_additional_info.html:368
@@ -107,7 +124,10 @@ msgstr ""
 
 #: accounts/templates/add_staff.html:235
 #: accounts/templates/staff_settings.html:193
+#: masters/templates/link_campus_to_program.html:283
+#: masters/templates/link_department_to_staff.html:287
 #: masters/templates/link_faculty_to_user.html:287
+#: masters/templates/link_university_staff.html:326
 msgid "Position"
 msgstr ""
 
@@ -122,9 +142,14 @@ msgstr ""
 
 #: accounts/templates/add_staff.html:294
 #: accounts/templates/staff_settings.html:194
+#: masters/templates/add_campus.html:251
 #: masters/templates/add_learning_centers.html:171
+#: masters/templates/campus_settings.html:193
 #: masters/templates/learning_centers_settings.html:191
+#: masters/templates/link_campus_to_program.html:284
+#: masters/templates/link_department_to_staff.html:288
 #: masters/templates/link_faculty_to_user.html:288
+#: masters/templates/link_university_staff.html:327
 #: student/templates/applicant_academic_english_qualification.html:480
 #: student/templates/applicant_academic_english_qualification.html:623
 #: student/templates/applicant_employement_history_info.html:422
@@ -144,16 +169,26 @@ msgstr ""
 #: accounts/templates/add_staff.html:333
 #: accounts/templates/staff_settings.html:195
 #: masters/templates/add_calender.html:338
+#: masters/templates/add_campus.html:342
 #: masters/templates/add_currency.html:278
+#: masters/templates/add_department.html:325
 #: masters/templates/add_faculty.html:351
 #: masters/templates/add_language.html:241
 #: masters/templates/add_learning_centers.html:246
+#: masters/templates/add_program.html:441
+#: masters/templates/add_university.html:288
+#: masters/templates/add_university_partner.html:245
 #: masters/templates/calendar_settings.html:199
+#: masters/templates/campus_settings.html:197
+#: masters/templates/department_settings.html:197
 #: masters/templates/edit_currency.html:279
 #: masters/templates/edit_language.html:227
 #: masters/templates/faculty_settings.html:197
 #: masters/templates/learning_centers_settings.html:195
+#: masters/templates/program_settings.html:199
 #: masters/templates/template_language_settings.html:194
+#: masters/templates/university_partner_settings.html:195
+#: masters/templates/university_settings.html:196
 #: student/templates/applicant_progress_history.html:107
 msgid "Status"
 msgstr ""
@@ -188,14 +223,19 @@ msgstr ""
 
 #: accounts/templates/staff_settings.html:196
 #: masters/templates/calendar_settings.html:200
+#: masters/templates/campus_settings.html:198
+#: masters/templates/department_settings.html:198
 #: masters/templates/document_settings.html:218
 #: masters/templates/faculty_settings.html:198
 #: masters/templates/group_settings.html:230
 #: masters/templates/learning_centers_settings.html:196
+#: masters/templates/link_campus_to_program.html:286
 #: masters/templates/link_faculty_to_user.html:290
 #: masters/templates/student_mode.html:230
 #: masters/templates/template_currency_settings.html:197
 #: masters/templates/template_language_settings.html:195
+#: masters/templates/university_partner_settings.html:196
+#: masters/templates/university_settings.html:197
 msgid "Action"
 msgstr ""
 
@@ -407,26 +447,35 @@ msgid "Manage Users"
 msgstr ""
 
 #: accounts/templates/template_base_page.html:677
+#: masters/templates/university_settings.html:151
 msgid "University Settings"
 msgstr ""
 
 #: accounts/templates/template_base_page.html:685
+#: masters/templates/university_settings.html:156
+#: masters/templates/university_settings.html:172
 msgid "Manage Universities"
 msgstr ""
 
 #: accounts/templates/template_base_page.html:692
+#: masters/templates/university_partner_settings.html:156
+#: masters/templates/university_partner_settings.html:172
 msgid "Manage University Partner"
 msgstr ""
 
 #: accounts/templates/template_base_page.html:699
+#: masters/templates/link_university_staff.html:183
 msgid "Link University to User"
 msgstr ""
 
 #: accounts/templates/template_base_page.html:706
+#: masters/templates/program_settings.html:156
+#: masters/templates/program_settings.html:172
 msgid "Manage Program"
 msgstr ""
 
 #: accounts/templates/template_base_page.html:713
+#: masters/templates/campus_settings.html:156
 msgid "Manage Branch/Campus"
 msgstr ""
 
@@ -435,10 +484,13 @@ msgid "Link Branch/Campus to User"
 msgstr ""
 
 #: accounts/templates/template_base_page.html:726
+#: masters/templates/department_settings.html:156
+#: masters/templates/department_settings.html:172
 msgid "Manage Department"
 msgstr ""
 
 #: accounts/templates/template_base_page.html:733
+#: masters/templates/link_department_to_staff.html:179
 msgid "Link Department to User"
 msgstr ""
 
@@ -666,18 +718,35 @@ msgid "Add Calendar"
 msgstr ""
 
 #: masters/templates/add_calender.html:203
+#: masters/templates/add_campus.html:203
+#: masters/templates/add_department.html:205
 #: masters/templates/add_faculty.html:206
+#: masters/templates/add_program.html:204
 #: masters/templates/calendar_settings.html:191
+#: masters/templates/campus_settings.html:191
+#: masters/templates/department_settings.html:191
 #: masters/templates/faculty_settings.html:191
+#: masters/templates/link_university_staff.html:216
+#: masters/templates/link_university_staff.html:324
+#: masters/templates/program_settings.html:192
 #: student/templates/intake_details.html:247
 #: student/templates/my_application.html:245
 msgid "University Type"
 msgstr ""
 
 #: masters/templates/add_calender.html:217
+#: masters/templates/add_campus.html:218
+#: masters/templates/add_department.html:221
 #: masters/templates/add_faculty.html:221
+#: masters/templates/add_program.html:219
 #: masters/templates/calendar_settings.html:192
+#: masters/templates/campus_settings.html:192
+#: masters/templates/department_settings.html:192
 #: masters/templates/faculty_settings.html:192
+#: masters/templates/link_university_staff.html:231
+#: masters/templates/link_university_staff.html:254
+#: masters/templates/link_university_staff.html:325
+#: masters/templates/program_settings.html:193
 #: student/templates/intake_details.html:283
 #: student/templates/my_application.html:257
 msgid "University"
@@ -692,6 +761,7 @@ msgid "Year"
 msgstr ""
 
 #: masters/templates/add_calender.html:255
+#: masters/templates/add_program.html:456
 #: masters/templates/calendar_settings.html:194
 #: student/templates/intake_details.html:489
 msgid "Branch/Campus"
@@ -724,6 +794,85 @@ msgstr ""
 #: masters/templates/year_settings.html:205
 #: masters/templates/year_settings.html:235
 msgid "End Date"
+msgstr ""
+
+#: masters/templates/add_campus.html:170 masters/templates/add_campus.html:186
+msgid "Add Branch / Campus"
+msgstr ""
+
+#: masters/templates/add_campus.html:209
+#: masters/templates/add_department.html:211
+#: masters/templates/add_faculty.html:212
+#: masters/templates/add_program.html:210
+#: masters/templates/link_university_staff.html:219
+#: student/templates/intake_details.html:255
+#: student/templates/intake_details.html:263
+#: student/templates/intake_details.html:275
+#: student/templates/my_application.html:250
+msgid "Main"
+msgstr ""
+
+#: masters/templates/add_campus.html:212
+#: masters/templates/add_department.html:214
+#: masters/templates/add_faculty.html:215
+#: masters/templates/add_program.html:213
+#: masters/templates/link_university_staff.html:222
+#: student/templates/intake_details.html:258
+#: student/templates/intake_details.html:267
+#: student/templates/intake_details.html:278
+#: student/templates/my_application.html:248
+msgid "Partner"
+msgstr ""
+
+#: masters/templates/add_campus.html:240
+#: masters/templates/campus_settings.html:190
+#: masters/templates/link_campus_to_program.html:213
+#: masters/templates/link_campus_to_program.html:282
+#: student/templates/my_application.html:332
+msgid "Campus"
+msgstr ""
+
+#: masters/templates/add_campus.html:289
+#: masters/templates/add_department.html:293
+#: masters/templates/add_faculty.html:286
+#: masters/templates/add_learning_centers.html:214
+#: masters/templates/add_university.html:243
+#: masters/templates/add_university_partner.html:201
+#: masters/templates/campus_settings.html:195
+#: masters/templates/department_settings.html:195
+#: masters/templates/faculty_settings.html:194
+#: masters/templates/learning_centers_settings.html:193
+#: masters/templates/university_partner_settings.html:192
+#: masters/templates/university_settings.html:193
+msgid "Telephone"
+msgstr ""
+
+#: masters/templates/add_campus.html:309
+#: masters/templates/add_department.html:313
+#: masters/templates/add_faculty.html:299
+#: masters/templates/add_university.html:256
+#: masters/templates/add_university_partner.html:214
+#: masters/templates/campus_settings.html:196
+#: masters/templates/faculty_settings.html:195
+#: masters/templates/university_partner_settings.html:193
+#: masters/templates/university_settings.html:194
+msgid "Website"
+msgstr ""
+
+#: masters/templates/add_campus.html:321 masters/templates/add_faculty.html:333
+#: masters/templates/add_learning_centers.html:234
+#: masters/templates/add_university.html:274
+#: masters/templates/add_university_partner.html:232
+#: masters/templates/learning_centers_settings.html:194
+#: masters/templates/link_campus_to_program.html:285
+#: masters/templates/link_department_to_staff.html:289
+#: masters/templates/link_faculty_to_user.html:289
+#: masters/templates/link_university_staff.html:328
+#: masters/templates/university_partner_settings.html:194
+#: masters/templates/university_settings.html:195
+#: student/templates/applicant_additional_info.html:356
+#: student/templates/my_application.html:680
+msgid "Address"
 msgstr ""
 
 #: masters/templates/add_currency.html:137
@@ -797,25 +946,37 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
+#: masters/templates/add_department.html:171
+#: masters/templates/add_department.html:187
+msgid "Add Department"
+msgstr ""
+
+#: masters/templates/add_department.html:247
+#: masters/templates/department_settings.html:190
+#, fuzzy
+#| msgid "First Name"
+msgid "Department Name"
+msgstr "Nama depan"
+
+#: masters/templates/add_department.html:260
+#: masters/templates/add_program.html:286
+#: masters/templates/department_settings.html:193
+#: masters/templates/link_faculty_to_user.html:216
+#: masters/templates/link_faculty_to_user.html:286
+#: masters/templates/program_settings.html:195
+#: student/templates/intake_details.html:462
+#: student/templates/my_application.html:325
+msgid "Faculty"
+msgstr ""
+
+#: masters/templates/add_department.html:338
+#: masters/templates/add_faculty.html:317
+msgid "Logo"
+msgstr ""
+
 #: masters/templates/add_faculty.html:171
 #: masters/templates/add_faculty.html:187
 msgid "Add Faculty"
-msgstr ""
-
-#: masters/templates/add_faculty.html:212
-#: student/templates/intake_details.html:255
-#: student/templates/intake_details.html:263
-#: student/templates/intake_details.html:275
-#: student/templates/my_application.html:250
-msgid "Main"
-msgstr ""
-
-#: masters/templates/add_faculty.html:215
-#: student/templates/intake_details.html:258
-#: student/templates/intake_details.html:267
-#: student/templates/intake_details.html:278
-#: student/templates/my_application.html:248
-msgid "Partner"
 msgstr ""
 
 #: masters/templates/add_faculty.html:256
@@ -824,31 +985,6 @@ msgstr ""
 #| msgid "First Name"
 msgid "Faculty Name"
 msgstr "Nama depan"
-
-#: masters/templates/add_faculty.html:286
-#: masters/templates/add_learning_centers.html:214
-#: masters/templates/faculty_settings.html:194
-#: masters/templates/learning_centers_settings.html:193
-msgid "Telephone"
-msgstr ""
-
-#: masters/templates/add_faculty.html:299
-#: masters/templates/faculty_settings.html:195
-msgid "Website"
-msgstr ""
-
-#: masters/templates/add_faculty.html:317
-msgid "Logo"
-msgstr ""
-
-#: masters/templates/add_faculty.html:333
-#: masters/templates/add_learning_centers.html:234
-#: masters/templates/learning_centers_settings.html:194
-#: masters/templates/link_faculty_to_user.html:289
-#: student/templates/applicant_additional_info.html:356
-#: student/templates/my_application.html:680
-msgid "Address"
-msgstr ""
 
 #: masters/templates/add_language.html:139
 #: masters/templates/add_language.html:155
@@ -882,12 +1018,104 @@ msgstr ""
 msgid "Learning Center Name"
 msgstr ""
 
+#: masters/templates/add_program.html:170
+#: masters/templates/add_program.html:186
+msgid "Add Program"
+msgstr ""
+
+#: masters/templates/add_program.html:274
+#: masters/templates/program_settings.html:191
+#, fuzzy
+#| msgid "First Name"
+msgid "Program Name"
+msgstr "Nama depan"
+
+#: masters/templates/add_program.html:328
+#: masters/templates/program_settings.html:196
+#: masters/templates/study_mode.html:184 masters/templates/study_mode.html:215
+msgid "Study Mode"
+msgstr ""
+
+#: masters/templates/add_program.html:345
+#: masters/templates/study_level.html:184
+#: masters/templates/study_level.html:215
+msgid "Study Level"
+msgstr ""
+
+#: masters/templates/add_program.html:367 masters/templates/study_type.html:184
+#: masters/templates/study_type.html:215
+msgid "Study Type"
+msgstr ""
+
+#: masters/templates/add_program.html:383
+msgid "Overview"
+msgstr ""
+
+#: masters/templates/add_program.html:401
+msgid "Objective"
+msgstr ""
+
+#: masters/templates/add_program.html:412
+msgid "Vision"
+msgstr ""
+
+#: masters/templates/add_program.html:430
+msgid "Mission"
+msgstr ""
+
+#: masters/templates/add_university.html:138
+msgid "Add University"
+msgstr ""
+
+#: masters/templates/add_university.html:173
+msgid "University Logo"
+msgstr ""
+
+#: masters/templates/add_university.html:195
+#: masters/templates/university_settings.html:190
+msgid "University ID"
+msgstr ""
+
+#: masters/templates/add_university.html:213
+#: masters/templates/add_university_partner.html:171
+#: masters/templates/university_partner_settings.html:190
+#: masters/templates/university_settings.html:191
+#, fuzzy
+#| msgid "First Name"
+msgid "University Name"
+msgstr "Nama depan"
+
+#: masters/templates/add_university_partner.html:137
+#: masters/templates/add_university_partner.html:153
+msgid "Add University Partner"
+msgstr ""
+
 #: masters/templates/calendar_settings.html:265
 msgid "Are you sure, you want to delete Calender?"
 msgstr ""
 
 #: masters/templates/calendar_settings.html:266
 msgid "After delete you will not be able to modify the Calender."
+msgstr ""
+
+#: masters/templates/campus_settings.html:172
+msgid "Manage Branch / Campus"
+msgstr ""
+
+#: masters/templates/campus_settings.html:260
+msgid "Are you sure, you want to delete Campus?"
+msgstr ""
+
+#: masters/templates/campus_settings.html:261
+msgid "After delete you will not be able to modify the Campus."
+msgstr ""
+
+#: masters/templates/department_settings.html:260
+msgid "Are you sure, you want to delete Department?"
+msgstr ""
+
+#: masters/templates/department_settings.html:261
+msgid "After delete you will not be able to modify the Department."
 msgstr ""
 
 #: masters/templates/document_settings.html:166
@@ -914,9 +1142,22 @@ msgstr ""
 msgid "Edit Calendar"
 msgstr ""
 
+#: masters/templates/edit_campus.html:167
+msgid "Edit Branch/Campus"
+msgstr ""
+
+#: masters/templates/edit_campus.html:183
+msgid "Edit Branch / Campus"
+msgstr ""
+
 #: masters/templates/edit_currency.html:138
 #: masters/templates/edit_currency.html:154
 msgid "Edit Currency"
+msgstr ""
+
+#: masters/templates/edit_department.html:169
+#: masters/templates/edit_department.html:185
+msgid "Edit Department"
 msgstr ""
 
 #: masters/templates/edit_faculty.html:171
@@ -930,6 +1171,20 @@ msgstr ""
 
 #: masters/templates/edit_learning_centers.html:137
 msgid "Edit Learning Centers"
+msgstr ""
+
+#: masters/templates/edit_program.html:179
+#: masters/templates/edit_program.html:195
+msgid "Edit Program"
+msgstr ""
+
+#: masters/templates/edit_university.html:137
+msgid "Edit University"
+msgstr ""
+
+#: masters/templates/edit_university_partner.html:137
+#: masters/templates/edit_university_partner.html:153
+msgid "Edit University Partner"
 msgstr ""
 
 #: masters/templates/faculty_settings.html:262
@@ -967,27 +1222,70 @@ msgstr ""
 msgid "After delete you will not be able to modify the Learning Centers."
 msgstr ""
 
+#: masters/templates/link_campus_to_program.html:176
+msgid "Link Campus to User"
+msgstr ""
+
+#: masters/templates/link_campus_to_program.html:193
+msgid "Campus to User"
+msgstr ""
+
+#: masters/templates/link_campus_to_program.html:228
+msgid "Please select Campus"
+msgstr ""
+
+#: masters/templates/link_campus_to_program.html:237
+#: masters/templates/link_department_to_staff.html:240
+#: masters/templates/link_faculty_to_user.html:240
+#: masters/templates/link_university_staff.html:278
+msgid "User"
+msgstr ""
+
+#: masters/templates/link_campus_to_program.html:252
+#: masters/templates/link_department_to_staff.html:255
+#: masters/templates/link_faculty_to_user.html:255
+msgid "Please select User"
+msgstr ""
+
+#: masters/templates/link_campus_to_program.html:336
+msgid "Are you sure, you want to delete campus to user linking?"
+msgstr ""
+
+#: masters/templates/link_campus_to_program.html:337
+msgid ""
+"After delete you will not be able to modify the delete campus to user "
+"linking."
+msgstr ""
+
+#: masters/templates/link_department_to_staff.html:196
+msgid "Department to User"
+msgstr ""
+
+#: masters/templates/link_department_to_staff.html:216
+#: masters/templates/link_department_to_staff.html:286
+msgid "Department"
+msgstr ""
+
+#: masters/templates/link_department_to_staff.html:230
+msgid "Please select Department"
+msgstr ""
+
+#: masters/templates/link_department_to_staff.html:339
+msgid "Are you sure, you want to delete department to user linking?"
+msgstr ""
+
+#: masters/templates/link_department_to_staff.html:340
+msgid ""
+"After delete you will not be able to modify the delete department to user "
+"linking."
+msgstr ""
+
 #: masters/templates/link_faculty_to_user.html:196
 msgid "Faculty to User"
 msgstr ""
 
-#: masters/templates/link_faculty_to_user.html:216
-#: masters/templates/link_faculty_to_user.html:286
-#: student/templates/intake_details.html:462
-#: student/templates/my_application.html:325
-msgid "Faculty"
-msgstr ""
-
 #: masters/templates/link_faculty_to_user.html:230
 msgid "Please select Faculty"
-msgstr ""
-
-#: masters/templates/link_faculty_to_user.html:240
-msgid "User"
-msgstr ""
-
-#: masters/templates/link_faculty_to_user.html:255
-msgid "Please select User"
 msgstr ""
 
 #: masters/templates/link_faculty_to_user.html:339
@@ -997,6 +1295,20 @@ msgstr ""
 #: masters/templates/link_faculty_to_user.html:340
 msgid ""
 "After delete you will not be able to modify the delete faculty to user "
+"linking."
+msgstr ""
+
+#: masters/templates/link_university_staff.html:200
+msgid "University to User"
+msgstr ""
+
+#: masters/templates/link_university_staff.html:385
+msgid "Are you sure, you want to delete university to user linking?"
+msgstr ""
+
+#: masters/templates/link_university_staff.html:386
+msgid ""
+"After delete you will not be able to modify the delete university to user "
 "linking."
 msgstr ""
 
@@ -1028,6 +1340,18 @@ msgstr ""
 msgid "Currency"
 msgstr ""
 
+#: masters/templates/program_settings.html:194
+msgid "Branch / Campus"
+msgstr ""
+
+#: masters/templates/program_settings.html:271
+msgid "Are you sure, you want to delete Program?"
+msgstr ""
+
+#: masters/templates/program_settings.html:272
+msgid "After delete you will not be able to modify the Program."
+msgstr ""
+
 #: masters/templates/semester_settings.html:189
 #: masters/templates/semester_settings.html:237
 #, fuzzy
@@ -1046,19 +1370,6 @@ msgstr ""
 #: masters/templates/student_mode.html:192
 #: masters/templates/student_mode.html:228
 msgid "Student Mode"
-msgstr ""
-
-#: masters/templates/study_level.html:184
-#: masters/templates/study_level.html:215
-msgid "Study Level"
-msgstr ""
-
-#: masters/templates/study_mode.html:184 masters/templates/study_mode.html:215
-msgid "Study Mode"
-msgstr ""
-
-#: masters/templates/study_type.html:184 masters/templates/study_type.html:215
-msgid "Study Type"
 msgstr ""
 
 #: masters/templates/template_country_master.html:186
@@ -1111,6 +1422,22 @@ msgstr ""
 
 #: masters/templates/template_language_settings.html:249
 msgid "After delete you will not be able to modify the language."
+msgstr ""
+
+#: masters/templates/university_partner_settings.html:252
+msgid "Are you sure, you want to delete University Partner?"
+msgstr ""
+
+#: masters/templates/university_partner_settings.html:253
+msgid "After delete you will not be able to modify the University Partner."
+msgstr ""
+
+#: masters/templates/university_settings.html:254
+msgid "Are you sure, you want to delete university?"
+msgstr ""
+
+#: masters/templates/university_settings.html:255
+msgid "After delete you will not be able to modify the university."
 msgstr ""
 
 #: masters/templates/year_settings.html:184
@@ -1723,10 +2050,6 @@ msgstr ""
 
 #: student/templates/my_application.html:240
 msgid "INTAKE INFO"
-msgstr ""
-
-#: student/templates/my_application.html:332
-msgid "Campus"
 msgstr ""
 
 #: student/templates/my_application.html:459

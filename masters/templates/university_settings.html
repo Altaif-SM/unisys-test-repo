@@ -1,4 +1,5 @@
 {% extends "template_base_page.html" %}
+{% load  i18n %}
 {% load staticfiles %}
 
 {% block styleBlock %}
@@ -147,12 +148,12 @@
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <span> University Settings</span>
+                <span> {% trans 'University Settings' %}</span>
                 <i class="fa fa-angle-right"></i>
             </li>
 
             <li>
-                <span> Manage Universities </span>
+                <span> {% trans 'Manage Universities' %} </span>
             </li>
         </ul>
     </div>
@@ -168,7 +169,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> Manage Universities</span>
+                <span class="caption-subject font-red sbold uppercase"> {% trans 'Manage Universities' %}</span>
             </div>
             <a href="{% url 'masters:add_university' %}">
                 <button type="submit" class="btn green" id="save" style="margin-left:78%;background-color: #3598dc">Add
@@ -186,14 +187,14 @@
                     <thead>
                     <tr>
                         <th style="display: none">Id</th>
-                        <th>University ID</th>
-                        <th> University Name</th>
-                        <th> Email</th>
-                        <th> Telephone</th>
-                        <th> Website</th>
-                        <th> Address</th>
-                        <th> Status</th>
-                        <th width="10%">Action</th>
+                        <th>{% trans 'University ID' %}</th>
+                        <th> {% trans 'University Name' %}</th>
+                        <th> {% trans 'Email' %}</th>
+                        <th> {% trans 'Telephone' %}</th>
+                        <th> {% trans 'Website' %}</th>
+                        <th> {% trans 'Address' %}</th>
+                        <th> {% trans 'Status' %}</th>
+                        <th width="10%">{% trans 'Action' %}</th>
                     </tr>
                     </thead>
 
@@ -250,8 +251,8 @@
                         <h4 class="modal-title" style="color: #2a015e; text-align: center"><b  >Delete Confirmation</b></h4>
                     </div>
                     <div class="modal-body">
-                        <p> Are you sure, you want to delete university? </p>
-                        <p> After delete you will not be able to modify the university. </p>
+                        <p> {% trans 'Are you sure, you want to delete university?' %} </p>
+                        <p> {% trans 'After delete you will not be able to modify the university.' %} </p>
 
                     </div>
                     <div class="modal-footer">

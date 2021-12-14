@@ -1,4 +1,5 @@
 {% extends "template_base_page.html" %}
+{% load  i18n %}
 {% load staticfiles %}
 
 {% block styleBlock %}
@@ -179,7 +180,7 @@
             </li>
 
             <li>
-                <span> Link University to User </span>
+                <span> {% trans 'Link University to User' %} </span>
             </li>
         </ul>
     </div>
@@ -196,7 +197,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> University to User</span>
+                <span class="caption-subject font-red sbold uppercase"> {% trans 'University to User' %}</span>
             </div>
         </div>
 
@@ -212,13 +213,13 @@
                     <div class="form-body">
 
                         <div class="row" style="margin-left:8%">
-                            <span style="padding:inherit">University Type :  </span>&nbsp;
+                            <span style="padding:inherit">{% trans 'University Type' %} :  </span>&nbsp;
                             <input class="current" type="radio" checked name="university_type" id="sponsored_by_yes"
                                    value="Main">
-                            <span style="padding:inherit">Main</span>&nbsp;&nbsp;
+                            <span style="padding:inherit">{% trans 'Main' %}</span>&nbsp;&nbsp;
                             <input class="current" type="radio" name="university_type" value="Partner"
                                    id="sponsored_by_no">
-                            <span style="padding:inherit">Partner</span>
+                            <span style="padding:inherit">{% trans 'Partner' %}</span>
                         </div>
                         <br>
 
@@ -227,7 +228,7 @@
 
 
                             <div class="university_main" >
-                                <label class="col-md-2 control-label">University:</label>
+                                <label class="col-md-2 control-label">{% trans 'University' %}:</label>
                                 <div class="col-md-3">
 
                                     <select id='university' title="Select University" name="university"
@@ -250,7 +251,7 @@
 
                             </div>
                         <div class="university_partner" style="display: none" >
-                                <label class="col-md-2 control-label">University:</label>
+                                <label class="col-md-2 control-label">{% trans 'University' %}:</label>
                                 <div class="col-md-3">
 
                                     <select id='university_partner_id' title="Select University" name="university_partner_id"
@@ -274,7 +275,7 @@
                             </div>
 
                             <div class="">
-                                <label class="col-md-2 control-label">User:</label>
+                                <label class="col-md-2 control-label">{% trans 'User' %}:</label>
                                 <div class="col-md-3">
                                     <select id='staff' title="Select Staff" name="staff"
                                             class="form-control value_check" data-live-search="true">
@@ -317,14 +318,14 @@
                         <tr>
                             <th style="display: none">Id</th>
 
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th> Email</th>
-                            <th>University Type</th>
-                            <th>University</th>
-                            <th> Position</th>
-                            <th> Country</th>
-                            <th> Address</th>
+                            <th>{% trans 'First Name' %}</th>
+                            <th>{% trans 'Last Name' %}</th>
+                            <th> {% trans 'Email' %}</th>
+                            <th>{% trans 'University Type' %}</th>
+                            <th>{% trans 'University' %}</th>
+                            <th> {% trans 'Position' %}</th>
+                            <th> {% trans 'Country' %}</th>
+                            <th> {% trans 'Address' %}</th>
                             <th width="10%">Action</th>
                         </tr>
                         </thead>
@@ -381,8 +382,8 @@
                         </h4>
                     </div>
                     <div class="modal-body">
-                        <p> Are you sure, you want to delete university to user linking? </p>
-                        <p> After delete you will not be able to modify the delete university to user linking. </p>
+                        <p> {% trans 'Are you sure, you want to delete university to user linking?' %} </p>
+                        <p> {% trans 'After delete you will not be able to modify the delete university to user linking.' %} </p>
 
                     </div>
                     <div class="modal-footer">

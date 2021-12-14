@@ -1,4 +1,5 @@
 {% extends "template_base_page.html" %}
+{% load  i18n %}
 {% load staticfiles %}
 
 {% block styleBlock %}
@@ -166,7 +167,7 @@
             </li>
 
             <li>
-                <span> Add Branch / Campus </span>
+                <span> {% trans 'Add Branch / Campus' %} </span>
             </li>
         </ul>
     </div>
@@ -182,7 +183,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase">Add Branch / Campus </span>
+                <span class="caption-subject font-red sbold uppercase">{% trans 'Add Branch / Campus' %} </span>
             </div>
         </div>
 
@@ -199,22 +200,22 @@
                         <div class="row item_experience" id="item_experience_1">
                             <div class="row">
                             <div class="">
-                                    <label class="col-md-2 control-label">University Type: <span
+                                    <label class="col-md-2 control-label">{% trans 'University Type' %}: <span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <input class="current" type="radio" checked name="university_type"
                                                id="university_main"
                                                value="Main">
-                                        <span style="padding:inherit">Main</span>&nbsp;&nbsp;
+                                        <span style="padding:inherit">{% trans 'Main' %}</span>&nbsp;&nbsp;
                                         <input class="current" type="radio" name="university_type" value="Partner"
                                                id="university_partner">
-                                        <span style="padding:inherit">Partner</span>
+                                        <span style="padding:inherit">{% trans 'Partner' %}</span>
                                     </div>
                                 </div>
 
 
                                 <div class="">
-                                    <label class="col-md-2 control-label">University:<span
+                                    <label class="col-md-2 control-label">{% trans 'University' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <select id='university' title="Select University"
@@ -236,7 +237,7 @@
 
                             <div class="row">
                                 <div class="">
-                                    <label class="col-md-2 control-label">Campus:<span
+                                    <label class="col-md-2 control-label">{% trans 'Campus' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <input type="text" title="Enter Campus Name" id="campus_name"
@@ -247,7 +248,7 @@
                                     </div>
                                 </div>
                                 <div class="">
-                                    <label class="col-md-2 control-label">Country:<span
+                                    <label class="col-md-2 control-label">{% trans 'Country' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <select id='country' title="Select Country"
@@ -273,7 +274,7 @@
 
                             <div class="row">
                                 <div class="">
-                                    <label class="col-md-2 control-label">Email:<span
+                                    <label class="col-md-2 control-label">{% trans 'Email' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <input type="text" title="Enter Email" id="email"
@@ -285,7 +286,7 @@
                                 </div>
 
                                 <div class="">
-                                    <label class="col-md-2 control-label">Telephone:<span
+                                    <label class="col-md-2 control-label">{% trans 'Telephone' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <input type="text" title="Enter Telephone" id="telephone"
@@ -305,7 +306,7 @@
 
                             <div class="row">
                                 <div class="">
-                                    <label class="col-md-2 control-label">Website:<span
+                                    <label class="col-md-2 control-label">{% trans 'Website' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <input type="text" title="Enter Website" id="website"
@@ -317,7 +318,7 @@
                                 </div>
 
                                 <div class="">
-                                    <label class="col-md-2 control-label">Address:<span
+                                    <label class="col-md-2 control-label">{% trans 'Address' %}:<span
                                             style="color: red">*</span>
 
                                     </label>
@@ -338,7 +339,7 @@
                         <br>
                         <div class="row">
                             <div class="">
-                                    <label class="col-md-2 control-label">Status:<span
+                                    <label class="col-md-2 control-label">{% trans 'Status' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                             <input type="checkbox" id="status" name="status" checked>

@@ -1,4 +1,5 @@
 {% extends "template_base_page.html" %}
+{% load  i18n %}
 {% load staticfiles %}
 
 {% block styleBlock %}
@@ -152,7 +153,7 @@
             </li>
 
             <li>
-                <span> Manage Program </span>
+                <span> {% trans 'Manage Program' %} </span>
             </li>
         </ul>
     </div>
@@ -168,7 +169,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> Manage Program</span>
+                <span class="caption-subject font-red sbold uppercase"> {% trans 'Manage Program' %}</span>
             </div>
             <a href="{% url 'masters:add_program' %}">
                 <button type="submit" class="btn green" id="save" style="margin-left:80%;background-color: #3598dc">Add
@@ -187,15 +188,15 @@
                     <tr>
                         <th style="display: none">Id</th>
                         {#                        <th>Program ID</th>#}
-                        <th> Program Name</th>
-                        <th> University Type</th>
-                        <th> University</th>
-                        <th> Branch / Campus</th>
-                        <th> Faculty</th>
-                        <th> Study Mode</th>
+                        <th> {% trans 'Program Name' %}</th>
+                        <th> {% trans 'University Type' %}</th>
+                        <th> {% trans 'University' %}</th>
+                        <th> {% trans 'Branch / Campus' %}</th>
+                        <th> {% trans 'Faculty' %}</th>
+                        <th> {% trans 'Study Mode' %}</th>
                         {#                        <th> Study Level</th>#}
                         {#                        <th> Study Type</th>#}
-                        <th> Status</th>
+                        <th> {% trans 'Status' %}</th>
                         <th width="10%">Action</th>
                     </tr>
                     </thead>
@@ -267,8 +268,8 @@
                         </h4>
                     </div>
                     <div class="modal-body">
-                        <p> Are you sure, you want to delete Program? </p>
-                        <p> After delete you will not be able to modify the Program. </p>
+                        <p> {% trans 'Are you sure, you want to delete Program?' %} </p>
+                        <p> {% trans 'After delete you will not be able to modify the Program.' %} </p>
 
                     </div>
                     <div class="modal-footer">

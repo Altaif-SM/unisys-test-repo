@@ -1,4 +1,5 @@
 {% extends "template_base_page.html" %}
+{% load  i18n %}
 {% load staticfiles %}
 
 {% block styleBlock %}
@@ -166,7 +167,7 @@
             </li>
 
             <li>
-                <span> Add Program </span>
+                <span> {% trans 'Add Program' %} </span>
             </li>
         </ul>
     </div>
@@ -182,7 +183,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase">Add Program </span>
+                <span class="caption-subject font-red sbold uppercase">{% trans 'Add Program' %} </span>
             </div>
         </div>
 
@@ -200,22 +201,22 @@
 
                             <div class="row">
                             <div class="">
-                                    <label class="col-md-2 control-label">University Type: <span
+                                    <label class="col-md-2 control-label">{% trans 'University Type' %}: <span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <input class="current" type="radio" checked name="university_type"
                                                id="university_main"
                                                value="Main">
-                                        <span style="padding:inherit">Main</span>&nbsp;&nbsp;
+                                        <span style="padding:inherit">{% trans 'Main' %}</span>&nbsp;&nbsp;
                                         <input class="current" type="radio" name="university_type" value="Partner"
                                                id="university_partner">
-                                        <span style="padding:inherit">Partner</span>
+                                        <span style="padding:inherit">{% trans 'Partner' %}</span>
                                     </div>
                                 </div>
 
 
                                 <div class="">
-                                    <label class="col-md-2 control-label">University:<span
+                                    <label class="col-md-2 control-label">{% trans 'University' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <select id='university' title="Select University"
@@ -270,7 +271,7 @@
                             {#                            <br>#}
                             <div class="row">
                              <div class="">
-                                    <label class="col-md-2 control-label">Program Name:<span
+                                    <label class="col-md-2 control-label">{% trans 'Program Name' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <input type="text" title="Enter Program Name" id="program_name"
@@ -282,7 +283,7 @@
                                 </div>
 
                                 <div class="">
-                                    <label class="col-md-2 control-label">Faculty:<span
+                                    <label class="col-md-2 control-label">{% trans 'Faculty' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <select id='faculty' title="Select Faculty"
@@ -324,7 +325,7 @@
 
                             <div class="row">
                             <div class="">
-                                    <label class="col-md-2 control-label">Study Mode: <span
+                                    <label class="col-md-2 control-label">{% trans 'Study Mode' %}: <span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
 
@@ -341,7 +342,7 @@
                                 </div>
 
                                 <div class="">
-                                    <label class="col-md-2 control-label">Study Level:<span
+                                    <label class="col-md-2 control-label">{% trans 'Study Level' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <select id='study_level' title="Select Study Level"
@@ -363,7 +364,7 @@
                             <br>
                             <div class="row">
                                 <div class="">
-                                    <label class="col-md-2 control-label">Study Type:<span
+                                    <label class="col-md-2 control-label">{% trans 'Study Type' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <select id='study_type' title="Select Study Type"
@@ -379,7 +380,7 @@
                                 </div>
 
                                 <div class="">
-                                    <label class="col-md-2 control-label">Overview:
+                                    <label class="col-md-2 control-label">{% trans 'Overview' %}:
 
                                     </label>
                                     <div class="col-md-3">
@@ -397,7 +398,7 @@
                             <br>
                             <div class="row">
                                 <div class="">
-                                    <label class="col-md-2 control-label">Objective:
+                                    <label class="col-md-2 control-label">{% trans 'Objective' %}:
 
                                     </label>
                                     <div class="col-md-3">
@@ -408,7 +409,7 @@
                                 </div>
 
                                 <div class="">
-                                    <label class="col-md-2 control-label">Vision:
+                                    <label class="col-md-2 control-label">{% trans 'Vision' %}:
 
                                     </label>
                                     <div class="col-md-3">
@@ -426,7 +427,7 @@
                             <br>
                         <div class="row">
                             <div class="">
-                                    <label class="col-md-2 control-label">Mission:
+                                    <label class="col-md-2 control-label">{% trans 'Mission' %}:
 
                                     </label>
                                     <div class="col-md-3">
@@ -437,7 +438,7 @@
                                 </div>
 
                             <div class="">
-                                    <label class="col-md-2 control-label">Status:<span
+                                    <label class="col-md-2 control-label">{% trans 'Status' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <input type="checkbox" id="status" name="status" checked>
@@ -452,7 +453,7 @@
 
 
                                 <div class="">
-                                    <label class="col-md-2 control-label">Branch/Campus:<span
+                                    <label class="col-md-2 control-label">{% trans 'Branch/Campus' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-8">
                                         <select multiple id='campus' title="Select Campus"
