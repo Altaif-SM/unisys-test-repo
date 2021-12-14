@@ -1,4 +1,5 @@
 {% extends "template_base_page.html" %}
+{% load  i18n %}
 {% load staticfiles %}
 
 {% block styleBlock %}
@@ -151,12 +152,12 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{% url 'student:student_home' %}">Home</a>
+                <a href="{% url 'student:student_home' %}">{% trans 'Home' %}</a>
                 <i class="fa fa-angle-right"></i>
             </li>
 
             <li>
-                <span> Qualification Info </span>
+                <span>{% trans 'Qualification Info' %}</span>
             </li>
         </ul>
     </div>
@@ -340,9 +341,9 @@
                         <div class="portlet-title" style="margin-left:-15px;font-size: 16px;">
                             <div class="caption">
                                 <i class="icon-settings font-red"></i>
-                                <span class="caption-subject font-red sbold uppercase"> Professional Qualifications</span>
+                                <span class="caption-subject font-red sbold uppercase">{% trans 'Professional Qualifications' %}</span>
                                 <br>
-                                <span style="font-family: 'Times New Roman';font-size: 16px;"><b>(Optional for Postgraduate Applications)</b></span>
+                                <span style="font-family: 'Times New Roman';font-size: 16px;"><b>({% trans 'Optional for Postgraduate Applications' %})</b></span>
                             </div>
                         </div>
                         <hr>
@@ -364,7 +365,7 @@
 
                                     <div class="row">
                                         <div class="">
-                                            <label class="col-md-2 control-label">Qualification Name:</label>
+                                            <label class="col-md-2 control-label">{% trans 'Qualification Name' %}:</label>
                                             <div class="col-md-3">
                                                 <input type="text" title="Enter Work Experience"
                                                        id="qualification_name_{{ forloop.counter }}"
@@ -378,7 +379,7 @@
 
 
                                         <div class="">
-                                        <label class="col-md-2 control-label">License/Certificate No:</label>
+                                        <label class="col-md-2 control-label">{% trans 'License/Certificate No' %}:</label>
                                         <div class="col-md-3">
                                             <input type="text" title="Enter License/Certificate No" id="license_{{ forloop.counter }}"
                                                    value="{{ experience_obj.license_certificate_no}}" name="license_{{ forloop.counter }}"
@@ -398,7 +399,7 @@
                                     <div class="row">
 
                                         <div class="">
-                                        <label class="col-md-2 control-label">Professional Body:</label>
+                                        <label class="col-md-2 control-label">{% trans 'Professional Body' %}:</label>
                                         <div class="col-md-3">
                                             <input type="text" title="Enter Professional Body" id="professional_body_{{ forloop.counter }}"
                                                    value="{{ experience_obj.professional_body}}" name="professional_body_{{ forloop.counter }}"
@@ -409,7 +410,7 @@
 
 
                                         <div class="">
-                                            <label class="col-md-2 control-label">Date Awarded:</label>
+                                            <label class="col-md-2 control-label">{% trans 'Date Awarded' %}:</label>
                                             <div class="col-md-3">
                                                 <input type="date" id="awarded_date_{{ forloop.counter }}"
                                                        name="awarded_date_{{ forloop.counter }}" max="2999-12-31"
@@ -423,7 +424,7 @@
 
                                     <div class="row">
                                         <div class="">
-                                            <label class="col-md-2 control-label">Agency Name/No:</label>
+                                            <label class="col-md-2 control-label">{% trans 'Agency Name/No' %}:</label>
                                             <div class="col-md-3">
                                                 <input type="text" title="Enter Agency Name/No"
                                                        id="agency_name_no_{{ forloop.counter }}"
@@ -435,7 +436,7 @@
 
 
                                         <div class="">
-                                        <label class="col-md-2 control-label">Issued in Country:</label>
+                                        <label class="col-md-2 control-label">{% trans 'Issued in Country' %}:</label>
                                         <div class="col-md-3">
                                             <select id='country_{{ forloop.counter }}' title="Select Year" name="country_{{ forloop.counter }}"
                                                     class="form-control chk">
@@ -446,9 +447,7 @@
                                                                 value="{{ experience_obj.country.id }}"
                                                                 >{{ experience_obj.country.country_name }}</option>
                                                 {% else %}
-                                                        <option style="display:none" selected="selected" id="" value="">
-                                                            Please
-                                                            Select
+                                                        <option style="display:none" selected="selected" id="" value="">Please Select
                                                         </option>
                                                 {% endif %}
 
@@ -466,7 +465,7 @@
 
                                  <div class="row">
                                      <div class="">
-                                            <label class="col-md-2 control-label">Expiration Date:</label>
+                                            <label class="col-md-2 control-label">{% trans 'Expiration Date' %}:</label>
                                             <div class="col-md-3">
                                                 <input type="date" id="expiration_date_{{ forloop.counter }}"
                                                        name="expiration_date_{{ forloop.counter }}" max="2999-12-31"
@@ -489,7 +488,7 @@
 
                                 <div class="row">
                                     <div class="">
-                                        <label class="col-md-2 control-label">Qualification Name:</label>
+                                        <label class="col-md-2 control-label">{% trans 'Qualification Name' %}:</label>
                                         <div class="col-md-3">
                                             <input type="text" title="Enter Work Experience" id="qualification_name_1"
                                                    value="" name="qualification_name_1"
@@ -500,7 +499,7 @@
                                     </div>
 
                                     <div class="">
-                                        <label class="col-md-2 control-label">License/Certificate No:</label>
+                                        <label class="col-md-2 control-label">{% trans 'License/Certificate No' %}:</label>
                                         <div class="col-md-3">
                                             <input type="text" title="Enter License/Certificate No" id="license_1"
                                                    value="" name="license_1"
@@ -516,7 +515,7 @@
 
                                  <div class="row">
                                      <div class="">
-                                        <label class="col-md-2 control-label">Professional Body:</label>
+                                        <label class="col-md-2 control-label">{% trans 'Professional Body' %}:</label>
                                         <div class="col-md-3">
                                             <input type="text" title="Enter Professional Body" id="professional_body_1"
                                                    value="" name="professional_body_1"
@@ -526,7 +525,7 @@
                                     </div>
 
                                       <div class="">
-                                        <label class="col-md-2 control-label">Date Awarded:</label>
+                                        <label class="col-md-2 control-label">{% trans 'Date Awarded' %}:</label>
                                         <div class="col-md-3">
                                             <input type="date" id="awarded_date_1" name="awarded_date_1" max="2999-12-31"
                                                    value="" class="form-control">
@@ -539,7 +538,7 @@
 
                                 <div class="row">
                                     <div class="">
-                                        <label class="col-md-2 control-label">Agency Name/No:</label>
+                                        <label class="col-md-2 control-label">{% trans 'Agency Name/No' %}:</label>
                                         <div class="col-md-3">
                                             <input type="text" title="Enter Agency Name/No" id="agency_name_no_1"
                                                    value="" name="agency_name_no_1"
@@ -549,7 +548,7 @@
                                     </div>
 
                                     <div class="">
-                                        <label class="col-md-2 control-label">Issued in Country:</label>
+                                        <label class="col-md-2 control-label">{% trans 'Issued in Country' %}:</label>
                                         <div class="col-md-3">
                                             <select id='country_1' title="Select Country" name="country_1"
                                                     class="form-control chk">
@@ -570,7 +569,7 @@
                             <br>
                             <div class="row">
                                 <div class="">
-                                        <label class="col-md-2 control-label">Expiration Date:
+                                        <label class="col-md-2 control-label">{% trans 'Expiration Date' %}:
 
                                         </label>
                                         <div class="col-md-3" id="EndDate">
@@ -593,12 +592,12 @@
                             <div class="col-md-offset-5 col-md-7">
                                 <button type="button" class="btn blue" id="back" style="margin-left: 70%"
                                         onclick="window.location='{% url "student:applicant_academic_english_qualification" %}'">
-                                    Back
+                                    {% trans 'Back' %}
                                 </button>
 
                                 {% if application_obj %}
 {#                                    {% if not application_obj.is_submitted %}#}
-                                        <button type="button" class="btn green" id="save_form" style="">Save/Next
+                                        <button type="button" class="btn green" id="save_form" style="">{% trans 'Save/Next' %}
                                         </button>
 {#                                    {% endif %}#}
                                 {% endif %}

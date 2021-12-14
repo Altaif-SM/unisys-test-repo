@@ -1,4 +1,5 @@
 {% extends "template_base_page.html" %}
+{% load  i18n %}
 {% load staticfiles %}
 
 {% block styleBlock %}
@@ -204,12 +205,12 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{% url 'student:student_home' %}">Home</a>
+                <a href="{% url 'student:student_home' %}">{% trans 'Home' %}</a>
                 <i class="fa fa-angle-right"></i>
             </li>
 
             <li>
-                <span> Intake Info </span>
+                <span>{% trans 'Intake Info' %}</span>
             </li>
         </ul>
     </div>
@@ -225,7 +226,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> Intake Info</span>
+                <span class="caption-subject font-red sbold uppercase">{% trans 'Intake Info' %}</span>
             </div>
         </div>
 
@@ -242,7 +243,7 @@
                     <div class="form-body">
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">University Type: <span
+                                <label class="col-md-2 control-label">{% trans 'University Type' %}: <span
                                         style="color: red">*</span></label>
                                 {% if application_obj.university %}
                                     <div class="col-md-3">
@@ -250,19 +251,19 @@
                                             <input class="current" type="radio" checked name="university_type"
                                                    id="university_main"
                                                    value="Main">
-                                            <span style="padding:inherit">Main</span>&nbsp;&nbsp;
+                                            <span style="padding:inherit">{% trans 'Main' %}</span>&nbsp;&nbsp;
                                             <input class="current" type="radio" name="university_type" value="Partner"
                                                    id="university_partner">
-                                            <span style="padding:inherit">Partner</span>
+                                            <span style="padding:inherit">{% trans 'Partner' %}</span>
                                         {% else %}
                                             <input class="current" type="radio" name="university_type"
                                                    id="university_main"
                                                    value="Main">
-                                            <span style="padding:inherit">Main</span>&nbsp;&nbsp;
+                                            <span style="padding:inherit">{% trans 'Main' %}</span>&nbsp;&nbsp;
                                             <input class="current" type="radio" checked name="university_type"
                                                    value="Partner"
                                                    id="university_partner">
-                                            <span style="padding:inherit">Partner</span>
+                                            <span style="padding:inherit">{% trans 'Partner' %}</span>
                                         {% endif %}
                                     </div>
                                 {% else %}
@@ -270,15 +271,15 @@
                                         <input class="current" type="radio" checked name="university_type"
                                                id="university_main"
                                                value="Main">
-                                        <span style="padding:inherit">Main</span>&nbsp;&nbsp;
+                                        <span style="padding:inherit">{% trans 'Main' %}</span>&nbsp;&nbsp;
                                         <input class="current" type="radio" name="university_type" value="Partner"
                                                id="university_partner">
-                                        <span style="padding:inherit">Partner</span>
+                                        <span style="padding:inherit">{% trans 'Partner' %}</span>
                                     </div>
                                 {% endif %}
                             </div>
                             <div class="">
-                                <label class="col-md-2 control-label">University: <span
+                                <label class="col-md-2 control-label">{% trans 'University' %}: <span
                                         style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <select id='university' title="Select University" name="university"
@@ -289,9 +290,7 @@
                                                     value="{{ application_obj.university.id }}"
                                             >{{ application_obj.university.university_name|default_if_none:"" }}</option>
                                         {% else %}
-                                            <option disabled selected="selected" value="">Please
-                                                Select
-                                            </option>
+                                            <option disabled selected="selected" value="">{% trans 'Please Select' %}</option>
                                         {% endif %}
 
                                         {% for rec in university_recs %}
@@ -308,7 +307,7 @@
 
 
                             <div class="">
-                                <label class="col-md-2 control-label">Academic Year: <span
+                                <label class="col-md-2 control-label">{% trans 'Academic Year' %}: <span
                                         style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <select id='year' title="Select Year" name="year"
@@ -319,8 +318,7 @@
                                                     value="{{ application_obj.year.id }}"
                                             >{{ application_obj.academic_year.year_name|default_if_none:"" }}</option>
                                         {% else %}
-                                            <option disabled selected="selected" value="">Please
-                                                Select
+                                            <option disabled selected="selected" value="">{% trans 'Please Select' %}
                                             </option>
                                         {% endif %}
 
@@ -332,7 +330,7 @@
                             </div>
 
                             <div class="">
-                                <label class="col-md-2 control-label">Intake/Semester: <span
+                                <label class="col-md-2 control-label">{% trans 'Intake/Semester' %}: <span
                                         style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <select id='semester' title="Select Semester" name="semester"
@@ -343,8 +341,7 @@
                                                     value="{{ application_obj.semester.id }}"
                                             >{{ application_obj.semester.semester_name|default_if_none:"" }}</option>
                                         {% else %}
-                                            <option disabled selected="selected" value="">Please
-                                                Select
+                                            <option disabled selected="selected" value="">{% trans 'Please Select' %}
                                             </option>
                                         {% endif %}
 
@@ -365,8 +362,7 @@
                         <div class="portlet-title">
                             <div class="caption">
                                 <i class="icon-settings font-red"></i>
-                                <span class="caption-subject font-red sbold uppercase"> LEARNING CENTRE
-INFO</span>
+                                <span class="caption-subject font-red sbold uppercase">{% trans 'LEARNING CENTRE INFO' %}</span>
                             </div>
                         </div>
                         <hr>
@@ -384,8 +380,7 @@ INFO</span>
                                                     value="{{ application_obj.learning_country.id }}"
                                                     value="">{{ application_obj.learning_country.country_name|title }}</option>
                                         {% else %}
-                                            <option disabled selected="selected" id="" value="">Please
-                                                Select
+                                            <option disabled selected="selected" id="" value="">{% trans 'Please Select' %}
                                             </option>
                                         {% endif %}
 
@@ -399,7 +394,7 @@ INFO</span>
                             </div>
 
                             <div class="">
-                                <label class="col-md-2 control-label">Learning Centre: <span style="color: red">*</span></label>
+                                <label class="col-md-2 control-label">{% trans 'Learning Centre' %}: <span style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <select id='learning_centre' title="Select Learning Centre" name="learning_centre"
                                             class="form-control value_check" data-live-search="true" required>
@@ -409,8 +404,7 @@ INFO</span>
                                                     value="{{ application_obj.learning_centre.id }}"
                                                     value="">{{ application_obj.learning_centre.lc_name|default_if_none:"" }}</option>
                                         {% else %}
-                                            <option disabled selected="selected" id="" value="">Please
-                                                Select
+                                            <option disabled selected="selected" id="" value="">{% trans 'Please Select' %}
                                             </option>
                                         {% endif %}
 
@@ -431,8 +425,7 @@ INFO</span>
                         <div class="portlet-title">
                             <div class="caption">
                                 <i class="icon-settings font-red"></i>
-                                <span class="caption-subject font-red sbold uppercase"> ACADEMIC PROGRAM
-DETAILS</span>
+                                <span class="caption-subject font-red sbold uppercase">{% trans 'ACADEMIC PROGRAM DETAILS' %}</span>
                             </div>
                         </div>
                         <hr>
@@ -441,7 +434,7 @@ DETAILS</span>
 
 
                             <div class="">
-                                <label class="col-md-2 control-label">Program: <span style="color: red">*</span></label>
+                                <label class="col-md-2 control-label">{% trans 'Program' %}: <span style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <select id='program' title="Select Program" name="program"
                                             class="form-control value_check" data-live-search="true">
@@ -451,8 +444,7 @@ DETAILS</span>
                                                     value="{{ application_obj.program.id }}"
                                                     value="">{{ application_obj.program.program_name|default_if_none:"" }}</option>
                                         {% else %}
-                                            <option selected="selected" id="" value="">Please
-                                                Select
+                                            <option selected="selected" id="" value="">{% trans 'Please Select' %}
                                             </option>
                                         {% endif %}
 
@@ -466,7 +458,7 @@ DETAILS</span>
                             </div>
 
                             <div class="">
-                                <label class="col-md-2 control-label">Faculty: <span style="color: red">*</span></label>
+                                <label class="col-md-2 control-label">{% trans 'Faculty' %}: <span style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <select id='faculty' title="Select Faculty" name="faculty"
                                             class="form-control value_check" data-live-search="true" required>
@@ -476,8 +468,7 @@ DETAILS</span>
                                                     value="{{ application_obj.faculty.id }}"
                                                     value="">{{ application_obj.faculty.faculty_name|default_if_none:"" }}</option>
                                         {% else %}
-                                            <option disabled selected="selected" id="" value="">Please
-                                                Select
+                                            <option disabled selected="selected" id="" value="">{% trans 'Please Select' %}
                                             </option>
                                         {% endif %}
 
@@ -494,7 +485,7 @@ DETAILS</span>
 
 
                             <div class="">
-                                <label class="col-md-2 control-label">Branch/Campus: <span
+                                <label class="col-md-2 control-label">{% trans 'Branch/Campus' %}: <span
                                         style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <select id='campus' title="Select Campus" name="campus"
@@ -505,8 +496,7 @@ DETAILS</span>
                                                     value="{{ application_obj.campus.id }}"
                                                     value="">{{ application_obj.campus.campus_name|default_if_none:"" }}</option>
                                         {% else %}
-                                            <option disabled selected="selected" id="" value="">Please
-                                                Select
+                                            <option disabled selected="selected" id="" value="">{% trans 'Please Select' %}
                                             </option>
                                         {% endif %}
 
@@ -527,11 +517,11 @@ DETAILS</span>
                         <div class="row">
                             <div class="col-md-offset-5 col-md-7">
                                 <button type="button" class="btn blue" id="back" style="margin-left: 70%"
-                                        onclick="window.location='{% url "student:applicant_personal_info" %}'">Back
+                                        onclick="window.location='{% url "student:applicant_personal_info" %}'">{% trans 'Back' %}
                                 </button>
 
                                 {#                            {% if application_obj.application_id %}#}
-                                <button type="submit" class="btn green" id="save">Save/Next</button>
+                                <button type="submit" class="btn green" id="save">{% trans 'Save/Next' %}</button>
                                 {#                            {% endif %}#}
                                 {% comment %}
                                     <button type="button" class="btn blue" id="next"

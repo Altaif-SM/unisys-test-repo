@@ -1,4 +1,5 @@
 {% extends "template_base_page.html" %}
+{% load  i18n %}
 {% load staticfiles %}
 
 {% block styleBlock %}
@@ -60,12 +61,12 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{% url 'student:student_home' %}">Home</a>
+                <a href="{% url 'student:student_home' %}">{% trans 'Home' %}</a>
                 <i class="fa fa-angle-right"></i>
             </li>
 
             <li>
-                <span> Applications Progress History </span>
+                <span>{% trans 'Applications Progress History' %}</span>
             </li>
         </ul>
     </div>
@@ -81,7 +82,7 @@
     <div class="portlet-title">
         <div class="caption">
             <i class="icon-settings font-red"></i>
-            <span class="caption-subject font-red sbold uppercase">Applications Progress History</span>
+            <span class="caption-subject font-red sbold uppercase">{% trans 'Applications Progress History' %}</span>
         </div>
     </div>
 
@@ -101,9 +102,9 @@
                                 <thead>
                                 <tr>
                                     <th style="display: none"></th>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                    <th>Remark</th>
+                                    <th>{% trans 'Date' %}</th>
+                                    <th>{% trans 'Status' %}</th>
+                                    <th>{% trans 'Remark' %}</th>
                                 </tr>
                                 </thead>
 

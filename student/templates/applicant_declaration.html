@@ -1,4 +1,5 @@
 {% extends "template_base_page.html" %}
+{% load  i18n %}
 {% load staticfiles %}
 
 {% block styleBlock %}
@@ -90,12 +91,12 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{% url 'student:student_home' %}">Home</a>
+                <a href="{% url 'student:student_home' %}">{% trans 'Home' %}</a>
                 <i class="fa fa-angle-right"></i>
             </li>
 
             <li>
-                <span>Declaration</span>
+                <span>{% trans 'Declaration' %}</span>
             </li>
         </ul>
     </div>
@@ -127,18 +128,18 @@
                         <div class="portlet-title">
                             <div class="caption">
                                 <i class="icon-settings font-red"></i>
-                                <span class="caption-subject font-red sbold uppercase"> Declaration:</span>
+                                <span class="caption-subject font-red sbold uppercase">{% trans 'Declaration' %}:</span>
                             </div>
                         </div>
                         <hr>
                         <div class="row">
                             <div class="">
                                 <div class="col-md-8" style="margin-left: 10%;font-size:15px">
-
-
+                                    {% blocktrans %}
                                     Please read the following terms & conditions carefully and tick the checkbox to
                                     indicate your
                                     agreement.
+                                    {% endblocktrans %}
 
                                 </div>
                             </div>
@@ -146,13 +147,13 @@
 
                         <div class="">
                                 <div class="col-md-8" style="margin-left: 10%;font-size:15px">
-
-
+                                    {% blocktrans %}
                                     I declare that all the information provided is correct and complete. I hereby give my consent to
 the University to obtain information relating to my admission into #Uni Name from relevant
 authorities. I understand that #Uni Name reserves the right to request any additional
 information before a decision on admission is made. I understand that any misinformation or
 incomplete application could result in the rejection of my application.
+                                    {% endblocktrans %}
                                 </div>
                             </div>
                             <br><br><br><br><br><br>
@@ -168,7 +169,7 @@ incomplete application could result in the rejection of my application.
                                     {% endif %}
 
 
-                                    <b>I have read the Declaration and agree to the terms and conditions.</b>
+                                    <b>{% trans 'I have read the Declaration and agree to the terms and conditions.' %}</b>
 
                                 </div>
                             </div>
@@ -181,13 +182,12 @@ incomplete application could result in the rejection of my application.
                             <div class="col-md-offset-3 col-md-9">
                                 <button type="button" class="btn blue" id="save" style="margin-left: 70%"
                                         onclick="window.location='{% url "student:applicant_attachment_submission" %}'">
-                                    Back
+                                    {% trans 'Back' %}
                                 </button>
 
                                 {% if application_obj %}
                                     {% if not application_obj.is_submitted %}
-                                        <button type="button" class="btn green" id="save_id" style="">Submit
-                                            Application
+                                        <button type="button" class="btn green" id="save_id" style="">{% trans 'Submit Application' %}
                                         </button>
                                     {% endif %}
                                 {% endif %}

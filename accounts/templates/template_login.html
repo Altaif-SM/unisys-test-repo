@@ -97,7 +97,7 @@
     <div class="logo" style="margin: 40px; padding: 0px;color: #262668;">
 
         <img src="{% static 'images/university_logo.png' %}" alt="" widtn="150px" height="60px;"/>
-        <h1 style="font-size:35px;font-weight: bold;">Online Admission</h1>
+        <h1 style="font-size:35px;font-weight: bold;">{% trans 'Online Admission' %}</h1>
     </div>
     <!-- END LOGO -->
     <!-- BEGIN LOGIN -->
@@ -110,7 +110,7 @@
                 <button class="close" data-close="alert"></button>
 
 
-                <span> Enter Valid User Name and Password. </span>
+                <span>{% trans 'Enter Valid User Name and Password.' %} </span>
             </div>
             {% if context1 %}
                 <div class="alert alert-danger" role="alert">{{ context1 }}
@@ -133,17 +133,16 @@
                 <label class="control-label visible-ie8 visible-ie9">Password</label>
                 {{ form.password }}</div>
             <div class="form-actions" id="log">
-                <button type="submit" style="background-color: #262668;color: aliceblue" class="btn uppercase">Login
-                </button>
+                <button type="submit" style="background-color: #262668;color: aliceblue" class="btn uppercase">{% trans 'Login' %}</button>
                 <label class="rememberme check mt-checkbox mt-checkbox-outline">
-                    <input type="checkbox" name="remember" value="1"/>Remember
+                    <input type="checkbox" name="remember" value="1"/>{% trans 'Remember' %}
                     <span></span>
                 </label>
-                <a href="/password_reset/recover/" id="forget-password" class="forget-password">Forgot Password?</a>
+                <a href="/password_reset/recover/" id="forget-password" class="forget-password">{% trans 'Forgot Password?' %}</a>
             </div>
             <div class="create-account" style="background-color: #262668;">
                 <p>
-                    <a href="javascript:;" id="register-btn" class="uppercase">Create an account</a>
+                    <a href="javascript:;" id="register-btn" class="uppercase">{% trans 'Create an account' %}</a>
                 </p>
             </div>
 
@@ -154,14 +153,14 @@
         <!-- BEGIN REGISTRATION FORM -->
         <form class="register-form" action="{% url 'accounts:user_signup' %}" method="post">{% csrf_token %}
             <h3 class="font" style="color: #0a001f;">Sign Up</h3>
-            <p class="hint"> Enter your personal details below: </p>
+            <p class="hint">{% trans 'Enter your personal details below:' %}</p>
             <div class="form-group">
                 <label class="control-label visible-ie8 visible-ie9">First Name</label>
-                <input class="form-control placeholder-no-fix" type="text" placeholder="First Name" name="first_name"
+                <input class="form-control placeholder-no-fix" type="text" placeholder="{% trans 'First Name' %}" name="first_name"
                        required/></div>
             <div class="form-group">
                 <label class="control-label visible-ie8 visible-ie9">Last Name</label>
-                <input class="form-control placeholder-no-fix" type="text" placeholder="Last Name" name="last_name"
+                <input class="form-control placeholder-no-fix" type="text" placeholder="{% trans 'Last Name' %}" name="last_name"
                        required/></div>
             {#                <div class="form-group">#}
             {#                    <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->#}
@@ -184,15 +183,15 @@
                 <input type="hidden" name="role" value="Student" class="form-control"/>
                 <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
                 <label class="control-label visible-ie8 visible-ie9">Email</label>
-                <input class="form-control placeholder-no-fix" type="text" placeholder="Email" name="email"/></div>
+                <input class="form-control placeholder-no-fix" type="text" placeholder="{% trans 'Email' %}" name="email"/></div>
             <div class="form-group">
                 <label class="control-label visible-ie8 visible-ie9">Password</label>
                 <input class="form-control placeholder-no-fix" type="password" autocomplete="off" id="register_password"
-                       placeholder="Password" name="password"/></div>
+                       placeholder="{% trans 'Password' %}" name="password"/></div>
             <div class="form-group">
                 <label class="control-label visible-ie8 visible-ie9">Re-type Your Password</label>
                 <input class="form-control placeholder-no-fix" type="password" autocomplete="off"
-                       placeholder="Re-type Your Password" name="confirm_password"/></div>
+                       placeholder="{% trans 'Re-type Your Password' %}" name="confirm_password"/></div>
             {#                <div class="form-group margin-top-20 margin-bottom-20">#}
             {#                    <label class="mt-checkbox mt-checkbox-outline">#}
             {#                        <input type="checkbox" name="remember" value="1" />#}
@@ -204,9 +203,9 @@
             {#                    <div id="register_tnc_error"> </div>#}
             {#                </div>#}
             <div class="form-actions">
-                <button type="button" id="register-back-btn" class="btn btn-outline">Back</button>
+                <button type="button" id="register-back-btn" class="btn btn-outline">{% trans 'Back' %}</button>
                 <button type="submit" id="register-submit-btn" style="background-color: #262668; color: aliceblue;"
-                        class="btn uppercase pull-right">Submit
+                        class="btn uppercase pull-right">{% trans 'Submit' %}
                 </button>
             </div>
         </form>

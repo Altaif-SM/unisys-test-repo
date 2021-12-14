@@ -1,4 +1,5 @@
 {% extends "template_base_page.html" %}
+{% load  i18n %}
 {% load staticfiles %}
 
 {% block styleBlock %}
@@ -130,12 +131,12 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{% url 'student:student_home' %}">Home</a>
+                <a href="{% url 'student:student_home' %}">{% trans 'Home' %}</a>
                 <i class="fa fa-angle-right"></i>
             </li>
 
             <li>
-                <span> Attachment </span>
+                <span>{% trans 'Attachment' %}</span>
             </li>
         </ul>
     </div>
@@ -151,7 +152,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase">Attachment Submission</span>
+                <span class="caption-subject font-red sbold uppercase">{% trans 'Attachment Submission' %}</span>
             </div>
         </div>
 
@@ -166,9 +167,9 @@
                     <div class="form-body">
                         <div class="row">
                             <div class="">
-                                <label class="col-md-4 control-label">Personal Photo:<br><span style="color:red;font-size: 12px">(photo must be jpg and White background)</span>
-                                    <br><span style="color:red;font-size: 12px">(Maximum file height and width must be 280px*217px)</span>
-                                    <br><span style="color:red;font-size: 12px">(Maximum file size must be 66 KB)</span>
+                                <label class="col-md-4 control-label">{% trans 'Personal Photo' %}:<br><span style="color:red;font-size: 12px">({% trans 'photo must be jpg and White background' %})</span>
+                                    <br><span style="color:red;font-size: 12px">({% trans 'Maximum file height and width must be 280px*217px' %})</span>
+                                    <br><span style="color:red;font-size: 12px">({% trans 'Maximum file size must be 66 KB' %})</span>
                                 </label>
                                 <div class="col-md-3" id="parent1" style="margin-top:20px;">
                                     {% if attachment_obj.image %}
@@ -207,8 +208,8 @@
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-4 control-label">Passport ID:<br><span
-                                        style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
+                                <label class="col-md-4 control-label">{% trans 'Passport ID' %}:<br><span
+                                        style="color:red;font-size: 12px">({% trans 'Only formats are allowed pdf' %})</span></label>
 
 
                                 <div class="col-md-3" id="item1">
@@ -250,8 +251,8 @@
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-4 control-label">Academic Certificate:<br><span
-                                        style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
+                                <label class="col-md-4 control-label">{% trans 'Academic Certificate' %}:<br><span
+                                        style="color:red;font-size: 12px">({% trans 'Only formats are allowed pdf' %})</span></label>
                                 <div class="col-md-3" id="parent2">
                                     {% if attachment_obj.level_result_document %}
                                         <label class="form-control"
@@ -287,8 +288,8 @@
                         <br>
                         <div class="row">
                             <div class="">
-                                <label class="col-md-4 control-label">Transcript:<br><span
-                                        style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
+                                <label class="col-md-4 control-label">{% trans 'Transcript' %}:<br><span
+                                        style="color:red;font-size: 12px">({% trans 'Only formats are allowed pdf' %})</span></label>
                                 <div class="col-md-3" id="parent3">
                                     {% if attachment_obj.transcript_document %}
                                         <label class="form-control"
@@ -325,8 +326,8 @@
                         <br>
                         <div class="row">
                             <div class="">
-                                <label class="col-md-4 control-label">English Language Proficiency Certificate:<br><span
-                                        style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
+                                <label class="col-md-4 control-label">{% trans 'English Language Proficiency Certificate' %}:<br><span
+                                        style="color:red;font-size: 12px">({% trans 'Only formats are allowed pdf' %})</span></label>
                                 <div class="col-md-3" id="parent4">
                                     {% if attachment_obj.english_test_result_document %}
                                         <label class="form-control"
@@ -363,9 +364,8 @@
                         <br>
                         <div class="row">
                             <div class="">
-                                <label class="col-md-4 control-label">Recommendation
-                                    Letter:<br><span
-                                            style="color:red;font-size: 12px">(Only formats are allowed pdf)</span></label>
+                                <label class="col-md-4 control-label">{% trans 'Recommendation Letter' %}:<br><span
+                                            style="color:red;font-size: 12px">({% trans 'Only formats are allowed pdf' %})</span></label>
                                 <div class="col-md-3" id="parent5">
                                     {% if attachment_obj.recommendation_letter %}
                                         <label class="form-control"
@@ -418,12 +418,12 @@
                             <div class="col-md-offset-5 col-md-7">
                                 <button type="button" class="btn blue" id="save" style="margin-left: 70%"
                                         onclick="window.location='{% url "student:applicant_additional_information" %}'">
-                                    Back
+                                    {% trans 'Back' %}
                                 </button>
 
                                 {% if user.get_application %}
 {#                                    {% if not user.get_application.is_submitted %}#}
-                                        <button type="submit" class="btn green" id="save" style="">Save/Next
+                                        <button type="submit" class="btn green" id="save" style="">{% trans 'Save/Next' %}
 
                                         </button>
 {#                                    {% endif %}#}

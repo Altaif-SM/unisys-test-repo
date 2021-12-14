@@ -1,4 +1,5 @@
 {% extends "template_base_page.html" %}
+{% load  i18n %}
 {% load staticfiles %}
 
 {% block styleBlock %}
@@ -140,12 +141,12 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{% url 'student:student_home' %}">Home</a>
+                <a href="{% url 'student:student_home' %}">{% trans 'Home' %}</a>
                 <i class="fa fa-angle-right"></i>
             </li>
 
             <li>
-                <span> Additional Information </span>
+                <span>{% trans 'Additional Information' %}</span>
             </li>
         </ul>
     </div>
@@ -162,7 +163,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> NEXT OF KEN DETAILS</span>
+                <span class="caption-subject font-red sbold uppercase">{% trans 'NEXT OF KEN DETAILS' %}</span>
             </div>
         </div>
 
@@ -179,7 +180,7 @@
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">Name:</label>
+                                <label class="col-md-2 control-label">{% trans 'Name' %}:</label>
                                 <div class="col-md-3">
                                     <input type="text" title="Enter Name" id="ken_name" name="ken_name"
                                            value="{{ application_obj.ken_name|default:"" }}" class="form-control">
@@ -187,7 +188,7 @@
                             </div>
 
                             <div class="">
-                                <label class="col-md-2 control-label">ID:</label>
+                                <label class="col-md-2 control-label">{% trans 'ID' %}:</label>
                                 <div class="col-md-3">
                                     <input type="text" title="Enter ID" id="ken_id" name="ken_id"
                                            value="{{ application_obj.ken_id|default:"" }}" class="form-control">
@@ -202,7 +203,7 @@
                         <div class="row">
 
                             <div class="">
-                                <label class="col-md-2 control-label">Relationship:</label>
+                                <label class="col-md-2 control-label">{% trans 'Relationship' %}:</label>
                                 <div class="col-md-3">
                                     <select id='ken_relationship' title="Select Country" name="ken_relationship"
                                             class="form-control">
@@ -211,8 +212,7 @@
                                                     value="{{ application_obj.ken_relationship }}"
                                                     value="">{{ application_obj.ken_relationship|title }}</option>
                                         {% else %}
-                                            <option style="display:none" selected="selected" id="" value="">Please
-                                                Select
+                                            <option style="display:none" selected="selected" id="" value="">{% trans 'Please Select' %}
                                             </option>
                                         {% endif %}
 
@@ -225,7 +225,7 @@
 
 
                             <div class="">
-                                <label class="col-md-2 control-label">Tel No:</label>
+                                <label class="col-md-2 control-label">{% trans 'Tel No' %}:</label>
                                 <div class="col-md-3">
                                     <input type="text" title="Enter Tel No" id="ken_tel_no"
                                            value="{{ application_obj.ken_tel_no|default:"" }}"
@@ -239,7 +239,7 @@
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">Email:</label>
+                                <label class="col-md-2 control-label">{% trans 'Email' %}:</label>
                                 <div class="col-md-3">
                                     <input type="text" title="Enter Email" id="ken_email"
                                            value="{{ application_obj.ken_email|default:"" }}"
@@ -256,9 +256,9 @@
                         <div class="portlet-title">
                             <div class="caption">
                                 <i class="icon-settings font-red"></i>
-                                <span class="caption-subject font-red sbold uppercase"> OTHER INFORMATION</span>
+                                <span class="caption-subject font-red sbold uppercase">{% trans 'OTHER INFORMATION' %}</span>
                                 <br>
-                                <span style="font-family: 'Times New Roman';font-size: 16px;"><b>(How did you know about us)</b></span>
+                                <span style="font-family: 'Times New Roman';font-size: 16px;"><b>({% trans 'How did you know about us' %})</b></span>
                             </div>
                         </div>
                         <hr>
@@ -267,7 +267,7 @@
 
 
                             <div class="">
-                                <label class="col-md-2 control-label">Student:</label>
+                                <label class="col-md-2 control-label">{% trans 'Student' %}:</label>
                                 <div class="col-md-3">
                                     <select id='student_id' title="Select Country" name="student"
                                             class="form-control value_check" data-live-search="true">
@@ -277,8 +277,7 @@
                                                     value="{{ application_obj.ref_by_student.id }}"
                                                     value="">{{ application_obj.ref_by_student.user.first_name|default_if_none:"" }} {{ application_obj.ref_by_student.user.last_name|default_if_none:"" }}</option>
                                         {% else %}
-                                            <option style="display:none" selected="selected" id="" value="">Please
-                                                Select
+                                            <option style="display:none" selected="selected" id="" value="">{% trans 'Please Select' %}
                                             </option>
                                         {% endif %}
 
@@ -289,7 +288,7 @@
                                 </div>
                             </div>
                             <div class="">
-                                <label class="col-md-2 control-label">Agent:</label>
+                                <label class="col-md-2 control-label">{% trans 'Agent' %}:</label>
                                 <div class="col-md-3">
                                     <select id='agent_id' title="Select Country" name="agent"
                                             class="form-control value_check" data-live-search="true">
@@ -299,8 +298,7 @@
                                                     value="{{ application_obj.ref_by_agent.id }}"
                                                     value="">{{ application_obj.ref_by_agent.first_name|default_if_none:"" }} {{ application_obj.ref_by_agent.last_name|default_if_none:"" }}</option>
                                         {% else %}
-                                            <option style="display:none" selected="selected" id="" value="">Please
-                                                Select
+                                            <option style="display:none" selected="selected" id="" value="">{% trans 'Please Select' %}
                                             </option>
                                         {% endif %}
 
@@ -321,23 +319,23 @@
                         <div class="portlet-title">
                             <div class="caption">
                                 <i class="icon-settings font-red"></i>
-                                <span class="caption-subject font-red sbold uppercase"> SPONSORSHIP</span>
+                                <span class="caption-subject font-red sbold uppercase">{% trans 'SPONSORSHIP' %}</span>
                                 <br>
                             </div>
                         </div>
                         <hr>
 
-                        <span style="padding:inherit"><b>Sponsored by Organisation:  </b></span>
+                        <span style="padding:inherit"><b>{% trans 'Sponsored by Organisation' %}:  </b></span>
                         {% if application_obj.is_sponsored == True %}
-                         <span style="padding:inherit">Yes </span>
+                         <span style="padding:inherit">{% trans 'Yes' %}</span>
                         <input class="current" type="radio" checked name="is_sponsored" id="sponsored_by_yes" value="Yes">
-                        <span style="padding:inherit">No</span>
+                        <span style="padding:inherit">{% trans 'No' %}</span>
                         <input class="current" type="radio" name="is_sponsored" value="No"
                                id="sponsored_by_no">
                         {% else %}
-                            <span style="padding:inherit">Yes </span>
+                            <span style="padding:inherit">{% trans 'Yes' %}</span>
                         <input class="current" type="radio"  name="is_sponsored" id="sponsored_by_yes" value="Yes">
-                        <span style="padding:inherit">No</span>
+                        <span style="padding:inherit">{% trans 'No' %}</span>
                         <input class="current" type="radio" checked name="is_sponsored" value="No"
                                id="sponsored_by_no">
                         {% endif %}
@@ -346,7 +344,7 @@
                         <br><br>
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">Name of the Organisation:</label>
+                                <label class="col-md-2 control-label">{% trans 'Name of the Organisation' %}:</label>
                                 <div class="col-md-3">
                                     <input type="text" title="Enter Tel No" id="sponsore_organisation"
                                            value="{{ application_obj.sponsore_organisation|default:"" }}"
@@ -355,7 +353,7 @@
                                 </div>
                             </div>
                             <div class="">
-                                <label class="col-md-2 control-label">Address:</label>
+                                <label class="col-md-2 control-label">{% trans 'Address' %}:</label>
                                 <div class="col-md-3">
                                     <input type="text" title="Enter Tel No" id="sponsore_address"
                                            value="{{ application_obj.sponsore_address|default:"" }}"
@@ -367,7 +365,7 @@
                     <br>
                     <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">Email:</label>
+                                <label class="col-md-2 control-label">{% trans 'Email' %}:</label>
                                 <div class="col-md-3">
                                     <input type="text" title="Enter Tel No" id="sponsore_email"
                                            value="{{ application_obj.sponsore_email|default:"" }}"
@@ -376,7 +374,7 @@
                                 </div>
                             </div>
                             <div class="">
-                                <label class="col-md-2 control-label">Contact dept/person:</label>
+                                <label class="col-md-2 control-label">{% trans 'Contact dept/person' %}:</label>
                                 <div class="col-md-3">
                                     <input type="text" title="Enter Tel No" id="sponsore_contact"
                                            value="{{ application_obj.sponsore_contact|default:"" }}"
@@ -394,11 +392,11 @@
                     <div class="row">
                         <div class="col-md-offset-5 col-md-7">
                             <button type="button" class="btn blue" id="back" style="margin-left: 70%"
-                                    onclick="window.location='{% url "student:applicant_academic_english_qualification" %}'">Back
+                                    onclick="window.location='{% url "student:applicant_academic_english_qualification" %}'">{% trans 'Back' %}
                             </button>
 
 {#                            {% if application_obj.application_id %}#}
-                                <button type="submit" class="btn green" id="save">Save/Next</button>
+                                <button type="submit" class="btn green" id="save">{% trans 'Save/Next' %}</button>
 {#                            {% endif %}#}
                             {% comment %}
                                     <button type="button" class="btn blue" id="next"

@@ -1,4 +1,5 @@
 {% extends "template_base_page.html" %}
+{% load  i18n %}
 {% load staticfiles %}
 
 {% block styleBlock %}
@@ -151,12 +152,12 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{% url 'student:student_home' %}">Home</a>
+                <a href="{% url 'student:student_home' %}">{% trans 'Home' %}</a>
                 <i class="fa fa-angle-right"></i>
             </li>
 
             <li>
-                <span> Employement History Info </span>
+                <span>{% trans 'Employement History Info' %}</span>
             </li>
         </ul>
     </div>
@@ -340,7 +341,7 @@
                         <div class="portlet-title" style="margin-left:-15px;font-size: 16px;">
                             <div class="caption">
                                 <i class="icon-settings font-red"></i>
-                                <span class="caption-subject font-red sbold uppercase"> EMPLOYMENT HISTORY</span>
+                                <span class="caption-subject font-red sbold uppercase">{% trans 'EMPLOYMENT HISTORY' %}</span>
 {#                                <br>#}
 {#                                <span style="font-family: 'Times New Roman';font-size: 16px;"><b>(Optional for Postgraduate Applications)</b></span>#}
                             </div>
@@ -363,7 +364,7 @@
 
                                 <div class="row">
                                     <div class="">
-                                        <label class="col-md-2 control-label">Name of Employer:</label>
+                                        <label class="col-md-2 control-label">{% trans 'Name of Employer' %}:</label>
                                         <div class="col-md-3">
                                             <input type="text" title="Enter Name of Employer" id="employer_name"
                                                    value="{{ employement_history_obj.employer_name|default_if_none:"" }}" name="employer_name"
@@ -376,7 +377,7 @@
                                     </div>
 
                                     <div class="">
-                                        <label class="col-md-2 control-label">Job Designation:</label>
+                                        <label class="col-md-2 control-label">{% trans 'Job Designation' %}:</label>
                                         <div class="col-md-3">
                                             <input type="text" title="Enter Job Designation" id="designation"
                                                    value="{{ employement_history_obj.designation|default_if_none:"" }}" name="designation"
@@ -393,7 +394,7 @@
                                  <div class="row">
 
                                       <div class="">
-                                        <label class="col-md-2 control-label">From Date:</label>
+                                        <label class="col-md-2 control-label">{% trans 'From Date' %}:</label>
                                         <div class="col-md-3">
                                             <input type="date" id="from_date" name="from_date" max="2999-12-31"
                                                    value="{{ employement_history_obj.from_date|date:"Y-m-d" }}" class="form-control">
@@ -401,7 +402,7 @@
                                     </div>
 
                                  <div class="">
-                                        <label class="col-md-2 control-label">To Date:
+                                        <label class="col-md-2 control-label">{% trans 'To Date' %}:
 
                                         </label>
                                         <div class="col-md-3" id="EndDate">
@@ -418,7 +419,7 @@
                                 <div class="row">
 
                                     <div class="">
-                                        <label class="col-md-2 control-label">Country:</label>
+                                        <label class="col-md-2 control-label">{% trans 'Country' %}:</label>
                                         <div class="col-md-3">
                                             <select id='country' title="Select Country" name="country"
                                                     class="form-control chk">
@@ -430,8 +431,7 @@
                                                                 >{{ employement_history_obj.country.country_name }}</option>
                                                 {% else %}
                                                         <option style="display:none" selected="selected" id="" value="">
-                                                            Please
-                                                            Select
+                                                            {% trans 'Please Select' %}
                                                         </option>
                                                 {% endif %}
 
@@ -443,7 +443,7 @@
                                     </div>
 
                                     <div class="">
-                                        <label class="col-md-2 control-label">Type of Industry:</label>
+                                        <label class="col-md-2 control-label">{% trans 'Type of Industry' %}:</label>
                                         <div class="col-md-3">
                                             <input type="text" title="Enter Type of Industry" id="industry_type"
                                                    value="{{ employement_history_obj.industry_type|default_if_none:"" }}" name="industry_type"
@@ -459,7 +459,7 @@
                             <br>
                             <div class="row">
                                 <div class="">
-                                        <label class="col-md-2 control-label">Number of Years Employed:</label>
+                                        <label class="col-md-2 control-label">{% trans 'Number of Years Employed' %}:</label>
                                         <div class="col-md-3">
                                             <input type="text" title="Enter Number of Years Employed" id="employed_years"
                                                    value="{{ employement_history_obj.employed_years|default_if_none:"" }}" name="employed_years"
@@ -477,7 +477,7 @@
 
                                 <div class="row">
                                     <div class="">
-                                        <label class="col-md-2 control-label">Name of Employer:</label>
+                                        <label class="col-md-2 control-label">{% trans 'Name of Employer' %}:</label>
                                         <div class="col-md-3">
                                             <input type="text" title="Enter Name of Employer" id="employer_name"
                                                    value="" name="employer_name"
@@ -490,7 +490,7 @@
                                     </div>
 
                                     <div class="">
-                                        <label class="col-md-2 control-label">Job Designation:</label>
+                                        <label class="col-md-2 control-label">{% trans 'Job Designation' %}:</label>
                                         <div class="col-md-3">
                                             <input type="text" title="Enter Job Designation" id="designation"
                                                    value="" name="designation"
@@ -507,7 +507,7 @@
                                  <div class="row">
 
                                       <div class="">
-                                        <label class="col-md-2 control-label">From Date:</label>
+                                        <label class="col-md-2 control-label">{% trans 'From Date' %}:</label>
                                         <div class="col-md-3">
                                             <input type="date" id="from_date" name="from_date" max="2999-12-31"
                                                    value="" class="form-control">
@@ -515,7 +515,7 @@
                                     </div>
 
                                  <div class="">
-                                        <label class="col-md-2 control-label">To Date:
+                                        <label class="col-md-2 control-label">{% trans 'To Date' %}:
 
                                         </label>
                                         <div class="col-md-3" id="EndDate">
@@ -532,13 +532,12 @@
                                 <div class="row">
 
                                     <div class="">
-                                        <label class="col-md-2 control-label">Country:</label>
+                                        <label class="col-md-2 control-label">{% trans 'Country' %}:</label>
                                         <div class="col-md-3">
                                             <select id='country' title="Select Country" name="country"
                                                     class="form-control chk">
                                                 <option style="display:none" selected="selected" id="" value="">
-                                                    Please
-                                                    Select
+                                                    {% trans 'Please Select' %}
                                                 </option>
 
                                                 {% for rec in country_recs %}
@@ -549,7 +548,7 @@
                                     </div>
 
                                     <div class="">
-                                        <label class="col-md-2 control-label">Type of Industry:</label>
+                                        <label class="col-md-2 control-label">{% trans 'Type of Industry' %}:</label>
                                         <div class="col-md-3">
                                             <input type="text" title="Enter Type of Industry" id="industry_type"
                                                    value="" name="industry_type"
@@ -565,7 +564,7 @@
                             <br>
                             <div class="row">
                                 <div class="">
-                                        <label class="col-md-2 control-label">Number of Years Employed:</label>
+                                        <label class="col-md-2 control-label">{% trans 'Number of Years Employed' %}:</label>
                                         <div class="col-md-3">
                                             <input type="text" title="Enter Number of Years Employed" id="employed_years"
                                                    value="" name="employed_years"
@@ -583,12 +582,12 @@
                             <div class="col-md-offset-5 col-md-7">
                                 <button type="button" class="btn blue" id="back" style="margin-left: 70%"
                                         onclick="window.location='{% url "student:applicant_curriculum_experience_info" %}'">
-                                    Back
+                                    {% trans 'Back' %}
                                 </button>
 
                                 {% if application_obj %}
 {#                                    {% if not application_obj.is_submitted %}#}
-                                        <button type="button" class="btn green" id="save_form" style="">Save/Next
+                                        <button type="button" class="btn green" id="save_form" style="">{% trans 'Save/Next' %}
                                         </button>
 {#                                    {% endif %}#}
                                 {% endif %}

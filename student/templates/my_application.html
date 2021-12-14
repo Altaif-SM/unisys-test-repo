@@ -1,4 +1,5 @@
 {% extends "template_base_page.html" %}
+{% load  i18n %}
 {% load staticfiles %}
 
 {% block styleBlock %}
@@ -63,12 +64,12 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{% url 'student:student_home' %}">Home</a>
+                <a href="{% url 'student:student_home' %}">{% trans 'Home' %}</a>
                 <i class="fa fa-angle-right"></i>
             </li>
 
             <li>
-                <span> My Application </span>
+                <span>{% trans 'My Application' %}</span>
 
             </li>
         </ul>
@@ -85,7 +86,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase">My Application</span>
+                <span class="caption-subject font-red sbold uppercase">{% trans 'My Application' %}</span>
             </div>
         </div>
 
@@ -93,7 +94,7 @@
             <div class="form-body">
                 <div class="portlet light portlet-fit portlet-form ">
                     <i class="icon-settings font-red"></i>
-                    <span class="caption-subject font-red sbold uppercase"> PERSONAL INFO (BIOGRAPHICAL INFORMATION)</span>
+                    <span class="caption-subject font-red sbold uppercase">{% trans 'PERSONAL INFO (BIOGRAPHICAL INFORMATION)' %}</span>
                     <form action="{% url 'partner:application_all_details_pdf' application_obj.id %}" id="form_pdf_id"
                           class="form-horizontal" target="_blank"
                           method="POST" enctype="multipart/form-data">
@@ -102,7 +103,7 @@
                 </div>
                 <div class="row">
                     <div class="">
-                        <label class="col-md-1 control-label">Profile Pic:</label>
+                        <label class="col-md-1 control-label">{% trans 'Profile Pic' %}:</label>
                         <div class="col-md-2">
                             <a href="{{ attachement_obj.0.image.url }}" download>
                                 <img src="{{ attachement_obj.0.image.url }}" alt="image"
@@ -115,7 +116,7 @@
 
                 <div class="row">
                     <div class="">
-                        <label class="col-md-1 control-label">First Name:</label>
+                        <label class="col-md-1 control-label">{% trans 'First Name' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ application_obj.first_name|default_if_none:"" }}</span>
 
@@ -123,14 +124,14 @@
                     </div>
 
                     <div class="">
-                        <label class="col-md-1 control-label">Middle Name:</label>
+                        <label class="col-md-1 control-label">{% trans 'Middle Name' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ application_obj.middle_name|default_if_none:"" }}</span>
                         </div>
                     </div>
 
                     <div class="">
-                        <label class="col-md-1 control-label">Last Name:</label>
+                        <label class="col-md-1 control-label">{% trans 'Last Name' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ application_obj.last_name|default_if_none:"" }}</span>
                         </div>
@@ -142,13 +143,13 @@
 
                 <div class="row">
                     <div class="">
-                        <label class="col-md-1 control-label">Surname:</label>
+                        <label class="col-md-1 control-label">{% trans 'Surname' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ application_obj.surname|default_if_none:"" }}</span>
                         </div>
                     </div>
                     <div class="">
-                        <label class="col-md-1 control-label">Passport No:</label>
+                        <label class="col-md-1 control-label">{% trans 'Passport No' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ application_obj.passport_number|default_if_none:"" }}</span>
 
@@ -159,12 +160,12 @@
                 <hr>
                 <div class="portlet light portlet-fit portlet-form ">
                     <i class="icon-settings font-red"></i>
-                    <span class="caption-subject font-red sbold uppercase"> CONTACT INFO</span>
+                    <span class="caption-subject font-red sbold uppercase">{% trans 'CONTACT INFO' %}</span>
                 </div>
 
                 <div class="row">
                     <div class="">
-                        <label class="col-md-1 control-label">E-mail:</label>
+                        <label class="col-md-1 control-label">{% trans 'E-mail' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ application_obj.email|default_if_none:"" }}</span>
 
@@ -172,14 +173,14 @@
                     </div>
 
                     <div class="">
-                        <label class="col-md-1 control-label">Mobile:</label>
+                        <label class="col-md-1 control-label">{% trans 'Mobile' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ application_obj.address.mobile|default_if_none:"" }}</span>
                         </div>
                     </div>
 
                     <div class="">
-                        <label class="col-md-1 control-label">WhatsApp:</label>
+                        <label class="col-md-1 control-label">{% trans 'WhatsApp' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ application_obj.address.whats_app|default_if_none:"" }}</span>
                         </div>
@@ -190,7 +191,7 @@
                 <br>
                 <div class="row">
                     <div class="">
-                        <label class="col-md-1 control-label">Country:</label>
+                        <label class="col-md-1 control-label">{% trans 'Country' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ application_obj.address.country|title|default_if_none:"" }}</span>
 
@@ -198,14 +199,14 @@
                     </div>
 
                     <div class="">
-                        <label class="col-md-1 control-label">Postcode:</label>
+                        <label class="col-md-1 control-label">{% trans 'Postcode' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ application_obj.address.post_code|default_if_none:"" }}</span>
                         </div>
                     </div>
 
                     <div class="">
-                        <label class="col-md-1 control-label">Address line 1:</label>
+                        <label class="col-md-1 control-label">{% trans 'Address line 1' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ application_obj.address.residential_address|default_if_none:"" }}</span>
                         </div>
@@ -216,7 +217,7 @@
                 <br>
                 <div class="row">
                     <div class="">
-                        <label class="col-md-1 control-label">Address line 2:</label>
+                        <label class="col-md-1 control-label">{% trans 'Address line 2' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ application_obj.address.street|title|default_if_none:"" }}</span>
 
@@ -224,7 +225,7 @@
                     </div>
 
                     <div class="">
-                        <label class="col-md-1 control-label">City:</label>
+                        <label class="col-md-1 control-label">{% trans 'City' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ application_obj.address.district|default_if_none:"" }}</span>
                         </div>
@@ -236,31 +237,31 @@
                 <hr>
                 <div class="portlet light portlet-fit portlet-form ">
                     <i class="icon-settings font-red"></i>
-                    <span class="caption-subject font-red sbold uppercase"> INTAKE INFO</span>
+                    <span class="caption-subject font-red sbold uppercase">{% trans 'INTAKE INFO' %}</span>
                 </div>
 
                 <div class="row">
                     <div class="">
-                        <label class="col-md-1 control-label">University Type:</label>
+                        <label class="col-md-1 control-label">{% trans 'University Type' %}:</label>
                         <div class="col-md-3">
                             {% if application_obj.university.is_partner_university == True %}
-                            <span class="">Partner</span>
+                            <span class="">{% trans 'Partner' %}</span>
                             {% else %}
-                                <span class="">Main</span>
+                                <span class="">{% trans 'Main' %}</span>
                             {% endif %}
 
                         </div>
                     </div>
 
                     <div class="">
-                        <label class="col-md-1 control-label">University:</label>
+                        <label class="col-md-1 control-label">{% trans 'University' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ application_obj.university.university_name|default_if_none:"" }}</span>
                         </div>
                     </div>
 
                     <div class="">
-                        <label class="col-md-1 control-label">Academic Year:</label>
+                        <label class="col-md-1 control-label">{% trans 'Academic Year' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ application_obj.academic_year.year_name|default_if_none:"" }}</span>
                         </div>
@@ -271,7 +272,7 @@
                 <br>
                 <div class="row">
                     <div class="">
-                        <label class="col-md-1 control-label">Semester:</label>
+                        <label class="col-md-1 control-label">{% trans 'Semester' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ application_obj.semester.semester_name|title|default_if_none:"" }}</span>
 
@@ -285,12 +286,12 @@
                 <hr>
             <div class="portlet light portlet-fit portlet-form ">
                     <i class="icon-settings font-red"></i>
-                    <span class="caption-subject font-red sbold uppercase"> LEARNING CENTRE INFO</span>
+                    <span class="caption-subject font-red sbold uppercase">{% trans 'LEARNING CENTRE INFO' %}</span>
                 </div>
 
                 <div class="row">
                     <div class="">
-                        <label class="col-md-1 control-label">Country:</label>
+                        <label class="col-md-1 control-label">{% trans 'Country' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ application_obj.learning_country.country_name|title }}</span>
 
@@ -298,7 +299,7 @@
                     </div>
 
                     <div class="">
-                        <label class="col-md-1 control-label">Learning Centre:</label>
+                        <label class="col-md-1 control-label">{% trans 'Learning Centre' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ application_obj.learning_centre.lc_name|default_if_none:"" }}</span>
                         </div>
@@ -308,12 +309,12 @@
             <hr>
                 <div class="portlet light portlet-fit portlet-form ">
                     <i class="icon-settings font-red"></i>
-                    <span class="caption-subject font-red sbold uppercase"> ACADEMIC PROGRAM DETAILS</span>
+                    <span class="caption-subject font-red sbold uppercase">{% trans 'ACADEMIC PROGRAM DETAILS' %}</span>
                 </div>
 
                 <div class="row">
                     <div class="">
-                        <label class="col-md-1 control-label">Program:</label>
+                        <label class="col-md-1 control-label">{% trans 'Program' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ application_obj.program.program_name|default_if_none:"" }}</span>
 
@@ -321,14 +322,14 @@
                     </div>
 
                     <div class="">
-                        <label class="col-md-1 control-label">Faculty:</label>
+                        <label class="col-md-1 control-label">{% trans 'Faculty' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ application_obj.faculty.faculty_name|default_if_none:"" }}</span>
                         </div>
                     </div>
 
                     <div class="">
-                        <label class="col-md-1 control-label">Campus:</label>
+                        <label class="col-md-1 control-label">{% trans 'Campus' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ application_obj.campus.campus_name|default_if_none:"" }}</span>
                         </div>
@@ -339,13 +340,13 @@
                 <hr>
                 <div class="portlet light portlet-fit portlet-form ">
                     <i class="icon-settings font-red"></i>
-                    <span class="caption-subject font-red sbold uppercase"> ACADEMIC QUALIFICATION DETAILS</span>
+                    <span class="caption-subject font-red sbold uppercase">{% trans 'ACADEMIC QUALIFICATION DETAILS' %}</span>
                 </div>
                 {% for qualification_obj in qualification_recs %}
 
                     <div class="row">
                         <div class="">
-                            <label class="col-md-1 control-label">Qualification:</label>
+                            <label class="col-md-1 control-label">{% trans 'Qualification' %}:</label>
                             <div class="col-md-3">
                                 <span class="">{{ qualification_obj.degree|default_if_none:"" }}</span>
 
@@ -353,14 +354,14 @@
                         </div>
 
                         <div class="">
-                            <label class="col-md-1 control-label">Major:</label>
+                            <label class="col-md-1 control-label">{% trans 'Major' %}:</label>
                             <div class="col-md-3">
                                 <span class="">{{ qualification_obj.major|default_if_none:"" }}</span>
                             </div>
                         </div>
 
                         <div class="">
-                            <label class="col-md-1 control-label">Institution:</label>
+                            <label class="col-md-1 control-label">{% trans 'Institution' %}:</label>
                             <div class="col-md-3">
                                 <span class="">{{ qualification_obj.level_institution|default_if_none:"" }}</span>
                             </div>
@@ -371,7 +372,7 @@
                     <br>
                     <div class="row">
                         <div class="">
-                            <label class="col-md-1 control-label">Result:</label>
+                            <label class="col-md-1 control-label">{% trans 'Result' %}:</label>
                             <div class="col-md-3">
                                 <span class="">{{ qualification_obj.level_result|default_if_none:"" }}</span>
 
@@ -380,7 +381,7 @@
 
 
                         <div class="">
-                            <label class="col-md-1 control-label">Year:</label>
+                            <label class="col-md-1 control-label">{% trans 'Year' %}:</label>
                             <div class="col-md-3">
                                 <span class="">{{ qualification_obj.level_year|default_if_none:"" }}</span>
 
@@ -388,7 +389,7 @@
                         </div>
 
                         <div class="">
-                            <label class="col-md-1 control-label">Country:</label>
+                            <label class="col-md-1 control-label">{% trans 'Country' %}:</label>
                             <div class="col-md-3">
                                 <span class="">{{ qualification_obj.country.country_name|default_if_none:"" }}</span>
 
@@ -405,13 +406,13 @@
 
                 <div class="portlet light portlet-fit portlet-form ">
                     <i class="icon-settings font-red"></i>
-                    <span class="caption-subject font-red sbold uppercase">English Language Proficiency</span>
+                    <span class="caption-subject font-red sbold uppercase">{% trans 'English Language Proficiency' %}</span>
                 </div>
                 {% for english_competency_obj in english_recs %}
 
                     <div class="row">
                         <div class="">
-                            <label class="col-md-1 control-label">English Competency Test:</label>
+                            <label class="col-md-1 control-label">{% trans 'English Competency Test' %}:</label>
                             <div class="col-md-3">
                                 <span class="">{{ english_competency_obj.english_competency_test.english_competency_test|default_if_none:"" }}</span>
 
@@ -419,14 +420,14 @@
                         </div>
 
                         <div class="">
-                            <label class="col-md-1 control-label">Institution:</label>
+                            <label class="col-md-1 control-label">{% trans 'Institution' %}:</label>
                             <div class="col-md-3">
                                 <span class="">{{ english_competency_obj.english_test|default_if_none:"" }}</span>
                             </div>
                         </div>
 
                         <div class="">
-                            <label class="col-md-1 control-label">Grade/Level:</label>
+                            <label class="col-md-1 control-label">{% trans 'Grade/Level' %}:</label>
                             <div class="col-md-3">
                                 <span class="">{{ english_competency_obj.english_test_result|default_if_none:"" }}</span>
                             </div>
@@ -442,12 +443,12 @@
 
                 <div class="portlet light portlet-fit portlet-form ">
                     <i class="icon-settings font-red"></i>
-                    <span class="caption-subject font-red sbold uppercase">  Professional Qualifications</span>
+                    <span class="caption-subject font-red sbold uppercase">{% trans 'Professional Qualifications' %}</span>
                 </div>
 
                 <div class="row">
                     <div class="">
-                        <label class="col-md-1 control-label">Qualification Name:</label>
+                        <label class="col-md-1 control-label">{% trans 'Qualification Name' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ postgraduate_obj.qualification_name|default_if_none:"" }}</span>
 
@@ -455,14 +456,14 @@
                     </div>
 
                     <div class="">
-                        <label class="col-md-1 control-label">License No:</label>
+                        <label class="col-md-1 control-label">{% trans 'License No' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ postgraduate_obj.license_certificate_no|default_if_none:"" }}</span>
                         </div>
                     </div>
 
                     <div class="">
-                        <label class="col-md-1 control-label">Professional Body:</label>
+                        <label class="col-md-1 control-label">{% trans 'Professional Body' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ postgraduate_obj.professional_body|default_if_none:"" }}</span>
                         </div>
@@ -473,7 +474,7 @@
                 <br>
                 <div class="row">
                     <div class="">
-                        <label class="col-md-1 control-label">Date Awarded:</label>
+                        <label class="col-md-1 control-label">{% trans 'Date Awarded' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ postgraduate_obj.awarded_date|date:"Y-m-d" }}</span>
 
@@ -481,14 +482,14 @@
                     </div>
 
                     <div class="">
-                        <label class="col-md-1 control-label">Agency Name/No:</label>
+                        <label class="col-md-1 control-label">{% trans 'Agency Name/No' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ postgraduate_obj.agency_name_no|default_if_none:"" }}</span>
                         </div>
                     </div>
 
                     <div class="">
-                        <label class="col-md-1 control-label">Issued in Country:</label>
+                        <label class="col-md-1 control-label">{% trans 'Issued in Country' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ postgraduate_obj.country.country_name|title|default_if_none:"" }}</span>
                         </div>
@@ -499,7 +500,7 @@
                 <br>
                 <div class="row">
                     <div class="">
-                        <label class="col-md-1 control-label">Expiration Date:</label>
+                        <label class="col-md-1 control-label">{% trans 'Expiration Date' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ postgraduate_obj.expiration_date|date:"Y-m-d" }}</span>
 
@@ -514,12 +515,12 @@
 
                 <div class="portlet light portlet-fit portlet-form ">
                     <i class="icon-settings font-red"></i>
-                    <span class="caption-subject font-red sbold uppercase">  EMPLOYMENT HISTORY</span>
+                    <span class="caption-subject font-red sbold uppercase">{% trans 'EMPLOYMENT HISTORY' %}</span>
                 </div>
 
                 <div class="row">
                     <div class="">
-                        <label class="col-md-1 control-label">Name of Employer:</label>
+                        <label class="col-md-1 control-label">{% trans 'Name of Employer' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ employement_history_obj.employer_name|default_if_none:"" }}</span>
 
@@ -527,14 +528,14 @@
                     </div>
 
                     <div class="">
-                        <label class="col-md-1 control-label">Job Designation:</label>
+                        <label class="col-md-1 control-label">{% trans 'Job Designation' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ employement_history_obj.designation|default_if_none:"" }}</span>
                         </div>
                     </div>
 
                     <div class="">
-                        <label class="col-md-1 control-label">From Date:</label>
+                        <label class="col-md-1 control-label">{% trans 'From Date' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ employement_history_obj.from_date|date:"Y-m-d" }}</span>
                         </div>
@@ -545,7 +546,7 @@
                 <br>
                 <div class="row">
                     <div class="">
-                        <label class="col-md-1 control-label">To Date:</label>
+                        <label class="col-md-1 control-label">{% trans 'To Date' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ employement_history_obj.to_date|date:"Y-m-d" }}</span>
 
@@ -553,14 +554,14 @@
                     </div>
 
                     <div class="">
-                        <label class="col-md-1 control-label">Country:</label>
+                        <label class="col-md-1 control-label">{% trans 'Country' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ employement_history_obj.country.country_name|title|default_if_none:"" }}</span>
                         </div>
                     </div>
 
                     <div class="">
-                        <label class="col-md-1 control-label">Type of Industry:</label>
+                        <label class="col-md-1 control-label">{% trans 'Type of Industry' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ employement_history_obj.industry_type|default_if_none:"" }}</span>
                         </div>
@@ -571,7 +572,7 @@
                 <br>
                 <div class="row">
                     <div class="">
-                        <label class="col-md-1 control-label">Number of Years Employed:</label>
+                        <label class="col-md-1 control-label">{% trans 'Number of Years Employed' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ employement_history_obj.employed_years|default_if_none:"" }}</span>
 
@@ -585,12 +586,12 @@
 
                 <div class="portlet light portlet-fit portlet-form ">
                     <i class="icon-settings font-red"></i>
-                    <span class="caption-subject font-red sbold uppercase">NEXT OF KEN DETAILS</span>
+                    <span class="caption-subject font-red sbold uppercase">{% trans 'NEXT OF KEN DETAILS' %}</span>
                 </div>
 
                 <div class="row">
                     <div class="">
-                        <label class="col-md-1 control-label">Name:</label>
+                        <label class="col-md-1 control-label">{% trans 'Name' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ addition_info_obj.ken_name|default_if_none:"" }}</span>
 
@@ -598,14 +599,14 @@
                     </div>
 
                     <div class="">
-                        <label class="col-md-1 control-label">ID:</label>
+                        <label class="col-md-1 control-label">{% trans 'ID' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ addition_info_obj.ken_id|default_if_none:"" }}</span>
                         </div>
                     </div>
 
                     <div class="">
-                        <label class="col-md-1 control-label">Relationship:</label>
+                        <label class="col-md-1 control-label">{% trans 'Relationship' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ addition_info_obj.ken_relationship|default_if_none:"" }}</span>
                         </div>
@@ -616,7 +617,7 @@
                 <br>
                 <div class="row">
                     <div class="">
-                        <label class="col-md-1 control-label">Tel No:</label>
+                        <label class="col-md-1 control-label">{% trans 'Tel No' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ addition_info_obj.ken_tel_no|default_if_none:"" }}</span>
 
@@ -624,7 +625,7 @@
                     </div>
 
                     <div class="">
-                        <label class="col-md-1 control-label">Email:</label>
+                        <label class="col-md-1 control-label">{% trans 'Email' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ addition_info_obj.ken_email|default_if_none:"" }}</span>
                         </div>
@@ -637,12 +638,12 @@
 
                 <div class="portlet light portlet-fit portlet-form ">
                     <i class="icon-settings font-red"></i>
-                    <span class="caption-subject font-red sbold uppercase">OTHER INFORMATION (How did you know about us)</span>
+                    <span class="caption-subject font-red sbold uppercase">{% trans 'OTHER INFORMATION (How did you know about us)' %}</span>
                 </div>
 
                 <div class="row">
                     <div class="">
-                        <label class="col-md-1 control-label">Student:</label>
+                        <label class="col-md-1 control-label">{% trans 'Student' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ addition_info_obj.ref_by_student.user.first_name|default_if_none:"" }} {{ addition_info_obj.ref_by_student.user.last_name|default_if_none:"" }}</span>
 
@@ -650,7 +651,7 @@
                     </div>
 
                     <div class="">
-                        <label class="col-md-1 control-label">Agent:</label>
+                        <label class="col-md-1 control-label">{% trans 'Agent' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ addition_info_obj.ref_by_agent.first_name|default_if_none:"" }} {{ addition_info_obj.ref_by_agent.last_name|default_if_none:"" }}</span>
                         </div>
@@ -663,12 +664,12 @@
 
                 <div class="portlet light portlet-fit portlet-form ">
                     <i class="icon-settings font-red"></i>
-                    <span class="caption-subject font-red sbold uppercase">SPONSORSHIP</span>
+                    <span class="caption-subject font-red sbold uppercase">{% trans 'SPONSORSHIP' %}</span>
                 </div>
 
                 <div class="row">
                     <div class="">
-                        <label class="col-md-1 control-label">Name of the Organisation:</label>
+                        <label class="col-md-1 control-label">{% trans 'Name of the Organisation' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ addition_info_obj.sponsore_organisation|default_if_none:"" }}</span>
 
@@ -676,14 +677,14 @@
                     </div>
 
                     <div class="">
-                        <label class="col-md-1 control-label">Address:</label>
+                        <label class="col-md-1 control-label">{% trans 'Address' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ addition_info_obj.sponsore_address|default_if_none:"" }}</span>
                         </div>
                     </div>
 
                     <div class="">
-                        <label class="col-md-1 control-label">Email:</label>
+                        <label class="col-md-1 control-label">{% trans 'Email' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ addition_info_obj.sponsore_email|default_if_none:"" }}</span>
                         </div>
@@ -694,7 +695,7 @@
                 <br>
                 <div class="row">
                     <div class="">
-                        <label class="col-md-1 control-label">Contact dept/person:</label>
+                        <label class="col-md-1 control-label">{% trans 'Contact dept/person' %}:</label>
                         <div class="col-md-3">
                             <span class="">{{ addition_info_obj.sponsore_contact|default_if_none:"" }}</span>
                         </div>
@@ -706,12 +707,12 @@
 
                 <div class="portlet light portlet-fit portlet-form ">
                     <i class="icon-settings font-red"></i>
-                    <span class="caption-subject font-red sbold uppercase">Attachment</span>
+                    <span class="caption-subject font-red sbold uppercase">{% trans 'Attachment' %}</span>
                 </div>
 
                 <div class="row">
                     <div class="">
-                        <label class="col-md-2 control-label">Passport ID:</label>
+                        <label class="col-md-2 control-label">{% trans 'Passport ID' %}:</label>
 
                         <div class="col-md-4">
                             {% if attachement_obj.0.passport_image %}
@@ -725,7 +726,7 @@
                     </div>
 
                     <div class="">
-                        <label class="col-md-2 control-label">Academic Certificate:</label>
+                        <label class="col-md-2 control-label">{% trans 'Academic Certificate' %}:</label>
 
                         <div class="col-md-4">
                             {% if attachement_obj.0.level_result_document %}
@@ -745,7 +746,7 @@
 
 
                     <div class="">
-                        <label class="col-md-2 control-label">Transcript:</label>
+                        <label class="col-md-2 control-label">{% trans 'Transcript' %}:</label>
 
                         <div class="col-md-4">
                             {% if attachement_obj.0.transcript_document %}
@@ -760,7 +761,7 @@
 
 
                     <div class="">
-                        <label class="col-md-2 control-label">English Language Proficiency Certificate:</label>
+                        <label class="col-md-2 control-label">{% trans 'English Language Proficiency Certificate' %}:</label>
 
                         <div class="col-md-4">
                             {% if attachement_obj.0.english_test_result_document %}
@@ -779,7 +780,7 @@
                 <div class="row">
 
                     <div class="">
-                        <label class="col-md-2 control-label">Recommendation Letter:</label>
+                        <label class="col-md-2 control-label">{% trans 'Recommendation Letter' %}:</label>
 
                         <div class="col-md-4">
                             {% if attachement_obj.0.recommendation_letter %}
