@@ -390,6 +390,8 @@ class ProgramStudyModeDetails(models.Model):
 
 class ProgramDetails(BaseModel):
     program_name = models.CharField(max_length=255, blank=True, null=True)
+    program_fee = models.CharField(max_length=255, blank=True, null=True)
+    credit_hrs = models.CharField(max_length=255, blank=True, null=True)
     program_overview = models.TextField(blank=True, null=True)
     program_objective = models.TextField(blank=True, null=True)
     program_vision = models.TextField(blank=True, null=True)

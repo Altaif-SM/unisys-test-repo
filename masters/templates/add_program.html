@@ -145,6 +145,24 @@
                 });
             }, 4000);
         }
+
+        function validate(evt) {
+            var theEvent = evt || window.event;
+
+            // Handle paste
+            if (theEvent.type === 'paste') {
+                key = event.clipboardData.getData('text/plain');
+            } else {
+                // Handle key press
+                var key = theEvent.keyCode || theEvent.which;
+                key = String.fromCharCode(key);
+            }
+            var regex = /[0-9]|\./;
+            if (!regex.test(key)) {
+                theEvent.returnValue = false;
+                if (theEvent.preventDefault) theEvent.preventDefault();
+            }
+        }
     </script>
 
 {% endblock %}
@@ -321,6 +339,39 @@
                             </div>
 
                             <br>
+
+                        <div class="row">
+                             <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Program Fee' %}:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter Program Fee" id="program_fee" onkeypress='validate(event)'
+                                               value=""
+                                               name="program_fee"
+                                               class="form-control" required>
+
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Credit Hrs' %}:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter Credit Hrs" id="credit_hrs" onkeypress='validate(event)'
+                                               value=""
+                                               name="credit_hrs"
+                                               class="form-control" required>
+
+                                    </div>
+                                </div>
+
+
+
+
+
+                            </div>
+
+                        <br>
 
 
                             <div class="row">
