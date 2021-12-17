@@ -2122,8 +2122,8 @@ def add_program(request):
         university = request.POST.get('university')
         faculty = request.POST.get('faculty')
         program_name = request.POST.get('program_name')
-        program_fee = request.POST.get('program_fee')
-        credit_hrs = request.POST.get('credit_hrs')
+        # program_fee = request.POST.get('program_fee')
+        # credit_hrs = request.POST.get('credit_hrs')
         study_type = request.POST.get('study_type')
         study_level = request.POST.get('study_level')
         program_overview = request.POST.get('program_overview')
@@ -2141,7 +2141,7 @@ def add_program(request):
             program_obj = ProgramDetails.objects.create(faculty_id=faculty,university_id=university,
                                              program_name=program_name,program_overview = program_overview,program_objective = program_objective,
                                              program_vision = program_vision,program_mission = program_mission,status = status,study_type_id = study_type,study_level_id = study_level,
-                                                        credit_hrs = credit_hrs,program_fee = program_fee)
+                                                        )
 
             program_obj.study_mode.clear()
             for study_mode in study_mode_recs:
@@ -2185,8 +2185,8 @@ def edit_program(request, program_id=None):
         status = request.POST.get('status')
         study_mode_recs = request.POST.getlist('study_mode[]')
         campus_recs = request.POST.getlist('campus')
-        program_fee = request.POST.get('program_fee')
-        credit_hrs = request.POST.get('credit_hrs')
+        # program_fee = request.POST.get('program_fee')
+        # credit_hrs = request.POST.get('credit_hrs')
         if status == 'on':
             status = True
         else:
@@ -2205,8 +2205,8 @@ def edit_program(request, program_id=None):
             program_obj.program_vision = program_vision
             program_obj.program_mission = program_mission
             program_obj.status = status
-            program_obj.program_fee = program_fee
-            program_obj.credit_hrs = credit_hrs
+            # program_obj.program_fee = program_fee
+            # program_obj.credit_hrs = credit_hrs
             program_obj.save()
 
             program_obj.study_mode.clear()
