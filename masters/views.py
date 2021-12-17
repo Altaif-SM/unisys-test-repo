@@ -2154,6 +2154,56 @@ def add_program_fee(request):
         'country_recs':country_recs,
                                                    })
 
+def edit_program_fee(request, program_id=None):
+    program_fee_obj = ProgramFeeDetails.objects.get(id=program_id)
+    if request.method == 'POST':
+        university = request.POST.get('university')
+        year = request.POST.get('year')
+        program = request.POST.get('program')
+        country = request.POST.get('country')
+        discount = request.POST.get('discount')
+        total_amount = request.POST.get('total_amount')
+        program_fee_count = request.POST.get('program_fee_count')
+        try:
+            program_fee_obj.university_id = university
+            program_fee_obj.country_id = country
+            program_fee_obj.year_id = year
+            program_fee_obj.program_id = program
+            program_fee_obj.discount = discount
+            program_fee_obj.total_amount = total_amount
+            program_fee_obj.save()
+
+            program_fee_obj.program_fee.clear()
+            for x in range(int(program_fee_count)):
+                try:
+                    x = x + 1
+                    program_fee_type_obj = ProgramFeeType.objects.create(
+                        fee_type=request.POST.get('fee_type_' + str(x)),
+                        amount=request.POST.get('amount_' + str(x))
+                        )
+                    program_fee_obj.program_fee.add(program_fee_type_obj)
+                except:
+                    pass
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/program_fee_settings/')
+    if program_fee_obj.university.is_partner_university == False:
+        university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university = False).order_by('-id')
+    else:
+        university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
+                                                           is_partner_university=True).order_by('-id')
+    year_recs = YearDetails.objects.all()
+    program_recs = ProgramDetails.objects.filter(is_delete=False).order_by('-id')
+    country_recs = CountryDetails.objects.all()
+    return render(request, 'edit_program_fee.html', {
+        'university_recs': university_recs,
+        'year_recs': year_recs,
+        'program_recs': program_recs,
+        'country_recs': country_recs,
+        'program_fee_obj': program_fee_obj,
+        'program_fee_count': program_fee_obj.program_fee.count(),
+    })
 
 def program_settings(request):
     program_recs = ProgramDetails.objects.filter(is_delete=False).order_by('-id')
