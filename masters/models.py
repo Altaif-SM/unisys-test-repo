@@ -387,6 +387,10 @@ class ProgramCampusDetails(models.Model):
 class ProgramStudyModeDetails(models.Model):
     study_mode = models.CharField(max_length=100, blank=True, null=True)
 
+class ProgramFeeType(models.Model):
+    fee_type = models.CharField(max_length=100, blank=True, null=True)
+    amount = models.CharField(max_length=100, blank=True, null=True)
+
 
 class ProgramDetails(BaseModel):
     program_name = models.CharField(max_length=255, blank=True, null=True)
@@ -429,6 +433,18 @@ class ProgramDetails(BaseModel):
 
         return res
 
+class ProgramFeeDetails(BaseModel):
+    university = models.ForeignKey(UniversityDetails, null=True, related_name='program_fee_university_rel',
+                                   on_delete=models.PROTECT)
+    year = models.ForeignKey(YearDetails, null=True, related_name='program_fee_year_rel',
+                                   on_delete=models.PROTECT)
+    program = models.ForeignKey(ProgramDetails, null=True, related_name='program_fee_rel',
+                                   on_delete=models.PROTECT)
+    country = models.ForeignKey(CountryDetails, null=True, related_name='country_fee_rel',
+                                on_delete=models.PROTECT)
+    discount = models.CharField(max_length=255, blank=True, null=True)
+    total_amount = models.CharField(max_length=255, blank=True, null=True)
+    program_fee = models.ManyToManyField(ProgramFeeType, blank=True)
 
 
 

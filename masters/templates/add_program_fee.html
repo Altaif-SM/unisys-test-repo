@@ -1,0 +1,444 @@
+{% extends "template_base_page.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css"
+          rel="stylesheet">
+
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+
+        .s-switch input[type='checkbox'] {
+            display: none
+        }
+
+        .s-switch {
+            width: 62px;
+            height: 32px;
+            z-index: 0;
+            margin: 0;
+            padding: 0;
+            appearance: none;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            border-radius: 16px;
+            -moz-border-radius: 16px;
+            -webkit-border-radius: 16px;
+        }
+
+        .s-switch:before {
+            content: ' ';
+            background: #D9534F !important;
+            position: absolute;
+            left: 1px;
+            top: 1px;
+            width: 60px;
+            height: 30px;
+            background: #FFFFFF;
+            z-index: 1;
+            border-radius: 16px;
+            -moz-border-radius: 16px;
+            -webkit-border-radius: 16px;
+        }
+
+        .s-switch:after {
+            content: ' ';
+            height: 29px;
+            width: 29px;
+            border-radius: 28px;
+            z-index: 2;
+            background: #FFFFFF;
+            position: absolute;
+            -webkit-transition-duration: 300ms;
+            transition-duration: 300ms;
+            top: 1px;
+            left: 3px;
+            -webkit-box-shadow: 0 2px 5px #999999;
+            box-shadow: 0 2px 5px #999999;
+        }
+
+        .s-switch-on:before {
+            background: #4DAF48 !important;
+        }
+
+        .s-switch-on:after {
+            left: 31px !important;
+        }
+
+        .s-switch-readonly, .s-switch-disabled {
+            opacity: 0.8;
+        }
+
+
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+
+    <script>
+        window.onload = function () {
+            $(document).ready(function () {
+                $("#status").Sswitch({});
+
+                $('input[type="radio"]').on('change', function () {
+                    var university_type = $('input[name="university_type"]:checked').val();
+                    var url = '/student/get_university_from_type/';
+                    get_university_from_university_type(url, university_type)
+
+
+                })
+
+                 var english_count = 1;
+                 $(".add_english_row").click(function () {
+                    english_count = english_count + 1;
+                    var english_row = '<hr><div class="row english_item" id="english_check_' + english_count + '"><div class="row"><div class=""><label class="col-md-2 control-label">{% trans 'Fee Type' %}:</label><div class="col-md-4"><input required type="text" title="Enter Fee Type" id="fee_type_' + english_count + '" name="fee_type_' + english_count + '" value="" class="form-control eng_emp"><input hidden type="text" id="english_obj_' + english_count + '" name="english_obj_' + english_count + '"></div></div><div class=""><label class="col-md-2 control-label">{% trans 'Amount' %}:</label><div class="col-md-2"><input required type="text" title="Enter result" id="amount_' + english_count + '" name="amount_' + english_count + '" onkeypress="validate(event)" value="" class="form-control eng_emp"></div></div><div class=""><div class="col-md-1"><a href="javascript:;" class="delete_english btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div></div>';
+                    $(english_row).removeAttr().hide().insertAfter(".english_item:last").slideDown(300);
+                });
+
+
+                 $(document).on("click", ".delete_english", function () {
+                    $(this).parents('.english_item').next().closest('hr').remove();
+                    $(this).parents('.english_item').remove();
+                });
+
+
+                  $("#id_form").submit(function (e) {
+
+
+                var rowCount = $(".english_item").length;
+                $('#program_fee_count').val(rowCount);
+
+            })
+
+            });
+
+            function get_university_from_university_type(url, university_type) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        university_type: university_type,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data) {
+
+                        $('#university').empty();
+                        $('#university').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#university').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['university_name'] + '</option>')
+                        }
+                    },
+                    error: function (xhr, msg, err) {
+                        alert(xhr.responseJSON.error);
+                    }
+                });
+            }
+
+
+            window.setTimeout(function () {
+                $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                    $(this).remove();
+                });
+            }, 4000);
+        }
+
+        function validate(evt) {
+            var theEvent = evt || window.event;
+
+            // Handle paste
+            if (theEvent.type === 'paste') {
+                key = event.clipboardData.getData('text/plain');
+            } else {
+                // Handle key press
+                var key = theEvent.keyCode || theEvent.which;
+                key = String.fromCharCode(key);
+            }
+            var regex = /[0-9]|\./;
+            if (!regex.test(key)) {
+                theEvent.returnValue = false;
+                if (theEvent.preventDefault) theEvent.preventDefault();
+            }
+        }
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'accounts:home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> Master Settings </span>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> University Settings</span>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span> {% trans 'Add Program Fee' %} </span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">{% trans 'Add Program Fee' %} </span>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form action="{% url 'masters:add_program_fee' %}"
+                      id="id_form"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                <input type="hidden" id="program_fee_count" name="program_fee_count">
+
+                    <div class="form-body">
+
+                        <div class="row item_experience" id="item_experience_1">
+
+                        <div class="row">
+                            <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'University Type' %}: <span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <input class="current" type="radio" checked name="university_type"
+                                               id="university_main"
+                                               value="Main">
+                                        <span style="padding:inherit">{% trans 'Main' %}</span>&nbsp;&nbsp;
+                                        <input class="current" type="radio" name="university_type" value="Partner"
+                                               id="university_partner">
+                                        <span style="padding:inherit">{% trans 'Partner' %}</span>
+                                    </div>
+                                </div>
+
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'University' %}:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select id='university' title="Select University"
+                                                name="university"
+                                                class="form-control" required>
+                                            <option selected="selected" value=""> Please Select</option>
+                                            {% for rec in university_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.university_name|default_if_none:"" }}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        <br>
+
+                            <div class="row">
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Academic Year' %}:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select id='year' title="Select Year"
+                                                name="year"
+                                                class="form-control" required>
+                                            <option selected="selected" value=""> Please Select</option>
+                                            {% for rec in year_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.year_name|default_if_none:"" }}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Program' %}:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select id='program' title="Select Program"
+                                                name="program"
+                                                class="form-control" required>
+                                            <option selected="selected" value=""> Please Select</option>
+                                            {% for rec in program_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.program_name|default_if_none:"" }}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        <br>
+                        <div class="row">
+                            <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Country' %}:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select id='country' title="Select Country"
+                                                name="country"
+                                                class="form-control" required>
+                                            <option selected="selected" value=""> Please Select</option>
+                                            {% for rec in country_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.country_name|title }}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                </div>
+                        </div>
+
+                            <br>
+                            <div class="row">
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Discount' %}:</label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter Total Amount" id="discount"
+                                               value="" onkeypress='validate(event)'
+                                               name="discount"
+                                               class="form-control" required>
+
+                                    </div>
+                                </div>
+
+
+                            <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Total Amount' %}:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter Total Amount" id="total_amount"
+                                               value="" onkeypress='validate(event)'
+                                               name="total_amount"
+                                               class="form-control" required>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                        <hr>
+
+                        <div class="portlet-title" style="margin-left:-15px;font-size: 14px;">
+                            <div class="caption">
+                                <p style="color: red;text-transform: uppercase">{% trans 'Program Fee Details' %}</p>
+                                {#                                <span class="caption-subject font-red sbold uppercase"> <i#}
+                                {#                                        class="icon-settings font-red"></i></span>#}
+                            </div>
+                        </div>
+                        <hr>
+
+                        <input hidden type="text" id="english_count" name="english_count">
+
+                        <div class="" style="float: right;padding-right: 90px;">
+                            <div class="">
+                                <a href="javascript:;" id="add" class="btn btn-icon-only green add_english_row"
+                                   style="">
+                                    <i class="fa fa-plus "></i>
+                                </a>
+                            </div>
+                        </div>
+
+
+                        <div class="row english_item" id="english_check_1">
+                            <div class="row">
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Fee Type' %}:</label>
+                                    <div class="col-md-4">
+                                        <input type="text" title="Enter Fee Type" id="fee_type_1"
+                                               name="fee_type_1" value=""
+                                               class="form-control eng_emp" required>
+
+                                        <input hidden type="text" id="english_obj_1" name="english_obj_1">
+                                    </div>
+                                </div>
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Amount' %}:</label>
+                                    <div class="col-md-2">
+                                        <input type="text" title="Enter result" id="amount_1"
+                                               name="amount_1" onkeypress='validate(event)'
+                                               value=""
+                                               class="form-control eng_emp" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br><br>
+                        <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                                        onclick="window.location='{% url "masters:program_fee_settings" %}'">
+                                    Back
+                                </button>
+
+                                <button type="submit" class="btn green" id="save_form" style="">Save
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

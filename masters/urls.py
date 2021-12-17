@@ -164,6 +164,9 @@ urlpatterns = [
     path('edit_study_type/', views.edit_study_type, name='edit_study_type'),
     path('delete_study_type/', views.delete_study_type, name='delete_study_type'),
 
+    path('program_fee_settings/', views.program_fee_settings, name='program_fee_settings'),
+    path('add_program_fee/', views.add_program_fee, name='add_program_fee'),
+
     path('program_settings/', views.program_settings, name='program_settings'),
     path('add_program/', views.add_program, name='add_program'),
     path('edit_program/<int:program_id>/', views.edit_program, name='edit_program'),

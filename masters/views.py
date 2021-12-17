@@ -2113,9 +2113,100 @@ def delete_study_type(request):
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/study_type_settings/')
 
+def program_fee_settings(request):
+    program_fee_recs = ProgramFeeDetails.objects.filter().order_by('-id')
+    return render(request, 'program_fee_settings.html', {'program_fee_recs': program_fee_recs})
+
+def add_program_fee(request):
+    if request.method == 'POST':
+        university = request.POST.get('university')
+        year = request.POST.get('year')
+        program = request.POST.get('program')
+        country = request.POST.get('country')
+        discount = request.POST.get('discount')
+        total_amount = request.POST.get('total_amount')
+        program_fee_count = request.POST.get('program_fee_count')
+        try:
+            program_fee_obj = ProgramFeeDetails.objects.create(university_id=university,country_id = country,
+                                                                                   year_id=year,
+                                                                                   program_id=program,discount = discount,total_amount = total_amount)
+            program_fee_obj.program_fee.clear()
+            for x in range(int(program_fee_count)):
+                try:
+                    x = x + 1
+                    program_fee_type_obj = ProgramFeeType.objects.create(fee_type=request.POST.get('fee_type_' + str(x)),
+                                                                      amount=request.POST.get('amount_' + str(x))
+                                                                      )
+                    program_fee_obj.program_fee.add(program_fee_type_obj)
+                except:
+                    pass
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/program_fee_settings/')
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university = False).order_by('-id')
+    year_recs = YearDetails.objects.all()
+    program_recs = ProgramDetails.objects.filter(is_delete=False).order_by('-id')
+    country_recs = CountryDetails.objects.all()
+    return render(request, 'add_program_fee.html',{
+        'university_recs':university_recs,
+        'year_recs':year_recs,
+        'program_recs':program_recs,
+        'country_recs':country_recs,
+                                                   })
+
+
 def program_settings(request):
     program_recs = ProgramDetails.objects.filter(is_delete=False).order_by('-id')
     return render(request, 'program_settings.html', {'program_recs': program_recs})
+
+def add_program(request):
+    if request.method == 'POST':
+        university = request.POST.get('university')
+        faculty = request.POST.get('faculty')
+        program_name = request.POST.get('program_name')
+        # program_fee = request.POST.get('program_fee')
+        # credit_hrs = request.POST.get('credit_hrs')
+        study_type = request.POST.get('study_type')
+        study_level = request.POST.get('study_level')
+        program_overview = request.POST.get('program_overview')
+        program_objective = request.POST.get('program_objective')
+        program_vision = request.POST.get('program_vision')
+        program_mission = request.POST.get('program_mission')
+        status = request.POST.get('status')
+        study_mode_recs = request.POST.getlist('study_mode[]')
+        campus_recs = request.POST.getlist('campus')
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            program_obj = ProgramDetails.objects.create(faculty_id=faculty,university_id=university,
+                                             program_name=program_name,program_overview = program_overview,program_objective = program_objective,
+                                             program_vision = program_vision,program_mission = program_mission,status = status,study_type_id = study_type,study_level_id = study_level,
+                                                        )
+
+            program_obj.study_mode.clear()
+            for study_mode in study_mode_recs:
+                program_study_mode_obj = ProgramStudyModeDetails.objects.create(study_mode=study_mode)
+                program_obj.study_mode.add(program_study_mode_obj)
+
+            program_obj.campus.clear()
+            for campus_id in campus_recs:
+                program_campus_obj = ProgramCampusDetails.objects.create(campus_id=campus_id)
+                program_obj.campus.add(program_campus_obj)
+
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/program_settings/')
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university = False).order_by('-id')
+    study_mode_recs = StudyModeDetails.objects.filter().order_by('-id')
+    study_level_recs = StudyLevelDetails.objects.filter().order_by('-id')
+    study_type_recs = StudyTypeDetails.objects.filter().order_by('-id')
+    faculty_recs = FacultyDetails.objects.filter(status=True).order_by('-id')
+    campus_recs = CampusBranchesDetails.objects.filter().order_by('-id')
+    study_mode_list = ['Online', 'On Campus']
+    return render(request, 'add_program.html',{'university_recs':university_recs,'faculty_recs':faculty_recs,'study_level_recs':study_level_recs,'study_mode_recs':study_mode_recs,'study_type_recs':study_type_recs,'campus_recs':campus_recs,'study_mode_list':study_mode_list})
 
 def add_program(request):
     if request.method == 'POST':

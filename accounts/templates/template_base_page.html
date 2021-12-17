@@ -702,6 +702,12 @@ License: You must have a valid license purchased only from themeforest(the above
                                                class="nav-link ">{% trans 'Manage Program' %}</a>
                                         </li>
                                     {% endif %}
+                                {% if 'Manage Program Fee' in access_list %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:program_fee_settings' %}"
+                                               class="nav-link ">{% trans 'Manage Program Fee' %}</a>
+                                        </li>
+                                    {% endif %}
                                     {% if 'Manage Campus' in access_list %}
                                         <li class="nav-item  ">
                                             <a href="/masters/campus_settings/" class="nav-link ">
@@ -1591,7 +1597,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-    {% if request.resolver_match.url_name == 'university_settings' or request.resolver_match.url_name == 'edit_university' or request.resolver_match.url_name == 'add_university' or request.resolver_match.url_name == 'university_partner_settings' or request.resolver_match.url_name == 'add_university_partner' or request.resolver_match.url_name == 'edit_university_partner' or request.resolver_match.url_name == 'campus_settings'  or request.resolver_match.url_name == 'add_campus'  or request.resolver_match.url_name == 'edit_campus'   or request.resolver_match.url_name == 'program_settings'  or request.resolver_match.url_name == 'add_program' or request.resolver_match.url_name == 'edit_program' or request.resolver_match.url_name == 'link_campus_staff'  or request.resolver_match.url_name == 'department_settings' or request.resolver_match.url_name == 'add_department' or request.resolver_match.url_name == 'edit_department' or request.resolver_match.url_name == 'link_department_staff' or request.resolver_match.url_name == 'link_university_staff' %}
+    {% if request.resolver_match.url_name == 'university_settings' or request.resolver_match.url_name == 'edit_university' or request.resolver_match.url_name == 'add_university' or request.resolver_match.url_name == 'university_partner_settings' or request.resolver_match.url_name == 'add_university_partner' or request.resolver_match.url_name == 'edit_university_partner' or request.resolver_match.url_name == 'campus_settings'  or request.resolver_match.url_name == 'add_campus'  or request.resolver_match.url_name == 'edit_campus'   or request.resolver_match.url_name == 'program_settings'   or request.resolver_match.url_name == 'program_fee_settings'  or request.resolver_match.url_name == 'add_program' or request.resolver_match.url_name == 'edit_program' or request.resolver_match.url_name == 'link_campus_staff'  or request.resolver_match.url_name == 'department_settings' or request.resolver_match.url_name == 'add_department' or request.resolver_match.url_name == 'edit_department' or request.resolver_match.url_name == 'link_department_staff' or request.resolver_match.url_name == 'link_university_staff' or request.resolver_match.url_name == 'add_program_fee' %}
         {
             var element = document.getElementById("b");
             element.classList.add("active");

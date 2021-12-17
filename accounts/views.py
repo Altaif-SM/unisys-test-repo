@@ -851,7 +851,7 @@ def get_user_permission(request):
                                     'Manage Faculties', 'Link Faculty to User','System Settings']
             user_settings_list = ['Manage Group', 'Manage Users','User Settings']
             university_settings_list = ['Manage Universities', 'Manage University Partner', 'Link University to User',
-                                        'Manage Program', 'Manage Campus', 'Link Campus to User', 'Manage Department',
+                                        'Manage Program','Manage Program Fee', 'Manage Campus', 'Link Campus to User', 'Manage Department',
                                         'Link Department to User','University Settings']
             academic_settings_list = ['Manage Year', 'Manage Semester', 'Manage Activity', 'Manage Calendar','Academic Settings']
             module_settings_list = ['Manage Applicant Documents', 'Approving Applicant Details','Payment Settings','Application Settings']
