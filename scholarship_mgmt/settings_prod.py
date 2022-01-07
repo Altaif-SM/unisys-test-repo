@@ -202,7 +202,7 @@ EMAIL_USE_TLS = True
 # EMAIL_HOST_USER = 'namafund@namafoundation.org'
 # EMAIL_HOST_PASSWORD = 'namafund123'
 # EMAIL_PORT = 587
-SERVER_HOST_NAME = "http://51.75.54.229:9000/"
+SERVER_HOST_NAME = "http://51.75.54.229:9092/"
 
 stripe.api_key = 'sk_test_51JcmDhSIeVZrpBOQmSMJtfkhTDY8JkkrbnjdEw2wurzt9nQdK74CGYCX90l5q0VfEUuq4oLzQHMA1mgpeUqsKK6G00fUXuYOIG'
 

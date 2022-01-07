@@ -99,7 +99,7 @@ class CreateCheckoutSessionView(View):
                             'unit_amount': int(float(payement_obj.amount)*100),
                             'product_data': {
                                 'name': 'Online Admission',
-                                'images': ['http://159.65.159.193:8082/static/images/university_logo.png'],
+                                'images': ['http://51.75.54.229:9092/static/images/university_logo.png'],
                             },
                         },
                         'quantity': 1,
