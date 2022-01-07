@@ -2262,7 +2262,6 @@ def save_update_applicant_additional_info(request):
     return redirect('/student/applicant_additional_information/')
 
 
-@agreements_required
 def applicant_attachment_submission(request):
 
     try:
@@ -2286,7 +2285,6 @@ def applicant_attachment_submission(request):
                   {'attachment_obj': attachment_obj})
 
 
-@agreements_required
 def save_attachement_submission(request):
     try:
         passport_photo = request.FILES.get('passport_photo')
