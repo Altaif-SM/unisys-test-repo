@@ -19,7 +19,7 @@ class StudentPaymentReceiptVoucher(BaseModel):
     VOUCHER_TYPE = 'voucher_type'
 
     voucher_number = models.CharField(max_length=50, null=True)
-    application = models.ForeignKey(ApplicationDetails, related_name="rel_student_payment_receipt_voucher", on_delete=models.PROTECT, null=True)
+    application = models.ForeignKey(ApplicationDetails, related_name="rel_student_payment_receipt_voucher", on_delete=models.SET_NULL, null=True)
     voucher_date = models.DateField()
     voucher_amount = models.FloatField(max_length=50, null=True)
     voucher_total = models.FloatField(max_length=50, null=True)
@@ -124,9 +124,9 @@ class StudentPaymentReceiptVoucher(BaseModel):
 #
 #     receipt_voucher_number = models.CharField(max_length=50, null=True)
 #     application = models.ForeignKey(ApplicationDetails, related_name="rel_student_receipt_voucher",
-#                                     on_delete=models.PROTECT, null=True)
-#     # student = models.ForeignKey(StudentDetails, related_name="rel_student_receipt_voucher", on_delete=models.PROTECT)
-#     # semester = models.ForeignKey(SemesterDetails, related_name="rel_semester_receipt_voucher", on_delete=models.PROTECT)
+#                                     on_delete=models.SET_NULL, null=True)
+#     # student = models.ForeignKey(StudentDetails, related_name="rel_student_receipt_voucher", on_delete=models.SET_NULL)
+#     # semester = models.ForeignKey(SemesterDetails, related_name="rel_semester_receipt_voucher", on_delete=models.SET_NULL)
 #     receipt_voucher_date = models.DateField()
 #     receipt_voucher_amount = models.FloatField(max_length=50, null=True)
 #     receipt_voucher_total = models.FloatField(max_length=50, null=True)
@@ -178,8 +178,8 @@ class StudentPaymentReceiptVoucher(BaseModel):
 # # class StudentReceiptVoucher(BaseModel):
 # #     receipt_voucher_number = models.CharField(max_length=50, null=True)
 # #     application = models.ForeignKey(ApplicationDetails, related_name="rel_donor_receipt_voucher",
-# #                                     on_delete=models.PROTECT, null=True)
-# #     student_donor = models.ForeignKey(StudentDonorMapping, related_name="rel_student_donor_receipt_voucher", on_delete=models.PROTECT, null=True)
+# #                                     on_delete=models.SET_NULL, null=True)
+# #     student_donor = models.ForeignKey(StudentDonorMapping, related_name="rel_student_donor_receipt_voucher", on_delete=models.SET_NULL, null=True)
 # #     receipt_voucher_amount = models.FloatField(max_length=50, null=True)
 # #     receipt_voucher_total = models.FloatField(max_length=50, null=True)
 # #     receipt_voucher_description = models.CharField(max_length=50, null=True)
@@ -205,8 +205,8 @@ class DonorReceiptVoucher(BaseModel):
 
     voucher_number = models.CharField(max_length=50, null=True)
     application = models.ForeignKey(ApplicationDetails, related_name="rel_donor_receipt_voucher",
-                                    on_delete=models.PROTECT, null=True)
-    donor_student = models.ForeignKey(StudentDonorMapping, related_name="rel_donor_student_receipt_voucher", on_delete=models.PROTECT, null=True)
+                                    on_delete=models.SET_NULL, null=True)
+    donor_student = models.ForeignKey(StudentDonorMapping, related_name="rel_donor_student_receipt_voucher", on_delete=models.SET_NULL, null=True)
     voucher_amount = models.FloatField(max_length=50, null=True)
     voucher_total = models.FloatField(max_length=50, null=True)
     voucher_description = models.CharField(max_length=50, null=True)

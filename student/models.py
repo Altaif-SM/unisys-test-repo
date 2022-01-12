@@ -71,12 +71,12 @@ class StudentDetails(BaseModel):
     photo = models.FileField(upload_to=content_student_file_name_image)
     is_active = models.BooleanField(default=True)
     nationality = models.ForeignKey('masters.CountryDetails', null=True, related_name='student_nationality_rel',
-                                    on_delete=models.PROTECT)
+                                    on_delete=models.SET_NULL)
     religion = models.CharField(max_length=255, blank=True, null=True)
     contact_number = models.CharField(max_length=16, blank=True, null=True)
     address = models.ForeignKey('masters.AddressDetails', blank=True, null=True, related_name='student_address_rel',
-                                on_delete=models.PROTECT)
-    user = models.ForeignKey(User, null=True, related_name='student_user_rel', on_delete=models.PROTECT)
+                                on_delete=models.SET_NULL)
+    user = models.ForeignKey(User, null=True, related_name='student_user_rel', on_delete=models.SET_NULL)
 
     class Meta:
         permissions = (
@@ -126,30 +126,30 @@ class ApplicationDetails(BaseModel):
     surname = models.CharField(max_length=255, blank=True, null=True)
 
     year = models.ForeignKey('masters.YearDetails', blank=True, null=True, related_name='applicant_year_rel',
-                             on_delete=models.PROTECT)
+                             on_delete=models.SET_NULL)
     semester = models.ForeignKey('masters.SemesterDetails', blank=True, null=True,
-                                 related_name='applicant_semester_rel', on_delete=models.PROTECT)
+                                 related_name='applicant_semester_rel', on_delete=models.SET_NULL)
 
     birth_date = models.DateField(blank=True, null=True)
     gender = models.CharField(max_length=25, blank=True, null=True, )
     nationality = models.ForeignKey('masters.CountryDetails', blank=True, null=True,
                                     related_name='applicant_nationality_rel',
-                                    on_delete=models.PROTECT)
+                                    on_delete=models.SET_NULL)
     religion = models.ForeignKey('masters.ReligionDetails', blank=True, null=True,
                                  related_name='applicant_religion_rel',
-                                 on_delete=models.PROTECT)
+                                 on_delete=models.SET_NULL)
 
     id_number = models.CharField(max_length=100, blank=True, null=True)
     passport_number = models.CharField(max_length=100, blank=True, null=True)
     passport_issue_country = models.ForeignKey('masters.CountryDetails', blank=True, null=True,
                                                related_name='passport_issue_country_rel',
-                                               on_delete=models.PROTECT)
+                                               on_delete=models.SET_NULL)
     passport_image = models.FileField(upload_to=content_file_name_image, blank=True, null=True)
 
     address = models.ForeignKey('masters.AddressDetails', blank=True, null=True, related_name='applicant_address_rel',
-                                on_delete=models.PROTECT)
+                                on_delete=models.SET_NULL)
     permanent_address = models.ForeignKey('masters.AddressDetails', blank=True, null=True,
-                                          related_name='applicant_permanent_address_rel', on_delete=models.PROTECT)
+                                          related_name='applicant_permanent_address_rel', on_delete=models.SET_NULL)
     telephone_hp = models.CharField(max_length=16, blank=True, null=True)
     telephone_home = models.CharField(max_length=16, blank=True, null=True)
     email = models.EmailField(max_length=255, blank=True, null=True)
@@ -160,7 +160,7 @@ class ApplicationDetails(BaseModel):
     wife_pay_slip = models.FileField(upload_to=content_file_name_report)
     wife_nationality = models.CharField(max_length=50, blank=True, null=True)
     wife_home_address = models.CharField(max_length=255, blank=True, null=True)
-    # wife_nationality = models.ForeignKey('masters.CountryDetails', null=True, related_name='wife_nationality_rel',on_delete=models.PROTECT)
+    # wife_nationality = models.ForeignKey('masters.CountryDetails', null=True, related_name='wife_nationality_rel',on_delete=models.SET_NULL)
 
     wife_occupation = models.CharField(max_length=255, blank=True, null=True)
     wife_telephone_home = models.CharField(max_length=16, blank=True, null=True)
@@ -173,7 +173,7 @@ class ApplicationDetails(BaseModel):
     father_nationality = models.CharField(max_length=50, blank=True, null=True)
     father_home_address = models.CharField(max_length=255, blank=True, null=True)
 
-    # father_nationality = models.ForeignKey('masters.CountryDetails', blank=True, null=True, related_name='father_nationality_rel', on_delete=models.PROTECT)
+    # father_nationality = models.ForeignKey('masters.CountryDetails', blank=True, null=True, related_name='father_nationality_rel', on_delete=models.SET_NULL)
 
     father_occupation = models.CharField(max_length=255, blank=True, null=True)
     father_telephone_home = models.CharField(max_length=16, blank=True, null=True)
@@ -185,7 +185,7 @@ class ApplicationDetails(BaseModel):
     mother_pay_slip = models.FileField(upload_to=content_file_name_report)
     mother_nationality = models.CharField(max_length=50, blank=True, null=True)
     mother_home_address = models.CharField(max_length=255, blank=True, null=True)
-    # mother_nationality = models.ForeignKey('masters.CountryDetails', null=True, related_name='mother_nationality_rel',on_delete=models.PROTECT)
+    # mother_nationality = models.ForeignKey('masters.CountryDetails', null=True, related_name='mother_nationality_rel',on_delete=models.SET_NULL)
 
     mother_occupation = models.CharField(max_length=255, blank=True, null=True)
     mother_telephone_home = models.CharField(max_length=16, blank=True, null=True)
@@ -195,7 +195,7 @@ class ApplicationDetails(BaseModel):
     is_submitted = models.BooleanField(default=False)
     application_id = models.CharField(max_length=100, blank=True, null=True)
     student = models.ForeignKey(StudentDetails, blank=True, null=True, related_name='student_applicant_rel',
-                                on_delete=models.PROTECT)
+                                on_delete=models.SET_NULL)
 
     first_interview = models.BooleanField(default=False)
     first_interview_attend = models.BooleanField(default=False)
@@ -224,23 +224,23 @@ class ApplicationDetails(BaseModel):
     is_sponsored = models.BooleanField(default=False)
     is_online_admission = models.BooleanField(default=False)
     university = models.ForeignKey('masters.UniversityDetails', blank=True, null=True,
-                                 related_name='applicant_university_rel', on_delete=models.PROTECT)
+                                 related_name='applicant_university_rel', on_delete=models.SET_NULL)
     learning_country = models.ForeignKey('masters.CountryDetails', blank=True, null=True,
                                                related_name='learing_country_rel',
-                                               on_delete=models.PROTECT)
+                                               on_delete=models.SET_NULL)
     learning_centre = models.ForeignKey('masters.LearningCentersDetails', blank=True, null=True, related_name='applicant_learning_centre_rel',
-                                on_delete=models.PROTECT)
+                                on_delete=models.SET_NULL)
     academic_year = models.ForeignKey('masters.YearDetails', blank=True, null=True, related_name='applicant_academic_year_rel',
-                             on_delete=models.PROTECT)
+                             on_delete=models.SET_NULL)
     program = models.ForeignKey('masters.ProgramDetails', blank=True, null=True,
                                        related_name='applicant_program_rel',
-                                       on_delete=models.PROTECT)
+                                       on_delete=models.SET_NULL)
     faculty = models.ForeignKey('masters.FacultyDetails', blank=True, null=True,
                                 related_name='applicant_faculty_rel',
-                                on_delete=models.PROTECT)
+                                on_delete=models.SET_NULL)
     campus = models.ForeignKey('masters.CampusBranchesDetails', blank=True, null=True,
                                 related_name='applicant_campus_branch_rel',
-                                on_delete=models.PROTECT)
+                                on_delete=models.SET_NULL)
     progress_counter = models.IntegerField(default=0)
 
     # family_info_flag = models.BooleanField(default=False)
@@ -479,7 +479,7 @@ class ApplicationHistoryDetails(BaseModel):
     status = models.CharField(max_length=255, blank=True, null=True)
     remark = models.CharField(max_length=1000, blank=True, null=True)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_history_rel',
-                                     on_delete=models.PROTECT)
+                                     on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ('-id',)
@@ -490,7 +490,7 @@ class SiblingDetails(BaseModel):
     sibling_age = models.CharField(max_length=5, blank=True, null=True)
     sibling_status = models.CharField(max_length=255, blank=True, null=True)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='sibling_applicant_rel',
-                                     on_delete=models.PROTECT)
+                                     on_delete=models.SET_NULL)
 
 
 class AcademicQualificationDetails(BaseModel):
@@ -502,7 +502,7 @@ class AcademicQualificationDetails(BaseModel):
     degree = models.CharField(max_length=256, blank=True, null=True)
     other_degree = models.CharField(max_length=256, blank=True, null=True)
     major = models.CharField(max_length=256, blank=True, null=True)
-    country = models.ForeignKey('masters.CountryDetails', null=True, related_name='academic_country_rel', on_delete=models.PROTECT)
+    country = models.ForeignKey('masters.CountryDetails', null=True, related_name='academic_country_rel', on_delete=models.SET_NULL)
     # o_level = models.CharField(max_length=255, blank=True, null=True)
     # o_level_year = models.CharField(max_length=6, blank=True, null=True)
     # o_level_result = models.CharField(max_length=255, blank=True, null=True)
@@ -515,7 +515,7 @@ class AcademicQualificationDetails(BaseModel):
     # high_school_institution = models.CharField(max_length=255, blank=True, null=True)
     # high_school_result_document = models.FileField(upload_to=content_file_name_report)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='academic_applicant_rel',
-                                     on_delete=models.PROTECT)
+                                     on_delete=models.SET_NULL)
 
 
 class EnglishQualificationDetails(BaseModel):
@@ -529,10 +529,10 @@ class EnglishQualificationDetails(BaseModel):
     # english_test_two_result = models.CharField(max_length=255, blank=True, null=True)
     # english_test_two_result_document = models.FileField(upload_to=content_file_name_report)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='english_applicant_rel',
-                                     on_delete=models.PROTECT)
+                                     on_delete=models.SET_NULL)
     english_qualification = models.BooleanField(default=True)
     english_competency_test = models.ForeignKey('masters.EnglishCompetencyTestDetails', null=True, related_name='english_competency_test_rel',
-                                     on_delete=models.PROTECT)
+                                     on_delete=models.SET_NULL)
 
 
 class CurriculumDetails(BaseModel):
@@ -550,7 +550,7 @@ class CurriculumDetails(BaseModel):
     # curriculum_result_document_three = models.FileField(upload_to=content_file_name_report, blank=True, null=True)
 
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='curriculum_applicant_rel',
-                                     on_delete=models.PROTECT)
+                                     on_delete=models.SET_NULL)
 
 
 class ExperienceDetails(BaseModel):
@@ -567,7 +567,7 @@ class ExperienceDetails(BaseModel):
     # work_experience_document_two = models.FileField(upload_to=content_file_name_report)
 
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_experience_rel',
-                                     on_delete=models.PROTECT)
+                                     on_delete=models.SET_NULL)
 
 
 class PostgraduateDetails(BaseModel):
@@ -577,32 +577,32 @@ class PostgraduateDetails(BaseModel):
     awarded_date = models.DateField(null=True, blank=True)
     agency_name_no = models.CharField(max_length=255, blank=True, null=True)
     country = models.ForeignKey('masters.CountryDetails', null=True, related_name='academic_postgraduate_country_rel',
-                                on_delete=models.PROTECT)
+                                on_delete=models.SET_NULL)
     expiration_date = models.DateField(null=True, blank=True)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_postgraduate_rel',
-                                     on_delete=models.PROTECT)
+                                     on_delete=models.SET_NULL)
 
 
 
 
 class ScholarshipSelectionDetails(BaseModel):
     scholarship = models.ForeignKey('masters.ScholarshipDetails', null=True, related_name='scholarship_selection_rel',
-                                    on_delete=models.PROTECT)
+                                    on_delete=models.SET_NULL)
     degree = models.ForeignKey('masters.DegreeDetails', blank=True, null=True,
                                related_name='degree_scholarship_rel',
-                               on_delete=models.PROTECT)
+                               on_delete=models.SET_NULL)
 
     course_applied = models.ForeignKey('masters.ProgramDetails', blank=True, null=True,
                                        related_name='course_scholarship_rel',
-                                       on_delete=models.PROTECT)
+                                       on_delete=models.SET_NULL)
 
     university = models.ForeignKey('masters.UniversityDetails', blank=True, null=True,
                                    related_name='university_scholarship_rel',
-                                   on_delete=models.PROTECT)
+                                   on_delete=models.SET_NULL)
 
     admission_letter_document = models.FileField(upload_to=content_aplicant_file_name_report)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_scholarship_rel',
-                                     on_delete=models.PROTECT)
+                                     on_delete=models.SET_NULL)
 
     scholarship_selection = models.BooleanField(default=True)
 
@@ -617,7 +617,7 @@ class ScholarshipSelectionDetails(BaseModel):
 class ApplicantAboutDetails(BaseModel):
     about_yourself = models.CharField(max_length=600, blank=True, null=True)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_about_rel',
-                                     on_delete=models.PROTECT)
+                                     on_delete=models.SET_NULL)
     # my_application = models.BooleanField(default=True)
 
 
@@ -626,22 +626,22 @@ class ApplicantPsychometricTestDetails(BaseModel):
     result = models.CharField(max_length=255, blank=True, null=True)
     test_result_document = models.FileField(upload_to=content_file_name_report)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_psychometric_test_rel',
-                                     on_delete=models.PROTECT)
+                                     on_delete=models.SET_NULL)
 
 
 class ApplicantAgreementDetails(BaseModel):
     four_parties_agreement_document = models.FileField(upload_to=content_file_name_report)
     education_loan_agreement_document = models.FileField(upload_to=content_file_name_report)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_agreement_rel',
-                                     on_delete=models.PROTECT)
+                                     on_delete=models.SET_NULL)
 
 
 class ApplicantAcademicProgressDetails(BaseModel):
     year = models.ForeignKey('masters.YearDetails', null=True, related_name='applicant_progress_year_rel',
-                             on_delete=models.PROTECT)
+                             on_delete=models.SET_NULL)
     date = models.DateField(null=True, blank=True)
     semester = models.ForeignKey('masters.SemesterDetails', null=True, related_name='applicant_progress_semester_rel',
-                                 on_delete=models.PROTECT)
+                                 on_delete=models.SET_NULL)
     gpa_scored = models.CharField(max_length=255, blank=True, null=True)
     gpa_from = models.CharField(max_length=255, blank=True, null=True)
     cgpa_scored = models.CharField(max_length=255, blank=True, null=True)
@@ -650,7 +650,7 @@ class ApplicantAcademicProgressDetails(BaseModel):
     is_approved = models.BooleanField(default=False)
     result = models.CharField(max_length=255, blank=True, null=True)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_progress_rel',
-                                     on_delete=models.PROTECT)
+                                     on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.semester.semester_name
@@ -673,17 +673,17 @@ class ApplicantAcademicProgressDetails(BaseModel):
 
 class ApplicantDevelopmentProgramDetails(BaseModel):
     module = models.ForeignKey('masters.DevelopmentProgram', null=True, related_name='development_program_module_rel',
-                               on_delete=models.PROTECT)
+                               on_delete=models.SET_NULL)
     certificate_document = models.FileField(upload_to=content_file_name_report)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='development_program_applicant_rel',
-                                     on_delete=models.PROTECT)
+                                     on_delete=models.SET_NULL)
 
 
 class StudentNotifications(BaseModel):
     is_read = models.BooleanField(default=False)
     message = models.CharField(max_length=500, blank=True, null=True)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_notification_rel',
-                                     on_delete=models.PROTECT)
+                                     on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ('-id',)
@@ -696,7 +696,7 @@ class AdminNotifications(BaseModel):
     is_read = models.BooleanField(default=False)
     message = models.CharField(max_length=500, blank=True, null=True)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='admin_notification_rel',
-                                     on_delete=models.PROTECT)
+                                     on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ('-id',)
@@ -709,13 +709,13 @@ class EmployementHistoryDetails(BaseModel):
     employer_name = models.CharField(max_length=255, blank=True, null=True)
     designation = models.CharField(max_length=255, blank=True, null=True)
     country = models.ForeignKey('masters.CountryDetails', null=True, related_name='employement_history_country_rel',
-                                on_delete=models.PROTECT)
+                                on_delete=models.SET_NULL)
     from_date = models.DateField(null=True, blank=True)
     to_date = models.DateField(null=True, blank=True)
     industry_type = models.CharField(max_length=255, blank=True, null=True)
     employed_years = models.CharField(max_length=255, blank=True, null=True)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='employement_history_rel',
-                                     on_delete=models.PROTECT)
+                                     on_delete=models.SET_NULL)
 
 
 class ApplicantAttachementDetails(BaseModel):
@@ -726,7 +726,7 @@ class ApplicantAttachementDetails(BaseModel):
     english_test_result_document = models.FileField(upload_to='document/', null=True, blank=True)
     recommendation_letter = models.FileField(upload_to='document/', null=True, blank=True)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_attachement_rel',
-                                     on_delete=models.PROTECT)
+                                     on_delete=models.SET_NULL)
 
 
 class AdditionInformationDetails(BaseModel):
@@ -743,14 +743,14 @@ class AdditionInformationDetails(BaseModel):
     sponsore_contact = models.CharField(max_length=255, blank=True, null=True)
 
     ref_by_student = models.ForeignKey(StudentDetails, blank=True, null=True, related_name='student_additional_info',
-                                       on_delete=models.PROTECT)
+                                       on_delete=models.SET_NULL)
     ref_by_agent = models.ForeignKey(AgentDetails, blank=True, null=True,
                                      related_name='agent_additional_info',
-                                     on_delete=models.PROTECT)
+                                     on_delete=models.SET_NULL)
     application_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_addition_info',
-                                     on_delete=models.PROTECT)
+                                     on_delete=models.SET_NULL)
 
 class ConditionalVerificationDocumentsDetails(BaseModel):
     required_document = models.CharField(max_length=255, blank=True, null=True)
     application_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_verification_document',
-                                     on_delete=models.PROTECT)
+                                     on_delete=models.SET_NULL)

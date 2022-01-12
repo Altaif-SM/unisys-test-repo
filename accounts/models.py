@@ -59,7 +59,7 @@ class User(AbstractUser):
     semester_switch = models.BooleanField(default=False)
     program_switch = models.BooleanField(default=False)
     address = models.ForeignKey('masters.AddressDetails', blank=True, null=True, related_name='user_address_rel',
-                                on_delete=models.PROTECT)
+                                on_delete=models.SET_NULL)
     permission = models.ManyToManyField(PersmissionDetails, blank=True)
 
     class Meta:

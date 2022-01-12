@@ -8,8 +8,8 @@ class OrderDetails(BaseModel):
     status = models.CharField(max_length=255, blank=True, null=True)
     currency_code = models.CharField(max_length=255, blank=True, null=True)
     amount = models.CharField(max_length=255, blank=True, null=True)
-    user = models.ForeignKey('accounts.User', null=True, related_name='order_user_rel', on_delete=models.PROTECT)
+    user = models.ForeignKey('accounts.User', null=True, related_name='order_user_rel', on_delete=models.SET_NULL)
     application_id = models.ForeignKey(ApplicationDetails, null=True, related_name='order_application_rel',
-                                       on_delete=models.PROTECT)
+                                       on_delete=models.SET_NULL)
     class Meta:
         ordering = ('-id',)

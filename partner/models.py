@@ -18,7 +18,7 @@ def content_file_name_partner(instance, filename):
 
 class PartnerDetails(BaseModel):
     country = models.ForeignKey('masters.CountryDetails', null=True, related_name='partner_country_rel',
-                                on_delete=models.PROTECT)
+                                on_delete=models.SET_NULL)
     office_name = models.CharField(max_length=255, blank=True, null=True)
     person_one = models.CharField(max_length=100, blank=True, null=True)
     person_one_contact_number = models.CharField(max_length=16, blank=True, null=True)
@@ -27,10 +27,10 @@ class PartnerDetails(BaseModel):
     office_contact_number = models.CharField(max_length=16, blank=True, null=True)
     email = models.EmailField(max_length=255, blank=True, null=True)
     address = models.ForeignKey('masters.AddressDetails', null=True, related_name='partner_address_rel',
-                                on_delete=models.PROTECT)
+                                on_delete=models.SET_NULL)
     single_address = models.CharField(max_length=500, blank=True, null=True)
     photo = models.FileField(upload_to=content_file_name_partner, blank=True, null=True)
-    user = models.ForeignKey('accounts.User', null=True, related_name='partner_user_rel', on_delete=models.PROTECT)
+    user = models.ForeignKey('accounts.User', null=True, related_name='partner_user_rel', on_delete=models.SET_NULL)
 
     class Meta:
         permissions = (
@@ -55,21 +55,21 @@ class PartnerDetails(BaseModel):
 
 class StudentModuleMapping(BaseModel):
     module = models.ForeignKey('masters.DevelopmentProgram', null=True, related_name='student_module_link_rel',
-                               on_delete=models.PROTECT)
+                               on_delete=models.SET_NULL)
     applicant_id = models.ForeignKey('student.ApplicationDetails', null=True, related_name='applicant_module_rel',
-                                     on_delete=models.PROTECT)
+                                     on_delete=models.SET_NULL)
     country = models.ForeignKey(CountryDetails, null=True, related_name='student_module_country_rel',
-                                on_delete=models.PROTECT)
+                                on_delete=models.SET_NULL)
     degree = models.ForeignKey('masters.DegreeDetails', blank=True, null=True,
                                related_name='degree_module_rel',
-                               on_delete=models.PROTECT)
+                               on_delete=models.SET_NULL)
 
     program = models.ForeignKey('masters.ProgramDetails', blank=True, null=True,
                                 related_name='program_module_rel',
-                                on_delete=models.PROTECT)
+                                on_delete=models.SET_NULL)
     soft_skill_program = models.ForeignKey('masters.SoftSkillDevelopmentProgram', blank=True, null=True,
                                 related_name='soft_skill_prog_rel',
-                                on_delete=models.PROTECT)
+                                on_delete=models.SET_NULL)
 
     def __str__(self):
         details = str(self.applicant_id.first_name) + ' and ' + str(self.module.module.module_name)

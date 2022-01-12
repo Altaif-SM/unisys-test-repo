@@ -6,12 +6,12 @@ from common.models import BaseModel
 class DonorDetails(BaseModel):
     organisation = models.CharField(max_length=255, blank=True, null=True)
     country = models.ForeignKey('masters.CountryDetails', null=True, related_name='donor_country_rel',
-                                on_delete=models.PROTECT)
+                                on_delete=models.SET_NULL)
     person = models.CharField(max_length=255, blank=True, null=True)
     person_contact_number = models.CharField(max_length=16, blank=True, null=True)
     single_donor_address = models.CharField(max_length=255, blank=True, null=True)
     address = models.ForeignKey('masters.AddressDetails', null=True, related_name='donor_address_rel',
-                                on_delete=models.PROTECT)
+                                on_delete=models.SET_NULL)
     email = models.EmailField(max_length=255, blank=True, null=True)
     reg_document = models.FileField(upload_to='masters.content_file_name_donor')
     due_amount = models.IntegerField(blank=True, null=True)
@@ -19,9 +19,9 @@ class DonorDetails(BaseModel):
     bank_account_number = models.CharField(max_length=100, blank=True, null=True)
     bank_swift_code = models.CharField(max_length=50, blank=True, null=True)
     bank_address = models.ForeignKey('masters.AddressDetails', null=True, related_name='donor_bank_address_rel',
-                                     on_delete=models.PROTECT)
+                                     on_delete=models.SET_NULL)
     donor_bank_address = models.CharField(max_length=255, blank=True, null=True)
-    user = models.ForeignKey('accounts.User', null=True, related_name='donor_user_rel', on_delete=models.PROTECT)
+    user = models.ForeignKey('accounts.User', null=True, related_name='donor_user_rel', on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ('user__first_name',)
