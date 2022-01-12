@@ -240,6 +240,7 @@ urlpatterns = [
     path('payment_settings/', views.payment_settings, name='payment_settings'),
     path('api_test/', views.api_test, name='api_test'),
     path('get_departments_from_faculty/', views.get_departments_from_faculty, name='get_departments_from_faculty'),
+    path('get_programs_from_filter/', views.get_programs_from_filter, name='get_programs_from_filter'),
 
 
 

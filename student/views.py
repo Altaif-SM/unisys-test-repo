@@ -2420,6 +2420,7 @@ def applicant_intake_info(request):
     semester_recs = SemesterDetails.objects.all()
     learning_centre_recs = LearningCentersDetails.objects.all()
     program_recs = ProgramDetails.objects.filter(is_delete=False).order_by('-id')
+    faculty_recs = FacultyDetails.objects.filter(status=True).order_by('-id')
     study_type_list = ['International', 'University Main']
     study_mode_list = ['Online', 'On Campus']
     study_level_list = ['Undergraduate', 'Postgraduate']
@@ -2434,8 +2435,10 @@ def applicant_intake_info(request):
     application_obj = ''
     learning_centre_list = []
     campus_list = []
+    department_recs = []
     if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
         application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
+        department_recs = application_obj.faculty.department.all()
     if application_obj:
         if application_obj.university:
             if application_obj.university.is_partner_university == True:
@@ -2468,7 +2471,8 @@ def applicant_intake_info(request):
 
 
     return render(request, 'intake_details.html',{'country_recs': country_recs, 'religion_recs': religion_recs, 'application_obj': application_obj,'student_recs':student_recs,'agent_recs':agent_recs,'year_recs':year_recs,'semester_recs':semester_recs,
-                                                  'learning_centre_recs':learning_centre_recs,'university_recs':university_recs,'learning_centre_list':learning_centre_list,'program_recs':program_recs,'campus_list':campus_list,'study_type_list':study_type_list,'study_mode_list':study_mode_list,'study_level_list':study_level_list})
+                                                  'learning_centre_recs':learning_centre_recs,'university_recs':university_recs,'learning_centre_list':learning_centre_list,'program_recs':program_recs,'campus_list':campus_list,'study_type_list':study_type_list,'study_mode_list':study_mode_list,'study_level_list':study_level_list,'faculty_recs':faculty_recs,
+                                                  'department_recs':department_recs})
 
 
 def get_learning_centre_from_country(request):

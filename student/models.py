@@ -242,6 +242,9 @@ class ApplicationDetails(BaseModel):
                                 related_name='applicant_campus_branch_rel',
                                 on_delete=models.SET_NULL)
     progress_counter = models.IntegerField(default=0)
+    department = models.ForeignKey('masters.Department', blank=True, null=True,
+                                related_name='applicant_department_rel',
+                                on_delete=models.SET_NULL)
 
     # family_info_flag = models.BooleanField(default=False)
     # mother_sibling_info_flag = models.BooleanField(default=False)

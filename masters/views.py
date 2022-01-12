@@ -3243,3 +3243,17 @@ def get_departments_from_faculty(request):
             raw_dict['id']=dep.id
             finalDict.append(raw_dict)
     return JsonResponse(finalDict, safe=False)
+
+
+def get_programs_from_filter(request):
+    program_list = []
+    program_filter = request.POST.getlist('program_filter[]')
+    program_recs = ProgramDetails.objects.filter()
+    if program_filter:
+        program_recs = program_recs.filter(Q(program_type__icontains=program_filter) | Q(study_level__study_level__icontains=program_filter))
+    for rec in program_recs:
+        raw_dict = {}
+        raw_dict['id']=rec.id
+        raw_dict['program']=rec.program_name
+        program_list.append(raw_dict)
+    return JsonResponse(program_list, safe=False)
