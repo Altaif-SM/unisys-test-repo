@@ -77,7 +77,7 @@ class AddressDetails(BaseModel):
     district = models.CharField(max_length=100, blank=True, null=True)
     state = models.CharField(max_length=80, blank=True, null=True)
     street = models.CharField(max_length=80, blank=True, null=True)
-    country = models.ForeignKey(CountryDetails, null=True, related_name='address_country_rel', on_delete=models.PROTECT)
+    country = models.ForeignKey(CountryDetails, null=True, related_name='address_country_rel', on_delete=models.SET_NULL)
     is_same = models.BooleanField(default=False)
     mobile = models.CharField(max_length=80, blank=True, null=True)
     whats_app = models.CharField(max_length=80, blank=True, null=True)
@@ -176,7 +176,7 @@ class ScholarshipDetails(BaseModel):
 
 class DegreeFormula(BaseModel):
     scholarship = models.ForeignKey(ScholarshipDetails, null=True, related_name='degree_scholarship_formula_relation',
-                                    on_delete=models.PROTECT)
+                                    on_delete=models.SET_NULL)
     cgpa_min = models.DecimalField(blank=True, null=True,decimal_places=2,max_digits=10)
     cgpa_max = models.DecimalField(blank=True, null=True,decimal_places=2,max_digits=10)
     grade_min = models.CharField(max_length=10, blank=True, null=True)
@@ -186,7 +186,7 @@ class DegreeFormula(BaseModel):
     is_cgpa_or_grade = models.BooleanField(default=True)
 
     degree_type = models.ForeignKey(DegreeTypeDetails, null=True, related_name='degree_formula_degree_type_relation',
-                                    on_delete=models.PROTECT)
+                                    on_delete=models.SET_NULL)
 
     def __str__(self):
         cgpa_min = self.cgpa_min if self.cgpa_min else ''
@@ -199,11 +199,11 @@ class DegreeFormula(BaseModel):
 
 class MasterAndPhdFormula(BaseModel):
     scholarship = models.ForeignKey(ScholarshipDetails, null=True, related_name='phd_scholarship_formula_relation',
-                                    on_delete=models.PROTECT)
+                                    on_delete=models.SET_NULL)
     result = models.CharField(max_length=10, blank=True, null=True)
     repayment = models.FloatField(max_length=10, blank=True, null=True)
     degree_type = models.ForeignKey(DegreeTypeDetails, null=True, related_name='master_phd_formula_degree_type_relation',
-                                    on_delete=models.PROTECT)
+                                    on_delete=models.SET_NULL)
 
     def __str__(self):
         result = self.result if self.result else ''
@@ -215,13 +215,13 @@ class MasterAndPhdFormula(BaseModel):
 
 class MasterAndCourseFormula(BaseModel):
     scholarship = models.ForeignKey(ScholarshipDetails, null=True, related_name='course_scholarship_formula_relation',
-                                    on_delete=models.PROTECT)
+                                    on_delete=models.SET_NULL)
     result_min = models.CharField(max_length=10, blank=True, null=True)
     result_max = models.CharField(max_length=10, blank=True, null=True)
     repayment = models.CharField(max_length=10, blank=True, null=True)
     degree_type = models.ForeignKey(DegreeTypeDetails, null=True,
                                     related_name='master_course_formula_degree_type_relation',
-                                    on_delete=models.PROTECT)
+                                    on_delete=models.SET_NULL)
 
     def __str__(self):
         result_min = self.result_min if self.result_min else ''
@@ -233,10 +233,10 @@ class MasterAndCourseFormula(BaseModel):
 
 
 class StudentDonorMapping(BaseModel):
-    student = models.ForeignKey(StudentDetails, null=True, related_name='student_donor_rel', on_delete=models.PROTECT)
+    student = models.ForeignKey(StudentDetails, null=True, related_name='student_donor_rel', on_delete=models.SET_NULL)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='donor_applicant_rel',
-                                     on_delete=models.PROTECT)
-    donor = models.ForeignKey(DonorDetails, null=True, related_name='donor_student_rel', on_delete=models.PROTECT)
+                                     on_delete=models.SET_NULL)
+    donor = models.ForeignKey(DonorDetails, null=True, related_name='donor_student_rel', on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ('student__user__first_name',)
@@ -258,14 +258,14 @@ class StudentDonorMapping(BaseModel):
 
 class UniversityDetails(BaseModel):
     country = models.ForeignKey(CountryDetails, null=True, related_name='university_country_rel',
-                                on_delete=models.PROTECT)
+                                on_delete=models.SET_NULL)
     university_id = models.CharField(max_length=255, blank=True, null=True)
     university_name = models.CharField(max_length=255, blank=True, null=True)
     email = models.CharField(max_length=255, blank=True, null=True)
     telephone = models.CharField(max_length=255, blank=True, null=True)
     website = models.CharField(max_length=255, blank=True, null=True)
     address = models.ForeignKey(AddressDetails, null=True, related_name='university_address_rel',
-                                on_delete=models.PROTECT)
+                                on_delete=models.SET_NULL)
     university_logo = models.ImageField(upload_to='university_logo/', null=True, blank=True)
     university_address = models.CharField(max_length=255, blank=True, null=True)
     is_active = models.BooleanField(default=True)
@@ -312,7 +312,7 @@ class SemesterDetails(BaseModel):
 class DegreeDetails(BaseModel):
     degree_name = models.CharField(max_length=255, blank=True, null=True)
     degree_type = models.ForeignKey(DegreeTypeDetails, null=True, related_name='degree_degree_type_rel',
-                                    on_delete=models.PROTECT)
+                                    on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ('degree_name',)
@@ -349,7 +349,7 @@ class StudyLevelDetails(BaseModel):
 
 class FacultyDetails(BaseModel):
     university = models.ForeignKey(UniversityDetails, null=True, related_name='university_faculty_rel',
-                                on_delete=models.PROTECT)
+                                on_delete=models.SET_NULL)
     faculty_id = models.CharField(max_length=255, blank=True, null=True)
     faculty_name = models.CharField(max_length=255, blank=True, null=True)
     email = models.CharField(max_length=255, blank=True, null=True)
@@ -370,9 +370,9 @@ class CampusBranchesDetails(BaseModel):
     address = models.CharField(max_length=255, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     university = models.ForeignKey(UniversityDetails, null=True, related_name='campus_university_rel',
-                                   on_delete=models.PROTECT)
+                                   on_delete=models.SET_NULL)
     country = models.ForeignKey(CountryDetails, null=True, related_name='campus_centers_country_rel',
-                                on_delete=models.PROTECT)
+                                on_delete=models.SET_NULL)
 
 
     class Meta:
@@ -382,7 +382,7 @@ class CampusBranchesDetails(BaseModel):
         return self.campus_name
 
 class ProgramCampusDetails(models.Model):
-    campus = models.ForeignKey(CampusBranchesDetails, null=True, related_name='program_campus_rel',on_delete=models.PROTECT)
+    campus = models.ForeignKey(CampusBranchesDetails, null=True, related_name='program_campus_rel',on_delete=models.SET_NULL)
 
 class ProgramStudyModeDetails(models.Model):
     study_mode = models.CharField(max_length=100, blank=True, null=True)
@@ -402,21 +402,21 @@ class ProgramDetails(BaseModel):
     program_mission = models.TextField(blank=True, null=True)
     program_id = models.CharField(max_length=255, blank=True, null=True)
     degree_type = models.ForeignKey(DegreeTypeDetails, null=True, related_name='program_degree_type_rel',
-                                    on_delete=models.PROTECT)
+                                    on_delete=models.SET_NULL)
     university = models.ForeignKey(UniversityDetails, null=True, related_name='program_university_rel',
-                                   on_delete=models.PROTECT)
+                                   on_delete=models.SET_NULL)
     faculty = models.ForeignKey(FacultyDetails, null=True, related_name='program_faculty_rel',
-                                   on_delete=models.PROTECT)
+                                   on_delete=models.SET_NULL)
     # study_mode = models.ForeignKey(StudyModeDetails, null=True, related_name='program_study_mode_rel',
-    #                             on_delete=models.PROTECT)
+    #                             on_delete=models.SET_NULL)
     study_level = models.ForeignKey(StudyLevelDetails, null=True, related_name='program_study_level_rel',
-                                   on_delete=models.PROTECT)
+                                   on_delete=models.SET_NULL)
     study_type = models.ForeignKey(StudyTypeDetails, null=True, related_name='program_study_type_rel',
-                                   on_delete=models.PROTECT)
+                                   on_delete=models.SET_NULL)
     status = models.BooleanField(default=True)
     is_delete = models.BooleanField(default=False)
     # campus = models.ForeignKey(CampusBranchesDetails, null=True, related_name='program_campus_rel',
-    #                                on_delete=models.PROTECT)
+    #                                on_delete=models.SET_NULL)
     campus = models.ManyToManyField(ProgramCampusDetails, blank=True)
     study_mode = models.ManyToManyField(ProgramStudyModeDetails, blank=True)
     class Meta:
@@ -435,13 +435,13 @@ class ProgramDetails(BaseModel):
 
 class ProgramFeeDetails(BaseModel):
     university = models.ForeignKey(UniversityDetails, null=True, related_name='program_fee_university_rel',
-                                   on_delete=models.PROTECT)
+                                   on_delete=models.SET_NULL)
     year = models.ForeignKey(YearDetails, null=True, related_name='program_fee_year_rel',
-                                   on_delete=models.PROTECT)
+                                   on_delete=models.SET_NULL)
     program = models.ForeignKey(ProgramDetails, null=True, related_name='program_fee_rel',
-                                   on_delete=models.PROTECT)
+                                   on_delete=models.SET_NULL)
     country = models.ForeignKey(CountryDetails, null=True, related_name='country_fee_rel',
-                                on_delete=models.PROTECT)
+                                on_delete=models.SET_NULL)
     discount = models.CharField(max_length=255, blank=True, null=True)
     total_amount = models.CharField(max_length=255, blank=True, null=True)
     program_fee = models.ManyToManyField(ProgramFeeType, blank=True)
@@ -450,15 +450,15 @@ class ProgramFeeDetails(BaseModel):
 
 class ModuleDetails(BaseModel):
     module_name = models.CharField(max_length=255, blank=True, null=True)
-    country = models.ForeignKey(CountryDetails, null=True, related_name='module_country_rel', on_delete=models.PROTECT)
+    country = models.ForeignKey(CountryDetails, null=True, related_name='module_country_rel', on_delete=models.SET_NULL)
 
 
 class DevelopmentProgram(BaseModel):
-    year = models.ForeignKey(YearDetails, null=True, related_name='development_year_rel', on_delete=models.PROTECT)
+    year = models.ForeignKey(YearDetails, null=True, related_name='development_year_rel', on_delete=models.SET_NULL)
     semester = models.ForeignKey(SemesterDetails, null=True, related_name='development_semester_rel',
-                                 on_delete=models.PROTECT)
+                                 on_delete=models.SET_NULL)
     module = models.ForeignKey(ModuleDetails, null=True, related_name='development_module_rel',
-                               on_delete=models.PROTECT)
+                               on_delete=models.SET_NULL)
     code = models.CharField(max_length=100, blank=True, null=True)
     name = models.CharField(max_length=255, blank=True, null=True)
     activity = models.CharField(max_length=2000, blank=True, null=True)
@@ -490,9 +490,9 @@ class GuardianDetails(BaseModel):
     religion = models.CharField(max_length=255, blank=True, null=True)
     contact_number = models.CharField(max_length=16, blank=True, null=True)
     address = models.ForeignKey(AddressDetails, null=True, related_name='guardian_address_rel',
-                                on_delete=models.PROTECT)
+                                on_delete=models.SET_NULL)
 
-    user = models.ForeignKey('accounts.User', null=True, related_name='guardian_user_rel', on_delete=models.PROTECT)
+    user = models.ForeignKey('accounts.User', null=True, related_name='guardian_user_rel', on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ('user__first_name',)
@@ -515,9 +515,9 @@ class GuardianDetails(BaseModel):
 
 class GuardianStudentMapping(BaseModel):
     guardian = models.ForeignKey(GuardianDetails, null=True, related_name='gurd_std_mapping_rel',
-                                 on_delete=models.PROTECT)
+                                 on_delete=models.SET_NULL)
     student = models.ForeignKey(StudentDetails, null=True, related_name='std_gurd_mapping_rel',
-                                on_delete=models.PROTECT)
+                                on_delete=models.SET_NULL)
 
 
 class EmailTemplates(BaseModel):
@@ -579,7 +579,7 @@ class LearningCentersDetails(BaseModel):
     lc_email = models.CharField(max_length=255, blank=True, null=True)
     lc_tel = models.CharField(max_length=255, blank=True, null=True)
     country = models.ForeignKey(CountryDetails, null=True, related_name='learning_centers_country_rel',
-                                    on_delete=models.PROTECT)
+                                    on_delete=models.SET_NULL)
     status = models.BooleanField(default=True)
 
     class Meta:
@@ -607,11 +607,11 @@ class UniversitPartnerDetails(BaseModel):
 
 
 class CalenderDetails(BaseModel):
-    university = models.ForeignKey(UniversityDetails, null=True, related_name='calender_university_rel',on_delete=models.PROTECT)
-    year = models.ForeignKey(YearDetails, null=True, related_name='calender_year_rel',on_delete=models.PROTECT)
-    branch = models.ForeignKey(CampusBranchesDetails, null=True, related_name='calender_branch_rel',on_delete=models.PROTECT)
-    semester = models.ForeignKey(SemesterDetails, null=True, related_name='calender_semester_rel',on_delete=models.PROTECT)
-    activity = models.ForeignKey(ActivityDetails, null=True, related_name='calender_activity_rel',on_delete=models.PROTECT)
+    university = models.ForeignKey(UniversityDetails, null=True, related_name='calender_university_rel',on_delete=models.SET_NULL)
+    year = models.ForeignKey(YearDetails, null=True, related_name='calender_year_rel',on_delete=models.SET_NULL)
+    branch = models.ForeignKey(CampusBranchesDetails, null=True, related_name='calender_branch_rel',on_delete=models.SET_NULL)
+    semester = models.ForeignKey(SemesterDetails, null=True, related_name='calender_semester_rel',on_delete=models.SET_NULL)
+    activity = models.ForeignKey(ActivityDetails, null=True, related_name='calender_activity_rel',on_delete=models.SET_NULL)
     start_date = models.DateField()
     end_date = models.DateField()
     status = models.BooleanField(default=True)
@@ -629,43 +629,43 @@ class DepartmentDetails(BaseModel):
     logo = models.ImageField(upload_to='department_logo/', null=True, blank=True)
     status = models.BooleanField(default=True)
     university = models.ForeignKey(UniversityDetails, null=True, related_name='university_depatment_rel',
-                                   on_delete=models.PROTECT)
+                                   on_delete=models.SET_NULL)
 
     faculty = models.ForeignKey(FacultyDetails, null=True, related_name='faculty_department_rel',
-                                   on_delete=models.PROTECT)
+                                   on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ('-id',)
 
 
 class DepartmentStaffMapping(BaseModel):
-    department = models.ForeignKey(DepartmentDetails, null=True, related_name='department_staff_map', on_delete=models.PROTECT)
+    department = models.ForeignKey(DepartmentDetails, null=True, related_name='department_staff_map', on_delete=models.SET_NULL)
     staff = models.ForeignKey(User, null=True, related_name='staff_department_mapp',
-                                     on_delete=models.PROTECT)
+                                     on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ('-id',)
 
 class CampusStaffMapping(BaseModel):
-    campus = models.ForeignKey(CampusBranchesDetails, null=True, related_name='campus_program_map', on_delete=models.PROTECT)
+    campus = models.ForeignKey(CampusBranchesDetails, null=True, related_name='campus_program_map', on_delete=models.SET_NULL)
     staff = models.ForeignKey(User, null=True, related_name='staff_campus_mapp',
-                              on_delete=models.PROTECT)
+                              on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ('-id',)
 
 class FacultyStaffMapping(BaseModel):
-    faculty = models.ForeignKey(FacultyDetails, null=True, related_name='faculty_staff_map', on_delete=models.PROTECT)
+    faculty = models.ForeignKey(FacultyDetails, null=True, related_name='faculty_staff_map', on_delete=models.SET_NULL)
     staff = models.ForeignKey(User, null=True, related_name='staff_faculty_mapp',
-                                     on_delete=models.PROTECT)
+                                     on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ('-id',)
 
 class UniversityStaffMapping(BaseModel):
-    university = models.ForeignKey(UniversityDetails, null=True, related_name='university_staff_map', on_delete=models.PROTECT)
+    university = models.ForeignKey(UniversityDetails, null=True, related_name='university_staff_map', on_delete=models.SET_NULL)
     staff = models.ForeignKey(User, null=True, related_name='staff_university_mapp',
-                                     on_delete=models.PROTECT)
+                                     on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ('-id',)
