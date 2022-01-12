@@ -111,6 +111,26 @@
 
                 })
 
+                 var department_count = 1;
+                $(document).on("click", ".add_department", function (e) {
+                    department_count = department_count + 1;
+                    var row = '<br><div class="row department" id="department_' + department_count + '"><div class="row"><div class=""><label class="col-md-2 control-label">Department:</label><div class="col-md-3"><input type="text" title="Enter Department" id="department_' + department_count + '" value="" name="department_' + department_count + '" class="form-control" required></div></div><div class="col-md-1"><a href="javascript:;" class="delete_department btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div>'
+                    $(row).removeAttr().hide().insertAfter(".department:last").slideDown(300);
+                });
+
+
+                $(document).on("click", ".delete_department", function () {
+                    $(this).parents('.department').remove();
+                });
+
+                  $("#id_form").submit(function (e) {
+
+
+                    var rowCount = $(".department").length;
+                    $('#department_count').val(rowCount);
+
+                })
+
 
             });
 
@@ -195,6 +215,7 @@
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
+                <input type="hidden" id="department_count" name="department_count">
 
                     <div class="form-body">
 
@@ -348,8 +369,7 @@
 
 
                                 <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'Status' %}:<span
-                                            style="color: red">*</span></label>
+                                    <label class="col-md-2 control-label">{% trans 'Status' %}: </label>
                                     <div class="col-md-3">
                                         <input type="checkbox" id="status" name="status" checked>
 
@@ -357,6 +377,40 @@
                                 </div>
 
                             </div>
+
+
+                         <hr>
+
+
+                        <div class="" style="float: right;
+    margin-top: 0px;
+    padding-right: 50%;">
+                            <div class="">
+                                <a href="javascript:;" id="add" class="btn btn-icon-only green add_department"
+                                   style="">
+                                    <i class="fa fa-plus "></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="row department" id="department_1">
+
+                            <div class="row">
+                                <div class="">
+                                    <label class="col-md-2 control-label">Department:</label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter Department" id="department_1"
+                                               value="" name="department_1"
+                                               class="form-control" required>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
 
 
                         </div>

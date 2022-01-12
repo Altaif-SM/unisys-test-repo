@@ -103,15 +103,48 @@
             $(document).ready(function () {
                 $("#status").Sswitch({});
 
-                $('input[type="radio"]').on('change', function () {
+               $('input[type=radio][name=university_type]').on('change', function ()
+                {
                     var university_type = $('input[name="university_type"]:checked').val();
+                    console.log("university_type"+university_type);
                     var url = '/student/get_university_from_type/';
                     get_university_from_university_type(url, university_type)
 
 
                 })
 
+                $(document).on("change", "#faculty", function (e) {
+                var faculty_id = $(this).val();
+                var url = '/masters/get_departments_from_faculty/';
+                get_departments_from_faculty(url, faculty_id)
+            })
+
             });
+
+            function get_departments_from_faculty(url, faculty_id) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        faculty_id: faculty_id,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data) {
+
+                        $('#department').empty();
+                        $('#department').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#department').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['department'] + '</option>')
+                        }
+                    },
+                    error: function (xhr, msg, err) {
+                        alert(xhr.responseJSON.error);
+                    }
+                });
+            }
 
             function get_university_from_university_type(url, university_type) {
                 $.ajax({
@@ -288,8 +321,23 @@
                             {#                            </div>#}
                             {#                            <br>#}
                             <div class="row">
+
+                                 <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Type of Program' %}: <span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-4">
+                                        <input class="current" type="radio" checked name="program_type"
+                                               id="international"
+                                               value="International">
+                                        <span style="padding:inherit">{% trans 'International' %}</span>&nbsp;&nbsp;
+                                        <input class="current" type="radio" name="program_type" value="University Main"
+                                               id="university_main">
+                                        <span style="padding:inherit">{% trans 'University Main' %}</span>
+                                    </div>
+                                </div>
+
                              <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'Program Name' %}:<span
+                                    <label class="col-md-1 control-label">{% trans 'Program' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <input type="text" title="Enter Program Name" id="program_name"
@@ -300,7 +348,18 @@
                                     </div>
                                 </div>
 
-                                <div class="">
+
+
+
+
+
+
+
+                            </div>
+
+                            <br>
+                        <div class="row">
+                             <div class="">
                                     <label class="col-md-2 control-label">{% trans 'Faculty' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
@@ -316,14 +375,22 @@
                                     </div>
                                 </div>
 
+                        <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Department' %}:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select id='department' title="Select Department"
+                                                name="department"
+                                                class="form-control" required>
+                                            <option selected="selected" value=""> Please Select</option>
 
 
+                                        </select>
+                                    </div>
+                                </div>
 
-
-
-                            </div>
-
-                            <br>
+                        </div>
+                        <br>
 
 {#                        <div class="row">#}
 {#                             <div class="">#}
@@ -361,8 +428,7 @@
 
                             <div class="row">
                             <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'Study Mode' %}: <span
-                                            style="color: red">*</span></label>
+                                    <label class="col-md-2 control-label">{% trans 'Study Mode' %}: </label>
                                     <div class="col-md-3">
 
                                         {% for rec in study_mode_list %}
@@ -474,8 +540,7 @@
                                 </div>
 
                             <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'Status' %}:<span
-                                            style="color: red">*</span></label>
+                                    <label class="col-md-2 control-label">{% trans 'Status' %}:</label>
                                     <div class="col-md-3">
                                         <input type="checkbox" id="status" name="status" checked>
 

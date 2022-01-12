@@ -112,7 +112,7 @@
 
                 $("#status").Sswitch({});
 
-                $('input[type="radio"]').on('change', function () {
+                $('input[type=radio][name=university_type]').on('change', function () {
                     var university_type = $('input[name="university_type"]:checked').val();
                     var url = '/student/get_university_from_type/';
                     get_university_from_university_type(url, university_type)
@@ -120,7 +120,38 @@
 
                 })
 
+                 $(document).on("change", "#faculty", function (e) {
+                var faculty_id = $(this).val();
+                var url = '/masters/get_departments_from_faculty/';
+                get_departments_from_faculty(url, faculty_id)
+            })
+
             });
+
+            function get_departments_from_faculty(url, faculty_id) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        faculty_id: faculty_id,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data) {
+
+                        $('#department').empty();
+                        $('#department').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#department').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['department'] + '</option>')
+                        }
+                    },
+                    error: function (xhr, msg, err) {
+                        alert(xhr.responseJSON.error);
+                    }
+                });
+            }
 
             function get_university_from_university_type(url, university_type) {
                 $.ajax({
@@ -146,8 +177,6 @@
                     }
                 });
             }
-
-
 
 
             window.setTimeout(function () {
@@ -229,12 +258,33 @@
                         <div class="row item_experience" id="item_experience_1">
 
                             <div class="row">
-                             <div class="">
-                                <label class="col-md-2 control-label">University Type: <span
-                                        style="color: red">*</span></label>
-                                {% if program_obj.university %}
-                                    <div class="col-md-3">
-                                        {% if  program_obj.university.is_partner_university == False %}
+                                <div class="">
+                                    <label class="col-md-2 control-label">University Type: <span
+                                            style="color: red">*</span></label>
+                                    {% if program_obj.university %}
+                                        <div class="col-md-3">
+                                            {% if  program_obj.university.is_partner_university == False %}
+                                                <input class="current" type="radio" checked name="university_type"
+                                                       id="university_main"
+                                                       value="Main">
+                                                <span style="padding:inherit">Main</span>&nbsp;&nbsp;
+                                                <input class="current" type="radio" name="university_type"
+                                                       value="Partner"
+                                                       id="university_partner">
+                                                <span style="padding:inherit">Partner</span>
+                                            {% else %}
+                                                <input class="current" type="radio" name="university_type"
+                                                       id="university_main"
+                                                       value="Main">
+                                                <span style="padding:inherit">Main</span>&nbsp;&nbsp;
+                                                <input class="current" type="radio" checked name="university_type"
+                                                       value="Partner"
+                                                       id="university_partner">
+                                                <span style="padding:inherit">Partner</span>
+                                            {% endif %}
+                                        </div>
+                                    {% else %}
+                                        <div class="col-md-3">
                                             <input class="current" type="radio" checked name="university_type"
                                                    id="university_main"
                                                    value="Main">
@@ -242,30 +292,9 @@
                                             <input class="current" type="radio" name="university_type" value="Partner"
                                                    id="university_partner">
                                             <span style="padding:inherit">Partner</span>
-                                        {% else %}
-                                            <input class="current" type="radio" name="university_type"
-                                                   id="university_main"
-                                                   value="Main">
-                                            <span style="padding:inherit">Main</span>&nbsp;&nbsp;
-                                            <input class="current" type="radio" checked name="university_type"
-                                                   value="Partner"
-                                                   id="university_partner">
-                                            <span style="padding:inherit">Partner</span>
-                                        {% endif %}
-                                    </div>
-                                {% else %}
-                                    <div class="col-md-3">
-                                        <input class="current" type="radio" checked name="university_type"
-                                               id="university_main"
-                                               value="Main">
-                                        <span style="padding:inherit">Main</span>&nbsp;&nbsp;
-                                        <input class="current" type="radio" name="university_type" value="Partner"
-                                               id="university_partner">
-                                        <span style="padding:inherit">Partner</span>
-                                    </div>
-                                {% endif %}
-                            </div>
-
+                                        </div>
+                                    {% endif %}
+                                </div>
 
 
                                 <div class="">
@@ -335,8 +364,48 @@
                             {#                            </div>#}
                             {#                            <br>#}
                             <div class="row">
-                            <div class="">
-                                    <label class="col-md-2 control-label">Program Name:<span
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Type of Program: <span
+                                            style="color: red">*</span></label>
+                                    {% if program_obj.program_type %}
+                                        <div class="col-md-4">
+                                            {% if  program_obj.program_type == 'International' %}
+                                                <input class="current" type="radio" checked name="program_type"
+                                                       id="international"
+                                                       value="International">
+                                                <span style="padding:inherit">International</span>&nbsp;&nbsp;
+                                                <input class="current" type="radio" name="program_type"
+                                                       value="University Main"
+                                                       id="university_main">
+                                                <span style="padding:inherit">University Main</span>
+                                            {% else %}
+                                                <input class="current" type="radio" name="program_type"
+                                                       id="international"
+                                                       value="International">
+                                                <span style="padding:inherit">International</span>&nbsp;&nbsp;
+                                                <input class="current" type="radio" checked name="program_type"
+                                                       value="University Main"
+                                                       id="university_main">
+                                                <span style="padding:inherit">University Main</span>
+                                            {% endif %}
+                                        </div>
+                                    {% else %}
+                                        <div class="col-md-4">
+                                            <input class="current" type="radio" checked name="program_type"
+                                                   id="international"
+                                                   value="International">
+                                            <span style="padding:inherit">{% trans 'International' %}</span>&nbsp;&nbsp;
+                                            <input class="current" type="radio" name="program_type"
+                                                   value="University Main"
+                                                   id="university_main">
+                                            <span style="padding:inherit">{% trans 'University Main' %}</span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="">
+                                    <label class="col-md-1 control-label">Program:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <input type="text" title="Enter Program Name" id="program_name"
@@ -344,28 +413,6 @@
                                                name="program_name"
                                                class="form-control" required>
 
-                                    </div>
-                                </div>
-
-                                <div class="">
-                                    <label class="col-md-2 control-label">Faculty:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <select id='faculty' title="Select Faculty"
-                                                name="faculty"
-                                                class="form-control" required>
-                                            {% if program_obj.faculty %}
-                                                <option style="display:none;" selected="selected"
-                                                        value="{{ program_obj.faculty.id|default_if_none:"" }}"> {{ program_obj.faculty.faculty_name|default_if_none:"" }}</option>
-                                            {% else %}
-                                                <option selected="selected" value=""> Please Select</option>
-                                            {% endif %}
-
-                                            {% for rec in faculty_recs %}
-                                                <option value="{{ rec.id }}">{{ rec.faculty_name|default_if_none:"" }}</option>
-                                            {% endfor %}
-
-                                        </select>
                                     </div>
                                 </div>
 
@@ -394,47 +441,94 @@
                                 {#                                </div>#}
 
 
-
-
                             </div>
 
                             <br>
+                            <div class="row">
+                                <div class="">
+                                    <label class="col-md-2 control-label">Faculty:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select id='faculty' title="Select Faculty"
+                                                name="faculty"
+                                                class="form-control" required>
+                                            {% if program_obj.faculty %}
+                                                <option style="display:none;" selected="selected"
+                                                        value="{{ program_obj.faculty.id|default_if_none:"" }}"> {{ program_obj.faculty.faculty_name|default_if_none:"" }}</option>
+                                            {% else %}
+                                                <option selected="selected" value=""> Please Select</option>
+                                            {% endif %}
 
-{#                        <div class="row">#}
-{#                             <div class="">#}
-{#                                    <label class="col-md-2 control-label">{% trans 'Program Fee' %}:<span#}
-{#                                            style="color: red">*</span></label>#}
-{#                                    <div class="col-md-3">#}
-{#                                        <input type="text" title="Enter Program Fee" id="program_fee" onkeypress='validate(event)'#}
-{#                                               value="{{ program_obj.program_fee|default_if_none:"" }}"#}
-{#                                               name="program_fee"#}
-{#                                               class="form-control" required>#}
-{##}
-{#                                    </div>#}
-{#                                </div>#}
-{##}
-{#                                <div class="">#}
-{#                                    <label class="col-md-2 control-label">{% trans 'Credit Hrs' %}:<span#}
-{#                                            style="color: red">*</span></label>#}
-{#                                    <div class="col-md-3">#}
-{#                                        <input type="text" title="Enter Credit Hrs" id="credit_hrs" onkeypress='validate(event)'#}
-{#                                               value="{{ program_obj.credit_hrs|default_if_none:"" }}"#}
-{#                                               name="credit_hrs"#}
-{#                                               class="form-control" required>#}
-{##}
-{#                                    </div>#}
-{#                                </div>#}
-{##}
-{##}
-{##}
-{##}
-{##}
-{#                            </div>#}
-{#                        <br>#}
+                                            {% for rec in faculty_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.faculty_name|default_if_none:"" }}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Department' %}:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select id='department' title="Select Department"
+                                                name="department"
+                                                class="form-control" required>
+
+                                        {% if program_obj.department %}
+                                                <option style="display:none;" selected="selected"
+                                                        value="{{ program_obj.department.id|default_if_none:"" }}"> {{ program_obj.department.department|default_if_none:"" }}</option>
+                                            {% else %}
+                                                <option selected="selected" value=""> Please Select</option>
+                                            {% endif %}
+
+                                            {% for rec in department_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.department|default_if_none:"" }}</option>
+                                            {% endfor %}
+
+
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <br>
+
+                            {#                        <div class="row">#}
+                            {#                             <div class="">#}
+                            {#                                    <label class="col-md-2 control-label">{% trans 'Program Fee' %}:<span#}
+                            {#                                            style="color: red">*</span></label>#}
+                            {#                                    <div class="col-md-3">#}
+                            {#                                        <input type="text" title="Enter Program Fee" id="program_fee" onkeypress='validate(event)'#}
+                            {#                                               value="{{ program_obj.program_fee|default_if_none:"" }}"#}
+                            {#                                               name="program_fee"#}
+                            {#                                               class="form-control" required>#}
+                            {##}
+                            {#                                    </div>#}
+                            {#                                </div>#}
+                            {##}
+                            {#                                <div class="">#}
+                            {#                                    <label class="col-md-2 control-label">{% trans 'Credit Hrs' %}:<span#}
+                            {#                                            style="color: red">*</span></label>#}
+                            {#                                    <div class="col-md-3">#}
+                            {#                                        <input type="text" title="Enter Credit Hrs" id="credit_hrs" onkeypress='validate(event)'#}
+                            {#                                               value="{{ program_obj.credit_hrs|default_if_none:"" }}"#}
+                            {#                                               name="credit_hrs"#}
+                            {#                                               class="form-control" required>#}
+                            {##}
+                            {#                                    </div>#}
+                            {#                                </div>#}
+                            {##}
+                            {##}
+                            {##}
+                            {##}
+                            {##}
+                            {#                            </div>#}
+                            {#                        <br>#}
 
 
                             <div class="row">
-                            <div class="">
+                                <div class="">
                                     <label class="col-md-2 control-label">Study Mode: <span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
@@ -479,12 +573,10 @@
                                 </div>
 
 
-
-
                             </div>
                             <br>
                             <div class="row">
-                                 <div class="">
+                                <div class="">
                                     <label class="col-md-2 control-label">Study Type:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
@@ -518,8 +610,6 @@
                                 </div>
 
 
-
-
                             </div>
                             <br>
                             <div class="row">
@@ -545,12 +635,10 @@
                                 </div>
 
 
-
-
                             </div>
                             <br>
-                        <div class="row">
-                            <div class="">
+                            <div class="row">
+                                <div class="">
                                     <label class="col-md-2 control-label">Mission:
 
                                     </label>
@@ -560,7 +648,7 @@
 
                                     </div>
                                 </div>
-                            <div class="">
+                                <div class="">
                                     <label class="col-md-2 control-label">Status:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
@@ -572,8 +660,8 @@
 
                                     </div>
                                 </div>
-                        </div>
-                        <br>
+                            </div>
+                            <br>
                             <div class="row">
 
                                 <div class="">
@@ -596,15 +684,14 @@
                             </div>
 
 
-
                         </div>
-                    <br>
-{#                    <hr>#}
-{##}
-{#                    <div class="caption">#}
-{#                <i class="icon-settings font-red"></i>#}
-{#                <span class="caption-subject font-red sbold uppercase">{% trans 'Program Fee' %} </span>#}
-{#            </div>#}
+                        <br>
+                        {#                    <hr>#}
+                        {##}
+                        {#                    <div class="caption">#}
+                        {#                <i class="icon-settings font-red"></i>#}
+                        {#                <span class="caption-subject font-red sbold uppercase">{% trans 'Program Fee' %} </span>#}
+                        {#            </div>#}
 
 
                         <div class="row">

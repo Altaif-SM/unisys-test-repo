@@ -347,6 +347,9 @@ class StudyLevelDetails(BaseModel):
     def __str__(self):
         return self.study_level
 
+class Department(models.Model):
+    department = models.CharField(max_length=100, blank=True, null=True)
+
 class FacultyDetails(BaseModel):
     university = models.ForeignKey(UniversityDetails, null=True, related_name='university_faculty_rel',
                                 on_delete=models.SET_NULL)
@@ -358,6 +361,7 @@ class FacultyDetails(BaseModel):
     logo = models.ImageField(upload_to='faculty_logo/', null=True, blank=True)
     address = models.CharField(max_length=255, blank=True, null=True)
     status = models.BooleanField(default=True)
+    department = models.ManyToManyField(Department, blank=True)
 
     class Meta:
         ordering = ('-id',)
@@ -419,6 +423,9 @@ class ProgramDetails(BaseModel):
     #                                on_delete=models.SET_NULL)
     campus = models.ManyToManyField(ProgramCampusDetails, blank=True)
     study_mode = models.ManyToManyField(ProgramStudyModeDetails, blank=True)
+    program_type = models.CharField(max_length=100, blank=True, null=True)
+    department = models.ForeignKey(Department, null=True, related_name='program_department_rel',
+                                    on_delete=models.SET_NULL)
     class Meta:
         ordering = ('program_name',)
 

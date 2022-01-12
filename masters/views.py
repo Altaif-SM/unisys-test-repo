@@ -11,6 +11,7 @@ from common.utils import *
 from partner.models import *
 from datetime import date
 import datetime
+from django.http import HttpResponse, JsonResponse
 
 
 
@@ -1911,6 +1912,7 @@ def add_faculty(request):
         website = request.POST.get('website')
         address = request.POST.get('address')
         status = request.POST.get('status')
+        department_count = request.POST.get('department_count')
         if status == 'on':
             status = True
         else:
@@ -1919,10 +1921,19 @@ def add_faculty(request):
             faculty_obj = FacultyDetails.objects.create(university_id=university,
                                              faculty_name=faculty_name, email=email,telephone = telephone,website = website,
                                              address = address,status = status)
+
+            faculty_obj.department.clear()
+            for x in range(int(department_count)):
+                try:
+                    x = x + 1
+                    department_obj = Department.objects.create(
+                        department=request.POST.get('department_' + str(x)))
+                    faculty_obj.department.add(department_obj)
+                except:
+                    pass
             if logo:
                 faculty_obj.logo = logo
                 faculty_obj.save()
-            messages.success(request, "Record saved.")
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/faculty_settings/')
@@ -1930,6 +1941,7 @@ def add_faculty(request):
 
 def edit_faculty(request, faculty_id=None):
     faculty_obj = FacultyDetails.objects.get(id=faculty_id)
+    department_total_count = faculty_obj.department.all().count()
     if faculty_obj.university.is_partner_university == False:
         university_recs = UniversityDetails.objects.filter(is_delete = False,is_active = True,is_partner_university = False).order_by('-id')
     else:
@@ -1944,6 +1956,7 @@ def edit_faculty(request, faculty_id=None):
         website = request.POST.get('website')
         address = request.POST.get('address')
         status = request.POST.get('status')
+        department_count = request.POST.get('department_count')
         if status == 'on':
             status = True
         else:
@@ -1956,6 +1969,17 @@ def edit_faculty(request, faculty_id=None):
             faculty_obj.website = website
             faculty_obj.address = address
             faculty_obj.status = status
+
+            faculty_obj.department.clear()
+            for x in range(int(department_count)):
+                try:
+                    x = x + 1
+                    department_obj = Department.objects.create(
+                        department=request.POST.get('department_' + str(x)))
+                    faculty_obj.department.add(department_obj)
+                except:
+                    pass
+
             if logo:
                 faculty_obj.logo = logo
             faculty_obj.save()
@@ -1963,7 +1987,7 @@ def edit_faculty(request, faculty_id=None):
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/faculty_settings/')
-    return render(request, "edit_faculty.html", {'faculty_obj': faculty_obj,'university_recs':university_recs})
+    return render(request, "edit_faculty.html", {'faculty_obj': faculty_obj,'university_recs':university_recs,'department_total_count':department_total_count})
 
 def delete_faculty(request):
     if request.method == 'POST':
@@ -2262,6 +2286,8 @@ def add_program(request):
     if request.method == 'POST':
         university = request.POST.get('university')
         faculty = request.POST.get('faculty')
+        program_type = request.POST.get('program_type')
+        department = request.POST.get('department')
         program_name = request.POST.get('program_name')
         # program_fee = request.POST.get('program_fee')
         # credit_hrs = request.POST.get('credit_hrs')
@@ -2279,7 +2305,7 @@ def add_program(request):
         else:
             status = False
         try:
-            program_obj = ProgramDetails.objects.create(faculty_id=faculty,university_id=university,
+            program_obj = ProgramDetails.objects.create(faculty_id=faculty,university_id=university,program_type = program_type,department_id = department,
                                              program_name=program_name,program_overview = program_overview,program_objective = program_objective,
                                              program_vision = program_vision,program_mission = program_mission,status = status,study_type_id = study_type,study_level_id = study_level,
                                                         )
@@ -2313,6 +2339,8 @@ def edit_program(request, program_id=None):
     if request.method == 'POST':
         university = request.POST.get('university')
         faculty = request.POST.get('faculty')
+        program_type = request.POST.get('program_type')
+        department = request.POST.get('department')
         # program_id = request.POST.get('program_id')
         program_name = request.POST.get('program_name')
         study_type = request.POST.get('study_type')
@@ -2335,6 +2363,8 @@ def edit_program(request, program_id=None):
         try:
             program_obj.university_id = university
             program_obj.faculty_id = faculty
+            program_obj.program_type = program_type
+            program_obj.department_id = department
             # program_obj.campus_id = campus
             # program_obj.program_id = program_id
             program_obj.program_name = program_name
@@ -2377,7 +2407,8 @@ def edit_program(request, program_id=None):
     study_mode_list = ['Online', 'On Campus']
     selected_study_mode_list = program_obj.study_mode.values_list('study_mode',flat = True)
     selected_campus_list = list(program_obj.campus.values_list('campus_id',flat = True))
-    return render(request, "edit_program.html", {'program_obj': program_obj,'university_recs':university_recs,'study_mode_recs':study_mode_recs,'study_level_recs':study_level_recs,'study_type_recs':study_type_recs,'faculty_recs':faculty_recs,'campus_recs':campus_recs,'study_mode_list':study_mode_list,'selected_study_mode_list':selected_study_mode_list,'selected_campus_list':selected_campus_list})
+    department_recs = program_obj.faculty.department.all()
+    return render(request, "edit_program.html", {'program_obj': program_obj,'university_recs':university_recs,'study_mode_recs':study_mode_recs,'study_level_recs':study_level_recs,'study_type_recs':study_type_recs,'faculty_recs':faculty_recs,'campus_recs':campus_recs,'study_mode_list':study_mode_list,'selected_study_mode_list':selected_study_mode_list,'selected_campus_list':selected_campus_list,'department_recs':department_recs})
 
 
 def delete_program(request):
@@ -3199,3 +3230,16 @@ def api_test(request):
     headers = {'content-type': 'application/json'}
     r = requests.post(url, data=json.dumps(body), headers=headers)
     print(r.content)
+
+
+def get_departments_from_faculty(request):
+    finalDict = []
+    faculty_id = request.POST.get('faculty_id', None)
+    faculty_recs = FacultyDetails.objects.filter(id = faculty_id)
+    for rec in faculty_recs:
+        for dep in rec.department.all():
+            raw_dict = {}
+            raw_dict['department']=dep.department
+            raw_dict['id']=dep.id
+            finalDict.append(raw_dict)
+    return JsonResponse(finalDict, safe=False)
