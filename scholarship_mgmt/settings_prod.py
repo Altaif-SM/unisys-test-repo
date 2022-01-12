@@ -125,7 +125,7 @@ MESSAGE_TAGS = {message_constants.DEBUG: 'debug',
 DATABASES = {
      'default': {
           'ENGINE': 'django.db.backends.mysql',
-          'NAME': 'indonesia_university_system_v3',
+          'NAME': 'indonesia_university_system_v4',
           'USER':'riyaz',
           'PASSWORD':'Sayyed@123',
           'HOST': '127.0.0.1',
