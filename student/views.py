@@ -2504,17 +2504,18 @@ def save_update_applicant_intake_info(request):
                 progress_counter = progress_counter + 20
                 application_obj.progress_counter = progress_counter
                 application_obj.save()
-
-            ApplicationDetails.objects.filter(id=application_id).update(
-                university_id=request.POST['university'],
-                semester_id=request.POST['semester'],
-                learning_centre_id=request.POST['learning_centre'],
-                academic_year_id=request.POST['year'],
-                program_id=request.POST['program'],
-                campus_id=request.POST['campus'],
-                faculty_id=request.POST['faculty'],
-                learning_country_id=request.POST['country'],intake_flag = True
-            )
+            # university_id=request.POST['university'],
+            # semester_id=request.POST['semester'],
+            if request.POST.get('learning_centre'):
+                application_obj.learning_centre_id = request.POST.get('learning_centre')
+            application_obj.academic_year_id = request.POST.get('year')
+            application_obj.program_id = request.POST.get('program')
+            application_obj.campus_id = request.POST.get('campus')
+            application_obj.faculty_id = request.POST.get('faculty')
+            if request.POST.get('country'):
+                application_obj.learning_country_id = request.POST.get('country')
+            application_obj.intake_flag = True
+            application_obj.save()
             redirect_flag = True
             if redirect_flag:
                 messages.success(request, "Record saved")
