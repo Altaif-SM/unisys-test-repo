@@ -130,3 +130,4 @@ class SuccessView(TemplateView):
 
 class CancelView(TemplateView):
     template_name = 'cancel.html'
+
