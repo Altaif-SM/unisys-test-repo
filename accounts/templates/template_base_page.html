@@ -584,12 +584,12 @@ License: You must have a valid license purchased only from themeforest(the above
                                                class="nav-link ">{% trans 'Manage Country' %}</a>
                                         </li>
                                     {% endif %}
-                                    {% if 'Manage Study Mode' in access_list %}
-                                        <li class="nav-item ">
-                                            <a href="{% url 'masters:study_mode_settings' %}"
-                                               class="nav-link ">{% trans 'Manage Study Mode' %}</a>
-                                        </li>
-                                    {% endif %}
+{#                                    {% if 'Manage Study Mode' in access_list %}#}
+{#                                        <li class="nav-item ">#}
+{#                                            <a href="{% url 'masters:study_mode_settings' %}"#}
+{#                                               class="nav-link ">{% trans 'Manage Study Mode' %}</a>#}
+{#                                        </li>#}
+{#                                    {% endif %}#}
                                     {% if 'Manage Study Level' in access_list %}
                                         <li class="nav-item ">
                                             <a href="{% url 'masters:study_level_settings' %}"
@@ -1511,7 +1511,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-    {% if request.resolver_match.url_name == 'template_approving_application' or request.resolver_match.url_name == 'document_settings' or  request.resolver_match.url_name == 'template_applicant_all_details'  %}
+    {% if request.resolver_match.url_name == 'template_approving_application' or request.resolver_match.url_name == 'edit_document' or request.resolver_match.url_name == 'document_settings' or  request.resolver_match.url_name == 'template_applicant_all_details'  %}
         {
             var element = document.getElementById("c");
             element.classList.add("active");

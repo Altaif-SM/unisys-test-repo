@@ -219,7 +219,7 @@ urlpatterns = [
     path('delete_department_staff/', views.delete_department_staff, name='delete_department_staff'),
 
     path('document_settings/', views.document_settings, name='document_settings'),
-    path('add_document/', views.add_document, name='add_document'),
+    path('edit_document/<int:doc_id>/', views.edit_document, name='edit_document'),
     path('update_documet/', views.update_documet, name='update_documet'),
     path('delete_document/', views.delete_document, name='delete_document'),
 

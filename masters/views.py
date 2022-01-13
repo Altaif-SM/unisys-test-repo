@@ -3294,3 +3294,20 @@ def get_faculty_from_university(request):
             raw_dict['faculty_name']=faculty.faculty_name
             faculty_list.append(raw_dict)
     return JsonResponse(faculty_list, safe=False)
+
+def edit_document(request, doc_id=None):
+    doc_obj = DocumentDetails.objects.get(id=doc_id)
+    if request.method == 'POST':
+        document_name = request.POST.get('document_name')
+        doc_required = request.POST.get('doc_required')
+        description = request.POST.get('description')
+        try:
+            doc_obj.document_name = document_name
+            doc_obj.doc_required = doc_required
+            doc_obj.description = description
+            doc_obj.save()
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/document_settings/')
+    return render(request, "edit_document.html", {'doc_obj': doc_obj})
