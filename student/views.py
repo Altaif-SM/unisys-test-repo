@@ -2424,6 +2424,8 @@ def applicant_intake_info(request):
     study_type_list = ['International', 'University Main']
     study_mode_list = ['Online', 'On Campus']
     study_level_list = ['Undergraduate', 'Postgraduate']
+    study_type_recs = StudyTypeDetails.objects.filter().order_by('-id')
+    study_level_recs = StudyLevelDetails.objects.filter().order_by('-id')
     try:
         application_obj = request.user.get_application
     except Exception as e :
@@ -2472,7 +2474,7 @@ def applicant_intake_info(request):
 
     return render(request, 'intake_details.html',{'country_recs': country_recs, 'religion_recs': religion_recs, 'application_obj': application_obj,'student_recs':student_recs,'agent_recs':agent_recs,'year_recs':year_recs,'semester_recs':semester_recs,
                                                   'learning_centre_recs':learning_centre_recs,'university_recs':university_recs,'learning_centre_list':learning_centre_list,'program_recs':program_recs,'campus_list':campus_list,'study_type_list':study_type_list,'study_mode_list':study_mode_list,'study_level_list':study_level_list,'faculty_recs':faculty_recs,
-                                                  'department_recs':department_recs})
+                                                  'department_recs':department_recs,'study_type_recs':study_type_recs,'study_level_recs':study_level_recs})
 
 
 def get_learning_centre_from_country(request):
