@@ -2514,6 +2514,7 @@ def save_update_applicant_intake_info(request):
                 progress_counter = progress_counter + 20
                 application_obj.progress_counter = progress_counter
                 application_obj.save()
+
             if request.POST.get('learning_centre'):
                 application_obj.learning_centre_id = request.POST.get('learning_centre')
             application_obj.academic_year_id = request.POST.get('year')
@@ -2522,6 +2523,9 @@ def save_update_applicant_intake_info(request):
             application_obj.faculty_id = request.POST.get('faculty')
             application_obj.university_id = request.POST.get('university')
             application_obj.semester_id = request.POST.get('semester')
+            application_obj.study_mode = request.POST.get('study_mode')
+            application_obj.study_level_id = request.POST.get('study_level')
+            application_obj.department_id = request.POST.get('department')
             if request.POST.get('country'):
                 application_obj.learning_country_id = request.POST.get('country')
             application_obj.intake_flag = True

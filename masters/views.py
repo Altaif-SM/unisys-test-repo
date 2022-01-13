@@ -3246,14 +3246,51 @@ def get_departments_from_faculty(request):
 
 
 def get_programs_from_filter(request):
+    final_list = []
     program_list = []
-    program_filter = request.POST.getlist('program_filter[]')
-    program_recs = ProgramDetails.objects.filter()
-    if program_filter:
-        program_recs = program_recs.filter(Q(program_type__icontains=program_filter) | Q(study_level__study_level__icontains=program_filter))
-    for rec in program_recs:
-        raw_dict = {}
-        raw_dict['id']=rec.id
-        raw_dict['program']=rec.program_name
-        program_list.append(raw_dict)
-    return JsonResponse(program_list, safe=False)
+    study_mode = request.POST.get('study_mode', None)
+    university = request.POST.get('university', None)
+    study_level = request.POST.get('study_level', None)
+    faculty = request.POST.get('faculty', None)
+    department = request.POST.get('department', None)
+    program_recs = ProgramDetails.objects.filter(is_delete=False)
+
+    if university:
+        program_recs = program_recs.filter(university_id = university)
+
+    if study_level:
+        program_recs = program_recs.filter(study_level_id = study_level)
+
+    if faculty:
+        program_recs = program_recs.filter(faculty_id = faculty)
+
+    if department:
+        program_recs = program_recs.filter(department_id = department)
+
+    if study_mode:
+        for rec in program_recs:
+            for mode in rec.study_mode.filter(study_mode = study_mode):
+                program_list.append(rec)
+
+    if program_list:
+        for rec in program_recs:
+            raw_dict = {}
+            raw_dict['id'] = rec.id
+            raw_dict['program'] = rec.program_name
+            final_list.append(raw_dict)
+    return JsonResponse(final_list, safe=False)
+
+
+
+
+def get_faculty_from_university(request):
+    faculty_list = []
+    university_id = request.POST.get('university_id', None)
+    faculty_recs = FacultyDetails.objects.filter(university_id = university_id)
+    for faculty_obj in faculty_recs:
+        for faculty in faculty_obj.faculty.all():
+            raw_dict = {}
+            raw_dict['id']=faculty.id
+            raw_dict['faculty_name']=faculty.faculty_name
+            faculty_list.append(raw_dict)
+    return JsonResponse(faculty_list, safe=False)

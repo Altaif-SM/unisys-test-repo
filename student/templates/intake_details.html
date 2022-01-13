@@ -71,31 +71,63 @@
 
                 })
 
+            $(document).on("change", "#university", function (e) {
+                var university = $(this).val();
+                var study_mode = $('#study_mode').val();
+                var study_level = $('#study_level').val();
+                var faculty = $('#faculty').val();
+                var department = $('#department').val();
+                var url = '/masters/get_programs_from_filter/';
+                get_programs_from_filter(url, study_mode,university,study_level,faculty,department)
+            })
+
+
+              $(document).on("change", "#study_mode", function (e) {
+                var study_mode = $(this).val();
+                var university = $('#university').val();
+                var study_level = $('#study_level').val();
+                var faculty = $('#faculty').val();
+                var department = $('#department').val();
+                var url = '/masters/get_programs_from_filter/';
+                get_programs_from_filter(url, study_mode,university,study_level,faculty,department)
+            })
+
+            $(document).on("change", "#study_level", function (e) {
+                var study_level = $(this).val();
+                var study_mode = $('#study_mode').val();
+                var university = $('#university').val();
+                var faculty = $('#faculty').val();
+                var department = $('#department').val();
+                var url = '/masters/get_programs_from_filter/';
+                get_programs_from_filter(url, study_mode,university,study_level,faculty,department)
+            })
+
+             $(document).on("change", "#faculty", function (e) {
+                var faculty = $(this).val();
+                 var study_mode = $('#study_mode').val();
+                var university = $('#university').val();
+                var department = $('#department').val();
+                var study_level = $('#study_level').val();
+                var url = '/masters/get_programs_from_filter/';
+                get_programs_from_filter(url, study_mode,university,study_level,faculty,department)
+            })
+
+            $(document).on("change", "#department", function (e) {
+                var department = $(this).val();
+                 var study_mode = $('#study_mode').val();
+                var university = $('#university').val();
+                var study_level = $('#study_level').val();
+                var faculty = $('#faculty').val();
+                var url = '/masters/get_programs_from_filter/';
+                get_programs_from_filter(url, study_mode,university,study_level,faculty,department)
+            })
+
                 $(document).on("change", "#faculty", function (e) {
                     var faculty_id = $(this).val();
                     var url = '/masters/get_departments_from_faculty/';
                     get_departments_from_faculty(url, faculty_id)
                 })
 
-                $('input[type="checkbox"]').on('change', function () {
-                    var program_dict = {};
-                    var program_filter = []
-                    var checkboxes = document.querySelectorAll('input[type=checkbox]:checked')
-                    for (var i = 0; i < checkboxes.length; i++) {
-                        program_filter.push(checkboxes[i].value)
-                    }
-                    if ($('#faculty').val()){
-                        var faculty = $('#faculty').val();
-                        program_dict[faculty] = JSON.parse(faculty);
-                        console.log("program_dict"+program_dict)
-                        program_filter.push(program_dict);
-                    }
-                    if ($('#department').val()) {
-                        program_filter.push($('#department').val());
-                    }
-                    var url = '/masters/get_programs_from_filter/';
-                    get_programs_from_filter(url, program_filter)
-                })
 
                 $(document).on("change", "#program1", function (e) {
                     var program_id = $(this).val();
@@ -169,12 +201,16 @@
                 });
             }
 
-            function get_programs_from_filter(url, program_filter) {
+            function get_programs_from_filter(url, study_mode,university,study_level,faculty,department) {
                 $.ajax({
                     type: 'POST',
                     url: url,
                     data: {
-                        program_filter: program_filter,
+                        study_mode: study_mode,
+                        university: university,
+                        study_level: study_level,
+                        faculty: faculty,
+                        department: department,
                         csrfmiddlewaretoken: '{{ csrf_token }}',
                     },
                     success: function (data) {
@@ -527,7 +563,8 @@
                             {#                            </div>#}
 
                         <div class="">
-                                <label class="col-md-2 control-label">{% trans 'Mode of Study' %}: </label>
+                                <label class="col-md-2 control-label">{% trans 'Mode of Study' %}: <span
+                                            style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <select id='study_mode' title="Select Mode of Study" name="study_mode"
                                             class="form-control value_check" data-live-search="true" required>
@@ -543,7 +580,7 @@
                                         {% endif %}
 
                                         {% for rec in study_mode_list %}
-                                            <option value='{{ rec.id }}'>{{ rec }}</option>
+                                            <option value='{{ rec }}'>{{ rec }}</option>
                                         {% endfor %}
 
                                     </select>
@@ -554,15 +591,16 @@
 
 
                         <div class="">
-                                <label class="col-md-2 control-label">{% trans 'Level of Study' %}: </label>
+                                <label class="col-md-2 control-label">{% trans 'Level of Study' %}: <span
+                                            style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <select id='study_level' title="Select Level of Study" name="study_level"
                                             class="form-control value_check" data-live-search="true" required>
 
-                                        {% if application_obj.study_type %}
+                                        {% if application_obj.study_level %}
                                             <option style="display:none" selected="selected"
-                                                    value="{{ application_obj.study_type}}"
-                                                    value="">{{ application_obj.study_type|default_if_none:"" }}</option>
+                                                    value="{{ application_obj.study_level.id}}"
+                                                    value="">{{ application_obj.study_level|default_if_none:"" }}</option>
                                         {% else %}
                                             <option disabled selected="selected" id=""
                                                     value="">{% trans 'Please Select' %}
@@ -618,7 +656,8 @@
 
 
                             <div class="">
-                                <label class="col-md-2 control-label">{% trans 'Faculty' %}: </label>
+                                <label class="col-md-2 control-label">{% trans 'Faculty' %}: <span
+                                            style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <select id='faculty' title="Select Faculty" name="faculty"
                                             class="form-control value_check" data-live-search="true" required>
@@ -644,10 +683,11 @@
                             </div>
 
                             <div class="">
-                                <label class="col-md-2 control-label">{% trans 'Department' %}:</label>
+                                <label class="col-md-2 control-label">{% trans 'Department' %}:<span
+                                            style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <select id='department' title="Select Department" name="department"
-                                            class="form-control value_check" data-live-search="true">
+                                            class="form-control value_check" data-live-search="true" required>
 
                                         {% if application_obj.department %}
                                             <option style="display:none" selected="selected"
@@ -675,10 +715,11 @@
 
 
                             <div class="">
-                                <label class="col-md-2 control-label">{% trans 'Program' %}: </label>
+                                <label class="col-md-2 control-label">{% trans 'Program' %}: <span
+                                            style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     <select id='program' title="Select Program" name="program"
-                                            class="form-control value_check" data-live-search="true">
+                                            class="form-control value_check" data-live-search="true" required>
 
                                         {% if application_obj.program %}
                                             <option style="display:none" selected="selected"
