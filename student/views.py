@@ -2293,6 +2293,7 @@ def save_attachement_submission(request):
         level_result_document = request.FILES.get('level_result_document')
         transcript_document = request.FILES.get('transcript_document')
         english_test_result_document = request.FILES.get('english_test_result_document')
+        arab_test_result_document = request.FILES.get('arab_test_result_document')
         recommendation_letter = request.FILES.get('recommendation_letter')
     except:
         passport_photo = ''
@@ -2300,6 +2301,7 @@ def save_attachement_submission(request):
         level_result_document = ''
         transcript_document = ''
         english_test_result_document = ''
+        arab_test_result_document = ''
         recommendation_letter = ''
 
     try:
@@ -2308,7 +2310,7 @@ def save_attachement_submission(request):
             attachment_obj = ApplicantAttachementDetails.objects.get(
                 applicant_id=request.user.get_application)
         else:
-            if (passport_photo is not None) or (photo is not None) or (level_result_document is not None) or (transcript_document is not None) or (english_test_result_document is not None) or (recommendation_letter is not None):
+            if (passport_photo is not None) or (photo is not None) or (level_result_document is not None) or (transcript_document is not None) or (english_test_result_document is not None) or (arab_test_result_document is not None) or (recommendation_letter is not None):
                 if not ApplicantAttachementDetails.objects.filter(applicant_id=request.user.get_application).exists():
                     application_obj = ApplicationDetails.objects.get(id=request.user.get_application.id)
                     progress_counter = application_obj.progress_counter
@@ -2335,6 +2337,10 @@ def save_attachement_submission(request):
 
         if english_test_result_document:
             attachment_obj.english_test_result_document = english_test_result_document
+            attachment_obj.save()
+
+        if arab_test_result_document:
+            attachment_obj.arab_test_result_document = arab_test_result_document
             attachment_obj.save()
 
         if recommendation_letter:

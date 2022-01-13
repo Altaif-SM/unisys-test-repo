@@ -46,6 +46,103 @@
                 });{% endcomment %}
 
 
+                $("#form_sample_1").submit(function (e) {
+
+
+                    if ($('#photo_doc_required').val() == 'Yes') {
+                        $('#passport_photo_exists').hide();
+                        $('#level_result_document_exists').hide();
+                        $('#transcript_document_exists').hide();
+                        $('#english_test_result_document_exists').hide();
+                        $('#arab_test_result_document_exists').hide();
+                        $('#recommendation_letter_exists').hide();
+
+                        if (document.getElementById("photo").files.length == 0 && !$('#photo_text').val()) {
+                            $('#photo_exists').show();
+                            return false;
+                        }
+
+                    }
+                    if($('#passport_id_doc_required').val() == 'Yes'){
+                        $('#photo_exists').hide();
+                        $('#level_result_document_exists').hide();
+                        $('#transcript_document_exists').hide();
+                        $('#english_test_result_document_exists').hide();
+                        $('#arab_test_result_document_exists').hide();
+                        $('#recommendation_letter_exists').hide();
+                         if (document.getElementById("passport_photo").files.length == 0 && !$('#passport_photo_text').val()) {
+                            $('#passport_photo_exists').show();
+                            return false;
+                        }
+                    }
+                    if($('#academic_doc_required').val() == 'Yes'){
+                        $('#photo_exists').hide();
+                        $('#passport_photo_exists').hide();
+                        $('#transcript_document_exists').hide();
+                        $('#english_test_result_document_exists').hide();
+                        $('#arab_test_result_document_exists').hide();
+                        $('#recommendation_letter_exists').hide();
+                         if (document.getElementById("level_result_document").files.length == 0 && !$('#level_result_document_text').val()) {
+                            $('#level_result_document_exists').show();
+                            return false;
+                        }
+                    }
+
+
+
+                    if($('#transcript_doc_required').val() == 'Yes'){
+                        $('#photo_exists').hide();
+                        $('#passport_photo_exists').hide();
+                        $('#level_result_document_exists').hide();
+                        $('#english_test_result_document_exists').hide();
+                        $('#arab_test_result_document_exists').hide();
+                        $('#recommendation_letter_exists').hide();
+                         if (document.getElementById("transcript_document").files.length == 0 && !$('#transcript_document_text').val()) {
+                            $('#transcript_document_exists').show();
+                            return false;
+                        }
+                    }
+                    if($('#english_doc_required').val() == 'Yes'){
+                        $('#photo_exists').hide();
+                        $('#passport_photo_exists').hide();
+                        $('#level_result_document_exists').hide();
+                        $('#transcript_document_exists').hide();
+                        $('#arab_test_result_document_exists').hide();
+                        $('#recommendation_letter_exists').hide();
+                         if (document.getElementById("english_test_result_document").files.length == 0 && !$('#english_test_result_document_text').val()) {
+                            $('#english_test_result_document_exists').show();
+                            return false;
+                        }
+                    }
+                    if($('#arab_doc_required').val() == 'Yes'){
+                        $('#photo_exists').hide();
+                        $('#passport_photo_exists').hide();
+                        $('#level_result_document_exists').hide();
+                        $('#transcript_document_exists').hide();
+                        $('#english_test_result_document_exists').hide();
+                        $('#recommendation_letter_exists').hide();
+                         if (document.getElementById("arab_test_result_document").files.length == 0 && !$('#arab_test_result_document_text').val()) {
+                            $('#arab_test_result_document_exists').show();
+                            return false;
+                        }
+                    }
+                    if($('#recommendation_doc_required').val() == 'Yes'){
+                        $('#photo_exists').hide();
+                        $('#passport_photo_exists').hide();
+                        $('#level_result_document_exists').hide();
+                        $('#transcript_document_exists').hide();
+                        $('#english_test_result_document_exists').hide();
+                        $('#arab_test_result_document_exists').hide();
+                         if (document.getElementById("recommendation_letter").files.length == 0 && !$('#recommendation_letter_text').val()) {
+                            $('#recommendation_letter_exists').show();
+                            return false;
+                        }
+                    }
+
+
+                })
+
+
                 $(document).on("click", ".remove_doc", function (e) {
                     var parent_id = $(this).closest('div').attr('id');
                     $('#' + parent_id + ' .emp').val('');
@@ -168,6 +265,8 @@
 
                     <div class="form-body">
                         <div class="row">
+                            <input type="hidden" value="{{ document_recs.0.doc_required|default_if_none:"" }}"
+                                   id="photo_doc_required" name="photo_doc_required">
                             <div class="">
                                 <label class="col-md-4 control-label">{{ document_recs.0.document_name|default_if_none:"" }}:
                                     {% if document_recs.0.doc_required == 'Yes' %}
@@ -187,7 +286,7 @@
                                                 type='button' value='Choose File:'><a target="_blank"
                                                                                       href="{{ attachment_obj.image.url }}"><input
                                                 type="text"
-                                                readonly name="photo_text"
+                                                readonly name="photo_text" id="photo_text"
                                                 class="file_value emp"
                                                 style="cursor: pointer;border: none; width: 50%"
                                                 value="{{ attachment_obj.image }}"></a>
@@ -212,24 +311,25 @@
 
                             </div>
 
-                            <div class="">
-                                <label class="col-md-2 control-label" style="margin-top: -7px;
-    font-size: 25px;
-    margin-left: -145px;">
+                            <div class="" style="font-size:20px;">
 
-                                    <a title="{{ document_recs.0.description|default_if_none:"" }}"><i
-                                            class="fa fa-info-circle" aria-hidden="true"></i></a>
-
-
-                                </label>
+                                <a title="{{ document_recs.0.description|default_if_none:"" }}"><i
+                                        class="fa fa-info-circle" aria-hidden="true"></i></a>
 
 
                             </div>
+                            <span style="color: red;font-size:13px;display: none;"
+                                  id="photo_exists">Please upload {{ document_recs.0.document_name|default_if_none:"" }}.</span>
+
+
                         </div>
+
                         <br>
 
                         <div class="row">
                             <div class="">
+                                <input type="hidden" value="{{ document_recs.1.doc_required|default_if_none:"" }}"
+                                       id="passport_id_doc_required" name="passport_id_doc_required">
                                 <label class="col-md-4 control-label">{{ document_recs.1.document_name|default_if_none:"" }}:
                                     {% if document_recs.1.doc_required == 'Yes' %}
                                         <span style="color: red">*</span>{% endif %}
@@ -246,7 +346,7 @@
                                                 type='button' value='Choose File:'><a target="_blank"
                                                                                       href="{{ attachment_obj.passport_image.url }}"><input
                                                 type="text"
-                                                readonly name="passport_photo_text"
+                                                readonly name="passport_photo_text" id="passport_photo_text"
                                                 class="file_value emp"
                                                 style="cursor: pointer;border: none; width: 50%"
                                                 value="{{ attachment_obj.passport_image }}"></a>
@@ -268,19 +368,15 @@
                                           class="remove_doc fa fa-close"></span>
                                 </div>
 
-                                <div class="">
-                                    <label class="col-md-2 control-label" style="margin-top: -7px;
-    font-size: 25px;
-    margin-left: -145px;">
+                                <div class="" style="font-size:20px;">
 
-                                        <a title="{{ document_recs.1.description|default_if_none:"" }}"><i
-                                                class="fa fa-info-circle" aria-hidden="true"></i></a>
-
-
-                                    </label>
+                                    <a title="{{ document_recs.1.description|default_if_none:"" }}"><i
+                                            class="fa fa-info-circle" aria-hidden="true"></i></a>
 
 
                                 </div>
+                            <span style="color: red;font-size:13px;display: none;"
+                                  id="passport_photo_exists">Please upload {{ document_recs.1.document_name|default_if_none:"" }}.</span>
 
 
                             </div>
@@ -290,6 +386,8 @@
 
 
                         <div class="row">
+                            <input type="hidden" value="{{ document_recs.2.doc_required|default_if_none:"" }}"
+                                   id="academic_doc_required" name="academic_doc_required">
                             <div class="">
                                 <label class="col-md-4 control-label">{{ document_recs.2.document_name|default_if_none:"" }}:
                                     {% if document_recs.2.doc_required == 'Yes' %}
@@ -305,7 +403,7 @@
                                                 type='button' value='Choose File:'><a target="_blank"
                                                                                       href="{{ attachment_obj.level_result_document.url }}"><input
                                                 type="text"
-                                                readonly name="level_result_document_text"
+                                                readonly name="level_result_document_text" id="level_result_document_text"
                                                 class="file_value emp"
                                                 style="cursor: pointer;border: none; width: 50%"
                                                 value="{{ attachment_obj.level_result_document }}"></a>
@@ -326,30 +424,29 @@
                                     <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
                                           class="remove_doc fa fa-close"></span>
                                 </div>
-                            <div class="">
-                                    <label class="col-md-2 control-label" style="margin-top: -7px;
-    font-size: 25px;
-    margin-left: -145px;">
-
-                                        <a title="{{ document_recs.2.description|default_if_none:"" }}"><i
-                                                class="fa fa-info-circle" aria-hidden="true"></i></a>
+                                <div class="" style="font-size:20px;">
 
 
-                                    </label>
+                                    <a title="{{ document_recs.2.description|default_if_none:"" }}"><i
+                                            class="fa fa-info-circle" aria-hidden="true"></i></a>
 
 
                                 </div>
+                            <span style="color: red;font-size:13px;display: none;"
+                                  id="level_result_document_exists">Please upload {{ document_recs.2.document_name|default_if_none:"" }}.</span>
 
                             </div>
                         </div>
                         <br>
                         <div class="row">
+                            <input type="hidden" value="{{ document_recs.3.doc_required|default_if_none:"" }}"
+                                   id="transcript_doc_required" name="transcript_doc_required">
                             <div class="">
                                 <label class="col-md-4 control-label">{{ document_recs.3.document_name|default_if_none:"" }}:
                                     {% if document_recs.3.doc_required == 'Yes' %}
                                         <span style="color: red">*</span>{% endif %}
-{#                                    <br><span#}
-{#                                            style="color:red;font-size: 12px">({% trans 'Only formats are allowed pdf' %})</span>#}
+                                    {#                                    <br><span#}
+                                    {#                                            style="color:red;font-size: 12px">({% trans 'Only formats are allowed pdf' %})</span>#}
                                 </label>
                                 <div class="col-md-3" id="parent3">
                                     {% if attachment_obj.transcript_document %}
@@ -360,7 +457,7 @@
                                                 href="
                                                         {{ attachment_obj.transcript_document.url }}"><input
                                                 type="text"
-                                                readonly name="transcript_document_text"
+                                                readonly name="transcript_document_text" id="transcript_document_text"
                                                 class="file_value emp"
                                                 style="cursor: pointer;border: none; width: 50%"
                                                 value="{{ attachment_obj.transcript_document }}"></a>
@@ -382,30 +479,29 @@
                                           class="remove_doc fa fa-close"></span>
                                 </div>
 
-                                <div class="">
-                                    <label class="col-md-2 control-label" style="margin-top: -7px;
-    font-size: 25px;
-    margin-left: -145px;">
-
-                                        <a title="{{ document_recs.3.description|default_if_none:"" }}"><i
-                                                class="fa fa-info-circle" aria-hidden="true"></i></a>
+                                <div class="" style="font-size:20px;">
 
 
-                                    </label>
+                                    <a title="{{ document_recs.3.description|default_if_none:"" }}"><i
+                                            class="fa fa-info-circle" aria-hidden="true"></i></a>
 
 
                                 </div>
+                            <span style="color: red;font-size:13px;display: none;"
+                                  id="transcript_document_exists">Please upload {{ document_recs.3.document_name|default_if_none:"" }}.</span>
 
                             </div>
                         </div>
                         <br>
                         <div class="row">
+                            <input type="hidden" value="{{ document_recs.4.doc_required|default_if_none:"" }}"
+                                   id="english_doc_required" name="english_doc_required">
                             <div class="">
                                 <label class="col-md-4 control-label">{{ document_recs.4.document_name|default_if_none:"" }}:
                                     {% if document_recs.4.doc_required == 'Yes' %}
                                         <span style="color: red">*</span>{% endif %}
-{#                                    <br><span#}
-{#                                            style="color:red;font-size: 12px">({% trans 'Only formats are allowed pdf' %})</span>#}
+                                    {#                                    <br><span#}
+                                    {#                                            style="color:red;font-size: 12px">({% trans 'Only formats are allowed pdf' %})</span>#}
                                 </label>
                                 <div class="col-md-3" id="parent4">
                                     {% if attachment_obj.english_test_result_document %}
@@ -415,7 +511,7 @@
                                                 type='button' value='Choose File:'><a target="_blank"
                                                                                       href="{{ attachment_obj.english_test_result_document.url }}"><input
                                                 type="text"
-                                                readonly name="english_test_result_document_text"
+                                                readonly name="english_test_result_document_text" id="english_test_result_document_text"
                                                 class="file_value emp"
                                                 style="cursor: pointer;border: none; width: 50%"
                                                 value="{{ attachment_obj.english_test_result_document }}"></a>
@@ -437,30 +533,83 @@
                                     <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
                                           class="remove_doc fa fa-close"></span>
                                 </div>
-                            <div class="">
-                                <label class="col-md-2 control-label" style="margin-top: -7px;
-    font-size: 25px;
-    margin-left: -145px;">
+                                <div class="" style="font-size:20px;">
+
 
                                     <a title="{{ document_recs.4.description|default_if_none:"" }}"><i
                                             class="fa fa-info-circle" aria-hidden="true"></i></a>
 
 
-                                </label>
-
+                                </div>
+                            <span style="color: red;font-size:13px;display: none;"
+                                  id="english_test_result_document_exists">Please upload {{ document_recs.4.document_name|default_if_none:"" }}.</span>
 
                             </div>
+                        </div>
+                    <br>
+                    <div class="row">
+                            <input type="hidden" value="{{ document_recs.5.doc_required|default_if_none:"" }}"
+                                   id="arab_doc_required" name="arab_doc_required">
+                            <div class="">
+                                <label class="col-md-4 control-label">{{ document_recs.5.document_name|default_if_none:"" }}:
+                                    {% if document_recs.5.doc_required == 'Yes' %}
+                                        <span style="color: red">*</span>{% endif %}
+                                    {#                                    <br><span#}
+                                    {#                                            style="color:red;font-size: 12px">({% trans 'Only formats are allowed pdf' %})</span>#}
+                                </label>
+                                <div class="col-md-3" id="parent5">
+                                    {% if attachment_obj.arab_test_result_document %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a
+                                                href="
+                                                        {{ attachment_obj.arab_test_result_document.url }}"><input
+                                                type="text"
+                                                readonly name="arab_test_result_document_text" id="arab_test_result_document_text"
+                                                class="file_value emp"
+                                                style="cursor: pointer;border: none; width: 50%"
+                                                value="{{ attachment_obj.arab_test_result_document }}"></a>
+                                        </label>
+                                    {% else %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a><input type="text"
+                                                                                             readonly
+                                                                                             name="arab_test_result_document_text"
+                                                                                             class="file_value emp"
+                                                                                             style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
+                                    {% endif %}
+                                    <input type="file" style="display: none" class="file_type" accept="application/pdf,"
+                                           title="Select Araba Language Proficiency" id="arab_test_result_document"
+                                           name="arab_test_result_document">
+                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                                          class="remove_doc fa fa-close"></span>
+                                </div>
+                                <div class="" style="font-size:20px;">
+
+
+                                    <a title="{{ document_recs.5.description|default_if_none:"" }}"><i
+                                            class="fa fa-info-circle" aria-hidden="true"></i></a>
+
+
+                                </div>
+                            <span style="color: red;font-size:13px;display: none;"
+                                  id="arab_test_result_document_exists">Please upload {{ document_recs.5.document_name|default_if_none:"" }}.</span>
 
                             </div>
                         </div>
                         <br>
                         <div class="row">
+                            <input type="hidden" value="{{ document_recs.6.doc_required|default_if_none:"" }}"
+                                   id="recommendation_doc_required" name="recommendation_doc_required">
                             <div class="">
-                                <label class="col-md-4 control-label">{{ document_recs.5.document_name|default_if_none:"" }}:
-                                    {% if document_recs.5.doc_required == 'Yes' %}
+                                <label class="col-md-4 control-label">{{ document_recs.6.document_name|default_if_none:"" }}:
+                                    {% if document_recs.6.doc_required == 'Yes' %}
                                         <span style="color: red">*</span>{% endif %}
-{#                                    <br><span#}
-{#                                            style="color:red;font-size: 12px">({% trans 'Only formats are allowed pdf' %})</span>#}
+                                    {#                                    <br><span#}
+                                    {#                                            style="color:red;font-size: 12px">({% trans 'Only formats are allowed pdf' %})</span>#}
                                 </label>
                                 <div class="col-md-3" id="parent5">
                                     {% if attachment_obj.recommendation_letter %}
@@ -471,7 +620,7 @@
                                                 href="
                                                         {{ attachment_obj.recommendation_letter.url }}"><input
                                                 type="text"
-                                                readonly name="recommendation_letter_text"
+                                                readonly name="recommendation_letter_text" id="recommendation_letter_text"
                                                 class="file_value emp"
                                                 style="cursor: pointer;border: none; width: 50%"
                                                 value="{{ attachment_obj.recommendation_letter }}"></a>
@@ -492,19 +641,16 @@
                                     <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
                                           class="remove_doc fa fa-close"></span>
                                 </div>
-                            <div class="">
-                                <label class="col-md-2 control-label" style="margin-top: -7px;
-    font-size: 25px;
-    margin-left: -145px;">
+                                <div class="" style="font-size:20px;">
 
-                                    <a title="{{ document_recs.5.description|default_if_none:"" }}"><i
+
+                                    <a title="{{ document_recs.6.description|default_if_none:"" }}"><i
                                             class="fa fa-info-circle" aria-hidden="true"></i></a>
 
 
-                                </label>
-
-
-                            </div>
+                                </div>
+                            <span style="color: red;font-size:13px;display: none;"
+                                  id="recommendation_letter_exists">Please upload {{ document_recs.6.document_name|default_if_none:"" }}.</span>
 
                             </div>
                         </div>
