@@ -1362,8 +1362,37 @@ def submit_application(request):
             messages.warning(request, "Please fill the Additional Information section before submitting the application.")
             return redirect('/student/applicant_additional_information/')
         if not ApplicantAttachementDetails.objects.filter(applicant_id=request.user.get_application):
-            messages.warning(request, "Please fill the Attachement section before submitting the application.")
+            messages.warning(request, "Please upload required Attachement section before submitting the application.")
             return redirect('/student/applicant_attachment_submission/')
+        else:
+            document_recs = DocumentDetails.objects.all()
+            attachment_obj = ApplicantAttachementDetails.objects.get(applicant_id=request.user.get_application)
+            document_count = 0
+            if document_recs[0].doc_required == 'Yes':
+                if attachment_obj.image:
+                    document_count = document_count + 1
+            if document_recs[1].doc_required == 'Yes':
+                if attachment_obj.passport_image:
+                    document_count = document_count + 1
+            if document_recs[2].doc_required == 'Yes':
+                if attachment_obj.level_result_document:
+                    document_count = document_count + 1
+            if document_recs[3].doc_required == 'Yes':
+                if attachment_obj.transcript_document:
+                    document_count = document_count + 1
+            if document_recs[4].doc_required == 'Yes':
+                if attachment_obj.english_test_result_document:
+                    document_count = document_count + 1
+            if document_recs[5].doc_required == 'Yes':
+                if attachment_obj.arab_test_result_document:
+                    document_count = document_count + 1
+            if document_recs[6].doc_required == 'Yes':
+                if attachment_obj.recommendation_letter:
+                    document_count = document_count + 1
+            attachement_count = DocumentDetails.objects.filter(doc_required = 'Yes').count()
+            if not attachement_count == document_count:
+                messages.warning(request, "Please upload required Attachement section before submitting the application.")
+                return redirect('/student/applicant_attachment_submission/')
 
         if application_obj.is_submitted == False:
             progress_counter = application_obj.progress_counter
