@@ -25,6 +25,8 @@
             padding-right: 40px;
             padding-top: 10px;
         }
+
+
     </style>
 {% endblock %}
 
@@ -73,8 +75,8 @@
                                 var width = img.naturalWidth,
                                     height = img.naturalHeight;
                                 _URL.revokeObjectURL(objectUrl);
-                                if(width <= 217 && height <= 280){
-                                     var file_name = $(this).val().split('\\')[2];
+                                if (width <= 217 && height <= 280) {
+                                    var file_name = $(this).val().split('\\')[2];
                                     $(this).prev().children().children('.file_value').val(file_name);
                                 } else {
                                     alert('Maximum file height and width must be 280px*217px');
@@ -85,8 +87,8 @@
 
                             };
                             img.src = objectUrl;
-                             var file_name = $(this).val().split('\\')[2];
-                        $(this).prev().children().children('.file_value').val(file_name);
+                            var file_name = $(this).val().split('\\')[2];
+                            $(this).prev().children().children('.file_value').val(file_name);
                         }
 
 
@@ -167,11 +169,17 @@
                     <div class="form-body">
                         <div class="row">
                             <div class="">
-                                <label class="col-md-4 control-label">{% trans 'Personal Photo' %}:<br><span style="color:red;font-size: 12px">({% trans 'photo must be jpg and White background' %})</span>
-                                    <br><span style="color:red;font-size: 12px">({% trans 'Maximum file height and width must be 280px*217px' %})</span>
-                                    <br><span style="color:red;font-size: 12px">({% trans 'Maximum file size must be 66 KB' %})</span>
+                                <label class="col-md-4 control-label">{{ document_recs.0.document_name|default_if_none:"" }}:
+                                    {% if document_recs.0.doc_required == 'Yes' %}
+                                        <span style="color: red">*</span>{% endif %}<br>
+                                    {#                                    <br><span#}
+                                    {#                                            style="color:red;font-size: 12px">({% trans 'photo must be jpg and White background' %})</span>#}
+                                    {#                                    <br><span#}
+                                    {#                                            style="color:red;font-size: 12px">({% trans 'Maximum file height and width must be 280px*217px' %})</span>#}
+                                    {#                                    <br><span#}
+                                    {#                                            style="color:red;font-size: 12px">({% trans 'Maximum file size must be 66 KB' %})</span>#}
                                 </label>
-                                <div class="col-md-3" id="parent1" style="margin-top:20px;">
+                                <div class="col-md-3" id="parent1">
                                     {% if attachment_obj.image %}
                                         <label class="form-control"
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
@@ -203,13 +211,31 @@
                                 </div>
 
                             </div>
+
+                            <div class="">
+                                <label class="col-md-2 control-label" style="margin-top: -7px;
+    font-size: 25px;
+    margin-left: -145px;">
+
+                                    <a title="{{ document_recs.0.description|default_if_none:"" }}"><i
+                                            class="fa fa-info-circle" aria-hidden="true"></i></a>
+
+
+                                </label>
+
+
+                            </div>
                         </div>
                         <br>
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-4 control-label">{% trans 'Passport ID' %}:<br><span
-                                        style="color:red;font-size: 12px">({% trans 'Only formats are allowed pdf' %})</span></label>
+                                <label class="col-md-4 control-label">{{ document_recs.1.document_name|default_if_none:"" }}:
+                                    {% if document_recs.1.doc_required == 'Yes' %}
+                                        <span style="color: red">*</span>{% endif %}
+                                    {#                                    <br><span#}
+                                    {#                                            style="color:red;font-size: 12px">({% trans 'Only formats are allowed pdf' %})</span>#}
+                                </label>
 
 
                                 <div class="col-md-3" id="item1">
@@ -242,6 +268,20 @@
                                           class="remove_doc fa fa-close"></span>
                                 </div>
 
+                                <div class="">
+                                    <label class="col-md-2 control-label" style="margin-top: -7px;
+    font-size: 25px;
+    margin-left: -145px;">
+
+                                        <a title="{{ document_recs.1.description|default_if_none:"" }}"><i
+                                                class="fa fa-info-circle" aria-hidden="true"></i></a>
+
+
+                                    </label>
+
+
+                                </div>
+
 
                             </div>
                         </div>
@@ -251,8 +291,12 @@
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-4 control-label">{% trans 'Academic Certificate' %}:<br><span
-                                        style="color:red;font-size: 12px">({% trans 'Only formats are allowed pdf' %})</span></label>
+                                <label class="col-md-4 control-label">{{ document_recs.2.document_name|default_if_none:"" }}:
+                                    {% if document_recs.2.doc_required == 'Yes' %}
+                                        <span style="color: red">*</span>{% endif %}
+                                    {#                                    <br><span#}
+                                    {#                                            style="color:red;font-size: 12px">({% trans 'Only formats are allowed pdf' %})</span>#}
+                                </label>
                                 <div class="col-md-3" id="parent2">
                                     {% if attachment_obj.level_result_document %}
                                         <label class="form-control"
@@ -282,14 +326,31 @@
                                     <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
                                           class="remove_doc fa fa-close"></span>
                                 </div>
+                            <div class="">
+                                    <label class="col-md-2 control-label" style="margin-top: -7px;
+    font-size: 25px;
+    margin-left: -145px;">
+
+                                        <a title="{{ document_recs.2.description|default_if_none:"" }}"><i
+                                                class="fa fa-info-circle" aria-hidden="true"></i></a>
+
+
+                                    </label>
+
+
+                                </div>
 
                             </div>
                         </div>
                         <br>
                         <div class="row">
                             <div class="">
-                                <label class="col-md-4 control-label">{% trans 'Transcript' %}:<br><span
-                                        style="color:red;font-size: 12px">({% trans 'Only formats are allowed pdf' %})</span></label>
+                                <label class="col-md-4 control-label">{{ document_recs.3.document_name|default_if_none:"" }}:
+                                    {% if document_recs.3.doc_required == 'Yes' %}
+                                        <span style="color: red">*</span>{% endif %}
+{#                                    <br><span#}
+{#                                            style="color:red;font-size: 12px">({% trans 'Only formats are allowed pdf' %})</span>#}
+                                </label>
                                 <div class="col-md-3" id="parent3">
                                     {% if attachment_obj.transcript_document %}
                                         <label class="form-control"
@@ -321,13 +382,31 @@
                                           class="remove_doc fa fa-close"></span>
                                 </div>
 
+                                <div class="">
+                                    <label class="col-md-2 control-label" style="margin-top: -7px;
+    font-size: 25px;
+    margin-left: -145px;">
+
+                                        <a title="{{ document_recs.3.description|default_if_none:"" }}"><i
+                                                class="fa fa-info-circle" aria-hidden="true"></i></a>
+
+
+                                    </label>
+
+
+                                </div>
+
                             </div>
                         </div>
                         <br>
                         <div class="row">
                             <div class="">
-                                <label class="col-md-4 control-label">{% trans 'English Language Proficiency Certificate' %}:<br><span
-                                        style="color:red;font-size: 12px">({% trans 'Only formats are allowed pdf' %})</span></label>
+                                <label class="col-md-4 control-label">{{ document_recs.4.document_name|default_if_none:"" }}:
+                                    {% if document_recs.4.doc_required == 'Yes' %}
+                                        <span style="color: red">*</span>{% endif %}
+{#                                    <br><span#}
+{#                                            style="color:red;font-size: 12px">({% trans 'Only formats are allowed pdf' %})</span>#}
+                                </label>
                                 <div class="col-md-3" id="parent4">
                                     {% if attachment_obj.english_test_result_document %}
                                         <label class="form-control"
@@ -358,14 +437,31 @@
                                     <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
                                           class="remove_doc fa fa-close"></span>
                                 </div>
+                            <div class="">
+                                <label class="col-md-2 control-label" style="margin-top: -7px;
+    font-size: 25px;
+    margin-left: -145px;">
+
+                                    <a title="{{ document_recs.4.description|default_if_none:"" }}"><i
+                                            class="fa fa-info-circle" aria-hidden="true"></i></a>
+
+
+                                </label>
+
+
+                            </div>
 
                             </div>
                         </div>
                         <br>
                         <div class="row">
                             <div class="">
-                                <label class="col-md-4 control-label">{% trans 'Recommendation Letter' %}:<br><span
-                                            style="color:red;font-size: 12px">({% trans 'Only formats are allowed pdf' %})</span></label>
+                                <label class="col-md-4 control-label">{{ document_recs.5.document_name|default_if_none:"" }}:
+                                    {% if document_recs.5.doc_required == 'Yes' %}
+                                        <span style="color: red">*</span>{% endif %}
+{#                                    <br><span#}
+{#                                            style="color:red;font-size: 12px">({% trans 'Only formats are allowed pdf' %})</span>#}
+                                </label>
                                 <div class="col-md-3" id="parent5">
                                     {% if attachment_obj.recommendation_letter %}
                                         <label class="form-control"
@@ -396,25 +492,38 @@
                                     <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
                                           class="remove_doc fa fa-close"></span>
                                 </div>
+                            <div class="">
+                                <label class="col-md-2 control-label" style="margin-top: -7px;
+    font-size: 25px;
+    margin-left: -145px;">
+
+                                    <a title="{{ document_recs.5.description|default_if_none:"" }}"><i
+                                            class="fa fa-info-circle" aria-hidden="true"></i></a>
+
+
+                                </label>
+
+
+                            </div>
 
                             </div>
                         </div>
 
 
-{#                        <div class="row">#}
-{#                            <div class="col-md-offset-4 col-md-7">#}
-{#                                {% if user.get_application %}#}
-{#                                                                        {% if user.get_application.is_submitted %}#}
-{#                                    <button type="submit" class="btn green" id="save" style="">Submit</button>#}
-{#                                                                        <button type="submit" class="btn green" id="save" style="">Submit</button>#}
-{#                                                                        {% endif %}#}
-{#                                {% endif %}#}
-{#                            </div>#}
-{#                        </div>#}
+                        {#                        <div class="row">#}
+                        {#                            <div class="col-md-offset-4 col-md-7">#}
+                        {#                                {% if user.get_application %}#}
+                        {#                                                                        {% if user.get_application.is_submitted %}#}
+                        {#                                    <button type="submit" class="btn green" id="save" style="">Submit</button>#}
+                        {#                                                                        <button type="submit" class="btn green" id="save" style="">Submit</button>#}
+                        {#                                                                        {% endif %}#}
+                        {#                                {% endif %}#}
+                        {#                            </div>#}
+                        {#                        </div>#}
 
-                    <hr>
+                        <hr>
 
-                    <div class="row">
+                        <div class="row">
                             <div class="col-md-offset-5 col-md-7">
                                 <button type="button" class="btn blue" id="save" style="margin-left: 70%"
                                         onclick="window.location='{% url "student:applicant_additional_information" %}'">
@@ -422,11 +531,11 @@
                                 </button>
 
                                 {% if user.get_application %}
-{#                                    {% if not user.get_application.is_submitted %}#}
-                                        <button type="submit" class="btn green" id="save" style="">{% trans 'Save/Next' %}
+                                    {#                                    {% if not user.get_application.is_submitted %}#}
+                                    <button type="submit" class="btn green" id="save" style="">{% trans 'Save/Next' %}
 
-                                        </button>
-{#                                    {% endif %}#}
+                                    </button>
+                                    {#                                    {% endif %}#}
                                 {% endif %}
 
                             </div>

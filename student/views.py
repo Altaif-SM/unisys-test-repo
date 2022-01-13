@@ -2281,8 +2281,9 @@ def applicant_attachment_submission(request):
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
         return redirect('/student/student_home/')
+    document_recs = DocumentDetails.objects.all()
     return render(request, 'applicant_attachment_submission.html',
-                  {'attachment_obj': attachment_obj})
+                  {'attachment_obj': attachment_obj,'document_recs':document_recs})
 
 
 def save_attachement_submission(request):
