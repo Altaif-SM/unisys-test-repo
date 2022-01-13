@@ -680,9 +680,11 @@ class UniversityStaffMapping(BaseModel):
 
 class DocumentDetails(BaseModel):
     document_name = models.CharField(max_length=255, blank=True, null=True)
+    doc_required = models.CharField(max_length=255, blank=True, null=True)
+    description = models.CharField(max_length=500, blank=True, null=True)
 
     class Meta:
-        ordering = ('-id',)
+        ordering = ('id',)
 
     def __str__(self):
         return self.document_name
