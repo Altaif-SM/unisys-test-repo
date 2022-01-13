@@ -219,7 +219,7 @@
                             <span style="padding:inherit">{% trans 'Main' %}</span>&nbsp;&nbsp;
                             <input class="current" type="radio" name="university_type" value="Partner"
                                    id="sponsored_by_no">
-                            <span style="padding:inherit">{% trans 'Partner' %}</span>
+                            <span style="padding:inherit">{% trans 'International' %}</span>
                         </div>
                         <br>
 
@@ -341,7 +341,7 @@
                                 {% if rec.university.is_partner_university == False %}
                                      <td>Main</td>
                                 {% else %}
-                                    <td>Partner</td>
+                                    <td>International</td>
                                 {% endif %}
 
                                 <td>{{ rec.university.university_name|default_if_none:"" }}</td>

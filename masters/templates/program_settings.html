@@ -188,7 +188,7 @@
                     <tr>
                         <th style="display: none">Id</th>
                         {#                        <th>Program ID</th>#}
-                        <th> {% trans 'Type of Program' %}</th>
+{#                        <th> {% trans 'Type of Program' %}</th>#}
                         <th> {% trans 'Program Name' %}</th>
                         <th> {% trans 'University Type' %}</th>
                         <th> {% trans 'University' %}</th>
@@ -207,10 +207,10 @@
                         <tr id="item{{ forloop.counter }}" class="item">
                             <td style="display: none"><input id="program_id" value="{{ rec.id }}"></td>
                             {#                            <td>{{ rec.program_id|default_if_none:"" }}</td>#}
-                            <td>{{ rec.program_type|default_if_none:"" }}</td>
+{#                            <td>{{ rec.program_type|default_if_none:"" }}</td>#}
                             <td>{{ rec.program_name|default_if_none:"" }}</td>
                             {% if rec.university.is_partner_university == True %}
-                                <td>Partner</td>
+                                <td>International</td>
                             {% else %}
                                 <td>Main</td>
                             {% endif %}
