@@ -3311,3 +3311,93 @@ def edit_document(request, doc_id=None):
             messages.warning(request, "Record not saved.")
         return redirect('/masters/document_settings/')
     return render(request, "edit_document.html", {'doc_obj': doc_obj})
+
+def arabic_lang_proficiency_settings(request):
+    arabic_recs = ArabCompetencyTestDetails.objects.filter().order_by('-id')
+    return render(request, 'arabic_lang_proficiency.html',
+                  {'arabic_recs': arabic_recs})
+
+
+def add_arabic_lang_proficiency(request):
+    arab_competency_test = request.POST.get('arab_competency_test')
+    try:
+        if not ArabCompetencyTestDetails.objects.filter(arab_competency_test=arab_competency_test).exists():
+            ArabCompetencyTestDetails.objects.create(arab_competency_test=arab_competency_test)
+            messages.success(request, "Record saved.")
+        else:
+            messages.warning(request, "Arabic Competency Test already exists.")
+    except:
+        messages.warning(request, "Record not saved.")
+    return redirect('/masters/arabic_lang_proficiency_settings/')
+
+def edit_arabic_lang_proficiency(request):
+    arab_competency_test_id = request.POST.get('arab_competency_test_id')
+    arab_competency_test = request.POST.get('arab_competency_test')
+    try:
+        if not ArabCompetencyTestDetails.objects.filter(~Q(id=arab_competency_test_id), arab_competency_test=arab_competency_test).exists():
+            ArabCompetencyTestDetails.objects.filter(id=arab_competency_test_id).update(arab_competency_test=arab_competency_test)
+            messages.success(request, "Record saved.")
+            return HttpResponse(json.dumps({'success': 'Record saved.'}), content_type="application/json")
+        else:
+            messages.warning(request, "Arabic Competency Test already exists.")
+            return HttpResponse(
+                json.dumps({'success': "Arabic Competency Test already exists."}),
+                content_type="application/json")
+    except:
+        messages.warning(request, "Record not updated.")
+        return HttpResponse(json.dumps({'error': 'Record not updated.'}), content_type="application/json")
+
+def delete_arabic_lang_proficiency(request):
+    if request.method == 'POST':
+        arab_competency_test_delete__id = request.POST.get('arab_competency_test_delete_id')
+        try:
+            ArabCompetencyTestDetails.objects.filter(id=arab_competency_test_delete__id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/arabic_lang_proficiency_settings/')
+
+
+def english_lang_proficiency_settings(request):
+    english_recs = EnglishCompetencyTestDetails.objects.filter().order_by('-id')
+    return render(request, 'english_lang_proficiency.html',
+                  {'english_recs': english_recs})
+
+def add_english_lang_proficiency(request):
+    english_competency_test = request.POST.get('english_competency_test')
+    try:
+        if not EnglishCompetencyTestDetails.objects.filter(english_competency_test=english_competency_test).exists():
+            EnglishCompetencyTestDetails.objects.create(english_competency_test=english_competency_test)
+            messages.success(request, "Record saved.")
+        else:
+            messages.warning(request, "English Competency Test already exists.")
+    except:
+        messages.warning(request, "Record not saved.")
+    return redirect('/masters/english_lang_proficiency_settings/')
+
+def edit_english_lang_proficiency(request):
+    english_competency_test_id = request.POST.get('english_competency_test_id')
+    english_competency_test = request.POST.get('english_competency_test')
+    try:
+        if not EnglishCompetencyTestDetails.objects.filter(~Q(id=english_competency_test_id), english_competency_test=english_competency_test).exists():
+            EnglishCompetencyTestDetails.objects.filter(id=english_competency_test_id).update(english_competency_test=english_competency_test)
+            messages.success(request, "Record saved.")
+            return HttpResponse(json.dumps({'success': 'Record saved.'}), content_type="application/json")
+        else:
+            messages.warning(request, "English Competency Test already exists.")
+            return HttpResponse(
+                json.dumps({'success': "English Competency Test already exists."}),
+                content_type="application/json")
+    except:
+        messages.warning(request, "Record not updated.")
+        return HttpResponse(json.dumps({'error': 'Record not updated.'}), content_type="application/json")
+
+def delete_english_lang_proficiency(request):
+    if request.method == 'POST':
+        english_competency_test_delete_id = request.POST.get('english_competency_test_delete_id')
+        try:
+            EnglishCompetencyTestDetails.objects.filter(id=english_competency_test_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/english_lang_proficiency_settings/')

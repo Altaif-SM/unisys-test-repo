@@ -242,6 +242,16 @@ urlpatterns = [
     path('get_departments_from_faculty/', views.get_departments_from_faculty, name='get_departments_from_faculty'),
     path('get_programs_from_filter/', views.get_programs_from_filter, name='get_programs_from_filter'),
 
+    path('arabic_lang_proficiency_settings/', views.arabic_lang_proficiency_settings, name='arabic_lang_proficiency_settings'),
+    path('add_arabic_lang_proficiency/', views.add_arabic_lang_proficiency, name='add_arabic_lang_proficiency'),
+    path('edit_arabic_lang_proficiency/', views.edit_arabic_lang_proficiency, name='edit_arabic_lang_proficiency'),
+    path('delete_arabic_lang_proficiency/', views.delete_arabic_lang_proficiency, name='delete_arabic_lang_proficiency'),
+
+    path('english_lang_proficiency_settings/', views.english_lang_proficiency_settings, name='english_lang_proficiency_settings'),
+    path('add_english_lang_proficiency/', views.add_english_lang_proficiency, name='add_english_lang_proficiency'),
+    path('edit_english_lang_proficiency/', views.edit_english_lang_proficiency, name='edit_english_lang_proficiency'),
+    path('delete_english_lang_proficiency/', views.delete_english_lang_proficiency, name='delete_english_lang_proficiency'),
+
 
 
 ]

@@ -357,9 +357,11 @@ def applicant_academic_english_qualification(request):
     year_recs = YearDetails.objects.all()
     qualification_obj = ''
     english_obj = ''
+    arab_obj = ''
     passing_year_recs = PassingYear.objects.filter().order_by('-year')
     country_recs = CountryDetails.objects.all()
     english_competency_test_recs = EnglishCompetencyTestDetails.objects.all()
+    arab_competency_test_recs = ArabCompetencyTestDetails.objects.all()
 
     try:
         application_obj = request.user.get_application
@@ -378,19 +380,22 @@ def applicant_academic_english_qualification(request):
 
             if EnglishQualificationDetails.objects.filter(applicant_id=request.user.get_application).exists():
                 english_obj = EnglishQualificationDetails.objects.filter(applicant_id=request.user.get_application)
+                arab_obj = ArabQualificationDetails.objects.filter(applicant_id=request.user.get_application)
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
         return redirect('/student/applicant_personal_info/')
 
     return render(request, 'applicant_academic_english_qualification.html',
-                  {'year_recs': year_recs, 'qualification_recs': qualification_obj, 'english_recs': english_obj,
-                   'passing_year_recs': passing_year_recs, 'application_obj': application_obj,'country_recs':country_recs,'english_competency_test_recs':english_competency_test_recs})
+                  {'year_recs': year_recs, 'qualification_recs': qualification_obj, 'english_recs': english_obj,'arab_recs': arab_obj,
+                   'passing_year_recs': passing_year_recs, 'application_obj': application_obj,'country_recs':country_recs,'english_competency_test_recs':english_competency_test_recs,
+                   'arab_competency_test_recs':arab_competency_test_recs})
 
 
 def save_update_applicant_academic_english_qualification(request):
     redirect_flag = False
     academic_count = request.POST.get('academic_count')
     english_count = request.POST.get('english_count')
+    arab_count = request.POST.get('arab_count')
 
     if request.POST:
 
@@ -502,6 +507,28 @@ def save_update_applicant_academic_english_qualification(request):
                                 english_object.english_test_result_document = ''
 
                             english_object.save()
+                        except Exception as e:
+                            pass
+
+                    for count in range(int(arab_count)):
+                        try:
+                            count = count + 1
+                            if request.POST.get('arab_obj_' + str(count)):
+                                ArabQualificationDetails.objects.filter(
+                                    id=request.POST['arab_obj_' + str(count)]).update(
+                                    arab_test=request.POST['arab_test_' + str(count)],
+                                    arab_competency_test_id=request.POST['arab_competency_test_' + str(count)],
+                                    arab_test_result=request.POST['arab_test_result_' + str(count)])
+
+                                arab_object = ArabQualificationDetails.objects.filter(
+                                    id=request.POST['arab_obj_' + str(count)])[0]
+                            else:
+                                arab_object = ArabQualificationDetails.objects.create(
+                                    arab_test=request.POST['arab_test_' + str(count)],
+                                    arab_competency_test_id=request.POST['arab_competency_test_' + str(count)],
+                                    arab_test_result=request.POST['arab_test_result_' + str(count)],
+                                    applicant_id=request.user.get_application)
+                            arab_object.save()
                         except Exception as e:
                             pass
 

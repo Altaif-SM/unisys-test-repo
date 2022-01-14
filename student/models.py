@@ -524,6 +524,12 @@ class AcademicQualificationDetails(BaseModel):
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='academic_applicant_rel',
                                      on_delete=models.SET_NULL)
 
+class ArabQualificationDetails(BaseModel):
+    arab_test_result = models.CharField(max_length=255, blank=True, null=True)
+    arab_test = models.CharField(max_length=255, blank=True, null=True)
+    arab_competency_test = models.ForeignKey('masters.ArabCompetencyTestDetails', null=True, related_name='arab_competency_test_rel',
+                                     on_delete=models.SET_NULL)
+    applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='arab_applicant_rel', on_delete=models.SET_NULL)
 
 class EnglishQualificationDetails(BaseModel):
     english_test = models.CharField(max_length=255, blank=True, null=True)
