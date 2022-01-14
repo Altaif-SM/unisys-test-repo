@@ -90,7 +90,7 @@
                  $(".add_arab_row").click(function () {
                     arab_count = arab_count + 1;
                     console.log("Hi");
-                    var arab_row = '<div class="row arab_item" id="arab_check_' + arab_count + '" style="margin-top: 50px"><div class="row"><div class=""> <label class="col-md-2 control-label">Arab Competency Test:</label> <div class="col-md-2"> <select id="arab_competency_test_' + arab_count + '" title="Select Arab Competency Test" name="arab_competency_test_' + arab_count + '" class="form-control"> <option style="display:none" selected="selected" id="" value=""> Please Select </option>{% for rec in arab_competency_test_recs %}<option value="{{ rec.id }}">{{ rec.arab_competency_test }}</option>{% endfor %} </select></div></div><div class=""> <label class="col-md-2 control-label">Institution:</label> <div class="col-md-2"><input type="text" title="Enter Institution" id="arab_test_' + arab_count + '" name="arab_test_' + arab_count + '" value="" class="form-control"> <input hidden type="text" name="arab_obj_' + arab_count + '" id="arab_obj_' + arab_count + '"> </div> </div></div><br><div class="row"><div class=""><label class="col-md-2 control-label"> Grade/Level:</label><div class="col-md-2"><input type="text" title="Enter Grade/Level" id="arab_test_result_' + arab_count + '" name="arab_test_result_' + english_count + '" value="" class="form-control"></div></div><div class=""><div class="col-md-1" style="margin-top: -55px;margin-left: 400px;"><a href="javascript:;" class="delete_arab btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div></div>';
+                    var arab_row = '<div class="row arab_item" id="arab_check_' + arab_count + '" style="margin-top: 50px"><div class="row"><div class=""> <label class="col-md-2 control-label">Arab Competency Test:</label> <div class="col-md-2"> <select id="arab_competency_test_' + arab_count + '" title="Select Arab Competency Test" name="arab_competency_test_' + arab_count + '" class="form-control"> <option style="display:none" selected="selected" id="" value=""> Please Select </option>{% for rec in arab_competency_test_recs %}<option value="{{ rec.id }}">{{ rec.arab_competency_test }}</option>{% endfor %} </select></div></div><div class=""> <label class="col-md-2 control-label">Institution:</label> <div class="col-md-2"><input type="text" title="Enter Institution" id="arab_test_' + arab_count + '" name="arab_test_' + arab_count + '" value="" class="form-control"> <input hidden type="text" name="arab_obj_' + arab_count + '" id="arab_obj_' + arab_count + '"> </div> </div></div><br><div class="row"><div class=""><label class="col-md-2 control-label"> Grade/Level:</label><div class="col-md-2"><input type="text" title="Enter Grade/Level" id="arab_test_result_' + arab_count + '" name="arab_test_result_' + arab_count + '" value="" class="form-control"></div></div><div class=""><div class="col-md-1" style="margin-top: -55px;margin-left: 400px;"><a href="javascript:;" class="delete_arab btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div></div>';
                     $(arab_row).removeAttr().hide().insertAfter(".arab_item:last").slideDown(300);
                 });
 
@@ -693,7 +693,7 @@ function showOptions(s) {
                              <span style="font-family: 'Times New Roman';font-size: 16px;"><b>Arabic Language Proficiency</b></span>
                             {% for arab_obj in arab_recs %}
 
-                                <div class="row arab_item" style="margin-top: 50px" id="arab_check_{{ forloop.counter }}">
+                                <div class="row arab_item" style="margin-top: 30px" id="arab_check_{{ forloop.counter }}">
                                 <div class="row">
                                     <div class="">
                                         <label class="col-md-2 control-label">{% trans 'Arab Competency Test' %}:</label>
@@ -758,7 +758,7 @@ function showOptions(s) {
                             {% endfor %}
                         {% else %}
                             <span style="font-family: 'Times New Roman';font-size: 16px;"><b>Arabic Language Proficiency</b></span>
-                            <div class="row arab_item" id="arab_check_1">
+                            <div class="row arab_item" style="margin-top: 30px" id="arab_check_1">
                             <div class="row">
 
                                 <div class="">
@@ -794,6 +794,7 @@ function showOptions(s) {
 
 
                             </div>
+                              <br>
 
 
                             <div class="row">
@@ -803,7 +804,7 @@ function showOptions(s) {
                                     <div class="col-md-2">
                                         <input type="text" title="Enter Grade/Level" id="arab_test_result_1"
                                                name="arab_test_result_1"
-                                               value="{{ english_obj.english_test_one_result }}"
+                                               value=""
                                                class="form-control eng_emp">
                                     </div>
                                 </div>
@@ -829,7 +830,7 @@ function showOptions(s) {
                             <span style="font-family: 'Times New Roman';font-size: 16px;"><b>English Language Proficiency</b></span>
                             {% for english_obj in english_recs %}
 
-                                <div class="row english_item" style="margin-top: 50px" id="english_check_{{ forloop.counter }}">
+                                <div class="row english_item" style="margin-top: 30px" id="english_check_{{ forloop.counter }}">
                                 <div class="row">
                                     <div class="">
                                         <label class="col-md-2 control-label">{% trans 'English Competency Test' %}:</label>
@@ -894,7 +895,7 @@ function showOptions(s) {
                             {% endfor %}
                         {% else %}
                             <span style="font-family: 'Times New Roman';font-size: 16px;"><b>English Language Proficiency</b></span>
-                            <div class="row english_item" id="english_check_1">
+                            <div class="row english_item" style="margin-top: 30px" id="english_check_1">
                             <div class="row">
 
                                 <div class="">
@@ -930,6 +931,7 @@ function showOptions(s) {
 
 
                             </div>
+                            <br>
 
                             <div class="row">
 
