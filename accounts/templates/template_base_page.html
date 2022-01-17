@@ -1351,7 +1351,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
                         {% endif %}
                         {% if user.is_student %}
-                            <li id="app_anch"><a href="#c" data-toggle="tab">{% trans 'Application Management' %}</a></li>
+                            <li id="app_anch"><a href="{% url 'student:student_home' %}" >{% trans 'Application Management' %}</a></li>
                         {% else %}
                             {% if 'Application Settings' in access_list %}
                                 <li id="app_anch"><a href="#c" data-toggle="tab">{% trans 'Module Settings' %}</a></li>
@@ -1359,15 +1359,15 @@ License: You must have a valid license purchased only from themeforest(the above
                         {% endif %}
 
                         {% if user.is_student %}
-                            <li id="app_prog"><a href="#application_progress" data-toggle="tab">{% trans 'Application Progress History' %}</a></li>
+                            <li id="app_prog"><a href="{% url 'student:applicant_progress_history' %}" >{% trans 'Application Progress History' %}</a></li>
                         {% endif %}
 
                         {% if user.is_student %}
-                            <li id="app_offer_status"><a href="#offer_status" data-toggle="tab">{% trans 'Offer Status' %}</a></li>
+                            <li id="app_offer_status"><a href="{% url 'student:application_offer_letter' %}" >{% trans 'Offer Status' %}</a></li>
                         {% endif %}
 
                         {% if user.is_student %}
-                            <li id="app_payments"><a href="#payments" data-toggle="tab">{% trans 'Payments' %}</a></li>
+                            <li id="app_payments"><a href="{% url 'payments:checkout' %}" >{% trans 'Payments' %}</a></li>
                         {% endif %}
 
                     </ul>
