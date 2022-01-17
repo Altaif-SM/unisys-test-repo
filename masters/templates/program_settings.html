@@ -190,8 +190,8 @@
                         {#                        <th>Program ID</th>#}
 {#                        <th> {% trans 'Type of Program' %}</th>#}
                         <th> {% trans 'Program Name' %}</th>
-                        <th> {% trans 'University Type' %}</th>
                         <th> {% trans 'University' %}</th>
+                        <th> {% trans 'University Type' %}</th>
 {#                        <th> {% trans 'Branch / Campus' %}</th>#}
                         <th> {% trans 'Faculty' %}</th>
                         <th> {% trans 'Department' %}</th>
@@ -210,13 +210,15 @@
                             <td style="display: none"><input id="program_id" value="{{ rec.id }}"></td>
                             {#                            <td>{{ rec.program_id|default_if_none:"" }}</td>#}
 {#                            <td>{{ rec.program_type|default_if_none:"" }}</td>#}
+
                             <td>{{ rec.program_name|default_if_none:"" }}</td>
-                            {% if rec.university.is_partner_university == True %}
+
+                            <td>{{ rec.university.university_name|default_if_none:"" }}</td>
+                        {% if rec.university.is_partner_university == True %}
                                 <td>International</td>
                             {% else %}
                                 <td>Main</td>
                             {% endif %}
-                            <td>{{ rec.university.university_name|default_if_none:"" }}</td>
 {#                            <td width="20%"> {% for rec in rec.campus.all %}#}
 {#                                <span>{{ forloop.counter }}){{ rec.campus.campus_name }}</span><br>#}
 {#                            {% endfor %}#}

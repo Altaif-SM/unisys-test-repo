@@ -309,6 +309,10 @@ class SemesterDetails(BaseModel):
     semester_name = models.CharField(max_length=255, blank=True, null=True)
     start_date = models.DateField()
     end_date = models.DateField()
+    year = models.ForeignKey(YearDetails, null=True, related_name='year_semester_rel',
+                                on_delete=models.SET_NULL)
+    university = models.ForeignKey(UniversityDetails, null=True, related_name='university_semester_rel',
+                             on_delete=models.SET_NULL)
 
     # class Meta:
     #     ordering = ('semester_name',)

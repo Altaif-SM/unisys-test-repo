@@ -321,8 +321,8 @@
                             <th>{% trans 'First Name' %}</th>
                             <th>{% trans 'Last Name' %}</th>
                             <th> {% trans 'Email' %}</th>
-                            <th>{% trans 'University Type' %}</th>
                             <th>{% trans 'University' %}</th>
+                            <th>{% trans 'University Type' %}</th>
                             <th> {% trans 'Position' %}</th>
                             <th> {% trans 'Country' %}</th>
                             <th> {% trans 'Address' %}</th>
@@ -338,13 +338,14 @@
                                 <td>{{ rec.staff.first_name|default_if_none:"" }}</td>
                                 <td>{{ rec.staff.last_name|default_if_none:"" }}</td>
                                 <td>{{ rec.staff.email|default_if_none:"" }}</td>
-                                {% if rec.university.is_partner_university == False %}
+
+
+                                <td>{{ rec.university.university_name|default_if_none:"" }}</td>
+                                 {% if rec.university.is_partner_university == False %}
                                      <td>Main</td>
                                 {% else %}
                                     <td>International</td>
                                 {% endif %}
-
-                                <td>{{ rec.university.university_name|default_if_none:"" }}</td>
                                 <td>{{ rec.staff.role.all.0.name|default_if_none:"" }}</td>
                                 <td>{{ rec.staff.address.country.country_name|title }}</td>
                                 <td>{{ rec.staff.address.residential_address|default_if_none:"" }}</td>

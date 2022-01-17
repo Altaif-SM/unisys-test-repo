@@ -324,85 +324,8 @@
                             </div>
 
                             <br>
-                            {#                            <div class="row">#}
-                            {#                                <div class="">#}
-                            {#                                    <label class="col-md-2 control-label">Campus:<span#}
-                            {#                                            style="color: red">*</span></label>#}
-                            {#                                    <div class="col-md-3">#}
-                            {#                                        <select id='campus' title="Select Campus"#}
-                            {#                                                name="campus"#}
-                            {#                                                class="form-control" required>#}
-                            {#                                            {% if program_obj.campus %}#}
-                            {#                                                <option style="display:none;" selected="selected"#}
-                            {#                                                        value="{{ program_obj.campus.id|default_if_none:"" }}"> {{ program_obj.campus.campus_name|default_if_none:"" }}</option>#}
-                            {#                                            {% else %}#}
-                            {#                                                <option selected="selected" value=""> Please Select</option>#}
-                            {#                                            {% endif %}#}
-                            {##}
-                            {#                                            {% for rec in campus_recs %}#}
-                            {#                                                <option value="{{ rec.id }}">{{ rec.campus_name|default_if_none:"" }}</option>#}
-                            {#                                            {% endfor %}#}
-                            {##}
-                            {#                                        </select>#}
-                            {#                                    </div>#}
-                            {#                                </div>#}
-                            {##}
-                            {#                                <div class="">#}
-                            {#                                    <label class="col-md-2 control-label">Program ID:<span#}
-                            {#                                            style="color: red">*</span></label>#}
-                            {#                                    <div class="col-md-3">#}
-                            {#                                        <input type="text" title="Enter Program ID" id="program_id"#}
-                            {#                                               value="{{ program_obj.program_id|default_if_none:"" }}"#}
-                            {#                                               name="program_id"#}
-                            {#                                               class="form-control" required>#}
-                            {##}
-                            {##}
-                            {#                                    </div>#}
-                            {#                                </div>#}
-                            {##}
-                            {##}
-                            {#                            </div>#}
-                            {#                            <br>#}
                             <div class="row">
 
-{#                                <div class="">#}
-{#                                    <label class="col-md-2 control-label">Type of Program: <span#}
-{#                                            style="color: red">*</span></label>#}
-{#                                    {% if program_obj.program_type %}#}
-{#                                        <div class="col-md-4">#}
-{#                                            {% if  program_obj.program_type == 'International' %}#}
-{#                                                <input class="current" type="radio" checked name="program_type"#}
-{#                                                       id="international"#}
-{#                                                       value="International">#}
-{#                                                <span style="padding:inherit">International</span>&nbsp;&nbsp;#}
-{#                                                <input class="current" type="radio" name="program_type"#}
-{#                                                       value="University Main"#}
-{#                                                       id="university_main">#}
-{#                                                <span style="padding:inherit">University Main</span>#}
-{#                                            {% else %}#}
-{#                                                <input class="current" type="radio" name="program_type"#}
-{#                                                       id="international"#}
-{#                                                       value="International">#}
-{#                                                <span style="padding:inherit">International</span>&nbsp;&nbsp;#}
-{#                                                <input class="current" type="radio" checked name="program_type"#}
-{#                                                       value="University Main"#}
-{#                                                       id="university_main">#}
-{#                                                <span style="padding:inherit">University Main</span>#}
-{#                                            {% endif %}#}
-{#                                        </div>#}
-{#                                    {% else %}#}
-{#                                        <div class="col-md-4">#}
-{#                                            <input class="current" type="radio" checked name="program_type"#}
-{#                                                   id="international"#}
-{#                                                   value="International">#}
-{#                                            <span style="padding:inherit">{% trans 'International' %}</span>&nbsp;&nbsp;#}
-{#                                            <input class="current" type="radio" name="program_type"#}
-{#                                                   value="University Main"#}
-{#                                                   id="university_main">#}
-{#                                            <span style="padding:inherit">{% trans 'University Main' %}</span>#}
-{#                                        </div>#}
-{#                                    {% endif %}#}
-{#                                </div>#}
 
                                 <div class="">
                                     <label class="col-md-2 control-label">Program:<span

@@ -189,8 +189,8 @@
                         <th style="display: none">Id</th>
                         <th> {% trans 'Faculty Name' %}</th>
                         <th> {% trans 'Department' %}</th>
-                        <th> {% trans 'University Type' %}</th>
                         <th> {% trans 'University' %}</th>
+                        <th> {% trans 'University Type' %}</th>
 {#                        <th> {% trans 'Email' %}</th>#}
 {#                        <th> {% trans 'Telephone' %}</th>#}
 {#                        <th> {% trans 'Website' %}</th>#}
@@ -209,18 +209,19 @@
                                 <span>{{ rec.department|default_if_none:"" }}</span><br>
                             {% endfor %}
                             </td>
-                         {% if rec.university.is_partner_university == True %}
-                                <td>Partner</td>
-                            {% else %}
-                                <td>Main</td>
-                            {% endif %}
-                            <td>{{ rec.university.university_name|default_if_none:"" }}
+
+                            <td>{{ rec.university.university_name|default_if_none:"" }}</td>
 
 
 {#                            <td>{{ rec.email|default_if_none:"" }}</td>#}
 {#                            <td>{{ rec.telephone|default_if_none:"" }}</td>#}
 {#                             <td>{{ rec.website|default_if_none:"" }}</td>#}
 {#                        <td>{{ rec.address|default_if_none:"" }}</td>#}
+                        {% if rec.university.is_partner_university == False %}
+                                     <td>Main</td>
+                                {% else %}
+                                    <td>International</td>
+                                {% endif %}
                          <td>
                                 {% if rec.status == True %}
                                     <i class="fa fa-power-off" aria-hidden="true"

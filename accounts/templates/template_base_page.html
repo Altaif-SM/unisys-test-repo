@@ -1591,7 +1591,7 @@ License: You must have a valid license purchased only from themeforest(the above
     {% endif %}
 
 
-    {% if request.resolver_match.url_name == 'year_settings' or request.resolver_match.url_name == 'semester_settings' or request.resolver_match.url_name == 'activity_settings' or  request.resolver_match.url_name == 'calendar_settings'  or request.resolver_match.url_name == 'add_calendar' or request.resolver_match.url_name == 'edit_calender' %}
+    {% if request.resolver_match.url_name == 'year_settings' or request.resolver_match.url_name == 'edit_semester' or request.resolver_match.url_name == 'add_semester' or request.resolver_match.url_name == 'semester_settings' or request.resolver_match.url_name == 'activity_settings' or  request.resolver_match.url_name == 'calendar_settings'  or request.resolver_match.url_name == 'add_calendar' or request.resolver_match.url_name == 'edit_calender' %}
         {
             var element = document.getElementById("b");
             element.classList.add("active");

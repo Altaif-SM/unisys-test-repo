@@ -168,63 +168,68 @@
 
     <!-- BEGIN VALIDATION STATES-->
     <div class="portlet light portlet-fit portlet-form ">
-        <div class="portlet-title">
+
+    <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
                 <span class="caption-subject font-red sbold uppercase"> {% trans 'Manage Semester' %}</span>
             </div>
+            <a href="{% url 'masters:add_semester' %}">
+                <button type="submit" class="btn green" id="save" style="margin-left:80%;background-color: #3598dc">Add
+                </button>
+            </a>
         </div>
 
         <div class="portlet-body">
 
-            <div class="form-body">
-                <form action="{% url 'masters:add_semester' %}" id="form_sample_1" class="form-horizontal"
-                      method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-
-                    <div class="form-body">
-
-                        <div class="row">
-                            <div class="">
-                                <label class="col-md-2 control-label">{% trans 'Semester Name' %}:
-
-                                </label>
-                                <div class="col-md-4">
-                                    <input type="text" name="semester_name" class="form-control" required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <br>
-
-                        <div class="row">
-                            <div class="">
-                                <label class="col-md-2 control-label">{% trans 'Start Date' %}:
-
-                                </label>
-                                <div class="col-md-4">
-                                    <input type="date" name="start_date" class="form-control" required>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-2 control-label">{% trans 'End Date' %}:
-
-                                </label>
-                                <div class="col-md-4" id="EndDate">
-                                    <input type="date" name="end_date" class="form-control" required>
-                                </div>
-                            </div>
-                        </div>
-                       <br>
-                        <div class="row">
-                            <div class="col-md-offset-5 col-md-7">
-                                <button style="background-color: #3598dc;" type="submit" class="btn green" id="save">Add</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
+{#            <div class="form-body">#}
+{#                <form action="{% url 'masters:add_semester' %}" id="form_sample_1" class="form-horizontal"#}
+{#                      method="POST" enctype="multipart/form-data">#}
+{#                    {% csrf_token %}#}
+{##}
+{#                    <div class="form-body">#}
+{##}
+{#                        <div class="row">#}
+{#                            <div class="">#}
+{#                                <label class="col-md-2 control-label">{% trans 'Semester Name' %}:#}
+{##}
+{#                                </label>#}
+{#                                <div class="col-md-4">#}
+{#                                    <input type="text" name="semester_name" class="form-control" required>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{##}
+{#                        <br>#}
+{##}
+{#                        <div class="row">#}
+{#                            <div class="">#}
+{#                                <label class="col-md-2 control-label">{% trans 'Start Date' %}:#}
+{##}
+{#                                </label>#}
+{#                                <div class="col-md-4">#}
+{#                                    <input type="date" name="start_date" class="form-control" required>#}
+{#                                </div>#}
+{#                            </div>#}
+{##}
+{#                            <div class="">#}
+{#                                <label class="col-md-2 control-label">{% trans 'End Date' %}:#}
+{##}
+{#                                </label>#}
+{#                                <div class="col-md-4" id="EndDate">#}
+{#                                    <input type="date" name="end_date" class="form-control" required>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                       <br>#}
+{#                        <div class="row">#}
+{#                            <div class="col-md-offset-5 col-md-7">#}
+{#                                <button style="background-color: #3598dc;" type="submit" class="btn green" id="save">Add</button>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </form>#}
+{#            </div>#}
 
 
             <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">
@@ -235,6 +240,10 @@
                     <tr>
                         <th style="display: none">Id</th>
                         <th>{% trans 'Semester Name' %}</th>
+                        <th> {% trans 'University' %}</th>
+                        <th> {% trans 'University Type' %}</th>
+                        <th> {% trans 'Year' %}</th>
+
                         <th> {% trans 'Start Date' %}</th>
                         <th> {% trans 'End Date' %}</th>
                         <th width="10%">Action</th>
@@ -245,29 +254,53 @@
                     {% for rec in semester_recs %}
                         <tr id="item{{ forloop.counter }}" class="item">
                             <td style="display: none"><input id="semester_id" value="{{ rec.id }}"></td>
+                        <td>{{ rec.semester_name|default_if_none:"" }}
+{#                                <text hidden>{{ rec.semester_name|default_if_none:"" }}</text>#}
+{#                                <input class="form-control data semester_name" name="semester_name_saved" type="text"#}
+{#                                       id="semester_name{{ forloop.counter }}" value="{{ rec.semester_name|default_if_none:"" }}"#}
+{#                                       required pattern='[A-Za-z+-]+'#}
+{#                                       title='Please enter semester name' disabled>#}
+                            </td>
+
+                            <td>{{ rec.university.university_name|default_if_none:"" }}</td>
+                             {% if rec.university.is_partner_university == True %}
+                                <td>International</td>
+                            {% else %}
+                                <td>Main</td>
+                            {% endif %}
+                            <td>{{ rec.year.year_name|default_if_none:"" }}</td>
+
+                            <td>{{ rec.start_date|date:"Y-m-d" }}
+{#                                <input class="form-control data start_date" name="start_date_saved" type="date"#}
+{#                                       id="start_date{{ forloop.counter }}"#}
+{#                                       value="{{ rec.start_date|date:"Y-m-d" }}" required="True" disabled>#}
+
+                            </td>
+                            <td>{{ rec.end_date|date:"Y-m-d" }}
+{#                                <input class="form-control data end_date" name="end_date_saved" type="date"#}
+{#                                       id="end_date{{ forloop.counter }}"#}
+{#                                       value="{{ rec.end_date|date:"Y-m-d" }}" required="True" disabled>#}
+                            </td>
                             <td>
-                                <text hidden>{{ rec.semester_name|default_if_none:"" }}</text>
-                                <input class="form-control data semester_name" name="semester_name_saved" type="text"
-                                       id="semester_name{{ forloop.counter }}" value="{{ rec.semester_name|default_if_none:"" }}"
-                                       required pattern='[A-Za-z+-]+'
-                                       title='Please enter semester name' disabled></td>
-                            <td><input class="form-control data start_date" name="start_date_saved" type="date"
-                                       id="start_date{{ forloop.counter }}"
-                                       value="{{ rec.start_date|date:"Y-m-d" }}" required="True" disabled></td>
-                            <td><input class="form-control data end_date" name="end_date_saved" type="date"
-                                       id="end_date{{ forloop.counter }}"
-                                       value="{{ rec.end_date|date:"Y-m-d" }}" required="True" disabled></td>
-                            <td>
-                                <span type="button" name="updt" id="update{{ forloop.counter }}"
-                                      class=" update btn green glyphicon glyphicon-ok" style="display:none;">
-                                </span>
+{#                                <span type="button" name="updt" id="update{{ forloop.counter }}"#}
+{#                                      class=" update btn green glyphicon glyphicon-ok" style="display:none;">#}
+{#                                </span>#}
+{#                                <span type="button" name="edit" id="edit{{ forloop.counter }}"#}
+{#                                      class=" edit btn blue glyphicon glyphicon-pencil">#}
+{#                                </span>#}
+
+                                <a href="{% url 'masters:edit_semester' rec.id %}">
                                 <span type="button" name="edit" id="edit{{ forloop.counter }}"
-                                      class=" edit btn blue glyphicon glyphicon-pencil">
+                                      class=" edit_btn btn blue glyphicon glyphicon-pencil">
                                 </span>
+                                </a>
+
                                 <span type="button" name="delete" id="delete{{ forloop.counter }}"
                                       class=" delete btn red glyphicon glyphicon-trash">
                                 </span>
                             </td>
+
+
                         </tr>
                     {% endfor %}
                     </tbody>

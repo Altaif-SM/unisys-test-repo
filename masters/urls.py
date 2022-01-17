@@ -180,6 +180,7 @@ urlpatterns = [
     path('semester_settings/', views.semester_settings, name='semester_settings'),
     path('add_semester/', views.add_semester, name='add_semester'),
     path('delete_semester/', views.delete_semester, name='delete_semester'),
+    path('edit_semester/<int:semester_id>/', views.edit_semester, name='edit_semester'),
 
     path('activity_settings/', views.activity_settings, name='activity_settings'),
     path('add_activity/', views.add_activity, name='add_activity'),
