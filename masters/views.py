@@ -3313,7 +3313,7 @@ def edit_document(request, doc_id=None):
     return render(request, "edit_document.html", {'doc_obj': doc_obj})
 
 def arabic_lang_proficiency_settings(request):
-    arabic_recs = ArabCompetencyTestDetails.objects.filter().order_by('-id')
+    arabic_recs = ArabCompetencyTestDetails.objects.all()
     return render(request, 'arabic_lang_proficiency.html',
                   {'arabic_recs': arabic_recs})
 
@@ -3359,7 +3359,7 @@ def delete_arabic_lang_proficiency(request):
 
 
 def english_lang_proficiency_settings(request):
-    english_recs = EnglishCompetencyTestDetails.objects.filter().order_by('-id')
+    english_recs = EnglishCompetencyTestDetails.objects.all()
     return render(request, 'english_lang_proficiency.html',
                   {'english_recs': english_recs})
 
