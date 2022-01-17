@@ -2596,7 +2596,7 @@ def delete_student_mode(request):
         return redirect('/masters/student_mode_settings/')
 
 def learning_centers_settings(request):
-    learning_centers_recs = LearningCentersDetails.objects.filter().order_by('-id')
+    learning_centers_recs = LearningCentersDetails.objects.all()
     return render(request, 'learning_centers_settings.html', {'learning_centers_recs': learning_centers_recs})
 
 def add_learning_centers(request):

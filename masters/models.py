@@ -607,7 +607,7 @@ class LearningCentersDetails(BaseModel):
     status = models.BooleanField(default=True)
 
     class Meta:
-        ordering = ('-id',)
+        ordering = ('id',)
 
     def __str__(self):
         return self.lc_name
