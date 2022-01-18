@@ -487,9 +487,25 @@
                     <br>
                     <div class="row">
 
+{#                    <div class="">#}
+{#                                <label class="col-md-1 control-label">{% trans 'WhatsApp' %}:</label>#}
+{#                                <div class="col-md-1">#}
+{#                                    <input type="text" title="Enter WhatsApp" id="whats_app"#}
+{#                                           value="{{ application_obj.address.whats_app|default_if_none:"" }}" name="whats_app"#}
+{#                                           class="form-control value_check">#}
+{#                                </div>#}
+{#                            </div>#}
+
+
+
                     <div class="">
                                 <label class="col-md-2 control-label">{% trans 'WhatsApp' %}:</label>
-                                <div class="col-md-3">
+                        <div class="col-md-1">
+                                    <input type="text" title="Enter Country Code" id="country_code" placeholder="Code"
+                                           value="{{ application_obj.address.country_code|default_if_none:"" }}" name="country_code"
+                                           class="form-control value_check">
+                                </div>
+                                <div class="col-md-2">
                                     <input type="text" title="Enter WhatsApp" id="whats_app"
                                            value="{{ application_obj.address.whats_app|default_if_none:"" }}" name="whats_app"
                                            class="form-control value_check">

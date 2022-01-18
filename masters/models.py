@@ -98,6 +98,7 @@ class AddressDetails(BaseModel):
     is_same = models.BooleanField(default=False)
     mobile = models.CharField(max_length=80, blank=True, null=True)
     whats_app = models.CharField(max_length=80, blank=True, null=True)
+    country_code = models.CharField(max_length=80, blank=True, null=True)
 
     class Meta:
         ordering = ('country',)
