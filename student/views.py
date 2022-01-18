@@ -2489,7 +2489,7 @@ def applicant_intake_info(request):
     study_type_list = ['International', 'University Main']
     study_mode_list = ['Online', 'On Campus']
     study_level_list = ['Undergraduate', 'Postgraduate']
-    study_type_recs = StudyTypeDetails.objects.filter().order_by('-id')
+    study_type_recs = StudyTypeDetails.objects.all()
     study_level_recs = StudyLevelDetails.objects.filter().order_by('-id')
     try:
         application_obj = request.user.get_application
@@ -2645,6 +2645,7 @@ def save_update_applicant_intake_info(request):
             application_obj.study_mode = request.POST.get('study_mode')
             application_obj.study_level_id = request.POST.get('study_level')
             application_obj.department_id = request.POST.get('department')
+            application_obj.program_mode_id = request.POST.get('program_mode')
             if request.POST.get('country'):
                 application_obj.learning_country_id = request.POST.get('country')
             application_obj.intake_flag = True

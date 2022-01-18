@@ -101,31 +101,31 @@
                 })
 
 
-            function get_faculty_from_study_mode(url, study_mode, study_level) {
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: {
-                        study_mode: study_mode,
-                        study_level: study_level,
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                    },
-                    success: function (data) {
+                function get_faculty_from_study_mode(url, study_mode, study_level) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            study_mode: study_mode,
+                            study_level: study_level,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
 
-                        $('#faculty').empty();
-                        $('#faculty').append(
-                            '<option value="" >Please select</option>');
-                        for (var i = 0; i < data.length; i++) {
+                            $('#faculty').empty();
                             $('#faculty').append(
-                                '<option value="' + data[i]['id'] + '">'
-                                + data[i]['faculty'] + '</option>')
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#faculty').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['faculty'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
                         }
-                    },
-                    error: function (xhr, msg, err) {
-                        alert(xhr.responseJSON.error);
-                    }
-                });
-            }
+                    });
+                }
 
                 $(document).on("change", "#study_level", function (e) {
                     var study_level = $(this).val();
@@ -137,32 +137,31 @@
                     get_faculty_from_study_level(url, study_mode, study_level)
                 })
 
-            function get_faculty_from_study_level(url, study_mode, study_level) {
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: {
-                        study_mode: study_mode,
-                        study_level: study_level,
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                    },
-                    success: function (data) {
+                function get_faculty_from_study_level(url, study_mode, study_level) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            study_mode: study_mode,
+                            study_level: study_level,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
 
-                        $('#faculty').empty();
-                        $('#faculty').append(
-                            '<option value="" >Please select</option>');
-                        for (var i = 0; i < data.length; i++) {
+                            $('#faculty').empty();
                             $('#faculty').append(
-                                '<option value="' + data[i]['id'] + '">'
-                                + data[i]['faculty'] + '</option>')
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#faculty').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['faculty'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
                         }
-                    },
-                    error: function (xhr, msg, err) {
-                        alert(xhr.responseJSON.error);
-                    }
-                });
-            }
-
+                    });
+                }
 
 
                 $(document).on("change", "#faculty1", function (e) {
@@ -752,7 +751,7 @@
                                             </option>
                                         {% endif %}
 
-                                        {% for rec in faculty_final_list%}
+                                        {% for rec in faculty_final_list %}
                                             <option value='{{ rec.id }}'>{{ rec.faculty|default_if_none:"" }}</option>
                                         {% endfor %}
 
@@ -813,9 +812,42 @@
                                             </option>
                                         {% endif %}
 
-                                                                                {% for rec in program_final_list %}
-                                                                                    <option value='{{ rec.id }}'>{{ rec.program|default_if_none:"" }}</option>
-                                                                                {% endfor %}
+                                        {% for rec in program_final_list %}
+                                            <option value='{{ rec.id }}'>{{ rec.program|default_if_none:"" }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                        <br>
+
+
+                        <div class="row">
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Program Mode' %}: <span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-4">
+                                    <select id='program_mode' title="Select Program Mode" name="program_mode"
+                                            class="form-control value_check" data-live-search="true" required>
+
+                                        {% if application_obj.program_mode %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.program_mode.id }}"
+                                                    value="">{{ application_obj.program_mode.study_type|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option selected="selected" id="" value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in study_type_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.study_type|default_if_none:"" }}</option>
+                                            {% endfor %}
                                     </select>
                                 </div>
 
