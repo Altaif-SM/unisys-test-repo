@@ -191,12 +191,13 @@
 {#                        <th> {% trans 'Type of Program' %}</th>#}
                         <th> {% trans 'Program Name' %}</th>
                         <th> {% trans 'University' %}</th>
-                        <th> {% trans 'University Type' %}</th>
+                        <th> {% trans 'Type' %}</th>
 {#                        <th> {% trans 'Branch / Campus' %}</th>#}
                         <th> {% trans 'Faculty' %}</th>
                         <th> {% trans 'Department' %}</th>
                         <th> {% trans 'Study Mode' %}</th>
                         <th> {% trans 'Study Level' %}</th>
+                        <th> {% trans 'Program Mode' %}</th>
                         {#                        <th> Study Level</th>#}
                         {#                        <th> Study Type</th>#}
                         <th> {% trans 'Status' %}</th>
@@ -230,6 +231,7 @@
                                 <span>{{ forloop.counter }}){{ rec.study_mode }}</span><br>
                             {% endfor %}
                             </td>
+                        <td>{{ rec.study_type.study_type|default_if_none:"" }}</td>
                             {#                             <td>{{ rec.study_level.study_level|default_if_none:"" }}</td>#}
                             {#                        <td>{{ rec.study_type.study_type|default_if_none:"" }}</td>#}
                             <td>
@@ -241,6 +243,7 @@
                                        style="margin-left: 30px;margin-top:8px;font-size:18px;color:red"></i>
                                 {% endif %}
                             </td>
+
 
                             <td>
                                 <a href="{% url 'masters:edit_program' rec.id %}">

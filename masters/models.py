@@ -366,6 +366,8 @@ class StudyTypeDetails(BaseModel):
     def __str__(self):
         return self.study_type
 
+    class Meta:
+        ordering = ('id',)
 
 
 class StudyLevelDetails(BaseModel):

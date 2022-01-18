@@ -2094,7 +2094,7 @@ def delete_study_level(request):
 
 
 def study_type_settings(request):
-    study_type_recs = StudyTypeDetails.objects.filter().order_by('-id')
+    study_type_recs = StudyTypeDetails.objects.all()
     return render(request, 'study_type.html',
                   {'study_type_recs': study_type_recs})
 
@@ -2327,7 +2327,7 @@ def add_program(request):
     university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university = False).order_by('-id')
     study_mode_recs = StudyModeDetails.objects.filter().order_by('-id')
     study_level_recs = StudyLevelDetails.objects.filter().order_by('-id')
-    study_type_recs = StudyTypeDetails.objects.filter().order_by('-id')
+    study_type_recs = StudyTypeDetails.objects.all()
     faculty_recs = FacultyDetails.objects.filter(status=True).order_by('-id')
     campus_recs = CampusBranchesDetails.objects.filter().order_by('-id')
     study_mode_list = ['Online', 'On Campus']
@@ -2401,7 +2401,7 @@ def edit_program(request, program_id=None):
                                                            is_partner_university=True).order_by('-id')
     study_mode_recs = StudyModeDetails.objects.filter().order_by('-id')
     study_level_recs = StudyLevelDetails.objects.filter().order_by('-id')
-    study_type_recs = StudyTypeDetails.objects.filter().order_by('-id')
+    study_type_recs = StudyTypeDetails.objects.all()
     faculty_recs = FacultyDetails.objects.filter(status=True).order_by('-id')
     campus_recs = CampusBranchesDetails.objects.filter().order_by('-id')
     study_mode_list = ['Online', 'On Campus']
