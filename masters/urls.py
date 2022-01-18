@@ -252,7 +252,9 @@ urlpatterns = [
     path('add_english_lang_proficiency/', views.add_english_lang_proficiency, name='add_english_lang_proficiency'),
     path('edit_english_lang_proficiency/', views.edit_english_lang_proficiency, name='edit_english_lang_proficiency'),
     path('delete_english_lang_proficiency/', views.delete_english_lang_proficiency, name='delete_english_lang_proficiency'),
-
+    path('get_year_from_university/', views.get_year_from_university, name='get_year_from_university'),
+    path('get_intake_semester_from_year/', views.get_intake_semester_from_year, name='get_intake_semester_from_year'),
+    path('get_semester_already_exists/', views.get_semester_already_exists, name='get_semester_already_exists'),
 
 
 ]

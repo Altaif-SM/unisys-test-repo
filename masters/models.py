@@ -304,29 +304,33 @@ class UniversityDetails(BaseModel):
 
         return res
 
+class Semester(models.Model):
+    semester = models.CharField(max_length=100, blank=True, null=True)
+    start_date = models.DateField(null=True)
+    end_date = models.DateField(null=True)
 
 class SemesterDetails(BaseModel):
     semester_name = models.CharField(max_length=255, blank=True, null=True)
-    start_date = models.DateField()
-    end_date = models.DateField()
+    start_date = models.DateField(null=True)
+    end_date = models.DateField(null=True)
     year = models.ForeignKey(YearDetails, null=True, related_name='year_semester_rel',
                                 on_delete=models.SET_NULL)
     university = models.ForeignKey(UniversityDetails, null=True, related_name='university_semester_rel',
                              on_delete=models.SET_NULL)
-
+    semester = models.ManyToManyField(Semester, blank=True)
     # class Meta:
     #     ordering = ('semester_name',)
 
-    def __str__(self):
-        return self.semester_name
-
-    def to_dict(self):
-        res = {
-            'id': self.id if self.id else '',
-            'semester_name': self.semester_name if self.semester_name else '',
-        }
-
-        return res
+    # def __str__(self):
+    #     return self.semester_name
+    #
+    # def to_dict(self):
+    #     res = {
+    #         'id': self.id if self.id else '',
+    #         'semester_name': self.semester_name if self.semester_name else '',
+    #     }
+    #
+    #     return res
 
 
 

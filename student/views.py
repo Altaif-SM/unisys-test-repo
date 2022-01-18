@@ -2479,8 +2479,8 @@ def applicant_intake_info(request):
     country_recs = CountryDetails.objects.all()
     religion_recs = ReligionDetails.objects.all()
     student_recs = StudentDetails.objects.filter(user__is_active = True)
-    year_recs = YearDetails.objects.all()
-    semester_recs = SemesterDetails.objects.all()
+    year_recs = ''
+    semester_recs = ''
     learning_centre_recs = LearningCentersDetails.objects.all()
     program_recs = ProgramDetails.objects.filter(is_delete=False).order_by('-id')
     faculty_recs = FacultyDetails.objects.filter(status=True).order_by('-id')
@@ -2506,6 +2506,7 @@ def applicant_intake_info(request):
         department_recs = application_obj.faculty.department.all()
     if application_obj:
         if application_obj.university:
+            year_recs = SemesterDetails.objects.filter(university_id = application_obj.university.id)
             if application_obj.university.is_partner_university == True:
                 university_recs = UniversityDetails.objects.filter(is_delete=False,
                                                                    is_partner_university=True).order_by('-id')
@@ -2515,6 +2516,9 @@ def applicant_intake_info(request):
         else:
             university_recs = UniversityDetails.objects.filter(is_delete=False,
                                                                is_partner_university=False).order_by('-id')
+        if application_obj.university and application_obj.academic_year:
+            semester_recs = SemesterDetails.objects.filter(university_id = application_obj.university.id,year_id = application_obj.academic_year.id)
+
         if application_obj.learning_country:
             learning_centre_recs = LearningCentersDetails.objects.filter(country_id=application_obj.learning_country.id)
             for rec in learning_centre_recs:
@@ -2529,7 +2533,6 @@ def applicant_intake_info(request):
                 raw_dict['campus_name'] = rec.campus.campus_name
                 raw_dict['id'] = rec.campus.id
                 campus_list.append(raw_dict)
-
 
     else:
         university_recs = UniversityDetails.objects.filter(is_delete=False, is_partner_university=False).order_by('-id')

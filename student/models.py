@@ -127,7 +127,7 @@ class ApplicationDetails(BaseModel):
 
     year = models.ForeignKey('masters.YearDetails', blank=True, null=True, related_name='applicant_year_rel',
                              on_delete=models.SET_NULL)
-    semester = models.ForeignKey('masters.SemesterDetails', blank=True, null=True,
+    semester = models.ForeignKey('masters.Semester', blank=True, null=True,
                                  related_name='applicant_semester_rel', on_delete=models.SET_NULL)
 
     birth_date = models.DateField(blank=True, null=True)

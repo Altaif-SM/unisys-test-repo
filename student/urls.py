@@ -118,4 +118,5 @@ urlpatterns = [
                   path('save_update_applicant_intake_info/', views.save_update_applicant_intake_info, name='save_update_applicant_intake_info'),
                   path('get_branch_campus_from_program/', views.get_branch_campus_from_program, name='get_branch_campus_from_program'),
 
+
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

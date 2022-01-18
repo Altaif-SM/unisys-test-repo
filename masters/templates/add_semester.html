@@ -103,10 +103,43 @@
             $(document).ready(function () {
                 $("#status").Sswitch({});
 
-               $('input[type=radio][name=university_type]').on('change', function ()
-                {
+                 var semester_count = 1;
+                $(document).on("click", ".add_semester", function (e) {
+                    semester_count = semester_count + 1;
+                    var row = '<br><div class="row semester" id="semester_' + semester_count + '"> <div class="row"><div class=""><label class="col-md-1 control-label">Semester:</label><div class="col-md-3"><input type="text" title="Enter Semester" id="semester_' + semester_count + '" value="" name="semester_' + semester_count + '" class="form-control" required></div></div><div class=""><label class="col-md-1 control-label">Start Date:</label><div class="col-md-2"><input type="date" name="start_date_' + semester_count + '" id="start_date_' + semester_count + '" class="form-control" required></div></div><div class=""><label class="col-md-1 control-label">End Date:</label><div class="col-md-2"><input type="date" name="end_date_' + semester_count + '" id="end_date_' + semester_count + '" class="form-control" required></div></div><div class="col-md-1"><a href="javascript:;" class="delete_semester btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div>';
+                    $(row).removeAttr().hide().insertAfter(".semester:last").slideDown(300);
+                });
+
+                 $(document).on("click", ".delete_semester", function () {
+                    $(this).parents('.semester').remove();
+                });
+
+                 $(document).on("change", "#year", function (e) {
+                var semester_id = $('#semester_id').val();
+                var university = $('#university').val();
+                var year = $(this).val();
+                var url = '/masters/get_semester_already_exists/';
+                get_semester_already_exists(url, semester_id, university, year)
+            })
+
+
+
+                  $("#id_form").submit(function (e) {
+
+                       if ($('#semester_exists').is(":visible")) {
+                    return false;
+                }
+
+
+                    var rowCount = $(".semester").length;
+                    $('#semester_count').val(rowCount);
+
+                })
+
+
+                $('input[type=radio][name=university_type]').on('change', function () {
                     var university_type = $('input[name="university_type"]:checked').val();
-                    console.log("university_type"+university_type);
+                    console.log("university_type" + university_type);
                     var url = '/student/get_university_from_type/';
                     get_university_from_university_type(url, university_type)
 
@@ -114,12 +147,40 @@
                 })
 
                 $(document).on("change", "#faculty", function (e) {
-                var faculty_id = $(this).val();
-                var url = '/masters/get_departments_from_faculty/';
-                get_departments_from_faculty(url, faculty_id)
-            })
+                    var faculty_id = $(this).val();
+                    var url = '/masters/get_departments_from_faculty/';
+                    get_departments_from_faculty(url, faculty_id)
+                })
 
             });
+
+
+             function get_semester_already_exists(url, semester_id, university, year) {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {
+                    semester_id: semester_id,
+                    university: university,
+                    year: year,
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+                success: function (data) {
+                    var semester_exists = data;
+                    if (semester_exists === true) {
+
+                        $('#semester_exists').show();
+                    } else {
+                        $('#semester_exists').hide();
+                    }
+
+
+                },
+                error: function (xhr, msg, err) {
+                    alert(xhr.responseJSON.error);
+                }
+            });
+        }
 
             function get_departments_from_faculty(url, faculty_id) {
                 $.ajax({
@@ -245,13 +306,14 @@
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
+                 <input type="hidden" id="semester_count" name="semester_count">
 
                     <div class="form-body">
 
                         <div class="row item_experience" id="item_experience_1">
 
                             <div class="row">
-                            <div class="">
+                                <div class="">
                                     <label class="col-md-2 control-label">{% trans 'University Type' %}: <span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
@@ -266,6 +328,10 @@
                                 </div>
 
 
+                            </div>
+
+                            <br>
+                            <div class="row">
                                 <div class="">
                                     <label class="col-md-2 control-label">{% trans 'University' %}:<span
                                             style="color: red">*</span></label>
@@ -283,11 +349,23 @@
                                 </div>
 
 
+                                {#                                <div class="">#}
+                                {#                                    <label class="col-md-2 control-label">{% trans 'Semester Name' %}:<span#}
+                                {#                                            style="color: red">*</span></label>#}
+                                {#                                    <div class="col-md-3">#}
+                                {#                                        <input type="text" title="Enter Semester Name" id="semester_name"#}
+                                {#                                               value=""#}
+                                {#                                               name="semester_name"#}
+                                {#                                               class="form-control" required>#}
+                                {##}
+                                {#                                    </div>#}
+                                {#                                </div>#}
+
+
                             </div>
 
                             <br>
                             <div class="row">
-
                                 <div class="">
                                     <label class="col-md-2 control-label">{% trans 'Year' %}:<span
                                             style="color: red">*</span></label>
@@ -301,57 +379,89 @@
                                             {% endfor %}
 
                                         </select>
+
+                                     <span style="color: red;display: none" id="semester_exists">This University,Year already used</span>
                                     </div>
                                 </div>
-
-
-                             <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'Semester Name' %}:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <input type="text" title="Enter Semester Name" id="semester_name"
-                                               value=""
-                                               name="semester_name"
-                                               class="form-control" required>
-
-                                    </div>
-                                </div>
-
-
-
-
                             </div>
 
-                            <br>
+                            {#                            <div class="row">#}
+                            {##}
+                            {#                                <div class="">#}
+                            {#                                    <label class="col-md-2 control-label">{% trans 'Start Date' %}:<span#}
+                            {#                                            style="color: red">*</span></label>#}
+                            {#                                    <div class="col-md-3">#}
+                            {#                                        <input type="date" name="start_date" class="form-control" required>#}
+                            {##}
+                            {#                                    </div>#}
+                            {#                                </div>#}
+                            {##}
+                            {#                                <div class="">#}
+                            {#                                    <label class="col-md-2 control-label">{% trans 'End Date' %}:<span#}
+                            {#                                            style="color: red">*</span></label>#}
+                            {#                                    <div class="col-md-3">#}
+                            {#                                        <input type="date" name="end_date" class="form-control" required>#}
+                            {##}
+                            {#                                    </div>#}
+                            {#                                </div>#}
+                            {##}
+                            {##}
+                            {#                            </div>#}
 
-                        <div class="row">
+                            <hr>
 
-                             <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'Start Date' %}:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <input type="date" name="start_date" class="form-control" required>
 
-                                    </div>
-                                </div>
-
+                            <div class="" style="float: right;
+    margin-top: 0px;
+    padding-right:8%;">
                                 <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'End Date' %}:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                         <input type="date" name="end_date" class="form-control" required>
-
-                                    </div>
+                                    <a href="javascript:;" id="add" class="btn btn-icon-only green add_semester"
+                                       style="">
+                                        <i class="fa fa-plus "></i>
+                                    </a>
                                 </div>
+                            </div>
 
+                            <div class="row semester" id="semester_1">
+
+                                <div class="row">
+                                    <div class="">
+                                        <label class="col-md-1 control-label">Semester:</label>
+                                        <div class="col-md-3">
+                                            <input type="text" title="Enter Semester" id="semester_1"
+                                                   value="" name="semester_1"
+                                                   class="form-control" required>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="">
+                                        <label class="col-md-1 control-label">{% trans 'Start Date' %}:</label>
+                                        <div class="col-md-2">
+                                            <input type="date" name="start_date_1" id="start_date_1"
+                                                   class="form-control" required>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="">
+                                        <label class="col-md-1 control-label">{% trans 'End Date' %}:</label>
+                                        <div class="col-md-2">
+                                            <input type="date" name="end_date_1" id="end_date_1" class="form-control"
+                                                   required>
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
 
 
                             </div>
 
-                            <br>
 
                         </div>
-                    <br>
+                        <br><br>
 
                         <div class="row">
                             <div class="col-md-offset-5 col-md-7">
@@ -370,7 +480,6 @@
         </div>
     </div>
 {% endblock %}
-
 
 
 

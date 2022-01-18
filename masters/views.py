@@ -2479,16 +2479,22 @@ def add_semester(request):
     if request.method == 'POST':
         university = request.POST.get('university')
         year = request.POST.get('year')
-        semester_name = request.POST.get('semester_name')
-        start_date = request.POST.get('start_date')
-        end_date = request.POST.get('end_date')
+        semester_count = request.POST.get('semester_count')
         try:
-            if not SemesterDetails.objects.filter(semester_name=semester_name).exists():
-                SemesterDetails.objects.create(semester_name=semester_name, start_date=start_date,
-                                               end_date=end_date,university_id = university,year_id = year)
-                messages.success(request, "Record saved.")
-            else:
-                messages.warning(request, "Semester name already exists.")
+            semester_obj = SemesterDetails.objects.create(university_id = university,year_id = year)
+            semester_obj.semester.clear()
+            for x in range(int(semester_count)):
+                try:
+                    x = x + 1
+                    semester = Semester.objects.create(
+                        semester=request.POST.get('semester_' + str(x)),
+                        start_date=request.POST.get('start_date_' + str(x)),
+                        end_date=request.POST.get('end_date_' + str(x))
+                    )
+                    semester_obj.semester.add(semester)
+                except:
+                    pass
+            messages.success(request, "Record saved.")
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/semester_settings/')
@@ -2505,28 +2511,32 @@ def add_semester(request):
 
 def edit_semester(request, semester_id=None):
     semester_obj = SemesterDetails.objects.get(id=semester_id)
+    semester_total_count = semester_obj.semester.all().count()
     if request.method == 'POST':
         university = request.POST.get('university')
         year = request.POST.get('year')
-        semester_name = request.POST.get('semester_name')
-        start_date = request.POST.get('start_date')
-        end_date = request.POST.get('end_date')
+        semester_count = request.POST.get('semester_count')
         try:
-            if not SemesterDetails.objects.filter(~Q(id=semester_id), semester_name=semester_name.lower()).exists():
-                semester_obj.university_id = university
-                semester_obj.year_id = year
-                semester_obj.semester_name = semester_name
-                semester_obj.university_id = university
-                semester_obj.start_date = start_date
-                semester_obj.end_date = end_date
-                semester_obj.save()
-                messages.success(request, "Record saved.")
-            else:
-                messages.warning(request, "Semester name already exists. Record not updated.")
+            semester_obj.university_id = university
+            semester_obj.year_id = year
+            semester_obj.university_id = university
+            semester_obj.save()
+            semester_obj.semester.clear()
+            for x in range(int(semester_count)):
+                try:
+                    x = x + 1
+                    semester = Semester.objects.create(
+                        semester=request.POST.get('semester_' + str(x)),
+                        start_date=request.POST.get('start_date_' + str(x)),
+                        end_date=request.POST.get('end_date_' + str(x))
+                    )
+                    semester_obj.semester.add(semester)
+                except:
+                    pass
+            messages.success(request, "Record saved.")
         except:
             messages.warning(request, "Semester name already exists. Record not updated.")
         return redirect('/masters/semester_settings/')
-
     if semester_obj.university:
         if semester_obj.university.is_partner_university == False:
             university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university = False).order_by('-id')
@@ -2541,6 +2551,7 @@ def edit_semester(request, semester_id=None):
         'semester_obj': semester_obj,
         'university_recs': university_recs,
         'year_recs': year_recs,
+        'semester_total_count': semester_total_count,
     }
     return render(request, "edit_semester.html",context)
 
@@ -3453,3 +3464,59 @@ def delete_english_lang_proficiency(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/english_lang_proficiency_settings/')
+
+
+def get_year_from_university(request):
+    semester_list = []
+    year_ids = []
+    university = request.POST.get('university', None)
+    year_recs = SemesterDetails.objects.all()
+    if university:
+        year_recs = year_recs.filter(university_id = university)
+    if year_recs:
+        for rec in year_recs:
+            if not  rec.year.id in year_ids:
+                raw_dict = {}
+                raw_dict['id'] = rec.year.id
+                raw_dict['year'] = rec.year.year_name
+                year_ids.append(rec.year.id)
+                semester_list.append(raw_dict)
+    return JsonResponse(semester_list, safe=False)
+
+
+def get_intake_semester_from_year(request):
+    semester_list = []
+    year = request.POST.get('year', None)
+    university = request.POST.get('university', None)
+    semester_recs = SemesterDetails.objects.all()
+    if year:
+        semester_recs = semester_recs.filter(year_id = year)
+    if university:
+        semester_recs = semester_recs.filter(university_id = university)
+    if semester_recs:
+        for rec in semester_recs:
+            for sem in rec.semester.all():
+                raw_dict = {}
+                raw_dict['id'] = sem.id
+                raw_dict['semester'] = sem.semester
+                semester_list.append(raw_dict)
+    return JsonResponse(semester_list, safe=False)
+
+def get_semester_already_exists(request):
+    semester_id = request.POST.get('semester_id', None)
+    university = request.POST.get('university', None)
+    year = request.POST.get('year', None)
+    semester_exists = False
+    if semester_id:
+        if SemesterDetails.objects.filter(university_id=university,year_id = year).exclude(
+                id=semester_id).exists():
+            semester_exists = True
+        else:
+            semester_exists = False
+        return JsonResponse(semester_exists, safe=False)
+    else:
+        if SemesterDetails.objects.filter(university_id=university,year_id = year).exists():
+            semester_exists = True
+        else:
+            semester_exists = False
+        return JsonResponse(semester_exists, safe=False)

@@ -53,9 +53,11 @@
 
             $(document).ready(function () {
 
-                {#$("#program").chosen();#}
-                {#$("#campus").chosen();#}
-                {#$("#faculty").chosen();#}
+                /*
+                var university = $('#university').val();
+                var url = '/masters/get_year_from_university/';
+                get_year_from_university(url,university)
+                */
 
 
                 $(document).on("change", "#country", function (e) {
@@ -71,56 +73,65 @@
 
                 })
 
-            $(document).on("change", "#university", function (e) {
-                var university = $(this).val();
-                var study_mode = $('#study_mode').val();
-                var study_level = $('#study_level').val();
-                var faculty = $('#faculty').val();
-                var department = $('#department').val();
-                var url = '/masters/get_programs_from_filter/';
-                get_programs_from_filter(url, study_mode,university,study_level,faculty,department)
-            })
+                $(document).on("change", "#year", function (e) {
+                    var year = $(this).val();
+                    var university = $('#university').val();
+                    var url = '/masters/get_intake_semester_from_year/';
+                    get_intake_semester_from_year(url, year, university)
+                })
+
+                $(document).on("change", "#university", function (e) {
+                    var university = $(this).val();
+                    var url = '/masters/get_year_from_university/';
+                    get_year_from_university(url, university)
+                    {#var study_mode = $('#study_mode').val();#}
+                    {#var study_level = $('#study_level').val();#}
+                    {#var faculty = $('#faculty').val();#}
+                    {#var department = $('#department').val();#}
+                    {#var url = '/masters/get_programs_from_filter/';#}
+                    {#get_programs_from_filter(url, study_mode,university,study_level,faculty,department)#}
+                })
 
 
-              $(document).on("change", "#study_mode", function (e) {
-                var study_mode = $(this).val();
-                var university = $('#university').val();
-                var study_level = $('#study_level').val();
-                var faculty = $('#faculty').val();
-                var department = $('#department').val();
-                var url = '/masters/get_programs_from_filter/';
-                get_programs_from_filter(url, study_mode,university,study_level,faculty,department)
-            })
+                $(document).on("change", "#study_mode", function (e) {
+                    var study_mode = $(this).val();
+                    var university = $('#university').val();
+                    var study_level = $('#study_level').val();
+                    var faculty = $('#faculty').val();
+                    var department = $('#department').val();
+                    var url = '/masters/get_programs_from_filter/';
+                    get_programs_from_filter(url, study_mode, university, study_level, faculty, department)
+                })
 
-            $(document).on("change", "#study_level", function (e) {
-                var study_level = $(this).val();
-                var study_mode = $('#study_mode').val();
-                var university = $('#university').val();
-                var faculty = $('#faculty').val();
-                var department = $('#department').val();
-                var url = '/masters/get_programs_from_filter/';
-                get_programs_from_filter(url, study_mode,university,study_level,faculty,department)
-            })
+                $(document).on("change", "#study_level", function (e) {
+                    var study_level = $(this).val();
+                    var study_mode = $('#study_mode').val();
+                    var university = $('#university').val();
+                    var faculty = $('#faculty').val();
+                    var department = $('#department').val();
+                    var url = '/masters/get_programs_from_filter/';
+                    get_programs_from_filter(url, study_mode, university, study_level, faculty, department)
+                })
 
-             $(document).on("change", "#faculty", function (e) {
-                var faculty = $(this).val();
-                 var study_mode = $('#study_mode').val();
-                var university = $('#university').val();
-                var department = $('#department').val();
-                var study_level = $('#study_level').val();
-                var url = '/masters/get_programs_from_filter/';
-                get_programs_from_filter(url, study_mode,university,study_level,faculty,department)
-            })
+                $(document).on("change", "#faculty", function (e) {
+                    var faculty = $(this).val();
+                    var study_mode = $('#study_mode').val();
+                    var university = $('#university').val();
+                    var department = $('#department').val();
+                    var study_level = $('#study_level').val();
+                    var url = '/masters/get_programs_from_filter/';
+                    get_programs_from_filter(url, study_mode, university, study_level, faculty, department)
+                })
 
-            $(document).on("change", "#department", function (e) {
-                var department = $(this).val();
-                 var study_mode = $('#study_mode').val();
-                var university = $('#university').val();
-                var study_level = $('#study_level').val();
-                var faculty = $('#faculty').val();
-                var url = '/masters/get_programs_from_filter/';
-                get_programs_from_filter(url, study_mode,university,study_level,faculty,department)
-            })
+                $(document).on("change", "#department", function (e) {
+                    var department = $(this).val();
+                    var study_mode = $('#study_mode').val();
+                    var university = $('#university').val();
+                    var study_level = $('#study_level').val();
+                    var faculty = $('#faculty').val();
+                    var url = '/masters/get_programs_from_filter/';
+                    get_programs_from_filter(url, study_mode, university, study_level, faculty, department)
+                })
 
                 $(document).on("change", "#faculty", function (e) {
                     var faculty_id = $(this).val();
@@ -149,6 +160,57 @@
 
 
             });
+
+            function get_year_from_university(url, university) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        university: university,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data) {
+
+                        $('#year').empty();
+                        $('#year').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#year').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['year'] + '</option>')
+                        }
+                    },
+                    error: function (xhr, msg, err) {
+                        alert(xhr.responseJSON.error);
+                    }
+                });
+            }
+
+            function get_intake_semester_from_year(url, year, university) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        year: year,
+                        university: university,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data) {
+
+                        $('#semester').empty();
+                        $('#semester').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#semester').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['semester'] + '</option>')
+                        }
+                    },
+                    error: function (xhr, msg, err) {
+                        alert(xhr.responseJSON.error);
+                    }
+                });
+            }
 
             function get_learning_center_from_country(url, country_id) {
                 $.ajax({
@@ -201,7 +263,7 @@
                 });
             }
 
-            function get_programs_from_filter(url, study_mode,university,study_level,faculty,department) {
+            function get_programs_from_filter(url, study_mode, university, study_level, faculty, department) {
                 $.ajax({
                     type: 'POST',
                     url: url,
@@ -358,7 +420,7 @@
                                 <label class="col-md-2 control-label">{% trans 'University Type' %}: <span
                                         style="color: red">*</span></label>
                                 {% if application_obj.university %}
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         {% if  application_obj.university.is_partner_university == False %}
                                             <input class="current" type="radio" checked name="university_type"
                                                    id="university_main"
@@ -379,7 +441,7 @@
                                         {% endif %}
                                     </div>
                                 {% else %}
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <input class="current" type="radio" checked name="university_type"
                                                id="university_main"
                                                value="Main">
@@ -390,10 +452,15 @@
                                     </div>
                                 {% endif %}
                             </div>
+
+                        </div>
+
+                        <br>
+                        <div class="row">
                             <div class="">
                                 <label class="col-md-2 control-label">{% trans 'University' %}: <span
                                         style="color: red">*</span></label>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <select id='university' title="Select University" name="university"
                                             class="form-control value_check" required>
 
@@ -413,7 +480,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <br>
                         <div class="row">
                             <input hidden id="value_check" name="value_check">
@@ -422,7 +488,7 @@
                             <div class="">
                                 <label class="col-md-2 control-label">{% trans 'Academic Year' %}: <span
                                         style="color: red">*</span></label>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <select id='year' title="Select Year" name="year"
                                             class="form-control value_check" required>
 
@@ -436,30 +502,7 @@
                                         {% endif %}
 
                                         {% for rec in year_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.year_name|default_if_none:"" }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <label class="col-md-2 control-label">{% trans 'Intake/Semester' %}: <span
-                                        style="color: red">*</span></label>
-                                <div class="col-md-3">
-                                    <select id='semester' title="Select Semester" name="semester"
-                                            class="form-control value_check" required>
-
-                                        {% if application_obj.semester %}
-                                            <option style="display:none" selected="selected"
-                                                    value="{{ application_obj.semester.id }}"
-                                            >{{ application_obj.semester.semester_name|default_if_none:"" }}</option>
-                                        {% else %}
-                                            <option disabled selected="selected" value="">{% trans 'Please Select' %}
-                                            </option>
-                                        {% endif %}
-
-                                        {% for rec in semester_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.semester_name|default_if_none:"" }}</option>
+                                            <option value='{{ rec.year.id }}'>{{ rec.year.year_name|default_if_none:"" }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -469,6 +512,33 @@
                         </div>
 
 
+                        <br>
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Intake/Semester' %}: <span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-4">
+                                    <select id='semester' title="Select Semester" name="semester"
+                                            class="form-control value_check" required>
+
+                                        {% if application_obj.semester %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.semester.id }}"
+                                            >{{ application_obj.semester.semester|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option disabled selected="selected" value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in semester_recs %}
+                                            {% for sem in rec.semester.all %}
+                                                <option value='{{ sem.id }}'>{{ sem.semester|default_if_none:"" }}</option>
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                         <br>
 
                         <hr>
@@ -484,7 +554,7 @@
 
                             <div class="">
                                 <label class="col-md-2 control-label">Country:</label>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <select id='country' title="Select Country" name="country"
                                             class="form-control value_check" data-live-search="true">
 
@@ -507,9 +577,13 @@
 
                             </div>
 
+
+                        </div>
+                        <br>
+                        <div class="row">
                             <div class="">
                                 <label class="col-md-2 control-label">{% trans 'Learning Centre' %}:</label>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <select id='learning_centre' title="Select Learning Centre" name="learning_centre"
                                             class="form-control value_check" data-live-search="true">
 
@@ -546,32 +620,17 @@
                         <hr>
 
                         <div class="row">
-                            {#                            <div class="">#}
-                            {#                                <label class="col-md-2 control-label">{% trans 'Type of Program' %}: </label>#}
-                            {#                                <div class="col-md-4">#}
-                            {##}
-                            {#                                    {% for rec in study_type_list %}#}
-                            {#                                        <input class="current" type="checkbox" name="study_mode[]"#}
-                            {#                                               id="study_mode"#}
-                            {#                                               value="{{ rec }}">#}
-                            {#                                        <span style="padding:inherit">{{ rec }}</span>&nbsp;&nbsp;#}
-                            {##}
-                            {#                                    {% endfor %}#}
-                            {##}
-                            {##}
-                            {#                                </div>#}
-                            {#                            </div>#}
 
-                        <div class="">
+                            <div class="">
                                 <label class="col-md-2 control-label">{% trans 'Mode of Study' %}: <span
-                                            style="color: red">*</span></label>
-                                <div class="col-md-3">
+                                        style="color: red">*</span></label>
+                                <div class="col-md-4">
                                     <select id='study_mode' title="Select Mode of Study" name="study_mode"
                                             class="form-control value_check" data-live-search="true" required>
 
                                         {% if application_obj.study_mode %}
                                             <option style="display:none" selected="selected"
-                                                    value="{{ application_obj.study_mode}}"
+                                                    value="{{ application_obj.study_mode }}"
                                                     value="">{{ application_obj.study_mode|default_if_none:"" }}</option>
                                         {% else %}
                                             <option disabled selected="selected" id=""
@@ -590,16 +649,19 @@
                             </div>
 
 
-                        <div class="">
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="">
                                 <label class="col-md-2 control-label">{% trans 'Level of Study' %}: <span
-                                            style="color: red">*</span></label>
-                                <div class="col-md-3">
+                                        style="color: red">*</span></label>
+                                <div class="col-md-4">
                                     <select id='study_level' title="Select Level of Study" name="study_level"
                                             class="form-control value_check" data-live-search="true" required>
 
                                         {% if application_obj.study_level %}
                                             <option style="display:none" selected="selected"
-                                                    value="{{ application_obj.study_level.id}}"
+                                                    value="{{ application_obj.study_level.id }}"
                                                     value="">{{ application_obj.study_level|default_if_none:"" }}</option>
                                         {% else %}
                                             <option disabled selected="selected" id=""
@@ -616,40 +678,6 @@
 
 
                             </div>
-
-{#                            <div class="">#}
-{#                                <label class="col-md-2 control-label">{% trans 'Mode of Study' %}: </label>#}
-{#                                <div class="col-md-3">#}
-{##}
-{#                                    {% for rec in study_mode_list %}#}
-{#                                        <input class="current" type="checkbox" name="study_mode[]"#}
-{#                                               id="study_mode"#}
-{#                                               value="{{ rec }}">#}
-{#                                        <span style="padding:inherit">{{ rec }}</span>&nbsp;&nbsp;#}
-{##}
-{#                                    {% endfor %}#}
-{##}
-{##}
-{#                                </div>#}
-{#                            </div>#}
-
-{#                            <div class="">#}
-{#                                <label class="col-md-2 control-label">{% trans 'Level of Study' %}: </label>#}
-{#                                <div class="col-md-4">#}
-{##}
-{#                                    {% for rec in study_level_list %}#}
-{#                                        <input class="current" type="checkbox" name="study_mode[]"#}
-{#                                               id="study_mode"#}
-{#                                               value="{{ rec }}">#}
-{#                                        <span style="padding:inherit">{{ rec }}</span>&nbsp;&nbsp;#}
-{##}
-{#                                    {% endfor %}#}
-{##}
-{##}
-{#                                </div>#}
-{#                            </div>#}
-
-
                         </div>
                         <br>
                         <div class="row">
@@ -657,8 +685,8 @@
 
                             <div class="">
                                 <label class="col-md-2 control-label">{% trans 'Faculty' %}: <span
-                                            style="color: red">*</span></label>
-                                <div class="col-md-3">
+                                        style="color: red">*</span></label>
+                                <div class="col-md-4">
                                     <select id='faculty' title="Select Faculty" name="faculty"
                                             class="form-control value_check" data-live-search="true" required>
 
@@ -682,10 +710,14 @@
 
                             </div>
 
+
+                        </div>
+                        <br>
+                        <div class="row">
                             <div class="">
                                 <label class="col-md-2 control-label">{% trans 'Department' %}:<span
-                                            style="color: red">*</span></label>
-                                <div class="col-md-3">
+                                        style="color: red">*</span></label>
+                                <div class="col-md-4">
                                     <select id='department' title="Select Department" name="department"
                                             class="form-control value_check" data-live-search="true" required>
 
@@ -707,7 +739,6 @@
 
                             </div>
 
-
                         </div>
                         <br>
 
@@ -716,8 +747,8 @@
 
                             <div class="">
                                 <label class="col-md-2 control-label">{% trans 'Program' %}: <span
-                                            style="color: red">*</span></label>
-                                <div class="col-md-3">
+                                        style="color: red">*</span></label>
+                                <div class="col-md-4">
                                     <select id='program' title="Select Program" name="program"
                                             class="form-control value_check" data-live-search="true" required>
 
@@ -742,89 +773,6 @@
 
                         </div>
                         <br>
-
-                        {#                        <div class="row">#}
-                        {##}
-                        {##}
-                        {#                            <div class="">#}
-                        {#                                <label class="col-md-2 control-label">{% trans 'Program' %}: <span style="color: red">*</span></label>#}
-                        {#                                <div class="col-md-3">#}
-                        {#                                    <select id='program' title="Select Program" name="program"#}
-                        {#                                            class="form-control value_check" data-live-search="true">#}
-                        {##}
-                        {#                                        {% if application_obj.program %}#}
-                        {#                                            <option style="display:none" selected="selected"#}
-                        {#                                                    value="{{ application_obj.program.id }}"#}
-                        {#                                                    value="">{{ application_obj.program.program_name|default_if_none:"" }}</option>#}
-                        {#                                        {% else %}#}
-                        {#                                            <option selected="selected" id="" value="">{% trans 'Please Select' %}#}
-                        {#                                            </option>#}
-                        {#                                        {% endif %}#}
-                        {##}
-                        {#                                        {% for rec in program_recs %}#}
-                        {#                                            <option value='{{ rec.id }}'>{{ rec.program_name|default_if_none:"" }}</option>#}
-                        {#                                        {% endfor %}#}
-                        {#                                    </select>#}
-                        {#                                </div>#}
-                        {##}
-                        {##}
-                        {#                            </div>#}
-                        {##}
-                        {#                            <div class="">#}
-                        {#                                <label class="col-md-2 control-label">{% trans 'Faculty' %}: <span style="color: red">*</span></label>#}
-                        {#                                <div class="col-md-3">#}
-                        {#                                    <select id='faculty' title="Select Faculty" name="faculty"#}
-                        {#                                            class="form-control value_check" data-live-search="true" required>#}
-                        {##}
-                        {#                                        {% if application_obj.faculty %}#}
-                        {#                                            <option style="display:none" selected="selected"#}
-                        {#                                                    value="{{ application_obj.faculty.id }}"#}
-                        {#                                                    value="">{{ application_obj.faculty.faculty_name|default_if_none:"" }}</option>#}
-                        {#                                        {% else %}#}
-                        {#                                            <option disabled selected="selected" id="" value="">{% trans 'Please Select' %}#}
-                        {#                                            </option>#}
-                        {#                                        {% endif %}#}
-                        {##}
-                        {#                                    </select>#}
-                        {#                                </div>#}
-                        {##}
-                        {##}
-                        {#                            </div>#}
-                        {##}
-                        {#                        </div>#}
-                        {#                        <br>#}
-                        {##}
-                        {#                        <div class="row">#}
-                        {##}
-                        {##}
-                        {#                            <div class="">#}
-                        {#                                <label class="col-md-2 control-label">{% trans 'Branch/Campus' %}: <span#}
-                        {#                                        style="color: red">*</span></label>#}
-                        {#                                <div class="col-md-3">#}
-                        {#                                    <select id='campus' title="Select Campus" name="campus"#}
-                        {#                                            class="form-control value_check" data-live-search="true" required>#}
-                        {##}
-                        {#                                        {% if application_obj.campus %}#}
-                        {#                                            <option style="display:none" selected="selected"#}
-                        {#                                                    value="{{ application_obj.campus.id }}"#}
-                        {#                                                    value="">{{ application_obj.campus.campus_name|default_if_none:"" }}</option>#}
-                        {#                                        {% else %}#}
-                        {#                                            <option disabled selected="selected" id="" value="">{% trans 'Please Select' %}#}
-                        {#                                            </option>#}
-                        {#                                        {% endif %}#}
-                        {##}
-                        {#                                        {% for rec in campus_list %}#}
-                        {#                                            <option value='{{ rec.id }}'>{{ rec.campus_name|default_if_none:"" }}</option>#}
-                        {#                                        {% endfor %}#}
-                        {#                                    </select>#}
-                        {#                                </div>#}
-                        {##}
-                        {##}
-                        {#                            </div>#}
-                        {##}
-                        {##}
-                        {#                        </div>#}
-                        {#                        <br>#}
 
 
                         <div class="row">
