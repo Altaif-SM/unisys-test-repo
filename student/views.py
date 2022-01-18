@@ -2503,11 +2503,61 @@ def applicant_intake_info(request):
     learning_centre_list = []
     campus_list = []
     department_recs = []
+
+    faculty_final_list = []
+    faculty_list = []
+    faculty_ids = []
+
+    program_final_list = []
+    program_list = []
+
     if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
         application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
         if application_obj.faculty:
              department_recs = application_obj.faculty.department.all()
     if application_obj:
+        program_recs = ProgramDetails.objects.filter(is_delete=False)
+        if application_obj.study_level:
+            program_recs = program_recs.filter(study_level_id=application_obj.study_level.id)
+        if application_obj.study_mode:
+            for rec in program_recs:
+                for mode in rec.study_mode.filter(study_mode=application_obj.study_mode):
+                    faculty_list.append(rec)
+        if faculty_list:
+            for rec in faculty_list:
+                if not rec.faculty.id in faculty_ids:
+                    raw_dict = {}
+                    raw_dict['id'] = rec.faculty.id
+                    raw_dict['faculty'] = rec.faculty.faculty_name
+                    faculty_ids.append(rec.faculty.id)
+                    faculty_final_list.append(raw_dict)
+
+
+        program_recs = ProgramDetails.objects.filter(is_delete=False)
+        if application_obj.university:
+            program_recs = program_recs.filter(university_id=application_obj.university.id)
+
+        if application_obj.study_level:
+            program_recs = program_recs.filter(study_level_id=application_obj.study_level.id)
+
+        if application_obj.faculty:
+            program_recs = program_recs.filter(faculty_id=application_obj.faculty.id)
+
+        if application_obj.department:
+            program_recs = program_recs.filter(department_id=application_obj.department.id)
+
+        if application_obj.study_mode:
+            for rec in program_recs:
+                for mode in rec.study_mode.filter(study_mode=application_obj.study_mode):
+                    program_list.append(rec)
+
+        if program_list:
+            for rec in program_recs:
+                raw_dict = {}
+                raw_dict['id'] = rec.id
+                raw_dict['program'] = rec.program_name
+                program_final_list.append(raw_dict)
+
         if application_obj.university:
             year_recs = SemesterDetails.objects.filter(university_id = application_obj.university.id)
             if application_obj.university.is_partner_university == True:
@@ -2543,7 +2593,7 @@ def applicant_intake_info(request):
 
     return render(request, 'intake_details.html',{'country_recs': country_recs, 'religion_recs': religion_recs, 'application_obj': application_obj,'student_recs':student_recs,'agent_recs':agent_recs,'year_recs':year_recs,'semester_recs':semester_recs,
                                                   'learning_centre_recs':learning_centre_recs,'university_recs':university_recs,'learning_centre_list':learning_centre_list,'program_recs':program_recs,'campus_list':campus_list,'study_type_list':study_type_list,'study_mode_list':study_mode_list,'study_level_list':study_level_list,'faculty_recs':faculty_recs,
-                                                  'department_recs':department_recs,'study_type_recs':study_type_recs,'study_level_recs':study_level_recs})
+                                                  'department_recs':department_recs,'study_type_recs':study_type_recs,'study_level_recs':study_level_recs,'faculty_final_list':faculty_final_list,'program_final_list':program_final_list})
 
 
 def get_learning_centre_from_country(request):

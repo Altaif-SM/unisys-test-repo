@@ -752,8 +752,8 @@
                                             </option>
                                         {% endif %}
 
-                                        {% for rec in faculty_recs1%}
-                                            <option value='{{ rec.id }}'>{{ rec.faculty_name|default_if_none:"" }}</option>
+                                        {% for rec in faculty_final_list%}
+                                            <option value='{{ rec.id }}'>{{ rec.faculty|default_if_none:"" }}</option>
                                         {% endfor %}
 
                                     </select>
@@ -813,9 +813,9 @@
                                             </option>
                                         {% endif %}
 
-                                        {#                                        {% for rec in program_recs %}#}
-                                        {#                                            <option value='{{ rec.id }}'>{{ rec.program_name|default_if_none:"" }}</option>#}
-                                        {#                                        {% endfor %}#}
+                                                                                {% for rec in program_final_list %}
+                                                                                    <option value='{{ rec.id }}'>{{ rec.program|default_if_none:"" }}</option>
+                                                                                {% endfor %}
                                     </select>
                                 </div>
 
