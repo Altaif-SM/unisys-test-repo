@@ -255,6 +255,8 @@ urlpatterns = [
     path('get_year_from_university/', views.get_year_from_university, name='get_year_from_university'),
     path('get_intake_semester_from_year/', views.get_intake_semester_from_year, name='get_intake_semester_from_year'),
     path('get_semester_already_exists/', views.get_semester_already_exists, name='get_semester_already_exists'),
+    path('get_faculty_from_study_mode/', views.get_faculty_from_study_mode, name='get_faculty_from_study_mode'),
+    path('get_faculty_from_study_level/', views.get_faculty_from_study_level, name='get_faculty_from_study_level'),
 
 
 ]

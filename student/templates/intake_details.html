@@ -95,25 +95,77 @@
 
                 $(document).on("change", "#study_mode", function (e) {
                     var study_mode = $(this).val();
-                    var university = $('#university').val();
                     var study_level = $('#study_level').val();
-                    var faculty = $('#faculty').val();
-                    var department = $('#department').val();
-                    var url = '/masters/get_programs_from_filter/';
-                    get_programs_from_filter(url, study_mode, university, study_level, faculty, department)
+                    var url = '/masters/get_faculty_from_study_mode/';
+                    get_faculty_from_study_mode(url, study_mode, study_level)
                 })
+
+
+            function get_faculty_from_study_mode(url, study_mode, study_level) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        study_mode: study_mode,
+                        study_level: study_level,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data) {
+
+                        $('#faculty').empty();
+                        $('#faculty').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#faculty').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['faculty'] + '</option>')
+                        }
+                    },
+                    error: function (xhr, msg, err) {
+                        alert(xhr.responseJSON.error);
+                    }
+                });
+            }
 
                 $(document).on("change", "#study_level", function (e) {
                     var study_level = $(this).val();
                     var study_mode = $('#study_mode').val();
-                    var university = $('#university').val();
-                    var faculty = $('#faculty').val();
-                    var department = $('#department').val();
-                    var url = '/masters/get_programs_from_filter/';
-                    get_programs_from_filter(url, study_mode, university, study_level, faculty, department)
+                    {#var university = $('#university').val();#}
+                    {#var faculty = $('#faculty').val();#}
+                    {#var department = $('#department').val();#}
+                    var url = '/masters/get_faculty_from_study_level/';
+                    get_faculty_from_study_level(url, study_mode, study_level)
                 })
 
-                $(document).on("change", "#faculty", function (e) {
+            function get_faculty_from_study_level(url, study_mode, study_level) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        study_mode: study_mode,
+                        study_level: study_level,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data) {
+
+                        $('#faculty').empty();
+                        $('#faculty').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#faculty').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['faculty'] + '</option>')
+                        }
+                    },
+                    error: function (xhr, msg, err) {
+                        alert(xhr.responseJSON.error);
+                    }
+                });
+            }
+
+
+
+                $(document).on("change", "#faculty1", function (e) {
                     var faculty = $(this).val();
                     var study_mode = $('#study_mode').val();
                     var university = $('#university').val();
@@ -700,7 +752,7 @@
                                             </option>
                                         {% endif %}
 
-                                        {% for rec in faculty_recs %}
+                                        {% for rec in faculty_recs1%}
                                             <option value='{{ rec.id }}'>{{ rec.faculty_name|default_if_none:"" }}</option>
                                         {% endfor %}
 

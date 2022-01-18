@@ -2505,7 +2505,8 @@ def applicant_intake_info(request):
     department_recs = []
     if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
         application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
-        department_recs = application_obj.faculty.department.all()
+        if application_obj.faculty:
+             department_recs = application_obj.faculty.department.all()
     if application_obj:
         if application_obj.university:
             year_recs = SemesterDetails.objects.filter(university_id = application_obj.university.id)

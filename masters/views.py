@@ -3520,3 +3520,51 @@ def get_semester_already_exists(request):
         else:
             semester_exists = False
         return JsonResponse(semester_exists, safe=False)
+
+
+def get_faculty_from_study_mode(request):
+    final_list = []
+    program_list = []
+    faculty_ids = []
+    study_mode = request.POST.get('study_mode', None)
+    study_level = request.POST.get('study_level', None)
+    program_recs = ProgramDetails.objects.filter(is_delete=False)
+    if study_level:
+        program_recs = program_recs.filter(study_level_id=study_level)
+    if study_mode:
+        for rec in program_recs:
+            for mode in rec.study_mode.filter(study_mode=study_mode):
+                program_list.append(rec)
+    if program_list:
+        for rec in program_list:
+            if not rec.faculty.id in faculty_ids:
+                raw_dict = {}
+                raw_dict['id'] = rec.faculty.id
+                raw_dict['faculty'] = rec.faculty.faculty_name
+                faculty_ids.append(rec.faculty.id)
+                final_list.append(raw_dict)
+    return JsonResponse(final_list, safe=False)
+
+
+def get_faculty_from_study_level(request):
+    final_list = []
+    program_list = []
+    faculty_ids = []
+    study_mode = request.POST.get('study_mode', None)
+    study_level = request.POST.get('study_level', None)
+    program_recs = ProgramDetails.objects.filter(is_delete=False)
+    if study_level:
+        program_recs = program_recs.filter(study_level_id=study_level)
+    if study_mode:
+        for rec in program_recs:
+            for mode in rec.study_mode.filter(study_mode=study_mode):
+                program_list.append(rec)
+    if program_list:
+        for rec in program_list:
+            if not rec.faculty.id in faculty_ids:
+                raw_dict = {}
+                raw_dict['id'] = rec.faculty.id
+                raw_dict['faculty'] = rec.faculty.faculty_name
+                faculty_ids.append(rec.faculty.id)
+                final_list.append(raw_dict)
+    return JsonResponse(final_list, safe=False)
