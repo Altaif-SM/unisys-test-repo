@@ -1830,7 +1830,7 @@ def university_settings(request):
 def add_university(request):
     if request.method == 'POST':
         university_logo = request.FILES.get('university_logo', None)
-        university_id = request.POST.get('university_id')
+        # university_id = request.POST.get('university_id')
         university_name = request.POST.get('university_name')
         email = request.POST.get('email')
         telephone = request.POST.get('telephone')
@@ -1842,7 +1842,7 @@ def add_university(request):
         else:
             status = False
         try:
-            university_obj = UniversityDetails.objects.create(university_id=university_id,
+            university_obj = UniversityDetails.objects.create(
                                              university_name=university_name, email=email,telephone = telephone,website = website,
                                              university_address = university_address,is_active = status)
             if university_logo:
@@ -1858,7 +1858,7 @@ def edit_university(request, university_id=None):
     university_obj = UniversityDetails.objects.get(id=university_id)
     if request.method == 'POST':
         university_logo = request.FILES.get('university_logo', None)
-        university_id = request.POST.get('university_id')
+        # university_id = request.POST.get('university_id')
         university_name = request.POST.get('university_name')
         email = request.POST.get('email')
         telephone = request.POST.get('telephone')
@@ -1870,7 +1870,7 @@ def edit_university(request, university_id=None):
         else:
             status = False
         try:
-            university_obj.university_id = university_id
+            # university_obj.university_id = university_id
             university_obj.university_name = university_name
             university_obj.email = email
             university_obj.telephone = telephone
@@ -2730,6 +2730,7 @@ def university_partner_settings(request):
 
 def add_university_partner(request):
     if request.method == 'POST':
+        university_logo = request.FILES.get('university_logo', None)
         university_name = request.POST.get('university_name')
         email = request.POST.get('email')
         telephone = request.POST.get('telephone')
@@ -2741,7 +2742,7 @@ def add_university_partner(request):
         else:
             status = False
         try:
-            UniversityDetails.objects.create(is_partner_university = True,
+            UniversityDetails.objects.create(is_partner_university = True,university_logo = university_logo,
                                              university_name=university_name, email=email,telephone = telephone,website = website,
                                              university_address = university_address,is_active = status)
             messages.success(request, "Record saved.")
@@ -2754,6 +2755,7 @@ def add_university_partner(request):
 def edit_university_partner(request, university_id=None):
     university_obj = UniversityDetails.objects.get(id=university_id)
     if request.method == 'POST':
+        university_logo = request.FILES.get('university_logo', None)
         university_name = request.POST.get('university_name')
         email = request.POST.get('email')
         telephone = request.POST.get('telephone')
@@ -2771,6 +2773,8 @@ def edit_university_partner(request, university_id=None):
             university_obj.website = website
             university_obj.university_address = university_address
             university_obj.is_active = status
+            if university_logo:
+                university_obj.university_logo = university_logo
             university_obj.save()
             messages.success(request, "Record saved.")
         except:

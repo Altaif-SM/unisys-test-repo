@@ -187,7 +187,7 @@
                     <thead>
                     <tr>
                         <th style="display: none">Id</th>
-                        <th>{% trans 'University ID' %}</th>
+{#                        <th>{% trans 'University ID' %}</th>#}
                         <th> {% trans 'University Name' %}</th>
                         <th> {% trans 'Email' %}</th>
                         <th> {% trans 'Telephone' %}</th>
@@ -202,7 +202,7 @@
                     {% for rec in university_recs %}
                         <tr id="item{{ forloop.counter }}" class="item">
                             <td style="display: none"><input id="university_id" value="{{ rec.id }}"></td>
-                            <td>{{ rec.university_id|default_if_none:"" }}</td>
+{#                            <td>{{ rec.university_id|default_if_none:"" }}</td>#}
                             <td>{{ rec.university_name|default_if_none:"" }}</td>
                             <td>{{ rec.email|default_if_none:"" }}</td>
                             <td>{{ rec.telephone|default_if_none:"" }}</td>
