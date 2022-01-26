@@ -107,15 +107,15 @@
         <br><br>
         <span style="font-size: 17px;color: #333">Registration Number : {{ registration_number }}</span>
         <br><br>
-{#        <span style="font-size: 17px;color: #333">Duration of Study : ####</span>#}
-{#        <br><br>#}
-        <span style="font-size: 17px;color: #333">Mode of Study : Online</span>
+        <span style="font-size: 17px;color: #333">Mode of Study : {{ application_obj.study_mode }}</span>
         <br><br>
-{#        <span style="font-size: 17px;color: #333">Campus : ####</span>#}
-{#        <br><br>#}
-        <span style="font-size: 17px;color: #333">Date of Registration : {{ created_on }}</span>
-{#        <br><br>#}
-{#        <span style="font-size: 17px;color: #333">Language Requirement : ####</span>#}
+        <span style="font-size: 17px;color: #333">Level of Study : {{ application_obj.study_level.study_level|default_if_none:"" }}</span>
+         <br><br>
+        <span style="font-size: 17px;color: #333">Faculty : {{ application_obj.faculty.faculty_name|default_if_none:"" }}</span>
+         <br><br>
+        <span style="font-size: 17px;color: #333">Department : {{ application_obj.department.department|default_if_none:"" }}</span>
+        <br><br>
+        <span style="font-size: 17px;color: #333">Program Mode : {{ application_obj.program_mode.study_type|default_if_none:"" }}</span>
 
         <br><br> <br><br>
      <span class="max-lines" style="font-size: 17px;color: #333">
@@ -124,7 +124,7 @@
 
         <br><br><br><br>
         <span class="max-lines" style="font-size: 17px;color: #333">This is a conditional offer and will be confirmed if you fulfill {{ application_obj.university.university_name|default_if_none:"" }} Entry Requirement as per {{ application_obj.university.university_name|default_if_none:"" }}'s approval.</span>
-        <br><br><br> <br><br><br>
+        <br>
         <span style="font-size: 17px;color: #333"><b>You are required to submit the following documents for verification:</b></span>
         {% for rec in application_obj.applicant_verification_document.all %}
             <span class="max-lines" style="font-size: 17px;color: red">{{ forloop.counter }}-{{ rec.required_document|default_if_none:"" }}</span>

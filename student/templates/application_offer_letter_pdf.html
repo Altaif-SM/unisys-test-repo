@@ -100,19 +100,21 @@
         <span class="max-lines" style="font-size: 17px;color: #333">Congratulations! We are pleased to inform you that your application for admission to the above programme has been approved. Your candidature as a graduate student is subject to the rules and regulations of the Graduate Studies Regulations of the University. The details of this offer are as follows:</span>
 
         <br><br>
-        <span style="font-size: 17px;color: #333">Programme of Study : {{ application_obj.program.program_name|default_if_none:"" }}</span>
+         <span style="font-size: 17px;color: #333">Programme of Study : {{ application_obj.program.program_name|default_if_none:"" }}</span>
         <br><br>
         <span style="font-size: 17px;color: #333">Registration Number : {{ registration_number }}</span>
-{#        <br><br>#}
-{#        <span style="font-size: 17px;color: #333">Duration of Study : ####</span>#}
         <br><br>
-        <span style="font-size: 17px;color: #333">Mode of Study : Online</span>
+        <span style="font-size: 17px;color: #333">Mode of Study : {{ application_obj.study_mode }}</span>
         <br><br>
-{#        <span style="font-size: 17px;color: #333">Campus : ####</span>#}
+        <span style="font-size: 17px;color: #333">Level of Study : {{ application_obj.study_level.study_level|default_if_none:"" }}</span>
+         <br><br>
+        <span style="font-size: 17px;color: #333">Faculty : {{ application_obj.faculty.faculty_name|default_if_none:"" }}</span>
+         <br><br>
+        <span style="font-size: 17px;color: #333">Department : {{ application_obj.department.department|default_if_none:"" }}</span>
+        <br><br>
+        <span style="font-size: 17px;color: #333">Program Mode : {{ application_obj.program_mode.study_type|default_if_none:"" }}</span>
 {#        <br><br>#}
-        <span style="font-size: 17px;color: #333">Date of Registration : {{ created_on }}</span>
-{#        <br><br>#}
-{#        <span style="font-size: 17px;color: #333">Language Requirement : ####</span>#}
+{#        <span style="font-size: 17px;color: #333">Date of Registration : {{ created_on }}</span>#}
 
         <br><br>
      <span class="max-lines" style="font-size: 17px;color: #333">
