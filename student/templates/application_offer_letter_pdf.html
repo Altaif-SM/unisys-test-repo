@@ -78,6 +78,7 @@
 {% block content %}
     <div class='wrapper'>
         <div class='header' id="header" style="text-align: center;">
+            <br><br>
             <img src="{{ header_path }}" alt="logo"
                  style="width: 600px;height: 80px;margin-top: 25px; text-align: center" class="logo-default"/><br><br>
             <span class='title' style="font-size: 20px; color: #13084e;"><b>Offer Letter</b></span>
@@ -93,25 +94,25 @@
         <br><br>
         <span style="font-size: 17px;color: #333">Dear MR / Ms :  {{ application_obj.first_name|default_if_none:"" }} {{ application_obj.last_name|default_if_none:"" }}</span>
         <br><br><br>
-        <span style="font-size: 17px;color: #333"><b>OFFER OF #POSTRGRADUATE STUDY PROGRAMME {{ application_obj.application_id|upper|default_if_none:"" }}</b></span>
+        <span style="font-size: 17px;color: #333"><b>OFFER OF #{{ application_obj.program.program_name|default_if_none:"" }} {{ application_obj.application_id|upper|default_if_none:"" }}</b></span>
 
         <br><br>
         <span class="max-lines" style="font-size: 17px;color: #333">Congratulations! We are pleased to inform you that your application for admission to the above programme has been approved. Your candidature as a graduate student is subject to the rules and regulations of the Graduate Studies Regulations of the University. The details of this offer are as follows:</span>
 
         <br><br>
-        <span style="font-size: 17px;color: #333">Programme of Study : ####</span>
+        <span style="font-size: 17px;color: #333">Programme of Study : {{ application_obj.program.program_name|default_if_none:"" }}</span>
         <br><br>
         <span style="font-size: 17px;color: #333">Registration Number : {{ registration_number }}</span>
-        <br><br>
-        <span style="font-size: 17px;color: #333">Duration of Study : ####</span>
+{#        <br><br>#}
+{#        <span style="font-size: 17px;color: #333">Duration of Study : ####</span>#}
         <br><br>
         <span style="font-size: 17px;color: #333">Mode of Study : Online</span>
         <br><br>
-        <span style="font-size: 17px;color: #333">Campus : ####</span>
-        <br><br>
+{#        <span style="font-size: 17px;color: #333">Campus : ####</span>#}
+{#        <br><br>#}
         <span style="font-size: 17px;color: #333">Date of Registration : {{ created_on }}</span>
-        <br><br>
-        <span style="font-size: 17px;color: #333">Language Requirement : ####</span>
+{#        <br><br>#}
+{#        <span style="font-size: 17px;color: #333">Language Requirement : ####</span>#}
 
         <br><br>
      <span class="max-lines" style="font-size: 17px;color: #333">
@@ -119,13 +120,13 @@
      </span>
 
         <br><br>
-        <span style="font-size: 17px;color: #333">We look forward to welcoming you University of Science and Technology</span>
+        <span style="font-size: 17px;color: #333">We look forward to welcoming you {{ application_obj.university.university_name|default_if_none:"" }}</span>
         <br><br><br>
         <span style="font-size: 17px;color: #333">Yours sincerely,</span>
         <br><br><br><br>
         <span style="font-size: 17px;color: #333"><b>ACADEMIC REGISTRAR</b></span>
     <br><br>
-        <span style="font-size: 17px;color: #333"><b>University of Science and Technology</b></span>
+        <span style="font-size: 17px;color: #333"><b>{{ application_obj.university.university_name|default_if_none:"" }}</b></span>
 
 
 

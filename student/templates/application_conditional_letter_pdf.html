@@ -95,34 +95,36 @@
         <br><br>
         <span style="font-size: 17px;color: #333">Dear MR / Ms :  {{ application_obj.first_name|default_if_none:"" }} {{ application_obj.last_name|default_if_none:"" }}</span>
         <br><br><br>
-        <span style="font-size: 17px;color: #333"><b>UNDERGRADUATE CONDITIONAL OFFER OF ADMISSION {{ application_obj.application_id|upper|default_if_none:"" }}</b></span>
+{#        <span style="font-size: 17px;color: #333"><b>UNDERGRADUATE CONDITIONAL OFFER OF ADMISSION {{ application_obj.application_id|upper|default_if_none:"" }}</b></span>#}
+            <span style="font-size: 17px;color: #333"><b>OFFER OF #{{ application_obj.program.program_name|default_if_none:"" }} {{ application_obj.application_id|upper|default_if_none:"" }}</b></span>
+
 
         <br><br>
-        <span class="max-lines" style="font-size: 17px;color: #333">I am pleased to inform you that the University of Science and Technology is making you a Conditional Offer for a place in the following programme:</span>
+        <span class="max-lines" style="font-size: 17px;color: #333">I am pleased to inform you that the {{ application_obj.university.university_name|default_if_none:"" }} is making you a Conditional Offer for a place in the following programme:</span>
 
         <br><br>
-        <span style="font-size: 17px;color: #333">Programme of Study : ####</span>
+        <span style="font-size: 17px;color: #333">Programme of Study : {{ application_obj.program.program_name|default_if_none:"" }}</span>
         <br><br>
         <span style="font-size: 17px;color: #333">Registration Number : {{ registration_number }}</span>
         <br><br>
-        <span style="font-size: 17px;color: #333">Duration of Study : ####</span>
-        <br><br>
+{#        <span style="font-size: 17px;color: #333">Duration of Study : ####</span>#}
+{#        <br><br>#}
         <span style="font-size: 17px;color: #333">Mode of Study : Online</span>
         <br><br>
-        <span style="font-size: 17px;color: #333">Campus : ####</span>
-        <br><br>
+{#        <span style="font-size: 17px;color: #333">Campus : ####</span>#}
+{#        <br><br>#}
         <span style="font-size: 17px;color: #333">Date of Registration : {{ created_on }}</span>
-        <br><br>
-        <span style="font-size: 17px;color: #333">Language Requirement : ####</span>
+{#        <br><br>#}
+{#        <span style="font-size: 17px;color: #333">Language Requirement : ####</span>#}
 
         <br><br> <br><br>
      <span class="max-lines" style="font-size: 17px;color: #333">
          Visa Fee: ##	Applicable for on campus programmes and for those selected required visa (or we just make it tab after offer letter visa requirement if student select required visa (can fill up form with required visa details)
      </span>
 
-        <br><br>
-        <span class="max-lines" style="font-size: 17px;color: #333">This is a conditional offer and will be confirmed if you fulfill University of Science and Technology Entry Requirement as per UST's approval.</span>
-        <br><br><br> <br><br>
+        <br><br><br><br>
+        <span class="max-lines" style="font-size: 17px;color: #333">This is a conditional offer and will be confirmed if you fulfill {{ application_obj.university.university_name|default_if_none:"" }} Entry Requirement as per {{ application_obj.university.university_name|default_if_none:"" }}'s approval.</span>
+        <br><br><br> <br><br><br>
         <span style="font-size: 17px;color: #333"><b>You are required to submit the following documents for verification:</b></span>
         {% for rec in application_obj.applicant_verification_document.all %}
             <span class="max-lines" style="font-size: 17px;color: red">{{ forloop.counter }}-{{ rec.required_document|default_if_none:"" }}</span>
@@ -134,13 +136,13 @@
         <br>
         <span class="max-lines" style="font-size: 17px;color: #333">This letter will be revoked in the event any incorrect, false or forged documents are found to be submitted to us</span>
         <br>
-        <span class="max-lines" style="font-size: 17px;color: #333">I look forward to welcoming you to University of Science and Technology. </span>
+        <span class="max-lines" style="font-size: 17px;color: #333">I look forward to welcoming you to {{ application_obj.university.university_name|default_if_none:"" }}. </span>
         <br><br><br>
         <span class="max-lines" style="font-size: 17px;color: #333">Yours sincerely,</span>
          <br><br><br><br>
         <span style="font-size: 17px;color: #333"><b>ACADEMIC REGISTRAR</b></span>
     <br><br>
-        <span style="font-size: 17px;color: #333"><b>University of Science and Technology</b></span>
+        <span style="font-size: 17px;color: #333"><b>{{ application_obj.university.university_name|default_if_none:"" }}</b></span>
 
 
 

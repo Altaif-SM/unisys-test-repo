@@ -2432,7 +2432,10 @@ def application_offer_letter_pdf(request, app_id):
     try:
         application_obj = ApplicationDetails.objects.get(id=app_id)
         if application_obj.first_interview_attend:
-            header_path = settings.MEDIA_ROOT + 'university_logo.png'
+            header_path = ''
+            if application_obj.university.university_logo:
+                # header_path = settings.MEDIA_ROOT + 'university_logo.png'
+                header_path = application_obj.university.university_logo.path
             created_on = application_obj.created_on.strftime("%d %B %Y")
             registration_number = int(application_obj.created_on.timestamp())
             current_date = datetime.datetime.now().strftime("%d %B %Y")
@@ -2447,7 +2450,10 @@ def application_offer_letter_pdf(request, app_id):
             file.close()
             return HttpResponse(pdf, 'application/pdf')
         else:
-            header_path = settings.MEDIA_ROOT + 'university_logo.png'
+            header_path = ''
+            if application_obj.university.university_logo:
+                # header_path = settings.MEDIA_ROOT + 'university_logo.png'
+                header_path = application_obj.university.university_logo.path
             created_on = application_obj.created_on.strftime("%d %B %Y")
             registration_number = int(application_obj.created_on.timestamp())
             current_date = datetime.datetime.now().strftime("%d %B %Y")
