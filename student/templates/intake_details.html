@@ -73,7 +73,39 @@
 
                 })
 
-                $(document).on("change", "#year", function (e) {
+                $(document).on("change", "#semester1", function (e) {
+                    var semester = $(this).val();
+                    var url = '/masters/get_mode_of_study_from_semester/';
+                    get_mode_of_study_from_semester(url, semester)
+                })
+
+            function get_mode_of_study_from_semester(url, semester) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        semester: semester,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data) {
+
+                        $('#study_mode').empty();
+                        $('#study_mode').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#study_mode').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['study_mode'] + '</option>')
+                        }
+                    },
+                    error: function (xhr, msg, err) {
+                        alert(xhr.responseJSON.error);
+                    }
+                });
+            }
+
+
+             $(document).on("change", "#year", function (e) {
                     var year = $(this).val();
                     var university = $('#university').val();
                     var url = '/masters/get_intake_semester_from_year/';
@@ -96,18 +128,20 @@
                 $(document).on("change", "#study_mode", function (e) {
                     var study_mode = $(this).val();
                     var study_level = $('#study_level').val();
+                    var university = $('#university').val();
                     var url = '/masters/get_faculty_from_study_mode/';
-                    get_faculty_from_study_mode(url, study_mode, study_level)
+                    get_faculty_from_study_mode(url, study_mode, study_level,university)
                 })
 
 
-                function get_faculty_from_study_mode(url, study_mode, study_level) {
+                function get_faculty_from_study_mode(url, study_mode, study_level,university) {
                     $.ajax({
                         type: 'POST',
                         url: url,
                         data: {
                             study_mode: study_mode,
                             study_level: study_level,
+                            university: university,
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
@@ -130,20 +164,21 @@
                 $(document).on("change", "#study_level", function (e) {
                     var study_level = $(this).val();
                     var study_mode = $('#study_mode').val();
-                    {#var university = $('#university').val();#}
+                    var university = $('#university').val();
                     {#var faculty = $('#faculty').val();#}
                     {#var department = $('#department').val();#}
                     var url = '/masters/get_faculty_from_study_level/';
-                    get_faculty_from_study_level(url, study_mode, study_level)
+                    get_faculty_from_study_level(url, study_mode, study_level,university)
                 })
 
-                function get_faculty_from_study_level(url, study_mode, study_level) {
+                function get_faculty_from_study_level(url, study_mode, study_level,university) {
                     $.ajax({
                         type: 'POST',
                         url: url,
                         data: {
                             study_mode: study_mode,
                             study_level: study_level,
+                            university: university,
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
@@ -191,10 +226,10 @@
                 })
 
 
-                $(document).on("change", "#program1", function (e) {
+                $(document).on("change", "#program", function (e) {
                     var program_id = $(this).val();
-                    var url = '/student/get_branch_campus_from_program/';
-                    get_branch_from_program(url, program_id)
+                    var url = '/masters/get_program_mode_from_selected_program/';
+                    get_program_mode_from_selected_program(url, program_id)
                 })
 
 
@@ -221,6 +256,14 @@
                         csrfmiddlewaretoken: '{{ csrf_token }}',
                     },
                     success: function (data) {
+
+                        $('#study_mode').empty();
+                        $('#study_mode').append(
+                            '<option value="" >Please select</option>');
+                        $('#study_mode').append(
+                            '<option value="Online" >Online</option>');
+                        $('#study_mode').append(
+                            '<option value="On Campus" >On Campus</option>');
 
                         $('#year').empty();
                         $('#year').append(
@@ -353,6 +396,10 @@
                     },
                     success: function (data) {
 
+
+
+
+
                         $('#university').empty();
                         $('#university').append(
                             '<option value="" >Please select</option>');
@@ -368,7 +415,7 @@
                 });
             }
 
-            function get_branch_from_program(url, program_id) {
+            function get_program_mode_from_selected_program(url, program_id) {
                 $.ajax({
                     type: 'POST',
                     url: url,
@@ -378,23 +425,15 @@
                     },
                     success: function (data) {
 
-                        $('#campus').empty();
-                        $('#campus').append(
-                            '<option value="" >Please select</option>');
-                        for (var i = 0; i < data.length - 1; i++) {
-                            $('#campus').append(
-                                '<option value="' + data[i]['id'] + '">'
-                                + data[i]['campus_name'] + '</option>')
-                        }
 
-                        $('#faculty').empty();
-                        $('#faculty').append(
+                        $('#program_mode').empty();
+                        $('#program_mode').append(
                             '<option value="" >Please select</option>');
                         for (var i = 0; i < data.length; i++) {
                             if (i === (data.length - 1)) {
-                                $('#faculty').append(
+                                $('#program_mode').append(
                                     '<option value="' + data[i]['id'] + '">'
-                                    + data[i]['faculty_name'] + '</option>')
+                                    + data[i]['program_mode'] + '</option>')
 
                             }
 
@@ -845,9 +884,9 @@
                                             </option>
                                         {% endif %}
 
-                                        {% for rec in study_type_recs %}
-                                                <option value="{{ rec.id }}">{{ rec.study_type|default_if_none:"" }}</option>
-                                            {% endfor %}
+{#                                        {% for rec in study_type_recs %}#}
+{#                                                <option value="{{ rec.id }}">{{ rec.study_type|default_if_none:"" }}</option>#}
+{#                                            {% endfor %}#}
                                     </select>
                                 </div>
 

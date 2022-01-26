@@ -257,6 +257,7 @@ urlpatterns = [
     path('get_semester_already_exists/', views.get_semester_already_exists, name='get_semester_already_exists'),
     path('get_faculty_from_study_mode/', views.get_faculty_from_study_mode, name='get_faculty_from_study_mode'),
     path('get_faculty_from_study_level/', views.get_faculty_from_study_level, name='get_faculty_from_study_level'),
+    path('get_program_mode_from_selected_program/', views.get_program_mode_from_selected_program, name='get_program_mode_from_selected_program'),
 
 
 ]

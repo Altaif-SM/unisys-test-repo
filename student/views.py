@@ -2527,10 +2527,11 @@ def applicant_intake_info(request):
             for rec in faculty_list:
                 if not rec.faculty.id in faculty_ids:
                     raw_dict = {}
-                    raw_dict['id'] = rec.faculty.id
-                    raw_dict['faculty'] = rec.faculty.faculty_name
-                    faculty_ids.append(rec.faculty.id)
-                    faculty_final_list.append(raw_dict)
+                    if application_obj.university.id == rec.university.id:
+                        raw_dict['id'] = rec.faculty.id
+                        raw_dict['faculty'] = rec.faculty.faculty_name
+                        faculty_ids.append(rec.faculty.id)
+                        faculty_final_list.append(raw_dict)
 
 
         program_recs = ProgramDetails.objects.filter(is_delete=False)
