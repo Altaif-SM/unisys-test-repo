@@ -1355,12 +1355,13 @@ def my_application(request):
         siblings_obj = application_obj.sibling_applicant_rel.all() if application_obj.sibling_applicant_rel.all() else ''
         qualification_obj = application_obj.academic_applicant_rel.all() if application_obj.academic_applicant_rel.all() else ''
         english_obj = application_obj.english_applicant_rel.all() if application_obj.english_applicant_rel.all() else ''
+        arabic_recs = application_obj.arab_applicant_rel.all() if application_obj.arab_applicant_rel.all() else ''
         curriculum_obj = application_obj.curriculum_applicant_rel.all() if application_obj.curriculum_applicant_rel.all() else ''
         applicant_experience_obj = application_obj.applicant_experience_rel.all() if application_obj.applicant_experience_rel.all() else ''
         scholarship_obj = application_obj.applicant_scholarship_rel.get() if application_obj.applicant_scholarship_rel.all() else ''
         about_obj = application_obj.applicant_about_rel.get() if application_obj.applicant_about_rel.all() else ''
-        postgraduate_obj = application_obj.applicant_postgraduate_rel.get() if application_obj.applicant_postgraduate_rel.all() else ''
-        employement_history_obj = application_obj.employement_history_rel.get() if application_obj.employement_history_rel.all() else ''
+        postgraduate_recs = application_obj.applicant_postgraduate_rel.all() if application_obj.applicant_postgraduate_rel.all() else ''
+        employement_history_recs = application_obj.employement_history_rel.all() if application_obj.employement_history_rel.all() else ''
         addition_info_obj = application_obj.applicant_addition_info.get() if application_obj.applicant_addition_info.all() else ''
         attachement_obj = application_obj.applicant_attachement_rel.all() if application_obj.applicant_attachement_rel.all() else ''
 
@@ -1369,8 +1370,9 @@ def my_application(request):
                        'qualification_recs': qualification_obj, 'english_recs': english_obj,
                        'curriculum_recs': curriculum_obj,
                        'applicant_experience_recs': applicant_experience_obj,
-                       'scholarship_obj': scholarship_obj, 'about_obj': about_obj,'attachement_obj':attachement_obj,'postgraduate_obj':postgraduate_obj,
-                       'employement_history_obj':employement_history_obj,'addition_info_obj':addition_info_obj,'attachement_obj':attachement_obj})
+                       'scholarship_obj': scholarship_obj, 'about_obj': about_obj,'attachement_obj':attachement_obj,'postgraduate_recs':postgraduate_recs,
+                       'employement_history_recs':employement_history_recs,'addition_info_obj':addition_info_obj,'attachement_obj':attachement_obj,
+                       'arabic_recs':arabic_recs})
 
     except Exception as e:
         messages.warning(request, "Please Fill The Application Form First ... ")
@@ -2169,50 +2171,42 @@ def get_courses_from_degrees(request):
 def applicant_employement_history_info(request):
     country_recs = CountryDetails.objects.all()
     employement_history_obj = ''
+    employement_history_count = 0
     try:
         application_obj = request.user.get_application
         if request.user.get_application:
             if EmployementHistoryDetails.objects.filter(applicant_id=request.user.get_application).exists():
-                employement_history_obj = EmployementHistoryDetails.objects.get(applicant_id=request.user.get_application)
+                employement_history_obj = EmployementHistoryDetails.objects.filter(applicant_id=request.user.get_application)
+                employement_history_count = employement_history_obj.count()
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
         return redirect('/student/applicant_personal_info/')
     return render(request, 'applicant_employement_history_info.html',
-                  {'employement_history_obj': employement_history_obj,'application_obj': application_obj,'country_recs':country_recs})
+                  {'employement_history_obj': employement_history_obj,'application_obj': application_obj,'country_recs':country_recs,'employement_history_count':employement_history_count})
 
 
 def save_update_applicant_employement_history_info(request):
-    redirect_flag = False
     if request.POST:
+        redirect_flag = False
+        experience_count = request.POST.get('experience_count')
         try:
             if StudentDetails.objects.filter(user=request.user):
-                student = StudentDetails.objects.filter(user=request.user)[0]
-                # if not request.user.get_application.is_submitted:
-                if request.POST.get('employement_history_obj'):
-                    EmployementHistoryDetails.objects.filter(id=request.POST['employement_history_obj']).update(
-                        employer_name=request.POST['employer_name'],
-                        designation=request.POST['designation'],
-                        country_id=request.POST['country'] if request.POST['country'] else None,
-                        from_date=request.POST['from_date'] if request.POST['from_date'] else None,
-                        to_date=request.POST['to_date'] if request.POST['to_date'] else None,
-                        industry_type=request.POST['industry_type'],
-                        employed_years=request.POST['employed_years'],
-                    )
-                else:
-                    EmployementHistoryDetails.objects.create(
-                        employer_name=request.POST['employer_name'],
-                        designation=request.POST['designation'],
-                        country_id=request.POST['country'] if request.POST['country'] else None,
-                        from_date=request.POST['from_date'] if request.POST['from_date'] else None,
-                        to_date=request.POST['to_date'] if request.POST['to_date'] else None,
-                        industry_type=request.POST['industry_type'],
-                        employed_years=request.POST['employed_years'],
-                        applicant_id=request.user.get_application)
+                EmployementHistoryDetails.objects.filter(applicant_id=request.user.get_application).delete()
+                for count in range(int(experience_count)):
+                    try:
+                        count = count + 1
+                        EmployementHistoryDetails.objects.create(
+                            employer_name=request.POST['employer_name_' + str(count)],
+                            designation=request.POST['designation_' + str(count)],
+                            country_id=request.POST['country_' + str(count)] if request.POST['country_' + str(count)] else None,
+                            from_date=request.POST['from_date_' + str(count)] if request.POST['from_date_' + str(count)] else None,
+                            to_date=request.POST['to_date_' + str(count)] if request.POST['to_date_' + str(count)] else None,
+                            industry_type=request.POST['industry_type_' + str(count)],
+                            employed_years=request.POST['employed_years_' + str(count)],
+                            applicant_id=request.user.get_application)
+                    except Exception as e:
+                        pass
                 redirect_flag = True
-                # else:
-                #     messages.success(request, "Please fill the record.")
-                #     return redirect('/student/applicant_personal_info/')
-
                 if redirect_flag:
                     messages.success(request, "Record saved")
                     return redirect('/student/applicant_additional_information/')
