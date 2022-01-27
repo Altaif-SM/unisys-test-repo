@@ -3364,20 +3364,32 @@ def get_faculty_from_university(request):
 
 def edit_document(request, doc_id=None):
     doc_obj = DocumentDetails.objects.get(id=doc_id)
+    notes_total_count = doc_obj.notes.all().count()
     if request.method == 'POST':
         document_name = request.POST.get('document_name')
         doc_required = request.POST.get('doc_required')
-        description = request.POST.get('description')
+        note_count = request.POST.get('note_count')
+        # description = request.POST.get('description')
         try:
             doc_obj.document_name = document_name
             doc_obj.doc_required = doc_required
-            doc_obj.description = description
+            # doc_obj.description = description
             doc_obj.save()
+            doc_obj.notes.clear()
+            for x in range(int(note_count)):
+                try:
+                    x = x + 1
+                    note_obj = NotesDetails.objects.create(
+                        note=request.POST.get('department_' + str(x)))
+                    doc_obj.notes.add(note_obj)
+                except:
+                    pass
+
             messages.success(request, "Record saved.")
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/document_settings/')
-    return render(request, "edit_document.html", {'doc_obj': doc_obj})
+    return render(request, "edit_document.html", {'doc_obj': doc_obj,'notes_total_count':notes_total_count})
 
 def arabic_lang_proficiency_settings(request):
     arabic_recs = ArabCompetencyTestDetails.objects.all()

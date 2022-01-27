@@ -705,11 +705,14 @@ class UniversityStaffMapping(BaseModel):
     class Meta:
         ordering = ('-id',)
 
+class NotesDetails(models.Model):
+    note = models.CharField(max_length=100, blank=True, null=True)
 
 class DocumentDetails(BaseModel):
     document_name = models.CharField(max_length=255, blank=True, null=True)
     doc_required = models.CharField(max_length=255, blank=True, null=True)
     description = models.CharField(max_length=500, blank=True, null=True)
+    notes = models.ManyToManyField(NotesDetails, blank=True)
 
     class Meta:
         ordering = ('id',)

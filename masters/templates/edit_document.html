@@ -104,6 +104,31 @@
             $(document).ready(function () {
                 $("#status").Sswitch({});
 
+                {% if notes_total_count == 0 %}
+                    var department_count = 1;
+                {% else %}
+                    var department_count = "{{ notes_total_count }}"
+                {% endif %}
+
+                $(document).on("click", ".add_department", function (e) {
+                    department_count = parseInt(department_count) + 1;
+                    var row = '<br><div class="row department" id="department_' + department_count + '"><div class="row"><div class=""><label class="col-md-2 control-label">Note:</label><div class="col-md-4"><input type="text" title="Enter Department" id="department_' + department_count + '" value="" name="department_' + department_count + '" class="form-control" ></div></div><div class="col-md-1"><a href="javascript:;" class="delete_department btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div>'
+                    $(row).removeAttr().hide().insertAfter(".department:last").slideDown(300);
+                });
+
+                  $(document).on("click", ".delete_department", function () {
+                    $(this).parents('.department').remove();
+                });
+
+
+                 $("#id_form").submit(function (e) {
+
+
+                    var rowCount = $(".department").length;
+                    $('#note_count').val(rowCount);
+
+                })
+
             });
 
 
@@ -162,6 +187,7 @@
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
+                 <input type="hidden" id="note_count" name="note_count">
 
                     <div class="form-body">
 
@@ -210,23 +236,95 @@
                             <br>
 
 
-                            <div class="row">
+{#                            <div class="row">#}
+{##}
+{#                            <div class="">#}
+{#                                    <label class="col-md-2 control-label">{% trans 'Description' %}:#}
+{##}
+{#                                    </label>#}
+{#                                    <div class="col-md-3">#}
+{#                                        <textarea rows="2" class="form-control " id="description"#}
+{#                                                  name="description">{{ doc_obj.description|default_if_none:"" }}</textarea>#}
+{##}
+{#                                    </div>#}
+{#                                </div>#}
+{##}
+{##}
+{##}
+{##}
+{#                            </div>#}
 
+    <hr>
+
+                        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">{% trans 'File Upload Instructions' %}</span>
+            </div>
+        </div>
+                        <hr>
+
+
+                        <div class="" style="float: right;
+    margin-top: 0px;
+    padding-right: 40%;">
                             <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'Description' %}:
+                                <a href="javascript:;" id="add" class="btn btn-icon-only green add_department"
+                                   style="">
+                                    <i class="fa fa-plus "></i>
+                                </a>
+                            </div>
+                        </div>
+                        {% if doc_obj.notes.all %}
+                        {% for note_obj in doc_obj.notes.all %}
 
-                                    </label>
-                                    <div class="col-md-3">
-                                        <textarea rows="2" class="form-control " id="description"
-                                                  name="description">{{ doc_obj.description|default_if_none:"" }}</textarea>
+                            <div class="row department" id="department_{{ forloop.counter }}">
+
+                                <div class="row">
+                                    <div class="">
+                                        <label class="col-md-2 control-label">Note:</label>
+                                        <div class="col-md-4">
+                                            <input type="text" title="Enter Department"
+                                                   id="department_{{ forloop.counter }}"
+                                                   value="{{ note_obj.note|default_if_none:"" }}"
+                                                   name="department_{{ forloop.counter }}"
+                                                   class="form-control" >
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+
+                            </div>
+                            <br>
+                        {% endfor %}
+                        {% else %}
+                            <div class="row department" id="department_1">
+
+                            <div class="row">
+                                <div class="">
+                                    <label class="col-md-2 control-label">Note:</label>
+                                    <div class="col-md-4">
+                                        <input type="text" title="Enter Department" id="department_1"
+                                               value="" name="department_1"
+                                               class="form-control" >
 
                                     </div>
                                 </div>
 
 
-
-
                             </div>
+
+
+                        </div>
+                        {% endif %}
+
+
+
+
+
 
 
                         </div>

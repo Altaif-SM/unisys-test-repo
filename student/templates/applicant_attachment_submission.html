@@ -313,7 +313,7 @@
 
                             <div class="" style="font-size:20px;">
 
-                                <a title="{{ document_recs.0.description|default_if_none:"" }}"><i
+                                <a data-target="#personal_photo_modal" data-toggle="modal" ><i
                                         class="fa fa-info-circle" aria-hidden="true"></i></a>
 
 
@@ -370,7 +370,7 @@
 
                                 <div class="" style="font-size:20px;">
 
-                                    <a title="{{ document_recs.1.description|default_if_none:"" }}"><i
+                                    <a data-target="#passport_id_modal" data-toggle="modal"><i
                                             class="fa fa-info-circle" aria-hidden="true"></i></a>
 
 
@@ -427,7 +427,7 @@
                                 <div class="" style="font-size:20px;">
 
 
-                                    <a title="{{ document_recs.2.description|default_if_none:"" }}"><i
+                                    <a data-target="#academic_certificate_modal" data-toggle="modal"><i
                                             class="fa fa-info-circle" aria-hidden="true"></i></a>
 
 
@@ -482,7 +482,7 @@
                                 <div class="" style="font-size:20px;">
 
 
-                                    <a title="{{ document_recs.3.description|default_if_none:"" }}"><i
+                                    <a data-target="#transcript_modal" data-toggle="modal"><i
                                             class="fa fa-info-circle" aria-hidden="true"></i></a>
 
 
@@ -536,7 +536,7 @@
                                 <div class="" style="font-size:20px;">
 
 
-                                    <a title="{{ document_recs.4.description|default_if_none:"" }}"><i
+                                    <a data-target="#english_language_proficiency_modal" data-toggle="modal"><i
                                             class="fa fa-info-circle" aria-hidden="true"></i></a>
 
 
@@ -590,7 +590,7 @@
                                 <div class="" style="font-size:20px;">
 
 
-                                    <a title="{{ document_recs.5.description|default_if_none:"" }}"><i
+                                    <a data-target="#araba_language_proficiency_modal" data-toggle="modal"><i
                                             class="fa fa-info-circle" aria-hidden="true"></i></a>
 
 
@@ -644,7 +644,7 @@
                                 <div class="" style="font-size:20px;">
 
 
-                                    <a title="{{ document_recs.6.description|default_if_none:"" }}"><i
+                                    <a data-target="#recommendation_letter_modal" data-toggle="modal"><i
                                             class="fa fa-info-circle" aria-hidden="true"></i></a>
 
 
@@ -693,4 +693,171 @@
             </div>
         </div>
     </div>
+
+
+    <div id="personal_photo_modal" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                    <input type="hidden" id="year_delete_id" name="year_delete_id">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h5 class="modal-title" style="color: #2a015e; text-align: center"><b>File Upload Instructions</b></h5>
+                    </div>
+                    <div class="modal-body">
+                        {% for rec in document_recs.0.notes.all %}
+                        <p style="margin: 0px 0 !important;">{{ rec.note|default_if_none:"" }}</p>
+                        {% endfor %}
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancel_model" data-dismiss="modal" class="btn dark btn-outline">
+                            Cancel
+                        </button>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="passport_id_modal" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                    <input type="hidden" id="year_delete_id" name="year_delete_id">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h5 class="modal-title" style="color: #2a015e; text-align: center"><b>File Upload Instructions</b></h5>
+                    </div>
+                    <div class="modal-body">
+                        {% for rec in document_recs.1.notes.all %}
+                        <p style="margin: 0px 0 !important;">{{ rec.note|default_if_none:"" }}</p>
+                        {% endfor %}
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancel_model" data-dismiss="modal" class="btn dark btn-outline">
+                            Cancel
+                        </button>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="academic_certificate_modal" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                    <input type="hidden" id="year_delete_id" name="year_delete_id">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h5 class="modal-title" style="color: #2a015e; text-align: center"><b>File Upload Instructions</b></h5>
+                    </div>
+                    <div class="modal-body">
+                        {% for rec in document_recs.2.notes.all %}
+                        <p style="margin: 0px 0 !important;">{{ rec.note|default_if_none:"" }}</p>
+                        {% endfor %}
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancel_model" data-dismiss="modal" class="btn dark btn-outline">
+                            Cancel
+                        </button>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="transcript_modal" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                    <input type="hidden" id="year_delete_id" name="year_delete_id">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h5 class="modal-title" style="color: #2a015e; text-align: center"><b>File Upload Instructions</b></h5>
+                    </div>
+                    <div class="modal-body">
+                        {% for rec in document_recs.3.notes.all %}
+                        <p style="margin: 0px 0 !important;">{{ rec.note|default_if_none:"" }}</p>
+                        {% endfor %}
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancel_model" data-dismiss="modal" class="btn dark btn-outline">
+                            Cancel
+                        </button>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="english_language_proficiency_modal" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                    <input type="hidden" id="year_delete_id" name="year_delete_id">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h5 class="modal-title" style="color: #2a015e; text-align: center"><b>File Upload Instructions</b></h5>
+                    </div>
+                    <div class="modal-body">
+                        {% for rec in document_recs.4.notes.all %}
+                        <p style="margin: 0px 0 !important;">{{ rec.note|default_if_none:"" }}</p>
+                        {% endfor %}
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancel_model" data-dismiss="modal" class="btn dark btn-outline">
+                            Cancel
+                        </button>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="araba_language_proficiency_modal" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                    <input type="hidden" id="year_delete_id" name="year_delete_id">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h5 class="modal-title" style="color: #2a015e; text-align: center"><b>File Upload Instructions</b></h5>
+                    </div>
+                    <div class="modal-body">
+                        {% for rec in document_recs.5.notes.all %}
+                        <p style="margin: 0px 0 !important;">{{ rec.note|default_if_none:"" }}</p>
+                        {% endfor %}
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancel_model" data-dismiss="modal" class="btn dark btn-outline">
+                            Cancel
+                        </button>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="recommendation_letter_modal" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                    <input type="hidden" id="year_delete_id" name="year_delete_id">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h5 class="modal-title" style="color: #2a015e; text-align: center"><b>File Upload Instructions</b></h5>
+                    </div>
+                    <div class="modal-body">
+                        {% for rec in document_recs.6.notes.all %}
+                        <p style="margin: 0px 0 !important;">{{ rec.note|default_if_none:"" }}</p>
+                        {% endfor %}
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancel_model" data-dismiss="modal" class="btn dark btn-outline">
+                            Cancel
+                        </button>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+
+
 {% endblock %}
