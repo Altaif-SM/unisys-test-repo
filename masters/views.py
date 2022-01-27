@@ -66,8 +66,8 @@ def update_year(request):
         if YearDetails.objects.filter(~Q(id=year_id), year_name=year_name.lower()).exists():
             messages.success(request, "Year name already exists. Record not updated..")
 
-        elif YearDetails.objects.filter(~Q(id=year_id)).filter((Q(start_date__lte=start_date) & Q(end_date__gte=end_date)) | Q(start_date__range=(start_date, end_date)) | Q(end_date__range=(start_date, end_date))):
-            messages.success(request, "Academic year already Exists")
+        # elif YearDetails.objects.filter(~Q(id=year_id)).filter((Q(start_date__lte=start_date) & Q(end_date__gte=end_date)) | Q(start_date__range=(start_date, end_date)) | Q(end_date__range=(start_date, end_date))):
+        #     messages.success(request, "Academic year already Exists")
         else:
             # today = date.today()
             # if (start_dt <= today) and (end_dt > today):
@@ -2437,10 +2437,10 @@ def add_year(request):
         if YearDetails.objects.filter(year_name=year_name).exists():
             messages.warning(request, "Year name already exists.")
 
-        elif YearDetails.objects.all().filter(
-                (Q(start_date__lte=start_dt) & Q(end_date__gte=end_dt)) | Q(start_date__range=(start_dt, end_dt)) | Q(
-                        end_date__range=(start_dt, end_dt))):
-            messages.success(request, "Academic year already Exists")
+        # elif YearDetails.objects.all().filter(
+        #         (Q(start_date__lte=start_dt) & Q(end_date__gte=end_dt)) | Q(start_date__range=(start_dt, end_dt)) | Q(
+        #                 end_date__range=(start_dt, end_dt))):
+        #     messages.success(request, "Academic year already Exists")
 
         else:
 
