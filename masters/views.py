@@ -3628,3 +3628,20 @@ def get_program_mode_from_selected_program(request):
             raw_dict['program_mode'] = rec.study_type.study_type
             program_mode_list.append(raw_dict)
     return JsonResponse(program_mode_list, safe=False)
+
+
+def get_country_from_semester_year(request):
+    country_list = []
+    duplicate_country_ids = []
+    university = request.POST.get('university', None)
+    learning_centers_recs = LearningCentersDetails.objects.all()
+    if university:
+        learning_centers_recs = learning_centers_recs.filter(university_id = university)
+        for rec in learning_centers_recs:
+            if rec.country.id not in duplicate_country_ids:
+                raw_dict = {}
+                raw_dict['id'] = rec.country.id
+                raw_dict['country'] = rec.country.country_name.capitalize()
+                duplicate_country_ids.append(rec.country.id)
+                country_list.append(raw_dict)
+    return JsonResponse(country_list, safe=False)

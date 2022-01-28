@@ -2478,12 +2478,11 @@ def application_offer_letter(request):
 
 @student_login_required
 def applicant_intake_info(request):
-    country_recs = CountryDetails.objects.all()
     religion_recs = ReligionDetails.objects.all()
     student_recs = StudentDetails.objects.filter(user__is_active = True)
     year_recs = ''
     semester_recs = ''
-    learning_centre_recs = LearningCentersDetails.objects.all()
+
     program_recs = ProgramDetails.objects.filter(is_delete=False).order_by('-id')
     faculty_recs = FacultyDetails.objects.filter(status=True).order_by('-id')
     study_type_list = ['International', 'University Main']
@@ -2511,11 +2510,27 @@ def applicant_intake_info(request):
     program_final_list = []
     program_list = []
 
+    country_recs = []
+    duplicate_country_ids = []
+
+    learning_centre_recs = []
+
     if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
         application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
         if application_obj.faculty:
              department_recs = application_obj.faculty.department.all()
     if application_obj:
+
+        country_learning_recs = LearningCentersDetails.objects.filter(university_id=application_obj.university.id)
+        for rec in country_learning_recs:
+            raw_dict = {}
+            if rec.country.id not in duplicate_country_ids:
+                raw_dict['id'] = rec.country.id
+                raw_dict['country_name'] = rec.country.country_name
+                duplicate_country_ids.append(rec.country.id)
+                country_recs.append(raw_dict)
+
+
         program_recs = ProgramDetails.objects.filter(is_delete=False)
         if application_obj.study_level:
             program_recs = program_recs.filter(study_level_id=application_obj.study_level.id)
@@ -2574,7 +2589,7 @@ def applicant_intake_info(request):
             semester_recs = SemesterDetails.objects.filter(university_id = application_obj.university.id,year_id = application_obj.academic_year.id)
 
         if application_obj.learning_country:
-            learning_centre_recs = LearningCentersDetails.objects.filter(country_id=application_obj.learning_country.id)
+            learning_centre_recs = LearningCentersDetails.objects.filter(country_id=application_obj.learning_country.id,university_id=application_obj.university.id)
             for rec in learning_centre_recs:
                 raw_dict = {}
                 raw_dict['learning_centre_name'] = rec.lc_name
@@ -2600,13 +2615,15 @@ def applicant_intake_info(request):
 def get_learning_centre_from_country(request):
     finalDict = []
     country_id = request.POST.get('country_id', None)
-    learning_centre_recs = LearningCentersDetails.objects.filter(country_id=country_id)
+    university = request.POST.get('university', None)
+    learning_centre_recs = LearningCentersDetails.objects.filter(country_id=country_id,university_id = university)
     for rec in learning_centre_recs:
         raw_dict = {}
         raw_dict['learning_centre_name']=rec.lc_name
         raw_dict['id']=rec.id
         finalDict.append(raw_dict)
     return JsonResponse(finalDict, safe=False)
+
 
 
 def get_university_from_type(request):

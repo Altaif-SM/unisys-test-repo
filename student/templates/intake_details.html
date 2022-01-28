@@ -53,18 +53,16 @@
 
             $(document).ready(function () {
 
-                /*
-                var university = $('#university').val();
-                var url = '/masters/get_year_from_university/';
-                get_year_from_university(url,university)
-                */
 
 
                 $(document).on("change", "#country", function (e) {
                     var country_id = $(this).val();
+                    var university = $('#university').val();
                     var url = '/student/get_learning_centre_from_country/';
-                    get_learning_center_from_country(url, country_id)
+                    get_learning_center_from_country(url, country_id, university)
                 })
+
+
                 $('input[type="radio"]').on('change', function () {
                     var university_type = $('input[name="university_type"]:checked').val();
                     var url = '/student/get_university_from_type/';
@@ -73,29 +71,29 @@
 
                 })
 
-                $(document).on("change", "#semester1", function (e) {
-                    var semester = $(this).val();
-                    var url = '/masters/get_mode_of_study_from_semester/';
-                    get_mode_of_study_from_semester(url, semester)
+                $(document).on("change", "#semester", function (e) {
+                    var university = $('#university').val();
+                    var url = '/masters/get_country_from_semester_year/';
+                    get_country_from_semester_year(url, university)
                 })
 
-            function get_mode_of_study_from_semester(url, semester) {
+            function get_country_from_semester_year(url, university) {
                 $.ajax({
                     type: 'POST',
                     url: url,
                     data: {
-                        semester: semester,
+                        university: university,
                         csrfmiddlewaretoken: '{{ csrf_token }}',
                     },
                     success: function (data) {
 
-                        $('#study_mode').empty();
-                        $('#study_mode').append(
+                        $('#country').empty();
+                        $('#country').append(
                             '<option value="" >Please select</option>');
                         for (var i = 0; i < data.length; i++) {
-                            $('#study_mode').append(
+                            $('#country').append(
                                 '<option value="' + data[i]['id'] + '">'
-                                + data[i]['study_mode'] + '</option>')
+                                + data[i]['country'] + '</option>')
                         }
                     },
                     error: function (xhr, msg, err) {
@@ -116,12 +114,6 @@
                     var university = $(this).val();
                     var url = '/masters/get_year_from_university/';
                     get_year_from_university(url, university)
-                    {#var study_mode = $('#study_mode').val();#}
-                    {#var study_level = $('#study_level').val();#}
-                    {#var faculty = $('#faculty').val();#}
-                    {#var department = $('#department').val();#}
-                    {#var url = '/masters/get_programs_from_filter/';#}
-                    {#get_programs_from_filter(url, study_mode,university,study_level,faculty,department)#}
                 })
 
 
@@ -165,8 +157,6 @@
                     var study_level = $(this).val();
                     var study_mode = $('#study_mode').val();
                     var university = $('#university').val();
-                    {#var faculty = $('#faculty').val();#}
-                    {#var department = $('#department').val();#}
                     var url = '/masters/get_faculty_from_study_level/';
                     get_faculty_from_study_level(url, study_mode, study_level,university)
                 })
@@ -232,18 +222,11 @@
                     get_program_mode_from_selected_program(url, program_id)
                 })
 
-
-
-
-
                 {% if user.get_application %}
                     {% if user.get_application.is_submitted %}
                         $('.submitted').prop('readonly', 'True')
                     {% endif %}
                 {% endif %}
-
-
-
 
             });
 
@@ -257,13 +240,6 @@
                     },
                     success: function (data) {
 
-                        $('#study_mode').empty();
-                        $('#study_mode').append(
-                            '<option value="" >Please select</option>');
-                        $('#study_mode').append(
-                            '<option value="Online" >Online</option>');
-                        $('#study_mode').append(
-                            '<option value="On Campus" >On Campus</option>');
 
                         $('#year').empty();
                         $('#year').append(
@@ -306,12 +282,13 @@
                 });
             }
 
-            function get_learning_center_from_country(url, country_id) {
+            function get_learning_center_from_country(url, country_id, university) {
                 $.ajax({
                     type: 'POST',
                     url: url,
                     data: {
                         country_id: country_id,
+                        university: university,
                         csrfmiddlewaretoken: '{{ csrf_token }}',
                     },
                     success: function (data) {
@@ -396,13 +373,60 @@
                     },
                     success: function (data) {
 
-
-
-
-
                         $('#university').empty();
                         $('#university').append(
                             '<option value="" >Please select</option>');
+
+                         $('#year').empty();
+                        $('#year').append(
+                            '<option value="" >Please select</option>');
+
+                          $('#semester').empty();
+                        $('#semester').append(
+                            '<option value="" >Please select</option>');
+
+                           $('#country').empty();
+                        $('#country').append(
+                            '<option value="" >Please select</option>');
+
+                           $('#learning_centre').empty();
+                        $('#learning_centre').append(
+                            '<option value="" >Please select</option>');
+
+                       $('#study_mode').empty();
+                        $('#study_mode').append(
+                            '<option value="" >Please select</option>');
+                        $('#study_mode').append(
+                            '<option value="Online" >Online</option>');
+                        $('#study_mode').append(
+                            '<option value="On Campus" >On Campus</option>');
+
+                         $('#study_level').empty();
+                        $('#study_level').append(
+                            '<option value="" >Please select</option>');
+                        $('#study_level').append(
+                            '<option value="2" >Undergraduate</option>');
+                        $('#study_level').append(
+                            '<option value="1" >Postgraduate</option>');
+
+                         $('#faculty').empty();
+                        $('#faculty').append(
+                            '<option value="" >Please select</option>');
+
+                         $('#department').empty();
+                        $('#department').append(
+                            '<option value="" >Please select</option>');
+
+                         $('#program').empty();
+                        $('#program').append(
+                            '<option value="" >Please select</option>');
+
+                         $('#program_mode').empty();
+                        $('#program_mode').append(
+                            '<option value="" >Please select</option>');
+
+
+
                         for (var i = 0; i < data.length; i++) {
                             $('#university').append(
                                 '<option value="' + data[i]['id'] + '">'
