@@ -204,7 +204,7 @@
                         <tr id="item{{ forloop.counter }}" class="item">
                             <td style="display: none"><input id="learning_centers_id" value="{{ rec.id }}"></td>
                             <td>{{ rec.lc_name|default_if_none:"" }}</td>
-                            <td>{{ rec.university.university_name|title }}</td>
+                            <td>{{ rec.university.university_name|default_if_none:"" }}</td>
                         {% if rec.university.is_partner_university == False %}
                                      <td>Main</td>
                                 {% else %}
