@@ -13,6 +13,7 @@
           rel="stylesheet">
 
 
+
     </head>
     <!-- END HEAD -->
     <style type="text/css">
@@ -103,7 +104,40 @@
             $(document).ready(function () {
                 $("#status").Sswitch({});
 
+                  $('input[type="radio"]').on('change', function () {
+                    var university_type = $('input[name="university_type"]:checked').val();
+                    var url = '/student/get_university_from_type/';
+                    get_university_from_university_type(url, university_type)
+
+
+                })
+
             });
+
+            function get_university_from_university_type(url, university_type) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        university_type: university_type,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data) {
+
+                        $('#university').empty();
+                        $('#university').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#university').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['university_name'] + '</option>')
+                        }
+                    },
+                    error: function (xhr, msg, err) {
+                        alert(xhr.responseJSON.error);
+                    }
+                });
+            }
 
 
             window.setTimeout(function () {
@@ -165,6 +199,76 @@
                     <div class="form-body">
 
                         <div class="row item_experience" id="item_experience_1">
+
+                         <div class="row">
+
+                            <div class="">
+                                <label class="col-md-2 control-label">University Type: <span
+                                        style="color: red">*</span></label>
+                                {% if learning_center_obj.university %}
+                                    <div class="col-md-3">
+                                        {% if  learning_center_obj.university.is_partner_university == False %}
+                                            <input class="current" type="radio" checked name="university_type"
+                                                   id="university_main"
+                                                   value="Main">
+                                            <span style="padding:inherit">Main</span>&nbsp;&nbsp;
+                                            <input class="current" type="radio" name="university_type" value="Partner"
+                                                   id="university_partner">
+                                            <span style="padding:inherit">Partner</span>
+                                        {% else %}
+                                            <input class="current" type="radio" name="university_type"
+                                                   id="university_main"
+                                                   value="Main">
+                                            <span style="padding:inherit">Main</span>&nbsp;&nbsp;
+                                            <input class="current" type="radio" checked name="university_type"
+                                                   value="Partner"
+                                                   id="university_partner">
+                                            <span style="padding:inherit">Partner</span>
+                                        {% endif %}
+                                    </div>
+                                {% else %}
+                                    <div class="col-md-3">
+                                        <input class="current" type="radio" checked name="university_type"
+                                               id="university_main"
+                                               value="Main">
+                                        <span style="padding:inherit">Main</span>&nbsp;&nbsp;
+                                        <input class="current" type="radio" name="university_type" value="Partner"
+                                               id="university_partner">
+                                        <span style="padding:inherit">Partner</span>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">University:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select id='university' title="Select University"
+                                                name="university"
+                                                class="form-control" required>
+
+                                            {% if learning_center_obj.university %}
+                                                <option style="display:none;" selected="selected"
+                                                        value="{{ learning_center_obj.university.id|default_if_none:"" }}"> {{ learning_center_obj.university.university_name|default_if_none:"" }}</option>
+                                            {% else %}
+                                                <option selected="selected" value=""> Please Select</option>
+                                            {% endif %}
+
+                                            {% for rec in university_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.university_name|default_if_none:"" }}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                </div>
+
+
+
+
+                            </div>
+
+                            <br>
 
                             <div class="row">
                                 <div class="">

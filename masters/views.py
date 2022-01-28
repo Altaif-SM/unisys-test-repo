@@ -2664,6 +2664,7 @@ def learning_centers_settings(request):
 
 def add_learning_centers(request):
     if request.method == 'POST':
+        university = request.POST.get('university')
         country = request.POST.get('country')
         lc_name = request.POST.get('lc_name')
         lc_address = request.POST.get('lc_address')
@@ -2675,18 +2676,21 @@ def add_learning_centers(request):
         else:
             status = False
         try:
-            LearningCentersDetails.objects.create(country_id=country,lc_name=lc_name,
+            LearningCentersDetails.objects.create(country_id=country,lc_name=lc_name,university_id = university,
                                              lc_address=lc_address, lc_email=lc_email,lc_tel = lc_tel,status = status)
             messages.success(request, "Record saved.")
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/learning_centers_settings/')
     country_recs = CountryDetails.objects.all()
-    return render(request, 'add_learning_centers.html',{'country_recs':country_recs,})
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
+                                                       is_partner_university=False).order_by('-id')
+    return render(request, 'add_learning_centers.html',{'country_recs':country_recs,'university_recs':university_recs})
 
 def edit_learning_centers(request, learning_center_id=None):
     learning_center_obj = LearningCentersDetails.objects.get(id=learning_center_id)
     if request.method == 'POST':
+        university = request.POST.get('university')
         country = request.POST.get('country')
         lc_name = request.POST.get('lc_name')
         lc_address = request.POST.get('lc_address')
@@ -2698,6 +2702,7 @@ def edit_learning_centers(request, learning_center_id=None):
         else:
             status = False
         try:
+            learning_center_obj.university_id = university
             learning_center_obj.country_id = country
             learning_center_obj.lc_name = lc_name
             learning_center_obj.lc_address = lc_address
@@ -2710,7 +2715,16 @@ def edit_learning_centers(request, learning_center_id=None):
             messages.warning(request, "Record not saved.")
         return redirect('/masters/learning_centers_settings/')
     country_recs = CountryDetails.objects.all()
-    return render(request, "edit_learning_centers.html", {'learning_center_obj': learning_center_obj,'country_recs':country_recs})
+    if learning_center_obj.university:
+        if learning_center_obj.university.is_partner_university == False:
+            university_recs = UniversityDetails.objects.filter(is_delete = False,is_active = True,is_partner_university = False).order_by('-id')
+        else:
+            university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
+                                                           is_partner_university=True).order_by('-id')
+    else:
+        university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
+                                                           is_partner_university=False).order_by('-id')
+    return render(request, "edit_learning_centers.html", {'learning_center_obj': learning_center_obj,'country_recs':country_recs,'university_recs':university_recs})
 
 def delete_learning_centers(request):
     if request.method == 'POST':

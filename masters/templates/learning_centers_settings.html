@@ -188,6 +188,8 @@
                     <tr>
                         <th style="display: none">Id</th>
                         <th>{% trans 'Learning Center' %}</th>
+                        <th>{% trans 'University' %}</th>
+                        <th>{% trans 'University Type' %}</th>
                         <th>{% trans 'Country' %}</th>
                         <th>{% trans 'Email' %}</th>
                         <th>{% trans 'Telephone' %}</th>
@@ -202,6 +204,12 @@
                         <tr id="item{{ forloop.counter }}" class="item">
                             <td style="display: none"><input id="learning_centers_id" value="{{ rec.id }}"></td>
                             <td>{{ rec.lc_name|default_if_none:"" }}</td>
+                            <td>{{ rec.university.university_name|title }}</td>
+                        {% if rec.university.is_partner_university == False %}
+                                     <td>Main</td>
+                                {% else %}
+                                    <td>International</td>
+                                {% endif %}
                             <td>{{ rec.country.country_name|title }}</td>
                             <td>{{ rec.lc_email|default_if_none:"" }}</td>
                             <td>{{ rec.lc_tel|default_if_none:"" }}</td>
