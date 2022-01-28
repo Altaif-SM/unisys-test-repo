@@ -616,6 +616,8 @@ class LearningCentersDetails(BaseModel):
     country = models.ForeignKey(CountryDetails, null=True, related_name='learning_centers_country_rel',
                                     on_delete=models.SET_NULL)
     status = models.BooleanField(default=True)
+    university = models.ForeignKey(UniversityDetails, null=True, related_name='learning_university_rel',
+                                   on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ('id',)
