@@ -846,7 +846,7 @@ def edit_staff(request, staff_id=None):
         'role': user_obj.role.all()[0].name,
         'country': user_obj.address.country.id if user_obj.address else None,
         'country_name': user_obj.address.country.country_name if user_obj.address else None,
-        'residential_address': user_obj.address.residential_address,
+        'residential_address': user_obj.address.residential_address if user_obj.address else None,
         'status': user_obj.is_active,
         'system_settings_list': system_settings_list,
         'user_settings_list': user_settings_list,
