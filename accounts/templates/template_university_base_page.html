@@ -1,0 +1,1699 @@
+<!DOCTYPE html>
+{% load  i18n %}
+<!--
+Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.3.6
+Version: 4.5.6
+Author: KeenThemes
+Website: http://www.keenthemes.com/
+Contact: support@keenthemes.com
+Follow: www.twitter.com/keenthemes
+Dribbble: www.dribbble.com/keenthemes
+Like: www.facebook.com/keenthemes
+Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
+Renew Support: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
+License: You must have a valid license purchased only from themeforest(the above link) in order to legally use the theme for your project.
+-->
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+
+<head>
+    <meta charset="utf-8"/>
+    <link rel="shortcut icon" href="../../media/logo_header.ico" type="image/png">
+    <title>Online Admission | Dashboard</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    {% load staticfiles %}
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet"
+          type="text/css"/>
+    <link href="{% static 'assets/global/plugins/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet"
+          type="text/css"/>
+    <link href="{% static 'assets/global/plugins/simple-line-icons/simple-line-icons.min.css' %}" rel="stylesheet"
+          type="text/css"/>
+    <link href="{% static 'assets/global/plugins/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css' %}" rel="stylesheet"
+          type="text/css"/>
+    <!-- END GLOBAL MANDATORY STYLES -->
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <link href="{% static 'assets/global/plugins/jstree/dist/themes/default/style.min.css' %}" rel="stylesheet"
+          type="text/css"/>
+    <link href="{% static 'assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css' %}" rel="stylesheet"
+          type="text/css"/>
+    <link href="{% static 'assets/global/plugins/morris/morris.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/fullcalendar/fullcalendar.min.css' %}" rel="stylesheet"
+          type="text/css"/>
+    <link href="{% static 'assets/global/plugins/jqvmap/jqvmap/jqvmap.css' %}" rel="stylesheet" type="text/css"/>
+    <!-- END PAGE LEVEL PLUGINS -->
+    <!-- BEGIN THEME GLOBAL STYLES -->
+    <link href="{% static 'assets/global/css/components.min.css' %}" rel="stylesheet" id="style_components"
+          type="text/css"/>
+    <link href="{% static 'assets/global/css/plugins.min.css' %}" rel="stylesheet" type="text/css"/>
+    <!-- END THEME GLOBAL STYLES -->
+    <!-- BEGIN THEME LAYOUT STYLES -->
+
+    <link href="{% static 'assets/layouts/layout2/css/layout.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/layouts/layout2/css/themes/grey.css' %}" rel="stylesheet" type="text/css"
+          id="style_color"/>
+    <link href="{% static 'assets/layouts/layout2/css/custom.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'spiner/spiner.css' %}" rel="stylesheet" type="text/css"/>
+    <!-- END THEME LAYOUT STYLES -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.5.1/chosen.min.css">
+    <link href="{% static 'css/tabs_accordion.css' %}" rel="stylesheet" type="text/css"/>
+    {% block styleBlock %}
+        <style type="text/css">
+            .s-switch input[type='checkbox'] {
+                display: none
+            }
+
+            .s-switch {
+                width: 62px;
+                height: 32px;
+                z-index: 0;
+                margin: 0;
+                padding: 0;
+                appearance: none;
+                border: none;
+                cursor: pointer;
+                position: relative;
+                border-radius: 16px;
+                -moz-border-radius: 16px;
+                -webkit-border-radius: 16px;
+            }
+
+            .s-switch:before {
+                content: ' ';
+                background: #D9534F !important;
+                position: absolute;
+                left: 1px;
+                top: 1px;
+                width: 60px;
+                height: 30px;
+                background: #FFFFFF;
+                z-index: 1;
+                border-radius: 16px;
+                -moz-border-radius: 16px;
+                -webkit-border-radius: 16px;
+            }
+
+            .s-switch:after {
+                content: ' ';
+                height: 29px;
+                width: 29px;
+                border-radius: 28px;
+                z-index: 2;
+                background: #FFFFFF;
+                position: absolute;
+                -webkit-transition-duration: 300ms;
+                transition-duration: 300ms;
+                top: 1px;
+                left: 3px;
+                -webkit-box-shadow: 0 2px 5px #999999;
+                box-shadow: 0 2px 5px #999999;
+            }
+
+            .s-switch-on:before {
+                background: #4DAF48 !important;
+            }
+
+            .s-switch-on:after {
+                left: 31px !important;
+            }
+
+            .s-switch-readonly, .s-switch-disabled {
+                opacity: 0.8;
+            }
+
+
+        </style>
+    {% endblock %}
+
+<!--
+<script src="https://global.localizecdn.com/localize.js"></script>
+<script>!function(a){if(!a.Localize){a.Localize={};for(var e=["translate","untranslate","phrase","initialize","translatePage","setLanguage","getLanguage","getSourceLanguage","detectLanguage","getAvailableLanguages","untranslatePage","bootstrap","prefetch","on","off","hideWidget","showWidget"],t=0;t<e.length;t++)a.Localize[e[t]]=function(){}}}(window);</script>
+
+<script>
+  Localize.initialize({
+    key: '2059d20d75a09',
+    rememberLanguage: true,
+  });
+</script>-->
+
+</head>
+
+{% block ScriptBlock %}
+
+{% endblock %}
+{% block head %}
+
+{% endblock %}
+<!-- END HEAD -->
+
+{#<body class="page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-sidebar-closed">#}
+<body class="page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid">
+<!-- BEGIN HEADER -->
+<div class="page-header navbar navbar-fixed-top">
+    <!-- BEGIN HEADER INNER -->
+    <div class="page-header-inner ">
+        <!-- BEGIN LOGO -->
+        <div class="page-logo">
+
+            {#            <h4>SMS</h4>#}
+            {#            <img src="{% static 'images/logo.png' %}" alt="logo"#}
+            {#                 style="width: 100px;height: 70px;margin-top: 0px; margin-left: 30px" class="logo-default"/>#}
+        {% if  request.user.university.university_logo %}
+            <img src="{{ request.user.university.university_logo.url }}" alt="logo"
+                 style="width: 145px;height: 45px;margin-top: 10px; margin-left: -15px" class="logo-default"/>
+        {% else %}
+             <img src="{% static 'images/university_logo.png' %}" alt="logo"
+                 style="width: 145px;height: 45px;margin-top: 10px; margin-left: -15px" class="logo-default"/>
+        {% endif %}
+
+            {#            <div class="menu-toggler sidebar-toggler">#}
+            <div class="menu-toggler sidebar-toggler" id="id_toggle">
+                <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
+                <img id="left" class="" style="width: 25px;height: 25px;display: none;margin-left: 20px;"
+                     src="{% static 'images/left_icon.png' %}">
+                <img id="right" style="width: 25px;height: 25px;margin-left: 5px;"
+                     src="{% static 'images/right_icon.png' %}">
+            </div>
+        </div>
+
+
+        <!-- END LOGO -->
+        <!-- BEGIN RESPONSIVE MENU TOGGLER -->
+        <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse"
+           data-target=".navbar-collapse"> </a>
+        <!-- END RESPONSIVE MENU TOGGLER -->
+        <!-- BEGIN PAGE ACTIONS -->
+        <!-- DOC: Remove "hide" class to enable the page header actions -->
+
+        <!-- END PAGE ACTIONS -->
+        <!-- BEGIN PAGE TOP -->
+
+        <div class="page-top">
+            {#        <span style="margin-top: 5%">{{ user.get_application_id }}</span>#}
+
+            <!-- BEGIN HEADER SEARCH BOX -->
+            <!-- DOC: Apply "search-form-expanded" right after the "search-form" class to have half expanded search box -->
+
+            <!-- END HEADER SEARCH BOX -->
+            <!-- BEGIN TOP NAVIGATION MENU -->
+            <div class="top-menu" style="float: left">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown dropdown-user">
+                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"
+                           data-close-others="true">
+                            {% if user.is_student %}
+                                {% if user.get_application %}
+                                    <img alt="" class="img-circle"
+                                         src="{{ user.get_application.report_path }}{{ user.get_application.image }}"/>
+                                    <span class="username username-hide-on-mobile"> {{ user.get_application.first_name|default_if_none:"" }} {{ user.get_application.last_name|default_if_none:"" }} </span>
+                                    -<b><span
+                                        class="username username-hide-on-mobile"> {{ user.get_application_id }}</span></b>
+                                {% endif %}
+                            {% else %}
+                                {#                                <img alt="" class="img-circle" src="../../media/{{ user.get_application.image }}"/>#}
+                                <b><span
+                                        class="username username-hide-on-mobile">{{ request.user.university.university_name|default_if_none:"" }} ({{ user.role.all.0.name }}) </span></b>
+                                {#                                <br>#}
+                                {#                                <span class="username username-hide-on-mobile"> {{ user.get_application_id }}#}
+                                </span>
+
+
+                            {% endif %}
+
+                            {#                            <i class="fa fa-angle-down"></i>#}
+                        </a>
+                        {% comment %}<ul class="dropdown-menu dropdown-menu-default">
+                            <li>
+                                <a href="/accounts/user_signout/">
+                                    <i class="fa fa-sign-out"></i> Log Out</a>
+                            </li>
+                        </ul>{% endcomment %}
+
+                    </li>
+                </ul>
+            </div>
+            <div class="top-menu">
+                {% comment %} <ul class="nav navbar-nav" >
+                    <li class="dropdown dropdown-user">
+                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
+                           data-close-others="true">
+                            <img alt="" class="img-circle" src="../../media/{{ user.get_application.image }}"/>
+                            <span class="username username-hide-on-mobile"> {{ user.get_application.first_name }} {{ user.get_application.last_name }} </span>
+                            <br><span class="username username-hide-on-mobile"> {{ user.get_application_id }}</span>
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-default">
+                            <li>
+                                <a href="/accounts/user_signout/">
+                                    <i class="fa fa-sign-out"></i> Log Out</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>{% endcomment %}
+
+
+                <ul class="nav navbar-nav pull-right">
+{#                <li class="nav-item active" style="margin-top: 20px">#}
+{#                    <form action="{% url 'set_language' %}" method="post">{% csrf_token %}#}
+{#                        <input name="next" type="hidden" value="{{ redirect_to }}">#}
+{#                        <select name="language" class="form-control" id="exampleFormControlSelect1"#}
+{#                                onchange="this.form.submit()">#}
+{#                            {% get_current_language as LANGUAGE_CODE %}#}
+{#                            {% get_available_languages as LANGUAGES %}#}
+{#                            {% get_language_info_list for LANGUAGES as languages %}#}
+{#                            {% for language in languages %}#}
+{#                                <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %}selected{% endif %}>#}
+{#                                    {{ language.name_local }}#}
+{#                                    {{ language.name_local }} {{ language.code }}#}
+{#                                </option>#}
+{#                            {% endfor %}#}
+{#                        </select>#}
+{#                    </form>#}
+{#                </li>#}
+                    {% if user.is_student %}
+                        <li class="dropdown dropdown-extended dropdown-tasks" id="header_task_bar">
+                            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
+                               data-close-others="true">
+                                <i class="icon-calendar"></i>
+                                {#					<span class="badge badge-default">#}
+                                {#					3%</span>#}
+                            </a>
+                            <ul class="dropdown-menu extended tasks">
+                                <li class="external">
+                                    <h3><span class="bold">{% trans 'Application Completed' %}</span></h3>
+                                    {#							<a href="page_todo.html">view all</a>#}
+                                </li>
+                                <li>
+                                    <ul class="dropdown-menu-list scroller" style="height: 100px;"
+                                        data-handle-color="#637283">
+                                        {% if user.get_student_progress.progress_counter >= 0 and user.get_student_progress.progress_counter <= 50 %}
+                                            <li>
+                                                <a href="javascript:;">
+                                                    <span class="task">
+                                                    <span class="desc">{% trans 'Application Progress (Good)' %}</span>
+
+                                                    <span class="percent">{{ user.get_student_progress.progress_counter }}%</span>
+                                                    </span>
+                                                    <span class="progress">
+                                                    <span style="width: {{ user.get_student_progress.progress_counter }}%;"
+                                                          class="progress-bar progress-bar-danger" aria-valuenow="65"
+                                                          aria-valuemin="0"
+                                                          aria-valuemax="100"><span
+                                                            class="sr-only">{{ user.get_student_progress.progress_counter }}% Complete</span></span>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        {% elif  user.get_student_progress.progress_counter >= 51 and user.get_student_progress.progress_counter <= 75 %}
+
+
+
+                                            <li>
+                                                <a href="javascript:;">
+                                                    <span class="task">
+                                                    <span class="desc">{% trans 'Application Progress (Better)' %}</span>
+                                                    <span class="percent">{{ user.get_student_progress.progress_counter }}%</span>
+                                                    </span>
+                                                    <span class="progress">
+                                                    <span style="width: {{ user.get_student_progress.progress_counter }}%;"
+                                                          class="progress-bar progress-bar-info"
+                                                          aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"><span
+                                                            class="sr-only">{{ user.get_student_progress.progress_counter }}% Complete</span></span>
+                                                    </span>
+                                                </a>
+                                            </li>
+
+
+                                        {% else %}
+                                            <li>
+                                                <a href="javascript:;">
+                                                    <span class="task">
+                                                    <span class="desc">{% trans 'Application Progress (Excellent)' %}</span>
+                                                    <span class="percent">{{ user.get_student_progress.progress_counter }}%</span>
+                                                    </span>
+                                                    <span class="progress">
+                                                    <span style="width: {{ user.get_student_progress.progress_counter }}%;"
+                                                          class="progress-bar progress-bar-success"
+                                                          aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"><span
+                                                            class="sr-only">{{ user.get_student_progress.progress_counter }}% Complete</span></span>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        {% endif %}
+
+
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    {% endif %}
+
+                    {% if user.is_super_admin or user.is_accountant or user.is_donor or user.is_partner %}
+                        <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
+                            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
+                               data-close-others="true">
+                                <i class="icon-settings"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    {% for year in user.year_list %}
+
+                                        {#                                        {% if year.active_year %}#}
+                                        <a href="javascript:;" class="action"
+                                           id="{{ year.id }}"> {{ year.year_name }}</a>
+                                        {#                                        {% endif %}#}
+                                    {% endfor %}
+                                </li>
+                            </ul>
+                        </li>
+                    {% endif %}
+
+
+                    <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
+                        {% if user.notifications.flag %}
+                            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
+                               data-close-others="true">
+                                <i class="icon-bell"></i>
+                                {% if user.notifications.active_count != 0 %}
+                                    <span class="badge badge-default">
+
+                                    {{ user.notifications.active_count }}
+                                        </span>
+                                {% endif %}
+                            </a>
+
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a>{% trans 'View all notifications' %}</a>
+                                    {% for notification in user.notifications.notifications %}
+                                        {% if not notification.is_read %}
+                                            <a style=""><b>{{ notification.last_updated|date:'d/m' }} {{ notification.message|truncatechars:30 }}</b></a>
+                                        {% else %}
+                                            <a>{{ notification.message|truncatechars:30 }}</a>
+                                        {% endif %}
+                                    {% endfor %}
+                                </li>
+                            </ul>
+                        {% else %}
+                            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
+                               data-close-others="true">
+                                <i class="icon-bell"></i>
+                                <span class="badge badge-default"></span>
+                            </a>
+                        {% endif %}
+                    </li>
+
+
+                    <!-- BEGIN NOTIFICATION DROPDOWN -->
+                    <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
+
+                    <!-- END NOTIFICATION DROPDOWN -->
+                    <!-- BEGIN INBOX DROPDOWN -->
+                    <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
+
+                    <!-- END INBOX DROPDOWN -->
+                    <!-- BEGIN TODO DROPDOWN -->
+                    <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
+
+                    <!-- END TODO DROPDOWN -->
+                    <!-- BEGIN USER LOGIN DROPDOWN -->
+                    <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
+
+                    <li class="dropdown dropdown-user">
+                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
+                           data-close-others="true">
+                            {#                            <img alt="" class="img-circle" src="../../media/{{ user.get_application.image }}"/>#}
+                            {#                            {% if user.staff_relation.all  and user.staff_relation.all.0.photo %}#}
+                            {#                                <img alt="" class="img-circle"#}
+                            {#                                     src="{{ MEDIA_URL }}{{ user.staff_relation.all.0.photo.url }}"/>#}
+                            {#                            {% elif user.parent_relation.all and user.parent_relation.all.0.photo %}#}
+                            {#                                <img alt="" class="img-circle"#}
+                            {#                                     src="{{ MEDIA_URL }}{{ user.parent_relation.all.0.photo.url }}"/>#}
+                            {#                            {% else %}#}
+                            {#                                <img alt="" class="img-circle" src="{% static 'images/user.png' %}"/>#}
+                            {#                            {% endif %}#}
+                            {% comment %}<span class="username username-hide-on-mobile"> {{ user.get_application.first_name }} {{ user.get_application.last_name }} </span>
+                            <br><span class="username username-hide-on-mobile"> {{ user.get_application_id }}</span>{% endcomment %}
+                            {#                    <li>#}
+                            {#                        <a href="/accounts/user_signout/">#}
+                            {#                            <i class="fa fa-sign-out"></i> Log Out</a>#}
+                            {#                    </li>#}
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+
+
+                        <ul class="dropdown-menu dropdown-menu-default">
+                            {% comment %}<li>
+                                <a href="/school/my_profile/">
+                                    <i class="fa fa-book" aria-hidden="true"></i> Profile </a>
+                            </li>{% endcomment %}
+                            <li>
+                                <a href="/accounts/change_password/">
+                                    <i class="icon-key" aria-hidden="true"></i>{% trans 'Change Password' %}</a>
+                            </li>
+
+                            <li>
+                                <a href="/accounts/user_signout/">
+                                    <i class="fa fa-sign-out"></i>{% trans 'Log Out' %}</a>
+                            </li>
+
+
+                        </ul>
+                    </li>
+                    <!-- END USER LOGIN DROPDOWN -->
+                    <!-- BEGIN QUICK SIDEBAR TOGGLER -->
+                    <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
+                    <!--  <li class="dropdown dropdown-extended quick-sidebar-toggler">
+                             <span class="sr-only">Toggle Quick Sidebar</span>
+
+                             <i class="icon-logout"></i>
+
+
+                         </li> -->
+                    <!-- END QUICK SIDEBAR TOGGLER -->
+                </ul>
+            </div>
+            <!-- END TOP NAVIGATION MENU -->
+
+
+        </div>
+        <!-- END PAGE TOP -->
+    </div>
+    <!-- END HEADER INNER -->
+</div>
+<!-- END HEADER -->
+<!-- BEGIN HEADER & CONTENT DIVIDER -->
+<div class="clearfix"></div>
+<!-- END HEADER & CONTENT DIVIDER -->
+{% with user.get_user_permissions as perms %}
+    <!-- BEGIN CONTAINER -->
+    <div class="page-container">
+
+
+        <!-- BEGIN SIDEBAR -->
+        <div class="page-sidebar-wrapper">
+
+
+            <!-- END SIDEBAR -->
+            <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
+            <!-- DOC: Change data-auto-speed="200" to adjust the sub menu slide up/down speed -->
+            <div class="page-sidebar navbar-collapse collapse">
+
+                <!-- BEGIN SIDEBAR MENU -->
+                <!-- DOC: Apply "page-sidebar-menu-light" class right after "page-sidebar-menu" to enable light sidebar menu style(without borders) -->
+                <!-- DOC: Apply "page-sidebar-menu-hover-submenu" class right after "page-sidebar-menu" to enable hoverable(hover vs accordion) sub menu mode -->
+                <!-- DOC: Apply "page-sidebar-menu-closed" class right after "page-sidebar-menu" to collapse("page-sidebar-closed" class must be applied to the body element) the sidebar sub menu mode -->
+                <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
+                <!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
+                <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
+                <div class="tab-content">
+
+                    <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
+                        data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+
+                        {% if user.is_super_admin %}
+                            <li class="nav-item " id="dashboard">
+                                <a href="/accounts/home/" class="nav-link nav-toggle">
+                                    <i class="glyphicon glyphicon-stats"></i>
+                                    <span class="title">{% trans 'Dashboard' %}</span>
+                                    <span class="selected"></span>
+                                </a>
+
+                            </li>
+                        {% elif not user.is_student %}
+                            <li class="nav-item " id="dashboard">
+                                <a href="/accounts/university_dashboard/" class="nav-link nav-toggle">
+                                    <i class="glyphicon glyphicon-stats"></i>
+                                    <span class="title">{% trans 'Dashboard' %}</span>
+                                    <span class="selected"></span>
+                                </a>
+
+                            </li>
+                        {% endif %}
+
+                        {% if user.is_student %}
+                            <li class="nav-item " id="dashboard">
+                                <a href="/student/student_home/" class="nav-link nav-toggle">
+                                    <i class="glyphicon glyphicon-stats"></i>
+                                    <span class="title">{% trans 'Dashboard' %}</span>
+                                    <span class="selected"></span>
+                                </a>
+
+                            </li>
+                        {% endif %}
+                    </ul>
+
+
+                    <div class="tab-pane " id="b"><!--Settings-->
+                        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
+                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+
+                            {#                            {% if user.is_super_admin %}#}
+
+                            <li class="nav-item master_settings_nav_item">
+                                {% if 'System Settings' in access_list %}
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+                                        <i class="fa fa-cog" aria-hidden="true"></i>
+
+                                        <span class="title">{% trans 'System Settings' %}</span>
+                                        <span class="arrow master_settings_arrow"></span>
+                                    </a>
+                                {% endif %}
+                                <ul class="sub-menu master_settings_sub_menu">
+                                    {% if 'Manage Language' in access_list %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:language_settings' %}"
+                                               class="nav-link ">{% trans 'Manage Language' %}</a>
+                                        </li>
+                                    {% endif %}
+                                    {% if 'Manage Currency' in access_list %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:currency_settings' %}"
+                                               class="nav-link ">{% trans 'Manage Currency' %}</a>
+                                        </li>
+                                    {% endif %}
+                                    {% if 'Manage Country' in access_list %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:country_settings' %}"
+                                               class="nav-link ">{% trans 'Manage Country' %}</a>
+                                        </li>
+                                    {% endif %}
+                                    <li class="nav-item ">
+                                            <a href="{% url 'masters:arabic_lang_proficiency_settings' %}"
+                                               class="nav-link ">{% trans 'Manage Arabic Lang Proficiency' %}</a>
+                                        </li>
+
+                                <li class="nav-item ">
+                                            <a href="{% url 'masters:english_lang_proficiency_settings' %}"
+                                               class="nav-link ">{% trans 'Manage English Lang Proficiency' %}</a>
+                                        </li>
+{#                                    {% if 'Manage Study Mode' in access_list %}#}
+{#                                        <li class="nav-item ">#}
+{#                                            <a href="{% url 'masters:study_mode_settings' %}"#}
+{#                                               class="nav-link ">{% trans 'Manage Study Mode' %}</a>#}
+{#                                        </li>#}
+{#                                    {% endif %}#}
+                                    {% if 'Manage Study Level' in access_list %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:study_level_settings' %}"
+                                               class="nav-link ">{% trans 'Manage Study Level' %}</a>
+                                        </li>
+                                    {% endif %}
+                                    {% if 'Manage Study Type' in access_list %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:study_type_settings' %}"
+                                               class="nav-link ">{% trans 'Manage Program Mode' %}</a>
+                                        </li>
+                                    {% endif %}
+                                    {% if 'Manage Student Mode' in access_list %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:student_mode_settings' %}"
+                                               class="nav-link ">{% trans 'Manage Student Mode' %}</a>
+                                        </li>
+                                    {% endif %}
+                                    {% if 'Manage Learning Centers' in access_list %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:learning_centers_settings' %}"
+                                               class="nav-link ">{% trans 'Manage Learning Centers' %}</a>
+                                        </li>
+                                    {% endif %}
+                                    {% if 'Manage Faculties' in access_list %}
+                                        <li class="nav-item  ">
+                                            <a href="/masters/faculty_settings/" class="nav-link ">
+                                                {#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
+                                                <span class="title">{% trans 'Manage Faculties' %}</span>
+                                            </a>
+                                        </li>
+                                    {% endif %}
+{#                                    {% if 'Link Faculty to User' in access_list %}#}
+{#                                        <li class="nav-item  ">#}
+{#                                            <a href="/masters/link_faculty_staff/" class="nav-link ">#}
+                                                {#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
+{#                                                <span class="title">{% trans 'Link Faculty to User' %}</span>#}
+{#                                            </a>#}
+{#                                        </li>#}
+{#                                    {% endif %}#}
+
+                                </ul>
+                            </li>
+
+                            <li class="nav-item staff_settings_nav_item">
+                                {% if 'User Settings' in access_list %}
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+                                        <i class="fa fa-users" aria-hidden="true"></i>
+
+
+                                        <span class="title">{% trans 'University User Settings' %}</span>
+                                        <span class="arrow staff_settings_arrow"></span>
+                                    </a>
+                                {% endif %}
+                                <ul class="sub-menu staff_settings_sub_menu">
+{#                                    {% if 'Manage Group' in access_list %}#}
+{#                                        <li class="nav-item ">#}
+{#                                            <a href="{% url 'masters:group_settings' %}"#}
+{#                                               class="nav-link ">{% trans 'Manage Group' %}</a>#}
+{#                                        </li>#}
+{#                                    {% endif %}#}
+                                    {% if 'Manage Users' in access_list %}
+                                        <li class="nav-item  ">
+                                            <a href="/accounts/staff_settings/" class="nav-link ">
+                                                {#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
+                                                <span class="title">{% trans 'Manage University Users' %}</span>
+                                            </a>
+                                        </li>
+                                    {% endif %}
+
+
+                                </ul>
+                            </li>
+
+                            <li class="nav-item organization_settings_nav_item">
+                                {% if 'University Settings' in access_list %}
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+                                        <i class="fa fa-university" aria-hidden="true"></i>
+
+
+                                        <span class="title">{% trans 'University Settings' %}</span>
+                                        <span class="arrow organization_settings_arrow"></span>
+                                    </a>
+                                {% endif %}
+                                <ul class="sub-menu organization_settings_sub_menu">
+                                    {% if 'Manage Universities' in access_list %}
+                                        <li class="nav-item  ">
+                                            <a href="/masters/university_settings/" class="nav-link ">
+                                                <span class="title">{% trans 'Manage Universities' %}</span>
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                    {% if 'Manage University Partner' in access_list %}
+                                        <li class="nav-item  ">
+                                            <a href="/masters/university_partner_settings/" class="nav-link ">
+                                                <span class="title">{% trans 'Manage International University' %}</span>
+                                            </a>
+                                        </li>
+                                    {% endif %}
+{#                                    {% if 'Link University to User' in access_list %}#}
+{#                                        <li class="nav-item  ">#}
+{#                                            <a href="/masters/link_university_staff/" class="nav-link ">#}
+{#                                                <span class="title">{% trans 'Link University to User' %}</span>#}
+{#                                            </a>#}
+{#                                        </li>#}
+{#                                    {% endif %}#}
+                                    {% if 'Manage Program' in access_list %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:program_settings' %}"
+                                               class="nav-link ">{% trans 'Manage Program' %}</a>
+                                        </li>
+                                    {% endif %}
+                                {% if 'Manage Program Fee' in access_list %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:program_fee_settings' %}"
+                                               class="nav-link ">{% trans 'Manage Program Fee' %}</a>
+                                        </li>
+                                    {% endif %}
+                                    {% if 'Manage Campus' in access_list %}
+                                        <li class="nav-item  ">
+                                            <a href="/masters/campus_settings/" class="nav-link ">
+                                                {#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
+                                                <span class="title">{% trans 'Manage Branch/Campus' %}</span>
+                                            </a>
+                                        </li>
+                                    {% endif %}
+{#                                    {% if 'Link Campus to User' in access_list %}#}
+{#                                        <li class="nav-item ">#}
+{#                                            <a href="{% url 'masters:link_campus_staff' %}"#}
+{#                                               class="nav-link ">{% trans 'Link Branch/Campus to User' %}</a>#}
+{#                                        </li>#}
+{#                                    {% endif %}#}
+{#                                    {% if 'Manage Department' in access_list %}#}
+{#                                        <li class="nav-item  ">#}
+{#                                            <a href="/masters/department_settings/" class="nav-link ">#}
+{#                                                <span class="title">{% trans 'Manage Department' %}</span>#}
+{#                                            </a>#}
+{#                                        </li>#}
+{#                                    {% endif %}#}
+{#                                    {% if 'Link Department to User' in access_list %}#}
+{#                                        <li class="nav-item  ">#}
+{#                                            <a href="/masters/link_department_staff/" class="nav-link ">#}
+{#                                                <span class="title">{% trans 'Link Department to User' %}</span>#}
+{#                                            </a>#}
+{#                                        </li>#}
+{#                                    {% endif %}#}
+
+
+                                </ul>
+                            </li>
+                            <li class="nav-item program_settings_nav_item">
+                                {% if 'Academic Settings' in access_list %}
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+
+                                        <i class="glyphicon glyphicon-education" aria-hidden="true"></i>
+                                        <span class="title">{% trans 'Academic Settings' %}</span>
+                                        <span class="arrow program_settings_arrow"></span>
+                                    </a>
+                                {% endif %}
+                                <ul class="sub-menu program_settings_sub_menu">
+                                    {% if 'Manage Year' in access_list %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:year_settings' %}"
+                                               class="nav-link ">{% trans 'Manage Year' %}</a>
+                                        </li>
+                                    {% endif %}
+                                    {% if 'Manage Semester' in access_list %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:semester_settings' %}"
+                                               class="nav-link ">{% trans 'Manage Semester' %}</a>
+                                        </li>
+                                    {% endif %}
+                                    {% if 'Manage Activity' in access_list %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:activity_settings' %}"
+                                               class="nav-link ">{% trans 'Manage Activity' %}</a>
+                                        </li>
+                                    {% endif %}
+                                    {% if 'Manage Calendar' in access_list %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:calendar_settings' %}"
+                                               class="nav-link ">{% trans 'Manage Calendar' %}</a>
+                                        </li>
+                                    {% endif %}
+
+
+                                </ul>
+                            </li>
+
+
+                            {#                            {% endif %}#}
+
+
+                        </ul>
+                        <!-- END SIDEBAR MENU -->
+                    </div>  <!-- END tabpane -->
+
+                    <div class="tab-pane " id="c"><!--Application Management-->
+                        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
+                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+
+
+                            {% if 'student.can_view_student_personal_info' in perms %}
+                                <li class="nav-item " id="personal_info">
+                                    <a href="{% url 'student:applicant_personal_info' %}" class="nav-link nav-toggle">
+                                        <i class="fa fa-id-card"></i>
+                                        <span class="title">{% trans 'Personal Info' %}</span>
+                                        {% if user.get_student_application.personal_info_flag %}
+                                            <span class="title glyphicon glyphicon-ok"
+                                                  style="color: #41bc2c;font-size: 16px"></span>
+                                        {% else %}
+                                            <span class="title glyphicon glyphicon-exclamation-sign"
+                                                  style="color: #dc302b; font-size: 16px"></span>{% endif %}
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% if 'student.can_view_student_personal_info' in perms %}
+                                <li class="nav-item " id="personal_info">
+                                    <a href="{% url 'student:applicant_intake_info' %}" class="nav-link nav-toggle">
+                                        <i class="fa fa-university"></i>
+                                        <span class="title">{% trans 'Intake Info' %}</span>
+                                        {% if user.get_student_application.intake_flag %}
+                                            <span class="title glyphicon glyphicon-ok"
+                                                  style="color: #41bc2c;font-size: 16px"></span>
+                                        {% else %}
+                                            <span class="title glyphicon glyphicon-exclamation-sign"
+                                                  style="color: #dc302b; font-size: 16px"></span>{% endif %}
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+
+
+                            {% if 'student.can_view_student_academic_qualification' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'student:applicant_academic_english_qualification' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-education"></i>
+                                        <span class="title">{% trans 'Qualification' %}</span>
+                                        {% if user.get_student_application.english_qualification %}
+                                            <span class="title glyphicon glyphicon-ok"
+                                                  style="color: #41bc2c;font-size: 16px"></span>{% else %}
+                                            <span class="title glyphicon glyphicon-exclamation-sign"
+                                                  style="color: #dc302b; font-size: 16px"></span>{% endif %}
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% if 'student.can_view_scholarship_selection' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'student:applicant_additional_information' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-star"></i>
+                                        <span class="title">{% trans 'Additional Information' %}</span>
+                                        {% if user.get_student_application.scholarship_selection %}
+                                            <span class="title glyphicon glyphicon-ok"
+                                                  style="color: #41bc2c;font-size: 16px"></span>{% else %}
+                                            <span class="title glyphicon glyphicon-exclamation-sign"
+                                                  style="color: #dc302b; font-size: 16px"></span>{% endif %}
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% if 'student.can_view_student_psychometric_test' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'student:applicant_attachment_submission' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-copy"></i>
+                                        <span class="title">{% trans 'Attachment' %}</span>
+                                        {% if user.get_student_application.attachment %}
+                                            <span class="title glyphicon glyphicon-ok"
+                                                  style="color: #41bc2c;font-size: 16px"></span>{% else %}
+                                            <span class="title glyphicon glyphicon-exclamation-sign"
+                                                  style="color: #dc302b; font-size: 16px"></span>{% endif %}
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% if 'student.can_view_student_psychometric_test' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'student:applicant_declaration' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-pencil"></i>
+                                        <span class="title">{% trans 'Declaration' %}</span>
+                                        {% if user.get_student_application.declaration %}
+                                            <span class="title glyphicon glyphicon-ok"
+                                                  style="color: #41bc2c;font-size: 16px"></span>{% else %}
+                                            <span class="title glyphicon glyphicon-exclamation-sign"
+                                                  style="color: #dc302b; font-size: 16px"></span>{% endif %}
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% if 'student.can_view_my_application' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'student:my_application' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-check"></i>
+                                        <span class="title">{% trans 'My Application' %}</span>
+
+
+                                        </span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+
+
+
+                            <li class="nav-item module_settings_nav_item">
+{#                                {% if 'Application Settings' in access_list %}#}
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+                                        <i class="fa fa-tasks" aria-hidden="true"></i>
+
+
+                                        <span class="title">{% trans 'Application Settings' %}</span>
+                                        <span class="arrow module_settings_arrow"></span>
+                                    </a>
+{#                                {% endif %}#}
+                                <ul class="sub-menu module_settings_sub_menu">
+                                    {% if 'Manage Applicant Documents' in access_list %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:document_settings' %}"
+                                               class="nav-link ">{% trans 'Manage Applicant Documents' %}</a>
+                                        </li>
+                                    {% endif %}
+{#                                    {% if 'Approving Applicant Details' in access_list %}#}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'partner:template_approving_application' %}"
+                                               class="nav-link ">{% trans 'Approving Applicant Details' %}</a>
+                                        </li>
+{#                                    {% endif %}#}
+
+
+
+
+                                </ul>
+                            </li>
+
+                        {% if user.is_super_admin %}
+
+
+                            <li class="nav-item accounting_nav_item">
+                                <a href="javascript:;" class="nav-link nav-toggle">
+                                    <i class="fa fa-briefcase" aria-hidden="true"></i>
+
+
+                                    <span class="title">{% trans 'Accounting' %}</span>
+                                    <span class="arrow accounting_arrow"></span>
+                                </a>
+                                <ul class="sub-menu accounting_sub_menu">
+                                    {% if 'Payment Settings' in access_list %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:payment_settings' %}"
+                                               class="nav-link ">{% trans 'Payment Settings' %}</a>
+                                        </li>
+                                    {% endif %}
+
+{#                                    <li class="nav-item ">#}
+{#                                        <a href="{% url 'accounting:get_payment_report' %}"#}
+{#                                           class="nav-link ">{% trans 'Payment Report' %}</a>#}
+{#                                    </li>#}
+
+
+                                </ul>
+                            </li>
+                        {% endif %}
+
+
+
+
+
+
+                            {% if 'donor.can_view_scholarship' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+                                        <i class="fa fa-briefcase"></i>
+                                        <span class="title">Scholarship</span>
+                                    </a>
+                                    <ul class="sub-menu">
+                                        <li class="nav-item ">
+                                            <a href="{% url 'donor:template_student_selection' %}" class="nav-link ">
+                                                Student Selection </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+
+
+                            {% if 'donor.can_view_reports' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-list-alt"></i>
+                                        <span class="title">Report</span>
+                                    </a>
+                                    <ul class="sub-menu">
+                                        <li class="nav-item ">
+                                            <a href="{% url 'donor:template_student_reports' %}" class="nav-link ">
+                                                Student Report </a>
+                                        </li>
+                                        <li class="nav-item ">
+                                            <a href="{% url 'donor:template_application_progress_history' %}"
+                                               class="nav-link ">
+                                                App Progress History </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+
+
+
+
+                            {% if 'donor.can_view_scholarship' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+                                        <i class="fa fa-briefcase"></i>
+                                        <span class="title">Scholarship</span>
+                                    </a>
+                                    <ul class="sub-menu">
+                                        <li class="nav-item ">
+                                            <a href="{% url 'donor:template_student_selection' %}" class="nav-link ">
+                                                Student Selection </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+
+                            {% if 'donor.can_view_reports' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-list-alt"></i>
+                                        <span class="title">Report</span>
+                                    </a>
+                                    <ul class="sub-menu">
+                                        <li class="nav-item ">
+                                            <a href="{% url 'donor:template_student_reports' %}" class="nav-link ">
+                                                Student Report </a>
+                                        </li>
+                                        <li class="nav-item ">
+                                            <a href="{% url 'donor:template_application_progress_history' %}"
+                                               class="nav-link ">
+                                                App Progress History </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+
+                            {% if 'donor.can_view_payments_reports' in perms %}
+                                <li class="nav-item" id="acd_qli">
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+                                        <i class="fa fa-briefcase"></i>
+                                        <span class="title">Payment Report</span>
+                                    </a>
+                                    <ul class="sub-menu">
+                                        <li class="nav-item ">
+                                            <a href="{% url 'donor:template_my_payments' %}" class="nav-link ">
+                                                My Payments </a>
+                                        </li>
+                                        <li class="nav-item ">
+                                            <a href="{% url 'donor:template_students_receipts' %}" class="nav-link ">
+                                                Student Receipt </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+
+
+
+                            {% if 'masters.can_view_application_progress_history' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'parent:template_student_application_progress_history' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-list-alt"></i>
+                                        <span class="title">Applications Progress History</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+
+                        </ul>
+                        <!-- END SIDEBAR MENU -->
+                    </div>  <!-- END tabpane -->
+                    <div class="tab-pane " id="d"><!--Academic-->
+                        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
+                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+
+                            {% if 'partner.can_view_academic_progress' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'partner:template_academic_progress' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-list-alt"></i>
+                                        <span class="title">Academic Progress</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% if 'partner.can_view_progress_history' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'partner:template_student_progress_history' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-list-alt"></i>
+                                        <span class="title">Applications Progress History</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% if 'partner.can_view_semester_result' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'partner:template_semester_result' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-list-alt"></i>
+                                        <span class="title">Semester Result</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% if 'masters.can_view_student_academic_reports' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'parent:template_student_academic_report' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-list-alt"></i>
+                                        <span class="title">Student Report</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+
+                        </ul>
+                        <!-- END SIDEBAR MENU -->
+                    </div>  <!-- END tabpane -->
+
+
+                    <div class="tab-pane " id="e"><!--Accounting -->
+                        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
+                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+
+                            {% if 'accounting.can_view_student_payment_voucher' in perms %}
+                                <li class="nav-item start ">
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+                                        <i class="fa fa-briefcase"></i>
+                                        <span class="title">{% trans 'Accounting' %}</span>
+                                        <span class="arrow"></span>
+                                    </a>
+                                    <ul class="sub-menu" style="display: block">
+                                        {% if 'accounting.can_view_student_receipt_voucher' in perms %}
+                                            <li class="nav-item ">
+                                                <a href="{% url 'accounting:get_student_payment_voucher' %}"
+                                                   class="nav-link ">
+                                                    Disbursement Register </a>
+                                            </li>
+                                        {% endif %}
+
+                                        {% if 'accounting.can_view_student_receipt_voucher' in perms %}
+                                            <li class="nav-item ">
+                                                <a href="{% url 'accounting:get_student_receipt_voucher' %}"
+                                                   class="nav-link ">
+                                                    Repayment Register </a>
+                                            </li>
+                                        {% endif %}
+                                        {% if 'accounting.can_view_student_reciept_payment_voucher' in perms %}
+
+                                            <li class="nav-item ">
+                                                <a href="{% url 'accounting:get_student_payment_and_receipt_report' %}"
+                                                   class="nav-link ">
+                                                    Individual Summary Report </a>
+                                            </li>
+                                        {% endif %}
+                                        {% if 'accounting.can_view_student_report' in perms %}
+                                            <li class="nav-item ">
+                                                <a href="{% url 'accounting:get_payment_report' %}" class="nav-link ">
+                                                    Disbursement Report </a>
+                                            </li>
+                                        {% endif %}
+                                        {% if 'accounting.can_view_student_repayment_report' in perms %}
+                                            <li class="nav-item ">
+                                                <a href="{% url 'accounting:get_repayment_report' %}" class="nav-link ">
+                                                    Repayment Report
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        {% if 'accounting.can_view_approve_and_paid_total' in perms %}
+                                            <li class="nav-item ">
+                                                <a href="{% url 'accounting:get_approval_and_paid_total' %}"
+                                                   class="nav-link ">
+                                                    Group Summary Report </a>
+                                            </li>
+                                        {% endif %}
+
+                                        {% if not user.is_partner %}
+                                            {% if 'accounting.can_view_donor_receipt_voucher' in perms %}
+
+                                                <li class="nav-item ">
+                                                    <a href="{% url 'accounting:get_donor_receipt_voucher' %}"
+                                                       class="nav-link ">
+                                                        Donor Register </a>
+                                                </li>
+                                            {% endif %}
+                                            {% if 'accounting.can_view_donor_report' in perms %}
+                                                <li class="nav-item ">
+                                                    <a href="{% url 'accounting:get_donor_report' %}" class="nav-link ">
+                                                        Donor Report </a>
+                                                </li>
+
+                                            {% endif %}
+                                        {% endif %}
+                                    </ul>
+                                </li>
+                            {% endif %}
+
+
+                        </ul>
+                        <!-- END SIDEBAR MENU -->
+                    </div>  <!-- END tabpane -->
+
+                    <div class="tab-pane " id="f"><!--Soft Skills Program-->
+                        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
+                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+
+
+                            {% if 'partner.can_view_link_student_program' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'partner:template_link_student_program' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-list-alt"></i>
+                                        <span class="title">Link Students & Program</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% if 'partner.can_view_attendance_report' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'partner:template_attendance_report' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-list-alt"></i>
+                                        <span class="title">Attendance Report</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+
+                        </ul>
+                        <!-- END SIDEBAR MENU -->
+                    </div>  <!-- END tabpane -->
+
+                    <div class="tab-pane " id="application_progress">
+                        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
+                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+
+
+                            {% if 'student.can_view_student_application_progress_history' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'student:applicant_progress_history' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-list-alt"></i>
+                                        <span class="title">{% trans 'Application Progress History' %}</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+
+                        </ul>
+                        <!-- END SIDEBAR MENU -->
+                    </div>  <!-- END tabpane -->
+
+
+                    <div class="tab-pane " id="offer_status">
+                        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
+                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+
+
+                            {% if 'student.can_view_student_application_progress_history' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'student:application_offer_letter' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-list-alt"></i>
+                                        <span class="title">{% trans 'Offer Status' %}</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+
+                        </ul>
+                        <!-- END SIDEBAR MENU -->
+                    </div>  <!-- END tabpane -->
+
+
+                    <div class="tab-pane " id="payments">
+                        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
+                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+
+
+                            {% if 'student.can_view_student_application_progress_history' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'payments:checkout' %}"
+                                       class="nav-link nav-toggle">
+                                        {#                                        <i class="glyphicon-credit-card"></i>#}
+                                        <span class="glyphicon glyphicon-credit-card" style="font-size: 28px"></span>
+                                        <span class="title">{% trans 'Payments' %}</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+
+                        </ul>
+                        <!-- END SIDEBAR MENU -->
+                    </div>  <!-- END tabpane -->
+
+
+                </div> <!-- tab-content -->
+            </div>
+            <!-- END SIDEBAR -->
+        </div>
+
+
+        <!-- END SIDEBAR -->
+        <!-- BEGIN CONTENT -->
+        <div class="page-content-wrapper">
+            <div class="col-md-12" style="margin-left: 180px;">
+                <div class="tabs-left">
+                    <ul class="nav nav-tabs menu" style="border-bottom: none">
+                        {#<li class="active"><a href="#a" data-toggle="tab">Dashboard</a></li>#}
+                        {% if not user.is_student %}
+                            {% if 'System Settings' in access_list %}
+                                <li id="setting_anch"><a href="#b" data-toggle="tab">{% trans 'Master Settings' %}</a></li>
+                            {% elif 'User Settings' in access_list %}
+                                <li id="setting_anch"><a href="#b" data-toggle="tab">{% trans 'Master Settings' %}</a></li>
+                            {% elif 'University Settings' in access_list %}
+                                <li id="setting_anch"><a href="#b" data-toggle="tab">{% trans 'Master Settings' %}</a></li>
+                            {% elif 'Academic Settings' in access_list %}
+                                <li id="setting_anch"><a href="#b" data-toggle="tab">{% trans 'Master Settings' %}</a></li>
+                            {% endif %}
+
+                        {% endif %}
+{#                        {% if user.is_student %}#}
+{#                            <li id="app_anch"><a href="{% url 'student:student_home' %}" >{% trans 'Application Management' %}</a></li>#}
+{#                        {% else %}#}
+{#                            {% if 'Application Settings' in access_list %}#}
+                                <li id="app_anch"><a href="#c" data-toggle="tab">{% trans 'Module Settings' %}</a></li>
+{#                            {% endif %}#}
+{#                        {% endif %}#}
+
+                        {% if user.is_student %}
+                            <li id="app_prog"><a href="{% url 'student:applicant_progress_history' %}" >{% trans 'Application Progress History' %}</a></li>
+                        {% endif %}
+
+                        {% if user.is_student %}
+                            <li id="app_offer_status"><a href="{% url 'student:application_offer_letter' %}" >{% trans 'Offer Status' %}</a></li>
+                        {% endif %}
+
+                        {% if user.is_student %}
+                            <li id="app_payments"><a href="{% url 'payments:checkout' %}" >{% trans 'Payments' %}</a></li>
+                        {% endif %}
+
+                    </ul>
+
+                </div><!-- /tabbable -->
+            </div><!-- /col -->
+            <!-- BEGIN CONTENT BODY -->
+            <div class="page-content">
+                <div class="overlay">
+                    <div id="loading-img"></div>
+                </div>
+                <div class="clearfix">
+                    {% block content %}
+                    {% endblock %}
+
+                </div>
+            </div>
+            <!-- END CONTENT BODY -->
+        </div>
+        <!-- END CONTENT -->
+
+    </div>
+    <!-- END CONTAINER -->
+{% endwith %}
+<!-- BEGIN FOOTER -->
+<div class="page-footer">
+    <div class="page-footer-inner"> &nbsp&nbsp&nbsp&nbsp 2018 &copy; NAMA.
+
+    </div>
+    <div class="scroll-to-top">
+        <i class="icon-arrow-up"></i>
+    </div>
+</div>
+<!-- END FOOTER -->
+<!--[if lt IE 9]>
+<script src="{% static 'assets/global/plugins/respond.min.js' %}"></script>
+<script src="{% static 'assets/global/plugins/excanvas.min.js' %}"></script>
+<![endif]-->
+<!-- BEGIN CORE PLUGINS -->
+
+{#    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js" type="text/javascript"></script>#}
+<script src="{% static 'assets/global/plugins/jquery.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/bootstrap/js/bootstrap.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/js.cookie.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js' %}"
+        type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.j' %}s"
+        type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/jquery.blockui.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js' %}"
+        type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.5.1/chosen.jquery.min.js" type="text/javascript"></script>
+<!-- END CORE PLUGINS -->
+<!-- BEGIN PAGE LEVEL PLUGINS -->
+<script src="{% static 'switch/js/Sswitch.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/moment.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js' %}"
+        type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/morris/morris.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/morris/raphael-min.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/counterup/jquery.waypoints.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/counterup/jquery.counterup.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/amcharts/amcharts/amcharts.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/amcharts/amcharts/serial.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/amcharts/amcharts/pie.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/amcharts/amcharts/radar.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/amcharts/amcharts/themes/light.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/amcharts/amcharts/themes/patterns.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/amcharts/amcharts/themes/chalk.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/amcharts/ammap/ammap.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/amcharts/ammap/maps/js/worldLow.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/amcharts/amstockcharts/amstock.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/fullcalendar/fullcalendar.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/horizontal-timeline/horozontal-timeline.min.js' %}"
+        type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/flot/jquery.flot.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/flot/jquery.flot.resize.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/flot/jquery.flot.categories.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/jquery-easypiechart/jquery.easypiechart.min.js' %}"
+        type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/jquery.sparkline.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/jqvmap/jqvmap/jquery.vmap.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.russia.js' %}"
+        type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.world.js' %}"
+        type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.europe.js' %}"
+        type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.germany.js' %}"
+        type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.usa.js' %}"
+        type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/jqvmap/jqvmap/data/jquery.vmap.sampledata.js' %}"
+        type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/jstree/dist/jstree.min.js' %}" type="text/javascript"></script>
+<!-- END PAGE LEVEL PLUGINS -->
+<!-- BEGIN THEME GLOBAL SCRIPTS -->
+<script src="{% static 'assets/global/scripts/app.min.js' %}" type="text/javascript"></script>
+
+<script src="{% static 'assets/pages/scripts/table-datatables-editable.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/bootstable.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/jquery.dataTables.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/dataTables.bootstrap.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/tabs_accordion.js' %}" type="text/javascript"></script>
+<!-- END THEME GLOBAL SCRIPTS -->
+<!-- BEGIN PAGE LEVEL SCRIPTS -->
+{#        <script src="{% static 'assets/pages/scripts/ui-tree.js' %}" type="text/javascript"></script>#}
+<script src="{% static 'assets/pages/scripts/dashboard.min.js' %}" type="text/javascript"></script>
+<!-- END PAGE LEVEL SCRIPTS -->
+<script src="{% static 'assets/global/scripts/datatable.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/datatables/datatables.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/pages/scripts/table-datatables-managed.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js' %}"
+        type="text/javascript"></script>
+<!-- BEGIN THEME LAYOUT SCRIPTS -->
+<script src="{% static 'assets/layouts/layout2/scripts/layout.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/layouts/layout2/scripts/demo.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/layouts/global/scripts/quick-sidebar.min.js' %}" type="text/javascript"></script>
+<!-- END THEME LAYOUT SCRIPTS -->
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-progressbar/0.9.0/bootstrap-progressbar.min.js"></script>
+<script src="http://www.amcharts.com/lib/amcharts.js" type="text/javascript"></script>
+<script src="{% static 'js-webshim/minified/polyfiller.js' %}" type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+
+</body>
+
+<script type="text/javascript">
+
+
+    {% if request.resolver_match.url_name == 'student_home' or request.resolver_match.url_name == 'applicant_personal_info' or request.resolver_match.url_name == 'applicant_academic_english_qualification' or request.resolver_match.url_name == 'applicant_curriculum_experience_info' or request.resolver_match.url_name == 'applicant_additional_information' or request.resolver_match.url_name == 'applicant_attachment_submission'  or request.resolver_match.url_name == 'applicant_declaration' or request.resolver_match.url_name == 'my_application'  or request.resolver_match.url_name == 'applicant_employement_history_info'  or request.resolver_match.url_name == 'applicant_intake_info'  %}
+        {
+            var element = document.getElementById("c");
+            element.classList.add("active");
+
+            var element = document.getElementById("app_anch");
+            element.classList.add("active");
+        }
+    {% endif %}
+
+
+
+    {% if request.resolver_match.url_name == 'applicant_progress_history' %}
+        {
+            var element = document.getElementById("application_progress");
+            element.classList.add("active");
+
+            var element = document.getElementById("app_prog");
+            element.classList.add("active");
+        }
+    {% endif %}
+
+    {% if request.resolver_match.url_name == 'template_approving_application' or request.resolver_match.url_name == 'edit_document' or request.resolver_match.url_name == 'document_settings' or  request.resolver_match.url_name == 'template_applicant_all_details'  %}
+        {
+            var element = document.getElementById("c");
+            element.classList.add("active");
+
+            var element = document.getElementById("app_anch");
+            element.classList.add("active");
+
+            $(".module_settings_nav_item").addClass("open");
+            $(".module_settings_arrow").addClass("open");
+            $('.module_settings_sub_menu').css('display', 'block');
+
+        }
+    {% endif %}
+
+
+    {% if request.resolver_match.url_name == 'get_payment_report' or request.resolver_match.url_name == 'payment_settings' %}
+        {
+            var element = document.getElementById("c");
+            element.classList.add("active");
+
+            var element = document.getElementById("app_anch");
+            element.classList.add("active");
+
+            $(".accounting_nav_item").addClass("open");
+            $(".accounting_arrow").addClass("open");
+            $('.accounting_sub_menu').css('display', 'block');
+
+        }
+    {% endif %}
+
+
+
+
+    {% if request.resolver_match.url_name == 'application_offer_letter' %}
+        {
+            var element = document.getElementById("offer_status");
+            element.classList.add("active");
+
+            var element = document.getElementById("app_offer_status");
+            element.classList.add("active");
+        }
+    {% endif %}
+
+    {% if request.resolver_match.url_name == 'checkout' %}
+        {
+            var element = document.getElementById("payments");
+            element.classList.add("active");
+
+            var element = document.getElementById("app_payments");
+            element.classList.add("active");
+        }
+    {% endif %}
+
+
+    {% if request.resolver_match.url_name == 'language_settings' or request.resolver_match.url_name == 'add_language' or request.resolver_match.url_name == 'edit_language' or request.resolver_match.url_name == 'currency_settings' or request.resolver_match.url_name == 'add_currency' or request.resolver_match.url_name == 'edit_currency'   or request.resolver_match.url_name == 'study_mode_settings'  or request.resolver_match.url_name == 'study_level_settings' or request.resolver_match.url_name == 'study_type_settings'  or request.resolver_match.url_name == 'country_settings'  or request.resolver_match.url_name == 'learning_centers_settings' or request.resolver_match.url_name == 'add_learning_centers' or request.resolver_match.url_name == 'edit_learning_centers' or request.resolver_match.url_name == 'student_mode_settings'  or request.resolver_match.url_name == 'faculty_settings' or request.resolver_match.url_name == 'add_faculty'  or request.resolver_match.url_name == 'edit_faculty' or request.resolver_match.url_name == 'link_faculty_staff' or request.resolver_match.url_name == 'arabic_lang_proficiency_settings' or request.resolver_match.url_name == 'english_lang_proficiency_settings' %}
+        {
+            var element = document.getElementById("b");
+            element.classList.add("active");
+
+            var element = document.getElementById("setting_anch");
+            element.classList.add("active");
+
+            $(".master_settings_nav_item").addClass("open");
+            $(".master_settings_arrow").addClass("open");
+            $('.master_settings_sub_menu').css('display', 'block');
+
+        }
+    {% endif %}
+
+
+    {% if request.resolver_match.url_name == 'year_settings' or request.resolver_match.url_name == 'edit_semester' or request.resolver_match.url_name == 'add_semester' or request.resolver_match.url_name == 'semester_settings' or request.resolver_match.url_name == 'activity_settings' or  request.resolver_match.url_name == 'calendar_settings'  or request.resolver_match.url_name == 'add_calendar' or request.resolver_match.url_name == 'edit_calender' %}
+        {
+            var element = document.getElementById("b");
+            element.classList.add("active");
+
+            var element = document.getElementById("setting_anch");
+            element.classList.add("active");
+
+            $(".program_settings_nav_item").addClass("open");
+            $(".program_settings_arrow").addClass("open");
+            $('.program_settings_sub_menu').css('display', 'block');
+
+        }
+    {% endif %}
+
+    {% if request.resolver_match.url_name == 'university_settings' or request.resolver_match.url_name == 'edit_university' or request.resolver_match.url_name == 'add_university' or request.resolver_match.url_name == 'university_partner_settings' or request.resolver_match.url_name == 'add_university_partner' or request.resolver_match.url_name == 'edit_university_partner' or request.resolver_match.url_name == 'campus_settings'  or request.resolver_match.url_name == 'add_campus'  or request.resolver_match.url_name == 'edit_campus'   or request.resolver_match.url_name == 'program_settings'   or request.resolver_match.url_name == 'program_fee_settings'  or request.resolver_match.url_name == 'add_program' or request.resolver_match.url_name == 'edit_program' or request.resolver_match.url_name == 'link_campus_staff'  or request.resolver_match.url_name == 'department_settings' or request.resolver_match.url_name == 'add_department' or request.resolver_match.url_name == 'edit_department' or request.resolver_match.url_name == 'link_department_staff' or request.resolver_match.url_name == 'link_university_staff' or request.resolver_match.url_name == 'add_program_fee' or request.resolver_match.url_name == 'edit_program_fee'%}
+        {
+            var element = document.getElementById("b");
+            element.classList.add("active");
+
+            var element = document.getElementById("setting_anch");
+            element.classList.add("active");
+
+            $(".organization_settings_nav_item").addClass("open");
+            $(".organization_settings_arrow").addClass("open");
+            $('.organization_settings_sub_menu').css('display', 'block');
+
+        }
+    {% endif %}
+
+    {% if request.resolver_match.url_name == 'staff_settings'  or request.resolver_match.url_name == 'add_staff'   or request.resolver_match.url_name == 'edit_staff' or request.resolver_match.url_name == 'group_settings' or request.resolver_match.url_name == 'add_group' %}
+        {
+            var element = document.getElementById("b");
+            element.classList.add("active");
+
+            var element = document.getElementById("setting_anch");
+            element.classList.add("active");
+
+            $(".staff_settings_nav_item").addClass("open");
+            $(".staff_settings_arrow").addClass("open");
+            $('.staff_settings_sub_menu').css('display', 'block');
+
+        }
+    {% endif %}
+
+    {% if request.resolver_match.url_name == 'university_dashboard'  %}
+        {
+            var element = document.getElementById("c");
+            element.classList.add("active");
+
+            var element = document.getElementById("app_anch");
+            element.classList.add("active");
+
+
+        }
+    {% endif %}
+
+
+
+
+    $(document).on("click", "#id_toggle", function (e) {
+        if ($('body').attr("class") == "page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid") {
+            $("#right").hide();
+            $("#left").show();
+        } else {
+            $("#right").show();
+            $("#left").hide();
+        }
+
+    });
+
+    $(document).on("click", ".action", function (e) {
+        var selected_year = $(this).attr('id');
+        var url = '/masters/change_session_year/';
+
+        {#alert(selected_year);#}
+        change_session_year(url, selected_year)
+    })
+
+    function change_session_year(url, selected_year) {
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                selected_year: selected_year,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            success: function (data) {
+                location.reload();
+            },
+            error: function (xhr, msg, err) {
+                alert(xhr.responseJSON.error);
+            }
+        });
+    }
+
+
+</script>
+</html>

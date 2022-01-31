@@ -1,4 +1,4 @@
-{% extends "template_base_page.html" %}
+{% extends request.user.is_administrator|yesno:"template_university_base_page.html,template_base_page.html" %}
 {% load  i18n %}
 {% load staticfiles %}
 {% load custom_tags %}

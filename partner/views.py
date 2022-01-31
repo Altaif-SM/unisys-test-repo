@@ -273,7 +273,10 @@ def template_approving_application(request):
     # messages.success(request, "Records are.... ")
     try:
         # if request.user.is_super_admin():
-        applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission = True,year=get_current_year(request))
+        if request.user.is_administrator():
+            applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission = True,year=get_current_year(request),university=request.user.university)
+        else:
+            applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission = True,year=get_current_year(request))
         # else:
         #     applicant_recs = ApplicationDetails.objects.filter(
         #         nationality=request.user.partner_user_rel.get().address.country,

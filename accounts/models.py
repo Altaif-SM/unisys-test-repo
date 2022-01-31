@@ -46,6 +46,8 @@ class User(AbstractUser):
     DEPUTT_VICE_CHANCELLOR = 'Deputy Vice Chancellor'
     HR = 'HR'
 
+    ADMINISTRATOR = 'Administrator'
+
 
     first_name = models.CharField(max_length=256, blank=True, null=True)
     middle_name = models.CharField(max_length=256, blank=True, null=True)
@@ -147,6 +149,9 @@ class User(AbstractUser):
 
     def accountant_type(self):
         return self.role.all()[0].name.title() if self.role.all().exists() else None
+
+    def is_administrator(self):
+        return True if self.role.all().filter(name__in=[self.ADMINISTRATOR]).exists() else False
 
     @property
     def get_user_permissions(self):
@@ -296,6 +301,7 @@ class User(AbstractUser):
     PARTNER_DASHBOARD = '/accounts/home/'
     DONOR_DASHBOARD = '/donor/template_donor_dashboard/'
     ACCOUNTANT_DASHBOARD = '/accounts/home/'
+    ADMINISTRATOR_DASHBOARD = '/accounts/university_dashboard/'
 
     def get_dashboard_path(self):
 
@@ -312,4 +318,6 @@ class User(AbstractUser):
             dashboard_path = User.DONOR_DASHBOARD
         elif self.role.get().name == User.ACCOUNTANT:
             dashboard_path = User.ACCOUNTANT_DASHBOARD
+        elif self.role.get().name == User.ADMINISTRATOR:
+            dashboard_path = User.ADMINISTRATOR_DASHBOARD
         return dashboard_path

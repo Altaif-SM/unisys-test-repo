@@ -1,0 +1,592 @@
+{% extends "template_university_base_page.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <style type="text/css">
+        .s-switch input[type='checkbox'] {
+            display: none
+        }
+
+        .s-switch {
+            width: 62px;
+            height: 32px;
+            z-index: 0;
+            margin: 0;
+            padding: 0;
+            appearance: none;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            border-radius: 16px;
+            -moz-border-radius: 16px;
+            -webkit-border-radius: 16px;
+        }
+
+        .s-switch:before {
+            content: ' ';
+            background: #D9534F !important;
+            position: absolute;
+            left: 1px;
+            top: 1px;
+            width: 60px;
+            height: 30px;
+            background: #FFFFFF;
+            z-index: 1;
+            border-radius: 16px;
+            -moz-border-radius: 16px;
+            -webkit-border-radius: 16px;
+        }
+
+        .s-switch:after {
+            content: ' ';
+            height: 29px;
+            width: 29px;
+            border-radius: 28px;
+            z-index: 2;
+            background: #FFFFFF;
+            position: absolute;
+            -webkit-transition-duration: 300ms;
+            transition-duration: 300ms;
+            top: 1px;
+            left: 3px;
+            -webkit-box-shadow: 0 2px 5px #999999;
+            box-shadow: 0 2px 5px #999999;
+        }
+
+        .s-switch-on:before {
+            background: #4DAF48 !important;
+        }
+
+        .s-switch-on:after {
+            left: 31px !important;
+        }
+
+        .s-switch-readonly, .s-switch-disabled {
+            opacity: 0.8;
+        }
+
+        {#tspan {#}
+        {#      display: none;#}
+        {#    }#}
+
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+
+    <script type="text/javascript">
+
+        window.onload = function () {
+            $(document).ready(function () {
+
+                var chart;
+                var data =
+                {{ raw_list }}//[50, 90, 60, 40, 30, 100, 70, 50];
+
+                var chartData = [{
+                    AttendanceStatus: "{% trans 'Applicants' %}",
+                    categrory: data[0],
+                },
+                    {
+                        AttendanceStatus: "{% trans 'Conditional Offer Letter' %}",
+                        categrory: data[1],
+                    },
+                    {
+                        AttendanceStatus: " {% trans 'Full Offer Letter' %}",
+                        categrory: data[2],
+                    },
+                    {
+                        AttendanceStatus: "{% trans 'Incomplete' %}",
+                        categrory: data[3],
+                    },
+
+                    {
+                        AttendanceStatus: "{% trans 'Reject' %}",
+                        categrory: data[5],
+                    },
+                    {
+                        AttendanceStatus: "{% trans 'Total' %}",
+                        categrory: data[6],
+                    },
+                ];
+                // SERIAL CHART
+                chart = new AmCharts.AmSerialChart();
+                chart.dataProvider = chartData;
+                chart.categoryField = "AttendanceStatus";
+                chart.fontSize = 14;
+                chart.startDuration = 1;
+                chart.plotAreaFillAlphas = 0.2;
+                // the following two lines makes chart 3D
+                chart.angle = 30;
+                chart.depth3D = 40;
+
+                // AXES
+                // category
+                var categoryAxis = chart.categoryAxis;
+                categoryAxis.gridAlpha = 0.2;
+                categoryAxis.gridPosition = "start";
+                categoryAxis.axisColor = "#DADADA";
+                categoryAxis.axisAlpha = 1;
+                categoryAxis.dashLength = 5;
+
+                // value
+                var valueAxis = new AmCharts.ValueAxis();
+                valueAxis.stackType = "3d"; // This line makes chart 3D stacked (columns are placed one behind another)
+                valueAxis.gridAlpha = 0.2;
+                valueAxis.axisColor = "#DADADA";
+                valueAxis.axisAlpha = 1;
+                valueAxis.dashLength = 5;
+                valueAxis.unit = "%";
+                chart.addValueAxis(valueAxis);
+
+                // GRAPHS
+                // first graph
+                var graph1 = new AmCharts.AmGraph();
+                graph1.title = "Attendance";
+                graph1.valueField = "categrory";
+                graph1.type = "column";
+                graph1.lineAlpha = 0;
+                graph1.lineColor = "#87CEFA";
+                graph1.fillAlphas = 2;
+                graph1.balloonText = " [[category]]";  //" [[category]] Student in Class: [[value]]";
+                chart.addGraph(graph1);
+                chart.write("chartdiv");
+
+
+                var data_one = {{scholarship_list|safe}};
+                console.log(data_one);
+
+                var chartDataTwo = [];
+                for (var i = 0; i < data_one.length; i++) {
+                    chartDataTwo.push({
+                        AttendanceStatus: data_one[i]['scholarship_name'],
+                        categrory: data_one[i]['scholarship_count']
+                    });
+                }
+
+                var chart_two = AmCharts.makeChart("chartdiv_two", {
+                    "type": "pie",
+                    "theme": "light",
+                    "dataProvider": chartDataTwo,
+                    "valueField": "categrory",
+                    "titleField": "AttendanceStatus",
+                    "outlineAlpha": 0.4,
+                    "depth3D": 15,
+                    "balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+                    "angle": 30,
+                    "export": {
+                        "enabled": true
+                    }
+                });
+
+
+                var data_two = {{country_list|safe}};
+                console.log(data_two);
+
+                var chartDataThree = [];
+                for (var i = 0; i < data_two.length; i++) {
+                    chartDataThree.push({
+                        AttendanceStatus: data_two[i]['country_name'],
+                        categrory: data_two[i]['country_count']
+                    });
+                }
+
+
+                var chart_three = AmCharts.makeChart("chartdiv_three", {
+                    "type": "pie",
+                    "theme": "light",
+                    "dataProvider": chartDataThree,
+                    "valueField": "categrory",
+                    "titleField": "AttendanceStatus",
+                    "outlineAlpha": 0.4,
+                    "depth3D": 15,
+                    "balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+                    "angle": 30,
+                    "export": {
+                        "enabled": true
+                    }
+                });
+
+
+                $("#id_registration_switch").Sswitch({
+                    onSwitchChange: function (event) {
+                        // Your magic
+
+                        var mode = $(this).prop('checked');
+                        toggle_switch('is_registration_switch', mode);
+                    }
+                });
+
+                $("#id_submission_switch").Sswitch({
+                    onSwitchChange: function (event) {
+                        var mode = $(this).prop('checked');
+                        toggle_switch('is_submission_switch', mode);
+                    }
+                });
+
+                $("#id_psyc_switch").Sswitch({
+                    onSwitchChange: function (event) {
+                        var mode = $(this).prop('checked');
+                        toggle_switch('is_psyc_switch', mode);
+                    }
+                });
+
+                $("#id_agreements_switch").Sswitch({
+                    onSwitchChange: function (event) {
+                        var mode = $(this).prop('checked');
+                        toggle_switch('is_agreements_switch', mode);
+                    }
+                });
+
+                $("#id_semester_switch").Sswitch({
+                    onSwitchChange: function (event) {
+                        var mode = $(this).prop('checked');
+                        toggle_switch('is_semester_switch', mode);
+                    }
+                });
+
+                $("#id_program_switch").Sswitch({
+                    onSwitchChange: function (event) {
+                        var mode = $(this).prop('checked');
+                        toggle_switch('is_program_switch', mode);
+                    }
+                });
+
+                function toggle_switch(switch_type, switch_mode) {
+                    $.ajax({
+                        type: "POST",
+                        cache: false,
+                        url: '/accounts/update_switch/',
+                        data: {
+                            'switch': switch_mode,
+                            'switch_type': switch_type,
+                            'csrfmiddlewaretoken': '{{ csrf_token }}'
+                        },
+                        success: function (res) {
+
+                            {#                            if(res){#}
+                            {#                                data=JSON.parse(res);#}
+                            {#                                if(data['flag'] === 'date_over'){#}
+                            {#                                    alert('Current Academic Year is over.Please Add New Acadmic Year.');#}
+                            {#                                    $('.s-switch-id-id_registration_switch').removeClass('s-switch-on').addClass('s-switch-off');#}
+                            {#                                    $('.s-switch-id-id_submission_switch').removeClass('s-switch-on').addClass('s-switch-off');#}
+                            {#                                    return false;#}
+                            {#                                }#}
+                            {##}
+                            {#                            }#}
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            //alert('error!');
+                        }
+                    });
+                }
+
+
+            });
+        }
+
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="/">{% trans 'Home' %}</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span>{% trans 'Dashboard' %}</span>
+            </li>
+
+        </ul>
+    </div>
+
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light">
+
+        <div class="portlet-body">
+
+            <h3 class="page-title">
+                {{ request.user.university.university_name|default_if_none:"" }}  Dashboard
+            </h3>
+            <!-- END PAGE HEADER-->
+            <!-- BEGIN DASHBOARD STATS -->
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat blue-madison">
+                        <div class="visual">
+                            <i class="fa fa-comments"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number">
+                                {{ raw_list.0 }}
+                            </div>
+                            <div class="desc">
+                                {% trans 'Applicants' %}
+                            </div>
+                        </div>
+                        <a class="more" href="javascript:;">
+                            {% trans 'View more' %} <i class="m-icon-swapright m-icon-white"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat red-intense">
+                        <div class="visual">
+                            <i class="fa fa-bar-chart-o"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number">
+                                {{ raw_list.1 }}
+                            </div>
+                            <div class="desc">
+                                {% trans 'Conditional Offer Letter' %}
+                            </div>
+                        </div>
+                        <a class="more" href="javascript:;">
+                            {% trans 'View more' %} <i class="m-icon-swapright m-icon-white"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat green-haze">
+                        <div class="visual">
+                            <i class="fa fa-shopping-cart"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number">
+                                {{ raw_list.2 }}
+                            </div>
+                            <div class="desc">
+                                {% trans 'Full Offer Letter' %}
+                            </div>
+                        </div>
+                        <span class="more" href="javascript:;">
+						{% trans 'View more' %} <i class="m-icon-swapright m-icon-white"></i>
+						</span>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat purple-plum">
+                        <div class="visual">
+                            <i class="fa fa-globe"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number">
+                                {{ raw_list.6 }}
+                            </div>
+                            <div class="desc">
+                                Total
+                            </div>
+                        </div>
+                        <a class="more" href="javascript:;">
+                            {% trans 'View more' %} <i class="m-icon-swapright m-icon-white"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+
+            <div class="clearfix">
+            </div>
+            <div class="row">
+                <div class="col-md-8 col-sm-8">
+                    <div class="portlet light ">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-share font-blue-steel hide"></i>
+                                <span class="caption-subject font-blue-steel bold uppercase">{% trans 'Recent Activities' %}</span>
+                            </div>
+
+                        </div>
+                        <div class="portlet-body">
+                            <div class="scroller" style="height: 150px;" data-always-visible="1" data-rail-visible="0">
+                                <ul class="feeds">
+                                    {% for notification in user.notifications.notifications %}
+                                        <li>
+                                        <a href="javascript:;">
+                                            <div class="col1">
+                                                <div class="cont">
+                                                    <div class="cont-col1">
+                                                        <div class="{% if forloop.counter|divisibleby:2 %}label label-sm label-info{% else %}label label-sm label-success{% endif %}" >
+                                                            <i class="fa fa-bell-o"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="cont-col2">
+                                                        <div class="desc">
+                                                            {{ notification.message }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col2">
+                                                <div class="date">
+                                                   {{ notification.last_updated|date:'d-m-y' }}
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+
+                                    {% endfor %}
+
+
+
+
+{#                                    <li>#}
+{#                                        <div class="col1">#}
+{#                                            <div class="cont">#}
+{#                                                <div class="cont-col1">#}
+{#                                                    <div class="label label-sm label-success">#}
+{#                                                        <i class="fa fa-bell-o"></i>#}
+{#                                                    </div>#}
+{#                                                </div>#}
+{#                                                <div class="cont-col2">#}
+{#                                                    <div class="desc">#}
+{#                                                        You have 5 pending membership that requires a quick review.#}
+{#                                                    </div>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                        <div class="col2">#}
+{#                                            <div class="date">#}
+{#                                                24 mins#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </li>#}
+
+
+                                </ul>
+                            </div>
+                            {#							<div class="scroller-footer">#}
+                            {#								<div class="btn-arrow-link pull-right">#}
+                            {#									<a href="javascript:;">See All Records</a>#}
+                            {#									<i class="icon-arrow-right"></i>#}
+                            {#								</div>#}
+                            {#							</div>#}
+                        </div>
+                    </div>
+                </div>
+            <div class="col-md-4 col-sm-4" style="float: right;">
+                    <!-- BEGIN PORTLET-->
+                    <div class="portlet light ">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-bar-chart font-dark hide"></i>
+                                <span class="caption-subject font-dark bold uppercase" style="color: #4B77BE!important">{% trans 'Quick Controls' %}</span>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+
+
+                            <div class="row ">
+                                <label class="col-md-3 control-label">{% trans 'Registration' %}:</label>
+                                <div class="col-md-offset-6" style="">
+
+                                    {% if registration_flag %}
+                                        <input type="checkbox" id="id_registration_switch" checked>
+                                    {% else %}
+                                        <input type="checkbox" id="id_registration_switch">
+                                    {% endif %}
+
+                                </div>
+                            </div>
+                            <br>
+
+                            <div class="row">
+                                <label class="col-md-3 control-label">{% trans 'Submission' %}:</label>
+                                <div class="col-md-offset-6">
+                                    {% if submission_switch %}
+                                        <input type="checkbox" id="id_submission_switch" checked>
+                                    {% else %}
+                                        <input type="checkbox" id="id_submission_switch">
+                                    {% endif %}
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- END PORTLET-->
+                </div>
+            </div>
+
+
+            <div class="row">
+
+                <div class="col-md-10 col-sm-10">
+                    <!-- BEGIN PORTLET-->
+                    <div class="portlet light ">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-bar-chart font-dark hide"></i>
+                                <span class="caption-subject font-dark bold uppercase">{% trans 'Statistics' %}</span>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div id="chartdiv" style="width: 70vw; height: 262px;"></div>
+                        </div>
+                    </div>
+                    <!-- END PORTLET-->
+                </div>
+
+
+            </div>
+            <hr>
+
+            <div class="row">
+                {#                {% if user.is_super_admin %}#}
+                <div class="col-md-6 col-sm-6">
+                    <div class="portlet light ">
+                        <div class="portlet-body">
+                            <div id="chartdiv_three" style="width: 100%; height: 262px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                {#                {% endif %}#}
+            </div>
+
+            {#            {% if user.is_super_admin %}#}
+            <div class="row">
+                <div class="col-md-6 col-sm-6" style="display: none">
+                    <div class="portlet light ">
+                        <div class="portlet-body">
+                            <div id="chartdiv_two" style="width: 100%; height: 262px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+                {#                    <div class="col-md-6 col-sm-6">#}
+                {#                        <div class="portlet light ">#}
+                {#                            <div class="portlet-body">#}
+                {#                                <div id="chartdiv_three" style="width: 100%; height: 262px;"></div>#}
+                {#                            </div>#}
+                {#                        </div>#}
+                {#                    </div>#}
+                {#            {% endif %}#}
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <!-- END VALIDATION STATES-->
+
+
+{% endblock %}

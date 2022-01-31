@@ -6,6 +6,7 @@ app_name = 'accounts'
 
 urlpatterns = [
     path('home/', views.home, name='home'),
+    path('university_dashboard/', views.university_dashboard, name='university_dashboard'),
     # path('signin/', views.template_signin, name='signin'),
     # path('signup/', views.template_signup, name='signup'),
     path('user_signup/', views.user_signup, name='user_signup'),
