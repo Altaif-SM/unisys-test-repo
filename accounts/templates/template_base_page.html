@@ -222,7 +222,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             {% else %}
                                 {#                                <img alt="" class="img-circle" src="../../media/{{ user.get_application.image }}"/>#}
                                 <b><span
-                                        class="username username-hide-on-mobile">{{ user.role.all.0.name }}-{{ user.first_name|default_if_none:"" }} {{ user.last_name|default_if_none:"" }} </span></b>
+                                        class="username username-hide-on-mobile">{{ user.role.all.0.name }} ({{ user.first_name|default_if_none:"" }}{{ user.last_name|default_if_none:""}}) </span></b>
                                 {#                                <br>#}
                                 {#                                <span class="username username-hide-on-mobile"> {{ user.get_application_id }}#}
                                 </span>
