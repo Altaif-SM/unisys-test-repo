@@ -2520,15 +2520,15 @@ def applicant_intake_info(request):
         if application_obj.faculty:
              department_recs = application_obj.faculty.department.all()
     if application_obj:
-
-        country_learning_recs = LearningCentersDetails.objects.filter(university_id=application_obj.university.id)
-        for rec in country_learning_recs:
-            raw_dict = {}
-            if rec.country.id not in duplicate_country_ids:
-                raw_dict['id'] = rec.country.id
-                raw_dict['country_name'] = rec.country.country_name
-                duplicate_country_ids.append(rec.country.id)
-                country_recs.append(raw_dict)
+        if application_obj.university:
+            country_learning_recs = LearningCentersDetails.objects.filter(university_id=application_obj.university.id)
+            for rec in country_learning_recs:
+                raw_dict = {}
+                if rec.country.id not in duplicate_country_ids:
+                    raw_dict['id'] = rec.country.id
+                    raw_dict['country_name'] = rec.country.country_name
+                    duplicate_country_ids.append(rec.country.id)
+                    country_recs.append(raw_dict)
 
 
         program_recs = ProgramDetails.objects.filter(is_delete=False)

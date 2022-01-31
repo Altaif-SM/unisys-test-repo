@@ -133,6 +133,13 @@ def get_admin_notification():
         pass
 
 
+def get_university_admin_notification():
+    try:
+        return AdminNotifications.objects.filter(applicant_id__year=get_current_year(), applicant_id__is_submitted=True,university=self.university)
+    except:
+        pass
+
+
 def export_pdf(output_file_name, records):
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=' + str(output_file_name) + '.pdf'

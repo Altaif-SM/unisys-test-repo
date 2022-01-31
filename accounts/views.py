@@ -198,7 +198,7 @@ def university_dashboard(request):
 
         if request.user.is_super_admin():
 
-            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,university=request.user.university).count())
             raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,first_interview=True).count())
             raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,first_interview_attend=True).count())
             raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,incomplete=True).count())
@@ -223,6 +223,41 @@ def university_dashboard(request):
                 raw_dict = {}
                 raw_dict['country_name'] = country.country_name.capitalize()
                 raw_dict['country_count'] = ApplicationDetails.objects.filter(address__country=country,is_online_admission=True).count()
+
+                country_list.append(raw_dict)
+
+        elif request.user.is_administrator():
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,university=request.user.university).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,university=request.user.university,
+                                                              first_interview=True).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,university=request.user.university,
+                                                              first_interview_attend=True).count())
+            raw_list.append(
+                ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True, incomplete=True,university=request.user.university).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
+                                                              first_interview_approval=True,
+                                                              second_interview_approval=True, psychometric_test=True,
+                                                              admin_approval=True, is_sponsored=False,university=request.user.university).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
+                                                              application_rejection=True,university=request.user.university).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_online_admission=True,university=request.user.university).count())
+
+            scholarship_list = []
+            country_list = []
+
+            for scholarship in ScholarshipDetails.objects.all():
+                raw_dict = {}
+                raw_dict['scholarship_name'] = scholarship.scholarship_name
+                raw_dict['scholarship_count'] = ApplicationDetails.objects.filter(
+                    applicant_scholarship_rel__scholarship=scholarship).count()
+
+                scholarship_list.append(raw_dict)
+
+            for country in CountryDetails.objects.all():
+                raw_dict = {}
+                raw_dict['country_name'] = country.country_name.capitalize()
+                raw_dict['country_count'] = ApplicationDetails.objects.filter(address__country=country,
+                                                                              is_online_admission=True).count()
 
                 country_list.append(raw_dict)
 

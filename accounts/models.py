@@ -286,8 +286,15 @@ class User(AbstractUser):
                 payload['flag'] = True
                 payload['active_count'] = get_admin_notification().count()
                 return payload
+            elif self.role.all().filter(name__in=[self.ADMINISTRATOR]).exists():
+                from common.utils import get_university_admin_notification
+                payload['notifications'] = get_university_admin_notification()
+                payload['flag'] = True
+                payload['active_count'] = get_university_admin_notification().count()
+                return payload
             else:
                 return payload
+
         except:
             return payload
 
