@@ -113,6 +113,13 @@
 
                 })
 
+                  $(document).on("change", "#email", function (e) {
+                var email = $(this).val();
+                 var user_id = $('#user_id').val()
+                var url = '/accounts/get_email_exists/';
+                get_email_exists_fun(url, email,user_id)
+            })
+
 
                 var password = document.getElementById("password")
                 var confirm_password = document.getElementById("confirm_password");
@@ -154,6 +161,33 @@
                     }
                 });
             }
+
+            function get_email_exists_fun(url, email,user_id) {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {
+                    user_id: user_id,
+                    email: email,
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+                success: function (data) {
+                    var email_exists = data;
+                    if(email_exists === true){
+                        $('#email').val('');
+                        $('#email_exists').show();
+                    }
+                    else{
+                        $('#email_exists').hide();
+                    }
+
+
+                },
+                error: function (xhr, msg, err) {
+                    alert(xhr.responseJSON.error);
+                }
+            });
+        }
 
 
         }
@@ -214,6 +248,7 @@
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
+                <input type="hidden" id="user_id" name="user_id" value="">
 
                     <div class="form-body">
 
@@ -297,6 +332,7 @@
                                                value="{{ staff_dict.email|default_if_none:"" }}"
                                                name="email"
                                                class="form-control" required>
+                                         <span style="color: red;display: none" id="email_exists">Email already exists</span>
 
 
                                     </div>

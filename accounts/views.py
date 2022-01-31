@@ -877,3 +877,20 @@ def get_user_permission(request):
         else:
             access_list = request.user.permission.values_list('permission', flat=True)
     return {'access_list': access_list}
+
+def get_email_exists(request):
+    user_id = request.POST.get('user_id', None)
+    email = request.POST.get('email', None)
+    email_exists = False
+    if user_id:
+        if User.objects.filter(email=email.strip()).exclude(id = user_id).exists():
+            email_exists = True
+        else:
+            email_exists = False
+        return JsonResponse(email_exists, safe=False)
+    else:
+        if User.objects.filter(email=email.strip()).exists():
+            email_exists = True
+        else:
+            email_exists = False
+        return JsonResponse(email_exists, safe=False)

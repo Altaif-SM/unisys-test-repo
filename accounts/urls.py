@@ -23,4 +23,5 @@ urlpatterns = [
     path('add_staff/', views.add_staff, name='add_staff'),
     path('delete_staff/', views.delete_staff, name='delete_staff'),
     path('edit_staff/<int:staff_id>/', views.edit_staff, name='edit_staff'),
+    path('get_email_exists/', views.get_email_exists, name='get_email_exists'),
 ]
