@@ -117,6 +117,13 @@
                 get_email_exists_fun(url, email,user_id)
             })
 
+                $(document).on("change", "#university", function (e) {
+                var university = $(this).val();
+                 var user_id = $('#user_id').val()
+                var url = '/accounts/get_university_exists/';
+                get_university_exists(url, university,user_id)
+            })
+
 
                 var password = document.getElementById("password")
                 var confirm_password = document.getElementById("confirm_password");
@@ -133,6 +140,32 @@
                     confirm_password.setCustomValidity('');
                 }
             }
+
+            function get_university_exists(url, university,user_id) {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {
+                    user_id: user_id,
+                    university: university,
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+                success: function (data) {
+                    var university_exists = data;
+                    if(university_exists === true){
+                        $('#university_exists').show();
+                    }
+                    else{
+                        $('#university_exists').hide();
+                    }
+
+
+                },
+                error: function (xhr, msg, err) {
+                    alert(xhr.responseJSON.error);
+                }
+            });
+        }
 
              function get_email_exists_fun(url, email,user_id) {
             $.ajax({
@@ -313,6 +346,7 @@
                                             {% endfor %}
 
                                         </select>
+                                    <span style="color: red;display: none" id="university_exists">University already exists</span>
                                     </div>
                                 </div>
 

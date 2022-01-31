@@ -105,6 +105,8 @@
 
                $('input[type=radio][name=university_type]').on('change', function ()
                 {
+                    $('#university_exists').hide();
+
                     var university_type = $('input[name="university_type"]:checked').val();
                     console.log("university_type"+university_type);
                     var url = '/student/get_university_from_type/';
@@ -118,6 +120,13 @@
                  var user_id = $('#user_id').val()
                 var url = '/accounts/get_email_exists/';
                 get_email_exists_fun(url, email,user_id)
+            })
+
+                   $(document).on("change", "#university", function (e) {
+                var university = $(this).val();
+                 var user_id = $('#user_id').val()
+                var url = '/accounts/get_university_exists/';
+                get_university_exists(url, university,user_id)
             })
 
 
@@ -162,7 +171,7 @@
                 });
             }
 
-            function get_email_exists_fun(url, email,user_id) {
+             function get_email_exists_fun(url, email,user_id) {
             $.ajax({
                 type: 'POST',
                 url: url,
@@ -179,6 +188,32 @@
                     }
                     else{
                         $('#email_exists').hide();
+                    }
+
+
+                },
+                error: function (xhr, msg, err) {
+                    alert(xhr.responseJSON.error);
+                }
+            });
+        }
+
+            function get_university_exists(url, university,user_id) {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {
+                    user_id: user_id,
+                    university: university,
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+                success: function (data) {
+                    var university_exists = data;
+                    if(university_exists === true){
+                        $('#university_exists').show();
+                    }
+                    else{
+                        $('#university_exists').hide();
                     }
 
 
@@ -282,6 +317,7 @@
                                             {% endfor %}
 
                                         </select>
+                                    <span style="color: red;display: none" id="university_exists">University already exists</span>
                                     </div>
                                 </div>
 

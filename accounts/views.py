@@ -894,3 +894,22 @@ def get_email_exists(request):
         else:
             email_exists = False
         return JsonResponse(email_exists, safe=False)
+
+
+
+def get_university_exists(request):
+    user_id = request.POST.get('user_id', None)
+    university = request.POST.get('university', None)
+    university_exists = False
+    if user_id:
+        if User.objects.filter(university_id=university.strip()).exclude(id = user_id).exists():
+            university_exists = True
+        else:
+            university_exists = False
+        return JsonResponse(university_exists, safe=False)
+    else:
+        if User.objects.filter(university_id=university.strip()).exists():
+            university_exists = True
+        else:
+            university_exists = False
+        return JsonResponse(university_exists, safe=False)
