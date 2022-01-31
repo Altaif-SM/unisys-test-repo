@@ -61,6 +61,8 @@ class User(AbstractUser):
     address = models.ForeignKey('masters.AddressDetails', blank=True, null=True, related_name='user_address_rel',
                                 on_delete=models.SET_NULL)
     permission = models.ManyToManyField(PersmissionDetails, blank=True)
+    university = models.ForeignKey('masters.UniversityDetails', blank=True, null=True, related_name='user_university_rel',
+                                on_delete=models.SET_NULL)
 
     class Meta:
         permissions = (

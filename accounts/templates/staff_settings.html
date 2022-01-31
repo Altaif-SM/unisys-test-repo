@@ -187,8 +187,8 @@
                     <thead>
                     <tr>
                         <th style="display: none">Id</th>
-                        <th>{% trans 'First Name' %}</th>
-                        <th>{% trans 'Last Name' %}</th>
+                        <th>{% trans 'University' %}</th>
+                        <th>{% trans 'University Type' %}</th>
                         <th>{% trans 'Email' %}</th>
                         <th>{% trans 'Position' %}</th>
                         <th>{% trans 'Country' %}</th>
@@ -201,8 +201,18 @@
                     {% for rec in user_recs %}
                         <tr id="item{{ forloop.counter }}" class="item">
                             <td style="display: none"><input id="staff_id" value="{{ rec.id }}"></td>
-                            <td>{{ rec.first_name|default_if_none:"" }}</td>
-                            <td>{{ rec.last_name|default_if_none:"" }}</td>
+{#                            <td>{{ rec.first_name|default_if_none:"" }}</td>#}
+{#                            <td>{{ rec.last_name|default_if_none:"" }}</td>#}
+
+
+                         <td>{{ rec.university.university_name|default_if_none:"" }}</td>
+                        {% if rec.university.is_partner_university == True %}
+                                <td>International</td>
+                            {% else %}
+                                <td>Main</td>
+                            {% endif %}
+
+
                             <td>{{ rec.email|default_if_none:"" }}</td>
                             <td>{{ rec.role.all.0.name|default_if_none:"" }}</td>
                             <td>{{ rec.address.country.country_name|title }}</td>

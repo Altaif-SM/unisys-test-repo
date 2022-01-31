@@ -103,6 +103,17 @@
                 $("#status").Sswitch({});
 
 
+               $('input[type=radio][name=university_type]').on('change', function ()
+                {
+                    var university_type = $('input[name="university_type"]:checked').val();
+                    console.log("university_type"+university_type);
+                    var url = '/student/get_university_from_type/';
+                    get_university_from_university_type(url, university_type)
+
+
+                })
+
+
                 var password = document.getElementById("password")
                 var confirm_password = document.getElementById("confirm_password");
                 password.onchange = validatePassword;
@@ -117,6 +128,31 @@
                 } else {
                     confirm_password.setCustomValidity('');
                 }
+            }
+
+            function get_university_from_university_type(url, university_type) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        university_type: university_type,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data) {
+
+                        $('#university').empty();
+                        $('#university').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#university').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['university_name'] + '</option>')
+                        }
+                    },
+                    error: function (xhr, msg, err) {
+                        alert(xhr.responseJSON.error);
+                    }
+                });
             }
 
 
@@ -182,40 +218,75 @@
                     <div class="form-body">
 
                         <div class="row item_experience" id="item_experience_1">
-
-                            <div class="row">
-
-
-                                <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'First Name' %}:<span
+                        <div class="row">
+                            <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'University Type' %}: <span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
-                                        <input type="text" title="Enter First Name" id="first_name"
-                                               value="{{ staff_dict.first_name|default_if_none:"" }}"
-                                               name="first_name"
-                                               class="form-control" required>
-
-
+                                        <input class="current" type="radio" checked name="university_type"
+                                               id="university_main"
+                                               value="Main">
+                                        <span style="padding:inherit">{% trans 'Main' %}</span>&nbsp;&nbsp;
+                                        <input class="current" type="radio" name="university_type" value="Partner"
+                                               id="university_partner">
+                                        <span style="padding:inherit">{% trans 'International' %}</span>
                                     </div>
                                 </div>
 
+
                                 <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'Last Name' %}:<span
+                                    <label class="col-md-2 control-label">{% trans 'University' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
-                                        <input type="text" title="Enter Last Name" id="last_name"
-                                               value="{{ staff_dict.last_name|default_if_none:"" }}"
-                                               name="last_name"
-                                               class="form-control" required>
+                                        <select id='university' title="Select University"
+                                                name="university"
+                                                class="form-control" required>
+                                            <option selected="selected" value=""> Please Select</option>
+                                            {% for rec in staff_dict.university_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.university_name|default_if_none:"" }}</option>
+                                            {% endfor %}
 
-
+                                        </select>
                                     </div>
                                 </div>
 
 
                             </div>
+                        <br>
 
-                            <br>
+{#                            <div class="row">#}
+{##}
+{##}
+{#                                <div class="">#}
+{#                                    <label class="col-md-2 control-label">{% trans 'First Name' %}:<span#}
+{#                                            style="color: red">*</span></label>#}
+{#                                    <div class="col-md-3">#}
+{#                                        <input type="text" title="Enter First Name" id="first_name"#}
+{#                                               value="{{ staff_dict.first_name|default_if_none:"" }}"#}
+{#                                               name="first_name"#}
+{#                                               class="form-control" required>#}
+{##}
+{##}
+{#                                    </div>#}
+{#                                </div>#}
+{##}
+{#                                <div class="">#}
+{#                                    <label class="col-md-2 control-label">{% trans 'Last Name' %}:<span#}
+{#                                            style="color: red">*</span></label>#}
+{#                                    <div class="col-md-3">#}
+{#                                        <input type="text" title="Enter Last Name" id="last_name"#}
+{#                                               value="{{ staff_dict.last_name|default_if_none:"" }}"#}
+{#                                               name="last_name"#}
+{#                                               class="form-control" required>#}
+{##}
+{##}
+{#                                    </div>#}
+{#                                </div>#}
+{##}
+{##}
+{#                            </div>#}
+{##}
+{#                            <br>#}
                             <div class="row">
 
                                 <div class="">
@@ -244,14 +315,15 @@
                                                 <option selected="selected" disabled value=""> Please Select</option>
                                             {% endif %}
 
-                                            <option value="Dean">Dean</option>
-                                            <option value="Deputy Dean">Deputy Dean</option>
-                                            <option value="Head">Head</option>
-                                            <option value="HR">HR</option>
-                                            <option value="Registrar">Registrar</option>
-                                            <option value="Accountant">Accountant</option>
-                                            <option value="Vice Chancellor">Vice Chancellor</option>
-                                            <option value="Deputy Vice Chancellor">Deputy Vice Chancellor</option>
+                                            <option value="Administrator">Administrator</option>
+{#                                            <option value="Dean">Dean</option>#}
+{#                                            <option value="Deputy Dean">Deputy Dean</option>#}
+{#                                            <option value="Head">Head</option>#}
+{#                                            <option value="HR">HR</option>#}
+{#                                            <option value="Registrar">Registrar</option>#}
+{#                                            <option value="Accountant">Accountant</option>#}
+{#                                            <option value="Vice Chancellor">Vice Chancellor</option>#}
+{#                                            <option value="Deputy Vice Chancellor">Deputy Vice Chancellor</option>#}
                                         </select>
                                     </div>
                                 </div>

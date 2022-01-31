@@ -19,6 +19,7 @@ from common.utils import *
 from django.template.context_processors import csrf
 from accounts.service import UserService
 from datetime import date
+from masters.models import UniversityDetails
 from django.http import JsonResponse
 # Create your views here.
 
@@ -636,8 +637,9 @@ def add_staff(request):
     academic_settings_list = ['Manage Year', 'Manage Semester', 'Manage Activity', 'Manage Calendar']
     module_settings_list = ['Manage Applicant Documents', 'Approving Applicant Details','Payment Settings']
     if request.method == 'POST':
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
+        university = request.POST.get('university')
+        # first_name = request.POST.get('first_name')
+        # last_name = request.POST.get('last_name')
         email = request.POST.get('email')
         role = request.POST.get('role')
         password = request.POST.get('password')
@@ -652,8 +654,8 @@ def add_staff(request):
         try:
             country_obj = CountryDetails.objects.get(id = country)
             staff_dict = {
-                'first_name': first_name,
-                'last_name': last_name,
+                # 'first_name': first_name,
+                # 'last_name': last_name,
                 'email': email,
                 'role': role,
                 'country': country_obj.id,
@@ -671,7 +673,7 @@ def add_staff(request):
                 messages.warning(request, "Email already exists.")
                 return render(request, 'add_staff.html',{'country_list':country_list,'staff_dict':staff_dict})
 
-            staff_obj = User.objects.create(first_name=first_name, last_name=last_name,email = email,username = email,password = make_password(password),is_active = status)
+            staff_obj = User.objects.create(email = email,username = email,password = make_password(password),is_active = status,university_id = university)
             staff_obj.role.add(UserRole.objects.get(name=role))
             try:
                 country = CountryDetails.objects.get(id=country)
@@ -704,6 +706,8 @@ def add_staff(request):
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/accounts/staff_settings/')
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
+                                                       is_partner_university=False).order_by('-id')
     staff_dict = {
         'first_name': '',
         'last_name': '',
@@ -717,7 +721,9 @@ def add_staff(request):
         'university_settings_list': university_settings_list,
         'academic_settings_list': academic_settings_list,
         'module_settings_list': module_settings_list,
-        'permission_list': []
+        'permission_list': [],
+        'university_recs':university_recs
+
     }
     return render(request, 'add_staff.html',{'country_list':country_list,'staff_dict':staff_dict})
 
@@ -740,8 +746,9 @@ def edit_staff(request, staff_id=None):
     academic_settings_list = ['Manage Year', 'Manage Semester', 'Manage Activity', 'Manage Calendar']
     module_settings_list = ['Manage Applicant Documents','Approving Applicant Details','Payment Settings']
     if request.method == 'POST':
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
+        university = request.POST.get('university')
+        # first_name = request.POST.get('first_name')
+        # last_name = request.POST.get('last_name')
         email = request.POST.get('email')
         role = request.POST.get('role')
         password = request.POST.get('password')
@@ -759,8 +766,8 @@ def edit_staff(request, staff_id=None):
             country_obj = CountryDetails.objects.get(id=country)
             user_obj = {
                 'id': user_obj.id,
-                'first_name': first_name,
-                'last_name': last_name,
+                # 'first_name': first_name,
+                # 'last_name': last_name,
                 'email': email,
                 'role': role,
                 'country': country_obj.id,
@@ -785,8 +792,9 @@ def edit_staff(request, staff_id=None):
                 user.address = address
             except:
                 pass
-            user.first_name = first_name
-            user.last_name = last_name
+            user.university_id = university
+            # user.first_name = first_name
+            # user.last_name = last_name
             user.email = email
             if password:
                 user.set_password(password)
@@ -821,11 +829,19 @@ def edit_staff(request, staff_id=None):
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/accounts/staff_settings/')
-
+    if user_obj.university:
+        if user_obj.university.is_partner_university == False:
+            university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university = False).order_by('-id')
+        else:
+            university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
+                                                           is_partner_university=True).order_by('-id')
+    else:
+        university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
+                                                           is_partner_university=False).order_by('-id')
     user_obj = {
         'id': user_obj.id,
-        'first_name': user_obj.first_name,
-        'last_name': user_obj.last_name,
+        # 'first_name': user_obj.first_name,
+        # 'last_name': user_obj.last_name,
         'email': user_obj.email,
         'role': user_obj.role.all()[0].name,
         'country': user_obj.address.country.id if user_obj.address.country else None,
@@ -837,7 +853,9 @@ def edit_staff(request, staff_id=None):
         'university_settings_list': university_settings_list,
         'academic_settings_list': academic_settings_list,
         'module_settings_list': module_settings_list,
-        'permission_list':user_obj.permission.values_list('permission',flat=True)
+        'permission_list':user_obj.permission.values_list('permission',flat=True),
+        'university_recs':university_recs,
+        'university':user_obj.university
     }
     return render(request, "edit_staff.html", {'user_obj': user_obj,'country_list':country_list})
 
