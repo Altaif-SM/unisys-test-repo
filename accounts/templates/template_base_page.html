@@ -698,13 +698,13 @@ License: You must have a valid license purchased only from themeforest(the above
                                             </a>
                                         </li>
                                     {% endif %}
-                                    {% if 'Link University to User' in access_list %}
-                                        <li class="nav-item  ">
-                                            <a href="/masters/link_university_staff/" class="nav-link ">
-                                                <span class="title">{% trans 'Link University to User' %}</span>
-                                            </a>
-                                        </li>
-                                    {% endif %}
+{#                                    {% if 'Link University to User' in access_list %}#}
+{#                                        <li class="nav-item  ">#}
+{#                                            <a href="/masters/link_university_staff/" class="nav-link ">#}
+{#                                                <span class="title">{% trans 'Link University to User' %}</span>#}
+{#                                            </a>#}
+{#                                        </li>#}
+{#                                    {% endif %}#}
                                     {% if 'Manage Program' in access_list %}
                                         <li class="nav-item ">
                                             <a href="{% url 'masters:program_settings' %}"
@@ -725,12 +725,12 @@ License: You must have a valid license purchased only from themeforest(the above
                                             </a>
                                         </li>
                                     {% endif %}
-                                    {% if 'Link Campus to User' in access_list %}
-                                        <li class="nav-item ">
-                                            <a href="{% url 'masters:link_campus_staff' %}"
-                                               class="nav-link ">{% trans 'Link Branch/Campus to User' %}</a>
-                                        </li>
-                                    {% endif %}
+{#                                    {% if 'Link Campus to User' in access_list %}#}
+{#                                        <li class="nav-item ">#}
+{#                                            <a href="{% url 'masters:link_campus_staff' %}"#}
+{#                                               class="nav-link ">{% trans 'Link Branch/Campus to User' %}</a>#}
+{#                                        </li>#}
+{#                                    {% endif %}#}
 {#                                    {% if 'Manage Department' in access_list %}#}
 {#                                        <li class="nav-item  ">#}
 {#                                            <a href="/masters/department_settings/" class="nav-link ">#}
