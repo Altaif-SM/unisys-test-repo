@@ -11,7 +11,7 @@ from accounts.service import *
 from accounts.models import UserRole
 from student.models import StudentDetails, ApplicationDetails, ScholarshipSelectionDetails
 from masters.models import AddressDetails, CountryDetails, ScholarshipDetails, GuardianDetails, EmailTemplates, \
-    YearDetails
+    YearDetails,FacultyDetails
 from partner.models import PartnerDetails
 from donor.models import DonorDetails
 import json
@@ -834,6 +834,7 @@ def add_staff(request):
     academic_settings_list = ['Manage Year', 'Manage Semester', 'Manage Activity', 'Manage Calendar']
     module_settings_list = ['Manage Applicant Documents', 'Approving Applicant Details','Payment Settings']
     if request.method == 'POST':
+        faculty = request.POST.get('faculty',None)
         university = request.POST.get('university')
         # first_name = request.POST.get('first_name')
         # last_name = request.POST.get('last_name')
@@ -870,7 +871,7 @@ def add_staff(request):
                 messages.warning(request, "Email already exists.")
                 return render(request, 'add_staff.html',{'country_list':country_list,'staff_dict':staff_dict})
 
-            staff_obj = User.objects.create(email = email,username = email,password = make_password(password),is_active = status,university_id = university)
+            staff_obj = User.objects.create(email = email,username = email,password = make_password(password),is_active = status,university_id = university,faculty_id = faculty)
             staff_obj.role.add(UserRole.objects.get(name=role))
             try:
                 country = CountryDetails.objects.get(id=country)
@@ -1110,3 +1111,19 @@ def get_university_exists(request):
         else:
             university_exists = False
         return JsonResponse(university_exists, safe=False)
+
+
+
+def get_faculty_from_account_type(request):
+    faculty_list = []
+    account_type = request.POST.get('account_type', None)
+    university = request.POST.get('university', None)
+    faculty_recs = FacultyDetails.objects.all()
+    if university:
+        faculty_recs = faculty_recs.filter(university_id = university)
+    for rec in faculty_recs:
+        raw_dict = {}
+        raw_dict['id'] = rec.id
+        raw_dict['faculty'] = rec.faculty_name
+        faculty_list.append(raw_dict)
+    return JsonResponse(faculty_list, safe=False)

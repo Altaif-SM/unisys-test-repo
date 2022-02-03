@@ -47,7 +47,8 @@ class User(AbstractUser):
     HR = 'HR'
 
     ADMINISTRATOR = 'Administrator'
-    ADMISSION_UNIT = 'Admission Unit'
+    ADMISSION_UNIT = 'Administrator'
+    FACULTY = 'Faculty'
 
 
     first_name = models.CharField(max_length=256, blank=True, null=True)
@@ -66,6 +67,9 @@ class User(AbstractUser):
     permission = models.ManyToManyField(PersmissionDetails, blank=True)
     university = models.ForeignKey('masters.UniversityDetails', blank=True, null=True, related_name='user_university_rel',
                                 on_delete=models.SET_NULL)
+    faculty = models.ForeignKey('masters.FacultyDetails', blank=True, null=True,
+                                   related_name='user_faculty_rel',
+                                   on_delete=models.SET_NULL)
 
     class Meta:
         permissions = (
@@ -153,6 +157,9 @@ class User(AbstractUser):
 
     def is_administrator(self):
         return True if self.role.all().filter(name__in=[self.ADMISSION_UNIT]).exists() else False
+
+    def is_faculty(self):
+        return True if self.role.all().filter(name__in=[self.FACULTY]).exists() else False
 
     @property
     def get_user_permissions(self):

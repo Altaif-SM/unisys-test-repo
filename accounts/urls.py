@@ -26,4 +26,5 @@ urlpatterns = [
     path('edit_staff/<int:staff_id>/', views.edit_staff, name='edit_staff'),
     path('get_email_exists/', views.get_email_exists, name='get_email_exists'),
     path('get_university_exists/', views.get_university_exists, name='get_university_exists'),
+    path('get_faculty_from_account_type/', views.get_faculty_from_account_type, name='get_faculty_from_account_type'),
 ]

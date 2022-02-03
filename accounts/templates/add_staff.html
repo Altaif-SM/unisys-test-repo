@@ -123,24 +123,47 @@
             })
 
                    $(document).on("change", "#university", function (e) {
+
+                        $('#id_account_type').empty();
+                        $('#id_account_type').append(
+                            '<option value="" >Please select</option>');
+                        $('#id_account_type').append(
+                            '<option value="Admission Unit" >Admission Unit</option>');
+                        $('#id_account_type').append(
+                            '<option value="Faculty" >Faculty</option>');
+
+
+                     /*
                 var university = $(this).val();
                  var user_id = $('#user_id').val()
                 var url = '/accounts/get_university_exists/';
-                get_university_exists(url, university,user_id)
+                get_university_exists(url, university,user_id)*/
+            })
+
+                $(document).on("change", "#id_account_type", function (e) {
+                var account_type = $(this).val();
+                var university = $('#university').val();
+                if(account_type == 'Faculty'){
+                    var url = '/accounts/get_faculty_from_account_type/';
+                    get_faculty_from_account_type(url, account_type,university)
+                }
+                else{
+                     $('#faculty').empty();
+                     $('#facculty_div').hide();
+                }
+
             })
 
 
-
+                /*
                 $("#staff_form").submit(function (e) {
 
                 if ($('#university_exists').is(":visible")) {
                     return false;
                 }
 
-                var rowCount = $(".district").length;
-                $('#acceptance_count').val(rowCount);
 
-            })
+            })*/
 
 
                 var password = document.getElementById("password")
@@ -205,6 +228,33 @@
 
 
                 },
+                error: function (xhr, msg, err) {
+                    alert(xhr.responseJSON.error);
+                }
+            });
+        }
+
+          function get_faculty_from_account_type(url, account_type,university) {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {
+                    account_type: account_type,
+                    university: university,
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+                success: function (data) {
+
+                        $('#faculty').empty();
+                        $('#facculty_div').show();
+                        $('#faculty').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#faculty').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['faculty'] + '</option>')
+                        }
+                    },
                 error: function (xhr, msg, err) {
                     alert(xhr.responseJSON.error);
                 }
@@ -324,7 +374,7 @@
                                         <select id='university' title="Select University"
                                                 name="university"
                                                 class="form-control" required>
-                                            <option selected="selected" value=""> Please Select</option>
+                                            <option selected="selected" value="" disabled> Please Select</option>
                                             {% for rec in staff_dict.university_recs %}
                                                 <option value="{{ rec.id }}">{{ rec.university_name|default_if_none:"" }}</option>
                                             {% endfor %}
@@ -387,7 +437,36 @@
                                     </div>
                                 </div>
 
-                                <div class="">
+                            <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Country' %}:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select id='country' title="Select Country"
+                                                name="country"
+                                                class="form-control" required>
+                                            {% if staff_dict.country %}
+                                                <option style="display:none;" selected="selected"
+                                                        value="{{ staff_dict.country|default_if_none:"" }}"> {{ staff_dict.country_name|default_if_none:"" }}</option>
+                                                <option value=""> Please Select</option>
+                                            {% else %}
+                                                <option selected="selected" value="" disabled> Please Select</option>
+                                            {% endif %}
+
+                                            {% for rec in country_list %}
+                                                <option value="{{ rec.id }}">{{ rec.country_name|title }}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                </div>
+
+
+
+
+                            </div>
+                            <br>
+                        <div class="row">
+                            <div class="">
                                     <label class="col-md-2 control-label">{% trans 'Role' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
@@ -397,11 +476,12 @@
                                                         value="{{ staff_dict.role|default_if_none:"" }}"> {{ staff_dict.role|default_if_none:"" }}</option>
                                                 <option value=""> Please Select</option>
                                             {% else %}
-                                                <option selected="selected" disabled value=""> Please Select</option>
+                                                <option selected="selected" disabled value="" > Please Select</option>
                                             {% endif %}
 
 {#                                            <option value="Administrator">Administrator</option>#}
-                                        <option value="Admission Unit">Admission Unit</option>
+                                        <option value="Administrator">Admission Unit</option>
+                                        <option value="Faculty">Faculty</option>
 {#                                            <option value="Dean">Dean</option>#}
 {#                                            <option value="Deputy Dean">Deputy Dean</option>#}
 {#                                            <option value="Head">Head</option>#}
@@ -415,8 +495,28 @@
                                 </div>
 
 
-                            </div>
-                            <br>
+                        <div class="" style="display: none;" id="facculty_div">
+                                    <label class="col-md-2 control-label">{% trans 'Faculty' %}:</label>
+                                    <div class="col-md-3">
+                                        <select name="faculty" class="form-control" id="faculty" >
+                                            {% if staff_dict.country %}
+                                                <option style="display:none;" selected="selected"
+                                                        value="{{ staff_dict.country|default_if_none:"" }}"> {{ staff_dict.country_name|default_if_none:"" }}</option>
+                                                <option value=""> Please Select</option>
+                                            {% else %}
+                                                <option selected="selected" value="" disabled> Please Select</option>
+                                            {% endif %}
+
+                                            {% for rec in faculty_list %}
+                                                <option value="{{ rec.id }}">{{ rec.country_name|title }}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                </div>
+
+                        </div>
+                        <br>
 
                             <div class="row">
 
@@ -448,28 +548,7 @@
 
                             <div class="row">
 
-                                <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'Country' %}:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <select id='country' title="Select Country"
-                                                name="country"
-                                                class="form-control" required>
-                                            {% if staff_dict.country %}
-                                                <option style="display:none;" selected="selected"
-                                                        value="{{ staff_dict.country|default_if_none:"" }}"> {{ staff_dict.country_name|default_if_none:"" }}</option>
-                                                <option value=""> Please Select</option>
-                                            {% else %}
-                                                <option selected="selected" value="" disabled> Please Select</option>
-                                            {% endif %}
 
-                                            {% for rec in country_list %}
-                                                <option value="{{ rec.id }}">{{ rec.country_name|title }}</option>
-                                            {% endfor %}
-
-                                        </select>
-                                    </div>
-                                </div>
 
                                 <div class="">
                                     <label class="col-md-2 control-label">{% trans 'Office Details' %}:
@@ -481,10 +560,6 @@
 
                                     </div>
                                 </div>
-
-
-                            </div>
-                            <div class="row">
 
                                 <div class="">
                                     <label class="col-md-2 control-label">{% trans 'Status' %}:<span
@@ -498,6 +573,7 @@
 
                                     </div>
                                 </div>
+
 
                             </div>
                             <br>
