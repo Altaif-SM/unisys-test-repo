@@ -285,7 +285,7 @@ class UniversityDetails(BaseModel):
     address = models.ForeignKey(AddressDetails, null=True, related_name='university_address_rel',
                                 on_delete=models.SET_NULL)
     university_logo = models.ImageField(upload_to='university_logo/', null=True, blank=True)
-    university_address = models.CharField(max_length=255, blank=True, null=True)
+    university_address = models.CharField(max_length=256, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_delete = models.BooleanField(default=False)
     is_partner_university = models.BooleanField(default=False)
