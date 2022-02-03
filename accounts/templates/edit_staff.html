@@ -258,12 +258,12 @@
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <span> University User Settings</span>
+                <span>User Settings</span>
                 <i class="fa fa-angle-right"></i>
             </li>
 
             <li>
-                <span> {% trans 'User Staff' %} </span>
+                <span> {% trans 'Edit User' %} </span>
             </li>
         </ul>
     </div>
@@ -414,7 +414,7 @@
                                 </div>
 
                                 <div class="">
-                                    <label class="col-md-2 control-label">Position:<span
+                                    <label class="col-md-2 control-label">Role:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <select name="role" class="form-control" required id="id_account_type" disabled>
@@ -426,7 +426,8 @@
                                                 <option selected="selected" disabled value=""> Please Select</option>
                                             {% endif %}
 
-                                            <option value="Administrator">Administrator</option>
+{#                                            <option value="Administrator">Administrator</option>#}
+                                            <option value="Admission Unit">Admission Unit</option>
 {#                                            <option value="Dean">Dean</option>#}
 {#                                            <option value="Deputy Dean">Deputy Dean</option>#}
 {#                                            <option value="Head">Head</option>#}

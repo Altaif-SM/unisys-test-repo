@@ -47,6 +47,7 @@ class User(AbstractUser):
     HR = 'HR'
 
     ADMINISTRATOR = 'Administrator'
+    ADMISSION_UNIT = 'Admission Unit'
 
 
     first_name = models.CharField(max_length=256, blank=True, null=True)
@@ -151,7 +152,7 @@ class User(AbstractUser):
         return self.role.all()[0].name.title() if self.role.all().exists() else None
 
     def is_administrator(self):
-        return True if self.role.all().filter(name__in=[self.ADMINISTRATOR]).exists() else False
+        return True if self.role.all().filter(name__in=[self.ADMISSION_UNIT]).exists() else False
 
     @property
     def get_user_permissions(self):

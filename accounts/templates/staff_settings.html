@@ -148,12 +148,12 @@
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <span> University User Settings</span>
+                <span> User Settings</span>
                 <i class="fa fa-angle-right"></i>
             </li>
 
             <li>
-                <span>{% trans 'Manage User' %}</span>
+                <span>{% trans 'Manage Users' %}</span>
             </li>
         </ul>
     </div>
@@ -169,7 +169,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase">{% trans 'Manage User' %}</span>
+                <span class="caption-subject font-red sbold uppercase">{% trans 'Manage Users' %}</span>
             </div>
             <a href="{% url 'accounts:add_staff' %}">
                 <button type="submit" class="btn green" id="save" style="margin-left:83%;background-color: #3598dc">{% trans 'Add' %}
@@ -190,7 +190,7 @@
                         <th>{% trans 'University' %}</th>
                         <th>{% trans 'University Type' %}</th>
                         <th>{% trans 'Email' %}</th>
-                        <th>{% trans 'Position' %}</th>
+                        <th>{% trans 'Role' %}</th>
                         <th>{% trans 'Country' %}</th>
                         <th>{% trans 'Status' %}</th>
                         <th width="10%">{% trans 'Action' %}</th>
