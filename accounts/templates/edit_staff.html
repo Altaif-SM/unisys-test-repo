@@ -125,6 +125,18 @@
             })
 
 
+                $("#staff_form").submit(function (e) {
+
+                if ($('#university_exists').is(":visible")) {
+                    return false;
+                }
+
+                var rowCount = $(".district").length;
+                $('#acceptance_count').val(rowCount);
+
+            })
+
+
                 var password = document.getElementById("password")
                 var confirm_password = document.getElementById("confirm_password");
                 password.onchange = validatePassword;
