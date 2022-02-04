@@ -124,11 +124,14 @@
 
                    $(document).on("change", "#university", function (e) {
 
+                       $('#faculty').empty();
+                        $('#facculty_div').hide();
+
                         $('#id_account_type').empty();
                         $('#id_account_type').append(
                             '<option value="" >Please select</option>');
                         $('#id_account_type').append(
-                            '<option value="Admission Unit" >Admission Unit</option>');
+                            '<option value="Administrator" >Admission Unit</option>');
                         $('#id_account_type').append(
                             '<option value="Faculty" >Faculty</option>');
 
