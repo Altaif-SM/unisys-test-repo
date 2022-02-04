@@ -118,10 +118,40 @@
             })
 
                 $(document).on("change", "#university", function (e) {
+
+                    $('#faculty').empty();
+                        $('#facculty_div').hide();
+
+                        $('#id_account_type').empty();
+                        $('#id_account_type').append(
+                            '<option value="" >Please select</option>');
+                        $('#id_account_type').append(
+                            '<option value="Administrator" >Admission Unit</option>');
+                        $('#id_account_type').append(
+                            '<option value="Faculty" >Faculty</option>');
+
+                    /*
                 var university = $(this).val();
                  var user_id = $('#user_id').val()
                 var url = '/accounts/get_university_exists/';
                 get_university_exists(url, university,user_id)
+                */
+            })
+
+                 $(document).on("change", "#id_account_type", function (e) {
+                var account_type = $(this).val();
+                var university = $('#university').val();
+                if(account_type == 'Faculty'){
+                    $("#faculty").prop('required',true);
+                    var url = '/accounts/get_faculty_from_account_type/';
+                    get_faculty_from_account_type(url, account_type,university)
+                }
+                else{
+                     $("#faculty").prop('required',false);
+                     $('#faculty').empty();
+                     $('#facculty_div').hide();
+                }
+
             })
 
 
@@ -135,6 +165,33 @@
                 $('#acceptance_count').val(rowCount);
 
             })
+
+                 function get_faculty_from_account_type(url, account_type,university) {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {
+                    account_type: account_type,
+                    university: university,
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+                success: function (data) {
+
+                        $('#faculty').empty();
+                        $('#facculty_div').show();
+                        $('#faculty').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#faculty').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['faculty'] + '</option>')
+                        }
+                    },
+                error: function (xhr, msg, err) {
+                    alert(xhr.responseJSON.error);
+                }
+            });
+        }
 
 
                 var password = document.getElementById("password")
@@ -413,21 +470,51 @@
                                     </div>
                                 </div>
 
-                                <div class="">
+                            <div class="">
+                                    <label class="col-md-2 control-label">Country:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select id='country' title="Select Country"
+                                                name="country"
+                                                class="form-control" required>
+                                            {% if user_obj.country %}
+                                                <option style="display:none;" selected="selected"
+                                                        value="{{ user_obj.country|default_if_none:"" }}"> {{ user_obj.country_name|title }}</option>
+                                                <option value="" disabled> Please Select</option>
+                                            {% else %}
+                                                <option selected="selected" value="" disabled> Please Select</option>
+                                            {% endif %}
+
+                                            {% for rec in country_list %}
+                                                <option value="{{ rec.id }}">{{ rec.country_name|title }}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                </div>
+
+
+
+
+                            </div>
+                            <br>
+                        <div class="row">
+                            <div class="">
                                     <label class="col-md-2 control-label">Role:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
-                                        <select name="role" class="form-control" required id="id_account_type" disabled>
+                                        <select name="role" class="form-control" required id="id_account_type" >
                                             {% if user_obj.role %}
                                                 <option style="display:none;" selected="selected"
-                                                        value="{{ user_obj.role|default_if_none:"" }}"> {{ user_obj.role|default_if_none:"" }}</option>
+                                                        value="{{ user_obj.role|default_if_none:"" }}"> {% if user_obj.role == 'Administrator' %}Admission Unit{% else %}{{ user_obj.role|default_if_none:"" }}{% endif %}</option>
                                                 <option value="" disabled> Please Select</option>
                                             {% else %}
                                                 <option selected="selected" disabled value=""> Please Select</option>
                                             {% endif %}
 
 {#                                            <option value="Administrator">Administrator</option>#}
-                                            <option value="Admission Unit">Admission Unit</option>
+                                            <option value="Administrator">Admission Unit</option>
+                                         <option value="Faculty">Faculty</option>
 {#                                            <option value="Dean">Dean</option>#}
 {#                                            <option value="Deputy Dean">Deputy Dean</option>#}
 {#                                            <option value="Head">Head</option>#}
@@ -439,9 +526,29 @@
                                     </div>
                                 </div>
 
+                        <div class=""  id="facculty_div" {% if user_obj.is_faculty == True %} style="display: block" {% else %} style="display: none" {% endif %}>
+                                    <label class="col-md-2 control-label">{% trans 'Faculty' %}:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select name="faculty" class="form-control" id="faculty" >
+                                            {% if user_obj.faculty %}
+                                                <option style="display:none;" selected="selected"
+                                                        value="{{ user_obj.faculty_id|default_if_none:"" }}"> {{ user_obj.faculty|default_if_none:"" }}</option>
+                                                <option value="" disabled> Please Select</option>
+                                            {% else %}
+                                                <option selected="selected" value="" disabled> Please Select</option>
+                                            {% endif %}
 
-                            </div>
-                            <br>
+                                            {% for rec in user_obj.faculty_list %}
+                                                <option value="{{ rec.id }}">{{ rec.faculty|default_if_none:"" }}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                </div>
+
+                        </div>
+                        <br>
 
                             <div class="row">
 
@@ -471,28 +578,7 @@
 
                             <div class="row">
 
-                                <div class="">
-                                    <label class="col-md-2 control-label">Country:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <select id='country' title="Select Country"
-                                                name="country"
-                                                class="form-control" required>
-                                            {% if user_obj.country %}
-                                                <option style="display:none;" selected="selected"
-                                                        value="{{ user_obj.country|default_if_none:"" }}"> {{ user_obj.country_name|title }}</option>
-                                                <option value="" disabled> Please Select</option>
-                                            {% else %}
-                                                <option selected="selected" value="" disabled> Please Select</option>
-                                            {% endif %}
 
-                                            {% for rec in country_list %}
-                                                <option value="{{ rec.id }}">{{ rec.country_name|title }}</option>
-                                            {% endfor %}
-
-                                        </select>
-                                    </div>
-                                </div>
 
                                 <div class="">
                                     <label class="col-md-2 control-label">Office Details:
@@ -505,11 +591,7 @@
                                     </div>
                                 </div>
 
-
-                            </div>
-                            <div class="row">
-
-                                <div class="">
+                                 <div class="">
                                     <label class="col-md-2 control-label">Status:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
@@ -521,8 +603,9 @@
 
                                     </div>
                                 </div>
+
+
                             </div>
-                            <br>
 
 {#                            <div class="portlet-title">#}
 {#                                <div class="caption">#}

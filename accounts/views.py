@@ -944,6 +944,7 @@ def edit_staff(request, staff_id=None):
     academic_settings_list = ['Manage Year', 'Manage Semester', 'Manage Activity', 'Manage Calendar']
     module_settings_list = ['Manage Applicant Documents','Approving Applicant Details','Payment Settings']
     if request.method == 'POST':
+        faculty = request.POST.get('faculty', None)
         university = request.POST.get('university')
         # first_name = request.POST.get('first_name')
         # last_name = request.POST.get('last_name')
@@ -990,15 +991,19 @@ def edit_staff(request, staff_id=None):
                 user.address = address
             except:
                 pass
+            user.role.clear()
+            user.role.add(UserRole.objects.get(name=role))
+            if faculty:
+                user.faculty_id = faculty
             user.university_id = university
-            # user.first_name = first_name
-            # user.last_name = last_name
             user.email = email
             if password:
                 user.set_password(password)
             user.username = email
             user.is_active = status
             user.save()
+
+
 
             system_check = any(item in system_settings_list for item in permission_list)
             user_check = any(item in user_settings_list for item in permission_list)
@@ -1035,7 +1040,22 @@ def edit_staff(request, staff_id=None):
                                                            is_partner_university=True).order_by('-id')
     else:
         university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
-                                                           is_partner_university=False).order_by('-id')
+                                                               is_partner_university=False).order_by('-id')
+    is_faculty = False
+    if user_obj.role.all():
+        if user_obj.role.all()[0].name == 'Faculty':
+            is_faculty = True
+
+    faculty_list = []
+    if is_faculty == True:
+        if user_obj.university:
+            faculty_recs = FacultyDetails.objects.filter(university_id=user_obj.university.id)
+            for rec in faculty_recs:
+                raw_dict = {}
+                raw_dict['id'] = rec.id
+                raw_dict['faculty'] = rec.faculty_name
+                faculty_list.append(raw_dict)
+
     user_obj = {
         'id': user_obj.id,
         # 'first_name': user_obj.first_name,
@@ -1053,7 +1073,11 @@ def edit_staff(request, staff_id=None):
         'module_settings_list': module_settings_list,
         'permission_list':user_obj.permission.values_list('permission',flat=True),
         'university_recs':university_recs,
-        'university':user_obj.university
+        'university':user_obj.university,
+        'is_faculty':is_faculty,
+        'faculty_id':user_obj.faculty.id if user_obj.faculty else None,
+        'faculty':user_obj.faculty.faculty_name if user_obj.faculty else None,
+        'faculty_list':faculty_list
     }
     return render(request, "edit_staff.html", {'user_obj': user_obj,'country_list':country_list})
 

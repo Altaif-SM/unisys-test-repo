@@ -147,10 +147,12 @@
                 var account_type = $(this).val();
                 var university = $('#university').val();
                 if(account_type == 'Faculty'){
+                    $("#faculty").prop('required',true);
                     var url = '/accounts/get_faculty_from_account_type/';
                     get_faculty_from_account_type(url, account_type,university)
                 }
                 else{
+                     $("#faculty").prop('required',false);
                      $('#faculty').empty();
                      $('#facculty_div').hide();
                 }
@@ -499,20 +501,11 @@
 
 
                         <div class="" style="display: none;" id="facculty_div">
-                                    <label class="col-md-2 control-label">{% trans 'Faculty' %}:</label>
+                                    <label class="col-md-2 control-label">{% trans 'Faculty' %}:<span
+                                            style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <select name="faculty" class="form-control" id="faculty" >
-                                            {% if staff_dict.country %}
-                                                <option style="display:none;" selected="selected"
-                                                        value="{{ staff_dict.country|default_if_none:"" }}"> {{ staff_dict.country_name|default_if_none:"" }}</option>
-                                                <option value=""> Please Select</option>
-                                            {% else %}
-                                                <option selected="selected" value="" disabled> Please Select</option>
-                                            {% endif %}
 
-                                            {% for rec in faculty_list %}
-                                                <option value="{{ rec.id }}">{{ rec.country_name|title }}</option>
-                                            {% endfor %}
 
                                         </select>
                                     </div>
@@ -579,7 +572,6 @@
 
 
                             </div>
-                            <br>
 
 {#                            <div class="portlet-title">#}
 {#                                <div class="caption">#}
@@ -690,7 +682,6 @@
 
 
                         </div>
-                        <br>
 
                         <div class="row">
                             <div class="col-md-offset-5 col-md-7">
