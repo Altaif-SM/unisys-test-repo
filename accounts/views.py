@@ -190,7 +190,7 @@ def home(request):
                        'country_list': json.dumps(country_list),'registration_flag':registration_flag,'submission_switch':submission_switch})
 
 @user_login_required
-def university_dashboard(request):
+def dashboard(request):
     if request.user.is_authenticated:
         user = request.user
 
@@ -241,6 +241,41 @@ def university_dashboard(request):
             raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
                                                               application_rejection=True,university=request.user.university).count())
             raw_list.append(ApplicationDetails.objects.filter(is_online_admission=True,university=request.user.university).count())
+
+            scholarship_list = []
+            country_list = []
+
+            for scholarship in ScholarshipDetails.objects.all():
+                raw_dict = {}
+                raw_dict['scholarship_name'] = scholarship.scholarship_name
+                raw_dict['scholarship_count'] = ApplicationDetails.objects.filter(
+                    applicant_scholarship_rel__scholarship=scholarship).count()
+
+                scholarship_list.append(raw_dict)
+
+            for country in CountryDetails.objects.all():
+                raw_dict = {}
+                raw_dict['country_name'] = country.country_name.capitalize()
+                raw_dict['country_count'] = ApplicationDetails.objects.filter(address__country=country,
+                                                                              is_online_admission=True).count()
+
+                country_list.append(raw_dict)
+
+        elif request.user.is_faculty():
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,faculty=request.user.faculty).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,faculty=request.user.faculty,
+                                                              first_interview=True).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,faculty=request.user.faculty,
+                                                              first_interview_attend=True).count())
+            raw_list.append(
+                ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True, incomplete=True,faculty=request.user.faculty).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
+                                                              first_interview_approval=True,
+                                                              second_interview_approval=True, psychometric_test=True,
+                                                              admin_approval=True, is_sponsored=False,faculty=request.user.faculty).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
+                                                              application_rejection=True,faculty=request.user.faculty).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_online_admission=True,faculty=request.user.faculty).count())
 
             scholarship_list = []
             country_list = []

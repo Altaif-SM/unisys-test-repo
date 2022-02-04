@@ -1,5 +1,7 @@
 {#{% extends "template_base_page.html" %}#}
-{% extends request.user.is_administrator|yesno:"template_university_base_page.html,template_base_page.html" %}
+{% extends context.my_template %}
+{#{% extends request.user.is_administrator|yesno:"template_university_base_page.html,template_base_page.html" %}#}
+
 {% load  i18n %}
 {% load staticfiles %}
 
@@ -445,6 +447,7 @@
                                         <th>{% trans 'Student Name' %}</th>
                                         <th>{% trans 'University' %}</th>
                                         <th>{% trans 'University Type' %}</th>
+                                        <th>{% trans 'Faculty' %}</th>
                                         <th>{% trans 'Program' %}</th>
                                         <th>{% trans 'Conditional Offer' %}</th>
                                         <th>{% trans 'Full Offer' %}</th>
@@ -490,6 +493,10 @@
                                             {% else %}
                                                 <td>Main</td>
                                             {% endif %}
+
+                                         <td>
+                                                {{ rec.faculty.faculty_name|default_if_none:"" }}
+                                            </td>
 
                                             <td>
                                                 {{ rec.program.program_name|default_if_none:"" }}

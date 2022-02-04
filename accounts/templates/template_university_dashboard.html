@@ -318,7 +318,7 @@
         <div class="portlet-body">
 
             <h3 class="page-title">
-                {{ request.user.university.university_name|default_if_none:"" }}  Dashboard
+                {{ request.user.university.university_name|default_if_none:"" }} - {% if user.role.all.0.name == 'Administrator' %}(Admission Unit){% else %}({{ user.faculty.faculty_name|default_if_none:"" }}){% endif %}
             </h3>
             <!-- END PAGE HEADER-->
             <!-- BEGIN DASHBOARD STATS -->

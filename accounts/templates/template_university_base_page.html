@@ -226,7 +226,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             {% else %}
                                 {#                                <img alt="" class="img-circle" src="../../media/{{ user.get_application.image }}"/>#}
                                 <b><span
-                                        class="username username-hide-on-mobile">{{ request.user.university.university_name|default_if_none:"" }} ({{ user.role.all.0.name }}) </span></b>
+                                        class="username username-hide-on-mobile">{{ request.user.university.university_name|default_if_none:"" }} - {% if user.role.all.0.name == 'Administrator' %}(Admission Unit){% else %}({{ user.faculty.faculty_name|default_if_none:"" }}){% endif %}</span></b>
                                 {#                                <br>#}
                                 {#                                <span class="username username-hide-on-mobile"> {{ user.get_application_id }}#}
                                 </span>
@@ -535,7 +535,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             </li>
                         {% elif not user.is_student %}
                             <li class="nav-item " id="dashboard">
-                                <a href="/accounts/university_dashboard/" class="nav-link nav-toggle">
+                                <a href="/accounts/dashboard/" class="nav-link nav-toggle">
                                     <i class="glyphicon glyphicon-stats"></i>
                                     <span class="title">{% trans 'Dashboard' %}</span>
                                     <span class="selected"></span>
@@ -1643,7 +1643,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-    {% if request.resolver_match.url_name == 'university_dashboard'  %}
+    {% if request.resolver_match.url_name == 'dashboard'  %}
         {
             var element = document.getElementById("c");
             element.classList.add("active");

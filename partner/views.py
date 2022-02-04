@@ -273,10 +273,16 @@ def template_approving_application(request):
     # messages.success(request, "Records are.... ")
     try:
         # if request.user.is_super_admin():
+        context = {}
         if request.user.is_administrator():
             applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission = True,year=get_current_year(request),university=request.user.university)
+            context['my_template'] = 'template_university_base_page.html'
+        elif request.user.is_faculty():
+            applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission = True,year=get_current_year(request),faculty=request.user.faculty)
+            context['my_template'] = 'template_university_base_page.html'
         else:
             applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission = True,year=get_current_year(request))
+            context['my_template'] = 'template_base_page.html'
         # else:
         #     applicant_recs = ApplicationDetails.objects.filter(
         #         nationality=request.user.partner_user_rel.get().address.country,
@@ -285,7 +291,7 @@ def template_approving_application(request):
         messages.warning(request, "Form have some error" + str(e))
     documents_recs = DocumentDetails.objects.all()
     return render(request, 'template_approving_application.html',
-                  {'applicant_recs': applicant_recs,'documents_recs':documents_recs})
+                  {'applicant_recs': applicant_recs,'documents_recs':documents_recs,'context':context})
 
 
 # def change_application_status(request):
