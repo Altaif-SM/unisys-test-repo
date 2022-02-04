@@ -179,6 +179,15 @@ def template_applicant_all_details(request, app_id):
         attachement_obj = application_obj.applicant_attachement_rel.all() if application_obj.applicant_attachement_rel.all() else ''
         arabic_recs = application_obj.arab_applicant_rel.all() if application_obj.arab_applicant_rel.all() else ''
 
+        context = {}
+        if request.user.is_administrator():
+            context['my_template'] = 'template_university_base_page.html'
+        elif request.user.is_faculty():
+            context['my_template'] = 'template_university_base_page.html'
+        else:
+            context['my_template'] = 'template_base_page.html'
+
+
         return render(request, 'template_applicant_all_details.html',
                       {'siblings_obj': siblings_obj, 'application_obj': application_obj,
                        'qualification_recs': qualification_obj, 'english_recs': english_obj,
@@ -186,7 +195,7 @@ def template_applicant_all_details(request, app_id):
                        'applicant_experience_recs': applicant_experience_obj,
                        'scholarship_obj': scholarship_obj, 'about_obj': about_obj,'attachement_obj':attachement_obj,'postgraduate_recs':postgraduate_recs,
                        'employement_history_recs':employement_history_recs,'addition_info_obj':addition_info_obj,'attachement_obj':attachement_obj,
-                       'arabic_recs':arabic_recs})
+                       'arabic_recs':arabic_recs,'context':context})
 
     except Exception as e:
         messages.warning(request, "Form have some error " + str(e))
