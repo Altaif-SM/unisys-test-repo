@@ -51,7 +51,7 @@ class User(AbstractUser):
     FACULTY = 'Faculty'
 
 
-    first_name = models.CharField(max_length=255, blank=True, null=True)
+    first_name = models.CharField(max_length=256, blank=True, null=True)
     middle_name = models.CharField(max_length=256, blank=True, null=True)
     last_name = models.CharField(max_length=256, blank=True, null=True)
     role = models.ManyToManyField(UserRole, related_name='user_role', null=True)
