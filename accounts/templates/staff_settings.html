@@ -217,7 +217,7 @@
                             {% if rec.role.all.0.name == 'Administrator' %}
                                 <td>Admission Unit</td>
                             {% else %}
-                                <td>{{ rec.role.all.0.name|default_if_none:"" }}</td>
+                                <td>{{ rec.role.all.0.name|default_if_none:"" }} - {{ rec.faculty.faculty_name|default_if_none:"" }}</td>
                             {% endif %}
 
                             <td>{{ rec.address.country.country_name|title }}</td>
