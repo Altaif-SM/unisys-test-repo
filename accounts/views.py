@@ -296,6 +296,41 @@ def dashboard(request):
 
                 country_list.append(raw_dict)
 
+        elif request.user.is_program():
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,program=request.user.program).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,program=request.user.program,
+                                                              first_interview=True).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,program=request.user.program,
+                                                              first_interview_attend=True).count())
+            raw_list.append(
+                ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True, incomplete=True,program=request.user.program).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
+                                                              first_interview_approval=True,
+                                                              second_interview_approval=True, psychometric_test=True,
+                                                              admin_approval=True, is_sponsored=False,program=request.user.program).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
+                                                              application_rejection=True,program=request.user.program).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_online_admission=True,program=request.user.program).count())
+
+            scholarship_list = []
+            country_list = []
+
+            for scholarship in ScholarshipDetails.objects.all():
+                raw_dict = {}
+                raw_dict['scholarship_name'] = scholarship.scholarship_name
+                raw_dict['scholarship_count'] = ApplicationDetails.objects.filter(
+                    applicant_scholarship_rel__scholarship=scholarship).count()
+
+                scholarship_list.append(raw_dict)
+
+            for country in CountryDetails.objects.all():
+                raw_dict = {}
+                raw_dict['country_name'] = country.country_name.capitalize()
+                raw_dict['country_count'] = ApplicationDetails.objects.filter(address__country=country,
+                                                                              is_online_admission=True).count()
+
+                country_list.append(raw_dict)
+
         elif request.user.is_partner():
             raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=False,
                                                               second_interview_approval=False, psychometric_test=False,
@@ -1198,17 +1233,22 @@ def get_university_exists(request):
 
 def get_faculty_from_account_type(request):
     faculty_list = []
+    faculty_ids = []
     account_type = request.POST.get('account_type', None)
     university = request.POST.get('university', None)
-    faculty_recs = FacultyDetails.objects.all()
+    faculty_recs = ProgramDetails.objects.all()
     if university:
         faculty_recs = faculty_recs.filter(university_id = university)
-    for rec in faculty_recs:
-        raw_dict = {}
-        raw_dict['id'] = rec.id
-        raw_dict['faculty'] = rec.faculty_name
-        faculty_list.append(raw_dict)
-    return JsonResponse(faculty_list, safe=False)
+        for rec in faculty_recs:
+            if not rec.faculty.id in faculty_ids:
+                raw_dict = {}
+                raw_dict['id'] = rec.faculty.id
+                raw_dict['faculty'] = rec.faculty.faculty_name
+                faculty_ids.append(rec.faculty.id)
+                faculty_list.append(raw_dict)
+        return JsonResponse(faculty_list, safe=False)
+    else:
+        return JsonResponse(faculty_list, safe=False)
 
 def get_program_from_account_type(request):
     program_list = []
@@ -1217,9 +1257,11 @@ def get_program_from_account_type(request):
     program_recs = ProgramDetails.objects.filter(is_delete=False).order_by('-id')
     if university:
         program_recs = program_recs.filter(university_id = university)
-    for rec in program_recs:
-        raw_dict = {}
-        raw_dict['id'] = rec.id
-        raw_dict['program'] = rec.program_name
-        program_list.append(raw_dict)
-    return JsonResponse(program_list, safe=False)
+        for rec in program_recs:
+            raw_dict = {}
+            raw_dict['id'] = rec.id
+            raw_dict['program'] = rec.program_name
+            program_list.append(raw_dict)
+        return JsonResponse(program_list, safe=False)
+    else:
+        return JsonResponse(program_list, safe=False)

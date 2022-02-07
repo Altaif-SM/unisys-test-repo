@@ -226,7 +226,8 @@ License: You must have a valid license purchased only from themeforest(the above
                             {% else %}
                                 {#                                <img alt="" class="img-circle" src="../../media/{{ user.get_application.image }}"/>#}
                                 <b><span
-                                        class="username username-hide-on-mobile">{{ request.user.university.university_name|default_if_none:"" }} - {% if user.role.all.0.name == 'Administrator' %}(Admission Unit){% else %}({{ user.faculty.faculty_name|default_if_none:"" }}){% endif %}</span></b>
+{#                                        class="username username-hide-on-mobile">{{ request.user.university.university_name|default_if_none:"" }} - {% if user.role.all.0.name == 'Administrator' %}(Admission Unit){% elif user.role.all.0.name == 'Faculty' %}({{ user.faculty.faculty_name|default_if_none:"" }}){% else %}({{ user.program.program_name|default_if_none:"" }}){% endif %}</span></b>#}
+                                        class="username username-hide-on-mobile">{{ request.user.university.university_name|default_if_none:"" }} - {% if user.role.all.0.name == 'Administrator' %}(Admission Unit){% elif user.role.all.0.name == 'Faculty' %}(Faculty){% else %}(Program){% endif %}</span></b>
                                 {#                                <br>#}
                                 {#                                <span class="username username-hide-on-mobile"> {{ user.get_application_id }}#}
                                 </span>

@@ -318,7 +318,8 @@
         <div class="portlet-body">
 
             <h3 class="page-title">
-                {{ request.user.university.university_name|default_if_none:"" }} - {% if user.role.all.0.name == 'Administrator' %}(Admission Unit){% else %}({{ user.faculty.faculty_name|default_if_none:"" }}){% endif %}
+{#                {{ request.user.university.university_name|default_if_none:"" }} - {% if user.role.all.0.name == 'Administrator' %}(Admission Unit){% elif user.role.all.0.name == 'Faculty' %}({{ user.faculty.faculty_name|default_if_none:"" }}){% else %}Program ({{ user.program.program_name|default_if_none:"" }}){% endif %} Dashboard#}
+               {% if user.role.all.0.name == 'Administrator' %}Admission Unit{% elif user.role.all.0.name == 'Faculty' %}{{ user.faculty.faculty_name|default_if_none:"" }}{% else %}{{ user.program.program_name|default_if_none:"" }}{% endif %} Dashboard
             </h3>
             <!-- END PAGE HEADER-->
             <!-- BEGIN DASHBOARD STATS -->
