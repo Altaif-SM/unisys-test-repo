@@ -106,6 +106,7 @@ DATABASES = {
      'default': {
           'ENGINE': 'django.db.backends.mysql',
           'NAME': 'university_system',
+          # 'NAME': 'indonesia_university_system_prod_4',
           'USER':'root',
           'PASSWORD':'Sayyed@123',
           'HOST': '127.0.0.1',

@@ -49,6 +49,7 @@ class User(AbstractUser):
     ADMINISTRATOR = 'Administrator'
     ADMISSION_UNIT = 'Administrator'
     FACULTY = 'Faculty'
+    PROGRAM = 'Program'
 
 
     first_name = models.CharField(max_length=256, blank=True, null=True)
@@ -70,7 +71,9 @@ class User(AbstractUser):
     faculty = models.ForeignKey('masters.FacultyDetails', blank=True, null=True,
                                    related_name='user_faculty_rel',
                                    on_delete=models.SET_NULL)
-
+    program = models.ForeignKey('masters.ProgramDetails', blank=True, null=True,
+                                related_name='user_program_rel',
+                                on_delete=models.SET_NULL)
     class Meta:
         permissions = (
             ('can_view_year_master', 'can view year master'),
@@ -160,6 +163,9 @@ class User(AbstractUser):
 
     def is_faculty(self):
         return True if self.role.all().filter(name__in=[self.FACULTY]).exists() else False
+
+    def is_program(self):
+        return True if self.role.all().filter(name__in=[self.PROGRAM]).exists() else False
 
     @property
     def get_user_permissions(self):
@@ -336,5 +342,7 @@ class User(AbstractUser):
         elif self.role.get().name == User.ADMINISTRATOR:
             dashboard_path = User.ADMINISTRATOR_DASHBOARD
         elif self.role.get().name == User.FACULTY:
+            dashboard_path = User.ADMINISTRATOR_DASHBOARD
+        elif self.role.get().name == User.PROGRAM:
             dashboard_path = User.ADMINISTRATOR_DASHBOARD
         return dashboard_path

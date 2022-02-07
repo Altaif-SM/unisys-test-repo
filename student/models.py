@@ -252,8 +252,8 @@ class ApplicationDetails(BaseModel):
     study_mode = models.CharField(max_length=100, blank=True, null=True)
     program_mode = models.ForeignKey('masters.StudyTypeDetails', null=True, related_name='program_mode_rel',
                                    on_delete=models.SET_NULL)
-    # family_info_flag = models.BooleanField(default=False)
-    # mother_sibling_info_flag = models.BooleanField(default=False)
+    is_faculty_approved = models.BooleanField(default=False)
+    is_program_approved = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('-created_on',)

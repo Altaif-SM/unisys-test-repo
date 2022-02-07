@@ -870,6 +870,7 @@ def add_staff(request):
     module_settings_list = ['Manage Applicant Documents', 'Approving Applicant Details','Payment Settings']
     if request.method == 'POST':
         faculty = request.POST.get('faculty',None)
+        program = request.POST.get('program',None)
         university = request.POST.get('university')
         # first_name = request.POST.get('first_name')
         # last_name = request.POST.get('last_name')
@@ -906,7 +907,7 @@ def add_staff(request):
                 messages.warning(request, "Email already exists.")
                 return render(request, 'add_staff.html',{'country_list':country_list,'staff_dict':staff_dict})
 
-            staff_obj = User.objects.create(email = email,username = email,password = make_password(password),is_active = status,university_id = university,faculty_id = faculty)
+            staff_obj = User.objects.create(email = email,username = email,password = make_password(password),is_active = status,university_id = university,faculty_id = faculty,program_id = program)
             staff_obj.role.add(UserRole.objects.get(name=role))
             try:
                 country = CountryDetails.objects.get(id=country)
@@ -980,6 +981,7 @@ def edit_staff(request, staff_id=None):
     module_settings_list = ['Manage Applicant Documents','Approving Applicant Details','Payment Settings']
     if request.method == 'POST':
         faculty = request.POST.get('faculty', None)
+        program = request.POST.get('program', None)
         university = request.POST.get('university')
         # first_name = request.POST.get('first_name')
         # last_name = request.POST.get('last_name')
@@ -1030,6 +1032,8 @@ def edit_staff(request, staff_id=None):
             user.role.add(UserRole.objects.get(name=role))
             if faculty:
                 user.faculty_id = faculty
+            if program:
+                user.program_id = program
             user.university_id = university
             user.email = email
             if password:
@@ -1081,6 +1085,11 @@ def edit_staff(request, staff_id=None):
         if user_obj.role.all()[0].name == 'Faculty':
             is_faculty = True
 
+    is_program = False
+    if user_obj.role.all():
+        if user_obj.role.all()[0].name == 'Program':
+            is_program = True
+
     faculty_list = []
     if is_faculty == True:
         if user_obj.university:
@@ -1090,6 +1099,16 @@ def edit_staff(request, staff_id=None):
                 raw_dict['id'] = rec.id
                 raw_dict['faculty'] = rec.faculty_name
                 faculty_list.append(raw_dict)
+
+    program_list = []
+    if is_program == True:
+        if user_obj.university:
+            program_recs = ProgramDetails.objects.filter(university_id=user_obj.university.id,is_delete=False)
+            for rec in program_recs:
+                raw_dict = {}
+                raw_dict['id'] = rec.id
+                raw_dict['program'] = rec.program_name
+                program_list.append(raw_dict)
 
     user_obj = {
         'id': user_obj.id,
@@ -1112,7 +1131,11 @@ def edit_staff(request, staff_id=None):
         'is_faculty':is_faculty,
         'faculty_id':user_obj.faculty.id if user_obj.faculty else None,
         'faculty':user_obj.faculty.faculty_name if user_obj.faculty else None,
-        'faculty_list':faculty_list
+        'faculty_list':faculty_list,
+        'is_program':is_program,
+        'program_id': user_obj.program.id if user_obj.program else None,
+        'program': user_obj.program.program_name if user_obj.program else None,
+        'program_list': program_list,
     }
     return render(request, "edit_staff.html", {'user_obj': user_obj,'country_list':country_list})
 

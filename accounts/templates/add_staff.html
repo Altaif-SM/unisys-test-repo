@@ -108,7 +108,6 @@
                     $('#university_exists').hide();
 
                     var university_type = $('input[name="university_type"]:checked').val();
-                    console.log("university_type"+university_type);
                     var url = '/student/get_university_from_type/';
                     get_university_from_university_type(url, university_type)
 
@@ -124,8 +123,11 @@
 
                    $(document).on("change", "#university", function (e) {
 
-                       $('#faculty').empty();
+                        $('#faculty').empty();
                         $('#facculty_div').hide();
+
+                        $('#program').empty();
+                        $('#program_div').hide();
 
                         $('#id_account_type').empty();
                         $('#id_account_type').append(
@@ -134,6 +136,8 @@
                             '<option value="Administrator" >Admission Unit</option>');
                         $('#id_account_type').append(
                             '<option value="Faculty" >Faculty</option>');
+                        $('#id_account_type').append(
+                            '<option value="Program" >Program</option>');
 
 
                      /*
@@ -151,10 +155,20 @@
                     var url = '/accounts/get_faculty_from_account_type/';
                     get_faculty_from_account_type(url, account_type,university)
                 }
+                else if(account_type == 'Program'){
+                    $("#program").prop('required',true);
+                    var url = '/accounts/get_program_from_account_type/';
+                    get_program_from_account_type(url, account_type,university)
+
+                    }
                 else{
                      $("#faculty").prop('required',false);
                      $('#faculty').empty();
                      $('#facculty_div').hide();
+
+                     $("#program").prop('required',false);
+                     $('#program').empty();
+                     $('#program_div').hide();
                 }
 
             })
@@ -239,6 +253,36 @@
             });
         }
 
+        function get_program_from_account_type(url, account_type,university) {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {
+                    account_type: account_type,
+                    university: university,
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+                success: function (data) {
+
+                        $('#faculty').empty();
+                        $('#facculty_div').hide();
+
+                        $('#program').empty();
+                        $('#program_div').show();
+                        $('#program').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#program').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['program'] + '</option>')
+                        }
+                    },
+                error: function (xhr, msg, err) {
+                    alert(xhr.responseJSON.error);
+                }
+            });
+        }
+
           function get_faculty_from_account_type(url, account_type,university) {
             $.ajax({
                 type: 'POST',
@@ -249,6 +293,9 @@
                     csrfmiddlewaretoken: '{{ csrf_token }}',
                 },
                 success: function (data) {
+
+                        $('#program').empty();
+                        $('#program_div').hide();
 
                         $('#faculty').empty();
                         $('#facculty_div').show();
@@ -487,6 +534,7 @@
 {#                                            <option value="Administrator">Administrator</option>#}
                                         <option value="Administrator">Admission Unit</option>
                                         <option value="Faculty">Faculty</option>
+                                        <option value="Program">Program</option>
 {#                                            <option value="Dean">Dean</option>#}
 {#                                            <option value="Deputy Dean">Deputy Dean</option>#}
 {#                                            <option value="Head">Head</option>#}
@@ -505,6 +553,17 @@
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <select name="faculty" class="form-control" id="faculty" >
+
+
+                                        </select>
+                                    </div>
+                                </div>
+
+                        <div class="" style="display: none;" id="program_div">
+                                    <label class="col-md-2 control-label">{% trans 'Program' %}:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select name="program" class="form-control" id="program" >
 
 
                                         </select>
