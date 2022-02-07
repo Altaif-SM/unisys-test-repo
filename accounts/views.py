@@ -11,7 +11,7 @@ from accounts.service import *
 from accounts.models import UserRole
 from student.models import StudentDetails, ApplicationDetails, ScholarshipSelectionDetails
 from masters.models import AddressDetails, CountryDetails, ScholarshipDetails, GuardianDetails, EmailTemplates, \
-    YearDetails,FacultyDetails
+    YearDetails,FacultyDetails,ProgramDetails
 from partner.models import PartnerDetails
 from donor.models import DonorDetails
 import json
@@ -1186,3 +1186,17 @@ def get_faculty_from_account_type(request):
         raw_dict['faculty'] = rec.faculty_name
         faculty_list.append(raw_dict)
     return JsonResponse(faculty_list, safe=False)
+
+def get_program_from_account_type(request):
+    program_list = []
+    account_type = request.POST.get('account_type', None)
+    university = request.POST.get('university', None)
+    program_recs = ProgramDetails.objects.filter(is_delete=False).order_by('-id')
+    if university:
+        program_recs = program_recs.filter(university_id = university)
+    for rec in program_recs:
+        raw_dict = {}
+        raw_dict['id'] = rec.id
+        raw_dict['program'] = rec.program_name
+        program_list.append(raw_dict)
+    return JsonResponse(program_list, safe=False)
