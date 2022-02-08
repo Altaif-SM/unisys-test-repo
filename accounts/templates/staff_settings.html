@@ -216,6 +216,8 @@
                             <td>{{ rec.email|default_if_none:"" }}</td>
                             {% if rec.role.all.0.name == 'Administrator' %}
                                 <td>Admission Unit</td>
+                            {% elif rec.role.all.0.name == 'Supervisor' %}
+                                <td>{{ rec.role.all.0.name|default_if_none:"" }}</td>
                             {% elif rec.role.all.0.name == 'Faculty' %}
                                 <td>{{ rec.role.all.0.name|default_if_none:"" }} - {{ rec.faculty.faculty_name|default_if_none:"" }}</td>
                             {% else %}

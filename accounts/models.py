@@ -50,6 +50,7 @@ class User(AbstractUser):
     ADMISSION_UNIT = 'Administrator'
     FACULTY = 'Faculty'
     PROGRAM = 'Program'
+    SUPERVISOR = 'Supervisor'
 
 
     first_name = models.CharField(max_length=256, blank=True, null=True)
@@ -166,6 +167,9 @@ class User(AbstractUser):
 
     def is_program(self):
         return True if self.role.all().filter(name__in=[self.PROGRAM]).exists() else False
+
+    def is_supervisor(self):
+        return True if self.role.all().filter(name__in=[self.SUPERVISOR]).exists() else False
 
     @property
     def get_user_permissions(self):
@@ -344,5 +348,7 @@ class User(AbstractUser):
         elif self.role.get().name == User.FACULTY:
             dashboard_path = User.ADMINISTRATOR_DASHBOARD
         elif self.role.get().name == User.PROGRAM:
+            dashboard_path = User.ADMINISTRATOR_DASHBOARD
+        elif self.role.get().name == User.SUPERVISOR:
             dashboard_path = User.ADMINISTRATOR_DASHBOARD
         return dashboard_path
