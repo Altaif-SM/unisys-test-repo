@@ -1420,7 +1420,15 @@ def submit_application(request):
             if document_recs[6].doc_required == 'Yes':
                 if attachment_obj.recommendation_letter:
                     document_count = document_count + 1
-            attachement_count = DocumentDetails.objects.filter(doc_required = 'Yes').count()
+
+            if application_obj.program_mode.study_type == 'Research':
+                attachement_count = DocumentDetails.objects.filter(doc_required='Yes').count()
+                if document_recs[7].doc_required == 'Yes':
+                    if attachment_obj.research_proposal:
+                        document_count = document_count + 1
+            else:
+                attachement_count = DocumentDetails.objects.filter(doc_required = 'Yes').exclude(document_name='Research').count()
+
             if not attachement_count == document_count:
                 messages.warning(request, "Please upload required Attachement section before submitting the application.")
                 return redirect('/student/applicant_attachment_submission/')
@@ -2315,13 +2323,12 @@ def save_update_applicant_additional_info(request):
 
 
 def applicant_attachment_submission(request):
-
+    application_obj = ''
     try:
         application_obj = request.user.get_application
     except Exception as e :
         messages.warning(request, "Please fill the personal details first.")
         return redirect('/student/applicant_personal_info/')
-
     try:
         attachment_obj = ''
         if request.user.get_application:
@@ -2329,13 +2336,12 @@ def applicant_attachment_submission(request):
             if ApplicantAttachementDetails.objects.filter(applicant_id=request.user.get_application).exists():
                 attachment_obj = ApplicantAttachementDetails.objects.get(
                     applicant_id=request.user.get_application)
-
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
         return redirect('/student/student_home/')
     document_recs = DocumentDetails.objects.all()
     return render(request, 'applicant_attachment_submission.html',
-                  {'attachment_obj': attachment_obj,'document_recs':document_recs})
+                  {'attachment_obj': attachment_obj,'document_recs':document_recs,'application_obj':application_obj})
 
 
 def save_attachement_submission(request):
@@ -2347,6 +2353,7 @@ def save_attachement_submission(request):
         english_test_result_document = request.FILES.get('english_test_result_document')
         arab_test_result_document = request.FILES.get('arab_test_result_document')
         recommendation_letter = request.FILES.get('recommendation_letter')
+        research_proposal = request.FILES.get('research_proposal')
     except:
         passport_photo = ''
         photo = ''
@@ -2355,6 +2362,7 @@ def save_attachement_submission(request):
         english_test_result_document = ''
         arab_test_result_document = ''
         recommendation_letter = ''
+        research_proposal = ''
 
     try:
 
@@ -2397,6 +2405,10 @@ def save_attachement_submission(request):
 
         if recommendation_letter:
             attachment_obj.recommendation_letter = recommendation_letter
+            attachment_obj.save()
+
+        if research_proposal:
+            attachment_obj.research_proposal = research_proposal
             attachment_obj.save()
 
 

@@ -56,6 +56,7 @@
                         $('#english_test_result_document_exists').hide();
                         $('#arab_test_result_document_exists').hide();
                         $('#recommendation_letter_exists').hide();
+                        $('#research_proposal_exists').hide();
 
                         if (document.getElementById("photo").files.length == 0 && !$('#photo_text').val()) {
                             $('#photo_exists').show();
@@ -70,6 +71,7 @@
                         $('#english_test_result_document_exists').hide();
                         $('#arab_test_result_document_exists').hide();
                         $('#recommendation_letter_exists').hide();
+                        $('#research_proposal_exists').hide();
                          if (document.getElementById("passport_photo").files.length == 0 && !$('#passport_photo_text').val()) {
                             $('#passport_photo_exists').show();
                             return false;
@@ -82,6 +84,7 @@
                         $('#english_test_result_document_exists').hide();
                         $('#arab_test_result_document_exists').hide();
                         $('#recommendation_letter_exists').hide();
+                        $('#research_proposal_exists').hide();
                          if (document.getElementById("level_result_document").files.length == 0 && !$('#level_result_document_text').val()) {
                             $('#level_result_document_exists').show();
                             return false;
@@ -97,6 +100,7 @@
                         $('#english_test_result_document_exists').hide();
                         $('#arab_test_result_document_exists').hide();
                         $('#recommendation_letter_exists').hide();
+                        $('#research_proposal_exists').hide();
                          if (document.getElementById("transcript_document").files.length == 0 && !$('#transcript_document_text').val()) {
                             $('#transcript_document_exists').show();
                             return false;
@@ -109,6 +113,7 @@
                         $('#transcript_document_exists').hide();
                         $('#arab_test_result_document_exists').hide();
                         $('#recommendation_letter_exists').hide();
+                        $('#research_proposal_exists').hide();
                          if (document.getElementById("english_test_result_document").files.length == 0 && !$('#english_test_result_document_text').val()) {
                             $('#english_test_result_document_exists').show();
                             return false;
@@ -121,6 +126,7 @@
                         $('#transcript_document_exists').hide();
                         $('#english_test_result_document_exists').hide();
                         $('#recommendation_letter_exists').hide();
+                        $('#research_proposal_exists').hide();
                          if (document.getElementById("arab_test_result_document").files.length == 0 && !$('#arab_test_result_document_text').val()) {
                             $('#arab_test_result_document_exists').show();
                             return false;
@@ -133,11 +139,29 @@
                         $('#transcript_document_exists').hide();
                         $('#english_test_result_document_exists').hide();
                         $('#arab_test_result_document_exists').hide();
+                        $('#research_proposal_exists').hide();
                          if (document.getElementById("recommendation_letter").files.length == 0 && !$('#recommendation_letter_text').val()) {
                             $('#recommendation_letter_exists').show();
                             return false;
                         }
                     }
+
+                    if($('#research_proposal_doc_required').val() == 'Yes'){
+                        $('#photo_exists').hide();
+                        $('#passport_photo_exists').hide();
+                        $('#level_result_document_exists').hide();
+                        $('#transcript_document_exists').hide();
+                        $('#english_test_result_document_exists').hide();
+                        $('#arab_test_result_document_exists').hide();
+                        $('#recommendation_letter_exists').hide();
+                         if (document.getElementById("research_proposal").files.length == 0 && !$('#research_proposal_text').val()) {
+                            $('#research_proposal_exists').show();
+                            return false;
+                        }
+                    }
+
+
+
 
 
                 })
@@ -145,6 +169,7 @@
 
                 $(document).on("click", ".remove_doc", function (e) {
                     var parent_id = $(this).closest('div').attr('id');
+                    console.log('parent_id'+parent_id);
                     $('#' + parent_id + ' .emp').val('');
                 });
 
@@ -338,7 +363,7 @@
                                 </label>
 
 
-                                <div class="col-md-3" id="item1">
+                                <div class="col-md-3" id="parent2">
                                     {% if attachment_obj.passport_image %}
                                         <label class="form-control"
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
@@ -395,7 +420,7 @@
                                     {#                                    <br><span#}
                                     {#                                            style="color:red;font-size: 12px">({% trans 'Only formats are allowed pdf' %})</span>#}
                                 </label>
-                                <div class="col-md-3" id="parent2">
+                                <div class="col-md-3" id="parent3">
                                     {% if attachment_obj.level_result_document %}
                                         <label class="form-control"
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
@@ -448,7 +473,7 @@
                                     {#                                    <br><span#}
                                     {#                                            style="color:red;font-size: 12px">({% trans 'Only formats are allowed pdf' %})</span>#}
                                 </label>
-                                <div class="col-md-3" id="parent3">
+                                <div class="col-md-3" id="parent4">
                                     {% if attachment_obj.transcript_document %}
                                         <label class="form-control"
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
@@ -503,7 +528,7 @@
                                     {#                                    <br><span#}
                                     {#                                            style="color:red;font-size: 12px">({% trans 'Only formats are allowed pdf' %})</span>#}
                                 </label>
-                                <div class="col-md-3" id="parent4">
+                                <div class="col-md-3" id="parent5">
                                     {% if attachment_obj.english_test_result_document %}
                                         <label class="form-control"
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
@@ -557,7 +582,7 @@
                                     {#                                    <br><span#}
                                     {#                                            style="color:red;font-size: 12px">({% trans 'Only formats are allowed pdf' %})</span>#}
                                 </label>
-                                <div class="col-md-3" id="parent5">
+                                <div class="col-md-3" id="parent6">
                                     {% if attachment_obj.arab_test_result_document %}
                                         <label class="form-control"
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
@@ -608,10 +633,8 @@
                                 <label class="col-md-4 control-label">{{ document_recs.6.document_name|default_if_none:"" }}:
                                     {% if document_recs.6.doc_required == 'Yes' %}
                                         <span style="color: red">*</span>{% endif %}
-                                    {#                                    <br><span#}
-                                    {#                                            style="color:red;font-size: 12px">({% trans 'Only formats are allowed pdf' %})</span>#}
                                 </label>
-                                <div class="col-md-3" id="parent5">
+                                <div class="col-md-3" id="parent7">
                                     {% if attachment_obj.recommendation_letter %}
                                         <label class="form-control"
                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
@@ -655,17 +678,62 @@
                             </div>
                         </div>
 
+                    {% if application_obj.program_mode.study_type == 'Research' %}
+                    <br>
+                    <div class="row">
+                            <input type="hidden" value="{{ document_recs.7.doc_required|default_if_none:"" }}"
+                                   id="research_proposal_doc_required" name="research_proposal_doc_required">
+                            <div class="">
+                                <label class="col-md-4 control-label">{{ document_recs.7.document_name|default_if_none:"" }}:
+                                    {% if document_recs.7.doc_required == 'Yes' %}
+                                        <span style="color: red">*</span>{% endif %}
+                                </label>
+                                <div class="col-md-3" id="parent8">
+                                    {% if attachment_obj.research_proposal %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a target="_blank"
+                                                href="
+                                                        {{ attachment_obj.research_proposal.url }}"><input
+                                                type="text"
+                                                readonly name="research_proposal_text" id="research_proposal_text"
+                                                class="file_value emp"
+                                                style="cursor: pointer;border: none; width: 50%"
+                                                value="{{ attachment_obj.research_proposal }}"></a>
+                                        </label>
+                                    {% else %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a><input type="text"
+                                                                                             readonly
+                                                                                             name="research_proposal_text"
+                                                                                             class="file_value emp"
+                                                                                             style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
+                                    {% endif %}
+                                    <input type="file" style="display: none" class="file_type" accept="application/pdf,"
+                                           title="Select Research Proposal" id="research_proposal"
+                                           name="research_proposal">
+                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                                          class="remove_doc fa fa-close"></span>
+                                </div>
+                                <div class="" style="font-size:20px;">
 
-                        {#                        <div class="row">#}
-                        {#                            <div class="col-md-offset-4 col-md-7">#}
-                        {#                                {% if user.get_application %}#}
-                        {#                                                                        {% if user.get_application.is_submitted %}#}
-                        {#                                    <button type="submit" class="btn green" id="save" style="">Submit</button>#}
-                        {#                                                                        <button type="submit" class="btn green" id="save" style="">Submit</button>#}
-                        {#                                                                        {% endif %}#}
-                        {#                                {% endif %}#}
-                        {#                            </div>#}
-                        {#                        </div>#}
+
+                                    <a data-target="#research_proposal_modal" data-toggle="modal"><i
+                                            class="fa fa-info-circle" aria-hidden="true"></i></a>
+
+
+                                </div>
+                            <span style="color: red;font-size:13px;display: none;"
+                                  id="research_proposal_exists">Please upload {{ document_recs.7.document_name|default_if_none:"" }}.</span>
+
+                            </div>
+                        </div>
+                    {% endif %}
+
+
 
                         <hr>
 
@@ -845,6 +913,30 @@
                     </div>
                     <div class="modal-body">
                         {% for rec in document_recs.6.notes.all %}
+                        <p style="margin: 0px 0 !important;">{{ rec.note|default_if_none:"" }}</p>
+                        {% endfor %}
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancel_model" data-dismiss="modal" class="btn dark btn-outline">
+                            Cancel
+                        </button>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="research_proposal_modal" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                    <input type="hidden" id="year_delete_id" name="year_delete_id">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h5 class="modal-title" style="color: #2a015e; text-align: center"><b>File Upload Instructions</b></h5>
+                    </div>
+                    <div class="modal-body">
+                        {% for rec in document_recs.7.notes.all %}
                         <p style="margin: 0px 0 !important;">{{ rec.note|default_if_none:"" }}</p>
                         {% endfor %}
 
