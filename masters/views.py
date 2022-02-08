@@ -3090,7 +3090,7 @@ def delete_department_staff(request):
         return redirect('/masters/link_department_staff/')
 
 def document_settings(request):
-    documents_recs = DocumentDetails.objects.all()
+    documents_recs = DocumentDetails.objects.filter().exclude(document_name='Research Proposal')
     return render(request, 'document_settings.html', {'documents_recs': documents_recs})
 
 def add_document(request):
