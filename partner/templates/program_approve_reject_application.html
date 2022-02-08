@@ -357,6 +357,7 @@
                                         {#                                        {% elif request.user.is_program %}#}
                                         <th>{% trans 'Program' %}</th>
                                         <th>{% trans 'Mode' %}</th>
+{#                                        <th>{% trans 'Supervisor' %}</th>#}
                                         {#                                        {% endif %}#}
 
 
@@ -397,33 +398,25 @@
                                             <td>
                                                 {{ rec.program.program_name|default_if_none:"" }}
                                             </td>
-                                         <td>
+                                            <td>
                                                 {{ rec.program.study_type|default_if_none:"" }}
                                             </td>
+
+
+{#                                        <td>#}
+{#                                                <text><a href="/partner/template_applicant_all_details/{{ rec.id }}"#}
+{#                                                        {% if rec.application_rejection %}#}
+{#                                                         style="color: darkred" {% endif %}>{{ rec.first_name|title }} {{ rec.last_name|title }}</a>#}
+{#                                                </text>#}
+{#                                            </td>#}
+
                                             {#                                            {% endif %}#}
+
 
                                             <td>
-                                                <span style="color:{% if rec.faculty_status == 'Pending' %}peru{% elif rec.faculty_status == 'Approved' %}green{% else %}red{% endif %}"><b>{{ rec.faculty_status|default_if_none:"" }}</b></span>
+                                                <span style="color:{% if rec.program_status == 'Pending' %}peru{% elif rec.program_status == 'Approved' %}green{% else %}red{% endif %}"><b>{{ rec.program_status|default_if_none:"" }}</b></span>
 
                                             </td>
-
-
-                                            {#                                            {% if request.user.is_faculty %}#}
-                                            {#                                                <td>#}
-                                            {#                                                    <span style="color:{% if rec.faculty_status == 'Pending' %}peru{% elif rec.faculty_status == 'Approved' %}green{% else %}red{% endif %}"><b>{{ rec.faculty_status|default_if_none:"" }}</b></span>#}
-                                            {##}
-                                            {#                                                </td>#}
-                                            {#                                            {% elif request.user.is_program %}#}
-                                            {#                                                <td>#}
-                                            {#                                                    <span style="color:{% if rec.program_status == 'Pending' %}peru{% elif rec.program_status == 'Approved' %}green{% else %}red{% endif %}"><b>{{ rec.program_status|default_if_none:"" }}</b></span>#}
-                                            {##}
-                                            {#                                                </td>#}
-                                            {#                                            {% else %}#}
-                                            {#                                                <td>#}
-                                            {#                                                    <span style="color:peru"><b>Pending</b></span>#}
-                                            {##}
-                                            {#                                                </td>#}
-                                            {#                                            {% endif %}#}
 
 
                                         </tr>

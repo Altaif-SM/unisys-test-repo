@@ -178,7 +178,7 @@ def template_applicant_all_details(request, app_id):
         addition_info_obj = application_obj.applicant_addition_info.get() if application_obj.applicant_addition_info.all() else ''
         attachement_obj = application_obj.applicant_attachement_rel.all() if application_obj.applicant_attachement_rel.all() else ''
         arabic_recs = application_obj.arab_applicant_rel.all() if application_obj.arab_applicant_rel.all() else ''
-
+        supervisor_list = User.objects.filter(role__name__in=['Supervisor'],university_id=application_obj.university.id)
         context = {}
         if request.user.is_administrator():
             context['my_template'] = 'template_university_base_page.html'
@@ -197,7 +197,7 @@ def template_applicant_all_details(request, app_id):
                        'applicant_experience_recs': applicant_experience_obj,
                        'scholarship_obj': scholarship_obj, 'about_obj': about_obj,'attachement_obj':attachement_obj,'postgraduate_recs':postgraduate_recs,
                        'employement_history_recs':employement_history_recs,'addition_info_obj':addition_info_obj,'attachement_obj':attachement_obj,
-                       'arabic_recs':arabic_recs,'context':context})
+                       'arabic_recs':arabic_recs,'context':context,'supervisor_list':supervisor_list})
 
     except Exception as e:
         messages.warning(request, "Form have some error " + str(e))
@@ -297,7 +297,7 @@ def template_approving_application(request):
         elif request.user.is_program():
             applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission = True,year=get_current_year(request),program=request.user.program)
             context['my_template'] = 'template_university_base_page.html'
-            return render(request, 'approve_reject_application.html',
+            return render(request, 'program_approve_reject_application.html',
                           {'applicant_recs': applicant_recs, 'documents_recs': documents_recs, 'context': context})
         else:
             applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission = True,year=get_current_year(request))
