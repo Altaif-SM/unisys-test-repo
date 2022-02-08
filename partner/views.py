@@ -840,7 +840,7 @@ def change_application_status(request):
                         ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
                                                                  status='Faculty Application Approved',
                                                                  remark='Your application has approved from Faculty.')
-                        messages.success(request, application_obj.first_name.title() + " application rejected.")
+                        messages.success(request, application_obj.first_name.title() + " application approved.")
                     else:
                         messages.warning(request, "Applicant " + application_obj.first_name.title() + " is already approved.")
                         continue
@@ -853,7 +853,7 @@ def change_application_status(request):
                         ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
                                                                  status='Program Application Approved',
                                                                  remark='Your application has approved from Program.')
-                        messages.success(request, application_obj.first_name.title() + " application rejected.")
+                        messages.success(request, application_obj.first_name.title() + " application approved.")
                     else:
                         messages.warning(request, "Applicant " + application_obj.first_name.title() + " is already approved.")
                         continue
@@ -869,7 +869,7 @@ def change_application_status(request):
                                                                  remark='Your application has rejected from Faculty.')
                         messages.success(request, application_obj.first_name.title() + " application rejected.")
                     else:
-                        messages.warning(request,"Applicant " + application_obj.first_name.title() + " is already approved.")
+                        messages.warning(request,"Applicant " + application_obj.first_name.title() + " is already rejected.")
                         continue
                 if request.user.is_program():
                     if not application_obj.program_status == 'Rejected':
@@ -881,7 +881,7 @@ def change_application_status(request):
                                                                  remark='Your application has rejected from Program.')
                         messages.success(request, application_obj.first_name.title() + " application rejected.")
                     else:
-                        messages.warning(request,"Applicant " + application_obj.first_name.title() + " is already approved.")
+                        messages.warning(request,"Applicant " + application_obj.first_name.title() + " is already rejected.")
                         continue
             elif interview_type == 'Reject':
                 if not application_obj.application_rejection:
