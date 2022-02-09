@@ -970,6 +970,24 @@
 
                     </div>
                 </div>
+            <br>
+             <div class="row">
+
+
+                    <div class="">
+                        <label class="col-md-2 control-label">Research Proposal:</label>
+
+                        <div class="col-md-4">
+                            {% if attachement_obj.0.research_proposal %}
+                                <a href="{{ attachement_obj.0.research_proposal.url }}" target="_blank">Preview
+                                    Research Proposal</a>
+                            {% else %}
+                                ----
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </div>
 
                 <hr>
 

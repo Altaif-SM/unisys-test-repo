@@ -331,6 +331,41 @@ def dashboard(request):
 
                 country_list.append(raw_dict)
 
+        elif request.user.is_supervisor():
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,supervisor=request.user).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,supervisor=request.user,
+                                                              first_interview=True).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,supervisor=request.user,
+                                                              first_interview_attend=True).count())
+            raw_list.append(
+                ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True, incomplete=True,supervisor=request.user).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
+                                                              first_interview_approval=True,
+                                                              second_interview_approval=True, psychometric_test=True,
+                                                              admin_approval=True, is_sponsored=False,supervisor=request.user).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
+                                                              application_rejection=True,supervisor=request.user).count())
+            raw_list.append(ApplicationDetails.objects.filter(is_online_admission=True,supervisor=request.user).count())
+
+            scholarship_list = []
+            country_list = []
+
+            for scholarship in ScholarshipDetails.objects.all():
+                raw_dict = {}
+                raw_dict['scholarship_name'] = scholarship.scholarship_name
+                raw_dict['scholarship_count'] = ApplicationDetails.objects.filter(
+                    applicant_scholarship_rel__scholarship=scholarship).count()
+
+                scholarship_list.append(raw_dict)
+
+            for country in CountryDetails.objects.all():
+                raw_dict = {}
+                raw_dict['country_name'] = country.country_name.capitalize()
+                raw_dict['country_count'] = ApplicationDetails.objects.filter(address__country=country,
+                                                                              is_online_admission=True).count()
+
+                country_list.append(raw_dict)
+
         elif request.user.is_partner():
             raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=False,
                                                               second_interview_approval=False, psychometric_test=False,
@@ -428,23 +463,6 @@ def dashboard(request):
 
                 country_list.append(raw_dict)
 
-        # if user.is_superuser:
-        # try:
-        #     current_acd_year = YearDetails.objects.get(active_year=True)
-        #     end_date = current_acd_year.end_date
-        #     todayDate = date.today()
-        #     active_year = False
-        #     if end_date <= todayDate:
-        #         active_year = True
-        #         User.objects.filter().update(registration_switch=False)
-        #         User.objects.filter().update(submission_switch=False)
-        # except:
-        #     active_year = False
-        #     User.objects.filter().update(registration_switch=False)
-        #     User.objects.filter().update(submission_switch=False)
-        # return render(request, "template_admin_dashboard.html",
-        #               {'user': user, 'raw_list': raw_list, 'scholarship_list': json.dumps(scholarship_list),'active_year':active_year,
-        #                'country_list': json.dumps(country_list)})
         if User.objects.all():
             registration_flag = User.objects.filter()[0].registration_switch
             submission_switch = User.objects.filter()[0].submission_switch

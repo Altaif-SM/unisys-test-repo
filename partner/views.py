@@ -186,6 +186,8 @@ def template_applicant_all_details(request, app_id):
             context['my_template'] = 'template_university_base_page.html'
         elif request.user.is_program():
             context['my_template'] = 'template_university_base_page.html'
+        elif request.user.is_supervisor():
+            context['my_template'] = 'template_university_base_page.html'
         else:
             context['my_template'] = 'template_base_page.html'
 
@@ -298,6 +300,11 @@ def template_approving_application(request):
             applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission = True,year=get_current_year(request),program=request.user.program)
             context['my_template'] = 'template_university_base_page.html'
             return render(request, 'program_approve_reject_application.html',
+                          {'applicant_recs': applicant_recs, 'documents_recs': documents_recs, 'context': context})
+        elif request.user.is_supervisor():
+            applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission = True,year=get_current_year(request),supervisor=request.user)
+            context['my_template'] = 'template_university_base_page.html'
+            return render(request, 'supervisor_approve_reject_template.html',
                           {'applicant_recs': applicant_recs, 'documents_recs': documents_recs, 'context': context})
         else:
             applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission = True,year=get_current_year(request))
