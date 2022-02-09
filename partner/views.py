@@ -2335,10 +2335,13 @@ def assign_supervisior(request, application_id=None):
     if request.method == 'POST':
         supervisor = request.POST.get('supervisor')
         try:
-            application_obj.supervisor_id = supervisor
-            application_obj.supervisor_status = 'Requested'
-            application_obj.save()
-            messages.success(request, "Record saved.")
+            if not application_obj.supervisor_id == int(supervisor):
+                application_obj.supervisor_id = str(supervisor)
+                application_obj.supervisor_status = 'Requested'
+                application_obj.save()
+                messages.success(request, "Record saved.")
+            else:
+                messages.warning(request, "Supervisor " + application_obj.supervisor.email + " is already assigned.")
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/partner/template_approving_application/')
