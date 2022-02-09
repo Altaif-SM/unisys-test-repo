@@ -351,13 +351,14 @@
                                         </th>
                                         <th>{% trans 'Student Name' %}</th>
                                         <th>{% trans 'University' %}</th>
-                                        <th>{% trans 'University Type' %}</th>
+{#                                        <th>{% trans 'University Type' %}</th>#}
                                         {#                                        {% if request.user.is_faculty %}#}
-                                        <th>{% trans 'Faculty' %}</th>
+{#                                        <th>{% trans 'Faculty' %}</th>#}
                                         {#                                        {% elif request.user.is_program %}#}
                                         <th>{% trans 'Program' %}</th>
                                         <th>{% trans 'Mode' %}</th>
-{#                                        <th>{% trans 'Supervisor' %}</th>#}
+                                        <th>{% trans 'Assign Supervisor' %}</th>
+                                        <th>{% trans 'Supervisor Status' %}</th>
                                         {#                                        {% endif %}#}
 
 
@@ -385,15 +386,15 @@
                                             <td>
                                                 {{ rec.university.university_name|default_if_none:"" }}
                                             </td>
-                                            {% if rec.university.is_partner_university == True %}
-                                                <td>International</td>
-                                            {% else %}
-                                                <td>Main</td>
-                                            {% endif %}
+{#                                            {% if rec.university.is_partner_university == True %}#}
+{#                                                <td>International</td>#}
+{#                                            {% else %}#}
+{#                                                <td>Main</td>#}
+{#                                            {% endif %}#}
                                             {#                                            {% if request.user.is_faculty %}#}
-                                            <td>
-                                                {{ rec.faculty.faculty_name|default_if_none:"" }}
-                                            </td>
+{#                                            <td>#}
+{#                                                {{ rec.faculty.faculty_name|default_if_none:"" }}#}
+{#                                            </td>#}
                                             {#                                            {% elif request.user.is_program %}#}
                                             <td>
                                                 {{ rec.program.program_name|default_if_none:"" }}
@@ -403,15 +404,29 @@
                                             </td>
 
 
-{#                                        <td>#}
-{#                                                <text><a href="/partner/template_applicant_all_details/{{ rec.id }}"#}
-{#                                                        {% if rec.application_rejection %}#}
-{#                                                         style="color: darkred" {% endif %}>{{ rec.first_name|title }} {{ rec.last_name|title }}</a>#}
-{#                                                </text>#}
-{#                                            </td>#}
+                                            {#                                        <td>#}
+                                            {#                                                <text><a href="/partner/template_applicant_all_details/{{ rec.id }}"#}
+                                            {#                                                        {% if rec.application_rejection %}#}
+                                            {#                                                         style="color: darkred" {% endif %}>{{ rec.first_name|title }} {{ rec.last_name|title }}</a>#}
+                                            {#                                                </text>#}
+                                            {#                                            </td>#}
 
                                             {#                                            {% endif %}#}
 
+                                            <td>
+                                                {% if rec.supervisor %}
+                                                    {{ rec.supervisor.email|default_if_none:"" }}
+                                                {% else %}
+                                                    -
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                               {% if rec.supervisor %}
+                                                   <span style="color:{% if rec.supervisor_status == 'Requested' %}peru{% elif rec.supervisor_status == 'Approved' %}green{% else %}red{% endif %}"><b>{{ rec.supervisor_status|default_if_none:"" }}</b></span>
+                                                {% else %}
+                                                    -
+                                                {% endif %}
+                                            </td>
 
                                             <td>
                                                 <span style="color:{% if rec.program_status == 'Pending' %}peru{% elif rec.program_status == 'Approved' %}green{% else %}red{% endif %}"><b>{{ rec.program_status|default_if_none:"" }}</b></span>

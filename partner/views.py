@@ -2295,3 +2295,14 @@ def update_semister_module_link_student(request):
         messages.warning(request, "Record not updated."+str(e))
     return HttpResponse(json.dumps({'error': 'Record not updated.'}), content_type="application/json")
 
+def assign_supervisior(request, application_id=None):
+    application_obj = ApplicationDetails.objects.get(id=application_id)
+    if request.method == 'POST':
+        supervisor = request.POST.get('supervisor')
+        try:
+            application_obj.supervisor_id = supervisor
+            application_obj.save()
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/partner/template_approving_application/')

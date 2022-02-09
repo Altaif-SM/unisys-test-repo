@@ -13,6 +13,12 @@
                 });
 
 
+                $(document).on("click", "#btn_supervisor", function (e) {
+
+                    $('#supervisior_modal').modal();
+                })
+
+
             });
         }
 
@@ -86,9 +92,12 @@
                 <span class="caption-subject font-red sbold uppercase"> {% trans 'Applications Details' %}</span>
 
             </div>
-            {#            <span style="margin-left: 10%">#}
-            {#                <button type="button" id="button_pdf_id" class="btn green" id="save">PDF</button>#}
-            {#            </span>#}
+            {% if request.user.is_program == True %}
+                {% if application_obj.program_mode.study_type == 'Research' %}
+                    <button type="button" class="btn red" id="btn_supervisor" style="margin-left: 70%">Assign Supervisor
+                    </button>
+                {% endif %}
+            {% endif %}
 
         </div>
 
@@ -114,55 +123,55 @@
                             </a>
                         </div>
                     </div>
-                    {% if request.user.is_program == True %}
-
-                        {% if application_obj.program_mode.study_type == 'Research' %}
-
-                            <form action="{% url 'accounts:add_staff' %}"
-                                  id="staff_form"
-                                  class="form-horizontal"
-                                  method="POST" enctype="multipart/form-data">
-                                {% csrf_token %}
-
-
-                                <div class="">
-                                    <label class="col-md-1 control-label">Supervisor:</label>
-                                    <div class="col-md-3">
-                                        <select id='supervisor' title="Select Supervisor"
-                                                name="supervisor"
-                                                class="form-control" required>
-                                            {% if staff_dict.country %}
-                                                <option style="display:none;" selected="selected"
-                                                        value="{{ staff_dict.country|default_if_none:"" }}"> {{ staff_dict.country_name|default_if_none:"" }}</option>
-                                                <option value=""> Please Select</option>
-                                            {% else %}
-                                                <option selected="selected" value="" disabled> Please Select</option>
-                                            {% endif %}
-
-                                            {% for rec in supervisor_list %}
-                                                <option value="{{ rec.id }}">{{ rec.email|default_if_none:"" }}</option>
-                                            {% endfor %}
-
-                                        </select>
-                                    </div>
-
-
-                                </div>
-
-                                <div class="">
-                                    <label class="col-md-1 control-label" style="padding-top:0px!important;">
-                                        <button type="submit" class="btn green" id="save_form" style="">Save
-                                        </button>
-
-
-                                    </label>
-
-
-                                </div>
-
-                            </form>
-                        {% endif %}
-                    {% endif %}
+                    {#                    {% if request.user.is_program == True %}#}
+                    {##}
+                    {#                        {% if application_obj.program_mode.study_type == 'Research' %}#}
+                    {##}
+                    {#                            <form action="{% url 'accounts:add_staff' %}"#}
+                    {#                                  id="staff_form"#}
+                    {#                                  class="form-horizontal"#}
+                    {#                                  method="POST" enctype="multipart/form-data">#}
+                    {#                                {% csrf_token %}#}
+                    {##}
+                    {##}
+                    {#                                <div class="">#}
+                    {#                                    <label class="col-md-1 control-label">Supervisor:</label>#}
+                    {#                                    <div class="col-md-3">#}
+                    {#                                        <select id='supervisor' title="Select Supervisor"#}
+                    {#                                                name="supervisor"#}
+                    {#                                                class="form-control" required>#}
+                    {#                                            {% if staff_dict.country %}#}
+                    {#                                                <option style="display:none;" selected="selected"#}
+                    {#                                                        value="{{ staff_dict.country|default_if_none:"" }}"> {{ staff_dict.country_name|default_if_none:"" }}</option>#}
+                    {#                                                <option value=""> Please Select</option>#}
+                    {#                                            {% else %}#}
+                    {#                                                <option selected="selected" value="" disabled> Please Select</option>#}
+                    {#                                            {% endif %}#}
+                    {##}
+                    {#                                            {% for rec in supervisor_list %}#}
+                    {#                                                <option value="{{ rec.id }}">{{ rec.email|default_if_none:"" }}</option>#}
+                    {#                                            {% endfor %}#}
+                    {##}
+                    {#                                        </select>#}
+                    {#                                    </div>#}
+                    {##}
+                    {##}
+                    {#                                </div>#}
+                    {##}
+                    {#                                <div class="">#}
+                    {#                                    <label class="col-md-1 control-label" style="padding-top:0px!important;">#}
+                    {#                                        <button type="submit" class="btn green" id="save_form" style="">Save#}
+                    {#                                        </button>#}
+                    {##}
+                    {##}
+                    {#                                    </label>#}
+                    {##}
+                    {##}
+                    {#                                </div>#}
+                    {##}
+                    {#                            </form>#}
+                    {#                        {% endif %}#}
+                    {#                    {% endif %}#}
 
 
                 </div>
@@ -968,4 +977,49 @@
             </div>
         </div>
     </div>
+
+
+    <div id="supervisior_modal" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{% url 'partner:assign_supervisior' application_obj.id %}"
+                      id="id_form"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h4 class="modal-title" style="color: #2a015e; text-align: left"><b>Select Supervisor</b>
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <select id='supervisor' title="Select Supervisor" style="width: 70%"
+                                name="supervisor"
+                                class="form-control" required>
+                            {% if staff_dict.country %}
+                                <option style="display:none;" selected="selected"
+                                        value="{{ staff_dict.country|default_if_none:"" }}"> {{ staff_dict.country_name|default_if_none:"" }}</option>
+                                <option value=""> Please Select</option>
+                            {% else %}
+                                <option selected="selected" value="" disabled> Please Select</option>
+                            {% endif %}
+
+                            {% for rec in supervisor_list %}
+                                <option value="{{ rec.id }}">{{ rec.email|default_if_none:"" }}</option>
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancel_model" data-dismiss="modal" class="btn dark btn-outline">
+                            Cancel
+                        </button>
+                        <button type="submit" id="delete_language" class="btn red">Confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
