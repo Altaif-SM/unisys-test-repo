@@ -162,22 +162,15 @@
 
 
                 $('.status_change').click(function () {
-
+                    var conditional_offer = []
                     var checked = $('#example').find('input[name="check"]:checked').length;
-
                     if (!checked) {
                         alert('Please select at least one record to proceed..!');
                         return false;
                     }
-
                     var favorite = [];
-                    var conditional_offer = []
-                    if ($(this).attr('id') == 'Incomplete') {
-                        $('#id_accept_student_model').modal();
-                        return false;
-                    }
-                    if ($(this).attr('id') == 'First Interview') {
-                        $('#id_conditional_model').modal();
+                    if ($(this).attr('id') == 'Supervisor Rejected') {
+                        $('#reject_model').modal();
                         return false;
                     }
                     if (!checked)
@@ -187,20 +180,18 @@
 
                             favorite.push($(this).val());
                         });
-                        {#alert(JSON.stringify(favorite));#}
                         $("#check_ids").val(JSON.stringify(favorite));
-                        $("#conditional_documents").val(JSON.stringify(conditional_offer));
                         $("#interview_type").val($(this).attr('id'));
+                        $("#conditional_documents").val(JSON.stringify(conditional_offer));
                         $('#form_submit').submit()
                     }
 
                 })
 
 
-                $('#first_interview_save').click(function () {
+                $('#btn_reject_supervisor').click(function () {
                     var favorite = []
                     var conditional_offer = []
-
                     var checked = $('#example').find('input[name="check"]:checked').length;
                     if (!checked)
                         alert('Please select at least one record to proceed..!');
@@ -209,46 +200,15 @@
 
                             favorite.push($(this).val());
                         });
-
-                        {#alert(JSON.stringify(favorite));#}
                         $("#check_ids").val(JSON.stringify(favorite));
+                        $("#interview_type").val('Supervisor Rejected');
+                        $("#reject_description").val($('#incomplete_description').val());
                         $("#conditional_documents").val(JSON.stringify(conditional_offer));
-
-                        $("#interview_type").val('Incomplete');
-                        $("#description").val($('#incomplete_description').val());
-
-
                         $('#form_submit').submit()
                     }
                 })
 
 
-                $('#conditional_offer_save').click(function () {
-                    var conditional_offer = []
-                    var favorite = []
-                    var checked = $('#example').find('input[name="check"]:checked').length;
-                    if (!checked)
-                        alert('Please select at least one record to proceed..!');
-                    else {
-                        $.each($("input[name='conditional_check']:checked"), function () {
-
-                            conditional_offer.push($(this).val());
-                        });
-                        $.each($("input[name='check']:checked"), function () {
-
-                            favorite.push($(this).val());
-                        });
-
-                        {#alert(JSON.stringify(conditional_offer));#}
-                        $("#check_ids").val(JSON.stringify(favorite));
-                        $("#conditional_documents").val(JSON.stringify(conditional_offer));
-
-                        $("#interview_type").val('First Interview');
-
-
-                        $('#form_submit').submit()
-                    }
-                })
 
 
             });
@@ -312,9 +272,9 @@
                     <div class="col-md-4">
                         <div class="">
                             <input type="text" hidden id="check_ids" name="check_ids">
-                            <input type="text" hidden id="conditional_documents" name="conditional_documents">
                             <input type="text" hidden id="interview_type" name="interview_type">
-                            <input type="text" hidden id="description" name="description">
+                            <input type="text" hidden id="conditional_documents" name="conditional_documents">
+                            <input type="text" hidden id="reject_description" name="reject_description">
                         </div>
                     </div>
                 </form>
@@ -332,8 +292,8 @@
                                     </a>
                                     <ul class="dropdown-menu pull-right" id="action">
                                         <li><a class="status_change"
-                                               id="Approved">{% trans 'Approve' %}</a></li>
-                                        <li><a class="status_change" id="Rejected">{% trans 'Reject' %}</a></li>
+                                               id="Supervisor Approved">{% trans 'Approve' %}</a></li>
+                                        <li><a class="status_change" id="Supervisor Rejected">{% trans 'Reject' %}</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -429,14 +389,14 @@
 
                         </div>
 
-                        <div id="id_accept_student_model" class="modal fade" tabindex="-1" data-backdrop="static"
+                        <div id="reject_model" class="modal fade" tabindex="-1" data-backdrop="static"
                              data-keyboard="false">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal"
                                                 aria-hidden="true"></button>
-                                        <h4 class="modal-title">Incomplete Details</h4>
+                                        <h4 class="modal-title">Reject Details</h4>
                                     </div>
                                     <div class="modal-body">
 
@@ -454,7 +414,7 @@
                                         <button type="button" id="cancel_model" data-dismiss="modal"
                                                 class="btn dark btn-outline">Cancel
                                         </button>
-                                        <button type="button" id="first_interview_save" data-dismiss="modal"
+                                        <button type="button" id="btn_reject_supervisor" data-dismiss="modal"
                                                 class="btn green btn-outline">
                                             Ok
                                         </button>

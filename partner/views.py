@@ -838,6 +838,34 @@ def change_application_status(request):
                 else:
                     messages.warning(request, "Only admin has permission for final approval.")
                     continue
+            elif interview_type == 'Supervisor Approved':
+                if request.user.is_supervisor():
+                    if not application_obj.supervisor_status == 'Approved':
+                        application_obj.supervisor_status = 'Approved'
+                        application_obj.reject_description = 'Requested'
+                        application_obj.save()
+                        application_notification(application_obj.id, 'Supervisor Application Approved')
+                        ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
+                                                                 status='Supervisor Application Approved',
+                                                                 remark='Your application has approved from Supervisor.')
+                        messages.success(request, application_obj.first_name.title() + " application approved.")
+                    else:
+                        messages.warning(request, "Applicant " + application_obj.first_name.title() + " is already approved.")
+                        continue
+
+            elif interview_type == 'Supervisor Rejected':
+                if request.user.is_supervisor():
+                    reject_description = request.POST.get('reject_description',None)
+                    application_obj.supervisor_status = 'Rejected'
+                    application_obj.reject_description = reject_description
+                    application_obj.save()
+                    application_notification(application_obj.id, 'Supervisor Application Rejected')
+                    ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
+                                                             status='Supervisor Application Rejected',
+                                                             remark='Your application has rejected from Supervisor.')
+                    messages.success(request, application_obj.first_name.title() + " application rejected.")
+
+
             elif interview_type == 'Approved':
                 if request.user.is_faculty():
                     if not application_obj.faculty_status == 'Approved':
@@ -2308,6 +2336,7 @@ def assign_supervisior(request, application_id=None):
         supervisor = request.POST.get('supervisor')
         try:
             application_obj.supervisor_id = supervisor
+            application_obj.supervisor_status = 'Requested'
             application_obj.save()
             messages.success(request, "Record saved.")
         except:

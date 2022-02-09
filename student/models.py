@@ -258,6 +258,7 @@ class ApplicationDetails(BaseModel):
                                    related_name='applicant_supervisor_rel', on_delete=models.SET_NULL)
 
     supervisor_status = models.CharField(max_length=255, default="Requested", blank=True, null=True)
+    reject_description = models.CharField(max_length=500, blank=True, null=True)
 
     class Meta:
         ordering = ('-created_on',)
