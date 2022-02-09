@@ -99,6 +99,94 @@
 
         <div class="portlet-body">
             <div class="form-body">
+
+                {% if request.user.is_supervisor == True %}
+                    {% if application_obj.program_mode.study_type == 'Research' %}
+                        <div class="portlet light portlet-fit portlet-form ">
+                            <i class="icon-settings font-red"></i>
+                            <span class="caption-subject font-red sbold uppercase"> Supervisor Details</span>
+                            <div class="" style="float: right;
+    margin-top: -10px;
+    padding-right: 74%;">
+
+                            </div>
+                        </div>
+
+                        {% if application_obj.supervisor %}
+
+                            <div class="row">
+                                <div class="">
+                                    <label class="col-md-2 control-label">Assign Supervisor:</label>
+                                    <div class="col-md-3">
+                                        <span class="">{{ application_obj.supervisor.email|default_if_none:"" }}</span>
+
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Research Proposal:</label>
+
+                                    <div class="col-md-4">
+                                        {% if attachement_obj.0.research_proposal %}
+                                            <a href="{{ attachement_obj.0.research_proposal.url }}" target="_blank">Preview
+                                                Research Proposal</a>
+                                        {% else %}
+                                            ----
+                                        {% endif %}
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="">
+                                    <label class="col-md-2 control-label">Status:</label>
+                                    <div class="col-md-3">
+
+                                        <span style="color:{% if application_obj.supervisor_status == 'Requested' %}peru{% elif application_obj.supervisor_status == 'Approved' %}green{% else %}red{% endif %}"><b>{{ application_obj.supervisor_status|default_if_none:"" }}</b></span>
+
+                                    </div>
+                                </div>
+                                {% if application_obj.supervisor_status == 'Rejected' %}
+                                    <div class="">
+                                        <label class="col-md-2 control-label">Reject Details:</label>
+                                        <div class="col-md-3">
+                                            <span class="">{{ application_obj.reject_description|default_if_none:"" }}</span>
+
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                            </div>
+                        {% else %}
+                            <div class="row">
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Research Proposal:</label>
+
+                                    <div class="col-md-4">
+                                        {% if attachement_obj.0.research_proposal %}
+                                            <a href="{{ attachement_obj.0.research_proposal.url }}" target="_blank">Preview
+                                                Research Proposal</a>
+                                        {% else %}
+                                            ----
+                                        {% endif %}
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+                        {% endif %}
+                        <br>
+                        <hr>
+                    {% endif %}
+                {% endif %}
+
+
                 {% if request.user.is_program == True %}
                     {% if application_obj.program_mode.study_type == 'Research' %}
                         <div class="portlet light portlet-fit portlet-form ">
@@ -146,7 +234,7 @@
                             </div>
                             <br>
                             <div class="row">
-                            <div class="">
+                                <div class="">
                                     <label class="col-md-2 control-label">Status:</label>
                                     <div class="col-md-3">
 
@@ -154,15 +242,15 @@
 
                                     </div>
                                 </div>
-                            {% if application_obj.supervisor_status == 'Rejected' %}
-                            <div class="">
-                                    <label class="col-md-2 control-label">Reject Details:</label>
-                                    <div class="col-md-3">
-                                        <span class="">{{ application_obj.reject_description|default_if_none:"" }}</span>
+                                {% if application_obj.supervisor_status == 'Rejected' %}
+                                    <div class="">
+                                        <label class="col-md-2 control-label">Reject Details:</label>
+                                        <div class="col-md-3">
+                                            <span class="">{{ application_obj.reject_description|default_if_none:"" }}</span>
 
+                                        </div>
                                     </div>
-                                </div>
-                            {% endif %}
+                                {% endif %}
 
                             </div>
                         {% else %}
