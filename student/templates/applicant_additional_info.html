@@ -37,8 +37,8 @@
 
                 {#$("#mother_nationality").chosen();#}
 
-                $("#student_id").chosen();
-                $("#agent_id").chosen();
+                {#$("#student_id").chosen();#}
+                {#$("#agent_id").chosen();#}
                 var is_sponsored = "{{ application_obj.is_sponsored }}";
                 if(is_sponsored === 'False' || is_sponsored === ''){
                     $(".sponsored").prop("disabled", true);
@@ -50,6 +50,23 @@
 
 
                 });
+
+                $(document).on("change", "#student_id", function (e) {
+                var about_know = $('#student_id').val();
+                if(about_know == 'Exam Center'){
+                    $("#agent_id").find('option').removeAttr("selected");
+                    $("#agent_id").find('option[value=""]').remove();
+                    $("#agent_id").append('<option value="" selected="selected">Please Select</option>');
+
+                    $('.campus_div').show();
+                }
+                else{
+                    $('.campus_div').hide();
+                }
+
+            })
+
+
 
                 $('input[type="radio"]').on('change', function(){
                     var is_sponsored = $('input[name="is_sponsored"]:checked').val();
@@ -257,8 +274,8 @@
                             <div class="caption">
                                 <i class="icon-settings font-red"></i>
                                 <span class="caption-subject font-red sbold uppercase">{% trans 'OTHER INFORMATION' %}</span>
-                                <br>
-                                <span style="font-family: 'Times New Roman';font-size: 16px;"><b>({% trans 'How did you know about us' %})</b></span>
+{#                                <br>#}
+{#                                <span style="font-family: 'Times New Roman';font-size: 16px;"><b>{% trans 'How did you know about us?' %}</b></span>#}
                             </div>
                         </div>
                         <hr>
@@ -267,43 +284,48 @@
 
 
                             <div class="">
-                                <label class="col-md-2 control-label">{% trans 'Student' %}:</label>
+                                <label class="col-md-2 control-label">{% trans 'How did you know about us?' %}:</label>
                                 <div class="col-md-3">
-                                    <select id='student_id' title="Select Country" name="student"
+                                    <select id='student_id' title="Select about us" name="about_know"
                                             class="form-control value_check" data-live-search="true">
 
-                                        {% if application_obj %}
+                                        {% if application_obj.about_know %}
                                             <option style="display:none" selected="selected"
-                                                    value="{{ application_obj.ref_by_student.id }}"
-                                                    value="">{{ application_obj.ref_by_student.user.first_name|default_if_none:"" }} {{ application_obj.ref_by_student.user.last_name|default_if_none:"" }}</option>
+                                                    value="{{ application_obj.about_know }}"
+                                                    value="">{{ application_obj.about_know|default_if_none:"" }}</option>
                                         {% else %}
-                                            <option style="display:none" selected="selected" id="" value="">{% trans 'Please Select' %}
+                                            <option  value="">{% trans 'Please Select' %}
                                             </option>
                                         {% endif %}
 
-                                        {% for rec in student_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.user.first_name|default_if_none:"" }} {{ rec.user.last_name|default_if_none:"" }}</option>
-                                        {% endfor %}
+                                    <option  value="Students or Graduates">{% trans 'Students or Graduates' %}
+                                    <option  value="Social Media">{% trans 'Social Media' %}
+                                    <option  value="Exam Center">{% trans 'Exam Center' %}
+                                    <option  value="Others">{% trans 'Others' %}
+                                            </option>
+
+{#                                        {% for rec in student_recs %}#}
+{#                                            <option value='{{ rec.id }}'>{{ rec.user.first_name|default_if_none:"" }} {{ rec.user.last_name|default_if_none:"" }}</option>#}
+{#                                        {% endfor %}#}
                                     </select>
                                 </div>
                             </div>
-                            <div class="">
-                                <label class="col-md-2 control-label">{% trans 'Agent' %}:</label>
+                            <div class="campus_div" {% if application_obj.about_know == 'Exam Center' %} style="display: block" {% else %} style="display: none" {% endif %}>
+                                <label class="col-md-2 control-label">{% trans 'Branch/Campus' %}:</label>
                                 <div class="col-md-3">
-                                    <select id='agent_id' title="Select Country" name="agent"
+                                    <select id='agent_id' title="Select Country" name="campus"
                                             class="form-control value_check" data-live-search="true">
 
-                                        {% if application_obj %}
+                                        {% if application_obj.campus %}
                                             <option style="display:none" selected="selected"
-                                                    value="{{ application_obj.ref_by_agent.id }}"
-                                                    value="">{{ application_obj.ref_by_agent.first_name|default_if_none:"" }} {{ application_obj.ref_by_agent.last_name|default_if_none:"" }}</option>
+                                                    value="{{ application_obj.campus.id}}">{{ application_obj.campus.campus_name|default_if_none:"" }}</option>
                                         {% else %}
-                                            <option style="display:none" selected="selected" id="" value="">{% trans 'Please Select' %}
+                                            <option value="">{% trans 'Please Select' %}
                                             </option>
                                         {% endif %}
 
-                                        {% for rec in agent_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.first_name|default_if_none:"" }} {{ rec.last_name|default_if_none:"" }}</option>
+                                        {% for rec in campus_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.campus_name|default_if_none:"" }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -313,7 +335,6 @@
                         <br>
 
 
-                        <hr>
 
                         <hr>
                         <div class="portlet-title">
