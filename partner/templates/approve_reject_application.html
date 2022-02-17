@@ -361,6 +361,7 @@
 
 
                                         <th>{% trans 'Status' %}</th>
+                                        <th>{% trans 'Action' %}</th>
                                     </tr>
                                     </thead>
 
@@ -397,13 +398,23 @@
                                             <td>
                                                 {{ rec.program.program_name|default_if_none:"" }}
                                             </td>
-                                         <td>
+                                            <td>
                                                 {{ rec.program.study_type|default_if_none:"" }}
                                             </td>
                                             {#                                            {% endif %}#}
 
                                             <td>
                                                 <span style="color:{% if rec.faculty_status == 'Pending' %}peru{% elif rec.faculty_status == 'Approved' %}green{% else %}red{% endif %}"><b>{{ rec.faculty_status|default_if_none:"" }}</b></span>
+
+                                            </td>
+
+                                            <td>
+                                                <a href="{% url 'partner:template_applicant_all_details' rec.id %}">
+                                <span type="button" name="edit" id="edit{{ forloop.counter }}"
+                                      class=" edit_btn btn blue glyphicon glyphicon-edit">
+                                </span>
+                                                </a>
+
 
                                             </td>
 

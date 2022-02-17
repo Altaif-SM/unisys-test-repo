@@ -408,6 +408,7 @@
                                         <i class="fa fa-angle-down"></i>
                                     </a>
                                     <ul class="dropdown-menu pull-right" id="action">
+
                                         <li><a class="status_change"
                                                id="First Interview">{% trans 'Conditional Offer Letter' %}</a></li>
                                         <li><a class="status_change"
@@ -449,9 +450,11 @@
                                         <th>{% trans 'University Type' %}</th>
                                         <th>{% trans 'Faculty' %}</th>
                                         <th>{% trans 'Program' %}</th>
-                                        <th>{% trans 'Conditional Offer' %}</th>
-                                        <th>{% trans 'Full Offer' %}</th>
-                                        <th>{% trans 'Incomplete' %}</th>
+                                        <th>{% trans 'Offer Status' %}</th>
+                                        {#                                        <th>{% trans 'Conditional' %}</th>#}
+                                        {#                                        <th>{% trans 'Full' %}</th>#}
+                                        {#                                        <th>{% trans 'Incomplete' %}</th>#}
+                                        <th>{% trans 'Action' %}</th>
                                         {#                                        <th>1st Interview Approval</th>#}
                                         {#                                        <th>Test</th>#}
                                         {#                                        <th>2nd Interview</th>#}
@@ -470,20 +473,13 @@
                                             <td>
                                                 <input name="check" type="checkbox" class="checkboxes"
                                                        value="{{ rec.id }}">
-                                                {% comment %}<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-
-                                                    <input type="checkbox" class="checkboxes" value="1">
-                                                    <span></span>
-                                                </label>{% endcomment %}
                                             </td>
                                             <td>
                                                 <text><a href="/partner/template_applicant_all_details/{{ rec.id }}"
                                                         {% if rec.application_rejection %}
                                                          style="color: darkred" {% endif %}>{{ rec.first_name|title }} {{ rec.last_name|title }}</a>
                                                 </text>
-                                                {#                                                <text><a href="/partner/template_applicant_all_details/{{ rec.id }}" {% if rec.application_rejection %} style="color: darkred" {% endif %}>{{ rec.first_name|title }} {{ rec.last_name|title }}</a>#}
                                                 </text>
-                                                {#                                            <text>{{ rec.first_name|title }} {{ rec.last_name|title }}</text>#}
                                             </td>
                                             <td>
                                                 {{ rec.university.university_name|default_if_none:"" }}
@@ -494,7 +490,7 @@
                                                 <td>Main</td>
                                             {% endif %}
 
-                                         <td>
+                                            <td>
                                                 {{ rec.faculty.faculty_name|default_if_none:"" }}
                                             </td>
 
@@ -502,121 +498,67 @@
                                                 {{ rec.program.program_name|default_if_none:"" }}
                                             </td>
 
-                                            <td>
-                                                <p hidden>{% if rec.first_interview == True %}True{% else %}
-                                                    False{% endif %}</p>
-                                                {#                                                <input class="app class_detail" type="checkbox" name="first"#}
-                                                {#                                                       id="id_first"#}
-                                                {#                                                       {% if rec.first_interview == True %}checked{% endif %} disabled>#}
-                                                {% if rec.first_interview == True %}
-                                                    <i class="fa fa-check" aria-hidden="true" style="color: green"></i>
-                                                {% else %}
-                                                    <i class="fa fa-times" aria-hidden="true" style="color: red"></i>
-
-                                                {% endif %}
-
-                                                {% comment %}<input hidden id="id_time">
-                                            <input hidden id="id_date">
-                                            <input hidden id="id_venue">{% endcomment %}
-                                            </td>
 
                                             <td>
-                                                <p hidden>{% if rec.first_interview_attend == True %}True{% else %}
-                                                    False{% endif %}</p>
-
-                                                {#                                                <input class="app" type="checkbox"#}
-                                                {#                                                       name="first_interview_attend"#}
-                                                {#                                                       {% if rec.first_interview_attend == True %}checked{% endif %}#}
-                                                {#                                                       id="id_first_interview_attend" disabled>#}
-                                                {% if rec.first_interview_attend == True %}
-                                                    <i class="fa fa-check" style="color: green" aria-hidden="true"></i>
+                                                {% if rec.first_interview == True and rec.first_interview_attend == False and rec.incomplete == False %}
+                                                    <span style="color: #bfb53c">Conditional</span>
+                                                {% elif  rec.first_interview == False and rec.first_interview_attend == True and rec.incomplete == False %}
+                                                    <span style="color: green">Full</span>
+                                                {% elif  rec.first_interview == False and rec.first_interview_attend == False and rec.incomplete == True %}
+                                                    <span style="color: darkred">Incomplete</span>
                                                 {% else %}
-                                                    <i class="fa fa-times" aria-hidden="true" style="color: red"></i>
+                                                    <span style="color: red">Reject</span>
                                                 {% endif %}
-
-
-                                                {% comment %}<input hidden id="id_first_attend_time">
-                                            <input hidden id="id_first_attend_date">
-                                            <input hidden id="id_first_attend_venue">{% endcomment %}
-                                            </td>
-
-                                            <td>
-                                                <p hidden>{% if rec.incomplete == True %}True{% else %}
-                                                    False{% endif %}</p>
-
-                                                {#                                                <input class="app" type="checkbox"#}
-                                                {#                                                       name="first_interview_attend"#}
-                                                {#                                                       {% if rec.first_interview_attend == True %}checked{% endif %}#}
-                                                {#                                                       id="id_first_interview_attend" disabled>#}
-                                                {% if rec.incomplete == True %}
-                                                    {#                                                <i class="fa fa-check" style="color: green" aria-hidden="true"></i>#}
-                                                    <i class="fa fa-exclamation-circle" aria-hidden="true"
-                                                       style="color: orange"></i>
-                                                {% else %}
-                                                    <i class="fa fa-times" aria-hidden="true" style="color: red"></i>
-                                                {% endif %}
-
-
-                                                {% comment %}<input hidden id="id_first_attend_time">
-                                            <input hidden id="id_first_attend_date">
-                                            <input hidden id="id_first_attend_venue">{% endcomment %}
                                             </td>
 
                                             {#                                            <td>#}
-                                            {#                                            <p hidden>{% if rec.first_interview_approval == True %}True{% else %}False{% endif %}</p>#}
-                                            {#                                                <input class="app" type="checkbox" name="first_interview_approval"#}
-                                            {#                                                       {% if rec.first_interview_approval == True %}checked{% endif %}#}
-                                            {#                                                       id="id_first_interview_approval" disabled>#}
-                                            {#                                            </td>#}
-
-                                            {#                                            <td>#}
-                                            {#                                            <p hidden>{% if rec.psychometric_test == True %}True{% else %}False{% endif %}</p>#}
-                                            {#                                                <input class="app" type="checkbox" name="id_test" id="id_test"#}
-                                            {#                                                       {% if rec.psychometric_test == True %}checked{% endif %}#}
-                                            {#                                                       disabled>#}
-                                            {#                                            </td>#}
-
-                                            {#                                            <td>#}
-                                            {#                                            <p hidden>{% if rec.second_interview_attend == True %}True{% else %}False{% endif %}</p>#}
-                                            {#                                                <input class="app" type="checkbox"#}
-                                            {#                                                       name="second_interview_attend"#}
-                                            {#                                                       {% if rec.second_interview_attend == True %}checked{% endif %}#}
-                                            {#                                                       id="id_second_interview_attend" disabled>#}
-                                            {##}
-                                            {#                                                {% comment %}<input hidden id="id_second_attend_time">#}
-                                            {#                                            <input hidden id="id_second_attend_date">#}
-                                            {#                                            <input hidden id="id_second_attend_venue">{% endcomment %}#}
-                                            {#                                            </td>#}
-
-                                            {#                                            <td>#}
-                                            {#                                            <p hidden>{% if rec.second_interview_approval == True %}True{% else %}False{% endif %}</p>#}
-                                            {#                                                <input class="app" type="checkbox" name="second_interview_approval"#}
-                                            {#                                                       {% if rec.second_interview_approval == True %}checked{% endif %}#}
-                                            {#                                                       id="id_second_interview_approval" disabled>#}
-                                            {#                                            </td>#}
-
-                                            {#                                            <td>#}
-                                            {#                                            <p hidden>{% if rec.admin_approval == True %}True{% else %}False{% endif %}</p>#}
-                                            {#                                                <input class="app class_admin" type="checkbox" name="admin"#}
-                                            {#                                                       id="id_admin"#}
-                                            {#                                                       {% if rec.admin_approval == True %}checked{% endif %}#}
-                                            {##}
-                                            {#                                                        {% if not user.is_super_admin %} disabled {% else %} {% endif %}#}
-                                            {#                                                       disabled>#}
-                                            {##}
-                                            {#                                                {% comment %}{% if user.is_super_admin %}#}
-                                            {#                                                {% if rec.admin_approval == True %}#}
-                                            {#                                                    <input type="number" title="Enter Scholarship Fee"#}
-                                            {#                                                           style="width: 50%" id="id_scholarship_fee"#}
-                                            {#                                                           name="scholarship_fee" class="id_scholarship_fee"#}
-                                            {#                                                           value="{{ rec.scholarship_fee }}">#}
+                                            {#                                                <p hidden>{% if rec.first_interview == True %}True{% else %}#}
+                                            {#                                                    False{% endif %}</p>#}
+                                            {#                                                {% if rec.first_interview == True %}#}
+                                            {#                                                    <i class="fa fa-check" aria-hidden="true" style="color: green"></i>#}
                                             {#                                                {% else %}#}
-                                            {#                                                    <input type="number" hidden title="Enter Scholarship Fee"#}
-                                            {#                                                           style="width: 50%" id="id_scholarship_fee"#}
-                                            {#                                                           name="scholarship_fee" class="id_scholarship_fee">#}
+                                            {#                                                    <i class="fa fa-times" aria-hidden="true" style="color: red"></i>#}
+                                            {##}
                                             {#                                                {% endif %}#}
-                                            {#                                            {% endif %}{% endcomment %}#}
+                                            {##}
                                             {#                                            </td>#}
+
+                                            {#                                            <td>#}
+                                            {#                                                <p hidden>{% if rec.first_interview_attend == True %}True{% else %}#}
+                                            {#                                                    False{% endif %}</p>#}
+                                            {##}
+                                            {#                                                {% if rec.first_interview_attend == True %}#}
+                                            {#                                                    <i class="fa fa-check" style="color: green" aria-hidden="true"></i>#}
+                                            {#                                                {% else %}#}
+                                            {#                                                    <i class="fa fa-times" aria-hidden="true" style="color: red"></i>#}
+                                            {#                                                {% endif %}#}
+                                            {##}
+                                            {##}
+                                            {#                                            </td>#}
+
+                                            {#                                            <td>#}
+                                            {#                                                <p hidden>{% if rec.incomplete == True %}True{% else %}#}
+                                            {#                                                    False{% endif %}</p>#}
+                                            {##}
+                                            {#                                                {% if rec.incomplete == True %}#}
+                                            {#                                                    <i class="fa fa-exclamation-circle" aria-hidden="true"#}
+                                            {#                                                       style="color: orange"></i>#}
+                                            {#                                                {% else %}#}
+                                            {#                                                    <i class="fa fa-times" aria-hidden="true" style="color: red"></i>#}
+                                            {#                                                {% endif %}#}
+                                            {##}
+                                            {##}
+                                            {#                                            </td>#}
+                                            <td>
+                                                <a href="{% url 'partner:template_applicant_all_details' rec.id %}">
+                                <span type="button" name="edit" id="edit{{ forloop.counter }}"
+                                      class=" edit_btn btn blue glyphicon glyphicon-edit">
+                                </span>
+                                                </a>
+
+
+                                            </td>
+
                                         </tr>
                                     {% endfor %}
                                     </tbody>

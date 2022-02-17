@@ -447,9 +447,11 @@
                                         {#                                        <th>{% trans 'Program' %}</th>#}
                                         <th>{% trans 'Faculty Status' %}</th>
                                         <th>{% trans 'Program Status' %}</th>
-                                        <th>{% trans 'Conditional' %}</th>
-                                        <th>{% trans 'Full' %}</th>
-                                        <th>{% trans 'Incomplete' %}</th>
+                                        <th>{% trans 'Offer Status' %}</th>
+                                        <th>{% trans 'Action' %}</th>
+                                        {#                                        <th>{% trans 'Conditional' %}</th>#}
+                                        {#                                        <th>{% trans 'Full' %}</th>#}
+                                        {#                                        <th>{% trans 'Incomplete' %}</th>#}
 
                                     </tr>
                                     </thead>
@@ -490,49 +492,71 @@
                                             </td>
 
                                             <td>
-                                                <p hidden>
-                                                    {% if rec.first_interview == True %}
-                                                        True{% else %}
-                                                        False{% endif %}</p>
-                                                {% if rec.first_interview == True %}
-                                                    <i class="fa fa-check"
-                                                       aria-hidden="true"
-                                                       style="color: green"></i>
+                                                {% if rec.first_interview == True and rec.first_interview_attend == False and rec.incomplete == False %}
+                                                    <span style="color: #bfb53c">Conditional</span>
+                                                {% elif  rec.first_interview == False and rec.first_interview_attend == True and rec.incomplete == False %}
+                                                    <span style="color: green">Full</span>
+                                                {% elif  rec.first_interview == False and rec.first_interview_attend == False and rec.incomplete == True %}
+                                                    <span style="color: darkred">Incomplete</span>
                                                 {% else %}
-                                                    <i class="fa fa-times"
-                                                       aria-hidden="true"
-                                                       style="color: red"></i>
-
+                                                    <span style="color: red">Reject</span>
                                                 {% endif %}
-
                                             </td>
 
                                             <td>
-                                                <p hidden>{% if rec.first_interview_attend == True %}True{% else %}
-                                                    False{% endif %}</p>
-
-                                                {% if rec.first_interview_attend == True %}
-                                                    <i class="fa fa-check" style="color: green" aria-hidden="true"></i>
-                                                {% else %}
-                                                    <i class="fa fa-times" aria-hidden="true" style="color: red"></i>
-                                                {% endif %}
+                                                <a href="{% url 'partner:template_applicant_all_details' rec.id %}">
+                                <span type="button" name="edit" id="edit{{ forloop.counter }}"
+                                      class=" edit_btn btn blue glyphicon glyphicon-edit">
+                                </span>
+                                                </a>
 
 
                                             </td>
 
-                                            <td>
-                                                <p hidden>{% if rec.incomplete == True %}True{% else %}
-                                                    False{% endif %}</p>
+                                            {#                                            <td>#}
+                                            {#                                                <p hidden>#}
+                                            {#                                                    {% if rec.first_interview == True %}#}
+                                            {#                                                        True{% else %}#}
+                                            {#                                                        False{% endif %}</p>#}
+                                            {#                                                {% if rec.first_interview == True %}#}
+                                            {#                                                    <i class="fa fa-check"#}
+                                            {#                                                       aria-hidden="true"#}
+                                            {#                                                       style="color: green"></i>#}
+                                            {#                                                {% else %}#}
+                                            {#                                                    <i class="fa fa-times"#}
+                                            {#                                                       aria-hidden="true"#}
+                                            {#                                                       style="color: red"></i>#}
+                                            {##}
+                                            {#                                                {% endif %}#}
+                                            {##}
+                                            {#                                            </td>#}
 
-                                                {% if rec.incomplete == True %}
-                                                    <i class="fa fa-check" aria-hidden="true"
-                                                       style="color: green"></i>
-                                                {% else %}
-                                                    <i class="fa fa-times" aria-hidden="true" style="color: red"></i>
-                                                {% endif %}
+                                            {#                                            <td>#}
+                                            {#                                                <p hidden>{% if rec.first_interview_attend == True %}True{% else %}#}
+                                            {#                                                    False{% endif %}</p>#}
+                                            {##}
+                                            {#                                                {% if rec.first_interview_attend == True %}#}
+                                            {#                                                    <i class="fa fa-check" style="color: green" aria-hidden="true"></i>#}
+                                            {#                                                {% else %}#}
+                                            {#                                                    <i class="fa fa-times" aria-hidden="true" style="color: red"></i>#}
+                                            {#                                                {% endif %}#}
+                                            {##}
+                                            {##}
+                                            {#                                            </td>#}
 
-
-                                            </td>
+                                            {#                                            <td>#}
+                                            {#                                                <p hidden>{% if rec.incomplete == True %}True{% else %}#}
+                                            {#                                                    False{% endif %}</p>#}
+                                            {##}
+                                            {#                                                {% if rec.incomplete == True %}#}
+                                            {#                                                    <i class="fa fa-check" aria-hidden="true"#}
+                                            {#                                                       style="color: green"></i>#}
+                                            {#                                                {% else %}#}
+                                            {#                                                    <i class="fa fa-times" aria-hidden="true" style="color: red"></i>#}
+                                            {#                                                {% endif %}#}
+                                            {##}
+                                            {##}
+                                            {#                                            </td>#}
 
                                         </tr>
                                     {% endfor %}

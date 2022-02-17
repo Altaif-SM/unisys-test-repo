@@ -363,6 +363,7 @@
 
 
                                         <th>{% trans 'Status' %}</th>
+                                        <th>{% trans 'Action' %}</th>
                                     </tr>
                                     </thead>
 
@@ -430,6 +431,15 @@
 
                                             <td>
                                                 <span style="color:{% if rec.program_status == 'Pending' %}peru{% elif rec.program_status == 'Approved' %}green{% else %}red{% endif %}"><b>{{ rec.program_status|default_if_none:"" }}</b></span>
+
+                                            </td>
+                                        <td>
+                                                <a href="{% url 'partner:template_applicant_all_details' rec.id %}">
+                                <span type="button" name="edit" id="edit{{ forloop.counter }}"
+                                      class=" edit_btn btn blue glyphicon glyphicon-edit">
+                                </span>
+                                                </a>
+
 
                                             </td>
 

@@ -318,6 +318,7 @@
                                         <th>{% trans 'Program' %}</th>
                                         <th>{% trans 'Mode' %}</th>
                                         <th>{% trans 'Status' %}</th>
+                                        <th>{% trans 'Action' %}</th>
                                         {#                                        {% endif %}#}
 
 
@@ -377,6 +378,16 @@
                                                 {% else %}
                                                     -
                                                 {% endif %}
+                                            </td>
+
+                                         <td>
+                                                <a href="{% url 'partner:template_applicant_all_details' rec.id %}">
+                                <span type="button" name="edit" id="edit{{ forloop.counter }}"
+                                      class=" edit_btn btn blue glyphicon glyphicon-edit">
+                                </span>
+                                                </a>
+
+
                                             </td>
 
 
