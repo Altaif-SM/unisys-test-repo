@@ -736,8 +736,11 @@ class GroupDetails(BaseModel):
 
 
 class PaymentDetails(BaseModel):
+    university = models.ForeignKey(UniversityDetails, null=True, related_name='payment_university_rel',
+                                   on_delete=models.SET_NULL)
     amount = models.CharField(max_length=255, blank=True, null=True)
     is_payment = models.BooleanField(default=True)
     currency = models.CharField(max_length=255, blank=True, null=True)
+    status = models.BooleanField(default=True)
     class Meta:
         ordering = ('-id',)

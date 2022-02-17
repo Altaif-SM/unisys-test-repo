@@ -260,5 +260,10 @@ urlpatterns = [
     path('get_program_mode_from_selected_program/', views.get_program_mode_from_selected_program, name='get_program_mode_from_selected_program'),
     path('get_country_from_semester_year/', views.get_country_from_semester_year, name='get_country_from_semester_year'),
 
+    path('application_fee/', views.application_fee, name='application_fee'),
+    path('add_application_fee/', views.add_application_fee, name='add_application_fee'),
+    path('edit_application_fee/<int:fee_id>/', views.edit_application_fee, name='edit_application_fee'),
+    path('delete_application_fee/', views.delete_application_fee, name='delete_application_fee'),
+
 
 ]

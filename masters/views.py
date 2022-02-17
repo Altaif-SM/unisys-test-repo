@@ -3645,3 +3645,72 @@ def get_country_from_semester_year(request):
                 duplicate_country_ids.append(rec.country.id)
                 country_list.append(raw_dict)
     return JsonResponse(country_list, safe=False)
+
+def application_fee(request):
+    application_fee_recs = PaymentDetails.objects.all()
+    return render(request, 'application_fee_settings.html', {'application_fee_recs': application_fee_recs})
+
+def add_application_fee(request):
+    university_recs = UniversityDetails.objects.filter(is_delete=False,is_active=True,is_partner_university = False).order_by('-id')
+    if request.method == 'POST':
+        university = request.POST.get('university')
+        amount = request.POST.get('amount')
+        currency = request.POST.get('currency')
+        status = request.POST.get('status')
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            if not PaymentDetails.objects.filter(university_id=university).exists():
+                PaymentDetails.objects.create(university_id=university,
+                                             amount=amount, currency=currency,status = status)
+                messages.success(request, "Record saved.")
+            else:
+                messages.warning(request, "University already exists.")
+
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/application_fee/')
+    return render(request, 'add_application_fee.html',{'university_recs':university_recs})
+
+def edit_application_fee(request, fee_id=None):
+    application_fee_obj = PaymentDetails.objects.get(id=fee_id)
+    if request.method == 'POST':
+        university = request.POST.get('university')
+        amount = request.POST.get('amount')
+        currency = request.POST.get('currency')
+        status = request.POST.get('status')
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            if not PaymentDetails.objects.filter(university_id=university).exclude(id = fee_id).exists():
+                application_fee_obj.university_id = university
+                application_fee_obj.amount = amount
+                application_fee_obj.status = status
+                application_fee_obj.currency = currency
+                application_fee_obj.save()
+                messages.success(request, "Record saved.")
+            else:
+                messages.warning(request, "University already exists.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/application_fee/')
+    if application_fee_obj.university.is_partner_university == False:
+        university_recs = UniversityDetails.objects.filter(is_delete = False,is_active = True,is_partner_university = False).order_by('-id')
+    else:
+        university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
+                                                           is_partner_university=True).order_by('-id')
+    return render(request, "edit_application_fee.html", {'university_recs':university_recs,'application_fee_obj':application_fee_obj})
+
+def delete_application_fee(request):
+    if request.method == 'POST':
+        fee_delete_id = request.POST.get('fee_delete_id')
+        try:
+            PaymentDetails.objects.filter(id=fee_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/application_fee/')

@@ -960,8 +960,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                 <ul class="sub-menu accounting_sub_menu">
                                     {% if 'Payment Settings' in access_list %}
                                         <li class="nav-item ">
-                                            <a href="{% url 'masters:payment_settings' %}"
-                                               class="nav-link ">{% trans 'Payment Settings' %}</a>
+                                            <a href="{% url 'masters:application_fee' %}"
+                                               class="nav-link ">{% trans 'Application Fee' %}</a>
                                         </li>
                                     {% endif %}
 
@@ -1536,7 +1536,7 @@ License: You must have a valid license purchased only from themeforest(the above
     {% endif %}
 
 
-    {% if request.resolver_match.url_name == 'get_payment_report' or request.resolver_match.url_name == 'payment_settings' %}
+    {% if request.resolver_match.url_name == 'get_payment_report' or request.resolver_match.url_name == 'application_fee' or request.resolver_match.url_name == 'add_application_fee' or request.resolver_match.url_name == 'edit_application_fee'  %}
         {
             var element = document.getElementById("c");
             element.classList.add("active");
