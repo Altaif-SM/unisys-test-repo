@@ -2287,7 +2287,7 @@ def add_program(request):
         university = request.POST.get('university')
         faculty = request.POST.get('faculty')
         program_type = request.POST.get('program_type')
-        department = request.POST.get('department')
+        department = request.POST.get('department',None)
         program_name = request.POST.get('program_name')
         # program_fee = request.POST.get('program_fee')
         # credit_hrs = request.POST.get('credit_hrs')
@@ -2340,7 +2340,7 @@ def edit_program(request, program_id=None):
         university = request.POST.get('university')
         faculty = request.POST.get('faculty')
         program_type = request.POST.get('program_type')
-        department = request.POST.get('department')
+        department = request.POST.get('department',None)
         # program_id = request.POST.get('program_id')
         program_name = request.POST.get('program_name')
         study_type = request.POST.get('study_type')
@@ -2403,6 +2403,8 @@ def edit_program(request, program_id=None):
     study_level_recs = StudyLevelDetails.objects.filter().order_by('-id')
     study_type_recs = StudyTypeDetails.objects.all()
     faculty_recs = FacultyDetails.objects.filter(status=True).order_by('-id')
+    if program_obj.university:
+        faculty_recs = FacultyDetails.objects.filter(university_id = program_obj.university.id)
     campus_recs = CampusBranchesDetails.objects.filter().order_by('-id')
     study_mode_list = ['Online', 'On Campus']
     selected_study_mode_list = program_obj.study_mode.values_list('study_mode',flat = True)
@@ -3369,11 +3371,10 @@ def get_faculty_from_university(request):
     university_id = request.POST.get('university_id', None)
     faculty_recs = FacultyDetails.objects.filter(university_id = university_id)
     for faculty_obj in faculty_recs:
-        for faculty in faculty_obj.faculty.all():
-            raw_dict = {}
-            raw_dict['id']=faculty.id
-            raw_dict['faculty_name']=faculty.faculty_name
-            faculty_list.append(raw_dict)
+        raw_dict = {}
+        raw_dict['id']=faculty_obj.id
+        raw_dict['faculty_name']=faculty_obj.faculty_name
+        faculty_list.append(raw_dict)
     return JsonResponse(faculty_list, safe=False)
 
 def edit_document(request, doc_id=None):
@@ -3714,3 +3715,4 @@ def delete_application_fee(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/application_fee/')
+

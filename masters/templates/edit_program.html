@@ -327,17 +327,7 @@
                             <div class="row">
 
 
-                                <div class="">
-                                    <label class="col-md-2 control-label">Program:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <input type="text" title="Enter Program Name" id="program_name"
-                                               value="{{ program_obj.program_name|default_if_none:"" }}"
-                                               name="program_name"
-                                               class="form-control" required>
 
-                                    </div>
-                                </div>
 
                                 <div class="">
                                     <label class="col-md-2 control-label">Faculty:<span
@@ -356,6 +346,29 @@
                                             {% for rec in faculty_recs %}
                                                 <option value="{{ rec.id }}">{{ rec.faculty_name|default_if_none:"" }}</option>
                                             {% endfor %}
+
+                                        </select>
+                                    </div>
+                                </div>
+
+                            <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Department' %}:</label>
+                                    <div class="col-md-3">
+                                        <select id='department' title="Select Department"
+                                                name="department"
+                                                class="form-control" >
+
+                                        {% if program_obj.department %}
+                                                <option style="display:none;" selected="selected"
+                                                        value="{{ program_obj.department.id|default_if_none:"" }}"> {{ program_obj.department.department|default_if_none:"" }}</option>
+                                            {% else %}
+                                                <option selected="selected" value=""> Please Select</option>
+                                            {% endif %}
+
+                                            {% for rec in department_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.department|default_if_none:"" }}</option>
+                                            {% endfor %}
+
 
                                         </select>
                                     </div>
@@ -391,30 +404,20 @@
                             <br>
                             <div class="row">
 
-
-                                <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'Department' %}:<span
+                            <div class="">
+                                    <label class="col-md-2 control-label">Program:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
-                                        <select id='department' title="Select Department"
-                                                name="department"
-                                                class="form-control" required>
+                                        <input type="text" title="Enter Program Name" id="program_name"
+                                               value="{{ program_obj.program_name|default_if_none:"" }}"
+                                               name="program_name"
+                                               class="form-control" required>
 
-                                        {% if program_obj.department %}
-                                                <option style="display:none;" selected="selected"
-                                                        value="{{ program_obj.department.id|default_if_none:"" }}"> {{ program_obj.department.department|default_if_none:"" }}</option>
-                                            {% else %}
-                                                <option selected="selected" value=""> Please Select</option>
-                                            {% endif %}
-
-                                            {% for rec in department_recs %}
-                                                <option value="{{ rec.id }}">{{ rec.department|default_if_none:"" }}</option>
-                                            {% endfor %}
-
-
-                                        </select>
                                     </div>
                                 </div>
+
+
+
 
                             <div class="">
                                     <label class="col-md-2 control-label">Study Mode: <span

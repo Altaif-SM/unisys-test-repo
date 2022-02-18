@@ -119,7 +119,40 @@
                 get_departments_from_faculty(url, faculty_id)
             })
 
+
+                 $(document).on("change", "#university", function (e) {
+                var university_id = $(this).val();
+                var url = '/masters/get_faculty_from_university/';
+                get_faculty_from_university(url, university_id)
+            })
+
             });
+
+
+            function get_faculty_from_university(url, university_id) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        university_id: university_id,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data) {
+
+                        $('#faculty').empty();
+                        $('#faculty').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#faculty').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['faculty_name'] + '</option>')
+                        }
+                    },
+                    error: function (xhr, msg, err) {
+                        alert(xhr.responseJSON.error);
+                    }
+                });
+            }
 
             function get_departments_from_faculty(url, faculty_id) {
                 $.ajax({
@@ -287,67 +320,10 @@
                             </div>
 
                             <br>
-                            {#                            <div class="row">#}
-                            {#                                <div class="">#}
-                            {#                                    <label class="col-md-2 control-label">Campus:<span#}
-                            {#                                            style="color: red">*</span></label>#}
-                            {#                                    <div class="col-md-3">#}
-                            {#                                        <select id='campus' title="Select Campus"#}
-                            {#                                                name="campus"#}
-                            {#                                                class="form-control" required>#}
-                            {#                                            <option selected="selected" value=""> Please Select</option>#}
-                            {#                                            {% for rec in campus_recs %}#}
-                            {#                                                <option value="{{ rec.id }}">{{ rec.campus_name|default_if_none:"" }}</option>#}
-                            {#                                            {% endfor %}#}
-                            {##}
-                            {#                                        </select>#}
-                            {#                                    </div>#}
-                            {#                                </div>#}
-                            {##}
-                            {##}
-                            {#                                <div class="">#}
-                            {#                                    <label class="col-md-2 control-label">Program ID:<span#}
-                            {#                                            style="color: red">*</span></label>#}
-                            {#                                    <div class="col-md-3">#}
-                            {#                                        <input type="text" title="Enter Program ID" id="program_id"#}
-                            {#                                               value=""#}
-                            {#                                               name="program_id"#}
-                            {#                                               class="form-control" required>#}
-                            {##}
-                            {##}
-                            {#                                    </div>#}
-                            {#                                </div>#}
-                            {##}
-                            {##}
-                            {#                            </div>#}
-                            {#                            <br>#}
                             <div class="row">
 
-{#                                 <div class="">#}
-{#                                    <label class="col-md-2 control-label">{% trans 'Type of Program' %}: <span#}
-{#                                            style="color: red">*</span></label>#}
-{#                                    <div class="col-md-4">#}
-{#                                        <input class="current" type="radio" checked name="program_type"#}
-{#                                               id="international"#}
-{#                                               value="International">#}
-{#                                        <span style="padding:inherit">{% trans 'International' %}</span>&nbsp;&nbsp;#}
-{#                                        <input class="current" type="radio" name="program_type" value="University Main"#}
-{#                                               id="university_main">#}
-{#                                        <span style="padding:inherit">{% trans 'University Main' %}</span>#}
-{#                                    </div>#}
-{#                                </div>#}
 
-                             <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'Program' %}:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <input type="text" title="Enter Program Name" id="program_name"
-                                               value=""
-                                               name="program_name"
-                                               class="form-control" required>
 
-                                    </div>
-                                </div>
 
                                 <div class="">
                                     <label class="col-md-2 control-label">{% trans 'Faculty' %}:<span
@@ -366,6 +342,20 @@
                                 </div>
 
 
+                            <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Department' %}:</label>
+                                    <div class="col-md-3">
+                                        <select id='department' title="Select Department"
+                                                name="department"
+                                                class="form-control" >
+                                            <option selected="selected" value=""> Please Select</option>
+
+
+                                        </select>
+                                    </div>
+                                </div>
+
+
 
 
 
@@ -378,17 +368,17 @@
                         <div class="row">
 
 
-                        <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'Department' %}:<span
+
+
+                         <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Program' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
-                                        <select id='department' title="Select Department"
-                                                name="department"
-                                                class="form-control" required>
-                                            <option selected="selected" value=""> Please Select</option>
+                                        <input type="text" title="Enter Program Name" id="program_name"
+                                               value=""
+                                               name="program_name"
+                                               class="form-control" required>
 
-
-                                        </select>
                                     </div>
                                 </div>
 
