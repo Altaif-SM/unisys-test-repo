@@ -37,6 +37,12 @@ urlpatterns = [
                        views.save_update_applicant_curriculum_experience_info,
                        name='save_update_applicant_curriculum_experience_info'),
 
+                  path('applicant_credit_transfer/', views.applicant_credit_transfer,
+                       name='applicant_credit_transfer'),
+                  path('save_credit_transfer/',
+                       views.save_credit_transfer,
+                       name='save_credit_transfer'),
+
                   path('applicant_employement_history_info/', views.applicant_employement_history_info,
                        name='applicant_employement_history_info'),
                   path('save_update_applicant_employement_history_info/',

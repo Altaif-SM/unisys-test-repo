@@ -543,7 +543,7 @@ def save_update_applicant_academic_english_qualification(request):
 
                 if redirect_flag:
                     messages.success(request, "Record saved")
-                    return redirect('/student/applicant_curriculum_experience_info/')
+                    return redirect('/student/applicant_credit_transfer/')
         except Exception as e:
             messages.warning(request, "Form have some error" + str(e))
 
@@ -2706,3 +2706,57 @@ def get_branch_campus_from_program(request):
     faculty_list.append(faculty_dict)
     main_list = finalDict + faculty_list
     return JsonResponse(main_list,safe=False)
+
+
+def applicant_credit_transfer(request):
+    try:
+        credit_transfer_recs = ''
+        credit_transfer_count = 0
+        application_obj = request.user.get_application
+        if request.user.get_application:
+            if CreditTransferDetails.objects.filter(applicant_id=request.user.get_application).exists():
+                credit_transfer_recs = CreditTransferDetails.objects.filter(applicant_id=request.user.get_application)
+                credit_transfer_count = CreditTransferDetails.objects.filter(applicant_id=request.user.get_application).count()
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+        return redirect('/student/applicant_personal_info/')
+    return render(request, 'applicant_credit_transfer.html',
+                  {'credit_transfer_recs': credit_transfer_recs,
+                   'application_obj': application_obj,'credit_transfer_count':credit_transfer_count})
+
+def save_credit_transfer(request):
+    redirect_flag = False
+    experience_count = request.POST.get('experience_count')
+    if request.POST:
+        try:
+            if StudentDetails.objects.filter(user=request.user):
+                for count in range(int(experience_count)):
+                    try:
+                        count = count + 1
+                        if request.POST.get('credit_transfer_obj_' + str(count)):
+                            CreditTransferDetails.objects.filter(id=request.POST['credit_transfer_obj_' + str(count)]).update(
+                                course_code=request.POST['course_code_' + str(count)],
+                                course_title=request.POST['course_title_' + str(count)],
+                                credit_hours=request.POST['credit_hours_' + str(count)],
+                                grade=request.POST['grade_' + str(count)],
+                                institution=request.POST['institution_' + str(count)],
+                            )
+                        else:
+                            CreditTransferDetails.objects.create(
+                                course_code=request.POST['course_code_' + str(count)],
+                                course_title=request.POST['course_title_' + str(count)],
+                                credit_hours=request.POST['credit_hours_' + str(count)],
+                                grade=request.POST['grade_' + str(count)],
+                                institution=request.POST['institution_' + str(count)],
+                                applicant_id=request.user.get_application
+                            )
+                    except Exception as e:
+                        pass
+                redirect_flag = True
+            if redirect_flag:
+                messages.success(request, "Record saved")
+                return redirect('/student/applicant_curriculum_experience_info/')
+        except Exception as e:
+            messages.warning(request, "Form have some error" + str(e))
+        messages.warning(request, "Please fill proper form")
+    return redirect('/student/applicant_credit_transfer/')

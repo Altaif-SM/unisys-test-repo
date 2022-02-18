@@ -1,0 +1,357 @@
+{% extends "template_base_page.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+
+            $(document).ready(function () {
+                var experience_count = 1;
+                {% if credit_transfer_count == 0 %}
+                    var experience_count = 1;
+                {% else %}
+                    var experience_count = "{{ credit_transfer_count }}"
+                {% endif %}
+                $(document).on("click", ".add_experience_row", function (e) {
+                    experience_count = parseInt(experience_count) + 1;
+                    var row = '<div class="row item_experience" id="item_experience_' + experience_count + '"><div class="row"><div class=""><label class="col-md-2 control-label">Course Code:</label><div class="col-md-3"><input type="text" title="Enter Course Code" id="course_code_' + experience_count + '" value="" name="course_code_' + experience_count + '" class="form-control"><input hidden type="text" name="credit_transfer_obj_' + experience_count + '" id="credit_transfer_obj_' + experience_count + '"></div></div><div class=""><label class="col-md-2 control-label">Course Title:</label><div class="col-md-3"><input type="text" title="Enter Course Title" id="course_title_' + experience_count + '" value="" name="course_title_' + experience_count + '" class="form-control"></div></div><div class="col-md-1"><a href="javascript:;" class="delete_experience btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Credit Hours:</label><div class="col-md-3"><input type="text" title="Enter Credit Hours" id="credit_hours_' + experience_count + '" value="" name="credit_hours_' + experience_count + '" class="form-control"></div></div><div class=""><label class="col-md-2 control-label">Grade:</label><div class="col-md-3"><input type="text" title="Enter Grade" id="grade_' + experience_count + '" value="" name="grade_' + experience_count + '" class="form-control"></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Institution/University:</label><div class="col-md-3"><input type="text" title="Enter Institution/University" id="institution_' + experience_count + '" value="" name="institution_' + experience_count + '" class="form-control"></div></div></div><br><hr><br></div>';
+                    $(row).removeAttr().hide().insertAfter(".item_experience:last").slideDown(300);
+                });
+
+                $(document).on("click", ".delete_experience", function () {
+                    {#$(this).parents('.curriculum_item').next().closest('br').remove();#}
+                    $(this).parents('.item_experience').remove();
+                });
+
+                $(document).on("click", "#save_form", function (e) {
+                    var rowCount = $(".item_experience").length;
+                    $('#experience_count').val(rowCount);
+                    $('#id_form').submit()
+
+                });
+                $('#sample_1').dataTable().fnDestroy();
+                $('#sample_1').dataTable({
+                    "aoColumnDefs": [
+                        {'bSortable': false}
+                    ]
+                });
+            });
+        }
+
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'student:student_home' %}">{% trans 'Home' %}</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span>{% trans 'Academic Qualification' %}</span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+{#        <div class="portlet-title">#}
+{#            <div class="caption">#}
+{#                <i class="icon-settings font-red"></i>#}
+{#                <span class="caption-subject font-red sbold uppercase">Achievements </span>#}
+{#            </div>#}
+{#        </div>#}
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form action="{% url 'student:save_credit_transfer' %}"
+                      id="id_form"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-body">
+
+                        <input id="curriculum_count" name="curriculum_count" hidden>
+
+
+                        <div class="portlet-title" style="margin-left:-15px;font-size: 16px;">
+                            <div class="caption">
+                                <i class="icon-settings font-red"></i>
+                                <span class="caption-subject font-red sbold uppercase">{% trans 'Credit Transfer' %}</span>
+                                <br>
+                                <span style="font-family: 'Times New Roman';font-size: 16px;"><b>({% trans 'Optional If Applicable' %})</b></span>
+                            </div>
+                        </div>
+                        <hr>
+
+                        <input id="experience_count" name="experience_count" hidden>
+
+                        <div class="" style="float: right; padding-right: 98px">
+                            <div class="">
+                                <a href="javascript:;" id="add" class="btn btn-icon-only green add_experience_row"
+                                   style="">
+                                    <i class="fa fa-plus "></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        {% if credit_transfer_recs %}
+                            {% for credit_transfer_obj in credit_transfer_recs %}
+                                <div class="row item_experience" id="item_experience_{{ forloop.counter }}">
+
+                                    <div class="row">
+                                        <div class="">
+                                            <label class="col-md-2 control-label">{% trans 'Course Code' %}:</label>
+                                            <div class="col-md-3">
+                                                <input type="text" title="Enter Course Code"
+                                                       id="course_code_{{ forloop.counter }}"
+                                                       value="{{ credit_transfer_obj.course_code }}" name="course_code_{{ forloop.counter }}"
+                                                       class="form-control">
+
+                                                <input hidden type="text" name="credit_transfer_obj_{{ forloop.counter }}" value="{{ credit_transfer_obj.id }}"
+                                                       id="credit_transfer_obj_{{ forloop.counter }}">
+                                            </div>
+                                        </div>
+
+
+                                        <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'Course Title' %}:</label>
+                                        <div class="col-md-3">
+                                            <input type="text" title="Enter Course Title" id="course_title_{{ forloop.counter }}"
+                                                   value="{{ credit_transfer_obj.course_title}}" name="course_title_{{ forloop.counter }}"
+                                                   class="form-control">
+
+                                        </div>
+                                    </div>
+
+                                    </div>
+
+
+
+                                    <br>
+
+
+
+                                    <div class="row">
+
+                                        <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'Credit Hours' %}:</label>
+                                        <div class="col-md-3">
+                                            <input type="text" title="Enter Credit Hours" id="credit_hours_{{ forloop.counter }}"
+                                                   value="{{ credit_transfer_obj.credit_hours}}" name="credit_hours_{{ forloop.counter }}"
+                                                   class="form-control">
+
+                                        </div>
+                                    </div>
+
+
+                                        <div class="">
+                                            <label class="col-md-2 control-label">{% trans 'Grade' %}:</label>
+                                            <div class="col-md-3">
+                                                <input type="text" title="Enter Grade"
+                                                       id="grade_{{ forloop.counter }}"
+                                                       value="{{ credit_transfer_obj.grade}}" name="grade_{{ forloop.counter }}"
+                                                       class="form-control">
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                <br>
+
+                                    <div class="row">
+                                        <div class="">
+                                            <label class="col-md-2 control-label">{% trans 'Institution/University' %}:</label>
+                                            <div class="col-md-3">
+                                                <input type="text" title="Enter Institution/University"
+                                                       id="institution_{{ forloop.counter }}"
+                                                       value="{{ credit_transfer_obj.institution}}" name="institution_{{ forloop.counter }}"
+                                                       class="form-control">
+
+                                            </div>
+                                        </div>
+
+
+
+
+
+                                    </div>
+
+                                    <br>
+
+
+
+
+                                    <hr>
+                                    <br>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+
+                            <div class="row item_experience" id="item_experience_1">
+
+                                <div class="row">
+                                    <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'Course Code' %}:</label>
+                                        <div class="col-md-3">
+                                            <input type="text" title="Enter Course Code" id="course_code_1"
+                                                   value="" name="course_code_1"
+                                                   class="form-control">
+
+                                            <input hidden type="text" name="credit_transfer_obj_1" id="credit_transfer_obj_1">
+                                        </div>
+                                    </div>
+
+                                    <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'Course Title' %}:</label>
+                                        <div class="col-md-3">
+                                            <input type="text" title="Enter Course Title" id="course_title_1"
+                                                   value="" name="course_title_1"
+                                                   class="form-control">
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <br>
+
+
+                                 <div class="row">
+                                     <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'Credit Hours' %}:</label>
+                                        <div class="col-md-3">
+                                            <input type="text" title="Enter Credit Hours" id="credit_hours_1"
+                                                   value="" name="credit_hours_1"
+                                                   class="form-control">
+
+                                        </div>
+                                    </div>
+
+                                     <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'Grade' %}:</label>
+                                        <div class="col-md-3">
+                                            <input type="text" title="Enter Grade" id="grade_1"
+                                                   value="" name="grade_1"
+                                                   class="form-control">
+
+                                        </div>
+                                    </div>
+
+
+                                 </div>
+                                <br>
+
+
+                                <div class="row">
+
+                                        <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'Institution/University' %}:</label>
+                                        <div class="col-md-3">
+                                            <input type="text" title="Enter Institution/University" id="institution_1"
+                                                   value="" name="institution_1"
+                                                   class="form-control">
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            <br>
+
+
+                                <hr>
+                                <br>
+                            </div>
+                        {% endif %}
+
+
+
+                        <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                                        onclick="window.location='{% url "student:applicant_academic_english_qualification" %}'">
+                                    {% trans 'Back' %}
+                                </button>
+
+                                {% if application_obj %}
+{#                                    {% if not application_obj.is_submitted %}#}
+                                        <button type="button" class="btn green" id="save_form" style="">{% trans 'Save/Next' %}
+                                        </button>
+{#                                    {% endif %}#}
+                                {% endif %}
+
+                                {% comment %}{% if application_obj %}
+                                    <button type="submit" class="btn green" id="save" style="">Save/Next</button>
+                                {% endif %}{% endcomment %}
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+{#<div class="row item" id="check_' + count + '" style="margin-top: 30px"><div class=""> <label class="col-md-2 control-label">Co-Curriculum:</label> <div class="col-md-2"> <input type="text" title="Enter Co-Curriculum" id="curriculum_name_' + count + '" name="curriculum_name_' + count + '" value="" class="form-control"> </div> </div> <div class=""> <label class="col-md-1 control-label">Year:</label> <div class="col-md-2"> <select id="curriculum_year_' + count + '" title="Select Year" name="curriculum_year_' + count + '" class="form-control"> <option style="display:none" selected="selected" id="" value="">PleaseSelect</option> {% for rec in passing_year_recs %} <option value='{{ rec.year }}'>{{ rec.year }}</option> {% endfor %} </select> </div> </div> <div class=""> <label class="col-md-1 control-label">Result:</label> <div class="col-md-2" id="item' + count + '"><label class="form-control" style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input class="file" style="width: 50%" type="button" value='Choose File:'><a><input type="text" readonly name="curriculum_result_document_text_' + count + '" class="file_value emp" style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label><input style="display: none" type="file" title="Select Result document" id="curriculum_result_document_' + count + '" value="" name="curriculum_result_document_' + count + '" class="file_type"><span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"class="remove_doc fa fa-close"></span></div></div></div>#}
+
+
+
+
+{#<div class="row item_experience" id="item_experience_' + experience_count + '"><div class="row"><div class=""><label class="col-md-2 control-label">Work Experience :</label><div class="col-md-3"><input type="text" title="Enter Work Experience" id="work_experience_' + experience_count + '" value="" name="work_experience_' + experience_count + '" class="form-control"></div></div><div class=""><label class="col-md-2 control-label">Result Doc:</label><div class="col-md-3" id="item' + experience_count + '"> <label class="form-control" style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input class="file" style="width: 50%" type='button' value='Choose File:'><a><input type="text" name="work_experience_document_text' + experience_count + '" class="file_value emp" style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label><input style="display: none" type="file" title="Select Result document" id="work_experience_document_' + experience_count + '" name="work_experience_document_' + experience_count + '" class="file_type"><span style="float: right; color: darkred; cursor: pointer;margin-top: -25px" class="remove_doc fa fa-close"></span></div><div class="col-md-1"><a href="javascript:;" class="delete btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div><br><br><div class="row"><div class=""><label class="col-md-2 control-label">Start Date:</label><div class="col-md-3"><input type="date" id="from_date_' + experience_count + '" name="from_date_' + experience_count + '" max="2999-12-31" value="" class="form-control"></div></div><div class=""><label class="col-md-2 control-label">End Date: </label> <div class="col-md-3" id="EndDate"><input type="date" id="to_date_' + experience_count + '" name="to_date_' + experience_count + '" max="2999-12-31" value="" class="form-control end_date"><br><span>Currently Working </span><input class="current" type="checkbox" name="experience_one_current" id="experience_one_current"></div></div></div><br><hr><br></div>#}
+
