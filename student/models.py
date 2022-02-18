@@ -603,6 +603,14 @@ class PostgraduateDetails(BaseModel):
                                      on_delete=models.SET_NULL)
 
 
+class CreditTransferDetails(BaseModel):
+    course_code = models.CharField(max_length=255, blank=True, null=True)
+    course_title = models.CharField(max_length=255, blank=True, null=True)
+    credit_hours = models.CharField(max_length=255, blank=True, null=True)
+    grade = models.CharField(max_length=255, blank=True, null=True)
+    institution = models.CharField(max_length=255, blank=True, null=True)
+    applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_credit_transfer_rel',
+                                     on_delete=models.SET_NULL)
 
 
 class ScholarshipSelectionDetails(BaseModel):
