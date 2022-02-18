@@ -2675,7 +2675,7 @@ def save_update_applicant_intake_info(request):
             application_obj.semester_id = request.POST.get('semester')
             application_obj.study_mode = request.POST.get('study_mode')
             application_obj.study_level_id = request.POST.get('study_level')
-            application_obj.department_id = request.POST.get('department')
+            application_obj.department_id = request.POST.get('department',None)
             application_obj.program_mode_id = request.POST.get('program_mode')
             if request.POST.get('country'):
                 application_obj.learning_country_id = request.POST.get('country')

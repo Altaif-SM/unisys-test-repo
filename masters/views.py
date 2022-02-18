@@ -3364,6 +3364,40 @@ def get_programs_from_filter(request):
     return JsonResponse(final_list, safe=False)
 
 
+def get_programs_from_faculty(request):
+    final_list = []
+    program_list = []
+    study_mode = request.POST.get('study_mode', None)
+    university = request.POST.get('university', None)
+    study_level = request.POST.get('study_level', None)
+    faculty = request.POST.get('faculty', None)
+    department = request.POST.get('department', None)
+    program_recs = ProgramDetails.objects.filter(is_delete=False)
+
+    if university:
+        program_recs = program_recs.filter(university_id = university)
+
+    if study_level:
+        program_recs = program_recs.filter(study_level_id = study_level)
+
+    if faculty:
+        program_recs = program_recs.filter(faculty_id = faculty)
+
+    if department:
+        program_recs = program_recs.filter(department_id = department)
+
+    if study_mode:
+        for rec in program_recs:
+            for mode in rec.study_mode.filter(study_mode = study_mode):
+                program_list.append(rec)
+
+    if program_list:
+        for rec in program_recs:
+            raw_dict = {}
+            raw_dict['id'] = rec.id
+            raw_dict['program'] = rec.program_name
+            final_list.append(raw_dict)
+    return JsonResponse(final_list, safe=False)
 
 
 def get_faculty_from_university(request):

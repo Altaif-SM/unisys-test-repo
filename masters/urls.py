@@ -242,6 +242,7 @@ urlpatterns = [
     path('api_test/', views.api_test, name='api_test'),
     path('get_departments_from_faculty/', views.get_departments_from_faculty, name='get_departments_from_faculty'),
     path('get_programs_from_filter/', views.get_programs_from_filter, name='get_programs_from_filter'),
+    path('get_programs_from_faculty/', views.get_programs_from_faculty, name='get_programs_from_faculty'),
 
     path('arabic_lang_proficiency_settings/', views.arabic_lang_proficiency_settings, name='arabic_lang_proficiency_settings'),
     path('add_arabic_lang_proficiency/', views.add_arabic_lang_proficiency, name='add_arabic_lang_proficiency'),

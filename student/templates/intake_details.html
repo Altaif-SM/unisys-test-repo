@@ -189,15 +189,6 @@
                 }
 
 
-                $(document).on("change", "#faculty1", function (e) {
-                    var faculty = $(this).val();
-                    var study_mode = $('#study_mode').val();
-                    var university = $('#university').val();
-                    var department = $('#department').val();
-                    var study_level = $('#study_level').val();
-                    var url = '/masters/get_programs_from_filter/';
-                    get_programs_from_filter(url, study_mode, university, study_level, faculty, department)
-                })
 
                 $(document).on("change", "#department", function (e) {
                     var department = $(this).val();
@@ -211,8 +202,22 @@
 
                 $(document).on("change", "#faculty", function (e) {
                     var faculty_id = $(this).val();
+                    var study_mode = $('#study_mode').val();
+                    var university = $('#university').val();
+                    var study_level = $('#study_level').val();
+                    var department = $('#department').val();
+
                     var url = '/masters/get_departments_from_faculty/';
                     get_departments_from_faculty(url, faculty_id)
+
+
+                    var url = '/masters/get_programs_from_faculty/';
+                    get_programs_from_faculty(url, study_mode, university, study_level, faculty_id, department)
+
+
+
+
+
                 })
 
 
@@ -382,6 +387,37 @@
                     }
                 });
             }
+
+
+            function get_programs_from_faculty(url, study_mode, university, study_level, faculty, department) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        study_mode: study_mode,
+                        university: university,
+                        study_level: study_level,
+                        faculty: faculty,
+                        department: department,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data) {
+
+                        $('#program').empty();
+                        $('#program').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#program').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['program'] + '</option>')
+                        }
+                    },
+                    error: function (xhr, msg, err) {
+                        alert(xhr.responseJSON.error);
+                    }
+                });
+            }
+
 
             function get_programs_from_filter(url, study_mode, university, study_level, faculty, department) {
                 $.ajax({
@@ -878,11 +914,10 @@
                         <br>
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">{% trans 'Department' %}:<span
-                                        style="color: red">*</span></label>
+                                <label class="col-md-2 control-label">{% trans 'Department' %}:</label>
                                 <div class="col-md-4">
                                     <select id='department' title="Select Department" name="department"
-                                            class="form-control value_check" data-live-search="true" required>
+                                            class="form-control value_check" data-live-search="true" >
 
                                         {% if application_obj.department %}
                                             <option style="display:none" selected="selected"
