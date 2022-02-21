@@ -3327,6 +3327,29 @@ def get_departments_from_faculty(request):
             finalDict.append(raw_dict)
     return JsonResponse(finalDict, safe=False)
 
+def get_departments_from_faculty_2(request):
+    finalDict = []
+    faculty_id = request.POST.get('faculty_id', None)
+    faculty_recs = FacultyDetails.objects.filter(id = faculty_id)
+    for rec in faculty_recs:
+        for dep in rec.department.all():
+            raw_dict = {}
+            raw_dict['department']=dep.department
+            raw_dict['id']=dep.id
+            finalDict.append(raw_dict)
+    return JsonResponse(finalDict, safe=False)
+
+def get_departments_from_faculty_3(request):
+    finalDict = []
+    faculty_id = request.POST.get('faculty_id', None)
+    faculty_recs = FacultyDetails.objects.filter(id = faculty_id)
+    for rec in faculty_recs:
+        for dep in rec.department.all():
+            raw_dict = {}
+            raw_dict['department']=dep.department
+            raw_dict['id']=dep.id
+            finalDict.append(raw_dict)
+    return JsonResponse(finalDict, safe=False)
 
 def get_programs_from_filter(request):
     final_list = []
@@ -3365,6 +3388,77 @@ def get_programs_from_filter(request):
 
 
 def get_programs_from_faculty(request):
+    final_list = []
+    program_list = []
+    study_mode = request.POST.get('study_mode', None)
+    university = request.POST.get('university', None)
+    study_level = request.POST.get('study_level', None)
+    faculty = request.POST.get('faculty', None)
+    department = request.POST.get('department', None)
+    program_recs = ProgramDetails.objects.filter(is_delete=False)
+
+    if university:
+        program_recs = program_recs.filter(university_id = university)
+
+    if study_level:
+        program_recs = program_recs.filter(study_level_id = study_level)
+
+    if faculty:
+        program_recs = program_recs.filter(faculty_id = faculty)
+
+    if department:
+        program_recs = program_recs.filter(department_id = department)
+
+    if study_mode:
+        for rec in program_recs:
+            for mode in rec.study_mode.filter(study_mode = study_mode):
+                program_list.append(rec)
+
+    if program_list:
+        for rec in program_recs:
+            raw_dict = {}
+            raw_dict['id'] = rec.id
+            raw_dict['program'] = rec.program_name
+            final_list.append(raw_dict)
+    return JsonResponse(final_list, safe=False)
+
+def get_programs_from_faculty_2(request):
+    final_list = []
+    program_list = []
+    study_mode = request.POST.get('study_mode', None)
+    university = request.POST.get('university', None)
+    study_level = request.POST.get('study_level', None)
+    faculty = request.POST.get('faculty', None)
+    department = request.POST.get('department', None)
+    program_recs = ProgramDetails.objects.filter(is_delete=False)
+
+    if university:
+        program_recs = program_recs.filter(university_id = university)
+
+    if study_level:
+        program_recs = program_recs.filter(study_level_id = study_level)
+
+    if faculty:
+        program_recs = program_recs.filter(faculty_id = faculty)
+
+    if department:
+        program_recs = program_recs.filter(department_id = department)
+
+    if study_mode:
+        for rec in program_recs:
+            for mode in rec.study_mode.filter(study_mode = study_mode):
+                program_list.append(rec)
+
+    if program_list:
+        for rec in program_recs:
+            raw_dict = {}
+            raw_dict['id'] = rec.id
+            raw_dict['program'] = rec.program_name
+            final_list.append(raw_dict)
+    return JsonResponse(final_list, safe=False)
+
+
+def get_programs_from_faculty_3(request):
     final_list = []
     program_list = []
     study_mode = request.POST.get('study_mode', None)
@@ -3619,6 +3713,70 @@ def get_faculty_from_study_mode(request):
     return JsonResponse(final_list, safe=False)
 
 
+
+
+def get_faculty_from_study_mode_2(request):
+    final_list = []
+    program_list = []
+    faculty_ids = []
+    study_mode_2 = request.POST.get('study_mode_2', None)
+    study_level_2 = request.POST.get('study_level_2', None)
+    university = request.POST.get('university', None)
+    program_recs = ProgramDetails.objects.filter(is_delete=False)
+    if study_level_2:
+        program_recs = program_recs.filter(study_level_id=study_level_2)
+    if study_mode_2:
+        for rec in program_recs:
+            for mode in rec.study_mode.filter(study_mode=study_mode_2):
+                program_list.append(rec)
+    if program_list:
+        for rec in program_list:
+            if not rec.faculty.id in faculty_ids:
+                raw_dict = {}
+                if university:
+                    if int(university) == rec.university.id:
+                        raw_dict['id'] = rec.faculty.id
+                        raw_dict['faculty'] = rec.faculty.faculty_name
+                        faculty_ids.append(rec.faculty.id)
+                        final_list.append(raw_dict)
+                else:
+                    raw_dict['id'] = rec.faculty.id
+                    raw_dict['faculty'] = rec.faculty.faculty_name
+                    faculty_ids.append(rec.faculty.id)
+                    final_list.append(raw_dict)
+    return JsonResponse(final_list, safe=False)
+
+def get_faculty_from_study_mode_3(request):
+    final_list = []
+    program_list = []
+    faculty_ids = []
+    study_mode = request.POST.get('study_mode', None)
+    study_level = request.POST.get('study_level', None)
+    university = request.POST.get('university', None)
+    program_recs = ProgramDetails.objects.filter(is_delete=False)
+    if study_level:
+        program_recs = program_recs.filter(study_level_id=study_level)
+    if study_mode:
+        for rec in program_recs:
+            for mode in rec.study_mode.filter(study_mode=study_mode):
+                program_list.append(rec)
+    if program_list:
+        for rec in program_list:
+            if not rec.faculty.id in faculty_ids:
+                raw_dict = {}
+                if university:
+                    if int(university) == rec.university.id:
+                        raw_dict['id'] = rec.faculty.id
+                        raw_dict['faculty'] = rec.faculty.faculty_name
+                        faculty_ids.append(rec.faculty.id)
+                        final_list.append(raw_dict)
+                else:
+                    raw_dict['id'] = rec.faculty.id
+                    raw_dict['faculty'] = rec.faculty.faculty_name
+                    faculty_ids.append(rec.faculty.id)
+                    final_list.append(raw_dict)
+    return JsonResponse(final_list, safe=False)
+
 def get_faculty_from_study_level(request):
     final_list = []
     program_list = []
@@ -3651,7 +3809,100 @@ def get_faculty_from_study_level(request):
     return JsonResponse(final_list, safe=False)
 
 
+def get_faculty_from_study_level_2(request):
+    final_list = []
+    program_list = []
+    faculty_ids = []
+    study_mode_2 = request.POST.get('study_mode_2', None)
+    study_level_2 = request.POST.get('study_level_2', None)
+    university = request.POST.get('university', None)
+    program_recs = ProgramDetails.objects.filter(is_delete=False)
+    if study_level_2:
+        program_recs = program_recs.filter(study_level_id=study_level_2)
+    if study_mode_2:
+        for rec in program_recs:
+            for mode in rec.study_mode.filter(study_mode=study_mode_2):
+                program_list.append(rec)
+    if program_list:
+        for rec in program_list:
+            if not rec.faculty.id in faculty_ids:
+                raw_dict = {}
+                if university:
+                    if int(university) == rec.university.id:
+                        raw_dict['id'] = rec.faculty.id
+                        raw_dict['faculty'] = rec.faculty.faculty_name
+                        faculty_ids.append(rec.faculty.id)
+                        final_list.append(raw_dict)
+                else:
+                    raw_dict['id'] = rec.faculty.id
+                    raw_dict['faculty'] = rec.faculty.faculty_name
+                    faculty_ids.append(rec.faculty.id)
+                    final_list.append(raw_dict)
+    return JsonResponse(final_list, safe=False)
+
+
+def get_faculty_from_study_level_3(request):
+    final_list = []
+    program_list = []
+    faculty_ids = []
+    study_mode = request.POST.get('study_mode', None)
+    study_level = request.POST.get('study_level', None)
+    university = request.POST.get('university', None)
+    program_recs = ProgramDetails.objects.filter(is_delete=False)
+    if study_level:
+        program_recs = program_recs.filter(study_level_id=study_level)
+    if study_mode:
+        for rec in program_recs:
+            for mode in rec.study_mode.filter(study_mode=study_mode):
+                program_list.append(rec)
+    if program_list:
+        for rec in program_list:
+            if not rec.faculty.id in faculty_ids:
+                raw_dict = {}
+                if university:
+                    if int(university) == rec.university.id:
+                        raw_dict['id'] = rec.faculty.id
+                        raw_dict['faculty'] = rec.faculty.faculty_name
+                        faculty_ids.append(rec.faculty.id)
+                        final_list.append(raw_dict)
+                else:
+                    raw_dict['id'] = rec.faculty.id
+                    raw_dict['faculty'] = rec.faculty.faculty_name
+                    faculty_ids.append(rec.faculty.id)
+                    final_list.append(raw_dict)
+    return JsonResponse(final_list, safe=False)
+
+
 def get_program_mode_from_selected_program(request):
+    program_mode_list = []
+    program_id = request.POST.get('program_id', None)
+    if program_id:
+        program_mode_recs = ProgramDetails.objects.filter(id = program_id)
+    if program_mode_recs:
+        for rec in program_mode_recs:
+            raw_dict = {}
+            raw_dict['id'] = rec.study_type.id
+            raw_dict['program_mode'] = rec.study_type.study_type
+            program_mode_list.append(raw_dict)
+    return JsonResponse(program_mode_list, safe=False)
+
+
+def get_program_mode_from_selected_program_2(request):
+    program_mode_list = []
+    program_id = request.POST.get('program_id', None)
+    if program_id:
+        program_mode_recs = ProgramDetails.objects.filter(id = program_id)
+    if program_mode_recs:
+        for rec in program_mode_recs:
+            raw_dict = {}
+            raw_dict['id'] = rec.study_type.id
+            raw_dict['program_mode'] = rec.study_type.study_type
+            program_mode_list.append(raw_dict)
+    return JsonResponse(program_mode_list, safe=False)
+
+
+
+def get_program_mode_from_selected_program_3(request):
     program_mode_list = []
     program_id = request.POST.get('program_id', None)
     if program_id:
