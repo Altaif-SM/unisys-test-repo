@@ -260,6 +260,40 @@ class ApplicationDetails(BaseModel):
     supervisor_status = models.CharField(max_length=255, default="Requested", blank=True, null=True)
     reject_description = models.CharField(max_length=500, blank=True, null=True)
 
+    study_mode_2 = models.CharField(max_length=100, blank=True, null=True)
+    study_level_2 = models.ForeignKey('masters.StudyLevelDetails', blank=True, null=True,
+                                    related_name='applicant_study_level_2_rel',
+                                    on_delete=models.SET_NULL)
+    faculty_2 = models.ForeignKey('masters.FacultyDetails', blank=True, null=True,
+                                related_name='applicant_faculty_2_rel',
+                                on_delete=models.SET_NULL)
+    department_2 = models.ForeignKey('masters.Department', blank=True, null=True,
+                                   related_name='applicant_2_department_rel',
+                                   on_delete=models.SET_NULL)
+
+    program_2 = models.ForeignKey('masters.ProgramDetails', blank=True, null=True,
+                                related_name='applicant_2_program_rel',
+                                on_delete=models.SET_NULL)
+    program_mode_2 = models.ForeignKey('masters.StudyTypeDetails', null=True, related_name='program_2_mode_rel',
+                                     on_delete=models.SET_NULL)
+
+    study_mode_3 = models.CharField(max_length=100, blank=True, null=True)
+    study_level_3 = models.ForeignKey('masters.StudyLevelDetails', blank=True, null=True,
+                                      related_name='applicant_study_level_3_rel',
+                                      on_delete=models.SET_NULL)
+    faculty_3 = models.ForeignKey('masters.FacultyDetails', blank=True, null=True,
+                                  related_name='applicant_faculty_3_rel',
+                                  on_delete=models.SET_NULL)
+    department_3 = models.ForeignKey('masters.Department', blank=True, null=True,
+                                     related_name='applicant_3_department_rel',
+                                     on_delete=models.SET_NULL)
+
+    program_3 = models.ForeignKey('masters.ProgramDetails', blank=True, null=True,
+                                  related_name='applicant_3_program_rel',
+                                  on_delete=models.SET_NULL)
+    program_mode_3 = models.ForeignKey('masters.StudyTypeDetails', null=True, related_name='program_3_mode_rel',
+                                       on_delete=models.SET_NULL)
+
     class Meta:
         ordering = ('-created_on',)
 
