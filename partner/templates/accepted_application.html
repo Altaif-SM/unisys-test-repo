@@ -346,7 +346,7 @@
             </div>
         </div>
 
-    <div class="portlet-body">
+        <div class="portlet-body">
             <div class="form-body">
                 <form method="post" action="{% url 'partner:change_application_status' %}" id="form_submit">
                     {% csrf_token %}
@@ -365,23 +365,23 @@
                         {% csrf_token %}
 
                         <div class="row">
-{#                            <div class="actions" style="text-align: right;margin-top: -40px;">#}
-{#                                <div class="btn-group">#}
-{#                                    <a class="btn green-haze btn-outline btn-circle btn-sm" data-toggle="dropdown"#}
-{#                                       data-hover="dropdown" data-close-others="true"> Actions#}
-{#                                        <i class="fa fa-angle-down"></i>#}
-{#                                    </a>#}
-{#                                    <ul class="dropdown-menu pull-right" id="action">#}
-{##}
-{#                                        <li><a class="status_change"#}
-{#                                               id="First Interview">{% trans 'Conditional Offer Letter' %}</a></li>#}
-{#                                        <li><a class="status_change"#}
-{#                                               id="First Interview attended"> {% trans 'Full Offer Letter' %}</a></li>#}
-{#                                        <li><a class="status_change" id="Incomplete"> {% trans 'Incomplete' %}</a></li>#}
-{#                                        <li><a class="status_change" id="Reject">{% trans 'Reject' %}</a></li>#}
-{#                                    </ul>#}
-{#                                </div>#}
-{#                            </div>#}
+                            {#                            <div class="actions" style="text-align: right;margin-top: -40px;">#}
+                            {#                                <div class="btn-group">#}
+                            {#                                    <a class="btn green-haze btn-outline btn-circle btn-sm" data-toggle="dropdown"#}
+                            {#                                       data-hover="dropdown" data-close-others="true"> Actions#}
+                            {#                                        <i class="fa fa-angle-down"></i>#}
+                            {#                                    </a>#}
+                            {#                                    <ul class="dropdown-menu pull-right" id="action">#}
+                            {##}
+                            {#                                        <li><a class="status_change"#}
+                            {#                                               id="First Interview">{% trans 'Conditional Offer Letter' %}</a></li>#}
+                            {#                                        <li><a class="status_change"#}
+                            {#                                               id="First Interview attended"> {% trans 'Full Offer Letter' %}</a></li>#}
+                            {#                                        <li><a class="status_change" id="Incomplete"> {% trans 'Incomplete' %}</a></li>#}
+                            {#                                        <li><a class="status_change" id="Reject">{% trans 'Reject' %}</a></li>#}
+                            {#                                    </ul>#}
+                            {#                                </div>#}
+                            {#                            </div>#}
                             <input hidden id="data_value" name="data_value">
                             <div class="">
                                 <table name="data"
@@ -390,10 +390,10 @@
                                     <thead>
                                     <tr>
                                         <th style="display: none"></th>
-{#                                        <th>#}
-{#                                            <input name="select_all" value="1" type="checkbox">#}
-{##}
-{#                                        </th>#}
+                                        {#                                        <th>#}
+                                        {#                                            <input name="select_all" value="1" type="checkbox">#}
+                                        {##}
+                                        {#                                        </th>#}
                                         <th>{% trans 'Student Name' %}</th>
                                         <th>{% trans 'University' %}</th>
                                         <th>{% trans 'University Type' %}</th>
@@ -411,10 +411,10 @@
                                                 <input id="application_id" class="application_id" value="{{ rec.id }}">
                                             </td>
 
-{#                                            <td>#}
-{#                                                <input name="check" type="checkbox" class="checkboxes"#}
-{#                                                       value="{{ rec.id }}">#}
-{#                                            </td>#}
+                                            {#                                            <td>#}
+                                            {#                                                <input name="check" type="checkbox" class="checkboxes"#}
+                                            {#                                                       value="{{ rec.id }}">#}
+                                            {#                                            </td>#}
                                             <td>
                                                 <text><a href="/partner/template_applicant_all_details/{{ rec.id }}"
                                                         {% if rec.application_rejection %}
@@ -434,10 +434,23 @@
                                             <td>
                                                 {{ rec.faculty.faculty_name|default_if_none:"" }}
                                             </td>
-
-                                            <td>
-                                                {{ rec.program.program_name|default_if_none:"" }}
-                                            </td>
+                                            {% if rec.choice_1 == True and rec.choice_1 == False and rec.choice_1 == False %}
+                                                <td>
+                                                    {{ rec.program.program_name|default_if_none:"" }}
+                                                </td>
+                                            {% elif  rec.choice_1 == False and rec.choice_1 == True and rec.choice_1 == False %}
+                                                <td>
+                                                    {{ rec.program_2.program_name|default_if_none:"" }}
+                                                </td>
+                                            {% elif  rec.choice_1 == False and rec.choice_1 == False and rec.choice_1 == True %}
+                                                <td>
+                                                    {{ rec.program_3.program_name|default_if_none:"" }}
+                                                </td>
+                                            {% else %}
+                                                 <td>
+                                                    {{ rec.program.program_name|default_if_none:"" }}
+                                                </td>
+                                            {% endif %}
 
 
                                             <td>
