@@ -1,0 +1,560 @@
+{#{% extends "template_base_page.html" %}#}
+{% extends context.my_template %}
+{#{% extends request.user.is_administrator|yesno:"template_university_base_page.html,template_base_page.html" %}#}
+
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+
+        .checkboxes {
+            margin: 10px !important;
+        }
+
+
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+            $(document).ready(function () {
+                {#$("#application_status").chosen();#}
+            });
+
+
+            $(document).ready(function () {
+                function updateDataTableSelectAllCtrl(table) {
+                    var $table = table.table().node();
+                    var $chkbox_all = $('tbody input[type="checkbox"]', $table);
+                    var $chkbox_checked = $('tbody input[type="checkbox"]:checked', $table);
+                    var chkbox_select_all = $('thead input[name="select_all"]', $table).get(0);
+
+                    // If none of the checkboxes are checked
+                    if ($chkbox_checked.length === 0) {
+                        chkbox_select_all.checked = false;
+                        if ('indeterminate' in chkbox_select_all) {
+                            chkbox_select_all.indeterminate = false;
+                        }
+
+                        // If all of the checkboxes are checked
+                    } else if ($chkbox_checked.length === $chkbox_all.length) {
+                        chkbox_select_all.checked = true;
+                        if ('indeterminate' in chkbox_select_all) {
+                            chkbox_select_all.indeterminate = false;
+                        }
+
+                        // If some of the checkboxes are checked
+                    } else {
+                        chkbox_select_all.checked = true;
+                        if ('indeterminate' in chkbox_select_all) {
+                            chkbox_select_all.indeterminate = true;
+                        }
+                    }
+                }
+
+                // Array holding selected row IDs
+                var rows_selected = [];
+                var table = $('#example').DataTable({
+                    {#      'ajax': 'https://api.myjson.com/bins/1us28',#}
+                    'columnDefs': [{
+                        'targets': 0,
+                        'searchable': false,
+                        'orderable': false,
+                        'width': '10%',
+                        'className': 'dt-body-center',
+                        'render': function (data, type, full, meta) {
+                            return '<input type="checkbox">';
+                        }
+                    }],
+                    'order': [1, 'asc'],
+                    'rowCallback': function (row, data, dataIndex) {
+                        // Get row ID
+                        var rowId = data[0];
+
+                        // If row ID is in the list of selected row IDs
+                        if ($.inArray(rowId, rows_selected) !== -1) {
+                            $(row).find('input[type="checkbox"]').prop('checked', true);
+                            $(row).addClass('selected');
+                        }
+                    }
+                });
+
+                // Handle click on checkbox
+                $('#example tbody').on('click', 'input[type="checkbox"]', function (e) {
+                    var $row = $(this).closest('tr');
+
+                    // Get row data
+                    var data = table.row($row).data();
+
+                    // Get row ID
+                    var rowId = data[0];
+
+                    // Determine whether row ID is in the list of selected row IDs
+                    var index = $.inArray(rowId, rows_selected);
+
+                    // If checkbox is checked and row ID is not in list of selected row IDs
+                    if (this.checked && index === -1) {
+                        rows_selected.push(rowId);
+
+                        // Otherwise, if checkbox is not checked and row ID is in list of selected row IDs
+                    } else if (!this.checked && index !== -1) {
+                        rows_selected.splice(index, 1);
+                    }
+
+                    if (this.checked) {
+                        $row.addClass('selected');
+                    } else {
+                        $row.removeClass('selected');
+                    }
+
+                    // Update state of "Select all" control
+                    updateDataTableSelectAllCtrl(table);
+
+                    // Prevent click event from propagating to parent
+                    e.stopPropagation();
+                });
+
+                // Handle click on table cells with checkboxes
+                $('#example').on('click', 'tbody td, thead th:first-child', function (e) {
+                    $(this).parent().find('input[type="checkbox"]').trigger('click');
+                });
+
+                // Handle click on "Select all" control
+                $('thead input[name="select_all"]', table.table().container()).on('click', function (e) {
+                    {#alert(this.checked);#}
+                    if (this.checked) {
+                        $('#example tbody input[type="checkbox"]:not(:checked)').trigger('click');
+                    } else {
+                        $('#example tbody input[type="checkbox"]:checked').trigger('click');
+                    }
+
+                    // Prevent click event from propagating to parent
+                    e.stopPropagation();
+                });
+
+                // Handle table draw event
+                table.on('draw', function () {
+                    // Update state of "Select all" control
+                    updateDataTableSelectAllCtrl(table);
+                });
+
+
+                {#                $('.status_change').click(function () {#}
+                {##}
+                {#                    var checked = $('#example').find('input[name="check"]:checked').length;#}
+                {##}
+                {#                    if (!checked){#}
+                {#                        alert('Please select at least one record to proceed..!');#}
+                {#                        return false;#}
+                {#                    }#}
+                {##}
+                {#                    var favorite = [];#}
+                {#                    if ($(this).attr('id') == 'First Interview'){#}
+                {#                        $('#id_accept_student_model').modal();#}
+                {#                        $('#second_interview_time').val('');#}
+                {#                        return false;#}
+                {#                    }#}
+                {##}
+                {#                    if ($(this).attr('id') == 'Second Interview attended'){#}
+                {#                        $('#id_accept_student_model').modal();#}
+                {#                        $('#second_interview_time').val('True');#}
+                {#                        return false;#}
+                {#                    }#}
+                {#                    else {#}
+                {#                        if (!checked)#}
+                {#                            alert('Please select at least one record to proceed..!');#}
+                {#                        else {#}
+                {#                            $.each($("input[name='check']:checked"), function () {#}
+                {##}
+                {#                                favorite.push($(this).val());#}
+                {#                            });#}
+                {##}
+                {#alert(JSON.stringify(favorite));#}
+                {#                            $("#check_ids").val(JSON.stringify(favorite));#}
+                {#                            $("#interview_type").val($(this).attr('id'));#}
+                {##}
+                {#                            $('#form_submit').submit()#}
+                {#                        }#}
+                {#                    }#}
+                {##}
+                {#                })#}
+
+
+                $('.status_change').click(function () {
+
+                    var checked = $('#example').find('input[name="check"]:checked').length;
+
+                    if (!checked) {
+                        alert('Please select at least one record to proceed..!');
+                        return false;
+                    }
+
+                    var favorite = [];
+                    var conditional_offer = []
+                    if ($(this).attr('id') == 'Incomplete') {
+                        $('#id_accept_student_model').modal();
+                        return false;
+                    }
+                    if ($(this).attr('id') == 'First Interview') {
+                        $('#id_conditional_model').modal();
+                        return false;
+                    }
+                    if (!checked)
+                        alert('Please select at least one record to proceed..!');
+                    else {
+                        $.each($("input[name='check']:checked"), function () {
+
+                            favorite.push($(this).val());
+                        });
+                        {#alert(JSON.stringify(favorite));#}
+                        $("#check_ids").val(JSON.stringify(favorite));
+                        $("#conditional_documents").val(JSON.stringify(conditional_offer));
+                        $("#interview_type").val($(this).attr('id'));
+                        $('#form_submit').submit()
+                    }
+
+                })
+
+
+                $('#first_interview_save').click(function () {
+                    var favorite = []
+                    var conditional_offer = []
+
+                    var checked = $('#example').find('input[name="check"]:checked').length;
+                    if (!checked)
+                        alert('Please select at least one record to proceed..!');
+                    else {
+                        $.each($("input[name='check']:checked"), function () {
+
+                            favorite.push($(this).val());
+                        });
+
+                        {#alert(JSON.stringify(favorite));#}
+                        $("#check_ids").val(JSON.stringify(favorite));
+                        $("#conditional_documents").val(JSON.stringify(conditional_offer));
+
+                        $("#interview_type").val('Incomplete');
+                        $("#description").val($('#incomplete_description').val());
+
+
+                        $('#form_submit').submit()
+                    }
+                })
+
+
+                $('#conditional_offer_save').click(function () {
+                    var conditional_offer = []
+                    var favorite = []
+                    var checked = $('#example').find('input[name="check"]:checked').length;
+                    if (!checked)
+                        alert('Please select at least one record to proceed..!');
+                    else {
+                        $.each($("input[name='conditional_check']:checked"), function () {
+
+                            conditional_offer.push($(this).val());
+                        });
+                        $.each($("input[name='check']:checked"), function () {
+
+                            favorite.push($(this).val());
+                        });
+
+                        {#alert(JSON.stringify(conditional_offer));#}
+                        $("#check_ids").val(JSON.stringify(favorite));
+                        $("#conditional_documents").val(JSON.stringify(conditional_offer));
+
+                        $("#interview_type").val('First Interview');
+
+
+                        $('#form_submit').submit()
+                    }
+                })
+
+
+            });
+
+            $('#sample_1').dataTable().fnDestroy();
+            $('#sample_1').dataTable({
+                "aoColumnDefs": [
+                    {'bSortable': false}
+                ]
+            });
+
+            window.setTimeout(function () {
+                $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                    $(this).remove();
+                });
+            }, 4000);
+        }
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'accounts:home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span>Module Settings </span>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span> {% trans 'Accepted Applications' %} </span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase"> {% trans 'Accepted Applications' %}</span>
+            </div>
+        </div>
+
+    <div class="portlet-body">
+            <div class="form-body">
+                <form method="post" action="{% url 'partner:change_application_status' %}" id="form_submit">
+                    {% csrf_token %}
+                    <div class="col-md-4">
+                        <div class="">
+                            <input type="text" hidden id="check_ids" name="check_ids">
+                            <input type="text" hidden id="conditional_documents" name="conditional_documents">
+                            <input type="text" hidden id="interview_type" name="interview_type">
+                            <input type="text" hidden id="description" name="description">
+                        </div>
+                    </div>
+                </form>
+                <div class="form-body">
+                    <form class="form-horizontal" method="POST"
+                          enctype="multipart/form-data" {% comment %}action="{% url 'partner:change_application_status' %}"{% endcomment %}>
+                        {% csrf_token %}
+
+                        <div class="row">
+{#                            <div class="actions" style="text-align: right;margin-top: -40px;">#}
+{#                                <div class="btn-group">#}
+{#                                    <a class="btn green-haze btn-outline btn-circle btn-sm" data-toggle="dropdown"#}
+{#                                       data-hover="dropdown" data-close-others="true"> Actions#}
+{#                                        <i class="fa fa-angle-down"></i>#}
+{#                                    </a>#}
+{#                                    <ul class="dropdown-menu pull-right" id="action">#}
+{##}
+{#                                        <li><a class="status_change"#}
+{#                                               id="First Interview">{% trans 'Conditional Offer Letter' %}</a></li>#}
+{#                                        <li><a class="status_change"#}
+{#                                               id="First Interview attended"> {% trans 'Full Offer Letter' %}</a></li>#}
+{#                                        <li><a class="status_change" id="Incomplete"> {% trans 'Incomplete' %}</a></li>#}
+{#                                        <li><a class="status_change" id="Reject">{% trans 'Reject' %}</a></li>#}
+{#                                    </ul>#}
+{#                                </div>#}
+{#                            </div>#}
+                            <input hidden id="data_value" name="data_value">
+                            <div class="">
+                                <table name="data"
+                                       class="data table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer"
+                                       id="example" role="grid" aria-describedby="sample_1_info">
+                                    <thead>
+                                    <tr>
+                                        <th style="display: none"></th>
+{#                                        <th>#}
+{#                                            <input name="select_all" value="1" type="checkbox">#}
+{##}
+{#                                        </th>#}
+                                        <th>{% trans 'Student Name' %}</th>
+                                        <th>{% trans 'University' %}</th>
+                                        <th>{% trans 'University Type' %}</th>
+                                        <th>{% trans 'Faculty' %}</th>
+                                        <th>{% trans 'Program' %}</th>
+                                        <th>{% trans 'Offer Status' %}</th>
+                                        <th>{% trans 'Action' %}</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody id="tbody">
+                                    {% for rec in accepted_applicants %}
+                                        <tr id="item{{ forloop.counter }}" class="item">
+                                            <td style="display: none">
+                                                <input id="application_id" class="application_id" value="{{ rec.id }}">
+                                            </td>
+
+{#                                            <td>#}
+{#                                                <input name="check" type="checkbox" class="checkboxes"#}
+{#                                                       value="{{ rec.id }}">#}
+{#                                            </td>#}
+                                            <td>
+                                                <text><a href="/partner/template_applicant_all_details/{{ rec.id }}"
+                                                        {% if rec.application_rejection %}
+                                                         style="color: darkred" {% endif %}>{{ rec.first_name|title }} {{ rec.last_name|title }}</a>
+                                                </text>
+                                                </text>
+                                            </td>
+                                            <td>
+                                                {{ rec.university.university_name|default_if_none:"" }}
+                                            </td>
+                                            {% if rec.university.is_partner_university == True %}
+                                                <td>International</td>
+                                            {% else %}
+                                                <td>Main</td>
+                                            {% endif %}
+
+                                            <td>
+                                                {{ rec.faculty.faculty_name|default_if_none:"" }}
+                                            </td>
+
+                                            <td>
+                                                {{ rec.program.program_name|default_if_none:"" }}
+                                            </td>
+
+
+                                            <td>
+                                                {% if rec.first_interview == True and rec.first_interview_attend == False and rec.incomplete == False %}
+                                                    <span style="color: #bfb53c">Conditional</span>
+                                                {% elif  rec.first_interview == False and rec.first_interview_attend == True and rec.incomplete == False %}
+                                                    <span style="color: green">Full</span>
+                                                {% elif  rec.first_interview == False and rec.first_interview_attend == False and rec.incomplete == True %}
+                                                    <span style="color: darkred">Incomplete</span>
+                                                {% else %}
+                                                    <span style="color: red">Rejected</span>
+                                                {% endif %}
+                                            </td>
+
+                                            <td>
+                                                <a href="{% url 'partner:template_applicant_all_details' rec.id %}">
+                                <span type="button" name="edit" id="edit{{ forloop.counter }}"
+                                      class=" edit_btn btn blue glyphicon glyphicon-edit">
+                                </span>
+                                                </a>
+
+
+                                            </td>
+
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+
+                        <div id="id_accept_student_model" class="modal fade" tabindex="-1" data-backdrop="static"
+                             data-keyboard="false">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"
+                                                aria-hidden="true"></button>
+                                        <h4 class="modal-title">Incomplete Details</h4>
+                                    </div>
+                                    <div class="modal-body">
+
+
+                                        <div class="row">
+                                            <div class="">
+                                                <label class="col-md-2 control-label">Description:</label>
+                                                <textarea class="emp" id="incomplete_description"
+                                                          name="incomplete_description"
+                                                          style="width: 70%;padding: 10px;"> </textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" id="cancel_model" data-dismiss="modal"
+                                                class="btn dark btn-outline">Cancel
+                                        </button>
+                                        <button type="button" id="first_interview_save" data-dismiss="modal"
+                                                class="btn green btn-outline">
+                                            Ok
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div id="id_conditional_model" class="modal fade" tabindex="-1" data-backdrop="static"
+                             data-keyboard="false">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"
+                                                aria-hidden="true"></button>
+                                        <h4 class="modal-title">{% trans 'Conditional Offer Letter Details' %}</h4>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <div class="row">
+                                            <div class="">
+                                                <label class="col-md-12 control-label"
+                                                       style="text-align: center!important;"><b>{% trans 'Please Select required documents for Conditional Offer Letter.' %}</b></label>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            {% for rec in documents_recs %}
+                                                <div class="">
+                                                    <label class="col-md-4 control-label">{{ rec.document_name|default_if_none:"" }}:</label>
+                                                    <div class="col-md-2">
+                                                        <input name="conditional_check" type="checkbox"
+                                                               class="checkboxes"
+                                                               value="{{ rec.document_name|default_if_none:"" }}">
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+
+                                        </div>
+
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" id="cancel_model" data-dismiss="modal"
+                                                class="btn dark btn-outline">Cancel
+                                        </button>
+                                        <button type="button" id="conditional_offer_save" data-dismiss="modal"
+                                                class="btn green btn-outline">
+                                            Ok
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

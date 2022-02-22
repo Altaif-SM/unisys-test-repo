@@ -308,9 +308,21 @@ def template_approving_application(request):
                           {'applicant_recs': applicant_recs, 'documents_recs': documents_recs, 'context': context})
         else:
             applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission = True,year=get_current_year(request))
+
+            applicant_recs_1 = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission = True,year=get_current_year(request),choice_1=False,
+                                                                        choice_2=False, choice_3=False,is_accepted = False
+                                                                        )
+            applicant_recs_2 = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission = True,year=get_current_year(request),choice_1=True,choice_2=False, choice_3=False,is_accepted = False
+                                                                        )
+            applicant_recs_3 = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission = True,year=get_current_year(request),choice_1=True,choice_2=True, choice_3=False,is_accepted = False)
+
             context['my_template'] = 'template_base_page.html'
             return render(request, 'template_approving_application.html',
-                          {'applicant_recs': applicant_recs, 'documents_recs': documents_recs, 'context': context})
+                          {'applicant_recs': applicant_recs, 'documents_recs': documents_recs, 'context': context,
+                           'applicant_recs_1':applicant_recs_1,
+                           'applicant_recs_2':applicant_recs_2,
+                           'applicant_recs_3':applicant_recs_3,
+                           })
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
 
@@ -572,6 +584,7 @@ def change_application_status(request):
         check_ids = json.loads(request.POST.get('check_ids'))
         conditional_documents = json.loads(request.POST.get('conditional_documents'))
         interview_type = request.POST.get('interview_type')
+        priorities = request.POST.get('priorities',None)
 
         for application in check_ids:
             application_obj = ApplicationDetails.objects.get(id=application)
@@ -586,6 +599,15 @@ def change_application_status(request):
                 application_obj.incomplete = False
                 application_obj.first_interview_attend = False
                 application_obj.first_interview = True
+
+                application_obj.is_accepted = True
+                if priorities == '1':
+                    application_obj.choice_1 = True
+                if priorities == '2':
+                    application_obj.choice_2 = True
+                if priorities == '3':
+                    application_obj.choice_3 = True
+
                 application_obj.save()
 
                 if conditional_documents:
@@ -602,6 +624,15 @@ def change_application_status(request):
                 application_obj.first_interview = False
                 application_obj.incomplete = False
                 application_obj.first_interview_attend = True
+
+                application_obj.is_accepted = True
+                if priorities == '1':
+                    application_obj.choice_1 = True
+                if priorities == '2':
+                    application_obj.choice_2 = True
+                if priorities == '3':
+                    application_obj.choice_3 = True
+
                 application_obj.save()
                 application_notification(application_obj.id, 'You have got Full Offer Letter')
                 ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
@@ -614,6 +645,16 @@ def change_application_status(request):
                 application_obj.first_interview = False
                 application_obj.first_interview_attend = False
                 application_obj.incomplete = True
+
+                application_obj.is_accepted = True
+                if priorities == '1':
+                    application_obj.choice_1 = True
+                if priorities == '2':
+                    application_obj.choice_2 = True
+                if priorities == '3':
+                    application_obj.choice_3 = True
+
+
                 application_obj.save()
                 application_notification(application_obj.id, 'You have Incomplete Application')
                 ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
@@ -919,6 +960,27 @@ def change_application_status(request):
                         messages.warning(request,"Applicant " + application_obj.first_name.title() + " is already rejected.")
                         continue
             elif interview_type == 'Reject':
+
+                if priorities == '1':
+                    application_obj.choice_1 = True
+                    application_obj.first_interview = False
+                    application_obj.first_interview_attend = False
+                    application_obj.incomplete = False
+
+                if priorities == '2':
+                    application_obj.choice_2 = True
+                    application_obj.first_interview = False
+                    application_obj.first_interview_attend = False
+                    application_obj.incomplete = False
+
+                if priorities == '3':
+                    application_obj.choice_3 = True
+                    application_obj.first_interview = False
+                    application_obj.first_interview_attend = False
+                    application_obj.incomplete = False
+
+                application_obj.save()
+
                 if not application_obj.application_rejection:
 
                     if application_obj.admin_approval:
@@ -2345,3 +2407,17 @@ def assign_supervisior(request, application_id=None):
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/partner/template_approving_application/')
+
+
+def accepted_application(request):
+    accepted_applicants = ''
+    context = {}
+    try:
+        accepted_applicants = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
+                                                             year=get_current_year(request), is_accepted=True,
+                                                             )
+        context['my_template'] = 'template_base_page.html'
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+    return render(request, 'accepted_application.html',{'accepted_applicants': accepted_applicants,'context':context})

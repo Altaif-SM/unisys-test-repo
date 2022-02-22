@@ -40,12 +40,40 @@
 {% block ScriptBlock %}
     <script>
         window.onload = function () {
-            $(document).ready(function () {
-                {#$("#application_status").chosen();#}
-            });
 
 
             $(document).ready(function () {
+
+
+                $('#example').dataTable();
+                $('#example_2').dataTable();
+                $('#example_3').dataTable();
+
+
+                $('.select_all').click(function () {
+                    var checked_status = this.checked;
+                    $(this).closest('table').find('input:checkbox').each(function () {
+                        this.checked = checked_status;
+                    });
+                })
+
+                $('.select_all_2').click(function () {
+                    var checked_status = this.checked;
+                    $(this).closest('table').find('input:checkbox').each(function () {
+                        this.checked = checked_status;
+                    });
+                })
+
+                $('.select_all_3').click(function () {
+                    var checked_status = this.checked;
+                    $(this).closest('table').find('input:checkbox').each(function () {
+                        this.checked = checked_status;
+                    });
+                })
+
+
+                /*
+
                 function updateDataTableSelectAllCtrl(table) {
                     var $table = table.table().node();
                     var $chkbox_all = $('tbody input[type="checkbox"]', $table);
@@ -78,7 +106,8 @@
                 // Array holding selected row IDs
                 var rows_selected = [];
                 var table = $('#example').DataTable({
-                    {#      'ajax': 'https://api.myjson.com/bins/1us28',#}
+
+                {#      'ajax': 'https://api.myjson.com/bins/1us28',#}
                     'columnDefs': [{
                         'targets': 0,
                         'searchable': false,
@@ -144,7 +173,12 @@
 
                 // Handle click on "Select all" control
                 $('thead input[name="select_all"]', table.table().container()).on('click', function (e) {
-                    {#alert(this.checked);#}
+
+
+
+
+
+                {#alert(this.checked);#}
                     if (this.checked) {
                         $('#example tbody input[type="checkbox"]:not(:checked)').trigger('click');
                     } else {
@@ -161,51 +195,23 @@
                     updateDataTableSelectAllCtrl(table);
                 });
 
+                */
 
-                {#                $('.status_change').click(function () {#}
-                {##}
-                {#                    var checked = $('#example').find('input[name="check"]:checked').length;#}
-                {##}
-                {#                    if (!checked){#}
-                {#                        alert('Please select at least one record to proceed..!');#}
-                {#                        return false;#}
-                {#                    }#}
-                {##}
-                {#                    var favorite = [];#}
-                {#                    if ($(this).attr('id') == 'First Interview'){#}
-                {#                        $('#id_accept_student_model').modal();#}
-                {#                        $('#second_interview_time').val('');#}
-                {#                        return false;#}
-                {#                    }#}
-                {##}
-                {#                    if ($(this).attr('id') == 'Second Interview attended'){#}
-                {#                        $('#id_accept_student_model').modal();#}
-                {#                        $('#second_interview_time').val('True');#}
-                {#                        return false;#}
-                {#                    }#}
-                {#                    else {#}
-                {#                        if (!checked)#}
-                {#                            alert('Please select at least one record to proceed..!');#}
-                {#                        else {#}
-                {#                            $.each($("input[name='check']:checked"), function () {#}
-                {##}
-                {#                                favorite.push($(this).val());#}
-                {#                            });#}
-                {##}
-                {#alert(JSON.stringify(favorite));#}
-                {#                            $("#check_ids").val(JSON.stringify(favorite));#}
-                {#                            $("#interview_type").val($(this).attr('id'));#}
-                {##}
-                {#                            $('#form_submit').submit()#}
-                {#                        }#}
-                {#                    }#}
-                {##}
-                {#                })#}
 
 
                 $('.status_change').click(function () {
 
-                    var checked = $('#example').find('input[name="check"]:checked').length;
+
+
+                    var priorities = $("#priorities").val();
+
+                    if (parseInt(priorities) == 1) {
+                        var checked = $('#example').find('input[name="check"]:checked').length;
+                    } else if (parseInt(priorities) == 2) {
+                        var checked = $('#example_2').find('input[name="check"]:checked').length;
+                    } else if (parseInt(priorities) == 3) {
+                        var checked = $('#example_3').find('input[name="check"]:checked').length;
+                    }
 
                     if (!checked) {
                         alert('Please select at least one record to proceed..!');
@@ -243,7 +249,15 @@
                     var favorite = []
                     var conditional_offer = []
 
-                    var checked = $('#example').find('input[name="check"]:checked').length;
+                    var priorities = $("#priorities").val();
+                    if (parseInt(priorities) == 1) {
+                        var checked = $('#example').find('input[name="check"]:checked').length;
+                    } else if (parseInt(priorities) == 2) {
+                        var checked = $('#example_2').find('input[name="check"]:checked').length;
+                    } else if (parseInt(priorities) == 3) {
+                        var checked = $('#example_3').find('input[name="check"]:checked').length;
+                    }
+
                     if (!checked)
                         alert('Please select at least one record to proceed..!');
                     else {
@@ -251,15 +265,11 @@
 
                             favorite.push($(this).val());
                         });
-
                         {#alert(JSON.stringify(favorite));#}
                         $("#check_ids").val(JSON.stringify(favorite));
                         $("#conditional_documents").val(JSON.stringify(conditional_offer));
-
                         $("#interview_type").val('Incomplete');
                         $("#description").val($('#incomplete_description').val());
-
-
                         $('#form_submit').submit()
                     }
                 })
@@ -268,7 +278,17 @@
                 $('#conditional_offer_save').click(function () {
                     var conditional_offer = []
                     var favorite = []
-                    var checked = $('#example').find('input[name="check"]:checked').length;
+                    var priorities = $("#priorities").val();
+                    if (parseInt(priorities) == 1) {
+                        var checked = $('#example').find('input[name="check"]:checked').length;
+                    } else if (parseInt(priorities) == 2) {
+                        var checked = $('#example_2').find('input[name="check"]:checked').length;
+                    } else if (parseInt(priorities) == 3) {
+                        var checked = $('#example_3').find('input[name="check"]:checked').length;
+                    }
+
+                    console.log("checked>>>>>>>>" + checked)
+
                     if (!checked)
                         alert('Please select at least one record to proceed..!');
                     else {
@@ -291,6 +311,38 @@
                         $('#form_submit').submit()
                     }
                 })
+
+
+                $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                    var target = $(e.target).attr("data-id")
+                    $("#priorities").val(target);
+                    var priorities = $("#priorities").val();
+                    if (parseInt(priorities) == 1) {
+                        $('#example').find('input[name="select_all"]:checked').removeAttr("checked");
+                        $('#example').find('input[name="check"]:checked').removeAttr("checked");
+                        $('#example_2').find('input[name="select_all_2"]:checked').removeAttr("checked");
+                        $('#example_2').find('input[name="check"]:checked').removeAttr("checked");
+                        $('#example_3').find('input[name="select_all_3"]:checked').removeAttr("checked");
+                        $('#example_3').find('input[name="check"]:checked').removeAttr("checked");
+                    } else if (parseInt(priorities) == 2) {
+                        $('#example').find('input[name="select_all"]:checked').removeAttr("checked");
+                        $('#example').find('input[name="check"]:checked').removeAttr("checked");
+                        $('#example_2').find('input[name="select_all_2"]:checked').removeAttr("checked");
+                        $('#example_2').find('input[name="check"]:checked').removeAttr("checked");
+                        $('#example_3').find('input[name="select_all_3"]:checked').removeAttr("checked");
+                        $('#example_3').find('input[name="check"]:checked').removeAttr("checked");
+                    } else if (parseInt(priorities) == 3) {
+                        $('#example').find('input[name="select_all"]:checked').removeAttr("checked");
+                        $('#example').find('input[name="check"]:checked').removeAttr("checked");
+                        $('#example_2').find('input[name="select_all_2"]:checked').removeAttr("checked");
+                        $('#example_2').find('input[name="check"]:checked').removeAttr("checked");
+                        $('#example_3').find('input[name="select_all_3"]:checked').removeAttr("checked");
+                        $('#example_3').find('input[name="check"]:checked').removeAttr("checked");
+
+                    }
+
+
+                });
 
 
             });
@@ -358,7 +410,7 @@
                            id="First Interview">{% trans 'Conditional Offer Letter' %}</a></li>
                     <li><a class="status_change"
                            id="First Interview attended"> {% trans 'Full Offer Letter' %}</a></li>
-                    <li><a class="status_change" id="Incomplete"> {% trans 'Incomplete' %}</a></li>
+                    {#                    <li><a class="status_change" id="Incomplete"> {% trans 'Incomplete' %}</a></li>#}
                     <li><a class="status_change" id="Reject">{% trans 'Reject' %}</a></li>
                 </ul>
             </div>
@@ -381,6 +433,7 @@
                                     <input type="text" hidden id="conditional_documents" name="conditional_documents">
                                     <input type="text" hidden id="interview_type" name="interview_type">
                                     <input type="text" hidden id="description" name="description">
+                                    <input type="text" hidden id="priorities" value="1" name="priorities">
                                 </div>
                             </div>
                         </form>
@@ -388,15 +441,15 @@
                         <div class="tabbable-custom nav-justified">
                             <ul class="nav nav-tabs nav-justified">
                                 <li class="active">
-                                    <a href="#tab_1_1_1" data-toggle="tab">
+                                    <a data-id="1" href="#tab_1_1_1" data-toggle="tab">
                                         Choice 1 </a>
                                 </li>
                                 <li>
-                                    <a href="#tab_1_1_2" data-toggle="tab">
+                                    <a data-id="2" href="#tab_1_1_2" data-toggle="tab">
                                         Choice 2 </a>
                                 </li>
                                 <li>
-                                    <a href="#tab_1_1_3" data-toggle="tab">
+                                    <a data-id="3" href="#tab_1_1_3" data-toggle="tab">
                                         Choice 3 </a>
                                 </li>
                             </ul>
@@ -409,7 +462,8 @@
                                         <tr>
                                             <th style="display: none"></th>
                                             <th>
-                                                <input name="select_all" value="1" type="checkbox">
+                                                <input name="select_all" id="select_all" class="select_all" value="1"
+                                                       type="checkbox">
 
                                             </th>
                                             <th>{% trans 'Student Name' %}</th>
@@ -417,13 +471,13 @@
                                             <th>{% trans 'University Type' %}</th>
                                             <th>{% trans 'Faculty' %}</th>
                                             <th>{% trans 'Program' %}</th>
-                                            <th>{% trans 'Offer Status' %}</th>
+                                            <th>{% trans 'Status' %}</th>
                                             <th>{% trans 'Action' %}</th>
                                         </tr>
                                         </thead>
 
                                         <tbody id="tbody">
-                                        {% for rec in applicant_recs %}
+                                        {% for rec in applicant_recs_1 %}
                                             <tr id="item{{ forloop.counter }}" class="item">
                                                 <td style="display: none">
                                                     <input id="application_id" class="application_id"
@@ -466,8 +520,10 @@
                                                         <span style="color: green">Full</span>
                                                     {% elif  rec.first_interview == False and rec.first_interview_attend == False and rec.incomplete == True %}
                                                         <span style="color: darkred">Incomplete</span>
+                                                    {% elif rec.first_interview == False and rec.first_interview_attend == False and rec.incomplete == False and rec.application_rejection == True %}
+                                                        <span style="color:darkred">Requested</span>
                                                     {% else %}
-                                                        <span style="color: red">Rejected</span>
+                                                        <span style="color:darkred">Requested</span>
                                                     {% endif %}
                                                 </td>
 
@@ -487,9 +543,181 @@
                                     </table>
                                 </div>
                                 <div class="tab-pane" id="tab_1_1_2">
+                                    <table name="data"
+                                           class="data table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer"
+                                           id="example_2" role="grid" aria-describedby="sample_1_info">
+                                        <thead>
+                                        <tr>
+                                            <th style="display: none"></th>
+                                            <th>
+                                                <input name="select_all_2" id="select_all_2" class="select_all_2"
+                                                       value="2" type="checkbox">
+
+                                            </th>
+                                            <th>{% trans 'Student Name' %}</th>
+                                            <th>{% trans 'University' %}</th>
+                                            <th>{% trans 'University Type' %}</th>
+                                            <th>{% trans 'Faculty' %}</th>
+                                            <th>{% trans 'Program' %}</th>
+                                            <th>{% trans 'Status' %}</th>
+                                            <th>{% trans 'Action' %}</th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody id="tbody">
+                                        {% for rec in applicant_recs_2 %}
+                                            <tr id="item{{ forloop.counter }}" class="item">
+                                                <td style="display: none">
+                                                    <input id="application_id" class="application_id"
+                                                           value="{{ rec.id }}">
+                                                </td>
+
+                                                <td>
+                                                    <input name="check" type="checkbox" class="checkboxes"
+                                                           value="{{ rec.id }}">
+                                                </td>
+                                                <td>
+                                                    <text><a href="/partner/template_applicant_all_details/{{ rec.id }}"
+                                                            {% if rec.application_rejection %}
+                                                             style="color: darkred" {% endif %}>{{ rec.first_name|title }} {{ rec.last_name|title }}</a>
+                                                    </text>
+                                                    </text>
+                                                </td>
+                                                <td>
+                                                    {{ rec.university.university_name|default_if_none:"" }}
+                                                </td>
+                                                {% if rec.university.is_partner_university == True %}
+                                                    <td>International</td>
+                                                {% else %}
+                                                    <td>Main</td>
+                                                {% endif %}
+
+                                                <td>
+                                                    {{ rec.faculty_2.faculty_name|default_if_none:"" }}
+                                                </td>
+
+                                                <td>
+                                                    {{ rec.program_2.program_name|default_if_none:"" }}
+                                                </td>
+
+
+                                                <td>
+                                                    {% if rec.first_interview == True and rec.first_interview_attend == False and rec.incomplete == False %}
+                                                        <span style="color: #bfb53c">Conditional</span>
+                                                    {% elif  rec.first_interview == False and rec.first_interview_attend == True and rec.incomplete == False %}
+                                                        <span style="color: green">Full</span>
+                                                    {% elif  rec.first_interview == False and rec.first_interview_attend == False and rec.incomplete == True %}
+                                                        <span style="color: darkred">Incomplete</span>
+                                                    {% elif rec.first_interview == False and rec.first_interview_attend == False and rec.incomplete == False and rec.application_rejection == True %}
+                                                        <span style="color:darkred">Requested</span>
+                                                    {% else %}
+                                                        <span style="color:darkred">Requested</span>
+                                                    {% endif %}
+                                                </td>
+
+                                                <td>
+                                                    <a href="{% url 'partner:template_applicant_all_details' rec.id %}">
+                                <span type="button" name="edit" id="edit{{ forloop.counter }}"
+                                      class=" edit_btn btn blue glyphicon glyphicon-edit">
+                                </span>
+                                                    </a>
+
+
+                                                </td>
+
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
 
                                 </div>
                                 <div class="tab-pane" id="tab_1_1_3">
+                                    <table name="data"
+                                           class="data table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer"
+                                           id="example_3" role="grid" aria-describedby="sample_1_info">
+                                        <thead>
+                                        <tr>
+                                            <th style="display: none"></th>
+                                            <th>
+                                                <input name="select_all_3" id="select_all_3" class="select_all_3"
+                                                       value="3" type="checkbox">
+
+                                            </th>
+                                            <th>{% trans 'Student Name' %}</th>
+                                            <th>{% trans 'University' %}</th>
+                                            <th>{% trans 'University Type' %}</th>
+                                            <th>{% trans 'Faculty' %}</th>
+                                            <th>{% trans 'Program' %}</th>
+                                            <th>{% trans 'Status' %}</th>
+                                            <th>{% trans 'Action' %}</th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody id="tbody">
+                                        {% for rec in applicant_recs_3 %}
+                                            <tr id="item{{ forloop.counter }}" class="item">
+                                                <td style="display: none">
+                                                    <input id="application_id" class="application_id"
+                                                           value="{{ rec.id }}">
+                                                </td>
+
+                                                <td>
+                                                    <input name="check" type="checkbox" class="checkboxes"
+                                                           value="{{ rec.id }}">
+                                                </td>
+                                                <td>
+                                                    <text><a href="/partner/template_applicant_all_details/{{ rec.id }}"
+                                                            {% if rec.application_rejection %}
+                                                             style="color: darkred" {% endif %}>{{ rec.first_name|title }} {{ rec.last_name|title }}</a>
+                                                    </text>
+                                                    </text>
+                                                </td>
+                                                <td>
+                                                    {{ rec.university.university_name|default_if_none:"" }}
+                                                </td>
+                                                {% if rec.university.is_partner_university == True %}
+                                                    <td>International</td>
+                                                {% else %}
+                                                    <td>Main</td>
+                                                {% endif %}
+
+                                                <td>
+                                                    {{ rec.faculty_3.faculty_name|default_if_none:"" }}
+                                                </td>
+
+                                                <td>
+                                                    {{ rec.program_3.program_name|default_if_none:"" }}
+                                                </td>
+
+
+                                                <td>
+                                                    {% if rec.first_interview == True and rec.first_interview_attend == False and rec.incomplete == False %}
+                                                        <span style="color: #bfb53c">Conditional</span>
+                                                    {% elif  rec.first_interview == False and rec.first_interview_attend == True and rec.incomplete == False %}
+                                                        <span style="color: green">Full</span>
+                                                    {% elif  rec.first_interview == False and rec.first_interview_attend == False and rec.incomplete == True %}
+                                                        <span style="color: darkred">Incomplete</span>
+                                                    {% elif rec.first_interview == False and rec.first_interview_attend == False and rec.incomplete == False and rec.application_rejection == True %}
+                                                        <span style="color:darkred">Requested</span>
+                                                    {% else %}
+                                                        <span style="color:darkred">Requested</span>
+                                                    {% endif %}
+                                                </td>
+
+                                                <td>
+                                                    <a href="{% url 'partner:template_applicant_all_details' rec.id %}">
+                                <span type="button" name="edit" id="edit{{ forloop.counter }}"
+                                      class=" edit_btn btn blue glyphicon glyphicon-edit">
+                                </span>
+                                                    </a>
+
+
+                                                </td>
+
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
 
                                 </div>
                             </div>
@@ -499,214 +727,87 @@
                 </div>
             </div>
         </div>
-{#        <div class="portlet-body">#}
-{#            <div class="form-body">#}
-{#                <form method="post" action="{% url 'partner:change_application_status' %}" id="form_submit">#}
-{#                    {% csrf_token %}#}
-{#                    <div class="col-md-4">#}
-{#                        <div class="">#}
-{#                            <input type="text" hidden id="check_ids" name="check_ids">#}
-{#                            <input type="text" hidden id="conditional_documents" name="conditional_documents">#}
-{#                            <input type="text" hidden id="interview_type" name="interview_type">#}
-{#                            <input type="text" hidden id="description" name="description">#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </form>#}
-{#                <div class="form-body">#}
-{#                    <form class="form-horizontal" method="POST"#}
-{#                          enctype="multipart/form-data" {% comment %}action="{% url 'partner:change_application_status' %}"{% endcomment %}>#}
-{#                        {% csrf_token %}#}
-{##}
-{#                        <div class="row">#}
-{#                            <div class="actions" style="text-align: right;margin-top: -40px;">#}
-{#                                <div class="btn-group">#}
-{#                                    <a class="btn green-haze btn-outline btn-circle btn-sm" data-toggle="dropdown"#}
-{#                                       data-hover="dropdown" data-close-others="true"> Actions#}
-{#                                        <i class="fa fa-angle-down"></i>#}
-{#                                    </a>#}
-{#                                    <ul class="dropdown-menu pull-right" id="action">#}
-{##}
-{#                                        <li><a class="status_change"#}
-{#                                               id="First Interview">{% trans 'Conditional Offer Letter' %}</a></li>#}
-{#                                        <li><a class="status_change"#}
-{#                                               id="First Interview attended"> {% trans 'Full Offer Letter' %}</a></li>#}
-{#                                        <li><a class="status_change" id="Incomplete"> {% trans 'Incomplete' %}</a></li>#}
-{#                                        <li><a class="status_change" id="Reject">{% trans 'Reject' %}</a></li>#}
-{#                                    </ul>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                            <input hidden id="data_value" name="data_value">#}
-{#                            <div class="">#}
-{#                                <table name="data"#}
-{#                                       class="data table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer"#}
-{#                                       id="example" role="grid" aria-describedby="sample_1_info">#}
-{#                                    <thead>#}
-{#                                    <tr>#}
-{#                                        <th style="display: none"></th>#}
-{#                                        <th>#}
-{#                                            <input name="select_all" value="1" type="checkbox">#}
-{##}
-{#                                        </th>#}
-{#                                        <th>{% trans 'Student Name' %}</th>#}
-{#                                        <th>{% trans 'University' %}</th>#}
-{#                                        <th>{% trans 'University Type' %}</th>#}
-{#                                        <th>{% trans 'Faculty' %}</th>#}
-{#                                        <th>{% trans 'Program' %}</th>#}
-{#                                        <th>{% trans 'Offer Status' %}</th>#}
-{#                                        <th>{% trans 'Action' %}</th>#}
-{#                                    </tr>#}
-{#                                    </thead>#}
-{##}
-{#                                    <tbody id="tbody">#}
-{#                                    {% for rec in applicant_recs %}#}
-{#                                        <tr id="item{{ forloop.counter }}" class="item">#}
-{#                                            <td style="display: none">#}
-{#                                                <input id="application_id" class="application_id" value="{{ rec.id }}">#}
-{#                                            </td>#}
-{##}
-{#                                            <td>#}
-{#                                                <input name="check" type="checkbox" class="checkboxes"#}
-{#                                                       value="{{ rec.id }}">#}
-{#                                            </td>#}
-{#                                            <td>#}
-{#                                                <text><a href="/partner/template_applicant_all_details/{{ rec.id }}"#}
-{#                                                        {% if rec.application_rejection %}#}
-{#                                                         style="color: darkred" {% endif %}>{{ rec.first_name|title }} {{ rec.last_name|title }}</a>#}
-{#                                                </text>#}
-{#                                                </text>#}
-{#                                            </td>#}
-{#                                            <td>#}
-{#                                                {{ rec.university.university_name|default_if_none:"" }}#}
-{#                                            </td>#}
-{#                                            {% if rec.university.is_partner_university == True %}#}
-{#                                                <td>International</td>#}
-{#                                            {% else %}#}
-{#                                                <td>Main</td>#}
-{#                                            {% endif %}#}
-{##}
-{#                                            <td>#}
-{#                                                {{ rec.faculty.faculty_name|default_if_none:"" }}#}
-{#                                            </td>#}
-{##}
-{#                                            <td>#}
-{#                                                {{ rec.program.program_name|default_if_none:"" }}#}
-{#                                            </td>#}
-{##}
-{##}
-{#                                            <td>#}
-{#                                                {% if rec.first_interview == True and rec.first_interview_attend == False and rec.incomplete == False %}#}
-{#                                                    <span style="color: #bfb53c">Conditional</span>#}
-{#                                                {% elif  rec.first_interview == False and rec.first_interview_attend == True and rec.incomplete == False %}#}
-{#                                                    <span style="color: green">Full</span>#}
-{#                                                {% elif  rec.first_interview == False and rec.first_interview_attend == False and rec.incomplete == True %}#}
-{#                                                    <span style="color: darkred">Incomplete</span>#}
-{#                                                {% else %}#}
-{#                                                    <span style="color: red">Rejected</span>#}
-{#                                                {% endif %}#}
-{#                                            </td>#}
-{##}
-{#                                            <td>#}
-{#                                                <a href="{% url 'partner:template_applicant_all_details' rec.id %}">#}
-{#                                <span type="button" name="edit" id="edit{{ forloop.counter }}"#}
-{#                                      class=" edit_btn btn blue glyphicon glyphicon-edit">#}
-{#                                </span>#}
-{#                                                </a>#}
-{##}
-{##}
-{#                                            </td>#}
-{##}
-{#                                        </tr>#}
-{#                                    {% endfor %}#}
-{#                                    </tbody>#}
-{#                                </table>#}
-{#                            </div>#}
-{##}
-{#                        </div>#}
-{##}
-{#                        <div id="id_accept_student_model" class="modal fade" tabindex="-1" data-backdrop="static"#}
-{#                             data-keyboard="false">#}
-{#                            <div class="modal-dialog">#}
-{#                                <div class="modal-content">#}
-{#                                    <div class="modal-header">#}
-{#                                        <button type="button" class="close" data-dismiss="modal"#}
-{#                                                aria-hidden="true"></button>#}
-{#                                        <h4 class="modal-title">Incomplete Details</h4>#}
-{#                                    </div>#}
-{#                                    <div class="modal-body">#}
-{##}
-{##}
-{#                                        <div class="row">#}
-{#                                            <div class="">#}
-{#                                                <label class="col-md-2 control-label">Description:</label>#}
-{#                                                <textarea class="emp" id="incomplete_description"#}
-{#                                                          name="incomplete_description"#}
-{#                                                          style="width: 70%;padding: 10px;"> </textarea>#}
-{#                                            </div>#}
-{#                                        </div>#}
-{#                                    </div>#}
-{#                                    <div class="modal-footer">#}
-{#                                        <button type="button" id="cancel_model" data-dismiss="modal"#}
-{#                                                class="btn dark btn-outline">Cancel#}
-{#                                        </button>#}
-{#                                        <button type="button" id="first_interview_save" data-dismiss="modal"#}
-{#                                                class="btn green btn-outline">#}
-{#                                            Ok#}
-{#                                        </button>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-{##}
-{##}
-{#                        <div id="id_conditional_model" class="modal fade" tabindex="-1" data-backdrop="static"#}
-{#                             data-keyboard="false">#}
-{#                            <div class="modal-dialog">#}
-{#                                <div class="modal-content">#}
-{#                                    <div class="modal-header">#}
-{#                                        <button type="button" class="close" data-dismiss="modal"#}
-{#                                                aria-hidden="true"></button>#}
-{#                                        <h4 class="modal-title">{% trans 'Conditional Offer Letter Details' %}</h4>#}
-{#                                    </div>#}
-{#                                    <div class="modal-body">#}
-{##}
-{#                                        <div class="row">#}
-{#                                            <div class="">#}
-{#                                                <label class="col-md-12 control-label"#}
-{#                                                       style="text-align: center!important;"><b>{% trans 'Please Select required documents for Conditional Offer Letter.' %}</b></label>#}
-{#                                            </div>#}
-{#                                        </div>#}
-{#                                        <br>#}
-{#                                        <div class="row">#}
-{#                                            {% for rec in documents_recs %}#}
-{#                                                <div class="">#}
-{#                                                    <label class="col-md-4 control-label">{{ rec.document_name|default_if_none:"" }}:</label>#}
-{#                                                    <div class="col-md-2">#}
-{#                                                        <input name="conditional_check" type="checkbox"#}
-{#                                                               class="checkboxes"#}
-{#                                                               value="{{ rec.document_name|default_if_none:"" }}">#}
-{#                                                    </div>#}
-{#                                                </div>#}
-{#                                            {% endfor %}#}
-{##}
-{#                                        </div>#}
-{##}
-{##}
-{#                                    </div>#}
-{#                                    <div class="modal-footer">#}
-{#                                        <button type="button" id="cancel_model" data-dismiss="modal"#}
-{#                                                class="btn dark btn-outline">Cancel#}
-{#                                        </button>#}
-{#                                        <button type="button" id="conditional_offer_save" data-dismiss="modal"#}
-{#                                                class="btn green btn-outline">#}
-{#                                            Ok#}
-{#                                        </button>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </form>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
+
+        <div id="id_accept_student_model" class="modal fade" tabindex="-1" data-backdrop="static"
+             data-keyboard="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true"></button>
+                        <h4 class="modal-title">Incomplete Details</h4>
+                    </div>
+                    <div class="modal-body">
+
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">Description:</label>
+                                <textarea class="emp" id="incomplete_description"
+                                          name="incomplete_description"
+                                          style="width: 70%;padding: 10px;"> </textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancel_model" data-dismiss="modal"
+                                class="btn dark btn-outline">Cancel
+                        </button>
+                        <button type="button" id="first_interview_save" data-dismiss="modal"
+                                class="btn green btn-outline">
+                            Ok
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="id_conditional_model" class="modal fade" tabindex="-1" data-backdrop="static"
+             data-keyboard="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true"></button>
+                        <h4 class="modal-title">{% trans 'Conditional Offer Letter Details' %}</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-12 control-label"
+                                       style="text-align: center!important;"><b>{% trans 'Please Select required documents for Conditional Offer Letter.' %}</b></label>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            {% for rec in documents_recs %}
+                                <div class="">
+                                    <label class="col-md-4 control-label">{{ rec.document_name|default_if_none:"" }}:</label>
+                                    <div class="col-md-2">
+                                        <input name="conditional_check" type="checkbox"
+                                               class="checkboxes"
+                                               value="{{ rec.document_name|default_if_none:"" }}">
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancel_model" data-dismiss="modal"
+                                class="btn dark btn-outline">Cancel
+                        </button>
+                        <button type="button" id="conditional_offer_save" data-dismiss="modal"
+                                class="btn green btn-outline">
+                            Ok
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

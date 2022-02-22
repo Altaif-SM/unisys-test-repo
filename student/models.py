@@ -294,6 +294,11 @@ class ApplicationDetails(BaseModel):
     program_mode_3 = models.ForeignKey('masters.StudyTypeDetails', null=True, related_name='program_3_mode_rel',
                                        on_delete=models.SET_NULL)
 
+    choice_1 = models.BooleanField(default=False)
+    choice_2 = models.BooleanField(default=False)
+    choice_3 = models.BooleanField(default=False)
+    is_accepted = models.BooleanField(default=False)
+
     class Meta:
         ordering = ('-created_on',)
 
