@@ -434,15 +434,15 @@
                                             <td>
                                                 {{ rec.faculty.faculty_name|default_if_none:"" }}
                                             </td>
-                                            {% if rec.choice_1 == True and rec.choice_1 == False and rec.choice_1 == False %}
+                                            {% if rec.choice_1 == True and rec.choice_2 == False and rec.choice_3 == False %}
                                                 <td>
                                                     {{ rec.program.program_name|default_if_none:"" }}
                                                 </td>
-                                            {% elif  rec.choice_1 == False and rec.choice_1 == True and rec.choice_1 == False %}
+                                            {% elif  rec.choice_1 == False and rec.choice_2 == True and rec.choice_3 == False %}
                                                 <td>
                                                     {{ rec.program_2.program_name|default_if_none:"" }}
                                                 </td>
-                                            {% elif  rec.choice_1 == False and rec.choice_1 == False and rec.choice_1 == True %}
+                                            {% elif  rec.choice_1 == False and rec.choice_2 == False and rec.choice_3 == True %}
                                                 <td>
                                                     {{ rec.program_3.program_name|default_if_none:"" }}
                                                 </td>
