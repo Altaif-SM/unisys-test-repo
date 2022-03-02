@@ -126,7 +126,7 @@
             </li>
 
             <li>
-                <span>{% trans 'Employement History Info' %}</span>
+                <span>{% trans 'Working Experience' %}</span>
             </li>
         </ul>
     </div>
@@ -153,32 +153,63 @@
                         <input id="curriculum_count" name="curriculum_count" hidden>
 
 
+
+
                         <div class="portlet-title" style="margin-left:-15px;font-size: 16px;">
                             <div class="caption">
                                 <i class="icon-settings font-red"></i>
-                                <span class="caption-subject font-red sbold uppercase">{% trans 'EMPLOYMENT HISTORY' %}</span>
+                                <span class="caption-subject font-red sbold uppercase">{% trans 'Working Experience' %}</span>
+                                <br>
+                <span style="font-family: 'Times New Roman';font-size: 16px;"><b>({% trans 'Working experience must be related with programme applied.' %})</b></span>
                             </div>
                         </div>
                         <hr>
 
                         <input id="experience_count" name="experience_count" hidden>
 
-                        <div class="" style="float: right; padding-right: 98px">
-                            <div class="">
-                                <a href="javascript:;" id="add" class="btn btn-icon-only green add_experience_row"
-                                   style="">
-                                    <i class="fa fa-plus "></i>
-                                </a>
-                            </div>
-                        </div>
+{#                        <div class="" style="float: right; padding-right: 98px">#}
+{#                            <div class="">#}
+{#                                <a href="javascript:;" id="add" class="btn btn-icon-only green add_experience_row"#}
+{#                                   style="">#}
+{#                                    <i class="fa fa-plus "></i>#}
+{#                                </a>#}
+{#                            </div>#}
+{#                        </div>#}
 
                         {% if employement_history_obj %}
+
                              {% for emp_obj in employement_history_obj %}
                                <div class="row item_experience" id="item_experience_{{ forloop.counter }}">
 
+                               <span style="padding:inherit;margin-left: 60px;">{% trans 'Working Criteria' %}:  </span>
+                        {% if emp_obj.working_criteria == False %}
+                         <span style="padding:inherit;margin-left:30px">{% trans 'Previous' %}</span>
+                        <input class="current" type="radio" checked name="working_criteria_{{ forloop.counter }}" id="" value="Previous">
+                        <span style="padding:inherit;margin-left:20px">{% trans 'Current' %}</span>
+                        <input class="current" type="radio" name="working_criteria_{{ forloop.counter }}" value="Current"
+                               id="">
+                        {% else %}
+                            <span style="padding:inherit;margin-left:30px">{% trans 'Previous' %}</span>
+                        <input class="current" type="radio"  name="working_criteria_{{ forloop.counter }}" id="" value="Previous">
+                        <span style="padding:inherit;margin-left:20px">{% trans 'Current' %}</span>
+                        <input class="current" type="radio" checked name="working_criteria_{{ forloop.counter }}" value="Current"
+                               id="">
+                        {% endif %}
+                               <br><br>
+
                                 <div class="row">
                                     <div class="">
-                                        <label class="col-md-2 control-label">{% trans 'Name of Employer' %}:</label>
+                                        <label class="col-md-2 control-label">{% trans 'Position' %}:</label>
+                                        <div class="col-md-3">
+                                            <input type="text" title="Enter Job Designation" id="designation_{{ forloop.counter }}"
+                                                   value="{{ emp_obj.designation|default_if_none:"" }}" name="designation_{{ forloop.counter }}"
+                                                   class="form-control">
+
+                                        </div>
+                                    </div>
+
+                                    <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'Employer' %}:</label>
                                         <div class="col-md-3">
                                             <input type="text" title="Enter Name of Employer" id="employer_name_{{ forloop.counter }}"
                                                    value="{{ emp_obj.employer_name|default_if_none:"" }}" name="employer_name_{{ forloop.counter }}"
@@ -190,15 +221,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="">
-                                        <label class="col-md-2 control-label">{% trans 'Job Designation' %}:</label>
-                                        <div class="col-md-3">
-                                            <input type="text" title="Enter Job Designation" id="designation_{{ forloop.counter }}"
-                                                   value="{{ emp_obj.designation|default_if_none:"" }}" name="designation_{{ forloop.counter }}"
-                                                   class="form-control">
 
-                                        </div>
-                                    </div>
 
                                 </div>
 
@@ -208,7 +231,7 @@
                                  <div class="row">
 
                                       <div class="">
-                                        <label class="col-md-2 control-label">{% trans 'From Date' %}:</label>
+                                        <label class="col-md-2 control-label">{% trans 'Start Service' %}:</label>
                                         <div class="col-md-3">
                                             <input type="date" id="from_date_{{ forloop.counter }}" name="from_date_{{ forloop.counter }}" max="2999-12-31"
                                                    value="{{ emp_obj.from_date|date:"Y-m-d" }}" class="form-control">
@@ -216,7 +239,7 @@
                                     </div>
 
                                  <div class="">
-                                        <label class="col-md-2 control-label">{% trans 'To Date' %}:
+                                        <label class="col-md-2 control-label">{% trans 'End Service' %}:
 
                                         </label>
                                         <div class="col-md-3" id="EndDate">
@@ -233,66 +256,90 @@
                                 <div class="row">
 
                                     <div class="">
-                                        <label class="col-md-2 control-label">{% trans 'Country' %}:</label>
+                                        <label class="col-md-2 control-label">{% trans 'Working Status' %}:</label>
                                         <div class="col-md-3">
-                                            <select id='country_{{ forloop.counter }}' title="Select Country" name="country_{{ forloop.counter }}"
+                                            <select id='working_status_{{ forloop.counter }}' title="Select Working Status" name="working_status_{{ forloop.counter }}"
                                                     class="form-control chk">
 
-                                             {% if emp_obj.country %}
+                                             {% if emp_obj.working_status %}
 
                                                         <option style="display:none" selected="selected"
-                                                                value="{{ emp_obj.country.id }}"
-                                                                >{{ emp_obj.country.country_name|title }}</option>
+                                                                value="{{ emp_obj.working_status }}"
+                                                                >{{ emp_obj.working_status|default_if_none:"" }}</option>
                                                 {% else %}
                                                         <option style="display:none" selected="selected" id="" value="">
                                                             {% trans 'Please Select' %}
                                                         </option>
                                                 {% endif %}
 
-                                                {% for rec in country_recs %}
-                                                    <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
-                                                {% endfor %}
+
+                                                <option value="Employed">Employed</option>
+    <option value="Self-employed">Self-employed</option>
+    <option value="Out of work">Out of work</option>
+    <option value="Homemaker">Homemaker</option>
+    <option value="Student">Student</option>
+    <option value="Retired">Retired</option>
+    <option value="Unable to work">Unable to work</option>
                                             </select>
-                                        </div>
-                                    </div>
 
-                                    <div class="">
-                                        <label class="col-md-2 control-label">{% trans 'Type of Industry' %}:</label>
-                                        <div class="col-md-3">
-                                            <input type="text" title="Enter Type of Industry" id="industry_type_{{ forloop.counter }}"
-                                                   value="{{ emp_obj.industry_type|default_if_none:"" }}" name="industry_type_{{ forloop.counter }}"
-                                                   class="form-control">
+
 
                                         </div>
                                     </div>
+
+{#                                    <div class="">#}
+{#                                        <label class="col-md-2 control-label">{% trans 'Type of Industry' %}:</label>#}
+{#                                        <div class="col-md-3">#}
+{#                                            <input type="text" title="Enter Type of Industry" id="industry_type_{{ forloop.counter }}"#}
+{#                                                   value="{{ emp_obj.industry_type|default_if_none:"" }}" name="industry_type_{{ forloop.counter }}"#}
+{#                                                   class="form-control">#}
+{##}
+{#                                        </div>#}
+{#                                    </div>#}
 
 
 
 
                                 </div>
-                            <br>
-                            <div class="row">
-                                <div class="">
-                                        <label class="col-md-2 control-label">{% trans 'Number of Years Employed' %}:</label>
-                                        <div class="col-md-3">
-                                            <input type="text" title="Enter Number of Years Employed" id="employed_years_{{ forloop.counter }}"
-                                                   value="{{ emp_obj.employed_years|default_if_none:"" }}" name="employed_years_{{ forloop.counter }}"
-                                                   class="form-control">
-
-                                        </div>
-                                    </div>
-                            </div>
+{#                            <br>#}
+{#                            <div class="row">#}
+{#                                <div class="">#}
+{#                                        <label class="col-md-2 control-label">{% trans 'Number of Years Employed' %}:</label>#}
+{#                                        <div class="col-md-3">#}
+{#                                            <input type="text" title="Enter Number of Years Employed" id="employed_years_{{ forloop.counter }}"#}
+{#                                                   value="{{ emp_obj.employed_years|default_if_none:"" }}" name="employed_years_{{ forloop.counter }}"#}
+{#                                                   class="form-control">#}
+{##}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                            </div>#}
                                 <hr>
-                                <br>
                             </div>
                             {% endfor %}
                         {% else %}
 
                             <div class="row item_experience" id="item_experience_1">
 
+                            <span style="padding:inherit;margin-left: 60px;">{% trans 'Working Criteria' %}:  </span>
+                         <span style="padding:inherit;margin-left:30px">{% trans 'Previous' %}</span>
+                        <input class="current" type="radio" checked name="working_criteria_1" id="" value="Previous">
+                        <span style="padding:inherit;margin-left:20px">{% trans 'Current' %}</span>
+                        <input class="current" type="radio" name="working_criteria_1" value="Current" id="">
+                               <br><br>
+
                                 <div class="row">
                                     <div class="">
-                                        <label class="col-md-2 control-label">{% trans 'Name of Employer' %}:</label>
+                                        <label class="col-md-2 control-label">{% trans 'Position' %}:</label>
+                                        <div class="col-md-3">
+                                            <input type="text" title="Enter Job Designation" id="designation_1"
+                                                   value="" name="designation_1"
+                                                   class="form-control">
+
+                                        </div>
+                                    </div>
+
+                                    <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'Employer' %}:</label>
                                         <div class="col-md-3">
                                             <input type="text" title="Enter Name of Employer" id="employer_name_1"
                                                    value="" name="employer_name_1"
@@ -304,15 +351,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="">
-                                        <label class="col-md-2 control-label">{% trans 'Job Designation' %}:</label>
-                                        <div class="col-md-3">
-                                            <input type="text" title="Enter Job Designation" id="designation_1"
-                                                   value="" name="designation_1"
-                                                   class="form-control">
 
-                                        </div>
-                                    </div>
 
                                 </div>
 
@@ -322,7 +361,7 @@
                                  <div class="row">
 
                                       <div class="">
-                                        <label class="col-md-2 control-label">{% trans 'From Date' %}:</label>
+                                        <label class="col-md-2 control-label">{% trans 'Start Service' %}:</label>
                                         <div class="col-md-3">
                                             <input type="date" id="from_date_1" name="from_date_1" max="2999-12-31"
                                                    value="" class="form-control">
@@ -330,7 +369,7 @@
                                     </div>
 
                                  <div class="">
-                                        <label class="col-md-2 control-label">{% trans 'To Date' %}:
+                                        <label class="col-md-2 control-label">{% trans 'End Service' %}:
 
                                         </label>
                                         <div class="col-md-3" id="EndDate">
@@ -347,47 +386,31 @@
                                 <div class="row">
 
                                     <div class="">
-                                        <label class="col-md-2 control-label">{% trans 'Country' %}:</label>
+                                        <label class="col-md-2 control-label">{% trans 'Working Status' %}:</label>
                                         <div class="col-md-3">
-                                            <select id='country_1' title="Select Country" name="country_1"
+                                            <select id='working_status_1' title="Select Working Status" name="working_status_1"
                                                     class="form-control chk">
                                                 <option style="display:none" selected="selected" id="" value="">
                                                     {% trans 'Please Select' %}
                                                 </option>
-
-                                                {% for rec in country_recs %}
-                                                    <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
-                                                {% endfor %}
+                                                <option value="Employed">Employed</option>
+    <option value="Self-employed">Self-employed</option>
+    <option value="Out of work">Out of work</option>
+    <option value="Homemaker">Homemaker</option>
+    <option value="Student">Student</option>
+    <option value="Retired">Retired</option>
+    <option value="Unable to work">Unable to work</option>
                                             </select>
                                         </div>
                                     </div>
 
-                                    <div class="">
-                                        <label class="col-md-2 control-label">{% trans 'Type of Industry' %}:</label>
-                                        <div class="col-md-3">
-                                            <input type="text" title="Enter Type of Industry" id="industry_type_1"
-                                                   value="" name="industry_type_1"
-                                                   class="form-control">
 
-                                        </div>
-                                    </div>
 
 
 
 
                                 </div>
-                            <br>
-                            <div class="row">
-                                <div class="">
-                                        <label class="col-md-2 control-label">{% trans 'Number of Years Employed' %}:</label>
-                                        <div class="col-md-3">
-                                            <input type="text" title="Enter Number of Years Employed" id="employed_years_1"
-                                                   value="" name="employed_years_1"
-                                                   class="form-control">
 
-                                        </div>
-                                    </div>
-                            </div>
                             </div>
 
                         {% endif %}

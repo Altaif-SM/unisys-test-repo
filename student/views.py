@@ -2203,14 +2203,18 @@ def save_update_applicant_employement_history_info(request):
                 for count in range(int(experience_count)):
                     try:
                         count = count + 1
+                        working_criteria = False
+                        if request.POST['working_criteria_' + str(count)] == 'Previous':
+                            working_criteria = False
+                        else:
+                            working_criteria = True
                         EmployementHistoryDetails.objects.create(
+                            working_criteria=working_criteria,
                             employer_name=request.POST['employer_name_' + str(count)],
+                            working_status=request.POST['working_status_' + str(count)],
                             designation=request.POST['designation_' + str(count)],
-                            country_id=request.POST['country_' + str(count)] if request.POST['country_' + str(count)] else None,
                             from_date=request.POST['from_date_' + str(count)] if request.POST['from_date_' + str(count)] else None,
                             to_date=request.POST['to_date_' + str(count)] if request.POST['to_date_' + str(count)] else None,
-                            industry_type=request.POST['industry_type_' + str(count)],
-                            employed_years=request.POST['employed_years_' + str(count)],
                             applicant_id=request.user.get_application)
                     except Exception as e:
                         pass

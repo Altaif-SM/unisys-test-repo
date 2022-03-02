@@ -774,6 +774,7 @@ class AdminNotifications(BaseModel):
 
 class EmployementHistoryDetails(BaseModel):
     employer_name = models.CharField(max_length=255, blank=True, null=True)
+    working_status = models.CharField(max_length=255, blank=True, null=True)
     designation = models.CharField(max_length=255, blank=True, null=True)
     country = models.ForeignKey('masters.CountryDetails', null=True, related_name='employement_history_country_rel',
                                 on_delete=models.SET_NULL)
@@ -783,6 +784,7 @@ class EmployementHistoryDetails(BaseModel):
     employed_years = models.CharField(max_length=255, blank=True, null=True)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='employement_history_rel',
                                      on_delete=models.SET_NULL)
+    working_criteria = models.BooleanField(default=False)
 
 
 class ApplicantAttachementDetails(BaseModel):
