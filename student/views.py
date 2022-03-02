@@ -519,7 +519,7 @@ def save_update_applicant_academic_english_qualification(request):
                                 ArabQualificationDetails.objects.filter(
                                     id=request.POST['arab_obj_' + str(count)]).update(
                                     arab_test=request.POST['arab_test_' + str(count)],
-                                    arab_competency_test_id=request.POST['arab_competency_test_' + str(count)],
+                                    arab_competency=request.POST['arab_competency_test_' + str(count)],
                                     arab_test_result=request.POST['arab_test_result_' + str(count)])
 
                                 arab_object = ArabQualificationDetails.objects.filter(
@@ -527,7 +527,7 @@ def save_update_applicant_academic_english_qualification(request):
                             else:
                                 arab_object = ArabQualificationDetails.objects.create(
                                     arab_test=request.POST['arab_test_' + str(count)],
-                                    arab_competency_test_id=request.POST['arab_competency_test_' + str(count)],
+                                    arab_competency=request.POST['arab_competency_test_' + str(count)],
                                     arab_test_result=request.POST['arab_test_result_' + str(count)],
                                     applicant_id=request.user.get_application)
                             arab_object.save()

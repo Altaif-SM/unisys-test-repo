@@ -104,7 +104,7 @@
                  $(".add_arab_row").click(function () {
                     arab_count = arab_count + 1;
                     console.log("Hi");
-                    var arab_row = '<div class="row arab_item" id="arab_check_' + arab_count + '" style="margin-top: 50px"><div class="row"><div class=""> <label class="col-md-2 control-label">Arab Competency Test:</label> <div class="col-md-2"> <select id="arab_competency_test_' + arab_count + '" title="Select Arab Competency Test" name="arab_competency_test_' + arab_count + '" class="form-control"> <option style="display:none" selected="selected" id="" value=""> Please Select </option>{% for rec in arab_competency_test_recs %}<option value="{{ rec.id }}">{{ rec.arab_competency_test }}</option>{% endfor %} </select></div></div><div class=""> <label class="col-md-2 control-label">Institution:</label> <div class="col-md-2"><input type="text" title="Enter Institution" id="arab_test_' + arab_count + '" name="arab_test_' + arab_count + '" value="" class="form-control"> <input hidden type="text" name="arab_obj_' + arab_count + '" id="arab_obj_' + arab_count + '"> </div> </div></div><br><div class="row"><div class=""><label class="col-md-2 control-label"> Grade/Level:</label><div class="col-md-2"><input type="text" title="Enter Grade/Level" id="arab_test_result_' + arab_count + '" name="arab_test_result_' + arab_count + '" value="" class="form-control"></div></div><div class=""><div class="col-md-1" style="margin-top: -55px;margin-left: 400px;"><a href="javascript:;" class="delete_arab btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div></div>';
+                    var arab_row = '<div class="row arab_item" id="arab_check_' + arab_count + '" style="margin-top: 50px"><div class="row"><div class=""> <label class="col-md-2 control-label">Arab Competency Test:</label> <div class="col-md-2"><input type="text" title="Arab Competency Test" id="arab_competency_test_' + arab_count + '" name="arab_competency_test_' + arab_count + '" value="" class="form-control eng_emp"></div></div><div class=""> <label class="col-md-2 control-label">Institution:</label> <div class="col-md-2"><input type="text" title="Enter Institution" id="arab_test_' + arab_count + '" name="arab_test_' + arab_count + '" value="" class="form-control"> <input hidden type="text" name="arab_obj_' + arab_count + '" id="arab_obj_' + arab_count + '"> </div> </div></div><br><div class="row"><div class=""><label class="col-md-2 control-label"> Grade/Level:</label><div class="col-md-2"><input type="text" title="Enter Grade/Level" id="arab_test_result_' + arab_count + '" name="arab_test_result_' + arab_count + '" value="" class="form-control"></div></div><div class=""><div class="col-md-1" style="margin-top: -55px;margin-left: 400px;"><a href="javascript:;" class="delete_arab btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div></div>';
                     $(arab_row).removeAttr().hide().insertAfter(".arab_item:last").slideDown(300);
                 });
 
@@ -639,24 +639,31 @@ function showOptions(s) {
                                     <div class="">
                                         <label class="col-md-2 control-label">{% trans 'Arab Competency Test' %}:</label>
                                         <div class="col-md-2">
-                                            <select id='arab_competency_test_{{ forloop.counter }}' title="Arab Competency Test"
-                                                    name="arab_competency_test_{{ forloop.counter }}"
-                                                    class="form-control eng_emp">
 
-                                                {% if arab_obj.arab_competency_test %}
-                                                    <option style="display:none" selected="selected"
-                                                            value="{{ arab_obj.arab_competency_test.id }}"
-                                                            value="">{{ arab_obj.arab_competency_test.arab_competency_test|default_if_none:"" }}</option>
-                                                {% else %}
-                                                    <option style="display:none" selected="selected" id="" value="">
-                                                        Please Select
-                                                    </option>
-                                                {% endif %}
+                                        <input type="text" title="Arab Competency Test"
+                                                   id="arab_competency_test_{{ forloop.counter }}"
+                                                   name="arab_competency_test_{{ forloop.counter }}"
+                                                   value="{{ arab_obj.arab_competency|default_if_none:""}}"
+                                                   class="form-control eng_emp">
 
-                                                {% for rec in arab_competency_test_recs %}
-                                                    <option value='{{ rec.id }}'>{{ rec.arab_competency_test|default_if_none:"" }}</option>
-                                                {% endfor %}
-                                            </select>
+{#                                            <select id='arab_competency_test_{{ forloop.counter }}' title="Arab Competency Test"#}
+{#                                                    name="arab_competency_test_{{ forloop.counter }}"#}
+{#                                                    class="form-control eng_emp">#}
+{##}
+{#                                                {% if arab_obj.arab_competency_test %}#}
+{#                                                    <option style="display:none" selected="selected"#}
+{#                                                            value="{{ arab_obj.arab_competency_test.id }}"#}
+{#                                                            value="">{{ arab_obj.arab_competency_test.arab_competency_test|default_if_none:"" }}</option>#}
+{#                                                {% else %}#}
+{#                                                    <option style="display:none" selected="selected" id="" value="">#}
+{#                                                        Please Select#}
+{#                                                    </option>#}
+{#                                                {% endif %}#}
+{##}
+{#                                                {% for rec in arab_competency_test_recs %}#}
+{#                                                    <option value='{{ rec.id }}'>{{ rec.arab_competency_test|default_if_none:"" }}</option>#}
+{#                                                {% endfor %}#}
+{#                                            </select>#}
                                         </div>
                                     </div>
 
@@ -705,17 +712,22 @@ function showOptions(s) {
                                 <div class="">
                                     <label class="col-md-2 control-label">{% trans 'Arabic Competency Test' %}:</label>
                                     <div class="col-md-2">
-                                        <select id='arab_competency_test_1' title="Select Arabic Competency Test"
-                                                name="arab_competency_test_1"
-                                                class="form-control eng_emp">
-
-                                            <option style="display:none" selected="selected" id="" value="">{% trans 'Please Select' %}
-                                            </option>
-
-                                            {% for rec in arab_competency_test_recs %}
-                                                <option value='{{ rec.id }}'>{{ rec.arab_competency_test|default_if_none:"" }}</option>
-                                            {% endfor %}
-                                        </select>
+                                        <input type="text" title="Arab Competency Test"
+                                                   id="arab_competency_test_1"
+                                                   name="arab_competency_test_1"
+                                                   value="{{ arab_obj.arab_competency|default_if_none:""}}"
+                                                   class="form-control eng_emp">
+{#                                        <select id='arab_competency_test_1' title="Select Arabic Competency Test"#}
+{#                                                name="arab_competency_test_1"#}
+{#                                                class="form-control eng_emp">#}
+{##}
+{#                                            <option style="display:none" selected="selected" id="" value="">{% trans 'Please Select' %}#}
+{#                                            </option>#}
+{##}
+{#                                            {% for rec in arab_competency_test_recs %}#}
+{#                                                <option value='{{ rec.id }}'>{{ rec.arab_competency_test|default_if_none:"" }}</option>#}
+{#                                            {% endfor %}#}
+{#                                        </select>#}
                                     </div>
                                 </div>
 
