@@ -1286,3 +1286,16 @@ def get_program_from_account_type(request):
         return JsonResponse(program_list, safe=False)
     else:
         return JsonResponse(program_list, safe=False)
+
+def get_working_experience(request):
+    form_vals = {}
+    if request.user.role.all().filter(name__in=[request.user.STUDENT]).exists():
+        try:
+            applicaton_obj = request.user.student_user_rel.get().student_applicant_rel.get(year__active_year=True)
+            form_vals['working_experience'] = True if applicaton_obj.employement_history_rel.all() else False
+            return form_vals
+        except:
+            form_vals['working_experience'] = False
+            return form_vals
+    else:
+        return None

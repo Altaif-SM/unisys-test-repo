@@ -241,6 +241,7 @@ class User(AbstractUser):
                 form_vals[
                     'scholarship_selection'] = True if applicaton_obj.applicant_addition_info.all() else False
                 form_vals['attachment'] = True if applicaton_obj.applicant_attachement_rel.all() else False
+                form_vals['working_experience'] = True if applicaton_obj.employement_history_rel.all() else False
                 form_vals['declaration'] = True if applicaton_obj.is_submitted else False
                 form_vals['my_application'] = applicaton_obj.is_submitted if applicaton_obj.is_submitted else False
                 form_vals['psychometric_test'] = applicaton_obj.applicant_psychometric_test_rel.exists() if applicaton_obj.applicant_psychometric_test_rel.exists() else False
@@ -258,6 +259,7 @@ class User(AbstractUser):
                 form_vals['psychometric_test'] = False
                 form_vals['agreement'] = False
                 form_vals['family_flag'] = False
+                form_vals['working_experience'] = False
 
                 return form_vals
         else:
