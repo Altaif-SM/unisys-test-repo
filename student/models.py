@@ -786,6 +786,7 @@ class EmployementHistoryDetails(BaseModel):
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='employement_history_rel',
                                      on_delete=models.SET_NULL)
     working_criteria = models.BooleanField(default=False)
+    no_experience = models.BooleanField(default=False)
 
 
 class ApplicantAttachementDetails(BaseModel):

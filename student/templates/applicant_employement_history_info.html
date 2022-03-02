@@ -176,10 +176,21 @@
 {#                            </div>#}
 {#                        </div>#}
 
+
+
                         {% if employement_history_obj %}
 
                              {% for emp_obj in employement_history_obj %}
+
+                                 <span>Tick here if you have no experience
+                                    <input  type="checkbox" {% if emp_obj.no_experience == True %}checked{% endif %} name="no_experience" id="no_experience"  style="margin-left:18px" >
+                                 </span>
+                    <br><br>
+
+
                                <div class="row item_experience" id="item_experience_{{ forloop.counter }}">
+
+
 
                                <span style="padding:inherit;margin-left: 60px;">{% trans 'Working Criteria' %}:  </span>
                         {% if emp_obj.working_criteria == False %}
@@ -317,6 +328,11 @@
                             </div>
                             {% endfor %}
                         {% else %}
+
+                            <span>Tick here if you have no experience
+                                    <input  type="checkbox" name="no_experience" id="no_experience"  style="margin-left:18px" >
+                                 </span>
+                            <br><br>
 
                             <div class="row item_experience" id="item_experience_1">
 

@@ -2208,7 +2208,12 @@ def save_update_applicant_employement_history_info(request):
                             working_criteria = False
                         else:
                             working_criteria = True
+                        if request.POST.get('no_experience') == 'on':
+                            no_experience = True
+                        else:
+                            no_experience = False
                         EmployementHistoryDetails.objects.create(
+                            no_experience=no_experience,
                             working_criteria=working_criteria,
                             employer_name=request.POST['employer_name_' + str(count)],
                             working_status=request.POST['working_status_' + str(count)],
