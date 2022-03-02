@@ -33,6 +33,22 @@
         window.onload = function () {
 
             $(document).ready(function () {
+
+                 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                    var target = $(e.target).attr("data-id")
+                    var priorities = target
+                     if (parseInt(priorities) == 1) {
+                        $(location).prop('href', "{% url 'student:applicant_academic_english_qualification' %}")
+
+                    }
+                    else{
+                         $(location).prop('href', "{% url 'student:applicant_credit_transfer' %}")
+                    }
+
+
+                });
+
+
                 var experience_count = 1;
                 {% if credit_transfer_count == 0 %}
                     var experience_count = 1;
@@ -95,14 +111,25 @@
         </div>
     {% endfor %}
 
-    <!-- BEGIN VALIDATION STATES-->
-    <div class="portlet light portlet-fit portlet-form ">
-{#        <div class="portlet-title">#}
-{#            <div class="caption">#}
-{#                <i class="icon-settings font-red"></i>#}
-{#                <span class="caption-subject font-red sbold uppercase">Achievements </span>#}
-{#            </div>#}
-{#        </div>#}
+    <br>
+    <div class="tabbable-custom nav-justified">
+                            <ul class="nav nav-tabs nav-justified">
+                                <li >
+                                    <a data-id="1" href="#tab_1_1_1" data-toggle="tab">
+                                        Qualification </a>
+                                </li>
+                                <li class="active">
+                                    <a data-id="2" href="#tab_1_1_2" data-toggle="tab">
+                                        Credit Transfer </a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content">
+                                <div class="tab-pane " id="tab_1_1_1">
+                                </div>
+                                <div class="tab-pane active" id="tab_1_1_2">
+                                    <div class="portlet light portlet-fit portlet-form ">
 
         <div class="portlet-body">
             <div class="form-body">
@@ -334,6 +361,13 @@
             </div>
         </div>
     </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+    <!-- BEGIN VALIDATION STATES-->
+
 {% endblock %}
 
 

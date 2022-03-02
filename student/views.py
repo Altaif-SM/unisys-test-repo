@@ -2903,7 +2903,7 @@ def save_credit_transfer(request):
                 redirect_flag = True
             if redirect_flag:
                 messages.success(request, "Record saved")
-                return redirect('/student/applicant_curriculum_experience_info/')
+                return redirect('/student/applicant_employement_history_info/')
         except Exception as e:
             messages.warning(request, "Form have some error" + str(e))
         messages.warning(request, "Please fill proper form")

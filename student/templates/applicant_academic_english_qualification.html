@@ -34,6 +34,20 @@
 
             $(document).ready(function () {
 
+                $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                    var target = $(e.target).attr("data-id")
+                    var priorities = target
+                   if (parseInt(priorities) == 1) {
+                        $(location).prop('href', "{% url 'student:applicant_academic_english_qualification' %}")
+
+                    }
+                    else{
+                         $(location).prop('href', "{% url 'student:applicant_credit_transfer' %}")
+                    }
+
+
+                });
+
                  $(document).on("change", ".select_data", function (e) {
                       var select_id = $(this).attr('id');
                       var res = select_id.charAt(6);
@@ -302,23 +316,31 @@ function showOptions(s) {
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
         </div>
     {% endfor %}
+    <br>
 
     <!-- BEGIN VALIDATION STATES-->
-    <div class="portlet light portlet-fit portlet-form ">
+    <div class="tabbable-custom nav-justified">
+                            <ul class="nav nav-tabs nav-justified">
+                                <li class="active">
+                                    <a data-id="1" href="#tab_1_1_1" data-toggle="tab">
+                                        Qualification </a>
+                                </li>
+                                <li>
+                                    <a data-id="2" href="#tab_1_1_2" data-toggle="tab">
+                                        Credit Transfer </a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab_1_1_1">
+                                    <div class="portlet light portlet-fit portlet-form ">
         <div class="portlet-title">
             <div class="caption">
 
                 <span class="caption-subject font-red sbold uppercase"> <i class="icon-settings font-red"></i>{% trans 'ACADEMIC QUALIFICATION DETAILS' %}</span>
                 <br>
                 <span style="font-family: 'Times New Roman';font-size: 16px;"><b>({% trans 'Please include top two highest academic qualification' %})</b></span>
-                {% comment %}<div class="" style="display:inline-block">
-                    <div class="">
-                        <a href="javascript:;" id="add" class="btn btn-icon-only green add_acedimic_row"
-                           style="">
-                            <i class="fa fa-plus "></i>
-                        </a>
-                    </div>
-                </div>{% endcomment %}
             </div>
         </div>
 
@@ -349,26 +371,15 @@ function showOptions(s) {
                                 <div class="row item" id="check_{{ forloop.counter }}">
                                     <div class="row">
 
-{#                                        <div class="">#}
-{#                                            <label class="col-md-1 control-label">Level :</label>#}
-{#                                            <div class="col-md-2">#}
-{#                                                <input type="text" title="Enter Level" id="level{{ forloop.counter }}"#}
-{#                                                       name="level{{ forloop.counter }}"#}
-{#                                                       value="{{ qualification_obj.level }}" class="form-control chk">#}
-{#                                            </div>#}
-{##}
-{##}
                                             <input type="text" hidden value="{{ qualification_obj.id }}"
                                                    id="academic_id_{{ forloop.counter }}"
                                                    name="academic_id_{{ forloop.counter }}">
-{#                                        </div>#}
                                     <div class="">
                                             <label class="col-md-1 control-label">{% trans 'Qualification' %}:</label>
                                             <div class="col-md-2">
 
                                                 <select id='degree{{ forloop.counter }}' title="Select Degree" name="degree{{ forloop.counter }}"
                                                         class="form-control select_data chk">
-{#                                                    {% if qualification_obj %}#}
                                                         <option style="display:none" selected="selected"
                                                                 value="{{ qualification_obj.degree }}">{{ qualification_obj.degree }}</option>
 
@@ -434,41 +445,6 @@ function showOptions(s) {
                                         </div>
 
 
-{#                                        <div class="">#}
-{#                                            <label class="col-md-1 control-label">Result Doc:</label>#}
-{#                                            <div class="col-md-2" id="item{{ forloop.counter }}">#}
-{#                                                {% if qualification_obj.level_result_document %}#}
-{#                                                    <label class="form-control"#}
-{#                                                           style="border-color: #b1ad9f;  width: 100%;text-align: left"><input#}
-{#                                                            style="width: 50%"#}
-{#                                                            type='button' class="file" value='Choose File:'><a#}
-{#                                                            href="#}
-{##}
-{#                                                                    {{ qualification_obj.applicant_id.report_path }}{{ qualification_obj.level_result_document }}"><input#}
-{#                                                            readonly#}
-{#                                                            class="file_value emp chk"#}
-{#                                                            style="border: none; width: 50%"#}
-{#                                                            name="level_result_document_text{{ forloop.counter }}"#}
-{#                                                            value="{{ qualification_obj.level_result_document }}"></a></label>#}
-{#                                                {% else %}#}
-{#                                                    <label class="form-control"#}
-{#                                                           style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input#}
-{#                                                            class="file" style="width: 50%"#}
-{#                                                            type='button' value='Choose File:'><a><input type="text"#}
-{#                                                                                                         readonly#}
-{#                                                                                                         name="level_result_document_text{{ forloop.counter }}"#}
-{#                                                                                                         class="file_value emp chk"#}
-{#                                                                                                         style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>#}
-{#                                                {% endif %}#}
-{##}
-{#                                                <input style="display: none" type="file" title="Select Result document"#}
-{#                                                       id="level_result_document{{ forloop.counter }}"#}
-{#                                                       name="level_result_document{{ forloop.counter }}"#}
-{#                                                       class="file_type">#}
-{#                                                <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"#}
-{#                                                      class="remove_doc fa fa-close"></span>#}
-{#                                            </div>#}
-{#                                        </div>#}
 
                                     <div class="">
                                             <label class="col-md-1 control-label">{% trans 'Year' %}:</label>
@@ -591,26 +567,6 @@ function showOptions(s) {
                                         </div>
                                     </div>
 
-{#                                    <div class="">#}
-{#                                        <label class="col-md-1 control-label">Result Doc:</label>#}
-{#                                        <div class="col-md-2" id="item1">#}
-{##}
-{#                                            <label class="form-control"#}
-{#                                                   style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input#}
-{#                                                    class="file" style="width: 50%"#}
-{#                                                    type='button' value='Choose File:'><a><input type="text"#}
-{#                                                                                                 readonly#}
-{#                                                                                                 name="level_result_document_text1"#}
-{#                                                                                                 class="file_value emp chk"#}
-{#                                                                                                 style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label>#}
-{##}
-{#                                            <input style="display: none" type="file" title="Select Result document"#}
-{#                                                   id="level_result_document1"#}
-{#                                                   name="level_result_document1" class="file_type">#}
-{#                                            <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"#}
-{#                                                  class="remove_doc fa fa-close"></span>#}
-{#                                        </div>#}
-{#                                    </div>#}
 
                                     <div class="">
                                         <label class="col-md-1 control-label">{% trans 'Year' %}:</label>
@@ -655,12 +611,6 @@ function showOptions(s) {
                             <br>
                         {% endif %}
 
-                        {% comment %}<div class="portlet-title">
-                            <div class="caption">
-                                <i class="icon-settings font-red"></i>
-                                <span class="caption-subject font-red sbold uppercase"> English Qualification</span>
-                            </div>
-                        </div>{% endcomment %}
                     <div class="portlet-title" style="margin-left:-15px;font-size: 16px;">
                             <div class="caption">
                                 <span class="caption-subject font-red sbold uppercase"> <i
@@ -964,49 +914,13 @@ function showOptions(s) {
             </div>
         </div>
     </div>
+                                </div>
+                                <div class="tab-pane" id="tab_1_1_2">
+
+                                </div>
+                            </div>
+                        </div>
+
 {% endblock %}
 
-{#<div class="row item" id="check_' + count + '"><div class="row"> <div class=""> <label class="col-md-1 control-label">Level :</label> <div class="col-md-2"> <input type="text" title="Enter Level" id="level' + count + '" name="level' + count + '" value="{{ qualification_obj.a_level }}" class="form-control chk"> </div> </div> <div class=""> <label class="col-md-1 control-label">Year:</label> <div class="col-md-2"> <select id="level_year' + count + '" title="Select Year" name="level_year' + count + '" class="form-control chk"> {% for rec in passing_year_recs %} <option value='{{ rec.year }}'>{{ rec.year }}</option> {% endfor %} </select> </div> </div> <div class=""> <label class="col-md-1 control-label"> Result:</label> <div class="col-md-2"> <input type="text" title="Enter result" id="level_result' + count + '" name="level_result' + count + '" value="" class="form-control chk"> </div> </div> </div> <br> <div class="row"> <div class=""> <label class="col-md-1 control-label"> Institution:</label> <div class="col-md-2"> <input type="text" title="Enter institution" id="a_level_institution" name="level_institution' + count + '" value="" class="form-control chk"> </div></div><div class=""><label class="col-md-1 control-label">Result Doc:</label> <div class="col-md-2" id="item' + count + '"> <label class="form-control" style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input class="file" style="width: 50%" type='button' value='Choose File:'><a><input type="text" readonly name="level_result_document_text' + count + '" class="file_value emp chk" style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label> <input style="display: none" type="file" title="Select Result document" id="level_result_document' + count + '" name="level_result_document' + count + '" class="file_type"><span style="float: right; color: darkred; cursor: pointer;margin-top: -25px" class="remove_doc fa fa-close"></span></div></div></div></div>#}
-{#<input hidden type="text" name="english_count" id="english_count">#}
-
-
-{#<div class="row english_item" id="english_check_' + count + '" style="margin-top: 50px"><div class=""> <label class="col-md-2 control-label">English Competency Test:</label> <div class="col-md-1"><input type="text" title="Enter English Competency Test" id="english_test_' + count + '" name="english_test_' + count + '" value="{{ english_obj.english_test_two }}" class="form-control"> <input hidden type="text" name="english_obj" id="english_obj"> </div> </div> <div class=""> <label class="col-md-1 control-label">Year:</label> <div class="col-md-1"> <select id="english_test_year_' + count + '" title="Select Year" name="english_test_year_' + count + '" class="form-control"> <option style="display:none" selected="selected" id="" value=""> Please Select </option>{% for rec in passing_year_recs %}<option value="{{ rec.year }}">{{ rec.year }}</option>{% endfor %} </select></div></div><div class=""><label class="col-md-1 control-label"> Result:</label><div class="col-md-1"><input type="text" title="Enter result" id="english_test_result_' + count + '" name="english_test_result_' + count + '" value="" class="form-control"></div></div> <div class=""> <label class="col-md-1 control-label">Result Doc:</label> <div class="col-md-2" id="item5"> <label class="form-control" style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input class="file" style="width: 50%" type="button" value="Choose File:"><a><input type="text" readonly name="english_test_result_document_text_' + count + '" class="file_value emp" style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label><input style="display: none" type="file" title="Select Result document" id="english_test_result_document_' + count + '" name="english_test_result_document_' + count + '" class="file_type"><span style="float: right; color: darkred; cursor: pointer;margin-top: -25px" class="remove_doc fa fa-close"></span></div></div><div class=""><div class="col-md-1"><a href="javascript:;" class="delete btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div>#}
-
-
-{% comment %}<div class="row english_item" id="english_check_' + count + '" style="margin-top: 50px">
-    <div class=""><label class="col-md-2 control-label">English Competency Test:</label>
-        <div class="col-md-1"><input type="text" title="Enter English Competency Test" id="english_test_' + count + '"
-                                     name="english_test_' + count + '" value="{{ english_obj.english_test_two }}"
-                                     class="form-control"> <input hidden type="text" name="english_obj" id="english_obj"></div>
-    </div>
-    <div class=""><label class="col-md-1 control-label">Year:</label>
-        <div class="col-md-1"><select id="english_test_year_' + count + '" title="Select Year"
-                                      name="english_test_year_' + count + '" class="form-control">
-            <option style="display:none" selected="selected" id="" value=""> Please Select</option>
-            {% for rec in passing_year_recs %}
-                <option value="{{ rec.year }}">{{ rec.year }}</option>{% endfor %} </select></div>
-    </div>
-    <div class=""><label class="col-md-1 control-label"> Result:</label>
-        <div class="col-md-1"><input type="text" title="Enter result" id="english_test_result_' + count + '"
-                                     name="english_test_result_' + count + '" value="" class="form-control"></div>
-    </div>
-    <div class=""><label class="col-md-1 control-label">Result Doc:</label>
-        <div class="col-md-2" id="item5"><label class="form-control"
-                                                style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
-                class="file" style="width: 50%" type="button" value="Choose File:"><a><input type="text" readonly
-                                                                                             name="english_test_result_document_text_' + count + '"
-                                                                                             class="file_value emp"
-                                                                                             style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label><input
-                style="display: none" type="file" title="Select Result document"
-                id="english_test_result_document_' + count + '" name="english_test_result_document_' + count + '"
-                class="file_type"><span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
-                                        class="remove_doc fa fa-close"></span></div>
-    </div>
-    <div class="">
-        <div class="col-md-1"><a href="javascript:;" class="delete btn btn-icon-only purple" style=""><i
-                class="fa fa-times"></i></a></div>
-    </div>
-</div>{% endcomment %}
-
-{#<div class=""><div class="col-md-1"><a href="javascript:;" class="delete btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div>#}
 
