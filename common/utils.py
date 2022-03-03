@@ -68,18 +68,17 @@ def get_application_specfic_year(self,year_name):
         return None
 
 
-def send_email_to_applicant(from_email, to_mail, subject, message, first_name):
-    # from_email = settings.EMAIL_HOST_USER
+def send_email_to_applicant(to_mail, subject, message, first_name,conditional_documents):
+    from_email = settings.EMAIL_HOST_USER
     to = [to_mail, from_email]
-
-    template = get_template('mail_template_approving_student_application.html')
     html_content = render_to_string('mail_template_approving_student_application.html',
-                                    {'first_name': first_name, 'message': message})
-
+                                    {'first_name': first_name, 'message': message,'conditional_documents':conditional_documents})
     try:
         send_mail(subject, message, from_email, to, fail_silently=True, html_message=html_content)
+        print("Email sent..............")
     except:
         messages.warning('Network Error Occur Please Try Later')
+        print("Email not sent..............")
     return to_mail
 
 def send_signup_email_to_applicant(from_email, to_mail, subject, message, first_name,user_id):

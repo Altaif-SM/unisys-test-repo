@@ -610,6 +610,7 @@ def change_application_status(request):
 
                 application_obj.save()
 
+
                 if conditional_documents:
                     ConditionalVerificationDocumentsDetails.objects.filter(application_id=application_obj).delete()
                     for document in conditional_documents:
@@ -617,6 +618,14 @@ def change_application_status(request):
                 ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
                                                              status='Conditional Offer Letter',
                                                              remark='Congratulations! We are pleased to inform you that the University ####### is making you a Conditional Offer.')
+
+                try:
+                    subject = 'Conditional Offer Letter'
+                    message = 'Congratulations! We are pleased to inform you that the University ####### is making you a Conditional Offer.'
+                    send_email_to_applicant(application_obj.email, subject, message,
+                                            application_obj.first_name,conditional_documents)
+                except:
+                    pass
 
                 messages.success(request, application_obj.first_name.title() + " application status changed.")
 
