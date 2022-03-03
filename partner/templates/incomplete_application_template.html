@@ -344,17 +344,17 @@
                                                                                                 <p><span
                                                                                                         style="color:#A9A9A9;">Hi {{ first_name }},</span>
                                                                                                     <br/>
+                                                                                                    <br/>
                                                                                                 <p style="color: #0c0c0c">{{ message }}</p>
-                                                                                            <br/>
-                                                                                                <p style="color: #0c0c0c">Program Name: {{ program_name|default_if_none:"" }}</p>
                                                                                                 <p></p>
                                                                                                 </p>
                                                                                                 <br/>
 
-                                                                                                <p style="color:#A9A9A9;">Required documents for Conditional Offer Letter:</p>
-                                                                                                {% for doc in conditional_documents %}
-                                                                                                    <p style="color: #0c0c0c">{{ forloop.counter }}. {{ doc|default_if_none:"" }}</p>
-                                                                                                {% endfor %}
+                                                                                                <p style="color: #0c0c0c">Program Name: {{ program_name|default_if_none:"" }}</p>
+
+                                                                                                 <br/>
+                                                                                                <p style="color:#A9A9A9;">Incomplete Application Description:</p>
+                                                                                                    <p style="color: #0c0c0c">{{ description|default_if_none:"" }}</p>
 
 
                                                                                             </div>

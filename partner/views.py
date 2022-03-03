@@ -596,6 +596,31 @@ def change_application_status(request):
                     application_obj.application_rejection = False
                     application_obj.save()
             if interview_type == 'First Interview':
+
+                try:
+                    subject = 'Conditional Offer Letter'
+                    program_name = ''
+                    if application_obj.choice_1 == False and application_obj.choice_2 == False and application_obj.choice_3 == False and application_obj.is_accepted == False:
+                        program_name = application_obj.program.program_name
+                    elif application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False and application_obj.is_accepted == False:
+                        program_name = application_obj.program_2.program_name
+                    else:
+                        program_name = application_obj.program_3.program_name
+                    if not request.user.is_super_admin():
+                        university_name = application_obj.university.university_name
+                        if application_obj.university.university_logo:
+                            logo_url = 'http://51.75.54.229:9092' + application_obj.university.university_logo.url
+                        else:
+                            logo_url = ''
+                    else:
+                        university_name = 'University Science & Technology'
+                        logo_url = 'http://51.75.54.229:9092/static/images/university_logo.png'
+                    message = 'Congratulations! We are pleased to inform you that the '+ university_name +' is offering a Conditional Offer Letter.'
+                    send_email_to_applicant(application_obj.email, subject, message,
+                                            application_obj.first_name,conditional_documents,logo_url,program_name)
+                except:
+                    pass
+
                 application_obj.incomplete = False
                 application_obj.first_interview_attend = False
                 application_obj.first_interview = True
@@ -619,17 +644,39 @@ def change_application_status(request):
                                                              status='Conditional Offer Letter',
                                                              remark='Congratulations! We are pleased to inform you that the University ####### is making you a Conditional Offer.')
 
-                try:
-                    subject = 'Conditional Offer Letter'
-                    message = 'Congratulations! We are pleased to inform you that the University ####### is making you a Conditional Offer.'
-                    send_email_to_applicant(application_obj.email, subject, message,
-                                            application_obj.first_name,conditional_documents)
-                except:
-                    pass
+
+
+
 
                 messages.success(request, application_obj.first_name.title() + " application status changed.")
 
             elif interview_type == 'First Interview attended':
+
+                try:
+                    subject = 'Full Offer Letter'
+                    program_name = ''
+                    if application_obj.choice_1 == False and application_obj.choice_2 == False and application_obj.choice_3 == False and application_obj.is_accepted == False:
+                        program_name = application_obj.program.program_name
+                    elif application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False and application_obj.is_accepted == False:
+                        program_name = application_obj.program_2.program_name
+                    else:
+                        program_name = application_obj.program_3.program_name
+                    if not request.user.is_super_admin():
+                        university_name = application_obj.university.university_name
+                        if application_obj.university.university_logo:
+                            logo_url = 'http://51.75.54.229:9092' + application_obj.university.university_logo.url
+                        else:
+                            logo_url = ''
+                    else:
+                        university_name = 'University Science & Technology'
+                        logo_url = 'http://51.75.54.229:9092/static/images/university_logo.png'
+                    message = 'Congratulations! We are pleased to inform you that the '+ university_name +' is offering a Full Offer Letter.'
+                    send_email_to_full_offer_letter(application_obj.email, subject, message,
+                                            application_obj.first_name,logo_url,program_name)
+                except:
+                    pass
+
+
                 application_obj.first_interview = False
                 application_obj.incomplete = False
                 application_obj.first_interview_attend = True
@@ -643,10 +690,16 @@ def change_application_status(request):
                     application_obj.choice_3 = True
 
                 application_obj.save()
+
+
+
+
                 application_notification(application_obj.id, 'You have got Full Offer Letter')
                 ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
                                                              status='Full Offer Letter',
                                                              remark='Congratulations! We are pleased to inform you that the University ####### is making you a Full Offer Letter.')
+
+
 
                 messages.success(request, application_obj.first_name.title() + " application status changed.")
             elif interview_type == 'Incomplete':
@@ -665,10 +718,35 @@ def change_application_status(request):
 
 
                 application_obj.save()
+
+
                 application_notification(application_obj.id, 'You have Incomplete Application')
                 ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
                                                          status='Incomplete Application',
                                                          remark=description)
+
+                try:
+                    subject = 'Incomplete Application'
+                    program_name = ''
+                    if application_obj.choice_1 == False and application_obj.choice_2 == False and application_obj.choice_3 == False and application_obj.is_accepted == False:
+                        program_name = application_obj.program.program_name
+                    elif application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False and application_obj.is_accepted == False:
+                        program_name = application_obj.program_2.program_name
+                    else:
+                        program_name = application_obj.program_3.program_name
+                    if not request.user.is_super_admin():
+                        if application_obj.university.university_logo:
+                            logo_url = 'http://51.75.54.229:9092' + application_obj.university.university_logo.url
+                        else:
+                            logo_url = ''
+                    else:
+                        logo_url = 'http://51.75.54.229:9092/static/images/university_logo.png'
+                    message = 'You have Incomplete Application.'
+                    send_email_to_incomplete_application(application_obj.email, subject, message,
+                                            application_obj.first_name,description,logo_url,program_name)
+                except:
+                    pass
+
 
                 messages.success(request, application_obj.first_name.title() + " application status changed.")
             elif interview_type == 'First Interview approval':
@@ -970,25 +1048,52 @@ def change_application_status(request):
                         continue
             elif interview_type == 'Reject':
 
+                try:
+                    subject = 'Application Rejected'
+                    program_name = ''
+                    if application_obj.choice_1 == False and application_obj.choice_2 == False and application_obj.choice_3 == False and application_obj.is_accepted == False:
+                        program_name = application_obj.program.program_name
+                    elif application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False and application_obj.is_accepted == False:
+                        program_name = application_obj.program_2.program_name
+                    else:
+                        program_name = application_obj.program_3.program_name
+                    if not request.user.is_super_admin():
+                        if application_obj.university.university_logo:
+                            logo_url = 'http://51.75.54.229:9092' + application_obj.university.university_logo.url
+                        else:
+                            logo_url = ''
+                    else:
+                        logo_url = 'http://51.75.54.229:9092/static/images/university_logo.png'
+                    message = 'Your application has rejected.'
+                    send_email_to_rejected_application(application_obj.email, subject, message,
+                                            application_obj.first_name,logo_url,program_name)
+                except:
+                    pass
+
                 if priorities == '1':
                     application_obj.choice_1 = True
                     application_obj.first_interview = False
                     application_obj.first_interview_attend = False
                     application_obj.incomplete = False
+                    application_obj.is_accepted = False
 
                 if priorities == '2':
                     application_obj.choice_2 = True
                     application_obj.first_interview = False
                     application_obj.first_interview_attend = False
                     application_obj.incomplete = False
+                    application_obj.is_accepted = False
 
                 if priorities == '3':
                     application_obj.choice_3 = True
                     application_obj.first_interview = False
                     application_obj.first_interview_attend = False
                     application_obj.incomplete = False
+                    application_obj.is_accepted = False
 
                 application_obj.save()
+
+
 
                 if not application_obj.application_rejection:
 

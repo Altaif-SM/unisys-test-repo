@@ -68,11 +68,51 @@ def get_application_specfic_year(self,year_name):
         return None
 
 
-def send_email_to_applicant(to_mail, subject, message, first_name,conditional_documents):
+def send_email_to_applicant(to_mail, subject, message, first_name,conditional_documents,logo_url,program_name):
     from_email = settings.EMAIL_HOST_USER
     to = [to_mail, from_email]
     html_content = render_to_string('mail_template_approving_student_application.html',
-                                    {'first_name': first_name, 'message': message,'conditional_documents':conditional_documents})
+                                    {'first_name': first_name, 'message': message,'conditional_documents':conditional_documents,'logo_url':logo_url,'program_name':program_name})
+    try:
+        send_mail(subject, message, from_email, to, fail_silently=True, html_message=html_content)
+        print("Email sent..............")
+    except:
+        messages.warning('Network Error Occur Please Try Later')
+        print("Email not sent..............")
+    return to_mail
+
+def send_email_to_full_offer_letter(to_mail, subject, message, first_name,logo_url,program_name):
+    from_email = settings.EMAIL_HOST_USER
+    to = [to_mail, from_email]
+    html_content = render_to_string('full_offer_letter_email_template.html',
+                                    {'first_name': first_name, 'message': message,'logo_url':logo_url,'program_name':program_name})
+    try:
+        send_mail(subject, message, from_email, to, fail_silently=True, html_message=html_content)
+        print("Email sent..............")
+    except:
+        messages.warning('Network Error Occur Please Try Later')
+        print("Email not sent..............")
+    return to_mail
+
+def send_email_to_incomplete_application(to_mail, subject, message, first_name,description,logo_url,program_name):
+    from_email = settings.EMAIL_HOST_USER
+    to = [to_mail, from_email]
+    html_content = render_to_string('incomplete_application_template.html',
+                                    {'first_name': first_name, 'message': message,'description':description,'logo_url':logo_url,'program_name':program_name})
+    try:
+        send_mail(subject, message, from_email, to, fail_silently=True, html_message=html_content)
+        print("Email sent..............")
+    except:
+        messages.warning('Network Error Occur Please Try Later')
+        print("Email not sent..............")
+    return to_mail
+
+
+def send_email_to_rejected_application(to_mail, subject, message, first_name,logo_url,program_name):
+    from_email = settings.EMAIL_HOST_USER
+    to = [to_mail, from_email]
+    html_content = render_to_string('rejected_application_template.html',
+                                    {'first_name': first_name, 'message': message,'logo_url':logo_url,'program_name':program_name})
     try:
         send_mail(subject, message, from_email, to, fail_silently=True, html_message=html_content)
         print("Email sent..............")
