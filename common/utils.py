@@ -75,10 +75,8 @@ def send_email_to_applicant(to_mail, subject, message, first_name,conditional_do
                                     {'first_name': first_name, 'message': message,'conditional_documents':conditional_documents,'logo_url':logo_url,'program_name':program_name})
     try:
         send_mail(subject, message, from_email, to, fail_silently=True, html_message=html_content)
-        print("Email sent..............")
     except:
         messages.warning('Network Error Occur Please Try Later')
-        print("Email not sent..............")
     return to_mail
 
 def send_email_to_full_offer_letter(to_mail, subject, message, first_name,logo_url,program_name):
