@@ -646,13 +646,13 @@ def change_application_status(request):
                 application_obj.first_interview_attend = False
                 application_obj.incomplete = True
 
-                application_obj.is_accepted = True
-                if priorities == '1':
-                    application_obj.choice_1 = True
-                if priorities == '2':
-                    application_obj.choice_2 = True
-                if priorities == '3':
-                    application_obj.choice_3 = True
+                # application_obj.is_accepted = True
+                # if priorities == '1':
+                #     application_obj.choice_1 = True
+                # if priorities == '2':
+                #     application_obj.choice_2 = True
+                # if priorities == '3':
+                #     application_obj.choice_3 = True
 
 
                 application_obj.save()

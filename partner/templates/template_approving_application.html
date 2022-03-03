@@ -410,7 +410,7 @@
                            id="First Interview">{% trans 'Conditional Offer Letter' %}</a></li>
                     <li><a class="status_change"
                            id="First Interview attended"> {% trans 'Full Offer Letter' %}</a></li>
-                    {#                    <li><a class="status_change" id="Incomplete"> {% trans 'Incomplete' %}</a></li>#}
+                                        <li><a class="status_change" id="Incomplete"> {% trans 'Incomplete' %}</a></li>
                     <li><a class="status_change" id="Reject">{% trans 'Reject' %}</a></li>
                 </ul>
             </div>
@@ -520,7 +520,7 @@
                                                     {% elif  rec.first_interview == False and rec.first_interview_attend == True and rec.incomplete == False %}
                                                         <span style="color: green">Full</span>
                                                     {% elif  rec.first_interview == False and rec.first_interview_attend == False and rec.incomplete == True %}
-                                                        <span style="color: darkred">Incomplete</span>
+                                                        <span style="color: #b1b118">Incomplete</span>
                                                     {% elif rec.first_interview == False and rec.first_interview_attend == False and rec.incomplete == False and rec.application_rejection == True %}
                                                         <span style="color:darkred">Requested</span>
                                                     {% else %}
@@ -608,7 +608,7 @@
                                                     {% elif  rec.first_interview == False and rec.first_interview_attend == True and rec.incomplete == False %}
                                                         <span style="color: green">Full</span>
                                                     {% elif  rec.first_interview == False and rec.first_interview_attend == False and rec.incomplete == True %}
-                                                        <span style="color: darkred">Incomplete</span>
+                                                        <span style="color: #b1b118">Incomplete</span>
                                                     {% elif rec.first_interview == False and rec.first_interview_attend == False and rec.incomplete == False and rec.application_rejection == True %}
                                                         <span style="color:darkred">Requested</span>
                                                     {% else %}
@@ -697,7 +697,7 @@
                                                     {% elif  rec.first_interview == False and rec.first_interview_attend == True and rec.incomplete == False %}
                                                         <span style="color: green">Full</span>
                                                     {% elif  rec.first_interview == False and rec.first_interview_attend == False and rec.incomplete == True %}
-                                                        <span style="color: darkred">Incomplete</span>
+                                                        <span style="color: #b1b118">Incomplete</span>
                                                     {% elif rec.first_interview == False and rec.first_interview_attend == False and rec.incomplete == False and rec.application_rejection == True %}
                                                         <span style="color:darkred">Requested</span>
                                                     {% else %}
