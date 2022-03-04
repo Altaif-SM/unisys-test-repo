@@ -10,6 +10,7 @@ urlpatterns = [
     path('checkout/', views.checkout, name='checkout'),
     path('payment_complete/', views.payment_complete, name='payment_complete'),
     path('order_complete/<str:transaction_id>/', views.order_complete, name='order_complete'),
+    path('stripe_checkout_success/<str:session_id>/', views.stripe_checkout_success, name='stripe_checkout_success'),
 
 
 

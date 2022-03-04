@@ -17,11 +17,15 @@ def checkout(request):
         application_obj = request.user.get_application
         if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
             application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
-        try:
-            payement_obj = PaymentDetails.objects.filter()[0]
-        except:
-            payement_obj = None
-        return render(request, 'checkout.html', {'application_obj': application_obj, 'payement_obj': payement_obj})
+        payement_obj = None
+        if PaymentDetails.objects.filter(university_id = application_obj.university.id).exists():
+            payement_obj = PaymentDetails.objects.get(university_id = application_obj.university.id)
+        if payement_obj == None:
+            return render(request, 'no_university_fee.html',{'application_obj':application_obj})
+        order_obj = None
+        if ApplicationFeeDetails.objects.filter(application_id=request.user.get_application.id).exists():
+            order_obj = ApplicationFeeDetails.objects.get(application_id_id=request.user.get_application.id)
+        return render(request, 'checkout.html', {'application_obj': application_obj, 'payement_obj': payement_obj,'order_obj':order_obj})
     except Exception as e:
         messages.warning(request, "Please Fill The Application Form First ... ")
         return redirect("/")
@@ -87,10 +91,10 @@ def charge(request):  # new
 class CreateCheckoutSessionView(View):
     def post(self, request, *args, **kwargs):
         YOUR_DOMAIN = settings.SERVER_HOST_NAME
-        try:
-            payement_obj = PaymentDetails.objects.filter()[0]
-        except:
-            payement_obj = None
+        application_obj = request.user.get_application
+        payement_obj = 1000
+        if PaymentDetails.objects.filter(university_id=application_obj.university.id).exists():
+            payement_obj = PaymentDetails.objects.get(university_id=application_obj.university.id)
         try:
             checkout_session = stripe.checkout.Session.create(
                 line_items=[
@@ -108,7 +112,7 @@ class CreateCheckoutSessionView(View):
                 ],
                 payment_method_types=['card'],
                 mode='payment',
-                success_url=YOUR_DOMAIN + 'payments/checkout/',
+                success_url=YOUR_DOMAIN + 'payments/stripe_checkout_success/session_id={CHECKOUT_SESSION_ID}',
                 cancel_url=YOUR_DOMAIN + 'payments/checkout/',
             )
             return JsonResponse({'id': checkout_session.id})
@@ -132,3 +136,6 @@ class SuccessView(TemplateView):
 class CancelView(TemplateView):
     template_name = 'cancel.html'
 
+def stripe_checkout_success(request, session_id):
+    ApplicationFeeDetails.objects.create(application_id=request.user.get_application)
+    return redirect('/student/applicant_declaration/')
