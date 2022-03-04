@@ -444,7 +444,7 @@
                                         <th>{% trans 'University' %}</th>
                                         <th>{% trans 'University Type' %}</th>
                                         {#                                        <th>{% trans 'Faculty' %}</th>#}
-                                        {#                                        <th>{% trans 'Program' %}</th>#}
+                                                                                <th>{% trans 'Program' %}</th>
                                         <th>{% trans 'Faculty Status' %}</th>
                                         <th>{% trans 'Program Status' %}</th>
                                         <th>{% trans 'Offer Status' %}</th>
@@ -481,6 +481,26 @@
                                             {% else %}
                                                 <td>Main</td>
                                             {% endif %}
+
+                                        {% if rec.choice_1 == True and rec.choice_2 == False and rec.choice_3 == False %}
+                                                <td>
+                                                    {{ rec.program.program_name|default_if_none:"" }}
+                                                </td>
+                                            {% elif  rec.choice_1 == True and rec.choice_2 == True and rec.choice_3 == False %}
+                                                <td>
+                                                    {{ rec.program_2.program_name|default_if_none:"" }}
+                                                </td>
+                                            {% elif  rec.choice_1 == True and rec.choice_2 == True and rec.choice_3 == True %}
+                                                <td>
+                                                    {{ rec.program_3.program_name|default_if_none:"" }}
+                                                </td>
+                                            {% else %}
+                                                 <td>
+                                                    {{ rec.program.program_name|default_if_none:"" }}
+                                                </td>
+                                            {% endif %}
+
+
 
                                             <td>
                                                 <span style="color:{% if rec.faculty_status == 'Pending' %}peru{% elif rec.faculty_status == 'Approved' %}green{% else %}red{% endif %}"><b>{{ rec.faculty_status|default_if_none:"" }}</b></span>
