@@ -83,6 +83,7 @@ def charge(request):  # new
         return render(request, 'charge.html')
 
 
+
 class CreateCheckoutSessionView(View):
     def post(self, request, *args, **kwargs):
         YOUR_DOMAIN = settings.SERVER_HOST_NAME
