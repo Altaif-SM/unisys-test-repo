@@ -18,7 +18,7 @@ def checkout(request):
         if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
             application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
         try:
-            payement_obj = PaymentDetails.objects.get()
+            payement_obj = PaymentDetails.objects.filter()[0]
         except:
             payement_obj = None
         return render(request, 'checkout.html', {'application_obj': application_obj, 'payement_obj': payement_obj})
@@ -87,7 +87,7 @@ class CreateCheckoutSessionView(View):
     def post(self, request, *args, **kwargs):
         YOUR_DOMAIN = settings.SERVER_HOST_NAME
         try:
-            payement_obj = PaymentDetails.objects.get()
+            payement_obj = PaymentDetails.objects.filter()[0]
         except:
             payement_obj = None
         try:
