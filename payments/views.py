@@ -12,7 +12,6 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 # Create your views here.
 
-
 def checkout(request):
     try:
         application_obj = request.user.get_application
