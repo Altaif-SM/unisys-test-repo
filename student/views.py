@@ -1442,7 +1442,7 @@ def submit_application(request):
                     if attachment_obj.research_proposal:
                         document_count = document_count + 1
             else:
-                attachement_count = DocumentDetails.objects.filter(doc_required = 'Yes').exclude(document_name='Research').count()
+                attachement_count = DocumentDetails.objects.filter(doc_required = 'Yes').exclude(document_name='Research Proposal').count()
 
             if not attachement_count == document_count:
                 messages.warning(request, "Please upload required Attachement section before submitting the application.")
