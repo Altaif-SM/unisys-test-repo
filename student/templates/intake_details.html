@@ -712,6 +712,87 @@
                 });
             }
 
+             $(document).on("change", "#department_2", function (e) {
+                    var department = $(this).val();
+                    var study_mode = $('#study_mode_2').val();
+                    var university = $('#university').val();
+                    var study_level = $('#study_level_2').val();
+                    var faculty = $('#faculty_2').val();
+
+                    var url = '/masters/get_programs_from_filter/';
+                    get_programs_from_filter_dep_2(url, study_mode, university, study_level, faculty, department)
+                })
+
+            function get_programs_from_filter_dep_2(url, study_mode, university, study_level, faculty, department) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        study_mode: study_mode,
+                        university: university,
+                        study_level: study_level,
+                        faculty: faculty,
+                        department: department,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data) {
+
+                        $('#program_2').empty();
+                        $('#program_2').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#program_2').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['program'] + '</option>')
+                        }
+                    },
+                    error: function (xhr, msg, err) {
+                        alert(xhr.responseJSON.error);
+                    }
+                });
+            }
+
+            $(document).on("change", "#department_3", function (e) {
+                    var department = $(this).val();
+                    var study_mode = $('#study_mode_3').val();
+                    var university = $('#university').val();
+                    var study_level = $('#study_level_3').val();
+                    var faculty = $('#faculty_3').val();
+
+                    var url = '/masters/get_programs_from_filter/';
+                    get_programs_from_filter_dep_3(url, study_mode, university, study_level, faculty, department)
+                })
+
+            function get_programs_from_filter_dep_3(url, study_mode, university, study_level, faculty, department) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        study_mode: study_mode,
+                        university: university,
+                        study_level: study_level,
+                        faculty: faculty,
+                        department: department,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data) {
+
+                        $('#program_3').empty();
+                        $('#program_3').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#program_3').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['program'] + '</option>')
+                        }
+                    },
+                    error: function (xhr, msg, err) {
+                        alert(xhr.responseJSON.error);
+                    }
+                });
+            }
+
+
                 $(document).on("change", "#faculty", function (e) {
                     var faculty_id = $(this).val();
                     var study_mode = $('#study_mode').val();
