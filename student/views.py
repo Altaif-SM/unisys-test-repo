@@ -115,16 +115,28 @@ def save_update_applicant_personal_info(request):
 
                     application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
 
-                    AddressDetails.objects.filter(id=application_obj.address.id).update(
-                        country_id=request.POST['country'],
-                        mobile=request.POST['mobile'],
-                        whats_app=request.POST['whats_app'],
-                        country_code=request.POST['country_code'],
-                        district=request.POST['district'],
-                        post_code=request.POST['post_code'],
-                        residential_address=request.POST['permanent_residential_address'],
-                        street=request.POST['permanent_street'])
 
+                    if application_obj.address:
+                        AddressDetails.objects.filter(id=application_obj.address.id).update(
+                            country_id=request.POST['country'],
+                            mobile=request.POST['mobile'],
+                            whats_app=request.POST['whats_app'],
+                            country_code=request.POST['country_code'],
+                            district=request.POST['district'],
+                            post_code=request.POST['post_code'],
+                            residential_address=request.POST['permanent_residential_address'],
+                            street=request.POST['permanent_street'])
+                    else:
+                        address_obj = AddressDetails.objects.create(country_id=request.POST['country'],
+                                                                    mobile=request.POST['mobile'],
+                                                                    whats_app=request.POST['whats_app'],
+                                                                    country_code=request.POST['country_code'],
+                                                                    district=request.POST['district'],
+                                                                    post_code=request.POST['post_code'],
+                                                                    residential_address=request.POST[
+                                                                        'permanent_residential_address'],
+                                                                    street=request.POST['permanent_street'])
+                        application_obj.address = address_obj
                     application_obj.save()
 
                     redirect_flag = True
@@ -139,6 +151,9 @@ def save_update_applicant_personal_info(request):
                                                                             email=request.POST['email'],
                                                                             student=student,
                                                                             year=current_year)
+                        application_id = get_application_id(application_obj)
+                        application_obj.application_id = application_id
+                        application_obj.save()
 
                         address_obj = AddressDetails.objects.create(country_id=request.POST['country'],
                                                                     mobile=request.POST['mobile'],
@@ -149,8 +164,8 @@ def save_update_applicant_personal_info(request):
                                                                     residential_address=request.POST['permanent_residential_address'],
                                                                     street=request.POST['permanent_street'])
 
-                        application_id = get_application_id(application_obj)
-                        application_obj.application_id = application_id
+
+
                         application_obj.progress_counter = 20
                         application_obj.address = address_obj
                         application_obj.save()
