@@ -744,3 +744,16 @@ class PaymentDetails(BaseModel):
     status = models.BooleanField(default=True)
     class Meta:
         ordering = ('-id',)
+
+
+class ApplicationFeeDetails(BaseModel):
+    transaction_id = models.CharField(max_length=255, blank=True, null=True)
+    status = models.CharField(max_length=255, blank=True, null=True)
+    currency_code = models.CharField(max_length=255, blank=True, null=True)
+    amount = models.CharField(max_length=255, blank=True, null=True)
+    application_id = models.ForeignKey(ApplicationDetails, null=True, related_name='application_app_id',
+                                       on_delete=models.SET_NULL)
+    university = models.ForeignKey(UniversityDetails, null=True, related_name='application_fee_rel',
+                                   on_delete=models.SET_NULL)
+    class Meta:
+        ordering = ('-id',)
