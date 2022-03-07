@@ -524,7 +524,7 @@ def user_signup(request):
 
                     if request.POST['role'] == "Student":
                         # student_obj = StudentDetails.objects.create(user=user, address=address)
-                        user.is_active = True
+                        user.is_active = False
                         user.save()
                         student_obj = StudentDetails.objects.create(user=user)
 
@@ -534,14 +534,10 @@ def user_signup(request):
                         #     send_email_with_template(student_obj, context, email_rec.subject, email_rec.email_body,
                         #                              request, True)
                         # except:
-
-                        # subject = 'Sign up Completed'
-                        # message = 'Your Sign up completed in NAMA. Please click on the given button to activate your account.'
-                        # send_signup_email_to_applicant(student_obj.user.email, student_obj.user.email, subject,
-                        #                                message,
-                        #                                student_obj.user.first_name, user.id)
-
-                        # messages.info(request,"The activation link is sent to your email id ... ")
+                        subject = 'Account Activation - Online Admission System'
+                        message = 'Thank you for registering with us. In order to activate your account please click button below.'
+                        send_signup_email_to_applicant(student_obj.user.email, student_obj.user.email, subject, message,student_obj.user.first_name, user.id)
+                        messages.info(request,"The activation link is sent to your email id. ")
 
                     if request.POST['role'] == "Partner":
                         PartnerDetails.objects.create(user=user, address=address)
@@ -586,8 +582,20 @@ def user_signin(request):
         form = loginForm(request.session.get('form_data'))
 
     if form.is_valid():
-        user = form.login(request)
+        if User.objects.filter(username = request.POST['username']).exists():
+            user_obj = User.objects.get(username = request.POST['username'])
+            student_obj = StudentDetails.objects.get(user=user_obj)
+            success = user_obj.check_password(request.POST['password'])
+            if success:
+                if not user_obj.is_active:
+                    subject = 'Account Activation - Online Admission System'
+                    message = 'Thank you for registering with us. In order to activate your account please click button below.'
+                    send_signup_email_to_applicant(student_obj.user.email, student_obj.user.email, subject, message,
+                                                   student_obj.user.first_name, user_obj.id)
+                    messages.info(request, "The activation link is sent to your email id. ")
+                    return redirect('/')
 
+        user = form.login(request)
         if user:
             login(request, user)
             dashboard_path = user.get_dashboard_path()
@@ -699,9 +707,7 @@ def template_manage_user(request):
 def account_activate(request, user_id):
     try:
         user_rec = User.objects.get(id=user_id)
-
         if not user_rec.is_active:
-
             User.objects.filter(id=user_id).update(is_active=True)
             messages.success(request, "Account activated. You can login now.")
         else:

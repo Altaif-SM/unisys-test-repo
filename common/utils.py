@@ -120,13 +120,12 @@ def send_email_to_rejected_application(to_mail, subject, message, first_name,log
     return to_mail
 
 def send_signup_email_to_applicant(from_email, to_mail, subject, message, first_name,user_id):
-    # from_email = settings.EMAIL_HOST_USER
+    from_email = settings.EMAIL_HOST_USER
     to = [to_mail, from_email]
     host_name = settings.SERVER_HOST_NAME+'accounts/account_activate/'+str(user_id)
-
-    # template = get_template('student_signup_mail_template.html')
-    html_content = render_to_string('student_signup_mail_template.html',
-                                    {'first_name': first_name, 'message': message,'user_id':user_id,'host_name':host_name})
+    #template = get_template('student_signup_mail_template.html')
+    logo_url = 'http://51.75.54.229:9092/static/images/university_logo.png'
+    html_content = render_to_string('activate_email_template.html',{'first_name': first_name, 'message': message,'user_id':user_id,'host_name':host_name,'logo_url':logo_url})
 
     try:
         send_mail(subject, message, from_email, to, fail_silently=True, html_message=html_content)
