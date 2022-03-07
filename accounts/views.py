@@ -582,19 +582,21 @@ def user_signin(request):
         form = loginForm(request.session.get('form_data'))
 
     if form.is_valid():
-        if User.objects.filter(username = request.POST['username']).exists():
-            user_obj = User.objects.get(username = request.POST['username'])
-            student_obj = StudentDetails.objects.get(user=user_obj)
-            success = user_obj.check_password(request.POST['password'])
-            if success:
-                if not user_obj.is_active:
-                    subject = 'Account Activation - Online Admission System'
-                    message = 'Thank you for registering with us. In order to activate your account please click button below.'
-                    send_signup_email_to_applicant(student_obj.user.email, student_obj.user.email, subject, message,
-                                                   student_obj.user.first_name, user_obj.id)
-                    messages.info(request, "The activation link is sent to your email id. ")
-                    return redirect('/')
-
+        try:
+            if User.objects.filter(username = request.POST['username']).exists():
+                user_obj = User.objects.get(username = request.POST['username'])
+                student_obj = StudentDetails.objects.get(user=user_obj)
+                success = user_obj.check_password(request.POST['password'])
+                if success:
+                    if not user_obj.is_active:
+                        subject = 'Account Activation - Online Admission System'
+                        message = 'Thank you for registering with us. In order to activate your account please click button below.'
+                        send_signup_email_to_applicant(student_obj.user.email, student_obj.user.email, subject, message,
+                                                       student_obj.user.first_name, user_obj.id)
+                        messages.info(request, "The activation link is sent to your email id. ")
+                        return redirect('/')
+        except:
+            pass
         user = form.login(request)
         if user:
             login(request, user)
