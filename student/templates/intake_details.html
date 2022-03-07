@@ -53,6 +53,14 @@
 
             $(document).ready(function () {
 
+                 {% if user.get_application %}
+                    {% if user.get_application.is_submitted %}
+                        $('input').prop('disabled', 'true');
+                        $('select').prop('disabled', 'true');
+                        $('label').prop('readonly', 'true');
+                    {% endif %}
+                {% endif %}
+
 
 
                 $(document).on("change", "#country", function (e) {
@@ -1987,13 +1995,21 @@
                                 </button>
 
                                 {#                            {% if application_obj.application_id %}#}
-                                <button type="submit" class="btn green" id="save">{% trans 'Save/Next' %}</button>
+{#                                <button type="submit" class="btn green" id="save">{% trans 'Save/Next' %}</button>#}
                                 {#                            {% endif %}#}
                                 {% comment %}
                                     <button type="button" class="btn blue" id="next"
                                             onclick="window.location='{% url "student:applicant_academic_english_qualification" %}'">
                                         Next
                                     </button>{% endcomment %}
+
+                                {% if application_obj %}
+                                    {% if not application_obj.is_submitted %}
+                                       <button type="submit" class="btn green" id="save">{% trans 'Save/Next' %}</button>
+                                    {% else %}
+                                        <button type="button" onclick="window.location='{% url "student:applicant_academic_english_qualification" %}'" class="btn green" id="save">{% trans 'Next' %}</button>
+                                    {% endif %}
+                                {% endif %}
                             </div>
                         </div>
 

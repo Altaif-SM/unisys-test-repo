@@ -34,6 +34,15 @@
 
             $(document).ready(function () {
 
+                 {% if user.get_application %}
+                    {% if user.get_application.is_submitted %}
+                        $('input').prop('disabled', 'true');
+                        $('select').prop('disabled', 'true');
+                        $('label').prop('readonly', 'true');
+                        $(".add_experience_row").removeClass("add_experience_row");
+                    {% endif %}
+                {% endif %}
+
                   {% if employement_history_count == 0 %}
                     var curriculum_count = 1;
                 {% else %}
@@ -440,16 +449,16 @@
                                     {% trans 'Back' %}
                                 </button>
 
-                                {% if application_obj %}
-{#                                    {% if not application_obj.is_submitted %}#}
+
+                            {% if application_obj %}
+                                    {% if not application_obj.is_submitted %}
                                         <button type="button" class="btn green" id="save_form" style="">{% trans 'Save/Next' %}
                                         </button>
-{#                                    {% endif %}#}
+                                    {% else %}
+                                        <button type="button" onclick="window.location='{% url "student:applicant_additional_information" %}'" class="btn green" id="save">{% trans 'Next' %}</button>
+                                    {% endif %}
                                 {% endif %}
 
-                                {% comment %}{% if application_obj %}
-                                    <button type="submit" class="btn green" id="save" style="">Save/Next</button>
-                                {% endif %}{% endcomment %}
                             </div>
                         </div>
                     </div>

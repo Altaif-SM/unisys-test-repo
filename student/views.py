@@ -823,6 +823,7 @@ def applicant_curriculum_experience_info(request):
     experience_obj = ''
     application_obj = ''
 
+
     passing_year_recs = PassingYear.objects.all()
     country_recs = CountryDetails.objects.all()
     try:
@@ -2192,6 +2193,12 @@ def get_courses_from_degrees(request):
 
 
 def applicant_employement_history_info(request):
+    try:
+        application_obj = request.user.get_application
+    except Exception as e :
+        messages.warning(request, "Please fill the personal details first.")
+        return redirect('/student/applicant_personal_info/')
+
     country_recs = CountryDetails.objects.all()
     employement_history_obj = ''
     employement_history_count = 0

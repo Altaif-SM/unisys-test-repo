@@ -34,6 +34,15 @@
     <script>
         window.onload = function () {
             $(document).ready(function () {
+
+                  {% if user.get_application %}
+                    {% if user.get_application.is_submitted %}
+                        $('input').prop('disabled', 'true');
+                        $('select').prop('disabled', 'true');
+                        $('label').prop('readonly', 'true');
+                    {% endif %}
+                {% endif %}
+
                 {% comment %}$(document).on("change", ".doc", function (e) {
                     var files = !!this.files ? this.files : [];
                     if (!files.length || !window.FileReader) return;
@@ -740,16 +749,19 @@
                         <div class="row">
                             <div class="col-md-offset-5 col-md-7">
                                 <button type="button" class="btn blue" id="save" style="margin-left: 70%"
-                                        onclick="window.location='{% url "student:applicant_additional_information" %}'">
+                                        onclick="window.location='{% url "payments:checkout" %}'">
                                     {% trans 'Back' %}
                                 </button>
 
-                                {% if user.get_application %}
-                                    {#                                    {% if not user.get_application.is_submitted %}#}
-                                    <button type="submit" class="btn green" id="save" style="">{% trans 'Save/Next' %}
+
+                            {% if application_obj %}
+                                    {% if not application_obj.is_submitted %}
+                                         <button type="submit" class="btn green" id="save" style="">{% trans 'Save/Next' %}
 
                                     </button>
-                                    {#                                    {% endif %}#}
+                                    {% else %}
+                                        <button type="button" onclick="window.location='{% url "student:applicant_declaration" %}'" class="btn green" id="save">{% trans 'Next' %}</button>
+                                    {% endif %}
                                 {% endif %}
 
                             </div>

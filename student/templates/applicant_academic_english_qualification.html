@@ -34,6 +34,18 @@
 
             $(document).ready(function () {
 
+                 {% if user.get_application %}
+                    {% if user.get_application.is_submitted %}
+                        $('input').prop('disabled', 'true');
+                        $('select').prop('disabled', 'true');
+                        $('label').prop('readonly', 'true');
+                        $(".add_acedimic_row").removeClass("add_acedimic_row");
+                        $(".add_arab_row").removeClass("add_arab_row");
+                        $(".add_english_row").removeClass("add_english_row");
+                    {% endif %}
+                {% endif %}
+
+
                 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
                     var target = $(e.target).attr("data-id")
                     var priorities = target
@@ -909,16 +921,15 @@ function showOptions(s) {
                                         onclick="window.location='{% url "student:applicant_intake_info" %}'">
                                     {% trans 'Back' %}
                                 </button>
+
                                 {% if application_obj %}
-{#                                    {% if not application_obj.is_submitted %}#}
-                                        <button type="button" class="btn green" id="save_form" style="">{% trans 'Save/Next' %}
+                                    {% if not application_obj.is_submitted %}
+                                       <button type="button" class="btn green" id="save_form" style="">{% trans 'Save/Next' %}
                                         </button>
-{#                                    {% endif %}#}
+                                    {% else %}
+                                        <button type="button" onclick="window.location='{% url "student:applicant_credit_transfer" %}'" class="btn green" id="save">{% trans 'Next' %}</button>
+                                    {% endif %}
                                 {% endif %}
-                                {% comment %}<button type="button" class="btn blue" id="next"
-                                        onclick="window.location='{% url "student:applicant_curriculum_experience_info" %}'">
-                                    Next
-                                </button>{% endcomment %}
                             </div>
                         </div>
                     </div>

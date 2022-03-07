@@ -180,6 +180,21 @@
 
                 </div>
             {% endif %}
+<hr>
+
+            <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                                        onclick="window.location='{% url "student:applicant_additional_information" %}'">{% trans 'Back' %}
+                                </button>
+                            <button type="button" onclick="window.location='{% url "student:applicant_attachment_submission" %}'" class="btn green" id="save">{% trans 'Next' %}</button>
+
+
+
+                            </div>
+                        </div>
+
+
             </div>
         </div>
     </div>

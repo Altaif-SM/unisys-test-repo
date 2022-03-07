@@ -60,6 +60,16 @@
 
 
             $(document).ready(function () {
+
+                {% if user.get_application %}
+                    {% if user.get_application.is_submitted %}
+                        $('input').prop('disabled', 'true');
+                        $('select').prop('disabled', 'true');
+                        $('label').prop('readonly', 'true');
+                    {% endif %}
+                {% endif %}
+
+
                  {#$("#address_country").chosen();#}
                  $("#student_id").chosen();
                  $("#agent_id").chosen();
@@ -823,11 +833,13 @@
 
                         <div class="row">
                             <div class="col-md-offset-10 col-md12">
-                                {#                                <button type="submit" class="btn green" id="save" style="float: left" >Save</button>#}
-                                <button type="submit" class="btn green" id="next" style="float: left"
-                                        {% comment %}onclick="window.location='{% url "student:applicant_family_info" %}'"{% endcomment %}>
-                                    {% trans 'Save/Next' %}
-                                </button>
+
+
+                                    {% if not application_obj.is_submitted %}
+                                        <button type="submit" class="btn green" id="next" style="float: left">{% trans 'Save/Next' %}</button>
+                                    {% else %}
+                                      <button type="button" onClick="location.href='{% url 'student:applicant_intake_info' %}'" class="btn green" id="next" style="float: left">Next</button>
+                                {% endif %}
                             </div>
                         </div>
 

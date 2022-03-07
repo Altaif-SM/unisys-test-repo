@@ -33,6 +33,15 @@
         window.onload = function () {
 
             $(document).ready(function () {
+
+                 {% if user.get_application %}
+                    {% if user.get_application.is_submitted %}
+                        $('input').prop('disabled', 'true');
+                        $('select').prop('disabled', 'true');
+                        $('label').prop('readonly', 'true');
+                    {% endif %}
+                {% endif %}
+
                 {#$("#father_nationality").chosen();#}
 
                 {#$("#mother_nationality").chosen();#}
@@ -416,15 +425,16 @@
                                     onclick="window.location='{% url "student:applicant_employement_history_info" %}'">{% trans 'Back' %}
                             </button>
 
-{#                            {% if application_obj.application_id %}#}
-                                <button type="submit" class="btn green" id="save">{% trans 'Save/Next' %}</button>
-{#                            {% endif %}#}
-                            {% comment %}
-                                    <button type="button" class="btn blue" id="next"
-                                            onclick="window.location='{% url "student:applicant_academic_english_qualification" %}'">
-                                        Next
-                                    </button>{% endcomment %}
-                        </div>
+
+
+                                {% if application_obj %}
+                                    {% if not application_obj.application_id.is_submitted %}
+                                         <button type="submit" class="btn green" id="save">{% trans 'Save/Next' %}</button>
+                                    {% else %}
+                                        <button type="button" onclick="window.location='{% url "payments:checkout" %}'" class="btn green" id="save">{% trans 'Next' %}</button>
+                                    {% endif %}
+                                {% endif %}
+
                     </div>
             </div>
             </form>
