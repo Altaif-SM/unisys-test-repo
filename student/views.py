@@ -2919,6 +2919,7 @@ def save_credit_transfer(request):
                                 credit_hours=request.POST['credit_hours_' + str(count)],
                                 grade=request.POST['grade_' + str(count)],
                                 institution=request.POST['institution_' + str(count)],
+                                program_study_status=request.POST['program_study_status_' + str(count)],
                             )
                         else:
                             CreditTransferDetails.objects.create(
@@ -2927,7 +2928,9 @@ def save_credit_transfer(request):
                                 credit_hours=request.POST['credit_hours_' + str(count)],
                                 grade=request.POST['grade_' + str(count)],
                                 institution=request.POST['institution_' + str(count)],
+                                program_study_status=request.POST['program_study_status_' + str(count)],
                                 applicant_id=request.user.get_application
+
                             )
                     except Exception as e:
                         pass

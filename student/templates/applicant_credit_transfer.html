@@ -67,7 +67,8 @@
                 {% endif %}
                 $(document).on("click", ".add_experience_row", function (e) {
                     experience_count = parseInt(experience_count) + 1;
-                    var row = '<div class="row item_experience" id="item_experience_' + experience_count + '"><div class="row"><div class=""><label class="col-md-2 control-label">Course Code:</label><div class="col-md-3"><input type="text" title="Enter Course Code" id="course_code_' + experience_count + '" value="" name="course_code_' + experience_count + '" class="form-control"><input hidden type="text" name="credit_transfer_obj_' + experience_count + '" id="credit_transfer_obj_' + experience_count + '"></div></div><div class=""><label class="col-md-2 control-label">Course Title:</label><div class="col-md-3"><input type="text" title="Enter Course Title" id="course_title_' + experience_count + '" value="" name="course_title_' + experience_count + '" class="form-control"></div></div><div class="col-md-1"><a href="javascript:;" class="delete_experience btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Credit Hours:</label><div class="col-md-3"><input type="text" title="Enter Credit Hours" id="credit_hours_' + experience_count + '" value="" name="credit_hours_' + experience_count + '" class="form-control"></div></div><div class=""><label class="col-md-2 control-label">Grade:</label><div class="col-md-3"><input type="text" title="Enter Grade" id="grade_' + experience_count + '" value="" name="grade_' + experience_count + '" class="form-control"></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Institution/University:</label><div class="col-md-3"><input type="text" title="Enter Institution/University" id="institution_' + experience_count + '" value="" name="institution_' + experience_count + '" class="form-control"></div></div></div><br><hr><br></div>';
+                    {#var row = '<div class="row item_experience" id="item_experience_' + experience_count + '"><div class="row"><div class=""><label class="col-md-2 control-label">Course Code:</label><div class="col-md-3"><input type="text" title="Enter Course Code" id="course_code_' + experience_count + '" value="" name="course_code_' + experience_count + '" class="form-control"><input hidden type="text" name="credit_transfer_obj_' + experience_count + '" id="credit_transfer_obj_' + experience_count + '"></div></div><div class=""><label class="col-md-2 control-label">Course Title:</label><div class="col-md-3"><input type="text" title="Enter Course Title" id="course_title_' + experience_count + '" value="" name="course_title_' + experience_count + '" class="form-control"></div></div><div class="col-md-1"><a href="javascript:;" class="delete_experience btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Credit Hours:</label><div class="col-md-3"><input type="text" title="Enter Credit Hours" id="credit_hours_' + experience_count + '" value="" name="credit_hours_' + experience_count + '" class="form-control"></div></div><div class=""><label class="col-md-2 control-label">Grade:</label><div class="col-md-3"><input type="text" title="Enter Grade" id="grade_' + experience_count + '" value="" name="grade_' + experience_count + '" class="form-control"></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Institution/University:</label><div class="col-md-3"><input type="text" title="Enter Institution/University" id="institution_' + experience_count + '" value="" name="institution_' + experience_count + '" class="form-control"></div></div></div><br><hr><br></div>';#}
+                    var row = '<div class="row item_experience" id="item_experience_' + experience_count + '"><div class="row"><div class=""><label class="col-md-2 control-label">Course Code:</label><div class="col-md-3"><input type="text" title="Enter Course Code" id="course_code_' + experience_count + '" value="" name="course_code_' + experience_count + '" class="form-control"><input hidden type="text" name="credit_transfer_obj_' + experience_count + '" id="credit_transfer_obj_' + experience_count + '"></div></div><div class=""><label class="col-md-2 control-label">Course Title:</label><div class="col-md-3"><input type="text" title="Enter Course Title" id="course_title_' + experience_count + '" value="" name="course_title_' + experience_count + '" class="form-control"></div></div><div class="col-md-1"><a href="javascript:;" class="delete_experience btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Program Study Status:</label><div class="col-md-3"><select id="program_study_status_' + experience_count + '" title="Select Program Study Status" name="program_study_status_' + experience_count + '" class="form-control chk"><option style="display:none" selected="selected" id="" value="">Please Select</option><option value="Complete">Complete</option><option value="Withdrawn">Withdrawn</option><option value="Terminated">Terminated</option><option value="Currently Studying">Currently Studying</option></select></div></div><div class=""><label class="col-md-2 control-label">Credit Hours:</label><div class="col-md-3"><input type="text" title="Enter Credit Hours" id="credit_hours_' + experience_count + '" value="" name="credit_hours_' + experience_count + '" class="form-control"></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Grade:</label><div class="col-md-3"><input type="text" title="Enter Grade" id="grade_' + experience_count + '" value="" name="grade_' + experience_count + '" class="form-control"></div></div><div class=""><label class="col-md-2 control-label">Institution/University:</label><div class="col-md-3"><input type="text" title="Enter Institution/University" id="institution_' + experience_count + '" value="" name="institution_' + experience_count + '" class="form-control"></div></div></div><br><hr><br></div>';
                     $(row).removeAttr().hide().insertAfter(".item_experience:last").slideDown(300);
                 });
 
@@ -185,7 +186,7 @@
                                             <div class="col-md-3">
                                                 <input type="text" title="Enter Course Code"
                                                        id="course_code_{{ forloop.counter }}"
-                                                       value="{{ credit_transfer_obj.course_code }}" name="course_code_{{ forloop.counter }}"
+                                                       value="{{ credit_transfer_obj.course_code|default_if_none:"" }}" name="course_code_{{ forloop.counter }}"
                                                        class="form-control">
 
                                                 <input hidden type="text" name="credit_transfer_obj_{{ forloop.counter }}" value="{{ credit_transfer_obj.id }}"
@@ -198,7 +199,7 @@
                                         <label class="col-md-2 control-label">{% trans 'Course Title' %}:</label>
                                         <div class="col-md-3">
                                             <input type="text" title="Enter Course Title" id="course_title_{{ forloop.counter }}"
-                                                   value="{{ credit_transfer_obj.course_title}}" name="course_title_{{ forloop.counter }}"
+                                                   value="{{ credit_transfer_obj.course_title|default_if_none:""}}" name="course_title_{{ forloop.counter }}"
                                                    class="form-control">
 
                                         </div>
@@ -214,6 +215,32 @@
 
                                     <div class="row">
 
+                                         <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'Program Study Status' %}:</label>
+                                        <div class="col-md-3">
+                                            <select id='program_study_status_{{ forloop.counter }}' title="Select Program Study Status" name="program_study_status_{{ forloop.counter }}"
+                                                    class="form-control chk">
+
+                                             {% if credit_transfer_obj.program_study_status %}
+
+                                                        <option style="display:none" selected="selected"
+                                                                value="{{ credit_transfer_obj.program_study_status }}"
+                                                                >{{ credit_transfer_obj.program_study_status|default_if_none:"" }}</option>
+                                                {% else %}
+                                                        <option style="display:none" selected="selected" id="" value="">
+                                                            {% trans 'Please Select' %}
+                                                        </option>
+                                                {% endif %}
+                                                <option value="Complete">Complete</option>
+                                                <option value="Withdrawn">Withdrawn</option>
+                                                <option value="Terminated">Terminated</option>
+                                                <option value="Currently Studying">Currently Studying</option>
+                                            </select>
+
+                                        </div>
+                                    </div>
+
+
                                         <div class="">
                                         <label class="col-md-2 control-label">{% trans 'Credit Hours' %}:</label>
                                         <div class="col-md-3">
@@ -225,27 +252,30 @@
                                     </div>
 
 
-                                        <div class="">
-                                            <label class="col-md-2 control-label">{% trans 'Grade' %}:</label>
-                                            <div class="col-md-3">
-                                                <input type="text" title="Enter Grade"
-                                                       id="grade_{{ forloop.counter }}"
-                                                       value="{{ credit_transfer_obj.grade}}" name="grade_{{ forloop.counter }}"
-                                                       class="form-control">
 
-                                            </div>
-                                        </div>
 
                                     </div>
                                 <br>
 
                                     <div class="row">
+
+                                         <div class="">
+                                            <label class="col-md-2 control-label">{% trans 'Grade' %}:</label>
+                                            <div class="col-md-3">
+                                                <input type="text" title="Enter Grade"
+                                                       id="grade_{{ forloop.counter }}"
+                                                       value="{{ credit_transfer_obj.grade|default_if_none:""}}" name="grade_{{ forloop.counter }}"
+                                                       class="form-control">
+
+                                            </div>
+                                        </div>
+
                                         <div class="">
                                             <label class="col-md-2 control-label">{% trans 'Institution/University' %}:</label>
                                             <div class="col-md-3">
                                                 <input type="text" title="Enter Institution/University"
                                                        id="institution_{{ forloop.counter }}"
-                                                       value="{{ credit_transfer_obj.institution}}" name="institution_{{ forloop.counter }}"
+                                                       value="{{ credit_transfer_obj.institution|default_if_none:""}}" name="institution_{{ forloop.counter }}"
                                                        class="form-control">
 
                                             </div>
@@ -292,12 +322,36 @@
                                         </div>
                                     </div>
 
+
+
                                 </div>
 
                                 <br>
 
 
                                  <div class="row">
+
+                                     <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'Program Study Status' %}:</label>
+                                        <div class="col-md-3">
+                                            <select id='program_study_status_1' title="Select Program Study Status" name="program_study_status_1"
+                                                    class="form-control chk">
+
+                                            <option style="display:none" selected="selected" id="" value="">
+                                                            {% trans 'Please Select' %}
+                                                        </option>
+
+                                                <option value="Complete">Complete</option>
+                                                <option value="Withdrawn">Withdrawn</option>
+                                                <option value="Terminated">Terminated</option>
+                                                <option value="Currently Studying">Currently Studying</option>
+                                            </select>
+
+                                        </div>
+                                    </div>
+
+
+
                                      <div class="">
                                         <label class="col-md-2 control-label">{% trans 'Credit Hours' %}:</label>
                                         <div class="col-md-3">
@@ -308,7 +362,15 @@
                                         </div>
                                     </div>
 
-                                     <div class="">
+
+
+
+                                 </div>
+                                <br>
+
+
+                                <div class="row">
+                                    <div class="">
                                         <label class="col-md-2 control-label">{% trans 'Grade' %}:</label>
                                         <div class="col-md-3">
                                             <input type="text" title="Enter Grade" id="grade_1"
@@ -317,13 +379,6 @@
 
                                         </div>
                                     </div>
-
-
-                                 </div>
-                                <br>
-
-
-                                <div class="row">
 
                                         <div class="">
                                         <label class="col-md-2 control-label">{% trans 'Institution/University' %}:</label>

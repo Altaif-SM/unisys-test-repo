@@ -649,6 +649,7 @@ class CreditTransferDetails(BaseModel):
     credit_hours = models.CharField(max_length=255, blank=True, null=True)
     grade = models.CharField(max_length=255, blank=True, null=True)
     institution = models.CharField(max_length=255, blank=True, null=True)
+    program_study_status = models.CharField(max_length=255, blank=True, null=True)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_credit_transfer_rel',
                                      on_delete=models.SET_NULL)
 
