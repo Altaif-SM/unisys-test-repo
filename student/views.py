@@ -2346,7 +2346,7 @@ def save_update_applicant_additional_info(request):
                 redirect_flag = True
             if redirect_flag:
                 messages.success(request, "Record saved")
-                return redirect('/student/applicant_attachment_submission/')
+                return redirect('/payments/checkout/')
         except Exception as e:
             messages.warning(request, "Form have some error" + str(e))
 
@@ -2903,6 +2903,65 @@ def applicant_credit_transfer(request):
                   {'credit_transfer_recs': credit_transfer_recs,
                    'application_obj': application_obj,'credit_transfer_count':credit_transfer_count})
 
+
+def applicant_credit_transfer_attachement(request):
+    application_obj = ''
+    try:
+        application_obj = request.user.get_application
+    except Exception as e:
+        messages.warning(request, "Please fill the personal details first.")
+        return redirect('/student/applicant_personal_info/')
+    try:
+        credit_transfer_attachment_obj = ''
+        if request.user.get_application:
+            if CreditTransferAttachmentDetails.objects.filter(applicant_id=request.user.get_application).exists():
+                credit_transfer_attachment_obj = CreditTransferAttachmentDetails.objects.get(
+                    applicant_id=request.user.get_application)
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+        return redirect('/student/student_home/')
+    return render(request, 'applicant_credit_transfer_attachement.html',
+                  {'credit_transfer_attachment_obj': credit_transfer_attachment_obj,
+                   'application_obj': application_obj})
+
+def save_credit_transfer_attachement(request):
+    try:
+        grading_scheme = request.FILES.get('grading_scheme')
+        module_syllabus = request.FILES.get('module_syllabus')
+        status_verification_letter = request.FILES.get('status_verification_letter')
+    except:
+        grading_scheme = ''
+        module_syllabus = ''
+        status_verification_letter = ''
+
+    try:
+
+        if CreditTransferAttachmentDetails.objects.filter(applicant_id=request.user.get_application).exists():
+            credit_transfer_attachment_obj = CreditTransferAttachmentDetails.objects.get(
+                applicant_id=request.user.get_application)
+        else:
+            if (grading_scheme is not None) or (module_syllabus is not None) or (status_verification_letter is not None):
+                credit_transfer_attachment_obj = CreditTransferAttachmentDetails.objects.create(
+                    applicant_id=request.user.get_application)
+        if grading_scheme:
+            credit_transfer_attachment_obj.grading_scheme = grading_scheme
+            credit_transfer_attachment_obj.save()
+
+        if module_syllabus:
+            credit_transfer_attachment_obj.module_syllabus = module_syllabus
+            credit_transfer_attachment_obj.save()
+
+        if status_verification_letter:
+            credit_transfer_attachment_obj.status_verification_letter = status_verification_letter
+            credit_transfer_attachment_obj.save()
+
+        messages.success(request, "Attachment submitted successfully.")
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+    return redirect('/student/applicant_employement_history_info/')
+
+
 def save_credit_transfer(request):
     redirect_flag = False
     experience_count = request.POST.get('experience_count')
@@ -2937,7 +2996,7 @@ def save_credit_transfer(request):
                 redirect_flag = True
             if redirect_flag:
                 messages.success(request, "Record saved")
-                return redirect('/student/applicant_employement_history_info/')
+                return redirect('/student/applicant_credit_transfer_attachement/')
         except Exception as e:
             messages.warning(request, "Form have some error" + str(e))
         messages.warning(request, "Please fill proper form")

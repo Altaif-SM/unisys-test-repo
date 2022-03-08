@@ -831,3 +831,11 @@ class ConditionalVerificationDocumentsDetails(BaseModel):
     required_document = models.CharField(max_length=255, blank=True, null=True)
     application_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_verification_document',
                                      on_delete=models.SET_NULL)
+
+
+class CreditTransferAttachmentDetails(BaseModel):
+    grading_scheme = models.FileField(upload_to='document/', null=True, blank=True)
+    module_syllabus = models.FileField(upload_to='document/', null=True, blank=True)
+    status_verification_letter = models.FileField(upload_to='document/', null=True, blank=True)
+    applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_credit_transfer_attachement_rel',
+                                     on_delete=models.SET_NULL)

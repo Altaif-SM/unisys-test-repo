@@ -53,10 +53,13 @@
                         $(location).prop('href', "{% url 'student:applicant_academic_english_qualification' %}")
 
                     }
-                    else{
+                     else if(parseInt(priorities) == 2){
                          $(location).prop('href', "{% url 'student:applicant_credit_transfer' %}")
-                    }
 
+                     }
+                    else{
+                        $(location).prop('href', "{% url 'student:applicant_credit_transfer_attachement' %}")
+                    }
 
                 });
 
@@ -340,6 +343,10 @@ function showOptions(s) {
                                 <li>
                                     <a data-id="2" href="#tab_1_1_2" data-toggle="tab">
                                         Credit Transfer </a>
+                                </li>
+                                <li>
+                                    <a data-id="3" href="#tab_1_1_3" data-toggle="tab">
+                                        Credit Transfer Attachment </a>
                                 </li>
 
                             </ul>
@@ -939,6 +946,10 @@ function showOptions(s) {
     </div>
                                 </div>
                                 <div class="tab-pane" id="tab_1_1_2">
+
+                                </div>
+
+                             <div class="tab-pane" id="tab_1_1_3">
 
                                 </div>
                             </div>
