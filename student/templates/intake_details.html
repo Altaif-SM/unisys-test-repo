@@ -53,7 +53,57 @@
 
             $(document).ready(function () {
 
-                 {% if user.get_application %}
+
+                $("#form_save").submit(function () {
+                    if( !$('#faculty').val() ) {
+                         $('#faculty').css("border", "red solid 1px");
+                         return false;
+
+                    }else if( !$('#program').val()){
+                        $('#faculty').css("border", "#c2cad8 solid 1px");
+                        $('#program').css("border", "red solid 1px");
+                        return false;
+
+                    }else if( !$('#program_mode').val()){
+                        $('#program').css("border", "#c2cad8 solid 1px");
+                        $('#program_mode').css("border", "red solid 1px");
+                        return false;
+
+                    }
+                    else if( !$('#faculty_2').val() ) {
+                         $('#faculty_2').css("border", "red solid 1px");
+                         return false;
+
+                    }else if( !$('#program_2').val()){
+                        $('#faculty_2').css("border", "#c2cad8 solid 1px");
+                        $('#program_2').css("border", "red solid 1px");
+                        return false;
+
+                    }else if( !$('#program_mode_2').val()){
+                        $('#program_2').css("border", "#c2cad8 solid 1px");
+                        $('#program_mode_2').css("border", "red solid 1px");
+                        return false;
+
+                    }
+                    else if( !$('#faculty_3').val() ) {
+                         $('#faculty_3').css("border", "red solid 1px");
+                         return false;
+
+                    }else if( !$('#program_3').val()){
+                        $('#faculty_3').css("border", "#c2cad8 solid 1px");
+                        $('#program_3').css("border", "red solid 1px");
+                        return false;
+
+                    }else if( !$('#program_mode_3').val()){
+                        $('#program_3').css("border", "#c2cad8 solid 1px");
+                        $('#program_mode_3').css("border", "red solid 1px");
+                        return false;
+
+                    }
+
+                });
+
+                {% if user.get_application %}
                     {% if user.get_application.is_submitted %}
                         $('input').prop('disabled', 'true');
                         $('select').prop('disabled', 'true');
@@ -70,32 +120,32 @@
                     get_learning_center_from_country(url, country_id, university)
                 })
 
-            function get_learning_center_from_country(url, country_id, university) {
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: {
-                        country_id: country_id,
-                        university: university,
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                    },
-                    success: function (data) {
+                function get_learning_center_from_country(url, country_id, university) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            country_id: country_id,
+                            university: university,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
 
 
-                        $('#learning_centre').empty();
-                        $('#learning_centre').append(
-                            '<option value="" >Please select</option>');
-                        for (var i = 0; i < data.length; i++) {
+                            $('#learning_centre').empty();
                             $('#learning_centre').append(
-                                '<option value="' + data[i]['id'] + '">'
-                                + data[i]['learning_centre_name'] + '</option>')
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#learning_centre').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['learning_centre_name'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
                         }
-                    },
-                    error: function (xhr, msg, err) {
-                        alert(xhr.responseJSON.error);
-                    }
-                });
-            }
+                    });
+                }
 
 
                 $('input[type="radio"]').on('change', function () {
@@ -106,146 +156,145 @@
 
                 })
 
-            function get_university_from_university_type(url, university_type) {
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: {
-                        university_type: university_type,
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                    },
-                    success: function (data) {
+                function get_university_from_university_type(url, university_type) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            university_type: university_type,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
 
-                        $('#university').empty();
-                        $('#university').append(
-                            '<option value="" >Please select</option>');
-
-                         $('#year').empty();
-                        $('#year').append(
-                            '<option value="" >Please select</option>');
-
-                          $('#semester').empty();
-                        $('#semester').append(
-                            '<option value="" >Please select</option>');
-
-                           $('#country').empty();
-                        $('#country').append(
-                            '<option value="" >Please select</option>');
-
-                           $('#learning_centre').empty();
-                        $('#learning_centre').append(
-                            '<option value="" >Please select</option>');
-
-                       $('#study_mode').empty();
-                        $('#study_mode').append(
-                            '<option value="" >Please select</option>');
-                        $('#study_mode').append(
-                            '<option value="Online" >Online</option>');
-                        $('#study_mode').append(
-                            '<option value="On Campus" >On Campus</option>');
-
-                         $('#study_level').empty();
-                        $('#study_level').append(
-                            '<option value="" >Please select</option>');
-                        $('#study_level').append(
-                            '<option value="2" >Undergraduate</option>');
-                        $('#study_level').append(
-                            '<option value="1" >Postgraduate</option>');
-
-                         $('#faculty').empty();
-                        $('#faculty').append(
-                            '<option value="" >Please select</option>');
-
-                         $('#department').empty();
-                        $('#department').append(
-                            '<option value="" >Please select</option>');
-
-                         $('#program').empty();
-                        $('#program').append(
-                            '<option value="" >Please select</option>');
-
-                         $('#program_mode').empty();
-                        $('#program_mode').append(
-                            '<option value="" >Please select</option>');
-
-                         $('#study_mode_2').empty();
-                        $('#study_mode_2').append(
-                            '<option value="" >Please select</option>');
-                        $('#study_mode_2').append(
-                            '<option value="Online" >Online</option>');
-                        $('#study_mode_2').append(
-                            '<option value="On Campus" >On Campus</option>');
-
-                         $('#study_level_2').empty();
-                        $('#study_level_2').append(
-                            '<option value="" >Please select</option>');
-                        $('#study_level_2').append(
-                            '<option value="2" >Undergraduate</option>');
-                        $('#study_level_2').append(
-                            '<option value="1" >Postgraduate</option>');
-
-                         $('#faculty_2').empty();
-                        $('#faculty_2').append(
-                            '<option value="" >Please select</option>');
-
-                         $('#department_2').empty();
-                        $('#department_2').append(
-                            '<option value="" >Please select</option>');
-
-                         $('#program_2').empty();
-                        $('#program_2').append(
-                            '<option value="" >Please select</option>');
-
-                         $('#program_mode_2').empty();
-                        $('#program_mode_2').append(
-                            '<option value="" >Please select</option>');
-
-
-                        $('#study_mode_3').empty();
-                        $('#study_mode_3').append(
-                            '<option value="" >Please select</option>');
-                        $('#study_mode_3').append(
-                            '<option value="Online" >Online</option>');
-                        $('#study_mode_3').append(
-                            '<option value="On Campus" >On Campus</option>');
-
-                         $('#study_level_3').empty();
-                        $('#study_level_3').append(
-                            '<option value="" >Please select</option>');
-                        $('#study_level_3').append(
-                            '<option value="2" >Undergraduate</option>');
-                        $('#study_level_3').append(
-                            '<option value="1" >Postgraduate</option>');
-
-                         $('#faculty_3').empty();
-                        $('#faculty_3').append(
-                            '<option value="" >Please select</option>');
-
-                         $('#department_3').empty();
-                        $('#department_3').append(
-                            '<option value="" >Please select</option>');
-
-                         $('#program_3').empty();
-                        $('#program_3').append(
-                            '<option value="" >Please select</option>');
-
-                         $('#program_mode_3').empty();
-                        $('#program_mode_3').append(
-                            '<option value="" >Please select</option>');
-
-
-
-                        for (var i = 0; i < data.length; i++) {
+                            $('#university').empty();
                             $('#university').append(
-                                '<option value="' + data[i]['id'] + '">'
-                                + data[i]['university_name'] + '</option>')
+                                '<option value="" >Please select</option>');
+
+                            $('#year').empty();
+                            $('#year').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#semester').empty();
+                            $('#semester').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#country').empty();
+                            $('#country').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#learning_centre').empty();
+                            $('#learning_centre').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#study_mode').empty();
+                            $('#study_mode').append(
+                                '<option value="" >Please select</option>');
+                            $('#study_mode').append(
+                                '<option value="Online" >Online</option>');
+                            $('#study_mode').append(
+                                '<option value="On Campus" >On Campus</option>');
+
+                            $('#study_level').empty();
+                            $('#study_level').append(
+                                '<option value="" >Please select</option>');
+                            $('#study_level').append(
+                                '<option value="2" >Undergraduate</option>');
+                            $('#study_level').append(
+                                '<option value="1" >Postgraduate</option>');
+
+                            $('#faculty').empty();
+                            $('#faculty').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#department').empty();
+                            $('#department').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program').empty();
+                            $('#program').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_mode').empty();
+                            $('#program_mode').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#study_mode_2').empty();
+                            $('#study_mode_2').append(
+                                '<option value="" >Please select</option>');
+                            $('#study_mode_2').append(
+                                '<option value="Online" >Online</option>');
+                            $('#study_mode_2').append(
+                                '<option value="On Campus" >On Campus</option>');
+
+                            $('#study_level_2').empty();
+                            $('#study_level_2').append(
+                                '<option value="" >Please select</option>');
+                            $('#study_level_2').append(
+                                '<option value="2" >Undergraduate</option>');
+                            $('#study_level_2').append(
+                                '<option value="1" >Postgraduate</option>');
+
+                            $('#faculty_2').empty();
+                            $('#faculty_2').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#department_2').empty();
+                            $('#department_2').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_2').empty();
+                            $('#program_2').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_mode_2').empty();
+                            $('#program_mode_2').append(
+                                '<option value="" >Please select</option>');
+
+
+                            $('#study_mode_3').empty();
+                            $('#study_mode_3').append(
+                                '<option value="" >Please select</option>');
+                            $('#study_mode_3').append(
+                                '<option value="Online" >Online</option>');
+                            $('#study_mode_3').append(
+                                '<option value="On Campus" >On Campus</option>');
+
+                            $('#study_level_3').empty();
+                            $('#study_level_3').append(
+                                '<option value="" >Please select</option>');
+                            $('#study_level_3').append(
+                                '<option value="2" >Undergraduate</option>');
+                            $('#study_level_3').append(
+                                '<option value="1" >Postgraduate</option>');
+
+                            $('#faculty_3').empty();
+                            $('#faculty_3').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#department_3').empty();
+                            $('#department_3').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_3').empty();
+                            $('#program_3').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_mode_3').empty();
+                            $('#program_mode_3').append(
+                                '<option value="" >Please select</option>');
+
+
+                            for (var i = 0; i < data.length; i++) {
+                                $('#university').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['university_name'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
                         }
-                    },
-                    error: function (xhr, msg, err) {
-                        alert(xhr.responseJSON.error);
-                    }
-                });
-            }
+                    });
+                }
 
                 $(document).on("change", "#semester", function (e) {
                     var university = $('#university').val();
@@ -253,64 +302,64 @@
                     get_country_from_semester_year(url, university)
                 })
 
-            function get_country_from_semester_year(url, university) {
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: {
-                        university: university,
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                    },
-                    success: function (data) {
+                function get_country_from_semester_year(url, university) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            university: university,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
 
-                        $('#country').empty();
-                        $('#country').append(
-                            '<option value="" >Please select</option>');
-                        for (var i = 0; i < data.length; i++) {
+                            $('#country').empty();
                             $('#country').append(
-                                '<option value="' + data[i]['id'] + '">'
-                                + data[i]['country'] + '</option>')
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#country').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['country'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
                         }
-                    },
-                    error: function (xhr, msg, err) {
-                        alert(xhr.responseJSON.error);
-                    }
-                });
-            }
+                    });
+                }
 
 
-             $(document).on("change", "#year", function (e) {
+                $(document).on("change", "#year", function (e) {
                     var year = $(this).val();
                     var university = $('#university').val();
                     var url = '/masters/get_intake_semester_from_year/';
                     get_intake_semester_from_year(url, year, university)
                 })
 
-            function get_intake_semester_from_year(url, year, university) {
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: {
-                        year: year,
-                        university: university,
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                    },
-                    success: function (data) {
+                function get_intake_semester_from_year(url, year, university) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            year: year,
+                            university: university,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
 
-                        $('#semester').empty();
-                        $('#semester').append(
-                            '<option value="" >Please select</option>');
-                        for (var i = 0; i < data.length; i++) {
+                            $('#semester').empty();
                             $('#semester').append(
-                                '<option value="' + data[i]['id'] + '">'
-                                + data[i]['semester'] + '</option>')
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#semester').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['semester'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
                         }
-                    },
-                    error: function (xhr, msg, err) {
-                        alert(xhr.responseJSON.error);
-                    }
-                });
-            }
+                    });
+                }
 
                 $(document).on("change", "#university", function (e) {
                     var university = $(this).val();
@@ -318,146 +367,146 @@
                     get_year_from_university(url, university)
                 })
 
-            function get_year_from_university(url, university) {
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: {
-                        university: university,
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                    },
-                    success: function (data) {
+                function get_year_from_university(url, university) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            university: university,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
 
 
-                        $('#year').empty();
-                        $('#year').append(
-                            '<option value="" >Please select</option>');
-
-                         $('#year').empty();
-                        $('#year').append(
-                            '<option value="" >Please select</option>');
-
-                          $('#semester').empty();
-                        $('#semester').append(
-                            '<option value="" >Please select</option>');
-
-                           $('#country').empty();
-                        $('#country').append(
-                            '<option value="" >Please select</option>');
-
-                           $('#learning_centre').empty();
-                        $('#learning_centre').append(
-                            '<option value="" >Please select</option>');
-
-                       $('#study_mode').empty();
-                        $('#study_mode').append(
-                            '<option value="" >Please select</option>');
-                        $('#study_mode').append(
-                            '<option value="Online" >Online</option>');
-                        $('#study_mode').append(
-                            '<option value="On Campus" >On Campus</option>');
-
-                         $('#study_level').empty();
-                        $('#study_level').append(
-                            '<option value="" >Please select</option>');
-                        $('#study_level').append(
-                            '<option value="2" >Undergraduate</option>');
-                        $('#study_level').append(
-                            '<option value="1" >Postgraduate</option>');
-
-                         $('#faculty').empty();
-                        $('#faculty').append(
-                            '<option value="" >Please select</option>');
-
-                         $('#department').empty();
-                        $('#department').append(
-                            '<option value="" >Please select</option>');
-
-                         $('#program').empty();
-                        $('#program').append(
-                            '<option value="" >Please select</option>');
-
-                         $('#program_mode').empty();
-                        $('#program_mode').append(
-                            '<option value="" >Please select</option>');
-
-                         $('#study_mode_2').empty();
-                        $('#study_mode_2').append(
-                            '<option value="" >Please select</option>');
-                        $('#study_mode_2').append(
-                            '<option value="Online" >Online</option>');
-                        $('#study_mode_2').append(
-                            '<option value="On Campus" >On Campus</option>');
-
-                         $('#study_level_2').empty();
-                        $('#study_level_2').append(
-                            '<option value="" >Please select</option>');
-                        $('#study_level_2').append(
-                            '<option value="2" >Undergraduate</option>');
-                        $('#study_level_2').append(
-                            '<option value="1" >Postgraduate</option>');
-
-                         $('#faculty_2').empty();
-                        $('#faculty_2').append(
-                            '<option value="" >Please select</option>');
-
-                         $('#department_2').empty();
-                        $('#department_2').append(
-                            '<option value="" >Please select</option>');
-
-                         $('#program_2').empty();
-                        $('#program_2').append(
-                            '<option value="" >Please select</option>');
-
-                         $('#program_mode_2').empty();
-                        $('#program_mode_2').append(
-                            '<option value="" >Please select</option>');
-
-
-                        $('#study_mode_3').empty();
-                        $('#study_mode_3').append(
-                            '<option value="" >Please select</option>');
-                        $('#study_mode_3').append(
-                            '<option value="Online" >Online</option>');
-                        $('#study_mode_3').append(
-                            '<option value="On Campus" >On Campus</option>');
-
-                         $('#study_level_3').empty();
-                        $('#study_level_3').append(
-                            '<option value="" >Please select</option>');
-                        $('#study_level_3').append(
-                            '<option value="2" >Undergraduate</option>');
-                        $('#study_level_3').append(
-                            '<option value="1" >Postgraduate</option>');
-
-                         $('#faculty_3').empty();
-                        $('#faculty_3').append(
-                            '<option value="" >Please select</option>');
-
-                         $('#department_3').empty();
-                        $('#department_3').append(
-                            '<option value="" >Please select</option>');
-
-                         $('#program_3').empty();
-                        $('#program_3').append(
-                            '<option value="" >Please select</option>');
-
-                         $('#program_mode_3').empty();
-                        $('#program_mode_3').append(
-                            '<option value="" >Please select</option>');
-
-
-                        for (var i = 0; i < data.length; i++) {
+                            $('#year').empty();
                             $('#year').append(
-                                '<option value="' + data[i]['id'] + '">'
-                                + data[i]['year'] + '</option>')
+                                '<option value="" >Please select</option>');
+
+                            $('#year').empty();
+                            $('#year').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#semester').empty();
+                            $('#semester').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#country').empty();
+                            $('#country').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#learning_centre').empty();
+                            $('#learning_centre').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#study_mode').empty();
+                            $('#study_mode').append(
+                                '<option value="" >Please select</option>');
+                            $('#study_mode').append(
+                                '<option value="Online" >Online</option>');
+                            $('#study_mode').append(
+                                '<option value="On Campus" >On Campus</option>');
+
+                            $('#study_level').empty();
+                            $('#study_level').append(
+                                '<option value="" >Please select</option>');
+                            $('#study_level').append(
+                                '<option value="2" >Undergraduate</option>');
+                            $('#study_level').append(
+                                '<option value="1" >Postgraduate</option>');
+
+                            $('#faculty').empty();
+                            $('#faculty').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#department').empty();
+                            $('#department').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program').empty();
+                            $('#program').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_mode').empty();
+                            $('#program_mode').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#study_mode_2').empty();
+                            $('#study_mode_2').append(
+                                '<option value="" >Please select</option>');
+                            $('#study_mode_2').append(
+                                '<option value="Online" >Online</option>');
+                            $('#study_mode_2').append(
+                                '<option value="On Campus" >On Campus</option>');
+
+                            $('#study_level_2').empty();
+                            $('#study_level_2').append(
+                                '<option value="" >Please select</option>');
+                            $('#study_level_2').append(
+                                '<option value="2" >Undergraduate</option>');
+                            $('#study_level_2').append(
+                                '<option value="1" >Postgraduate</option>');
+
+                            $('#faculty_2').empty();
+                            $('#faculty_2').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#department_2').empty();
+                            $('#department_2').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_2').empty();
+                            $('#program_2').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_mode_2').empty();
+                            $('#program_mode_2').append(
+                                '<option value="" >Please select</option>');
+
+
+                            $('#study_mode_3').empty();
+                            $('#study_mode_3').append(
+                                '<option value="" >Please select</option>');
+                            $('#study_mode_3').append(
+                                '<option value="Online" >Online</option>');
+                            $('#study_mode_3').append(
+                                '<option value="On Campus" >On Campus</option>');
+
+                            $('#study_level_3').empty();
+                            $('#study_level_3').append(
+                                '<option value="" >Please select</option>');
+                            $('#study_level_3').append(
+                                '<option value="2" >Undergraduate</option>');
+                            $('#study_level_3').append(
+                                '<option value="1" >Postgraduate</option>');
+
+                            $('#faculty_3').empty();
+                            $('#faculty_3').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#department_3').empty();
+                            $('#department_3').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_3').empty();
+                            $('#program_3').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_mode_3').empty();
+                            $('#program_mode_3').append(
+                                '<option value="" >Please select</option>');
+
+
+                            for (var i = 0; i < data.length; i++) {
+                                $('#year').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['year'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
                         }
-                    },
-                    error: function (xhr, msg, err) {
-                        alert(xhr.responseJSON.error);
-                    }
-                });
-            }
+                    });
+                }
 
 
                 $(document).on("change", "#study_mode", function (e) {
@@ -465,11 +514,11 @@
                     var study_level = $('#study_level').val();
                     var university = $('#university').val();
                     var url = '/masters/get_faculty_from_study_mode/';
-                    get_faculty_from_study_mode(url, study_mode, study_level,university)
+                    get_faculty_from_study_mode(url, study_mode, study_level, university)
                 })
 
 
-                function get_faculty_from_study_mode(url, study_mode, study_level,university) {
+                function get_faculty_from_study_mode(url, study_mode, study_level, university) {
                     $.ajax({
                         type: 'POST',
                         url: url,
@@ -480,6 +529,27 @@
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
+                            if (data.length != 0) {
+                                $('#faculty').removeAttr('disabled');
+                            } else {
+                                $('#faculty').attr('disabled', 'disabled');
+
+                                $('#department').empty();
+                                $('#department').append(
+                                    '<option value="" >Please select</option>');
+                                $('#department').attr('disabled', 'disabled');
+
+                                $('#program').empty();
+                                $('#program').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program').attr('disabled', 'disabled');
+
+                                $('#program_mode').empty();
+                                $('#program_mode').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_mode').attr('disabled', 'disabled');
+
+                            }
 
                             $('#faculty').empty();
                             $('#faculty').append(
@@ -496,15 +566,15 @@
                     });
                 }
 
-                 $(document).on("change", "#study_mode_2", function (e) {
+                $(document).on("change", "#study_mode_2", function (e) {
                     var study_mode_2 = $(this).val();
                     var study_level_2 = $('#study_level_2').val();
                     var university = $('#university').val();
                     var url = '/masters/get_faculty_from_study_mode_2/';
-                    get_faculty_from_study_mode_2(url, study_mode_2, study_level_2,university)
+                    get_faculty_from_study_mode_2(url, study_mode_2, study_level_2, university)
                 })
 
-            function get_faculty_from_study_mode_2(url, study_mode_2, study_level_2,university) {
+                function get_faculty_from_study_mode_2(url, study_mode_2, study_level_2, university) {
                     $.ajax({
                         type: 'POST',
                         url: url,
@@ -515,6 +585,28 @@
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
+
+                            if (data.length != 0) {
+                                $('#faculty_2').removeAttr('disabled');
+                            } else {
+                                $('#faculty_2').attr('disabled', 'disabled');
+
+                                $('#department_2').empty();
+                                $('#department_2').append(
+                                    '<option value="" >Please select</option>');
+                                $('#department_2').attr('disabled', 'disabled');
+
+                                $('#program_2').empty();
+                                $('#program_2').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_2').attr('disabled', 'disabled');
+
+                                $('#program_mode_2').empty();
+                                $('#program_mode_2').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_mode_2').attr('disabled', 'disabled');
+
+                            }
 
                             $('#faculty_2').empty();
                             $('#faculty_2').append(
@@ -532,17 +624,16 @@
                 }
 
 
-
                 $(document).on("change", "#study_mode_3", function (e) {
                     var study_mode = $(this).val();
                     var study_level = $('#study_level_3').val();
                     var university = $('#university').val();
                     var url = '/masters/get_faculty_from_study_mode_3/';
-                    get_faculty_from_study_mode_3(url, study_mode, study_level,university)
+                    get_faculty_from_study_mode_3(url, study_mode, study_level, university)
                 })
 
 
-                function get_faculty_from_study_mode_3(url, study_mode, study_level,university) {
+                function get_faculty_from_study_mode_3(url, study_mode, study_level, university) {
                     $.ajax({
                         type: 'POST',
                         url: url,
@@ -553,6 +644,28 @@
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
+
+                            if (data.length != 0) {
+                                $('#faculty_3').removeAttr('disabled');
+                            } else {
+                                $('#faculty_3').attr('disabled', 'disabled');
+
+                                $('#department_3').empty();
+                                $('#department_3').append(
+                                    '<option value="" >Please select</option>');
+                                $('#department_3').attr('disabled', 'disabled');
+
+                                $('#program_3').empty();
+                                $('#program_3').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_3').attr('disabled', 'disabled');
+
+                                $('#program_mode_3').empty();
+                                $('#program_mode_3').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_mode_3').attr('disabled', 'disabled');
+
+                            }
 
                             $('#faculty_3').empty();
                             $('#faculty_3').append(
@@ -570,17 +683,15 @@
                 }
 
 
-
-
                 $(document).on("change", "#study_level", function (e) {
                     var study_level = $(this).val();
                     var study_mode = $('#study_mode').val();
                     var university = $('#university').val();
                     var url = '/masters/get_faculty_from_study_level/';
-                    get_faculty_from_study_level(url, study_mode, study_level,university)
+                    get_faculty_from_study_level(url, study_mode, study_level, university)
                 })
 
-                function get_faculty_from_study_level(url, study_mode, study_level,university) {
+                function get_faculty_from_study_level(url, study_mode, study_level, university) {
                     $.ajax({
                         type: 'POST',
                         url: url,
@@ -591,6 +702,27 @@
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
+                            if (data.length != 0) {
+                                $('#faculty').removeAttr('disabled');
+                            } else {
+                                $('#faculty').attr('disabled', 'disabled');
+
+                                $('#department').empty();
+                                $('#department').append(
+                                    '<option value="" >Please select</option>');
+                                $('#department').attr('disabled', 'disabled');
+
+                                $('#program').empty();
+                                $('#program').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program').attr('disabled', 'disabled');
+
+                                $('#program_mode').empty();
+                                $('#program_mode').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_mode').attr('disabled', 'disabled');
+
+                            }
 
                             $('#faculty').empty();
                             $('#faculty').append(
@@ -613,11 +745,11 @@
                     var study_mode_2 = $('#study_mode_2').val();
                     var university = $('#university').val();
                     var url = '/masters/get_faculty_from_study_level_2/';
-                    get_faculty_from_study_level_2(url, study_mode_2, study_level_2,university)
+                    get_faculty_from_study_level_2(url, study_mode_2, study_level_2, university)
                 })
 
 
-                function get_faculty_from_study_level_2(url, study_mode_2, study_level_2,university) {
+                function get_faculty_from_study_level_2(url, study_mode_2, study_level_2, university) {
                     $.ajax({
                         type: 'POST',
                         url: url,
@@ -628,6 +760,28 @@
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
+
+                            if (data.length != 0) {
+                                $('#faculty_2').removeAttr('disabled');
+                            } else {
+                                $('#faculty_2').attr('disabled', 'disabled');
+
+                                $('#department_2').empty();
+                                $('#department_2').append(
+                                    '<option value="" >Please select</option>');
+                                $('#department_2').attr('disabled', 'disabled');
+
+                                $('#program_2').empty();
+                                $('#program_2').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_2').attr('disabled', 'disabled');
+
+                                $('#program_mode_2').empty();
+                                $('#program_mode_2').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_mode_2').attr('disabled', 'disabled');
+
+                            }
 
                             $('#faculty_2').empty();
                             $('#faculty_2').append(
@@ -649,10 +803,10 @@
                     var study_mode = $('#study_mode_3').val();
                     var university = $('#university').val();
                     var url = '/masters/get_faculty_from_study_level_3/';
-                    get_faculty_from_study_level_3(url, study_mode, study_level,university)
+                    get_faculty_from_study_level_3(url, study_mode, study_level, university)
                 })
 
-                function get_faculty_from_study_level_3(url, study_mode, study_level,university) {
+                function get_faculty_from_study_level_3(url, study_mode, study_level, university) {
                     $.ajax({
                         type: 'POST',
                         url: url,
@@ -663,6 +817,28 @@
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
+
+                            if (data.length != 0) {
+                                $('#faculty_3').removeAttr('disabled');
+                            } else {
+                                $('#faculty_3').attr('disabled', 'disabled');
+
+                                $('#department_3').empty();
+                                $('#department_3').append(
+                                    '<option value="" >Please select</option>');
+                                $('#department_3').attr('disabled', 'disabled');
+
+                                $('#program_3').empty();
+                                $('#program_3').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_3').attr('disabled', 'disabled');
+
+                                $('#program_mode_3').empty();
+                                $('#program_mode_3').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_mode_3').attr('disabled', 'disabled');
+
+                            }
 
                             $('#faculty_3').empty();
                             $('#faculty_3').append(
@@ -680,7 +856,6 @@
                 }
 
 
-
                 $(document).on("change", "#department", function (e) {
                     var department = $(this).val();
                     var study_mode = $('#study_mode').val();
@@ -691,36 +866,51 @@
                     get_programs_from_filter(url, study_mode, university, study_level, faculty, department)
                 })
 
-            function get_programs_from_filter(url, study_mode, university, study_level, faculty, department) {
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: {
-                        study_mode: study_mode,
-                        university: university,
-                        study_level: study_level,
-                        faculty: faculty,
-                        department: department,
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                    },
-                    success: function (data) {
+                function get_programs_from_filter(url, study_mode, university, study_level, faculty, department) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            study_mode: study_mode,
+                            university: university,
+                            study_level: study_level,
+                            faculty: faculty,
+                            department: department,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
 
-                        $('#program').empty();
-                        $('#program').append(
-                            '<option value="" >Please select</option>');
-                        for (var i = 0; i < data.length; i++) {
+
+                            if (data.length != 0) {
+                                $('#program').removeAttr('disabled');
+                            } else {
+                                $('#program').attr('disabled', 'disabled');
+
+
+                                $('#program_mode').empty();
+                                $('#program_mode').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_mode').attr('disabled', 'disabled');
+
+                            }
+
+
+                            $('#program').empty();
                             $('#program').append(
-                                '<option value="' + data[i]['id'] + '">'
-                                + data[i]['program'] + '</option>')
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#program').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['program'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
                         }
-                    },
-                    error: function (xhr, msg, err) {
-                        alert(xhr.responseJSON.error);
-                    }
-                });
-            }
+                    });
+                }
 
-             $(document).on("change", "#department_2", function (e) {
+                $(document).on("change", "#department_2", function (e) {
                     var department = $(this).val();
                     var study_mode = $('#study_mode_2').val();
                     var university = $('#university').val();
@@ -731,36 +921,50 @@
                     get_programs_from_filter_dep_2(url, study_mode, university, study_level, faculty, department)
                 })
 
-            function get_programs_from_filter_dep_2(url, study_mode, university, study_level, faculty, department) {
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: {
-                        study_mode: study_mode,
-                        university: university,
-                        study_level: study_level,
-                        faculty: faculty,
-                        department: department,
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                    },
-                    success: function (data) {
+                function get_programs_from_filter_dep_2(url, study_mode, university, study_level, faculty, department) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            study_mode: study_mode,
+                            university: university,
+                            study_level: study_level,
+                            faculty: faculty,
+                            department: department,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
 
-                        $('#program_2').empty();
-                        $('#program_2').append(
-                            '<option value="" >Please select</option>');
-                        for (var i = 0; i < data.length; i++) {
+                            if (data.length != 0) {
+                                $('#program_2').removeAttr('disabled');
+                            } else {
+                                $('#program_2').attr('disabled', 'disabled');
+
+
+                                $('#program_mode_2').empty();
+                                $('#program_mode_2').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_mode_2').attr('disabled', 'disabled');
+
+                            }
+
+
+                            $('#program_2').empty();
                             $('#program_2').append(
-                                '<option value="' + data[i]['id'] + '">'
-                                + data[i]['program'] + '</option>')
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#program_2').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['program'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
                         }
-                    },
-                    error: function (xhr, msg, err) {
-                        alert(xhr.responseJSON.error);
-                    }
-                });
-            }
+                    });
+                }
 
-            $(document).on("change", "#department_3", function (e) {
+                $(document).on("change", "#department_3", function (e) {
                     var department = $(this).val();
                     var study_mode = $('#study_mode_3').val();
                     var university = $('#university').val();
@@ -771,37 +975,51 @@
                     get_programs_from_filter_dep_3(url, study_mode, university, study_level, faculty, department)
                 })
 
-            function get_programs_from_filter_dep_3(url, study_mode, university, study_level, faculty, department) {
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: {
-                        study_mode: study_mode,
-                        university: university,
-                        study_level: study_level,
-                        faculty: faculty,
-                        department: department,
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                    },
-                    success: function (data) {
+                function get_programs_from_filter_dep_3(url, study_mode, university, study_level, faculty, department) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            study_mode: study_mode,
+                            university: university,
+                            study_level: study_level,
+                            faculty: faculty,
+                            department: department,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
 
-                        $('#program_3').empty();
-                        $('#program_3').append(
-                            '<option value="" >Please select</option>');
-                        for (var i = 0; i < data.length; i++) {
+                            if (data.length != 0) {
+                                $('#program_3').removeAttr('disabled');
+                            } else {
+                                $('#program_3').attr('disabled', 'disabled');
+
+
+                                $('#program_mode_3').empty();
+                                $('#program_mode_3').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_mode_3').attr('disabled', 'disabled');
+
+                            }
+
+                            $('#program_3').empty();
                             $('#program_3').append(
-                                '<option value="' + data[i]['id'] + '">'
-                                + data[i]['program'] + '</option>')
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#program_3').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['program'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
                         }
-                    },
-                    error: function (xhr, msg, err) {
-                        alert(xhr.responseJSON.error);
-                    }
-                });
-            }
+                    });
+                }
 
 
                 $(document).on("change", "#faculty", function (e) {
+                    $('#faculty').css("border", "#c2cad8 solid 1px");
                     var faculty_id = $(this).val();
                     var study_mode = $('#study_mode').val();
                     var university = $('#university').val();
@@ -817,61 +1035,94 @@
                 })
 
                 function get_departments_from_faculty(url, faculty_id) {
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: {
-                        faculty_id: faculty_id,
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                    },
-                    success: function (data) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            faculty_id: faculty_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
 
-                        $('#department').empty();
-                        $('#department').append(
-                            '<option value="" >Please Select</option>');
-                        for (var i = 0; i < data.length; i++) {
+                            if (data.length != 0) {
+                                $('#department').removeAttr('disabled');
+                            } else {
+                                $('#department').attr('disabled', 'disabled');
+
+
+                                $('#program').empty();
+                                $('#program').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program').attr('disabled', 'disabled');
+
+                                $('#program_mode').empty();
+                                $('#program_mode').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_mode').attr('disabled', 'disabled');
+
+                            }
+
+                            $('#department').empty();
                             $('#department').append(
-                                '<option value="' + data[i]['id'] + '">'
-                                + data[i]['department'] + '</option>')
+                                '<option value="" >Please Select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#department').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['department'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
                         }
-                    },
-                    error: function (xhr, msg, err) {
-                        alert(xhr.responseJSON.error);
-                    }
-                });
-            }
-            function get_programs_from_faculty(url, study_mode, university, study_level, faculty, department) {
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: {
-                        study_mode: study_mode,
-                        university: university,
-                        study_level: study_level,
-                        faculty: faculty,
-                        department: department,
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                    },
-                    success: function (data) {
+                    });
+                }
 
-                        $('#program').empty();
-                        $('#program').append(
-                            '<option value="" >Please select</option>');
-                        for (var i = 0; i < data.length; i++) {
+                function get_programs_from_faculty(url, study_mode, university, study_level, faculty, department) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            study_mode: study_mode,
+                            university: university,
+                            study_level: study_level,
+                            faculty: faculty,
+                            department: department,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            if (data.length != 0) {
+                                $('#program').removeAttr('disabled');
+                            } else {
+                                $('#program').attr('disabled', 'disabled');
+
+
+                                $('#program_mode').empty();
+                                $('#program_mode').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_mode').attr('disabled', 'disabled');
+
+                            }
+
+
+                            $('#program').empty();
                             $('#program').append(
-                                '<option value="' + data[i]['id'] + '">'
-                                + data[i]['program'] + '</option>')
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#program').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['program'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
                         }
-                    },
-                    error: function (xhr, msg, err) {
-                        alert(xhr.responseJSON.error);
-                    }
-                });
-            }
+                    });
+                }
 
 
-
-             $(document).on("change", "#faculty_2", function (e) {
+                $(document).on("change", "#faculty_2", function (e) {
+                    $('#faculty_2').css("border", "#c2cad8 solid 1px");
                     var faculty_id = $(this).val();
                     var study_mode = $('#study_mode_2').val();
                     var university = $('#university').val();
@@ -886,62 +1137,94 @@
 
                 })
 
-            function get_departments_from_faculty_2(url, faculty_id) {
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: {
-                        faculty_id: faculty_id,
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                    },
-                    success: function (data) {
+                function get_departments_from_faculty_2(url, faculty_id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            faculty_id: faculty_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
 
-                        $('#department_2').empty();
-                        $('#department_2').append(
-                            '<option value="" >Please Select</option>');
-                        for (var i = 0; i < data.length; i++) {
+                            if (data.length != 0) {
+                                $('#department_2').removeAttr('disabled');
+                            } else {
+                                $('#department_2').attr('disabled', 'disabled');
+
+
+                                $('#program_2').empty();
+                                $('#program_2').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_2').attr('disabled', 'disabled');
+
+                                $('#program_mode_2').empty();
+                                $('#program_mode_2').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_mode_2').attr('disabled', 'disabled');
+
+                            }
+
+                            $('#department_2').empty();
                             $('#department_2').append(
-                                '<option value="' + data[i]['id'] + '">'
-                                + data[i]['department'] + '</option>')
+                                '<option value="" >Please Select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#department_2').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['department'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
                         }
-                    },
-                    error: function (xhr, msg, err) {
-                        alert(xhr.responseJSON.error);
-                    }
-                });
-            }
+                    });
+                }
 
-            function get_programs_from_faculty_2(url, study_mode, university, study_level, faculty, department) {
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: {
-                        study_mode: study_mode,
-                        university: university,
-                        study_level: study_level,
-                        faculty: faculty,
-                        department: department,
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                    },
-                    success: function (data) {
+                function get_programs_from_faculty_2(url, study_mode, university, study_level, faculty, department) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            study_mode: study_mode,
+                            university: university,
+                            study_level: study_level,
+                            faculty: faculty,
+                            department: department,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
 
-                        $('#program_2').empty();
-                        $('#program_2').append(
-                            '<option value="" >Please select</option>');
-                        for (var i = 0; i < data.length; i++) {
+                            if (data.length != 0) {
+                                $('#program_2').removeAttr('disabled');
+                            } else {
+                                $('#program_2').attr('disabled', 'disabled');
+
+
+                                $('#program_mode_2').empty();
+                                $('#program_mode_2').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_mode_2').attr('disabled', 'disabled');
+
+                            }
+
+                            $('#program_2').empty();
                             $('#program_2').append(
-                                '<option value="' + data[i]['id'] + '">'
-                                + data[i]['program'] + '</option>')
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#program_2').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['program'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
                         }
-                    },
-                    error: function (xhr, msg, err) {
-                        alert(xhr.responseJSON.error);
-                    }
-                });
-            }
+                    });
+                }
 
 
-             $(document).on("change", "#faculty_3", function (e) {
+                $(document).on("change", "#faculty_3", function (e) {
+                    $('#faculty_3').css("border", "#c2cad8 solid 1px");
                     var faculty_id = $(this).val();
                     var study_mode = $('#study_mode_3').val();
                     var university = $('#university').val();
@@ -956,174 +1239,227 @@
 
                 })
 
-            function get_departments_from_faculty_3(url, faculty_id) {
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: {
-                        faculty_id: faculty_id,
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                    },
-                    success: function (data) {
+                function get_departments_from_faculty_3(url, faculty_id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            faculty_id: faculty_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
 
-                        $('#department_3').empty();
-                        $('#department_3').append(
-                            '<option value="" >Please Select</option>');
-                        for (var i = 0; i < data.length; i++) {
+                            if (data.length != 0) {
+                                $('#department_3').removeAttr('disabled');
+                            } else {
+                                $('#department_3').attr('disabled', 'disabled');
+
+
+                                $('#program_3').empty();
+                                $('#program_3').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_3').attr('disabled', 'disabled');
+
+                                $('#program_mode_3').empty();
+                                $('#program_mode_3').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_mode_3').attr('disabled', 'disabled');
+
+                            }
+
+                            $('#department_3').empty();
                             $('#department_3').append(
-                                '<option value="' + data[i]['id'] + '">'
-                                + data[i]['department'] + '</option>')
+                                '<option value="" >Please Select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#department_3').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['department'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
                         }
-                    },
-                    error: function (xhr, msg, err) {
-                        alert(xhr.responseJSON.error);
-                    }
-                });
-            }
+                    });
+                }
 
-            function get_programs_from_faculty_3(url, study_mode, university, study_level, faculty, department) {
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: {
-                        study_mode: study_mode,
-                        university: university,
-                        study_level: study_level,
-                        faculty: faculty,
-                        department: department,
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                    },
-                    success: function (data) {
+                function get_programs_from_faculty_3(url, study_mode, university, study_level, faculty, department) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            study_mode: study_mode,
+                            university: university,
+                            study_level: study_level,
+                            faculty: faculty,
+                            department: department,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
 
-                        $('#program_3').empty();
-                        $('#program_3').append(
-                            '<option value="" >Please select</option>');
-                        for (var i = 0; i < data.length; i++) {
+                            if (data.length != 0) {
+                                $('#program_3').removeAttr('disabled');
+                            } else {
+                                $('#program_3').attr('disabled', 'disabled');
+
+
+                                $('#program_mode_3').empty();
+                                $('#program_mode_3').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_mode_3').attr('disabled', 'disabled');
+
+                            }
+
+                            $('#program_3').empty();
                             $('#program_3').append(
-                                '<option value="' + data[i]['id'] + '">'
-                                + data[i]['program'] + '</option>')
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#program_3').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['program'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
                         }
-                    },
-                    error: function (xhr, msg, err) {
-                        alert(xhr.responseJSON.error);
-                    }
-                });
-            }
-
+                    });
+                }
 
 
                 $(document).on("change", "#program", function (e) {
+                    $('#program').css("border", "#c2cad8 solid 1px");
                     var program_id = $(this).val();
                     var url = '/masters/get_program_mode_from_selected_program/';
                     get_program_mode_from_selected_program(url, program_id)
                 })
 
-            function get_program_mode_from_selected_program(url, program_id) {
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: {
-                        program_id: program_id,
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                    },
-                    success: function (data) {
+                function get_program_mode_from_selected_program(url, program_id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            program_id: program_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
 
-
-                        $('#program_mode').empty();
-                        $('#program_mode').append(
-                            '<option value="" >Please select</option>');
-                        for (var i = 0; i < data.length; i++) {
-                            if (i === (data.length - 1)) {
-                                $('#program_mode').append(
-                                    '<option value="' + data[i]['id'] + '">'
-                                    + data[i]['program_mode'] + '</option>')
+                            if (data.length != 0) {
+                                $('#program_mode').removeAttr('disabled');
+                            } else {
+                                $('#program_mode').attr('disabled', 'disabled');
 
                             }
 
+                            $('#program_mode').empty();
+                            $('#program_mode').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                if (i === (data.length - 1)) {
+                                    $('#program_mode').append(
+                                        '<option value="' + data[i]['id'] + '">'
+                                        + data[i]['program_mode'] + '</option>')
+
+                                }
+
+                            }
+
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
                         }
-
-                    },
-                    error: function (xhr, msg, err) {
-                        alert(xhr.responseJSON.error);
-                    }
-                });
-            }
+                    });
+                }
 
 
-             $(document).on("change", "#program_2", function (e) {
+                $(document).on("change", "#program_2", function (e) {
+                    $('#program_2').css("border", "#c2cad8 solid 1px");
                     var program_id = $(this).val();
                     var url = '/masters/get_program_mode_from_selected_program_2/';
                     get_program_mode_from_selected_program_2(url, program_id)
                 })
 
-            function get_program_mode_from_selected_program_2(url, program_id) {
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: {
-                        program_id: program_id,
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                    },
-                    success: function (data) {
+                function get_program_mode_from_selected_program_2(url, program_id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            program_id: program_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
 
-
-                        $('#program_mode_2').empty();
-                        $('#program_mode_2').append(
-                            '<option value="" >Please select</option>');
-                        for (var i = 0; i < data.length; i++) {
-                            if (i === (data.length - 1)) {
-                                $('#program_mode_2').append(
-                                    '<option value="' + data[i]['id'] + '">'
-                                    + data[i]['program_mode'] + '</option>')
+                            if (data.length != 0) {
+                                $('#program_mode_2').removeAttr('disabled');
+                            } else {
+                                $('#program_mode_2').attr('disabled', 'disabled');
 
                             }
 
+
+                            $('#program_mode_2').empty();
+                            $('#program_mode_2').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                if (i === (data.length - 1)) {
+                                    $('#program_mode_2').append(
+                                        '<option value="' + data[i]['id'] + '">'
+                                        + data[i]['program_mode'] + '</option>')
+
+                                }
+
+                            }
+
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
                         }
-
-                    },
-                    error: function (xhr, msg, err) {
-                        alert(xhr.responseJSON.error);
-                    }
-                });
-            }
+                    });
+                }
 
 
-            $(document).on("change", "#program_3", function (e) {
+                $(document).on("change", "#program_3", function (e) {
+                    $('#program_3').css("border", "#c2cad8 solid 1px");
                     var program_id = $(this).val();
                     var url = '/masters/get_program_mode_from_selected_program_3/';
                     get_program_mode_from_selected_program_3(url, program_id)
                 })
 
-            function get_program_mode_from_selected_program_3(url, program_id) {
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: {
-                        program_id: program_id,
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                    },
-                    success: function (data) {
+                function get_program_mode_from_selected_program_3(url, program_id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            program_id: program_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
 
-
-                        $('#program_mode_3').empty();
-                        $('#program_mode_3').append(
-                            '<option value="" >Please select</option>');
-                        for (var i = 0; i < data.length; i++) {
-                            if (i === (data.length - 1)) {
-                                $('#program_mode_3').append(
-                                    '<option value="' + data[i]['id'] + '">'
-                                    + data[i]['program_mode'] + '</option>')
+                            if (data.length != 0) {
+                                $('#program_mode_3').removeAttr('disabled');
+                            } else {
+                                $('#program_mode_3').attr('disabled', 'disabled');
 
                             }
 
-                        }
 
-                    },
-                    error: function (xhr, msg, err) {
-                        alert(xhr.responseJSON.error);
-                    }
-                });
-            }
+                            $('#program_mode_3').empty();
+                            $('#program_mode_3').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                if (i === (data.length - 1)) {
+                                    $('#program_mode_3').append(
+                                        '<option value="' + data[i]['id'] + '">'
+                                        + data[i]['program_mode'] + '</option>')
+
+                                }
+
+                            }
+
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
 
 
 
@@ -1147,24 +1483,6 @@
                 {% endif %}
 
             });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
             $('#sample_1').dataTable().fnDestroy();
@@ -1428,7 +1746,7 @@
                             </div>
                         </div>
                         <hr>
-                      <span style="padding:inherit;color: red">{% trans 'Choice 1' %}:  </span><br><br>
+                        <span style="padding:inherit;color: red">{% trans 'FIRST CHOICE' %}:  </span><br><br>
 
                         <div class="row">
 
@@ -1529,7 +1847,7 @@
                                 <label class="col-md-2 control-label">{% trans 'Department' %}:</label>
                                 <div class="col-md-4">
                                     <select id='department' title="Select Department" name="department"
-                                            class="form-control value_check" data-live-search="true" >
+                                            class="form-control value_check" data-live-search="true">
 
                                         {% if application_obj.department %}
                                             <option style="display:none" selected="selected"
@@ -1614,7 +1932,7 @@
                         </div>
                         <hr>
 
-                    <span style="padding:inherit;color: red">{% trans 'Choice 2' %}:  </span><br><br>
+                        <span style="padding:inherit;color: red">{% trans 'SECOND CHOICE' %}:  </span><br><br>
 
                         <div class="row">
 
@@ -1659,7 +1977,7 @@
                                         {% if application_obj.study_level_2 %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ application_obj.study_level_2.id }}"
-                                                    >{{ application_obj.study_level_2|default_if_none:"" }}</option>
+                                            >{{ application_obj.study_level_2|default_if_none:"" }}</option>
                                         {% else %}
                                             <option disabled selected="selected" id=""
                                                     value="">{% trans 'Please Select' %}
@@ -1715,7 +2033,7 @@
                                 <label class="col-md-2 control-label">{% trans 'Department' %}:</label>
                                 <div class="col-md-4">
                                     <select id='department_2' title="Select Department" name="department_2"
-                                            class="form-control value_check" data-live-search="true" >
+                                            class="form-control value_check" data-live-search="true">
 
                                         {% if application_obj.department_2 %}
                                             <option style="display:none" selected="selected"
@@ -1801,7 +2119,7 @@
                         <hr>
 
 
-                    <span style="padding:inherit;color: red">{% trans 'Choice 3' %}:  </span><br><br>
+                        <span style="padding:inherit;color: red">{% trans 'THIRD CHOICE' %}:  </span><br><br>
 
                         <div class="row">
 
@@ -1902,7 +2220,7 @@
                                 <label class="col-md-2 control-label">{% trans 'Department' %}:</label>
                                 <div class="col-md-4">
                                     <select id='department_3' title="Select Department" name="department_3"
-                                            class="form-control value_check" data-live-search="true" >
+                                            class="form-control value_check" data-live-search="true">
 
                                         {% if application_obj.department_3 %}
                                             <option style="display:none" selected="selected"
@@ -1995,7 +2313,7 @@
                                 </button>
 
                                 {#                            {% if application_obj.application_id %}#}
-{#                                <button type="submit" class="btn green" id="save">{% trans 'Save/Next' %}</button>#}
+                                {#                                <button type="submit" class="btn green" id="save">{% trans 'Save/Next' %}</button>#}
                                 {#                            {% endif %}#}
                                 {% comment %}
                                     <button type="button" class="btn blue" id="next"
@@ -2005,9 +2323,12 @@
 
                                 {% if application_obj %}
                                     {% if not application_obj.is_submitted %}
-                                       <button type="submit" class="btn green" id="save">{% trans 'Save/Next' %}</button>
+                                        <button type="submit" class="btn green"
+                                                id="save">{% trans 'Save/Next' %}</button>
                                     {% else %}
-                                        <button type="button" onclick="window.location='{% url "student:applicant_academic_english_qualification" %}'" class="btn green" id="save">{% trans 'Next' %}</button>
+                                        <button type="button"
+                                                onclick="window.location='{% url "student:applicant_academic_english_qualification" %}'"
+                                                class="btn green" id="save">{% trans 'Next' %}</button>
                                     {% endif %}
                                 {% endif %}
                             </div>
