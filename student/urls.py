@@ -128,6 +128,8 @@ urlpatterns = [
                   path('get_university_from_type/', views.get_university_from_type, name='get_university_from_type'),
                   path('save_update_applicant_intake_info/', views.save_update_applicant_intake_info, name='save_update_applicant_intake_info'),
                   path('get_branch_campus_from_program/', views.get_branch_campus_from_program, name='get_branch_campus_from_program'),
+                  path('acceptance_declaration/', views.acceptance_declaration, name='acceptance_declaration'),
+                  path('submit_acceptance/', views.submit_acceptance, name='submit_acceptance'),
 
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

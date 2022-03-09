@@ -3001,3 +3001,33 @@ def save_credit_transfer(request):
             messages.warning(request, "Form have some error" + str(e))
         messages.warning(request, "Please fill proper form")
     return redirect('/student/applicant_credit_transfer/')
+
+
+def acceptance_declaration(request):
+    application_obj = ''
+    try:
+        application_obj = request.user.get_application
+    except Exception as e :
+        messages.warning(request, "Please fill the personal details first.")
+        return redirect('/student/applicant_personal_info/')
+    try:
+        if request.user.get_application:
+            application_obj = request.user.get_application
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+    return render(request, 'accepting_declarartion.html', {'application_obj':application_obj})
+
+def submit_acceptance(request):
+    try:
+        ApplicationDetails.objects.filter(application_id=request.user.get_application_id).update(is_offer_accepted=True,is_online_admission = True)
+        ApplicationHistoryDetails.objects.create(applicant_id=request.user.get_application,
+                                                 status='Offer Accepted',
+                                                 remark='Your offer is submitted and your University will be notified on further updates regarding your applications.')
+        application_notification(request.user.get_application.id,
+                                 'You have successfully accepted offer.')
+        admin_notification(request.user.get_application.id,
+                           str(request.user.get_application.get_full_name()) + ' have accepted offer letter.')
+        messages.success(request, "Offer submitted successfully.")
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+    return redirect('/student/acceptance_declaration/')

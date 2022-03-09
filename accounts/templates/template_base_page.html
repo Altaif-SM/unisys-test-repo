@@ -1331,8 +1331,19 @@ License: You must have a valid license purchased only from themeforest(the above
                                 <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'student:application_offer_letter' %}"
                                        class="nav-link nav-toggle">
-                                        <i class="glyphicon glyphicon-list-alt"></i>
+                                        <i class="fa fa-gift"></i>
                                         <span class="title">{% trans 'Offer Status' %}</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                         {% if 'student.can_view_student_application_progress_history' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'student:acceptance_declaration' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-pencil"></i>
+                                        <span class="title">{% trans 'Offer Acceptance & Declaration' %}</span>
                                         <span class="selected"></span>
                                     </a>
                                 </li>
@@ -1596,7 +1607,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
 
 
-    {% if request.resolver_match.url_name == 'application_offer_letter' %}
+    {% if request.resolver_match.url_name == 'application_offer_letter' or request.resolver_match.url_name == 'acceptance_declaration'  %}
         {
             var element = document.getElementById("offer_status");
             element.classList.add("active");
