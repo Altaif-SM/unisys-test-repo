@@ -431,9 +431,28 @@
                                                 <td>Main</td>
                                             {% endif %}
 
-                                            <td>
-                                                {{ rec.faculty.faculty_name|default_if_none:"" }}
-                                            </td>
+
+
+
+
+                                        {% if rec.choice_1 == True and rec.choice_2 == False and rec.choice_3 == False %}
+                                                <td>
+                                                    {{ rec.faculty.faculty_name|default_if_none:"" }}
+                                                </td>
+                                            {% elif  rec.choice_1 == True and rec.choice_2 == True and rec.choice_3 == False %}
+                                                <td>
+                                                    {{ rec.faculty_2.faculty_name|default_if_none:"" }}
+                                                </td>
+                                            {% elif  rec.choice_1 == True and rec.choice_2 == True and rec.choice_3 == True %}
+                                                <td>
+                                                    {{ rec.faculty_3.faculty_name|default_if_none:"" }}
+                                                </td>
+                                            {% else %}
+                                                 <td>
+                                                    {{ rec.faculty.faculty_name|default_if_none:"" }}
+                                                </td>
+                                            {% endif %}
+
                                             {% if rec.choice_1 == True and rec.choice_2 == False and rec.choice_3 == False %}
                                                 <td>
                                                     {{ rec.program.program_name|default_if_none:"" }}
