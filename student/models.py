@@ -298,6 +298,7 @@ class ApplicationDetails(BaseModel):
     choice_2 = models.BooleanField(default=False)
     choice_3 = models.BooleanField(default=False)
     is_accepted = models.BooleanField(default=False)
+    is_offer_accepted = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('-created_on',)
