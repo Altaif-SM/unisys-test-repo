@@ -94,7 +94,7 @@
         <br><br>
         <span style="font-size: 17px;color: #333">Dear MR / Ms :  {{ application_obj.first_name|default_if_none:"" }} {{ application_obj.last_name|default_if_none:"" }}</span>
         <br><br><br>
-        <span style="font-size: 17px;color: #333"><b>OFFER OF #{{ application_obj.program.program_name|default_if_none:"" }}
+        <span style="font-size: 17px;color: #333"><b>OFFER OF #
 
              {% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.program.program_name|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.program_2.program_name|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.program_3.program_name|default_if_none:"" }} {% else %}{{ application_obj.program.program_name|default_if_none:"" }}{% endif %}
 

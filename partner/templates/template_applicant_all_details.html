@@ -523,7 +523,9 @@
                     <div class="">
                         <label class="col-md-1 control-label">Mode of Study:</label>
                         <div class="col-md-3">
-                            <span class="">{{ application_obj.study_mode|default_if_none:"" }}</span>
+                            <span class="">
+                                 {% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.study_mode|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.study_mode_2|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.study_mode_3|default_if_none:"" }} {% else %}{{ application_obj.study_mode|default_if_none:"" }}{% endif %}
+                            </span>
 
                         </div>
                     </div>
@@ -531,7 +533,7 @@
                     <div class="">
                         <label class="col-md-1 control-label">Level of Study:</label>
                         <div class="col-md-3">
-                            <span class="">{{ application_obj.study_level.study_level|default_if_none:"" }}</span>
+                            <span class="">{% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.study_level.study_level|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.study_level_2.study_level|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.study_level_3.study_level|default_if_none:"" }} {% else %}{{ application_obj.study_level.study_level|default_if_none:"" }}{% endif %}</span>
 
                         </div>
                     </div>
@@ -543,7 +545,7 @@
                     <div class="">
                         <label class="col-md-1 control-label">Faculty:</label>
                         <div class="col-md-3">
-                            <span class="">{{ application_obj.faculty.faculty_name|default_if_none:"" }}</span>
+                            <span class="">{% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.faculty.faculty_name|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.faculty_2.faculty_name|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.faculty_3.faculty_name|default_if_none:"" }} {% else %}{{ application_obj.faculty.faculty_name|default_if_none:"" }}{% endif %}</span>
 
                         </div>
                     </div>
@@ -551,7 +553,7 @@
                     <div class="">
                         <label class="col-md-1 control-label">Department:</label>
                         <div class="col-md-3">
-                            <span class="">{{ application_obj.department.department|default_if_none:"" }}</span>
+                            <span class="">{% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.department.department|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.department_2.department|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.department_3.department|default_if_none:"" }} {% else %}{{ application_obj.department.department|default_if_none:"" }}{% endif %}</span>
 
                         </div>
                     </div>
@@ -559,7 +561,7 @@
                     <div class="">
                         <label class="col-md-1 control-label">Program:</label>
                         <div class="col-md-3">
-                            <span class="">{{ application_obj.program.program_name|default_if_none:"" }}</span>
+                            <span class="">{% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.program.program_name|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.program_2.program_name|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.program_3.program_name|default_if_none:"" }} {% else %}{{ application_obj.program.program_name|default_if_none:"" }}{% endif %}</span>
 
                         </div>
                     </div>
@@ -571,7 +573,7 @@
                     <div class="">
                         <label class="col-md-1 control-label">Program Mode:</label>
                         <div class="col-md-3">
-                            <span class="">{{ application_obj.program_mode.study_type|default_if_none:"" }}</span>
+                            <span class="">{% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.program_mode.study_type|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.program_mode_2.study_type|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.program_mode_3.study_type|default_if_none:"" }} {% else %}{{ application_obj.program_mode.study_type|default_if_none:"" }}{% endif %}</span>
 
                         </div>
                     </div>
