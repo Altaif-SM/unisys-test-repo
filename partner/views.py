@@ -2523,15 +2523,29 @@ def assign_supervisior(request, application_id=None):
         return redirect('/partner/template_approving_application/')
 
 
-def accepted_application(request):
+def approved_application(request):
     accepted_applicants = ''
     context = {}
     try:
         accepted_applicants = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
                                                              year=get_current_year(request), is_accepted=True,
-                                                             )
+                                                             ).exclude(is_offer_accepted = True)
         context['my_template'] = 'template_base_page.html'
 
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
     return render(request, 'accepted_application.html',{'accepted_applicants': accepted_applicants,'context':context})
+
+
+def accepted_application(request):
+    accepted_applicants = ''
+    context = {}
+    try:
+        accepted_applicants = ApplicationDetails.objects.filter(is_offer_accepted=True, is_online_admission=True,
+                                                             year=get_current_year(request),
+                                                             )
+        context['my_template'] = 'template_base_page.html'
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+    return render(request, 'offer_accepted_applications.html',{'accepted_applicants': accepted_applicants,'context':context})

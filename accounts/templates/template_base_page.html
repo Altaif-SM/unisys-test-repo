@@ -978,8 +978,13 @@ License: You must have a valid license purchased only from themeforest(the above
                                     {% endif %}
 
                                         <li class="nav-item ">
+                                            <a href="{% url 'partner:approved_application' %}"
+                                               class="nav-link ">{% trans 'Approved Applications' %}</a>
+                                        </li>
+
+                                <li class="nav-item ">
                                             <a href="{% url 'partner:accepted_application' %}"
-                                               class="nav-link ">{% trans 'Accepted Applications' %}</a>
+                                               class="nav-link ">{% trans 'Offer Accepted Applicant' %}</a>
                                         </li>
 
 
@@ -1573,7 +1578,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-    {% if request.resolver_match.url_name == 'template_approving_application' or request.resolver_match.url_name == 'accepted_application' or request.resolver_match.url_name == 'edit_document' or request.resolver_match.url_name == 'document_settings' or  request.resolver_match.url_name == 'template_applicant_all_details'  %}
+    {% if request.resolver_match.url_name == 'template_approving_application' or request.resolver_match.url_name == 'approved_application' or request.resolver_match.url_name == 'accepted_application' or request.resolver_match.url_name == 'edit_document' or request.resolver_match.url_name == 'document_settings' or  request.resolver_match.url_name == 'template_applicant_all_details'  %}
         {
             var element = document.getElementById("c");
             element.classList.add("active");

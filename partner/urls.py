@@ -97,5 +97,6 @@ urlpatterns = [
                   path('update_semister_module_link_student/', views.update_semister_module_link_student, name='update_semister_module_link_student'),
                   path('companies_datatable/', filters.FilterCompaniesList.as_view(), name='companies_datatable'),
                   path('assign_supervisior/<int:application_id>/', views.assign_supervisior, name='assign_supervisior'),
+                  path('approved_application/', views.approved_application, name='approved_application'),
                   path('accepted_application/', views.accepted_application, name='accepted_application'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
