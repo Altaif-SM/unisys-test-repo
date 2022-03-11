@@ -119,6 +119,7 @@ def save_update_applicant_personal_info(request):
                     if application_obj.address:
                         AddressDetails.objects.filter(id=application_obj.address.id).update(
                             country_id=request.POST['country'],
+                            nationality_id=request.POST['nationality'],
                             mobile=request.POST['mobile'],
                             whats_app=request.POST['whats_app'],
                             country_code=request.POST['country_code'],
@@ -128,6 +129,7 @@ def save_update_applicant_personal_info(request):
                             street=request.POST['permanent_street'])
                     else:
                         address_obj = AddressDetails.objects.create(country_id=request.POST['country'],
+                                                                    nationality_id=request.POST['nationality'],
                                                                     mobile=request.POST['mobile'],
                                                                     whats_app=request.POST['whats_app'],
                                                                     country_code=request.POST['country_code'],
@@ -156,6 +158,7 @@ def save_update_applicant_personal_info(request):
                         application_obj.save()
 
                         address_obj = AddressDetails.objects.create(country_id=request.POST['country'],
+                                                                    nationality_id=request.POST['nationality'],
                                                                     mobile=request.POST['mobile'],
                                                                     whats_app=request.POST['whats_app'],
                                                                     country_code=request.POST['country_code'],

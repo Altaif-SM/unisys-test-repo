@@ -95,6 +95,7 @@ class AddressDetails(BaseModel):
     state = models.CharField(max_length=80, blank=True, null=True)
     street = models.CharField(max_length=80, blank=True, null=True)
     country = models.ForeignKey(CountryDetails, null=True, related_name='address_country_rel', on_delete=models.SET_NULL)
+    nationality = models.ForeignKey(CountryDetails, null=True, related_name='nationality_country_rel', on_delete=models.SET_NULL)
     is_same = models.BooleanField(default=False)
     mobile = models.CharField(max_length=80, blank=True, null=True)
     whats_app = models.CharField(max_length=80, blank=True, null=True)

@@ -4001,3 +4001,11 @@ def delete_application_fee(request):
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/application_fee/')
 
+def load_country(request):
+    with open(settings.BASE_DIR + '/raw/countries.json') as f:
+        data = json.load(f)
+        count = 1
+        for rec in data:
+            CountryDetails.objects.create(country_name=rec['name'])
+            print(count)
+            count = count + 1
