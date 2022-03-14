@@ -190,8 +190,11 @@
                         {#                        <th>Program ID</th>#}
                         <th> {% trans 'Academic Year' %}</th>
                         <th> {% trans 'University' %}</th>
+                        <th> {% trans 'Type' %}</th>
                         <th> {% trans 'Program' %}</th>
-                        <th> {% trans 'Country' %}</th>
+{#                        <th> {% trans 'Discount' %}</th>#}
+                        <th> {% trans 'Total Fee' %}</th>
+{#                        <th> {% trans 'Country' %}</th>#}
                         <th width="10%">Action</th>
                     </tr>
                     </thead>
@@ -203,8 +206,15 @@
                             {#                            <td>{{ rec.program_id|default_if_none:"" }}</td>#}
                             <td>{{ rec.year.year_name|default_if_none:"" }}</td>
                             <td>{{ rec.university.university_name|default_if_none:"" }}</td>
+                             {% if rec.university.is_partner_university == True %}
+                                <td>International</td>
+                            {% else %}
+                                <td>Main</td>
+                            {% endif %}
                             <td>{{ rec.program.program_name|default_if_none:"" }}</td>
-                            <td>{{ rec.country.country_name|title }}</td>
+{#                            <td>{{ rec.discount|floatformat:"2" }}</td>#}
+                            <td>{{ rec.total_amount|floatformat:"2" }}</td>
+{#                            <td>{{ rec.country.country_name|title }}</td>#}
 
                             <td>
                                 <a href="{% url 'masters:edit_program_fee' rec.id %}">
@@ -212,9 +222,9 @@
                                       class=" edit_btn btn blue glyphicon glyphicon-pencil">
                                 </span>
                                 </a>
-{#                                <span type="button" name="delete" id="delete{{ forloop.counter }}"#}
-{#                                      class=" delete btn red glyphicon glyphicon-trash">#}
-{#                                </span>#}
+                                <span type="button" name="delete" id="delete{{ forloop.counter }}"
+                                      class=" delete btn red glyphicon glyphicon-trash">
+                                </span>
                             </td>
 
                         </tr>
@@ -228,7 +238,7 @@
     <div id="id_delete_program_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{% url 'masters:delete_program' %}"
+                <form action="{% url 'masters:delete_program_fee' %}"
                       id="form_sample_1"
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
@@ -240,8 +250,8 @@
                         </h4>
                     </div>
                     <div class="modal-body">
-                        <p> {% trans 'Are you sure, you want to delete Program?' %} </p>
-                        <p> {% trans 'After delete you will not be able to modify the Program.' %} </p>
+                        <p> {% trans 'Are you sure, you want to delete Program Fee?' %} </p>
+                        <p> {% trans 'After delete you will not be able to modify the Program Fee.' %} </p>
 
                     </div>
                     <div class="modal-footer">

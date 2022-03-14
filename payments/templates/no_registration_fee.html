@@ -1,0 +1,198 @@
+{% extends "template_base_page.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+{% block styleBlock %}
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+{% endblock %}
+
+{% block content %}
+
+
+
+
+
+
+    <div class="portlet light">
+        <div class="portlet-body">
+            <div class="invoice">
+                <div class="row invoice-logo">
+                    <div class="col-xs-8">
+                        <p>
+                            #5652256 / {% now "j F Y " %}
+
+                            <span class="muted">
+										Online Admission ({{ application_obj.university.university_name|default_if_none:"" }}) </span>
+                        </p>
+                    </div>
+
+
+                </div>
+
+                <div class="row invoice-logo">
+{#                    <div class="col-xs-4 invoice-logo-space">#}
+{#                    </div>#}
+
+                     <div class="col-xs-12">
+                        <p style="text-align: center">
+                            <span class="muted" style="color: red;font-size: 16px">
+                                        {% if is_university %}
+                                            Program Registration Payment Fee not updated yet. Please contact to Administrator.
+                                        {% else %}
+                                            You have not accepted offer yet. Please accept the offer to proceed the Program Registration Payment.
+                                        {% endif %}
+
+										 </span>
+                        </p>
+                    </div>
+                </div>
+                <hr/>
+
+
+            <br>
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <!-- Include the PayPal JavaScript SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=ASNG2WkQcuI1FrVwGqCeinjIC2WUj061QIpbKpuN8X7EbnwuZhId_M57GZkh8JjNuNFflXVCHIlP7qn5&currency=USD"
+            data-order-id="{{ application_obj.application_id }}"></script>
+
+
+    <script>
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== "") {
+                var cookies = document.cookie.split(";");
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === name + "=") {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        var csrftoken = getCookie("csrftoken");
+        var amount = "{{payement_obj.amount|floatformat:2}}";
+        var url = "{% url 'payments:payment_complete' %}";
+
+        // Render the PayPal button into #paypal-button-container
+        paypal.Buttons({
+
+            // Set up the transaction
+            createOrder: function (data, actions) {
+                return actions.order.create({
+                    application_context: {
+                        brand_name: 'Our Club Name',
+                        shipping_preference: 'NO_SHIPPING'
+                    },
+                    payer: {
+                        name: {
+                            given_name: "{{ application_obj.first_name }}",
+                            surname: "{{ application_obj.last_name }}"
+                        },
+                        email_address: "{{ application_obj.email }}"
+                    },
+                    purchase_units: [{
+                        reference_id: '{{ application_obj.application_id }}',
+                        amount: {
+                            value: amount,
+                            currency_code: 'USD'
+                        }
+                    }],
+                });
+            },
+
+            // Finalize the transaction
+            onApprove: function (data, actions) {
+                return actions.order.capture().then(function (orderData) {
+                    // Successful capture! For demo purposes:
+                    console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+                    var transaction = orderData.purchase_units[0].payments.captures[0];
+                    console.log(orderData);
+                    sendData();
+
+                    function sendData() {
+                        fetch(url, {
+                            method: "POST",
+                            headers: {
+                                "Content-type": "application/json",
+                                "X-CSRFToken": csrftoken,
+                            },
+                            body: JSON.stringify({orderData: orderData}),
+                        })
+                            .then((response) => response.json())
+                            .then((data) => {
+                                console.log('Success:', data); // Just for testing, you can delete
+                                {#alert(data);#}
+                                {#alert('Transaction ' + transaction.status + ': ' + transaction.id);#}
+                                {#var transaction_id = transaction.id;#}
+                                {#document.location.href = order_complete_url + "/" + transaction_id;#}
+                                // Just for testing, you can delete
+                                {#window.location.href = "{% url 'payments:order_complete' pk=instance.pk %}"#}
+                                var order_complete_url = '/payments/order_complete';
+                                document.location.href = order_complete_url + "/" + transaction.id;
+
+
+                            });
+                    }
+
+                    // Show a success message to the buyer
+                    {#alert('Transaction ' + transaction.status + ': ' + transaction.id + '\n\nSee console for all available details');#}
+                });
+            }
+
+        }).render('#paypal-button-container');
+    </script>
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+
+    <script type="text/javascript">
+        var CheckoutButton = document.getElementById("checkout-button");
+        var stripe = Stripe('pk_test_51JcmDhSIeVZrpBOQvbNkpUdU9H7l6iGwMyHzsASeNF6howwGwp9asyxWfjukiP7bHqB5EnGKIwGBR02f5431Qni700Zf86Q6VI');
+        CheckoutButton.addEventListener("click", function () {
+            fetch('{% url 'payments:create_checkout_session' %}',
+                {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken
+                    }
+                })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (session) {
+                    return stripe.redirectToCheckout({sessionId: session.id});
+                })
+                .then(function (result) {
+                    // If `redirectToCheckout` fails due to a browser or network
+                    // error, you should display the localized error message to your
+                    // customer using `error.message`.
+                    if (result.error) {
+                        alert(result.error.message);
+                    }
+                });
+        });
+
+
+    </script>
+
+{% endblock %}

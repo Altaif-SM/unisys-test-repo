@@ -2150,6 +2150,10 @@ def add_program_fee(request):
         discount = request.POST.get('discount')
         total_amount = request.POST.get('total_amount')
         program_fee_count = request.POST.get('program_fee_count')
+
+        if ProgramFeeDetails.objects.filter(university_id=university).exists():
+            messages.warning(request, "University Name already exists.")
+            return redirect('/masters/program_fee_settings/')
         try:
             program_fee_obj = ProgramFeeDetails.objects.create(university_id=university,country_id = country,
                                                                                    year_id=year,
@@ -2188,6 +2192,10 @@ def edit_program_fee(request, program_id=None):
         discount = request.POST.get('discount')
         total_amount = request.POST.get('total_amount')
         program_fee_count = request.POST.get('program_fee_count')
+        if ProgramFeeDetails.objects.filter(~Q(id=program_id), university_id=university).exists():
+            messages.warning(request, "University Name already exists.")
+            return redirect('/masters/program_fee_settings/')
+
         try:
             program_fee_obj.university_id = university
             program_fee_obj.country_id = country
@@ -4009,3 +4017,14 @@ def load_country(request):
             CountryDetails.objects.create(country_name=rec['name'])
             print(count)
             count = count + 1
+
+
+def delete_program_fee(request):
+    if request.method == 'POST':
+        program_delete_id = request.POST.get('program_delete_id')
+        try:
+            ProgramFeeDetails.objects.filter(id=program_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/program_fee_settings/')

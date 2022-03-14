@@ -990,6 +990,8 @@ License: You must have a valid license purchased only from themeforest(the above
 
 
 
+
+
                                 </ul>
                             </li>
 
@@ -1355,6 +1357,18 @@ License: You must have a valid license purchased only from themeforest(the above
                             {% endif %}
 
 
+                        {% if 'student.can_view_student_application_progress_history' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'payments:registration_checkout' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-credit-card"></i>
+                                        <span class="title">{% trans 'Program Registration Payment' %}</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+
                         </ul>
                         <!-- END SIDEBAR MENU -->
                     </div>  <!-- END tabpane -->
@@ -1612,7 +1626,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
 
 
-    {% if request.resolver_match.url_name == 'application_offer_letter' or request.resolver_match.url_name == 'acceptance_declaration'  %}
+    {% if request.resolver_match.url_name == 'application_offer_letter' or request.resolver_match.url_name == 'acceptance_declaration' or request.resolver_match.url_name == 'registration_checkout' %}
         {
             var element = document.getElementById("offer_status");
             element.classList.add("active");

@@ -277,6 +277,7 @@ urlpatterns = [
     path('delete_application_fee/', views.delete_application_fee, name='delete_application_fee'),
     path('get_faculty_from_university/', views.get_faculty_from_university, name='get_faculty_from_university'),
     path('load_country/', views.load_country, name='load_country'),
+    path('delete_program_fee/', views.delete_program_fee, name='delete_program_fee'),
 
 
 ]
