@@ -419,29 +419,29 @@
 
 
 
-                            <div class="">
-                                    <label class="col-md-2 control-label">Study Mode: <span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-
-                                        {% for rec in study_mode_list %}
-                                            {% if rec in selected_study_mode_list %}
-                                                <input class="current" type="checkbox" checked name="study_mode[]"
-                                                       id="study_mode"
-                                                       value="{{ rec }}">
-                                                <span style="padding:inherit">{{ rec }}</span>&nbsp;&nbsp;
-                                            {% else %}
-                                                <input class="current" type="checkbox" name="study_mode[]"
-                                                       id="study_mode"
-                                                       value="{{ rec }}">
-                                                <span style="padding:inherit">{{ rec }}</span>&nbsp;&nbsp;
-                                            {% endif %}
-
-                                        {% endfor %}
-
-
-                                    </div>
-                                </div>
+{#                            <div class="">#}
+{#                                    <label class="col-md-2 control-label">Study Mode: <span#}
+{#                                            style="color: red">*</span></label>#}
+{#                                    <div class="col-md-3">#}
+{##}
+{#                                        {% for rec in study_mode_list %}#}
+{#                                            {% if rec in selected_study_mode_list %}#}
+{#                                                <input class="current" type="checkbox" checked name="study_mode[]"#}
+{#                                                       id="study_mode"#}
+{#                                                       value="{{ rec }}">#}
+{#                                                <span style="padding:inherit">{{ rec }}</span>&nbsp;&nbsp;#}
+{#                                            {% else %}#}
+{#                                                <input class="current" type="checkbox" name="study_mode[]"#}
+{#                                                       id="study_mode"#}
+{#                                                       value="{{ rec }}">#}
+{#                                                <span style="padding:inherit">{{ rec }}</span>&nbsp;&nbsp;#}
+{#                                            {% endif %}#}
+{##}
+{#                                        {% endfor %}#}
+{##}
+{##}
+{#                                    </div>#}
+{#                                </div>#}
 
                             </div>
                             <br>

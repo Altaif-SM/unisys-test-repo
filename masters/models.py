@@ -368,7 +368,7 @@ class StudyTypeDetails(BaseModel):
         return self.study_type
 
     class Meta:
-        ordering = ('id',)
+        ordering = ('-id',)
 
 
 class StudyLevelDetails(BaseModel):

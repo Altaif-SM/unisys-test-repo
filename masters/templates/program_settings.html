@@ -195,9 +195,9 @@
 {#                        <th> {% trans 'Branch / Campus' %}</th>#}
                         <th> {% trans 'Faculty' %}</th>
                         <th> {% trans 'Department' %}</th>
-                        <th> {% trans 'Study Mode' %}</th>
                         <th> {% trans 'Study Level' %}</th>
-{#                        <th> {% trans 'Program Mode' %}</th>#}
+{#                        <th> {% trans 'Study Level' %}</th>#}
+                        <th> {% trans 'Program Mode' %}</th>
                         {#                        <th> Study Level</th>#}
                         {#                        <th> Study Type</th>#}
                         <th> {% trans 'Status' %}</th>
@@ -227,11 +227,11 @@
                             <td>{{ rec.faculty.faculty_name|default_if_none:"" }}</td>
                             <td>{{ rec.department.department|default_if_none:"" }}</td>
                             <td>{{ rec.study_level.study_level|default_if_none:"" }}</td>
-                            <td>{% for rec in rec.study_mode.all %}
-                                <span>{{ forloop.counter }}){{ rec.study_mode }}</span><br>
-                            {% endfor %}
-                            </td>
-{#                        <td>{{ rec.study_type.study_type|default_if_none:"" }}</td>#}
+{#                            <td>{% for rec in rec.study_mode.all %}#}
+{#                                <span>{{ forloop.counter }}){{ rec.study_mode }}</span><br>#}
+{#                            {% endfor %}#}
+{#                            </td>#}
+                        <td>{{ rec.study_type.study_type|default_if_none:"" }}</td>
                             {#                             <td>{{ rec.study_level.study_level|default_if_none:"" }}</td>#}
                             {#                        <td>{{ rec.study_type.study_type|default_if_none:"" }}</td>#}
                             <td>
