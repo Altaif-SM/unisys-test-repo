@@ -2533,9 +2533,12 @@ def applicant_intake_info(request):
     program_recs = ProgramDetails.objects.filter(is_delete=False).order_by('-id')
     faculty_recs = FacultyDetails.objects.filter(status=True).order_by('-id')
     study_type_list = ['International', 'University Main']
-    study_mode_list = ['Online', 'On Campus']
-    study_mode_list_2 = ['Online', 'On Campus']
-    study_mode_list_3 = ['Online', 'On Campus']
+    # study_mode_list = ['Online', 'On Campus']
+    # study_mode_list_2 = ['Online', 'On Campus']
+    # study_mode_list_3 = ['Online', 'On Campus']
+    study_mode_list = StudyTypeDetails.objects.all()
+    study_mode_list_2 = StudyTypeDetails.objects.all()
+    study_mode_list_3 = StudyTypeDetails.objects.all()
     study_level_list = ['Undergraduate', 'Postgraduate']
     study_type_recs = StudyTypeDetails.objects.all()
     study_level_recs = StudyLevelDetails.objects.filter().order_by('-id')
@@ -2584,6 +2587,8 @@ def applicant_intake_info(request):
 
     learning_centre_recs = []
 
+    country_recs = CountryDetails.objects.all()
+
     if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
         application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
         if application_obj.faculty:
@@ -2596,40 +2601,40 @@ def applicant_intake_info(request):
              department_3_recs = application_obj.faculty_3.department.all()
 
     if application_obj:
-        if application_obj.university:
-            country_learning_recs = LearningCentersDetails.objects.filter(university_id=application_obj.university.id)
-            for rec in country_learning_recs:
-                raw_dict = {}
-                if rec.country.id not in duplicate_country_ids:
-                    raw_dict['id'] = rec.country.id
-                    raw_dict['country_name'] = rec.country.country_name
-                    duplicate_country_ids.append(rec.country.id)
-                    country_recs.append(raw_dict)
+        # if application_obj.university:
+        #     country_learning_recs = LearningCentersDetails.objects.filter(university_id=application_obj.university.id)
+        #     for rec in country_learning_recs:
+        #         raw_dict = {}
+        #         if rec.country.id not in duplicate_country_ids:
+        #             raw_dict['id'] = rec.country.id
+        #             raw_dict['country_name'] = rec.country.country_name
+        #             duplicate_country_ids.append(rec.country.id)
+        #             country_recs.append(raw_dict)
 
 
         program_recs = ProgramDetails.objects.filter(is_delete=False)
-        if application_obj.study_level:
-            program_recs = program_recs.filter(study_level_id=application_obj.study_level.id)
-        if application_obj.study_mode:
+        if application_obj.program_mode:
+            program_recs = program_recs.filter(study_type_id=application_obj.program_mode.id)
+        # if application_obj.study_mode:
             for rec in program_recs:
-                for mode in rec.study_mode.filter(study_mode=application_obj.study_mode):
-                    faculty_list.append(rec)
+                # for mode in rec.study_mode.filter(study_mode=application_obj.study_mode):
+                faculty_list.append(rec)
 
         program_recs_2 = ProgramDetails.objects.filter(is_delete=False)
-        if application_obj.study_level_2:
-            program_recs_2 = program_recs_2.filter(study_level_id=application_obj.study_level_2.id)
-        if application_obj.study_mode_2:
+        if application_obj.program_mode_2:
+            program_recs_2 = program_recs_2.filter(study_type_id=application_obj.program_mode_2.id)
+        # if application_obj.study_mode_2:
             for rec in program_recs_2:
-                for mode in rec.study_mode.filter(study_mode=application_obj.study_mode_2):
-                    faculty_2_list.append(rec)
+                # for mode in rec.study_mode.filter(study_mode=application_obj.study_mode_2):
+                faculty_2_list.append(rec)
 
         program_recs_3 = ProgramDetails.objects.filter(is_delete=False)
-        if application_obj.study_level_3:
-            program_recs_3 = program_recs_3.filter(study_level_id=application_obj.study_level_3.id)
-        if application_obj.study_mode_3:
+        if application_obj.program_mode_3:
+            program_recs_3 = program_recs_3.filter(study_type_id=application_obj.program_mode_3.id)
+        # if application_obj.study_mode_3:
             for rec in program_recs_3:
-                for mode in rec.study_mode.filter(study_mode=application_obj.study_mode_3):
-                    faculty_3_list.append(rec)
+                # for mode in rec.study_mode.filter(study_mode=application_obj.study_mode_3):
+                faculty_3_list.append(rec)
 
 
         if faculty_list:
@@ -2667,76 +2672,76 @@ def applicant_intake_info(request):
         if application_obj.university:
             program_recs = program_recs.filter(university_id=application_obj.university.id)
 
-        if application_obj.study_level:
-            program_recs = program_recs.filter(study_level_id=application_obj.study_level.id)
+        if application_obj.program_mode:
+            program_recs = program_recs.filter(study_type_id=application_obj.program_mode.id)
 
         if application_obj.faculty:
             program_recs = program_recs.filter(faculty_id=application_obj.faculty.id)
 
-        if application_obj.department:
-            program_recs = program_recs.filter(department_id=application_obj.department.id)
+        # if application_obj.department:
+        #     program_recs = program_recs.filter(department_id=application_obj.department.id)
 
-        if application_obj.study_mode:
-            for rec in program_recs:
-                for mode in rec.study_mode.filter(study_mode=application_obj.study_mode):
-                    program_list.append(rec)
+        # if application_obj.study_mode:
+        # for rec in program_recs:
+        #     # for mode in rec.study_mode.filter(study_mode=application_obj.study_mode):
+        #     program_list.append(rec)
 
-        if program_list:
-            for rec in program_recs:
-                raw_dict = {}
-                raw_dict['id'] = rec.id
-                raw_dict['program'] = rec.program_name
-                program_final_list.append(raw_dict)
+        # if program_list:
+        for rec in program_recs:
+            raw_dict = {}
+            raw_dict['id'] = rec.id
+            raw_dict['program'] = rec.program_name
+            program_final_list.append(raw_dict)
 
         program_2_recs = ProgramDetails.objects.filter(is_delete=False)
         if application_obj.university:
             program_2_recs = program_2_recs.filter(university_id=application_obj.university.id)
 
-        if application_obj.study_level_2:
-            program_2_recs = program_2_recs.filter(study_level_id=application_obj.study_level_2.id)
+        if application_obj.program_mode_2:
+            program_2_recs = program_2_recs.filter(study_type_id=application_obj.program_mode_2.id)
 
         if application_obj.faculty_2:
             program_2_recs = program_2_recs.filter(faculty_id=application_obj.faculty_2.id)
 
-        if application_obj.department_2:
-            program_2_recs = program_2_recs.filter(department_id=application_obj.department_2.id)
+        # if application_obj.department_2:
+        #     program_2_recs = program_2_recs.filter(department_id=application_obj.department_2.id)
 
-        if application_obj.study_mode_2:
-            for rec in program_2_recs:
-                for mode in rec.study_mode.filter(study_mode=application_obj.study_mode_2):
-                    program_2_list.append(rec)
+        # if application_obj.study_mode_2:
+        # for rec in program_2_recs:
+        #     # for mode in rec.study_mode.filter(study_mode=application_obj.study_mode_2):
+        #     program_2_list.append(rec)
 
-        if program_2_list:
-            for rec in program_2_recs:
-                raw_dict = {}
-                raw_dict['id'] = rec.id
-                raw_dict['program'] = rec.program_name
-                program_2_final_list.append(raw_dict)
+        # if program_2_list:
+        for rec in program_2_recs:
+            raw_dict = {}
+            raw_dict['id'] = rec.id
+            raw_dict['program'] = rec.program_name
+            program_2_final_list.append(raw_dict)
 
         program_3_recs = ProgramDetails.objects.filter(is_delete=False)
         if application_obj.university:
             program_3_recs = program_3_recs.filter(university_id=application_obj.university.id)
 
-        if application_obj.study_level_2:
-            program_3_recs = program_3_recs.filter(study_level_id=application_obj.study_level_3.id)
+        if application_obj.program_mode_3:
+            program_3_recs = program_3_recs.filter(study_type_id=application_obj.program_mode_3.id)
 
         if application_obj.faculty_3:
             program_3_recs = program_3_recs.filter(faculty_id=application_obj.faculty_3.id)
 
-        if application_obj.department_3:
-            program_3_recs = program_3_recs.filter(department_id=application_obj.department_3.id)
+        # if application_obj.department_3:
+        #     program_3_recs = program_3_recs.filter(department_id=application_obj.department_3.id)
 
-        if application_obj.study_mode_3:
-            for rec in program_3_recs:
-                for mode in rec.study_mode.filter(study_mode=application_obj.study_mode_3):
-                    program_3_list.append(rec)
+        # if application_obj.study_mode_3:
+        #     for rec in program_3_recs:
+        #         for mode in rec.study_mode.filter(study_mode=application_obj.study_mode_3):
+        #             program_3_list.append(rec)
 
-        if program_3_list:
-            for rec in program_3_recs:
-                raw_dict = {}
-                raw_dict['id'] = rec.id
-                raw_dict['program'] = rec.program_name
-                program_3_final_list.append(raw_dict)
+        # if program_3_list:
+        for rec in program_3_recs:
+            raw_dict = {}
+            raw_dict['id'] = rec.id
+            raw_dict['program'] = rec.program_name
+            program_3_final_list.append(raw_dict)
 
 
 
@@ -2754,8 +2759,8 @@ def applicant_intake_info(request):
         if application_obj.university and application_obj.academic_year:
             semester_recs = SemesterDetails.objects.filter(university_id = application_obj.university.id,year_id = application_obj.academic_year.id)
 
-        if application_obj.learning_country:
-            learning_centre_recs = LearningCentersDetails.objects.filter(country_id=application_obj.learning_country.id,university_id=application_obj.university.id)
+        if application_obj.university:
+            learning_centre_recs = LearningCentersDetails.objects.filter(university_id=application_obj.university.id)
             for rec in learning_centre_recs:
                 raw_dict = {}
                 raw_dict['learning_centre_name'] = rec.lc_name
@@ -2793,7 +2798,7 @@ def get_learning_centre_from_country(request):
     finalDict = []
     country_id = request.POST.get('country_id', None)
     university = request.POST.get('university', None)
-    learning_centre_recs = LearningCentersDetails.objects.filter(country_id=country_id,university_id = university)
+    learning_centre_recs = LearningCentersDetails.objects.filter(university_id = university)
     for rec in learning_centre_recs:
         raw_dict = {}
         raw_dict['learning_centre_name']=rec.lc_name
@@ -2829,38 +2834,33 @@ def save_update_applicant_intake_info(request):
                 application_obj.progress_counter = progress_counter
                 application_obj.save()
 
-            if request.POST.get('learning_centre'):
-                application_obj.learning_centre_id = request.POST.get('learning_centre')
-            application_obj.academic_year_id = request.POST.get('year')
-            application_obj.program_id = request.POST.get('program')
-            application_obj.campus_id = request.POST.get('campus')
-            application_obj.faculty_id = request.POST.get('faculty')
-            application_obj.university_id = request.POST.get('university')
-            application_obj.semester_id = request.POST.get('semester')
-            application_obj.study_mode = request.POST.get('study_mode')
-            application_obj.study_level_id = request.POST.get('study_level')
+            application_obj.learning_centre_id = request.POST.get('learning_centre',None)
+            application_obj.academic_year_id = request.POST.get('year',None)
+            application_obj.program_id = request.POST.get('program',None)
+            application_obj.campus_id = request.POST.get('campus',None)
+            application_obj.faculty_id = request.POST.get('faculty',None)
+            application_obj.university_id = request.POST.get('university',None)
+            application_obj.semester_id = request.POST.get('semester',None)
+            application_obj.study_mode = request.POST.get('study_mode',None)
+            # application_obj.study_level_id = request.POST.get('study_level',None)
             application_obj.department_id = request.POST.get('department',None)
-            application_obj.program_mode_id = request.POST.get('program_mode')
+            application_obj.program_mode_id = request.POST.get('study_level',None)
 
             application_obj.study_mode_2 = request.POST.get('study_mode_2',None)
-            application_obj.study_level_2_id = request.POST.get('study_level_2',None)
+            # application_obj.study_level_2_id = request.POST.get('study_level_2',None)
             application_obj.faculty_2_id = request.POST.get('faculty_2',None)
             application_obj.department_2_id = request.POST.get('department_2', None)
             application_obj.program_2_id = request.POST.get('program_2',None)
-            application_obj.program_mode_2_id = request.POST.get('program_mode_2',None)
+            application_obj.program_mode_2_id = request.POST.get('study_level_2',None)
 
             application_obj.study_mode_3 = request.POST.get('study_mode_3', None)
-            application_obj.study_level_3_id = request.POST.get('study_level_3', None)
+            # application_obj.study_level_3_id = request.POST.get('study_level_3', None)
             application_obj.faculty_3_id = request.POST.get('faculty_3', None)
             application_obj.department_3_id = request.POST.get('department_3', None)
             application_obj.program_3_id = request.POST.get('program_3', None)
-            application_obj.program_mode_3_id = request.POST.get('program_mode_3', None)
-
-
-
-
-            if request.POST.get('country'):
-                application_obj.learning_country_id = request.POST.get('country')
+            application_obj.program_mode_3_id = request.POST.get('study_level_3', None)
+            # if request.POST.get('country'):
+            application_obj.learning_country_id = request.POST.get('country',None)
             application_obj.intake_flag = True
             application_obj.save()
             redirect_flag = True
@@ -3034,3 +3034,28 @@ def submit_acceptance(request):
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
     return redirect('/student/acceptance_declaration/')
+
+
+def get_all_program_mode(request):
+    study_type_list = []
+    study_type_recs = StudyTypeDetails.objects.all()
+    for rec in study_type_recs:
+        raw_dict = {}
+        raw_dict['id']=rec.id
+        raw_dict['study_type']=rec.study_type
+        study_type_list.append(raw_dict)
+    return JsonResponse(study_type_list, safe=False)
+
+def get_faculty_from_university(request):
+    finalDict = []
+    university_type = request.POST.get('university_type', None)
+    if university_type == 'Main':
+        university_recs = UniversityDetails.objects.filter(is_delete=False, is_partner_university=False).order_by('-id')
+    else:
+        university_recs = UniversityDetails.objects.filter(is_delete=False, is_partner_university=True).order_by('-id')
+    for rec in university_recs:
+        raw_dict = {}
+        raw_dict['university_name']=rec.university_name
+        raw_dict['id']=rec.id
+        finalDict.append(raw_dict)
+    return JsonResponse(finalDict, safe=False)

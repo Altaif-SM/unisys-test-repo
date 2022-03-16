@@ -130,6 +130,8 @@ urlpatterns = [
                   path('get_branch_campus_from_program/', views.get_branch_campus_from_program, name='get_branch_campus_from_program'),
                   path('acceptance_declaration/', views.acceptance_declaration, name='acceptance_declaration'),
                   path('submit_acceptance/', views.submit_acceptance, name='submit_acceptance'),
+                  path('get_all_program_mode/', views.get_all_program_mode, name='get_all_program_mode'),
+                  path('get_faculty_from_university/', views.get_faculty_from_university, name='get_faculty_from_university'),
 
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
