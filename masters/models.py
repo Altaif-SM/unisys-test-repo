@@ -306,6 +306,11 @@ class UniversityDetails(BaseModel):
 
         return res
 
+class StudyLevelDetails(BaseModel):
+    study_level = models.CharField(max_length=255, blank=True, null=True)
+    def __str__(self):
+        return self.study_level
+
 class Semester(models.Model):
     semester = models.CharField(max_length=100, blank=True, null=True)
     start_date = models.DateField(null=True)
@@ -315,6 +320,8 @@ class SemesterDetails(BaseModel):
     semester_name = models.CharField(max_length=255, blank=True, null=True)
     start_date = models.DateField(null=True)
     end_date = models.DateField(null=True)
+    study_level = models.ForeignKey(StudyLevelDetails, null=True, related_name='study_level_semester_rel',
+                             on_delete=models.SET_NULL)
     year = models.ForeignKey(YearDetails, null=True, related_name='year_semester_rel',
                                 on_delete=models.SET_NULL)
     university = models.ForeignKey(UniversityDetails, null=True, related_name='university_semester_rel',
@@ -371,10 +378,7 @@ class StudyTypeDetails(BaseModel):
         ordering = ('-id',)
 
 
-class StudyLevelDetails(BaseModel):
-    study_level = models.CharField(max_length=255, blank=True, null=True)
-    def __str__(self):
-        return self.study_level
+
 
 class Department(models.Model):
     department = models.CharField(max_length=100, blank=True, null=True)

@@ -2489,9 +2489,10 @@ def add_semester(request):
     if request.method == 'POST':
         university = request.POST.get('university')
         year = request.POST.get('year')
+        study_level = request.POST.get('study_level')
         semester_count = request.POST.get('semester_count')
         try:
-            semester_obj = SemesterDetails.objects.create(university_id = university,year_id = year)
+            semester_obj = SemesterDetails.objects.create(university_id = university,year_id = year,study_level_id = study_level)
             semester_obj.semester.clear()
             for x in range(int(semester_count)):
                 try:
@@ -2512,9 +2513,11 @@ def add_semester(request):
         university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
                                                            is_partner_university=False).order_by('-id')
         year_recs = YearDetails.objects.all()
+        study_level_recs  = StudyLevelDetails.objects.filter().order_by('-id')
         context = {
             'university_recs':university_recs,
             'year_recs':year_recs,
+            'study_level_recs':study_level_recs,
         }
         return render(request, 'add_semester.html',context)
 
@@ -2525,10 +2528,12 @@ def edit_semester(request, semester_id=None):
     if request.method == 'POST':
         university = request.POST.get('university')
         year = request.POST.get('year')
+        study_level = request.POST.get('study_level')
         semester_count = request.POST.get('semester_count')
         try:
             semester_obj.university_id = university
             semester_obj.year_id = year
+            semester_obj.study_level_id = study_level
             semester_obj.university_id = university
             semester_obj.save()
             semester_obj.semester.clear()
@@ -2557,11 +2562,14 @@ def edit_semester(request, semester_id=None):
         university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
                                                            is_partner_university=False).order_by('-id')
     year_recs = YearDetails.objects.all()
+    study_level_recs = StudyLevelDetails.objects.filter().order_by('-id')
+
     context = {
         'semester_obj': semester_obj,
         'university_recs': university_recs,
         'year_recs': year_recs,
         'semester_total_count': semester_total_count,
+        'study_level_recs': study_level_recs,
     }
     return render(request, "edit_semester.html",context)
 
@@ -3673,16 +3681,17 @@ def get_semester_already_exists(request):
     semester_id = request.POST.get('semester_id', None)
     university = request.POST.get('university', None)
     year = request.POST.get('year', None)
+    study_level = request.POST.get('study_level', None)
     semester_exists = False
     if semester_id:
-        if SemesterDetails.objects.filter(university_id=university,year_id = year).exclude(
+        if SemesterDetails.objects.filter(university_id=university,year_id = year,study_level = study_level).exclude(
                 id=semester_id).exists():
             semester_exists = True
         else:
             semester_exists = False
         return JsonResponse(semester_exists, safe=False)
     else:
-        if SemesterDetails.objects.filter(university_id=university,year_id = year).exists():
+        if SemesterDetails.objects.filter(university_id=university,year_id = year,study_level = study_level).exists():
             semester_exists = True
         else:
             semester_exists = False

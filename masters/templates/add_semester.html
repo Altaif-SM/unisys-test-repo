@@ -117,9 +117,10 @@
                  $(document).on("change", "#year", function (e) {
                 var semester_id = $('#semester_id').val();
                 var university = $('#university').val();
+                var study_level = $('#study_level').val();
                 var year = $(this).val();
                 var url = '/masters/get_semester_already_exists/';
-                get_semester_already_exists(url, semester_id, university, year)
+                get_semester_already_exists(url, semester_id, university, year,study_level)
             })
 
 
@@ -155,7 +156,7 @@
             });
 
 
-             function get_semester_already_exists(url, semester_id, university, year) {
+             function get_semester_already_exists(url, semester_id, university, year,study_level) {
             $.ajax({
                 type: 'POST',
                 url: url,
@@ -163,6 +164,7 @@
                     semester_id: semester_id,
                     university: university,
                     year: year,
+                    study_level: study_level,
                     csrfmiddlewaretoken: '{{ csrf_token }}',
                 },
                 success: function (data) {
@@ -349,22 +351,33 @@
                                 </div>
 
 
-                                {#                                <div class="">#}
-                                {#                                    <label class="col-md-2 control-label">{% trans 'Semester Name' %}:<span#}
-                                {#                                            style="color: red">*</span></label>#}
-                                {#                                    <div class="col-md-3">#}
-                                {#                                        <input type="text" title="Enter Semester Name" id="semester_name"#}
-                                {#                                               value=""#}
-                                {#                                               name="semester_name"#}
-                                {#                                               class="form-control" required>#}
-                                {##}
-                                {#                                    </div>#}
-                                {#                                </div>#}
+
+                            </div>
+
+                            <br>
+                        <div class="row">
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Study Level' %}:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select id='study_level' title="Select Study Level"
+                                                name="study_level"
+                                                class="form-control" required>
+                                            <option selected="selected" value=""> Please Select</option>
+                                            {% for rec in study_level_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.study_level|default_if_none:"" }}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                </div>
+
 
 
                             </div>
 
                             <br>
+
                             <div class="row">
                                 <div class="">
                                     <label class="col-md-2 control-label">{% trans 'Year' %}:<span
@@ -380,33 +393,13 @@
 
                                         </select>
 
-                                     <span style="color: red;display: none" id="semester_exists">This University,Year already used</span>
+
                                     </div>
                                 </div>
                             </div>
+                        <br>
+                        <span style="color: red;display: none;margin-left: 15%" id="semester_exists">This University, Study Level, Year already used</span>
 
-                            {#                            <div class="row">#}
-                            {##}
-                            {#                                <div class="">#}
-                            {#                                    <label class="col-md-2 control-label">{% trans 'Start Date' %}:<span#}
-                            {#                                            style="color: red">*</span></label>#}
-                            {#                                    <div class="col-md-3">#}
-                            {#                                        <input type="date" name="start_date" class="form-control" required>#}
-                            {##}
-                            {#                                    </div>#}
-                            {#                                </div>#}
-                            {##}
-                            {#                                <div class="">#}
-                            {#                                    <label class="col-md-2 control-label">{% trans 'End Date' %}:<span#}
-                            {#                                            style="color: red">*</span></label>#}
-                            {#                                    <div class="col-md-3">#}
-                            {#                                        <input type="date" name="end_date" class="form-control" required>#}
-                            {##}
-                            {#                                    </div>#}
-                            {#                                </div>#}
-                            {##}
-                            {##}
-                            {#                            </div>#}
 
                             <hr>
 
