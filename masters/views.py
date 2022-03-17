@@ -12,6 +12,7 @@ from partner.models import *
 from datetime import date
 import datetime
 from django.http import HttpResponse, JsonResponse
+from datetime import datetime
 
 
 
@@ -3658,7 +3659,6 @@ def get_year_from_university(request):
                 semester_list.append(raw_dict)
     return JsonResponse(semester_list, safe=False)
 
-
 def get_intake_semester_from_year(request):
     semester_list = []
     year = request.POST.get('year', None)
@@ -3676,7 +3676,7 @@ def get_intake_semester_from_year(request):
             for sem in rec.semester.all():
                 raw_dict = {}
                 raw_dict['id'] = sem.id
-                raw_dict['semester'] = str(sem.semester +' ' + rec.year.year_name)
+                raw_dict['semester'] = str(sem.semester + ' ' + (str(sem.start_date) + ' - ' + str(sem.end_date)))
                 semester_list.append(raw_dict)
     return JsonResponse(semester_list, safe=False)
 
