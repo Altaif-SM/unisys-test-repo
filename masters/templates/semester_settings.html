@@ -241,7 +241,7 @@
                         <th style="display: none">Id</th>
 
                         <th> {% trans 'University' %}</th>
-                        <th> {% trans 'Type' %}</th>
+{#                        <th> {% trans 'Type' %}</th>#}
                         <th> {% trans 'Study Level' %}</th>
                         <th> {% trans 'Year' %}</th>
                         <th>{% trans 'Semester' %}</th>
@@ -265,11 +265,11 @@
                             </td>
 
                             <td>{{ rec.university.university_name|default_if_none:"" }}</td>
-                            {% if rec.university.is_partner_university == True %}
-                                <td>International</td>
-                            {% else %}
-                                <td>Main</td>
-                            {% endif %}
+{#                            {% if rec.university.is_partner_university == True %}#}
+{#                                <td>International</td>#}
+{#                            {% else %}#}
+{#                                <td>Main</td>#}
+{#                            {% endif %}#}
                             <td>{{ rec.study_level.study_level|default_if_none:"" }}</td>
                             <td>{{ rec.year.year_name|default_if_none:"" }}</td>
                             <td>{% for rec in rec.semester.all %}
