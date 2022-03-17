@@ -141,8 +141,37 @@
                     var url = '/student/get_all_program_mode/';
                     get_all_program_mode(url)
 
+                     var url = '/student/get_all_study_level/';
+                    get_all_study_level(url)
+
+
 
                 })
+
+            function get_all_study_level(url) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            $('#program_level').empty();
+                            $('#program_level').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#program_level').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['study_level'] + '</option>')
+                            }
+
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
 
             function get_all_program_mode(url) {
                     $.ajax({
@@ -227,12 +256,12 @@
                             $('#study_mode').append(
                                 '<option value="On Campus" >On Campus</option>');
 
-                            {#$('#study_level').empty();#}
-                            {#$('#study_level').append(#}
+                            {#$('#program_level').empty();#}
+                            {#$('#program_level').append(#}
                             {#    '<option value="" >Please select</option>');#}
-                            {#$('#study_level').append(#}
+                            {#$('#program_level').append(#}
                             {#    '<option value="2" >Undergraduate</option>');#}
-                            {#$('#study_level').append(#}
+                            {#$('#program_level').append(#}
                             {#    '<option value="1" >Postgraduate</option>');#}
 
                             $('#faculty').empty();
@@ -366,20 +395,55 @@
                     });
                 }
 
-
                 $(document).on("change", "#year", function (e) {
                     var year = $(this).val();
                     var university = $('#university').val();
+                    var program_level = $('#program_level').val();
                     var url = '/masters/get_intake_semester_from_year/';
-                    get_intake_semester_from_year(url, year, university)
+                    get_intake_semester_from_year(url, year, university,program_level)
                 })
 
-                function get_intake_semester_from_year(url, year, university) {
+
+                $(document).on("change", "#program_level", function (e) {
+                    var program_level = $(this).val();
+                    var university = $('#university').val();
+                    var url = '/masters/get_year_from_study_level/';
+                    get_year_from_study_level(url, program_level, university)
+                })
+
+             function get_year_from_study_level(url, program_level, university) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            program_level: program_level,
+                            university: university,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            $('#year').empty();
+                            $('#year').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#year').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['year'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+                function get_intake_semester_from_year(url, year, university,program_level) {
                     $.ajax({
                         type: 'POST',
                         url: url,
                         data: {
                             year: year,
+                            program_level: program_level,
                             university: university,
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
@@ -407,6 +471,10 @@
 
                     var url = '/student/get_all_program_mode/';
                     get_all_program_mode(url)
+
+
+                    var url = '/student/get_all_study_level/';
+                    get_all_study_level(url)
 
 
 
@@ -1658,6 +1726,36 @@
                             </div>
                         </div>
                         <br>
+                    <div class="row">
+                            <input hidden id="value_check" name="value_check">
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Study Level' %}: <span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-4">
+                                    <select id='program_level' title="Select Study Level" name="program_level"
+                                            class="form-control value_check" required>
+
+                                        {% if application_obj.study_level %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.study_level.id }}"
+                                            >{{ application_obj.study_level.study_level|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option disabled selected="selected" value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in study_level_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.study_level|default_if_none:"" }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <br>
                         <div class="row">
                             <input hidden id="value_check" name="value_check">
 
@@ -1701,7 +1799,7 @@
                                         {% if application_obj.semester %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ application_obj.semester.id }}"
-                                            >{{ application_obj.semester.semester|default_if_none:"" }}</option>
+                                            >{{ application_obj.semester.semester|default_if_none:"" }} ({{ application_obj.semester.start_date|date:"Y/m/d" }} - {{ application_obj.semester.end_date|date:"Y/m/d" }})</option>
                                         {% else %}
                                             <option disabled selected="selected" value="">{% trans 'Please Select' %}
                                             </option>
@@ -1709,7 +1807,7 @@
 
                                         {% for rec in semester_recs %}
                                             {% for sem in rec.semester.all %}
-                                                <option value='{{ sem.id }}'>{{ sem.semester|default_if_none:"" }}</option>
+                                                <option value='{{ sem.id }}'>{{ sem.semester|default_if_none:"" }} ({{ sem.start_date|date:"Y/m/d" }} - {{ sem.end_date|date:"Y/m/d" }})</option>
                                             {% endfor %}
                                         {% endfor %}
                                     </select>

@@ -2746,7 +2746,7 @@ def applicant_intake_info(request):
 
 
         if application_obj.university:
-            year_recs = SemesterDetails.objects.filter(university_id = application_obj.university.id)
+            year_recs = SemesterDetails.objects.filter(university_id = application_obj.university.id,study_level_id = application_obj.study_level.id)
             if application_obj.university.is_partner_university == True:
                 university_recs = UniversityDetails.objects.filter(is_delete=False,
                                                                    is_partner_university=True).order_by('-id')
@@ -2757,7 +2757,7 @@ def applicant_intake_info(request):
             university_recs = UniversityDetails.objects.filter(is_delete=False,
                                                                is_partner_university=False).order_by('-id')
         if application_obj.university and application_obj.academic_year:
-            semester_recs = SemesterDetails.objects.filter(university_id = application_obj.university.id,year_id = application_obj.academic_year.id)
+            semester_recs = SemesterDetails.objects.filter(university_id = application_obj.university.id,year_id = application_obj.academic_year.id,study_level_id = application_obj.study_level.id)
 
         if application_obj.university:
             learning_centre_recs = LearningCentersDetails.objects.filter(university_id=application_obj.university.id)
@@ -2842,7 +2842,7 @@ def save_update_applicant_intake_info(request):
             application_obj.university_id = request.POST.get('university',None)
             application_obj.semester_id = request.POST.get('semester',None)
             application_obj.study_mode = request.POST.get('study_mode',None)
-            # application_obj.study_level_id = request.POST.get('study_level',None)
+            application_obj.study_level_id = request.POST.get('program_level',None)
             application_obj.department_id = request.POST.get('department',None)
             application_obj.program_mode_id = request.POST.get('study_level',None)
 
@@ -3059,3 +3059,14 @@ def get_faculty_from_university(request):
         raw_dict['id']=rec.id
         finalDict.append(raw_dict)
     return JsonResponse(finalDict, safe=False)
+
+
+def get_all_study_level(request):
+    study_level_list = []
+    study_level_recs = StudyLevelDetails.objects.all()
+    for rec in study_level_recs:
+        raw_dict = {}
+        raw_dict['id']=rec.id
+        raw_dict['study_level']=rec.study_level
+        study_level_list.append(raw_dict)
+    return JsonResponse(study_level_list, safe=False)

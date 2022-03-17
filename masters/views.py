@@ -3662,10 +3662,13 @@ def get_year_from_university(request):
 def get_intake_semester_from_year(request):
     semester_list = []
     year = request.POST.get('year', None)
+    program_level = request.POST.get('program_level', None)
     university = request.POST.get('university', None)
     semester_recs = SemesterDetails.objects.all()
     if year:
         semester_recs = semester_recs.filter(year_id = year)
+    if program_level:
+        semester_recs = semester_recs.filter(study_level_id = program_level)
     if university:
         semester_recs = semester_recs.filter(university_id = university)
     if semester_recs:
@@ -3673,7 +3676,7 @@ def get_intake_semester_from_year(request):
             for sem in rec.semester.all():
                 raw_dict = {}
                 raw_dict['id'] = sem.id
-                raw_dict['semester'] = sem.semester
+                raw_dict['semester'] = str(sem.semester +' ' + rec.year.year_name)
                 semester_list.append(raw_dict)
     return JsonResponse(semester_list, safe=False)
 
@@ -4090,3 +4093,21 @@ def delete_program_fee(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/program_fee_settings/')
+
+
+def get_year_from_study_level(request):
+    year_list = []
+    program_level = request.POST.get('program_level', None)
+    university = request.POST.get('university', None)
+    semester_recs = SemesterDetails.objects.all()
+    if program_level:
+        semester_recs = semester_recs.filter(study_level_id = program_level)
+    if university:
+        semester_recs = semester_recs.filter(university_id = university)
+    if semester_recs:
+        for rec in semester_recs:
+            raw_dict = {}
+            raw_dict['id'] = rec.year.id
+            raw_dict['year'] = rec.year.year_name
+            year_list.append(raw_dict)
+    return JsonResponse(year_list, safe=False)
