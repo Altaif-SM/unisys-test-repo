@@ -23,7 +23,7 @@ def content_file_name_donor(instance, filename):
 
 
 class CountryDetails(BaseModel):
-    country_name = models.CharField(max_length=255, blank=True, null=True)
+    country_name = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         ordering = ('id',)
@@ -40,7 +40,7 @@ class CountryDetails(BaseModel):
         return res
 
 class ArabCompetencyTestDetails(BaseModel):
-    arab_competency_test = models.CharField(max_length=255, blank=True, null=True)
+    arab_competency_test = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         ordering = ('id',)
@@ -57,7 +57,7 @@ class ArabCompetencyTestDetails(BaseModel):
         return res
 
 class EnglishCompetencyTestDetails(BaseModel):
-    english_competency_test = models.CharField(max_length=255, blank=True, null=True)
+    english_competency_test = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         ordering = ('id',)
@@ -307,7 +307,7 @@ class UniversityDetails(BaseModel):
         return res
 
 class StudyLevelDetails(BaseModel):
-    study_level = models.CharField(max_length=255, blank=True, null=True)
+    study_level = models.CharField(max_length=50, blank=True, null=True)
     def __str__(self):
         return self.study_level
 
@@ -370,7 +370,7 @@ class StudyModeDetails(BaseModel):
         return self.study_mode
 
 class StudyTypeDetails(BaseModel):
-    study_type = models.CharField(max_length=255, blank=True, null=True)
+    study_type = models.CharField(max_length=50, blank=True, null=True)
     def __str__(self):
         return self.study_type
 
@@ -573,21 +573,22 @@ class UploadTermCondition(BaseModel):
 
 
 class LanguageDetails(BaseModel):
-    short_code = models.CharField(max_length=255, blank=True, null=True)
-    language_name = models.CharField(max_length=255, blank=True, null=True)
-    language_direction = models.CharField(max_length=255, blank=True, null=True)
+    short_code = models.CharField(max_length=10, blank=True, null=True)
+    language_name = models.CharField(max_length=50, blank=True, null=True)
+    language_direction = models.CharField(max_length=50, blank=True, null=True)
     status = models.BooleanField(default=False)
+
     class Meta:
         ordering = ('-id',)
 
 class CurrencyDetails(BaseModel):
-    currency_number = models.CharField(max_length=255, blank=True, null=True)
-    currency_code = models.CharField(max_length=255, blank=True, null=True)
-    currency_name = models.CharField(max_length=255, blank=True, null=True)
-    decimal_description = models.CharField(max_length=255, blank=True, null=True)
+    currency_number = models.CharField(max_length=11, blank=True, null=True)
+    currency_code = models.CharField(max_length=10, blank=True, null=True)
+    currency_name = models.CharField(max_length=50, blank=True, null=True)
+    decimal_description = models.CharField(max_length=50, blank=True, null=True)
     record_status = models.BooleanField(default=False)
-    length = models.CharField(max_length=255, blank=True, null=True)
-    exchange_type = models.CharField(max_length=255, blank=True, null=True)
+    length = models.CharField(max_length=50, blank=True, null=True)
+    exchange_type = models.CharField(max_length=50, blank=True, null=True)
     class Meta:
         ordering = ('-id',)
 
@@ -604,7 +605,7 @@ class ActivityDetails(BaseModel):
 
 
 class StudentModeDetails(BaseModel):
-    student_mode = models.CharField(max_length=255, blank=True, null=True)
+    student_mode = models.CharField(max_length=50, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
 
     class Meta:
