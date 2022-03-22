@@ -75,36 +75,20 @@ def applicant_personal_info(request):
     religion_recs = ReligionDetails.objects.all()
     student_recs = StudentDetails.objects.filter(user__is_active = True)
     agent_recs = AgentDetails.objects.filter()
-
-
     application_obj = ''
-
     if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
         application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
-
-    #if ApplicationDetails.objects.filter(id=request.user.get_application.id).exists():
-    #     application_obj = ApplicationDetails.objects.get(id=request.user.get_application.id)
-
     return render(request, 'applicant_personal_info.html',
                   {'country_recs': country_recs, 'religion_recs': religion_recs, 'application_obj': application_obj,'student_recs':student_recs,'agent_recs':agent_recs})
 
 
 def save_update_applicant_personal_info(request):
-    passport_photo = request.FILES.get('passport_photo')
-    pic = request.FILES.get('photo')
-    same_as = request.POST.get('same_as')
-    # value_check = json.loads(request.POST.get('value_check'))
     redirect_flag = False
-    # from_status = from_status_check(list(value_check.values()))
-
     if request.POST:
         if StudentDetails.objects.filter(user=request.user):
             student = StudentDetails.objects.get(user=request.user)
-
             if request.POST['first_name'] and request.POST['last_name'] and request.POST['email'] != '':
-
                 if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
-
                     ApplicationDetails.objects.filter(application_id=request.user.get_application_id).update(
                         first_name=request.POST['first_name'],
                         middle_name=request.POST['middle_name'],
@@ -112,10 +96,7 @@ def save_update_applicant_personal_info(request):
                         surname=request.POST['surname'],
                         passport_number=request.POST.get('passport_number'),
                         email=request.POST['email'])
-
                     application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
-
-
                     if application_obj.address:
                         AddressDetails.objects.filter(id=application_obj.address.id).update(
                             country_id=request.POST['country'],
@@ -140,7 +121,6 @@ def save_update_applicant_personal_info(request):
                                                                     street=request.POST['permanent_street'])
                         application_obj.address = address_obj
                     application_obj.save()
-
                     redirect_flag = True
                 else:
                     try:
@@ -156,7 +136,6 @@ def save_update_applicant_personal_info(request):
                         application_id = get_application_id(application_obj)
                         application_obj.application_id = application_id
                         application_obj.save()
-
                         address_obj = AddressDetails.objects.create(country_id=request.POST['country'],
                                                                     nationality_id=request.POST['nationality'],
                                                                     mobile=request.POST['mobile'],
@@ -167,20 +146,14 @@ def save_update_applicant_personal_info(request):
                                                                     residential_address=request.POST['permanent_residential_address'],
                                                                     street=request.POST['permanent_street'])
 
-
-
                         application_obj.progress_counter = 20
                         application_obj.address = address_obj
                         application_obj.save()
-
                         redirect_flag = True
                     except Exception as e:
                         messages.warning(request, "Form have some error" + str(e))
-
                 try:
-
                     application_obj.save()
-
                 except Exception as e:
                     messages.warning(request, "Form have some error" + str(e))
             else:

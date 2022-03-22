@@ -226,16 +226,6 @@ class User(AbstractUser):
                 form_vals['personal_info_flag'] = applicaton_obj.personal_info_flag
                 form_vals['intake_flag'] = applicaton_obj.intake_flag
 
-                if applicaton_obj.father_name == None or applicaton_obj.mother_name == None or applicaton_obj.father_income == None or applicaton_obj.father_occupation == None or applicaton_obj.mother_income == None or applicaton_obj.mother_occupation == None:
-                    form_vals['family_flag'] = False
-
-                elif not applicaton_obj.father_name == '' or not applicaton_obj.mother_name == '' or not applicaton_obj.father_income == '' or not applicaton_obj.father_occupation == '' or not applicaton_obj.mother_income == '' or not applicaton_obj.mother_occupation == '':
-                    form_vals['family_flag'] = True
-
-                else:
-                    form_vals['family_flag'] = False
-                if applicaton_obj.personal_info_flag:
-                    pass
                 form_vals[
                     'english_qualification'] = applicaton_obj.english_applicant_rel.filter()[0].english_qualification if applicaton_obj.english_applicant_rel.all() else False
                 form_vals[
@@ -245,7 +235,6 @@ class User(AbstractUser):
                 form_vals['working_experience'] = True if applicaton_obj.employement_history_rel.all() else False
                 form_vals['declaration'] = True if applicaton_obj.is_submitted else False
                 form_vals['my_application'] = applicaton_obj.is_submitted if applicaton_obj.is_submitted else False
-                form_vals['psychometric_test'] = applicaton_obj.applicant_psychometric_test_rel.exists() if applicaton_obj.applicant_psychometric_test_rel.exists() else False
                 form_vals['agreement'] = applicaton_obj.applicant_agreement_rel.exists() if applicaton_obj.applicant_agreement_rel.exists() else False
 
                 return form_vals
@@ -258,19 +247,11 @@ class User(AbstractUser):
                 form_vals['payment'] = False
                 form_vals['declaration'] = False
                 form_vals['my_application'] = False
-                form_vals['psychometric_test'] = False
                 form_vals['agreement'] = False
-                form_vals['family_flag'] = False
                 form_vals['working_experience'] = False
 
                 return form_vals
         else:
-
-            # form_vals['personal_info_flag'] = False
-            # form_vals['english_qualification'] = False
-            # form_vals['scholarship_selection'] = False
-            # form_vals['my_application'] = False
-
             return None
 
     @property
@@ -331,6 +312,7 @@ class User(AbstractUser):
     DONOR_DASHBOARD = '/donor/template_donor_dashboard/'
     ACCOUNTANT_DASHBOARD = '/accounts/home/'
     ADMINISTRATOR_DASHBOARD = '/accounts/dashboard/'
+
 
     def get_dashboard_path(self):
 

@@ -64,15 +64,13 @@ class AgentDetails(BaseModel):
     last_name = models.CharField(max_length=256, blank=True, null=True)
 
 class StudentDetails(BaseModel):
-    # student_name = computed_property.ComputedCharField(compute_from='student_full_name', null=True, max_length=250)
     birth_date = models.DateField(null=True)
     gender = models.CharField(max_length=25, null=True)
-    father_name = models.CharField(max_length=255, blank=True, null=True)
-    photo = models.FileField(upload_to=content_student_file_name_image)
+    father_name = models.CharField(max_length=150, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     nationality = models.ForeignKey('masters.CountryDetails', null=True, related_name='student_nationality_rel',
                                     on_delete=models.SET_NULL)
-    religion = models.CharField(max_length=255, blank=True, null=True)
+    religion = models.CharField(max_length=100, blank=True, null=True)
     contact_number = models.CharField(max_length=16, blank=True, null=True)
     address = models.ForeignKey('masters.AddressDetails', blank=True, null=True, related_name='student_address_rel',
                                 on_delete=models.SET_NULL)
@@ -120,16 +118,14 @@ class StudentDetails(BaseModel):
 
 
 class ApplicationDetails(BaseModel):
-    first_name = models.CharField(max_length=255, blank=True, null=True)
-    middle_name = models.CharField(max_length=255, blank=True, null=True)
-    last_name = models.CharField(max_length=255, blank=True, null=True)
-    surname = models.CharField(max_length=255, blank=True, null=True)
-
+    first_name = models.CharField(max_length=150, blank=True, null=True)
+    middle_name = models.CharField(max_length=150, blank=True, null=True)
+    last_name = models.CharField(max_length=150, blank=True, null=True)
+    surname = models.CharField(max_length=150, blank=True, null=True)
     year = models.ForeignKey('masters.YearDetails', blank=True, null=True, related_name='applicant_year_rel',
                              on_delete=models.SET_NULL)
     semester = models.ForeignKey('masters.Semester', blank=True, null=True,
                                  related_name='applicant_semester_rel', on_delete=models.SET_NULL)
-
     birth_date = models.DateField(blank=True, null=True)
     gender = models.CharField(max_length=25, blank=True, null=True, )
     nationality = models.ForeignKey('masters.CountryDetails', blank=True, null=True,
@@ -138,89 +134,24 @@ class ApplicationDetails(BaseModel):
     religion = models.ForeignKey('masters.ReligionDetails', blank=True, null=True,
                                  related_name='applicant_religion_rel',
                                  on_delete=models.SET_NULL)
-
-    id_number = models.CharField(max_length=100, blank=True, null=True)
     passport_number = models.CharField(max_length=100, blank=True, null=True)
-    passport_issue_country = models.ForeignKey('masters.CountryDetails', blank=True, null=True,
-                                               related_name='passport_issue_country_rel',
-                                               on_delete=models.SET_NULL)
-    passport_image = models.FileField(upload_to=content_file_name_image, blank=True, null=True)
-
     address = models.ForeignKey('masters.AddressDetails', blank=True, null=True, related_name='applicant_address_rel',
                                 on_delete=models.SET_NULL)
     permanent_address = models.ForeignKey('masters.AddressDetails', blank=True, null=True,
                                           related_name='applicant_permanent_address_rel', on_delete=models.SET_NULL)
-    telephone_hp = models.CharField(max_length=16, blank=True, null=True)
-    telephone_home = models.CharField(max_length=16, blank=True, null=True)
-    email = models.EmailField(max_length=255, blank=True, null=True)
-    image = models.FileField(upload_to=content_file_name_image)
-
-    wife_name = models.CharField(max_length=255, blank=True, null=True)
-    wife_income = models.CharField(max_length=10, blank=True, null=True)
-    wife_pay_slip = models.FileField(upload_to=content_file_name_report)
-    wife_nationality = models.CharField(max_length=50, blank=True, null=True)
-    wife_home_address = models.CharField(max_length=255, blank=True, null=True)
-    # wife_nationality = models.ForeignKey('masters.CountryDetails', null=True, related_name='wife_nationality_rel',on_delete=models.SET_NULL)
-
-    wife_occupation = models.CharField(max_length=255, blank=True, null=True)
-    wife_telephone_home = models.CharField(max_length=16, blank=True, null=True)
-    wife_dob = models.DateField(blank=True, null=True)
-    wife_email = models.EmailField(max_length=255, blank=True, null=True)
-
-    father_name = models.CharField(max_length=255, blank=True, null=True)
-    father_income = models.CharField(max_length=10, blank=True, null=True)
-    father_pay_slip = models.FileField(upload_to=content_file_name_report)
-    father_nationality = models.CharField(max_length=50, blank=True, null=True)
-    father_home_address = models.CharField(max_length=255, blank=True, null=True)
-
-    # father_nationality = models.ForeignKey('masters.CountryDetails', blank=True, null=True, related_name='father_nationality_rel', on_delete=models.SET_NULL)
-
-    father_occupation = models.CharField(max_length=255, blank=True, null=True)
-    father_telephone_home = models.CharField(max_length=16, blank=True, null=True)
-    father_dob = models.DateField(blank=True, null=True)
-    father_email = models.EmailField(max_length=255, blank=True, null=True)
-
-    mother_name = models.CharField(max_length=255, blank=True, null=True)
-    mother_income = models.CharField(max_length=10, blank=True, null=True)
-    mother_pay_slip = models.FileField(upload_to=content_file_name_report)
-    mother_nationality = models.CharField(max_length=50, blank=True, null=True)
-    mother_home_address = models.CharField(max_length=255, blank=True, null=True)
-    # mother_nationality = models.ForeignKey('masters.CountryDetails', null=True, related_name='mother_nationality_rel',on_delete=models.SET_NULL)
-
-    mother_occupation = models.CharField(max_length=255, blank=True, null=True)
-    mother_telephone_home = models.CharField(max_length=16, blank=True, null=True)
-    mother_dob = models.DateField(blank=True, null=True)
-    mother_email = models.EmailField(max_length=255, blank=True, null=True)
-
+    email = models.EmailField(max_length=50, blank=True, null=True)
     is_submitted = models.BooleanField(default=False)
     application_id = models.CharField(max_length=100, blank=True, null=True)
     student = models.ForeignKey(StudentDetails, blank=True, null=True, related_name='student_applicant_rel',
                                 on_delete=models.SET_NULL)
-
     first_interview = models.BooleanField(default=False)
     first_interview_attend = models.BooleanField(default=False)
-    first_interview_approval = models.BooleanField(default=False)
-    psychometric_test = models.BooleanField(default=False)
-    second_interview_attend = models.BooleanField(default=False)
-    second_interview_approval = models.BooleanField(default=False)
     admin_approval = models.BooleanField(default=False)
     application_rejection = models.BooleanField(default=False)
     incomplete = models.BooleanField(default=False)
-
-
     scholarship_fee = models.CharField(max_length=15, blank=True, null=True)
-
-    interview_time = models.CharField(max_length=30, blank=True, null=True)
-    interview_date = models.CharField(max_length=50, blank=True, null=True)
-    interview_venue = models.CharField(max_length=500, blank=True, null=True)
-
-    second_interview_time = models.CharField(max_length=30, blank=True, null=True)
-    second_interview_date = models.CharField(max_length=50, blank=True, null=True)
-    second_interview_venue = models.CharField(max_length=500, blank=True, null=True)
-
     personal_info_flag = models.BooleanField(default=True)
     intake_flag = models.BooleanField(default=False)
-
     is_sponsored = models.BooleanField(default=False)
     is_online_admission = models.BooleanField(default=False)
     university = models.ForeignKey('masters.UniversityDetails', blank=True, null=True,
@@ -245,7 +176,6 @@ class ApplicationDetails(BaseModel):
     department = models.ForeignKey('masters.Department', blank=True, null=True,
                                 related_name='applicant_department_rel',
                                 on_delete=models.SET_NULL)
-
     study_level = models.ForeignKey('masters.StudyLevelDetails', blank=True, null=True,
                                 related_name='applicant_study_level_rel',
                                 on_delete=models.SET_NULL)
@@ -256,10 +186,8 @@ class ApplicationDetails(BaseModel):
     program_status = models.CharField(max_length=255, default="Pending",blank=True, null=True)
     supervisor = models.ForeignKey('accounts.User', blank=True, null=True,
                                    related_name='applicant_supervisor_rel', on_delete=models.SET_NULL)
-
     supervisor_status = models.CharField(max_length=255, default="Requested", blank=True, null=True)
     reject_description = models.CharField(max_length=500, blank=True, null=True)
-
     study_mode_2 = models.CharField(max_length=100, blank=True, null=True)
     study_level_2 = models.ForeignKey('masters.StudyLevelDetails', blank=True, null=True,
                                     related_name='applicant_study_level_2_rel',
@@ -276,7 +204,6 @@ class ApplicationDetails(BaseModel):
                                 on_delete=models.SET_NULL)
     program_mode_2 = models.ForeignKey('masters.StudyTypeDetails', null=True, related_name='program_2_mode_rel',
                                      on_delete=models.SET_NULL)
-
     study_mode_3 = models.CharField(max_length=100, blank=True, null=True)
     study_level_3 = models.ForeignKey('masters.StudyLevelDetails', blank=True, null=True,
                                       related_name='applicant_study_level_3_rel',
@@ -287,13 +214,11 @@ class ApplicationDetails(BaseModel):
     department_3 = models.ForeignKey('masters.Department', blank=True, null=True,
                                      related_name='applicant_3_department_rel',
                                      on_delete=models.SET_NULL)
-
     program_3 = models.ForeignKey('masters.ProgramDetails', blank=True, null=True,
                                   related_name='applicant_3_program_rel',
                                   on_delete=models.SET_NULL)
     program_mode_3 = models.ForeignKey('masters.StudyTypeDetails', null=True, related_name='program_3_mode_rel',
                                        on_delete=models.SET_NULL)
-
     choice_1 = models.BooleanField(default=False)
     choice_2 = models.BooleanField(default=False)
     choice_3 = models.BooleanField(default=False)

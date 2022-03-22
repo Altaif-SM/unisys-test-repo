@@ -147,7 +147,7 @@ class YearDetails(BaseModel):
 
 
 class ReligionDetails(BaseModel):
-    religion_name = models.CharField(max_length=255, blank=True, null=True)
+    religion_name = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         ordering = ('religion_name',)
@@ -690,12 +690,12 @@ class UniversityStaffMapping(BaseModel):
         ordering = ('-id',)
 
 class NotesDetails(models.Model):
-    note = models.CharField(max_length=100, blank=True, null=True)
+    note = models.CharField(max_length=255, blank=True, null=True)
 
 class DocumentDetails(BaseModel):
-    document_name = models.CharField(max_length=255, blank=True, null=True)
-    doc_required = models.CharField(max_length=255, blank=True, null=True)
-    description = models.CharField(max_length=500, blank=True, null=True)
+    document_name = models.CharField(max_length=150, blank=True, null=True)
+    doc_required = models.CharField(max_length=50, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
     notes = models.ManyToManyField(NotesDetails, blank=True)
 
     class Meta:
@@ -720,10 +720,10 @@ class GroupDetails(BaseModel):
 class PaymentDetails(BaseModel):
     university = models.ForeignKey(UniversityDetails, null=True, related_name='payment_university_rel',
                                    on_delete=models.SET_NULL)
-    amount = models.CharField(max_length=255, blank=True, null=True)
-    is_payment = models.BooleanField(default=True)
-    currency = models.CharField(max_length=255, blank=True, null=True)
+    amount = models.FloatField(null=True, blank=True, default=0.0)
+    currency = models.CharField(max_length=50, blank=True, null=True)
     status = models.BooleanField(default=True)
+
     class Meta:
         ordering = ('-id',)
 
@@ -737,6 +737,7 @@ class ApplicationFeeDetails(BaseModel):
                                        on_delete=models.SET_NULL)
     university = models.ForeignKey(UniversityDetails, null=True, related_name='application_fee_rel',
                                    on_delete=models.SET_NULL)
+
     class Meta:
         ordering = ('-id',)
 
@@ -750,5 +751,6 @@ class ProgramRegistrationFeeDetails(BaseModel):
                                        on_delete=models.SET_NULL)
     university = models.ForeignKey(UniversityDetails, null=True, related_name='program_registration_fee_rel',
                                    on_delete=models.SET_NULL)
+
     class Meta:
         ordering = ('-id',)
