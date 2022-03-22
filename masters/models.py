@@ -126,11 +126,10 @@ class AddressDetails(BaseModel):
 
 
 class YearDetails(BaseModel):
-    year_name = models.CharField(max_length=255, blank=True, null=True)
+    year_name = models.CharField(max_length=100, blank=True, null=True)
     start_date = models.DateField()
     end_date = models.DateField()
     active_year = models.BooleanField(default=False)
-    #base_date = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('year_name',)
@@ -314,7 +313,7 @@ class Semester(models.Model):
     end_date = models.DateField(null=True)
 
 class SemesterDetails(BaseModel):
-    semester_name = models.CharField(max_length=255, blank=True, null=True)
+    semester_name = models.CharField(max_length=150, blank=True, null=True)
     start_date = models.DateField(null=True)
     end_date = models.DateField(null=True)
     study_level = models.ForeignKey(StudyLevelDetails, null=True, related_name='study_level_semester_rel',
@@ -324,19 +323,6 @@ class SemesterDetails(BaseModel):
     university = models.ForeignKey(UniversityDetails, null=True, related_name='university_semester_rel',
                              on_delete=models.SET_NULL)
     semester = models.ManyToManyField(Semester, blank=True)
-    # class Meta:
-    #     ordering = ('semester_name',)
-
-    # def __str__(self):
-    #     return self.semester_name
-    #
-    # def to_dict(self):
-    #     res = {
-    #         'id': self.id if self.id else '',
-    #         'semester_name': self.semester_name if self.semester_name else '',
-    #     }
-    #
-    #     return res
 
 
 
@@ -584,7 +570,7 @@ class CurrencyDetails(BaseModel):
 
 
 class ActivityDetails(BaseModel):
-    activity_name = models.CharField(max_length=255, blank=True, null=True)
+    activity_name = models.CharField(max_length=150, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
 
     class Meta:
