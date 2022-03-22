@@ -386,11 +386,10 @@ class Department(models.Model):
 class FacultyDetails(BaseModel):
     university = models.ForeignKey(UniversityDetails, null=True, related_name='university_faculty_rel',
                                 on_delete=models.SET_NULL)
-    faculty_id = models.CharField(max_length=255, blank=True, null=True)
-    faculty_name = models.CharField(max_length=255, blank=True, null=True)
-    email = models.CharField(max_length=255, blank=True, null=True)
-    telephone = models.CharField(max_length=255, blank=True, null=True)
-    website = models.CharField(max_length=255, blank=True, null=True)
+    faculty_name = models.CharField(max_length=100, blank=True, null=True)
+    email = models.CharField(max_length=50, blank=True, null=True)
+    telephone = models.CharField(max_length=30, blank=True, null=True)
+    website = models.CharField(max_length=50, blank=True, null=True)
     logo = models.ImageField(upload_to='faculty_logo/', null=True, blank=True)
     address = models.CharField(max_length=255, blank=True, null=True)
     status = models.BooleanField(default=True)
@@ -615,10 +614,10 @@ class StudentModeDetails(BaseModel):
         return self.student_mode
 
 class LearningCentersDetails(BaseModel):
-    lc_name = models.CharField(max_length=255, blank=True, null=True)
+    lc_name = models.CharField(max_length=100, blank=True, null=True)
     lc_address = models.CharField(max_length=255, blank=True, null=True)
-    lc_email = models.CharField(max_length=255, blank=True, null=True)
-    lc_tel = models.CharField(max_length=255, blank=True, null=True)
+    lc_email = models.CharField(max_length=50, blank=True, null=True)
+    lc_tel = models.CharField(max_length=30, blank=True, null=True)
     country = models.ForeignKey(CountryDetails, null=True, related_name='learning_centers_country_rel',
                                     on_delete=models.SET_NULL)
     status = models.BooleanField(default=True)
