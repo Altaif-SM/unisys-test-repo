@@ -1845,7 +1845,7 @@ def add_university(request):
         try:
             university_obj = UniversityDetails.objects.create(
                                              university_name=university_name, email=email,telephone = telephone,website = website,
-                                             university_address = university_address,is_active = status)
+                                             address = university_address,is_active = status)
             if university_logo:
                 university_obj.university_logo = university_logo
                 university_obj.save()
@@ -1876,7 +1876,7 @@ def edit_university(request, university_id=None):
             university_obj.email = email
             university_obj.telephone = telephone
             university_obj.website = website
-            university_obj.university_address = university_address
+            university_obj.address = university_address
             university_obj.is_active = status
             if university_logo:
                 university_obj.university_logo = university_logo
@@ -2777,7 +2777,7 @@ def add_university_partner(request):
         try:
             UniversityDetails.objects.create(is_partner_university = True,university_logo = university_logo,
                                              university_name=university_name, email=email,telephone = telephone,website = website,
-                                             university_address = university_address,is_active = status)
+                                             address = university_address,is_active = status)
             messages.success(request, "Record saved.")
         except:
             messages.warning(request, "Record not saved.")
@@ -2804,7 +2804,7 @@ def edit_university_partner(request, university_id=None):
             university_obj.email = email
             university_obj.telephone = telephone
             university_obj.website = website
-            university_obj.university_address = university_address
+            university_obj.address = university_address
             university_obj.is_active = status
             if university_logo:
                 university_obj.university_logo = university_logo

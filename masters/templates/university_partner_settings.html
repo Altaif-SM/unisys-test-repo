@@ -205,7 +205,7 @@
                             <td>{{ rec.email|default_if_none:"" }}</td>
                             <td>{{ rec.telephone|default_if_none:"" }}</td>
                              <td>{{ rec.website|default_if_none:"" }}</td>
-                        <td>{{ rec.university_address|default_if_none:"" }}</td>
+                        <td>{{ rec.address|default_if_none:"" }}</td>
                          <td>
                                 {% if rec.is_active == True %}
                                     <i class="fa fa-power-off" aria-hidden="true"

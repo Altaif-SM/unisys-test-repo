@@ -158,7 +158,7 @@ class ReligionDetails(BaseModel):
 
 
 class DegreeTypeDetails(BaseModel):
-    degree_name = models.CharField(max_length=255, blank=True, null=True)
+    degree_name = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         ordering = ('degree_name',)
@@ -278,15 +278,12 @@ class StudentDonorMapping(BaseModel):
 class UniversityDetails(BaseModel):
     country = models.ForeignKey(CountryDetails, null=True, related_name='university_country_rel',
                                 on_delete=models.SET_NULL)
-    university_id = models.CharField(max_length=255, blank=True, null=True)
-    university_name = models.CharField(max_length=255, blank=True, null=True)
-    email = models.CharField(max_length=255, blank=True, null=True)
-    telephone = models.CharField(max_length=255, blank=True, null=True)
-    website = models.CharField(max_length=255, blank=True, null=True)
-    address = models.ForeignKey(AddressDetails, null=True, related_name='university_address_rel',
-                                on_delete=models.SET_NULL)
+    university_name = models.CharField(max_length=100, blank=True, null=True)
+    email = models.CharField(max_length=50, blank=True, null=True)
+    telephone = models.CharField(max_length=30, blank=True, null=True)
+    website = models.CharField(max_length=50, blank=True, null=True)
     university_logo = models.ImageField(upload_to='university_logo/', null=True, blank=True)
-    university_address = models.CharField(max_length=255, blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_delete = models.BooleanField(default=False)
     is_partner_university = models.BooleanField(default=False)
@@ -365,12 +362,14 @@ class DegreeDetails(BaseModel):
 
 
 class StudyModeDetails(BaseModel):
-    study_mode = models.CharField(max_length=255, blank=True, null=True)
+    study_mode = models.CharField(max_length=50, blank=True, null=True)
+
     def __str__(self):
         return self.study_mode
 
 class StudyTypeDetails(BaseModel):
     study_type = models.CharField(max_length=50, blank=True, null=True)
+
     def __str__(self):
         return self.study_type
 
@@ -391,7 +390,7 @@ class FacultyDetails(BaseModel):
     telephone = models.CharField(max_length=30, blank=True, null=True)
     website = models.CharField(max_length=50, blank=True, null=True)
     logo = models.ImageField(upload_to='faculty_logo/', null=True, blank=True)
-    address = models.CharField(max_length=255, blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
     status = models.BooleanField(default=True)
     department = models.ManyToManyField(Department, blank=True)
 
@@ -399,11 +398,11 @@ class FacultyDetails(BaseModel):
         ordering = ('-id',)
 
 class CampusBranchesDetails(BaseModel):
-    campus_name = models.CharField(max_length=255, blank=True, null=True)
-    email = models.CharField(max_length=255, blank=True, null=True)
-    telephone = models.CharField(max_length=255, blank=True, null=True)
-    website = models.CharField(max_length=255, blank=True, null=True)
-    address = models.CharField(max_length=255, blank=True, null=True)
+    campus_name = models.CharField(max_length=150, blank=True, null=True)
+    email = models.CharField(max_length=50, blank=True, null=True)
+    telephone = models.CharField(max_length=30, blank=True, null=True)
+    website = models.CharField(max_length=50, blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
     university = models.ForeignKey(UniversityDetails, null=True, related_name='campus_university_rel',
                                    on_delete=models.SET_NULL)
@@ -425,37 +424,30 @@ class ProgramStudyModeDetails(models.Model):
 
 class ProgramFeeType(models.Model):
     fee_type = models.CharField(max_length=100, blank=True, null=True)
-    amount = models.CharField(max_length=100, blank=True, null=True)
+    amount = models.FloatField(null=True, blank=True, default=0.0)
 
 
 class ProgramDetails(BaseModel):
-    program_name = models.CharField(max_length=255, blank=True, null=True)
-    program_fee = models.CharField(max_length=255, blank=True, null=True)
-    credit_hrs = models.CharField(max_length=255, blank=True, null=True)
+    program_name = models.CharField(max_length=100, blank=True, null=True)
+    credit_hrs = models.CharField(max_length=50, blank=True, null=True)
     program_overview = models.TextField(blank=True, null=True)
     program_objective = models.TextField(blank=True, null=True)
     program_vision = models.TextField(blank=True, null=True)
     program_mission = models.TextField(blank=True, null=True)
-    program_id = models.CharField(max_length=255, blank=True, null=True)
     degree_type = models.ForeignKey(DegreeTypeDetails, null=True, related_name='program_degree_type_rel',
                                     on_delete=models.SET_NULL)
     university = models.ForeignKey(UniversityDetails, null=True, related_name='program_university_rel',
                                    on_delete=models.SET_NULL)
     faculty = models.ForeignKey(FacultyDetails, null=True, related_name='program_faculty_rel',
                                    on_delete=models.SET_NULL)
-    # study_mode = models.ForeignKey(StudyModeDetails, null=True, related_name='program_study_mode_rel',
-    #                             on_delete=models.SET_NULL)
     study_level = models.ForeignKey(StudyLevelDetails, null=True, related_name='program_study_level_rel',
                                    on_delete=models.SET_NULL)
     study_type = models.ForeignKey(StudyTypeDetails, null=True, related_name='program_study_type_rel',
                                    on_delete=models.SET_NULL)
     status = models.BooleanField(default=True)
     is_delete = models.BooleanField(default=False)
-    # campus = models.ForeignKey(CampusBranchesDetails, null=True, related_name='program_campus_rel',
-    #                                on_delete=models.SET_NULL)
     campus = models.ManyToManyField(ProgramCampusDetails, blank=True)
     study_mode = models.ManyToManyField(ProgramStudyModeDetails, blank=True)
-    program_type = models.CharField(max_length=100, blank=True, null=True)
     department = models.ForeignKey(Department, null=True, related_name='program_department_rel',
                                     on_delete=models.SET_NULL)
     class Meta:
@@ -481,8 +473,7 @@ class ProgramFeeDetails(BaseModel):
                                    on_delete=models.SET_NULL)
     country = models.ForeignKey(CountryDetails, null=True, related_name='country_fee_rel',
                                 on_delete=models.SET_NULL)
-    discount = models.CharField(max_length=255, blank=True, null=True)
-    total_amount = models.CharField(max_length=255, blank=True, null=True)
+    total_amount = models.FloatField(null=True, blank=True, default=0.0)
     program_fee = models.ManyToManyField(ProgramFeeType, blank=True)
 
 
