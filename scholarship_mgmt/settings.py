@@ -84,6 +84,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 # 'accounts.views.AuthRequiredMiddleware',
                 'accounts.views.get_user_permission',
+                # 'accounts.views.get_working_experience',
             ],
         },
     },
@@ -106,7 +107,7 @@ DATABASES = {
      'default': {
           'ENGINE': 'django.db.backends.mysql',
           'NAME': 'university_system',
-          # 'NAME': 'indonesia_university_system_prod_4',
+          # 'NAME': 'indonesia_university_system_test_17_03_2022',
           'USER':'root',
           'PASSWORD':'Sayyed@123',
           'HOST': '127.0.0.1',
@@ -192,11 +193,10 @@ REGISTRATION_FLAG = False
 EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'sayyedriyaj55@gmail.com'
+EMAIL_HOST_PASSWORD = 'Sayyed@123'
 
-EMAIL_HOST_USER = 'redbytes.test@gmail.com'
-EMAIL_HOST_PASSWORD = 'redbytes@123'
-
-SERVER_HOST_NAME = "http://127.0.0.1:3000/"
+SERVER_HOST_NAME = "http://127.0.0.1:4000/"
 
 stripe.api_key = 'sk_test_51JcmDhSIeVZrpBOQmSMJtfkhTDY8JkkrbnjdEw2wurzt9nQdK74CGYCX90l5q0VfEUuq4oLzQHMA1mgpeUqsKK6G00fUXuYOIG'
 

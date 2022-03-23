@@ -179,16 +179,16 @@ class ApplicationDetails(BaseModel):
     study_level = models.ForeignKey('masters.StudyLevelDetails', blank=True, null=True,
                                 related_name='applicant_study_level_rel',
                                 on_delete=models.SET_NULL)
-    study_mode = models.CharField(max_length=100, blank=True, null=True)
+    study_mode = models.CharField(max_length=50, blank=True, null=True)
     program_mode = models.ForeignKey('masters.StudyTypeDetails', null=True, related_name='program_mode_rel',
                                    on_delete=models.SET_NULL)
-    faculty_status = models.CharField(max_length=255, default="Pending",blank=True, null=True)
-    program_status = models.CharField(max_length=255, default="Pending",blank=True, null=True)
+    faculty_status = models.CharField(max_length=50, default="Pending",blank=True, null=True)
+    program_status = models.CharField(max_length=50, default="Pending",blank=True, null=True)
     supervisor = models.ForeignKey('accounts.User', blank=True, null=True,
                                    related_name='applicant_supervisor_rel', on_delete=models.SET_NULL)
-    supervisor_status = models.CharField(max_length=255, default="Requested", blank=True, null=True)
-    reject_description = models.CharField(max_length=500, blank=True, null=True)
-    study_mode_2 = models.CharField(max_length=100, blank=True, null=True)
+    supervisor_status = models.CharField(max_length=50, default="Requested", blank=True, null=True)
+    reject_description = models.TextField(blank=True, null=True)
+    study_mode_2 = models.CharField(max_length=50, blank=True, null=True)
     study_level_2 = models.ForeignKey('masters.StudyLevelDetails', blank=True, null=True,
                                     related_name='applicant_study_level_2_rel',
                                     on_delete=models.SET_NULL)
@@ -198,13 +198,12 @@ class ApplicationDetails(BaseModel):
     department_2 = models.ForeignKey('masters.Department', blank=True, null=True,
                                    related_name='applicant_2_department_rel',
                                    on_delete=models.SET_NULL)
-
     program_2 = models.ForeignKey('masters.ProgramDetails', blank=True, null=True,
                                 related_name='applicant_2_program_rel',
                                 on_delete=models.SET_NULL)
     program_mode_2 = models.ForeignKey('masters.StudyTypeDetails', null=True, related_name='program_2_mode_rel',
                                      on_delete=models.SET_NULL)
-    study_mode_3 = models.CharField(max_length=100, blank=True, null=True)
+    study_mode_3 = models.CharField(max_length=50, blank=True, null=True)
     study_level_3 = models.ForeignKey('masters.StudyLevelDetails', blank=True, null=True,
                                       related_name='applicant_study_level_3_rel',
                                       on_delete=models.SET_NULL)
