@@ -40,8 +40,7 @@ def home(request):
             raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,first_interview=True).count())
             raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,first_interview_attend=True).count())
             raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,incomplete=True).count())
-            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,first_interview_approval=True,
-                                                              second_interview_approval=True, psychometric_test=True,
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
                                                               admin_approval=True, is_sponsored=False).count())
             raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,application_rejection=True).count())
             raw_list.append(ApplicationDetails.objects.filter(is_online_admission=True).count())
@@ -65,38 +64,38 @@ def home(request):
                 country_list.append(raw_dict)
 
         elif request.user.is_partner():
-            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=False,
-                                                              second_interview_approval=False, psychometric_test=False,
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True,
+
                                                               admin_approval=False, is_sponsored=False,
                                                               nationality=request.user.partner_user_rel.get().address.country,
                                                               year=get_current_year(request)).count())
 
-            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
-                                                              second_interview_approval=False, psychometric_test=False,
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True,
+
                                                               admin_approval=False, is_sponsored=False,
                                                               nationality=request.user.partner_user_rel.get().address.country,
                                                               year=get_current_year(request)).count())
 
-            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
-                                                              second_interview_approval=True, psychometric_test=False,
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True,
+
                                                               admin_approval=False, is_sponsored=False,
                                                               nationality=request.user.partner_user_rel.get().address.country,
                                                               year=get_current_year(request)).count())
 
-            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
-                                                              second_interview_approval=True, psychometric_test=True,
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True,
+
                                                               admin_approval=False, is_sponsored=False,
                                                               nationality=request.user.partner_user_rel.get().address.country,
                                                               year=get_current_year(request)).count())
 
-            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
-                                                              second_interview_approval=True, psychometric_test=True,
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True,
+
                                                               admin_approval=True, is_sponsored=False,
                                                               nationality=request.user.partner_user_rel.get().address.country,
                                                               year=get_current_year(request)).count())
 
-            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, first_interview_approval=True,
-                                                              second_interview_approval=True, psychometric_test=True,
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True,
+
                                                               admin_approval=True, is_sponsored=True,
                                                               nationality=request.user.partner_user_rel.get().address.country,
                                                               year=get_current_year(request)).count())
@@ -136,8 +135,8 @@ def home(request):
             raw_list.append(
                 ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True, incomplete=True).count())
             raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
-                                                              first_interview_approval=True,
-                                                              second_interview_approval=True, psychometric_test=True,
+
+
                                                               admin_approval=True, is_sponsored=False).count())
             raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
                                                               application_rejection=True).count())
