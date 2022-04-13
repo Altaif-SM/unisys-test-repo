@@ -201,8 +201,8 @@ def dashboard(request):
             raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,first_interview=True).count())
             raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,first_interview_attend=True).count())
             raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,incomplete=True).count())
-            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,first_interview_approval=True,
-                                                              second_interview_approval=True, psychometric_test=True,
+            raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
+
                                                               admin_approval=True, is_sponsored=False).count())
             raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,application_rejection=True).count())
             raw_list.append(ApplicationDetails.objects.filter(is_online_admission=True).count())
@@ -234,8 +234,8 @@ def dashboard(request):
             raw_list.append(
                 ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True, incomplete=True,university=request.user.university).count())
             raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
-                                                              first_interview_approval=True,
-                                                              second_interview_approval=True, psychometric_test=True,
+
+
                                                               admin_approval=True, is_sponsored=False,university=request.user.university).count())
             raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
                                                               application_rejection=True,university=request.user.university).count())
@@ -269,8 +269,7 @@ def dashboard(request):
             raw_list.append(
                 ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True, incomplete=True,faculty=request.user.faculty).count())
             raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
-                                                              first_interview_approval=True,
-                                                              second_interview_approval=True, psychometric_test=True,
+
                                                               admin_approval=True, is_sponsored=False,faculty=request.user.faculty).count())
             raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
                                                               application_rejection=True,faculty=request.user.faculty).count())
@@ -304,8 +303,7 @@ def dashboard(request):
             raw_list.append(
                 ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True, incomplete=True,program=request.user.program).count())
             raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
-                                                              first_interview_approval=True,
-                                                              second_interview_approval=True, psychometric_test=True,
+
                                                               admin_approval=True, is_sponsored=False,program=request.user.program).count())
             raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
                                                               application_rejection=True,program=request.user.program).count())
@@ -339,8 +337,7 @@ def dashboard(request):
             raw_list.append(
                 ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True, incomplete=True,supervisor=request.user).count())
             raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
-                                                              first_interview_approval=True,
-                                                              second_interview_approval=True, psychometric_test=True,
+
                                                               admin_approval=True, is_sponsored=False,supervisor=request.user).count())
             raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
                                                               application_rejection=True,supervisor=request.user).count())
@@ -437,8 +434,7 @@ def dashboard(request):
             raw_list.append(
                 ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True, incomplete=True).count())
             raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
-                                                              first_interview_approval=True,
-                                                              second_interview_approval=True, psychometric_test=True,
+
                                                               admin_approval=True, is_sponsored=False).count())
             raw_list.append(ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
                                                               application_rejection=True).count())
