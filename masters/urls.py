@@ -280,5 +280,9 @@ urlpatterns = [
     path('load_country/', views.load_country, name='load_country'),
     path('delete_program_fee/', views.delete_program_fee, name='delete_program_fee'),
 
+    path('university_type_settings/', views.university_type_settings, name='university_type_settings'),
+    path('add_university_type/', views.add_university_type, name='add_university_type'),
+    path('edit_university_type/<int:university_type_id>/', views.edit_university_type, name='edit_university_type'),
+    path('delete_university_type/', views.delete_university_type, name='delete_university_type'),
 
 ]

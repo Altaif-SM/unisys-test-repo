@@ -191,6 +191,22 @@
 {#                            <br>#}
                             <div class="row">
                                 <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'University Type' %}:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select id='university_type' title="Select University Type"
+                                                name="university_type"
+                                                class="form-control" required>
+                                            <option selected="selected" value=""> Please Select</option>
+                                            {% for rec in university_type_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.university_type|default_if_none:"" }}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="">
                                     <label class="col-md-2 control-label">{% trans 'University Name' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
@@ -202,6 +218,14 @@
                                     </div>
                                 </div>
 
+
+
+
+                            </div>
+                            <br>
+
+
+                            <div class="row">
                                 <div class="">
                                     <label class="col-md-2 control-label">{% trans 'Email' %}:<span
                                             style="color: red">*</span></label>
@@ -214,12 +238,6 @@
                                     </div>
                                 </div>
 
-
-                            </div>
-                            <br>
-
-
-                            <div class="row">
                                 <div class="">
                                     <label class="col-md-2 control-label">{% trans 'Telephone' %}:<span
                                             style="color: red">*</span></label>
@@ -233,7 +251,14 @@
                                 </div>
 
 
-                                <div class="">
+
+
+                            </div>
+                            <br>
+
+                            <div class="row">
+
+                            <div class="">
                                     <label class="col-md-2 control-label">{% trans 'Website' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
@@ -245,11 +270,6 @@
                                     </div>
                                 </div>
 
-
-                            </div>
-                            <br>
-
-                            <div class="row">
 
                                 <div class="">
                                     <label class="col-md-2 control-label">{% trans 'Address' %}:<span
@@ -264,7 +284,16 @@
                                 </div>
 
 
-                                <div class="">
+
+
+
+
+
+
+                            </div>
+                        <br>
+                        <div class="row">
+                            <div class="">
                                     <label class="col-md-2 control-label">{% trans 'Logo' %}:
 
                                     </label>
@@ -286,13 +315,6 @@
                                     {% endif %}
                                 </div>
 
-
-
-
-
-                            </div>
-                        <br>
-                        <div class="row">
                             <div class="">
                                     <label class="col-md-2 control-label">{% trans 'Status' %}:<span
                                             style="color: red">*</span></label>

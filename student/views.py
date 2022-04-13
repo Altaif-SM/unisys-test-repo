@@ -2500,8 +2500,10 @@ def application_offer_letter(request):
 def applicant_intake_info(request):
     religion_recs = ReligionDetails.objects.all()
     student_recs = StudentDetails.objects.filter(user__is_active = True)
+    university_type_recs = UniversityTypeDetails.objects.filter(status=True)
     year_recs = ''
     semester_recs = ''
+    university_recs =''
 
     program_recs = ProgramDetails.objects.filter(is_delete=False).order_by('-id')
     faculty_recs = FacultyDetails.objects.filter(status=True).order_by('-id')
@@ -2720,15 +2722,15 @@ def applicant_intake_info(request):
 
         if application_obj.university:
             year_recs = SemesterDetails.objects.filter(university_id = application_obj.university.id,study_level_id = application_obj.study_level.id)
-            if application_obj.university.is_partner_university == True:
-                university_recs = UniversityDetails.objects.filter(is_delete=False,
-                                                                   is_partner_university=True).order_by('-id')
-            else:
-                university_recs = UniversityDetails.objects.filter(is_delete=False,
-                                                                   is_partner_university=False).order_by('-id')
-        else:
+            # if application_obj.university.is_partner_university == True:
+            #     university_recs = UniversityDetails.objects.filter(is_delete=False,
+            #                                                        is_partner_university=True).order_by('-id')
+            # else:
             university_recs = UniversityDetails.objects.filter(is_delete=False,
-                                                               is_partner_university=False).order_by('-id')
+                                                                   university_type_id=application_obj.university_type.id).order_by('-id')
+        # else:
+        #     university_recs = UniversityDetails.objects.filter(is_delete=False,
+        #                                                        is_partner_university=False).order_by('-id')
         if application_obj.university and application_obj.academic_year:
             semester_recs = SemesterDetails.objects.filter(university_id = application_obj.university.id,year_id = application_obj.academic_year.id,study_level_id = application_obj.study_level.id)
 
@@ -2764,6 +2766,7 @@ def applicant_intake_info(request):
                                                   'faculty_3_final_list':faculty_3_final_list,
                                                   'department_3_recs':department_3_recs,
                                                   'program_3_final_list':program_3_final_list,
+                                                  'university_type_recs':university_type_recs
                                                   })
 
 
@@ -2783,11 +2786,12 @@ def get_learning_centre_from_country(request):
 
 def get_university_from_type(request):
     finalDict = []
-    university_type = request.POST.get('university_type', None)
-    if university_type == 'Main':
-        university_recs = UniversityDetails.objects.filter(is_delete=False, is_partner_university=False).order_by('-id')
-    else:
-        university_recs = UniversityDetails.objects.filter(is_delete=False, is_partner_university=True).order_by('-id')
+    university_type_id = request.POST.get('university_type_id', None)
+    university_recs = UniversityDetails.objects.filter(is_delete=False, university_type_id = university_type_id).order_by('-id')
+    # if university_type == 'Main':
+    #     university_recs = UniversityDetails.objects.filter(is_delete=False, ).order_by('-id')
+    # else:
+    #     university_recs = UniversityDetails.objects.filter(is_delete=False, is_partner_university=True).order_by('-id')
     for rec in university_recs:
         raw_dict = {}
         raw_dict['university_name']=rec.university_name

@@ -215,11 +215,12 @@
                             <td>{{ rec.program_name|default_if_none:"" }}</td>
 
                             <td>{{ rec.university.university_name|default_if_none:"" }}</td>
-                        {% if rec.university.is_partner_university == True %}
-                                <td>International</td>
-                            {% else %}
-                                <td>Main</td>
-                            {% endif %}
+                            <td>{{ rec.university_type.university_type|default_if_none:"" }}</td>
+{#                        {% if rec.university.is_partner_university == True %}#}
+{#                                <td>International</td>#}
+{#                            {% else %}#}
+{#                                <td>Main</td>#}
+{#                            {% endif %}#}
 {#                            <td width="20%"> {% for rec in rec.campus.all %}#}
 {#                                <span>{{ forloop.counter }}){{ rec.campus.campus_name }}</span><br>#}
 {#                            {% endfor %}#}

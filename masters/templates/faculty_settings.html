@@ -211,17 +211,18 @@
                             </td>
 
                             <td>{{ rec.university.university_name|default_if_none:"" }}</td>
+                            <td>{{ rec.university_type.university_type|default_if_none:"" }}</td>
 
 
 {#                            <td>{{ rec.email|default_if_none:"" }}</td>#}
 {#                            <td>{{ rec.telephone|default_if_none:"" }}</td>#}
 {#                             <td>{{ rec.website|default_if_none:"" }}</td>#}
 {#                        <td>{{ rec.address|default_if_none:"" }}</td>#}
-                        {% if rec.university.is_partner_university == False %}
-                                     <td>Main</td>
-                                {% else %}
-                                    <td>International</td>
-                                {% endif %}
+{#                        {% if rec.university.is_partner_university == False %}#}
+{#                                     <td>Main</td>#}
+{#                                {% else %}#}
+{#                                    <td>International</td>#}
+{#                                {% endif %}#}
                          <td>
                                 {% if rec.status == True %}
                                     <i class="fa fa-power-off" aria-hidden="true"

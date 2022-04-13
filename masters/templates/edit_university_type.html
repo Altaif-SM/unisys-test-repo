@@ -103,11 +103,12 @@
             $(document).ready(function () {
                 $("#status").Sswitch({});
 
-               $(document).on("change", "#university_type", function (e) {
-                    var university_type_id = $(this).val();
-                    console.log("university_type_id" + university_type_id);
+                $('input[type="radio"]').on('change', function () {
+                    var university_type = $('input[name="university_type"]:checked').val();
                     var url = '/student/get_university_from_type/';
-                    get_university_from_university_type(url, university_type_id)
+                    get_university_from_university_type(url, university_type)
+
+
                 })
 
                  var department_count = 1;
@@ -133,12 +134,12 @@
 
             });
 
-function get_university_from_university_type(url, university_type_id) {
+            function get_university_from_university_type(url, university_type) {
                 $.ajax({
                     type: 'POST',
                     url: url,
                     data: {
-                        university_type_id: university_type_id,
+                        university_type: university_type,
                         csrfmiddlewaretoken: '{{ csrf_token }}',
                     },
                     success: function (data) {
@@ -157,6 +158,7 @@ function get_university_from_university_type(url, university_type_id) {
                     }
                 });
             }
+
 
             window.setTimeout(function () {
                 $(".alert").fadeTo(500, 0).slideUp(500, function () {
@@ -186,7 +188,7 @@ function get_university_from_university_type(url, university_type_id) {
             </li>
 
             <li>
-                <span>{% trans 'Add Faculty' %}</span>
+                <span>{% trans 'Edit University Type' %}</span>
             </li>
         </ul>
     </div>
@@ -202,13 +204,13 @@ function get_university_from_university_type(url, university_type_id) {
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase">{% trans 'Add Faculty' %}</span>
+                <span class="caption-subject font-red sbold uppercase">{% trans 'Edit University Type' %}</span>
             </div>
         </div>
 
         <div class="portlet-body">
             <div class="form-body">
-                <form action="{% url 'masters:add_faculty' %}"
+                <form action="{% url 'masters:edit_university_type' university_type_obj.id %}"
                       id="id_form"
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
@@ -219,186 +221,48 @@ function get_university_from_university_type(url, university_type_id) {
 
                         <div class="row item_experience" id="item_experience_1">
 
-                            <div class="row">
 
-                               <div class="">
-    <label class="col-md-2 control-label">{% trans 'University Type' %}:<span
-            style="color: red">*</span></label>
-    <div class="col-md-3">
-        <select id='university_type' title="Select University"
-                name="university_type"
-                class="form-control" required>
-            <option selected="selected" value=""> Please Select</option>
-            {% for rec in university_type_recs %}
-                <option value="{{ rec.id }}">{{ rec.university_type|default_if_none:"" }}</option>
-            {% endfor %}
-
-        </select>
-    </div>
-</div>
-
-
-                                <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'University' %}:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <select id='university' title="Select University"
-                                                name="university"
-                                                class="form-control" required>
-                                            <option selected="selected" value=""> Please Select</option>
-                                            {% for rec in university_recs %}
-                                                <option value="{{ rec.id }}">{{ rec.university_name|default_if_none:"" }}</option>
-                                            {% endfor %}
-
-                                        </select>
-                                    </div>
-                                </div>
-
-
-
-
-                            </div>
-
-                            <br>
                             <div class="row">
                                 <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'Faculty Name' %}:<span
+                                    <label class="col-md-2 control-label">{% trans 'University Type' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
-                                        <input type="text" title="Enter Faculty Name" id="faculty_name"
-                                               value=""
-                                               name="faculty_name"
+                                        <input type="text" title="Enter University Type" id="university_type"
+                                               value="{{ university_type_obj.university_type|default_if_none:"" }}"
+                                               name="university_type"
                                                class="form-control" required>
 
                                     </div>
                                 </div>
 
                                 <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'Email' %}:<span
-                                            style="color: red">*</span></label>
+                                    <label class="col-md-2 control-label">Status:</label>
                                     <div class="col-md-3">
-                                        <input type="text" title="Enter Email" id="email"
-                                               value=""
-                                               name="email"
-                                               class="form-control" required>
+                                        {% if university_type_obj.status == True %}
+                                            <input type="checkbox" id="status" name="status" checked>
+                                        {% else %}
+                                            <input type="checkbox" id="status" name="status">
+                                        {% endif %}
 
                                     </div>
                                 </div>
+
 
 
                             </div>
-                            <br>
 
 
-                            <div class="row">
-                                <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'Telephone' %}:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <input type="text" title="Enter Telephone" id="telephone"
-                                               value=""
-                                               name="telephone"
-                                               class="form-control" required>
-
-                                    </div>
-                                </div>
 
 
-                                <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'Website' %}:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <input type="text" title="Enter Website" id="website"
-                                               value=""
-                                               name="website"
-                                               class="form-control" required>
-
-                                    </div>
-                                </div>
 
 
-                            </div>
-                            <br>
-
-                            <div class="row">
-
-                                <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'Logo' %}:
-
-                                    </label>
-                                    <div class="col-md-3">
-
-                                        <input name="logo" type="file" title="Select Faculty Logo"
-                                               accept="image/gif, image/jpeg, image/png"
-                                               id="logo"
-                                               class="form-control ">
-
-
-                                    </div>
-                                </div>
-
-
-                                <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'Address' %}:<span
-                                            style="color: red">*</span>
-
-                                    </label>
-                                    <div class="col-md-3">
-                                        <textarea rows="2" class="form-control " id="address"
-                                                  name="address" required></textarea>
-
-                                    </div>
-                                </div>
-
-
-                            </div>
-                            <br>
-                            <div class="row">
-
-
-                                <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'Status' %}: </label>
-                                    <div class="col-md-3">
-                                        <input type="checkbox" id="status" name="status" checked>
-
-                                    </div>
-                                </div>
-
-                            </div>
 
 
                          <hr>
 
 
-                        <div class="" style="float: right;
-    margin-top: 0px;
-    padding-right: 50%;">
-                            <div class="">
-                                <a href="javascript:;" id="add" class="btn btn-icon-only green add_department"
-                                   style="">
-                                    <i class="fa fa-plus "></i>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="row department" id="department_1">
-
-                            <div class="row">
-                                <div class="">
-                                    <label class="col-md-2 control-label">Department:</label>
-                                    <div class="col-md-3">
-                                        <input type="text" title="Enter Department" id="department_1"
-                                               value="" name="department_1"
-                                               class="form-control" required>
-
-                                    </div>
-                                </div>
 
 
-                            </div>
-
-
-                        </div>
 
 
                         </div>
@@ -406,7 +270,7 @@ function get_university_from_university_type(url, university_type_id) {
                         <div class="row">
                             <div class="col-md-offset-5 col-md-7">
                                 <button type="button" class="btn blue" id="back" style="margin-left: 70%"
-                                        onclick="window.location='{% url "masters:faculty_settings" %}'">
+                                        onclick="window.location='{% url "masters:university_type_settings" %}'">
                                     Back
                                 </button>
 

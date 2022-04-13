@@ -192,7 +192,7 @@
                         <th> {% trans 'Type' %}</th>
                         <th> {% trans 'Year' %}</th>
                         <th> {% trans 'Branch/Campus' %}</th>
-                        <th> {% trans 'Semester' %}</th>
+{#                        <th> {% trans 'Semester' %}</th>#}
                         <th> {% trans 'Activity' %}</th>
                         <th> {% trans 'Start Date' %}</th>
                         <th> {% trans 'End Date' %}</th>
@@ -206,15 +206,16 @@
                         <tr id="item{{ forloop.counter }}" class="item">
                             <td style="display: none"><input id="calender_id" value="{{ rec.id }}"></td>
                          <td>{{ rec.university.university_name|default_if_none:"" }}</td>
-                            {% if rec.university.is_partner_university == True %}
-                                <td>Partner</td>
-                                {% else %}
-                                <td>Main</td>
-                            {% endif %}
+                         <td>{{ rec.university_type.university_type|default_if_none:"" }}</td>
+{#                            {% if rec.university.is_partner_university == True %}#}
+{#                                <td>Partner</td>#}
+{#                                {% else %}#}
+{#                                <td>Main</td>#}
+{#                            {% endif %}#}
 
                             <td>{{ rec.year.year_name|default_if_none:"" }}</td>
                             <td>{{ rec.branch.campus_name|default_if_none:"" }}</td>
-                            <td>{{ rec.semester.semester_name|default_if_none:"" }}</td>
+{#                            <td>{{ rec.semester.semester_name|default_if_none:"" }}</td>#}
                             <td>{{ rec.activity.activity_name|default_if_none:"" }}</td>
                             <td>{{ rec.start_date|date:"d/m/Y"|default_if_none:"" }}</td>
                             <td>{{ rec.end_date|date:"d/m/Y"|default_if_none:"" }}</td>

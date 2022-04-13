@@ -205,11 +205,12 @@
                             <td style="display: none"><input id="campus_id" value="{{ rec.id }}"></td>
                             <td>{{ rec.campus_name|default_if_none:"" }}</td>
                             <td>{{ rec.university.university_name|default_if_none:"" }}</td>
-                        {% if rec.university.is_partner_university == True %}
-                                <td>International</td>
-                            {% else %}
-                                <td>Main</td>
-                            {% endif %}
+                            <td>{{ rec.university_type.university_type|default_if_none:"" }}</td>
+{#                        {% if rec.university.is_partner_university == True %}#}
+{#                                <td>International</td>#}
+{#                            {% else %}#}
+{#                                <td>Main</td>#}
+{#                            {% endif %}#}
                             <td>{{ rec.country.country_name|title }}</td>
                             <td>{{ rec.email|default_if_none:"" }}</td>
                             <td>{{ rec.telephone|default_if_none:"" }}</td>

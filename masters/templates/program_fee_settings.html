@@ -206,11 +206,12 @@
                             {#                            <td>{{ rec.program_id|default_if_none:"" }}</td>#}
                             <td>{{ rec.year.year_name|default_if_none:"" }}</td>
                             <td>{{ rec.university.university_name|default_if_none:"" }}</td>
-                             {% if rec.university.is_partner_university == True %}
-                                <td>International</td>
-                            {% else %}
-                                <td>Main</td>
-                            {% endif %}
+                            <td>{{ rec.university_type.university_type|default_if_none:"" }}</td>
+{#                             {% if rec.university.is_partner_university == True %}#}
+{#                                <td>International</td>#}
+{#                            {% else %}#}
+{#                                <td>Main</td>#}
+{#                            {% endif %}#}
                             <td>{{ rec.program.program_name|default_if_none:"" }}</td>
 {#                            <td>{{ rec.discount|floatformat:"2" }}</td>#}
                             <td>{{ rec.total_amount|floatformat:"2" }}</td>

@@ -132,7 +132,7 @@
                     });
                 }
 
-
+            /*
                 $('input[type="radio"]').on('change', function () {
                     var university_type = $('input[name="university_type"]:checked').val();
                     var url = '/student/get_university_from_type/';
@@ -146,6 +146,18 @@
 
 
 
+                })*/
+
+                $(document).on("change", "#university_type", function (e) {
+                    var university_type_id = $(this).val();
+                    var url = '/student/get_university_from_type/';
+                    get_university_from_university_type(url, university_type_id)
+
+                    var url = '/student/get_all_program_mode/';
+                    get_all_program_mode(url)
+
+                     var url = '/student/get_all_study_level/';
+                    get_all_study_level(url)
                 })
 
             function get_all_study_level(url) {
@@ -218,12 +230,12 @@
                     });
                 }
 
-                function get_university_from_university_type(url, university_type) {
+                function get_university_from_university_type(url, university_type_id) {
                     $.ajax({
                         type: 'POST',
                         url: url,
                         data: {
-                            university_type: university_type,
+                            university_type_id: university_type_id,
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
@@ -1593,6 +1605,8 @@
 
 
 
+
+
                 {% if user.get_application %}
                     {% if user.get_application.is_submitted %}
                         $('.submitted').prop('readonly', 'True')
@@ -1608,6 +1622,24 @@
                     {'bSortable': false}
                 ]
             });
+        }
+
+        function validate_avergare(evt) {
+            var theEvent = evt || window.event;
+
+            // Handle paste
+            if (theEvent.type === 'paste') {
+                key = event.clipboardData.getData('text/plain');
+            } else {
+                // Handle key press
+                var key = theEvent.keyCode || theEvent.which;
+                key = String.fromCharCode(key);
+            }
+            var regex = /[0-9]|\./;
+            if (!regex.test(key)) {
+                theEvent.returnValue = false;
+                if (theEvent.preventDefault) theEvent.preventDefault();
+            }
         }
 
         window.setTimeout(function () {
@@ -1661,42 +1693,63 @@
 
                     <div class="form-body">
                         <div class="row">
-                            <div class="">
-                                <label class="col-md-2 control-label">{% trans 'University Type' %}: <span
-                                        style="color: red">*</span></label>
-                                {% if application_obj.university %}
-                                    <div class="col-md-4">
-                                        {% if  application_obj.university.is_partner_university == False %}
-                                            <input class="current" type="radio" checked name="university_type"
-                                                   id="university_main"
-                                                   value="Main">
-                                            <span style="padding:inherit">{% trans 'Main' %}</span>&nbsp;&nbsp;
-                                            <input class="current" type="radio" name="university_type" value="Partner"
-                                                   id="university_partner">
-                                            <span style="padding:inherit">{% trans 'International' %}</span>
-                                        {% else %}
-                                            <input class="current" type="radio" name="university_type"
-                                                   id="university_main"
-                                                   value="Main">
-                                            <span style="padding:inherit">{% trans 'Main' %}</span>&nbsp;&nbsp;
-                                            <input class="current" type="radio" checked name="university_type"
-                                                   value="Partner"
-                                                   id="university_partner">
-                                            <span style="padding:inherit">{% trans 'International' %}</span>
-                                        {% endif %}
-                                    </div>
-                                {% else %}
-                                    <div class="col-md-4">
-                                        <input class="current" type="radio" checked name="university_type"
-                                               id="university_main"
-                                               value="Main">
-                                        <span style="padding:inherit">{% trans 'Main' %}</span>&nbsp;&nbsp;
-                                        <input class="current" type="radio" name="university_type" value="Partner"
-                                               id="university_partner">
-                                        <span style="padding:inherit">{% trans 'International' %}</span>
-                                    </div>
-                                {% endif %}
-                            </div>
+{#                            <div class="">#}
+{#                                <label class="col-md-2 control-label">{% trans 'University Type' %}: <span#}
+{#                                        style="color: red">*</span></label>#}
+{#                                {% if application_obj.university %}#}
+{#                                    <div class="col-md-4">#}
+{#                                        {% if  application_obj.university.is_partner_university == False %}#}
+{#                                            <input class="current" type="radio" checked name="university_type"#}
+{#                                                   id="university_main"#}
+{#                                                   value="Main">#}
+{#                                            <span style="padding:inherit">{% trans 'Main' %}</span>&nbsp;&nbsp;#}
+{#                                            <input class="current" type="radio" name="university_type" value="Partner"#}
+{#                                                   id="university_partner">#}
+{#                                            <span style="padding:inherit">{% trans 'International' %}</span>#}
+{#                                        {% else %}#}
+{#                                            <input class="current" type="radio" name="university_type"#}
+{#                                                   id="university_main"#}
+{#                                                   value="Main">#}
+{#                                            <span style="padding:inherit">{% trans 'Main' %}</span>&nbsp;&nbsp;#}
+{#                                            <input class="current" type="radio" checked name="university_type"#}
+{#                                                   value="Partner"#}
+{#                                                   id="university_partner">#}
+{#                                            <span style="padding:inherit">{% trans 'International' %}</span>#}
+{#                                        {% endif %}#}
+{#                                    </div>#}
+{#                                {% else %}#}
+{#                                    <div class="col-md-4">#}
+{#                                        <input class="current" type="radio" checked name="university_type"#}
+{#                                               id="university_main"#}
+{#                                               value="Main">#}
+{#                                        <span style="padding:inherit">{% trans 'Main' %}</span>&nbsp;&nbsp;#}
+{#                                        <input class="current" type="radio" name="university_type" value="Partner"#}
+{#                                               id="university_partner">#}
+{#                                        <span style="padding:inherit">{% trans 'International' %}</span>#}
+{#                                    </div>#}
+{#                                {% endif %}#}
+{#                            </div>#}
+
+                             <div class="">
+    <label class="col-md-2 control-label">{% trans 'University Type' %}:<span
+            style="color: red">*</span></label>
+    <div class="col-md-4">
+        <select id='university_type' title="Select University"
+                name="university_type"
+                class="form-control" required>
+            {% if application_obj.university_type %}
+                <option style="display:none;" selected="selected"
+                        value="{{ application_obj.university_type.id|default_if_none:"" }}"> {{ application_obj.university_type.university_type|default_if_none:"" }}</option>
+            {% else %}
+                <option selected="selected" value=""> Please Select</option>
+            {% endif %}
+            {% for rec in university_type_recs %}
+                <option value="{{ rec.id }}">{{ rec.university_type|default_if_none:"" }}</option>
+            {% endfor %}
+
+        </select>
+    </div>
+</div>
 
                         </div>
 
@@ -1814,6 +1867,20 @@
                                 </div>
                             </div>
                         </div>
+                        <br>
+                    <div class="row">
+                        <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Average' %}:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-2">
+                                        <input onkeypress='validate_avergare(event)' type="text" title="Enter Acceptance(Avg)" id="acceptance_avg"
+                                               value=""
+                                               name="acceptance_avg"
+                                               class="form-control" required>
+
+                                    </div>
+                                </div>
+                    </div>
 
 
 

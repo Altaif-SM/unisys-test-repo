@@ -189,6 +189,27 @@
 {#                            <br>#}
                             <div class="row">
                                 <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'University Type' %}:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select id='university_type' title="Select University Type"
+                                                name="university_type"
+                                                class="form-control" required>
+                                           {% if university_obj.university_type %}
+                                                <option style="display:none;" selected="selected"
+                                                        value="{{ university_obj.university_type.id|default_if_none:"" }}"> {{ university_obj.university_type.university_type|default_if_none:"" }}</option>
+                                            {% else %}
+                                                <option selected="selected" value=""> Please Select</option>
+                                            {% endif %}
+                                            {% for rec in university_type_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.university_type|default_if_none:"" }}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="">
                                     <label class="col-md-2 control-label">University Name:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
@@ -200,7 +221,15 @@
                                     </div>
                                 </div>
 
-                                <div class="">
+
+
+
+                            </div>
+                            <br>
+
+
+                            <div class="row">
+                                 <div class="">
                                     <label class="col-md-2 control-label">Email:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
@@ -212,12 +241,6 @@
                                     </div>
                                 </div>
 
-
-                            </div>
-                            <br>
-
-
-                            <div class="row">
                                 <div class="">
                                     <label class="col-md-2 control-label">Telephone:<span
                                             style="color: red">*</span></label>
@@ -231,7 +254,14 @@
                                 </div>
 
 
-                                <div class="">
+
+
+
+                            </div>
+                            <br>
+
+                            <div class="row">
+                            <div class="">
                                     <label class="col-md-2 control-label">Website:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
@@ -242,12 +272,6 @@
 
                                     </div>
                                 </div>
-
-
-                            </div>
-                            <br>
-
-                            <div class="row">
 
                                 <div class="">
                                     <label class="col-md-2 control-label">Address:<span
@@ -261,7 +285,17 @@
                                     </div>
                                 </div>
 
-                            {% if university_obj.university_logo %}
+
+
+
+
+
+
+                            </div>
+
+                        <br>
+                        <div class="row">
+                          {% if university_obj.university_logo %}
                                     <div class="">
                                         <label class="col-md-2 control-label">Logo:
 
@@ -302,15 +336,6 @@
 
                                     </div>
                                 {% endif %}
-
-
-
-
-
-                            </div>
-
-                        <br>
-                        <div class="row">
                             <div class="">
                                     <label class="col-md-2 control-label">Status:<span
                                             style="color: red">*</span></label>

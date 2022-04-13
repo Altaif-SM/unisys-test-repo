@@ -102,21 +102,29 @@
         window.onload = function () {
             $(document).ready(function () {
                 $("#status").Sswitch({});
+                /*
                  $('input[type="radio"]').on('change', function () {
                     var university_type = $('input[name="university_type"]:checked').val();
                     var url = '/student/get_university_from_type/';
                     get_university_from_university_type(url, university_type)
 
 
-                })
+                })*/
+
+
+                $(document).on("change", "#university_type", function (e) {
+                var university_type_id = $(this).val();
+                var url = '/student/get_university_from_type/';
+                get_university_from_university_type(url, university_type_id)
+            })
 
             });
-            function get_university_from_university_type(url, university_type) {
+function get_university_from_university_type(url, university_type_id) {
                 $.ajax({
                     type: 'POST',
                     url: url,
                     data: {
-                        university_type: university_type,
+                        university_type_id: university_type_id,
                         csrfmiddlewaretoken: '{{ csrf_token }}',
                     },
                     success: function (data) {
@@ -135,7 +143,6 @@
                     }
                 });
             }
-
             window.setTimeout(function () {
                 $(".alert").fadeTo(500, 0).slideUp(500, function () {
                     $(this).remove();
@@ -196,43 +203,63 @@
 
                         <div class="row item_experience" id="item_experience_1">
                             <div class="row">
-                                <div class="">
-                                    <label class="col-md-2 control-label">University Type: <span
+                             <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'University Type' %}:<span
                                             style="color: red">*</span></label>
-                                    {% if campus_obj.university %}
-                                        <div class="col-md-3">
-                                            {% if  campus_obj.university.is_partner_university == False %}
-                                                <input class="current" type="radio" checked name="university_type"
-                                                       id="university_main"
-                                                       value="Main">
-                                                <span style="padding:inherit">Main</span>&nbsp;&nbsp;
-                                                <input class="current" type="radio" name="university_type"
-                                                       value="Partner"
-                                                       id="university_partner">
-                                                <span style="padding:inherit">International</span>
+                                    <div class="col-md-3">
+                                        <select id='university_type' title="Select University"
+                                                name="university_type"
+                                                class="form-control" required>
+                                        {% if campus_obj.university_type %}
+                                                <option style="display:none;" selected="selected"
+                                                        value="{{ campus_obj.university_type.id|default_if_none:"" }}"> {{ campus_obj.university_type.university_type|default_if_none:"" }}</option>
                                             {% else %}
-                                                <input class="current" type="radio" name="university_type"
-                                                       id="university_main"
-                                                       value="Main">
-                                                <span style="padding:inherit">Main</span>&nbsp;&nbsp;
-                                                <input class="current" type="radio" checked name="university_type"
-                                                       value="Partner"
-                                                       id="university_partner">
-                                                <span style="padding:inherit">International</span>
+                                                <option selected="selected" value=""> Please Select</option>
                                             {% endif %}
-                                        </div>
-                                    {% else %}
-                                        <div class="col-md-3">
-                                            <input class="current" type="radio" checked name="university_type"
-                                                   id="university_main"
-                                                   value="Main">
-                                            <span style="padding:inherit">Main</span>&nbsp;&nbsp;
-                                            <input class="current" type="radio" name="university_type" value="Partner"
-                                                   id="university_partner">
-                                            <span style="padding:inherit">International</span>
-                                        </div>
-                                    {% endif %}
+                                            {% for rec in university_type_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.university_type|default_if_none:"" }}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
                                 </div>
+{#                                <div class="">#}
+{#                                    <label class="col-md-2 control-label">University Type: <span#}
+{#                                            style="color: red">*</span></label>#}
+{#                                    {% if campus_obj.university %}#}
+{#                                        <div class="col-md-3">#}
+{#                                            {% if  campus_obj.university.is_partner_university == False %}#}
+{#                                                <input class="current" type="radio" checked name="university_type"#}
+{#                                                       id="university_main"#}
+{#                                                       value="Main">#}
+{#                                                <span style="padding:inherit">Main</span>&nbsp;&nbsp;#}
+{#                                                <input class="current" type="radio" name="university_type"#}
+{#                                                       value="Partner"#}
+{#                                                       id="university_partner">#}
+{#                                                <span style="padding:inherit">International</span>#}
+{#                                            {% else %}#}
+{#                                                <input class="current" type="radio" name="university_type"#}
+{#                                                       id="university_main"#}
+{#                                                       value="Main">#}
+{#                                                <span style="padding:inherit">Main</span>&nbsp;&nbsp;#}
+{#                                                <input class="current" type="radio" checked name="university_type"#}
+{#                                                       value="Partner"#}
+{#                                                       id="university_partner">#}
+{#                                                <span style="padding:inherit">International</span>#}
+{#                                            {% endif %}#}
+{#                                        </div>#}
+{#                                    {% else %}#}
+{#                                        <div class="col-md-3">#}
+{#                                            <input class="current" type="radio" checked name="university_type"#}
+{#                                                   id="university_main"#}
+{#                                                   value="Main">#}
+{#                                            <span style="padding:inherit">Main</span>&nbsp;&nbsp;#}
+{#                                            <input class="current" type="radio" name="university_type" value="Partner"#}
+{#                                                   id="university_partner">#}
+{#                                            <span style="padding:inherit">International</span>#}
+{#                                        </div>#}
+{#                                    {% endif %}#}
+{#                                </div>#}
 
                                 <div class="">
                                     <label class="col-md-2 control-label">University:<span

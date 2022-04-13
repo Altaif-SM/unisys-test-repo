@@ -1824,14 +1824,14 @@ def delete_currency(request):
 
 
 def university_settings(request):
-    university_recs = UniversityDetails.objects.filter(is_delete = False,is_partner_university = False)
+    university_recs = UniversityDetails.objects.filter(is_delete = False)
     return render(request, 'university_settings.html', {'university_recs': university_recs})
 
 
 def add_university(request):
     if request.method == 'POST':
         university_logo = request.FILES.get('university_logo', None)
-        # university_id = request.POST.get('university_id')
+        university_type = request.POST.get('university_type')
         university_name = request.POST.get('university_name')
         email = request.POST.get('email')
         telephone = request.POST.get('telephone')
@@ -1845,7 +1845,7 @@ def add_university(request):
         try:
             university_obj = UniversityDetails.objects.create(
                                              university_name=university_name, email=email,telephone = telephone,website = website,
-                                             address = university_address,is_active = status)
+                                             address = university_address,is_active = status,university_type_id = university_type)
             if university_logo:
                 university_obj.university_logo = university_logo
                 university_obj.save()
@@ -1853,13 +1853,14 @@ def add_university(request):
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/university_settings/')
-    return render(request, 'add_university.html')
+    university_type_recs = UniversityTypeDetails.objects.filter(status = True)
+    return render(request, 'add_university.html',{'university_type_recs':university_type_recs})
 
 def edit_university(request, university_id=None):
     university_obj = UniversityDetails.objects.get(id=university_id)
     if request.method == 'POST':
         university_logo = request.FILES.get('university_logo', None)
-        # university_id = request.POST.get('university_id')
+        university_type = request.POST.get('university_type')
         university_name = request.POST.get('university_name')
         email = request.POST.get('email')
         telephone = request.POST.get('telephone')
@@ -1871,7 +1872,7 @@ def edit_university(request, university_id=None):
         else:
             status = False
         try:
-            # university_obj.university_id = university_id
+            university_obj.university_type_id = university_type
             university_obj.university_name = university_name
             university_obj.email = email
             university_obj.telephone = telephone
@@ -1885,7 +1886,8 @@ def edit_university(request, university_id=None):
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/university_settings/')
-    return render(request, "edit_university.html", {'university_obj': university_obj})
+    university_type_recs = UniversityTypeDetails.objects.filter(status=True)
+    return render(request, "edit_university.html", {'university_obj': university_obj,'university_type_recs':university_type_recs})
 
 def delete_university(request):
     if request.method == 'POST':
@@ -1906,6 +1908,7 @@ def add_faculty(request):
     if request.method == 'POST':
         logo = request.FILES.get('logo', None)
         university = request.POST.get('university')
+        university_type = request.POST.get('university_type')
         # faculty_id = request.POST.get('faculty_id')
         faculty_name = request.POST.get('faculty_name')
         email = request.POST.get('email')
@@ -1921,7 +1924,7 @@ def add_faculty(request):
         try:
             faculty_obj = FacultyDetails.objects.create(university_id=university,
                                              faculty_name=faculty_name, email=email,telephone = telephone,website = website,
-                                             address = address,status = status)
+                                             address = address,status = status,university_type_id = university_type)
 
             faculty_obj.department.clear()
             for x in range(int(department_count)):
@@ -1938,19 +1941,23 @@ def add_faculty(request):
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/faculty_settings/')
-    return render(request, 'add_faculty.html',{'university_recs':university_recs})
+    university_type_recs = UniversityTypeDetails.objects.filter(status=True)
+    return render(request, 'add_faculty.html',{'university_recs':university_recs,'university_type_recs':university_type_recs})
 
 def edit_faculty(request, faculty_id=None):
     faculty_obj = FacultyDetails.objects.get(id=faculty_id)
     department_total_count = faculty_obj.department.all().count()
-    if faculty_obj.university.is_partner_university == False:
-        university_recs = UniversityDetails.objects.filter(is_delete = False,is_active = True,is_partner_university = False).order_by('-id')
-    else:
+    university_recs = ''
+    if faculty_obj.university_type:
+    # if faculty_obj.university.is_partner_university == False:
+    #     university_recs = UniversityDetails.objects.filter(is_delete = False,is_active = True,is_partner_university = False).order_by('-id')
+    # else:
         university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
-                                                           is_partner_university=True).order_by('-id')
+                                                           university_type_id=faculty_obj.university_type.id).order_by('-id')
     if request.method == 'POST':
         logo = request.FILES.get('logo', None)
         university = request.POST.get('university')
+        university_type = request.POST.get('university_type')
         faculty_name = request.POST.get('faculty_name')
         email = request.POST.get('email')
         telephone = request.POST.get('telephone')
@@ -1963,6 +1970,7 @@ def edit_faculty(request, faculty_id=None):
         else:
             status = False
         try:
+            faculty_obj.university_type_id = university_type
             faculty_obj.university_id = university
             faculty_obj.faculty_name = faculty_name
             faculty_obj.email = email
@@ -1988,7 +1996,8 @@ def edit_faculty(request, faculty_id=None):
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/faculty_settings/')
-    return render(request, "edit_faculty.html", {'faculty_obj': faculty_obj,'university_recs':university_recs,'department_total_count':department_total_count})
+    university_type_recs = UniversityTypeDetails.objects.filter(status=True)
+    return render(request, "edit_faculty.html", {'faculty_obj': faculty_obj,'university_recs':university_recs,'department_total_count':department_total_count,'university_type_recs':university_type_recs})
 
 def delete_faculty(request):
     if request.method == 'POST':
@@ -2145,6 +2154,7 @@ def program_fee_settings(request):
 def add_program_fee(request):
     if request.method == 'POST':
         university = request.POST.get('university')
+        university_type = request.POST.get('university_type')
         year = request.POST.get('year')
         program = request.POST.get('program')
         country = request.POST.get('country')
@@ -2158,7 +2168,7 @@ def add_program_fee(request):
         try:
             program_fee_obj = ProgramFeeDetails.objects.create(university_id=university,country_id = country,
                                                                                    year_id=year,
-                                                                                   program_id=program,discount = discount,total_amount = total_amount)
+                                                                                   program_id=program,total_amount = total_amount,university_type_id = university_type)
             program_fee_obj.program_fee.clear()
             for x in range(int(program_fee_count)):
                 try:
@@ -2176,16 +2186,19 @@ def add_program_fee(request):
     year_recs = YearDetails.objects.all()
     program_recs = ProgramDetails.objects.filter(is_delete=False).order_by('-id')
     country_recs = CountryDetails.objects.all()
+    university_type_recs = UniversityTypeDetails.objects.filter(status=True)
     return render(request, 'add_program_fee.html',{
         'university_recs':university_recs,
         'year_recs':year_recs,
         'program_recs':program_recs,
         'country_recs':country_recs,
+        'university_type_recs':university_type_recs,
                                                    })
 
 def edit_program_fee(request, program_id=None):
     program_fee_obj = ProgramFeeDetails.objects.get(id=program_id)
     if request.method == 'POST':
+        university_type = request.POST.get('university_type')
         university = request.POST.get('university')
         year = request.POST.get('year')
         program = request.POST.get('program')
@@ -2198,11 +2211,11 @@ def edit_program_fee(request, program_id=None):
             return redirect('/masters/program_fee_settings/')
 
         try:
+            program_fee_obj.university_type_id = university_type
             program_fee_obj.university_id = university
             program_fee_obj.country_id = country
             program_fee_obj.year_id = year
             program_fee_obj.program_id = program
-            program_fee_obj.discount = discount
             program_fee_obj.total_amount = total_amount
             program_fee_obj.save()
 
@@ -2221,14 +2234,12 @@ def edit_program_fee(request, program_id=None):
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/program_fee_settings/')
-    if program_fee_obj.university.is_partner_university == False:
-        university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university = False).order_by('-id')
-    else:
-        university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
-                                                           is_partner_university=True).order_by('-id')
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
+                                                           university_type_id=program_fee_obj.university_type.id).order_by('-id')
     year_recs = YearDetails.objects.all()
     program_recs = ProgramDetails.objects.filter(is_delete=False).order_by('-id')
     country_recs = CountryDetails.objects.all()
+    university_type_recs = UniversityTypeDetails.objects.filter(status=True)
     return render(request, 'edit_program_fee.html', {
         'university_recs': university_recs,
         'year_recs': year_recs,
@@ -2236,6 +2247,7 @@ def edit_program_fee(request, program_id=None):
         'country_recs': country_recs,
         'program_fee_obj': program_fee_obj,
         'program_fee_count': program_fee_obj.program_fee.count(),
+        'university_type_recs': university_type_recs,
     })
 
 def program_settings(request):
@@ -2289,10 +2301,14 @@ def add_program(request):
     faculty_recs = FacultyDetails.objects.filter(status=True).order_by('-id')
     campus_recs = CampusBranchesDetails.objects.filter().order_by('-id')
     study_mode_list = ['Online', 'On Campus']
+
     return render(request, 'add_program.html',{'university_recs':university_recs,'faculty_recs':faculty_recs,'study_level_recs':study_level_recs,'study_mode_recs':study_mode_recs,'study_type_recs':study_type_recs,'campus_recs':campus_recs,'study_mode_list':study_mode_list})
 
 def add_program(request):
     if request.method == 'POST':
+        university_type = request.POST.get('university_type')
+        acceptance_avg = request.POST.get('acceptance_avg')
+        capacity_avg = request.POST.get('capacity_avg')
         university = request.POST.get('university')
         faculty = request.POST.get('faculty')
         program_type = request.POST.get('program_type')
@@ -2317,7 +2333,7 @@ def add_program(request):
             program_obj = ProgramDetails.objects.create(faculty_id=faculty,university_id=university,program_type = program_type,department_id = department,
                                              program_name=program_name,program_overview = program_overview,program_objective = program_objective,
                                              program_vision = program_vision,program_mission = program_mission,status = status,study_type_id = study_type,study_level_id = study_level,
-                                                        )
+                                                        university_type_id = university_type,acceptance_avg = acceptance_avg,capacity_avg = capacity_avg)
 
             program_obj.study_mode.clear()
             for study_mode in study_mode_recs:
@@ -2340,13 +2356,17 @@ def add_program(request):
     faculty_recs = FacultyDetails.objects.filter(status=True).order_by('-id')
     campus_recs = CampusBranchesDetails.objects.filter().order_by('-id')
     study_mode_list = ['Online', 'On Campus']
-    return render(request, 'add_program.html',{'university_recs':university_recs,'faculty_recs':faculty_recs,'study_level_recs':study_level_recs,'study_mode_recs':study_mode_recs,'study_type_recs':study_type_recs,'campus_recs':campus_recs,'study_mode_list':study_mode_list})
+    university_type_recs = UniversityTypeDetails.objects.filter(status=True)
+    return render(request, 'add_program.html',{'university_recs':university_recs,'faculty_recs':faculty_recs,'study_level_recs':study_level_recs,'study_mode_recs':study_mode_recs,'study_type_recs':study_type_recs,'campus_recs':campus_recs,'study_mode_list':study_mode_list,'university_type_recs':university_type_recs})
 
 
 def edit_program(request, program_id=None):
     program_obj = ProgramDetails.objects.get(id=program_id)
     if request.method == 'POST':
         university = request.POST.get('university')
+        university_type = request.POST.get('university_type')
+        acceptance_avg = request.POST.get('acceptance_avg')
+        capacity_avg = request.POST.get('capacity_avg')
         faculty = request.POST.get('faculty')
         program_type = request.POST.get('program_type')
         department = request.POST.get('department',None)
@@ -2370,6 +2390,9 @@ def edit_program(request, program_id=None):
         else:
             status = False
         try:
+            program_obj.university_type_id = university_type
+            program_obj.acceptance_avg = acceptance_avg
+            program_obj.capacity_avg = capacity_avg
             program_obj.university_id = university
             program_obj.faculty_id = faculty
             program_obj.program_type = program_type
@@ -2403,11 +2426,11 @@ def edit_program(request, program_id=None):
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/program_settings/')
-    if program_obj.university.is_partner_university == False:
-        university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university = False).order_by('-id')
-    else:
-        university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
-                                                           is_partner_university=True).order_by('-id')
+    # if program_obj.university.is_partner_university == False:
+    #     university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university = False).order_by('-id')
+    # else:
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
+                                                           university_type_id=program_obj.university_type.id).order_by('-id')
     study_mode_recs = StudyModeDetails.objects.filter().order_by('-id')
     study_level_recs = StudyLevelDetails.objects.filter().order_by('-id')
     study_type_recs = StudyTypeDetails.objects.all()
@@ -2419,7 +2442,8 @@ def edit_program(request, program_id=None):
     selected_study_mode_list = program_obj.study_mode.values_list('study_mode',flat = True)
     selected_campus_list = list(program_obj.campus.values_list('campus_id',flat = True))
     department_recs = program_obj.faculty.department.all()
-    return render(request, "edit_program.html", {'program_obj': program_obj,'university_recs':university_recs,'study_mode_recs':study_mode_recs,'study_level_recs':study_level_recs,'study_type_recs':study_type_recs,'faculty_recs':faculty_recs,'campus_recs':campus_recs,'study_mode_list':study_mode_list,'selected_study_mode_list':selected_study_mode_list,'selected_campus_list':selected_campus_list,'department_recs':department_recs})
+    university_type_recs = UniversityTypeDetails.objects.filter(status=True)
+    return render(request, "edit_program.html", {'program_obj': program_obj,'university_recs':university_recs,'study_mode_recs':study_mode_recs,'study_level_recs':study_level_recs,'study_type_recs':study_type_recs,'faculty_recs':faculty_recs,'campus_recs':campus_recs,'study_mode_list':study_mode_list,'selected_study_mode_list':selected_study_mode_list,'selected_campus_list':selected_campus_list,'department_recs':department_recs,'university_type_recs':university_type_recs})
 
 
 def delete_program(request):
@@ -2488,12 +2512,13 @@ def semester_settings(request):
 
 def add_semester(request):
     if request.method == 'POST':
+        university_type = request.POST.get('university_type')
         university = request.POST.get('university')
         year = request.POST.get('year')
         study_level = request.POST.get('study_level')
         semester_count = request.POST.get('semester_count')
         try:
-            semester_obj = SemesterDetails.objects.create(university_id = university,year_id = year,study_level_id = study_level)
+            semester_obj = SemesterDetails.objects.create(university_id = university,year_id = year,study_level_id = study_level,university_type_id = university_type)
             semester_obj.semester.clear()
             for x in range(int(semester_count)):
                 try:
@@ -2511,6 +2536,7 @@ def add_semester(request):
             messages.warning(request, "Record not saved.")
         return redirect('/masters/semester_settings/')
     else:
+        university_type_recs = UniversityTypeDetails.objects.filter(status=True)
         university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
                                                            is_partner_university=False).order_by('-id')
         year_recs = YearDetails.objects.all()
@@ -2519,6 +2545,7 @@ def add_semester(request):
             'university_recs':university_recs,
             'year_recs':year_recs,
             'study_level_recs':study_level_recs,
+            'university_type_recs':university_type_recs
         }
         return render(request, 'add_semester.html',context)
 
@@ -2527,11 +2554,13 @@ def edit_semester(request, semester_id=None):
     semester_obj = SemesterDetails.objects.get(id=semester_id)
     semester_total_count = semester_obj.semester.all().count()
     if request.method == 'POST':
+        university_type = request.POST.get('university_type')
         university = request.POST.get('university')
         year = request.POST.get('year')
         study_level = request.POST.get('study_level')
         semester_count = request.POST.get('semester_count')
         try:
+            semester_obj.university_type_id = university_type
             semester_obj.university_id = university
             semester_obj.year_id = year
             semester_obj.study_level_id = study_level
@@ -2553,17 +2582,18 @@ def edit_semester(request, semester_id=None):
         except:
             messages.warning(request, "Semester name already exists. Record not updated.")
         return redirect('/masters/semester_settings/')
-    if semester_obj.university:
-        if semester_obj.university.is_partner_university == False:
-            university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university = False).order_by('-id')
-        else:
-            university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
-                                                               is_partner_university=True).order_by('-id')
-    else:
-        university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
-                                                           is_partner_university=False).order_by('-id')
+    # if semester_obj.university:
+    #     if semester_obj.university.is_partner_university == False:
+    #         university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university = False).order_by('-id')
+    #     else:
+    #         university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
+    #                                                            is_partner_university=True).order_by('-id')
+    # else:
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
+                                                           university_type_id=semester_obj.university_type.id).order_by('-id')
     year_recs = YearDetails.objects.all()
     study_level_recs = StudyLevelDetails.objects.filter().order_by('-id')
+    university_type_recs = UniversityTypeDetails.objects.filter(status=True)
 
     context = {
         'semester_obj': semester_obj,
@@ -2571,6 +2601,7 @@ def edit_semester(request, semester_id=None):
         'year_recs': year_recs,
         'semester_total_count': semester_total_count,
         'study_level_recs': study_level_recs,
+        'university_type_recs': university_type_recs,
     }
     return render(request, "edit_semester.html",context)
 
@@ -2683,6 +2714,7 @@ def learning_centers_settings(request):
 
 def add_learning_centers(request):
     if request.method == 'POST':
+        university_type = request.POST.get('university_type')
         university = request.POST.get('university')
         country = request.POST.get('country')
         lc_name = request.POST.get('lc_name')
@@ -2696,7 +2728,7 @@ def add_learning_centers(request):
             status = False
         try:
             LearningCentersDetails.objects.create(country_id=country,lc_name=lc_name,university_id = university,
-                                             lc_address=lc_address, lc_email=lc_email,lc_tel = lc_tel,status = status)
+                                             lc_address=lc_address, lc_email=lc_email,lc_tel = lc_tel,status = status,university_type_id = university_type)
             messages.success(request, "Record saved.")
         except:
             messages.warning(request, "Record not saved.")
@@ -2704,11 +2736,13 @@ def add_learning_centers(request):
     country_recs = CountryDetails.objects.all()
     university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
                                                        is_partner_university=False).order_by('-id')
-    return render(request, 'add_learning_centers.html',{'country_recs':country_recs,'university_recs':university_recs})
+    university_type_recs = UniversityTypeDetails.objects.filter(status=True)
+    return render(request, 'add_learning_centers.html',{'country_recs':country_recs,'university_recs':university_recs,'university_type_recs':university_type_recs})
 
 def edit_learning_centers(request, learning_center_id=None):
     learning_center_obj = LearningCentersDetails.objects.get(id=learning_center_id)
     if request.method == 'POST':
+        university_type = request.POST.get('university_type')
         university = request.POST.get('university')
         country = request.POST.get('country')
         lc_name = request.POST.get('lc_name')
@@ -2721,6 +2755,7 @@ def edit_learning_centers(request, learning_center_id=None):
         else:
             status = False
         try:
+            learning_center_obj.university_type_id = university_type
             learning_center_obj.university_id = university
             learning_center_obj.country_id = country
             learning_center_obj.lc_name = lc_name
@@ -2734,16 +2769,19 @@ def edit_learning_centers(request, learning_center_id=None):
             messages.warning(request, "Record not saved.")
         return redirect('/masters/learning_centers_settings/')
     country_recs = CountryDetails.objects.all()
-    if learning_center_obj.university:
-        if learning_center_obj.university.is_partner_university == False:
-            university_recs = UniversityDetails.objects.filter(is_delete = False,is_active = True,is_partner_university = False).order_by('-id')
-        else:
-            university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
-                                                           is_partner_university=True).order_by('-id')
-    else:
+    # if learning_center_obj.university:
+    #     if learning_center_obj.university.is_partner_university == False:
+    #         university_recs = UniversityDetails.objects.filter(is_delete = False,is_active = True,is_partner_university = False).order_by('-id')
+    #     else:
+    #         university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
+    #                                                        is_partner_university=True).order_by('-id')
+    # else:
+    university_recs = ''
+    if learning_center_obj.university_type:
         university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
-                                                           is_partner_university=False).order_by('-id')
-    return render(request, "edit_learning_centers.html", {'learning_center_obj': learning_center_obj,'country_recs':country_recs,'university_recs':university_recs})
+                                                           university_type_id=learning_center_obj.university_type.id).order_by('-id')
+    university_type_recs = UniversityTypeDetails.objects.filter(status=True)
+    return render(request, "edit_learning_centers.html", {'learning_center_obj': learning_center_obj,'country_recs':country_recs,'university_recs':university_recs,'university_type_recs':university_type_recs})
 
 def delete_learning_centers(request):
     if request.method == 'POST':
@@ -2835,6 +2873,7 @@ def add_campus(request):
     if request.method == 'POST':
         country = request.POST.get('country')
         university = request.POST.get('university')
+        university_type = request.POST.get('university_type')
         campus_name = request.POST.get('campus_name')
         email = request.POST.get('email')
         telephone = request.POST.get('telephone')
@@ -2848,20 +2887,22 @@ def add_campus(request):
         try:
             CampusBranchesDetails.objects.create(
                                              campus_name=campus_name, email=email,telephone = telephone,website = website,
-                                             address = address,is_active = status,country_id = country,university_id=university)
+                                             address = address,is_active = status,country_id = country,university_id=university,university_type_id = university_type)
             messages.success(request, "Record saved.")
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/campus_settings/')
     university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university = False).order_by('-id')
     country_recs = CountryDetails.objects.all()
-    return render(request, 'add_campus.html',{'university_recs':university_recs,'country_recs':country_recs})
+    university_type_recs = UniversityTypeDetails.objects.filter(status=True)
+    return render(request, 'add_campus.html',{'university_recs':university_recs,'country_recs':country_recs,'university_type_recs':university_type_recs})
 
 
 def edit_campus(request, campus_id=None):
     campus_obj = CampusBranchesDetails.objects.get(id=campus_id)
     if request.method == 'POST':
         country = request.POST.get('country')
+        university_type = request.POST.get('university_type')
         university = request.POST.get('university')
         campus_name = request.POST.get('campus_name')
         email = request.POST.get('email')
@@ -2874,6 +2915,7 @@ def edit_campus(request, campus_id=None):
         else:
             status = False
         try:
+            campus_obj.university_type_id = university_type
             campus_obj.country_id = country
             campus_obj.university_id = university
             campus_obj.campus_name = campus_name
@@ -2887,13 +2929,14 @@ def edit_campus(request, campus_id=None):
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/campus_settings/')
-    if campus_obj.university.is_partner_university == False:
-        university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university = False).order_by('-id')
-    else:
-        university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
-                                                           is_partner_university=True).order_by('-id')
+    # if campus_obj.university.is_partner_university == False:
+    #     university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university = False).order_by('-id')
+    # else:
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
+                                                           university_type_id=campus_obj.university_type.id).order_by('-id')
+    university_type_recs = UniversityTypeDetails.objects.filter(status=True)
     country_recs = CountryDetails.objects.all()
-    return render(request, "edit_campus.html", {'campus_obj': campus_obj,'university_recs':university_recs,'country_recs':country_recs})
+    return render(request, "edit_campus.html", {'campus_obj': campus_obj,'university_recs':university_recs,'country_recs':country_recs,'university_type_recs':university_type_recs})
 
 def delete_campus(request):
     if request.method == 'POST':
@@ -2914,6 +2957,7 @@ def calendar_settings(request):
 def add_calendar(request):
     if request.method == 'POST':
         university = request.POST.get('university')
+        university_type = request.POST.get('university_type')
         year = request.POST.get('year')
         branch = request.POST.get('branch')
         semester = request.POST.get('semester')
@@ -2928,8 +2972,8 @@ def add_calendar(request):
         else:
             status = False
         try:
-            CalenderDetails.objects.create(university_id=university, year_id=year,branch_id = branch,semester_id = semester,
-                                             activity_id = activity,start_date = start_dt,end_date = end_dt,status=status)
+            CalenderDetails.objects.create(university_id=university, year_id=year,branch_id = branch,
+                                             activity_id = activity,start_date = start_dt,end_date = end_dt,status=status,university_type_id = university_type)
             messages.success(request, "Record saved.")
         except:
             messages.warning(request, "Record not saved.")
@@ -2939,13 +2983,15 @@ def add_calendar(request):
     branch_recs = CampusBranchesDetails.objects.all()
     semester_recs = SemesterDetails.objects.all()
     activity_recs = ActivityDetails.objects.all()
-    return render(request, 'add_calender.html',{'university_recs':university_recs,'year_recs':year_recs,'branch_recs':branch_recs,'semester_recs':semester_recs,'activity_recs':activity_recs})
+    university_type_recs = UniversityTypeDetails.objects.filter(status=True)
+    return render(request, 'add_calender.html',{'university_recs':university_recs,'year_recs':year_recs,'branch_recs':branch_recs,'semester_recs':semester_recs,'activity_recs':activity_recs,'university_type_recs':university_type_recs})
 
 
 def edit_calender(request, calender_id=None):
     calender_obj = CalenderDetails.objects.get(id=calender_id)
     if request.method == 'POST':
         university = request.POST.get('university')
+        university_type = request.POST.get('university_type')
         year = request.POST.get('year')
         branch = request.POST.get('branch')
         semester = request.POST.get('semester')
@@ -2960,10 +3006,10 @@ def edit_calender(request, calender_id=None):
         else:
             status = False
         try:
+            calender_obj.university_type_id = university_type
             calender_obj.university_id = university
             calender_obj.year_id = year
             calender_obj.branch_id = branch
-            calender_obj.semester_id = semester
             calender_obj.activity_id = activity
             calender_obj.start_date = start_dt
             calender_obj.end_date = end_dt
@@ -2973,18 +3019,16 @@ def edit_calender(request, calender_id=None):
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/calendar_settings/')
-    if calender_obj.university.is_partner_university == False:
-        university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university = False).order_by('-id')
-    else:
-        university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
-                                                           is_partner_university=True).order_by('-id')
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
+                                                           university_type_id=calender_obj.university_type.id).order_by('-id')
     year_recs = YearDetails.objects.all()
     branch_recs = CampusBranchesDetails.objects.all()
     semester_recs = SemesterDetails.objects.all()
     activity_recs = ActivityDetails.objects.all()
+    university_type_recs = UniversityTypeDetails.objects.filter(status=True)
     return render(request, 'edit_calender.html',
                   {'university_recs': university_recs, 'year_recs': year_recs, 'branch_recs': branch_recs,
-                   'semester_recs': semester_recs, 'activity_recs': activity_recs,'calender_obj':calender_obj})
+                   'semester_recs': semester_recs, 'activity_recs': activity_recs,'calender_obj':calender_obj,'university_type_recs':university_type_recs})
 
 def delete_calender(request):
     if request.method == 'POST':
@@ -4111,3 +4155,59 @@ def get_year_from_study_level(request):
             raw_dict['year'] = rec.year.year_name
             year_list.append(raw_dict)
     return JsonResponse(year_list, safe=False)
+
+
+def university_type_settings(request):
+    university_type_recs = UniversityTypeDetails.objects.filter()
+    return render(request, 'university_type_settings.html', {'university_type_recs': university_type_recs})
+
+
+def add_university_type(request):
+    if request.method == 'POST':
+        university_type = request.POST.get('university_type')
+        status = request.POST.get('status')
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            if not UniversityTypeDetails.objects.filter(university_type=university_type).exists():
+                UniversityTypeDetails.objects.create(university_type=university_type,status = status)
+            else:
+                messages.warning(request, "University Type already exists.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/university_type_settings/')
+    return render(request, 'add_university_type.html')
+
+def edit_university_type(request, university_type_id=None):
+    university_type_obj = UniversityTypeDetails.objects.get(id=university_type_id)
+    if request.method == 'POST':
+        university_type = request.POST.get('university_type')
+        status = request.POST.get('status')
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            if not UniversityTypeDetails.objects.filter(university_type=university_type).exclude(id=university_type_id).exists():
+                university_type_obj.university_type = university_type
+                university_type_obj.status = status
+                university_type_obj.save()
+                messages.success(request, "Record saved.")
+            else:
+                messages.warning(request, "University Type already exists.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/university_type_settings/')
+    return render(request, "edit_university_type.html", {'university_type_obj': university_type_obj})
+
+def delete_university_type(request):
+    if request.method == 'POST':
+        university_type_delete_id = request.POST.get('university_type_delete_id')
+        try:
+            UniversityTypeDetails.objects.filter(id=university_type_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/university_type_settings/')

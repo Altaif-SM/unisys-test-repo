@@ -73,6 +73,12 @@ class EnglishCompetencyTestDetails(BaseModel):
 
         return res
 
+class UniversityTypeDetails(BaseModel):
+    university_type = models.CharField(max_length=150, blank=True, null=True)
+    status = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ('id',)
 
 
 class AllCountries(BaseModel):
@@ -286,6 +292,8 @@ class UniversityDetails(BaseModel):
     is_active = models.BooleanField(default=True)
     is_delete = models.BooleanField(default=False)
     is_partner_university = models.BooleanField(default=False)
+    university_type = models.ForeignKey(UniversityTypeDetails, null=True, related_name='university_type_rel',
+                                on_delete=models.SET_NULL)
 
 
     class Meta:
@@ -323,6 +331,11 @@ class SemesterDetails(BaseModel):
     university = models.ForeignKey(UniversityDetails, null=True, related_name='university_semester_rel',
                              on_delete=models.SET_NULL)
     semester = models.ManyToManyField(Semester, blank=True)
+    university_type = models.ForeignKey(UniversityTypeDetails, null=True, related_name='semester_university_type_rel',
+                                        on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return self.semester_name
 
 
 
@@ -379,6 +392,8 @@ class FacultyDetails(BaseModel):
     address = models.TextField(blank=True, null=True)
     status = models.BooleanField(default=True)
     department = models.ManyToManyField(Department, blank=True)
+    university_type = models.ForeignKey(UniversityTypeDetails, null=True, related_name='faculty_university_type_rel',
+                                        on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ('-id',)
@@ -394,6 +409,8 @@ class CampusBranchesDetails(BaseModel):
                                    on_delete=models.SET_NULL)
     country = models.ForeignKey(CountryDetails, null=True, related_name='campus_centers_country_rel',
                                 on_delete=models.SET_NULL)
+    university_type = models.ForeignKey(UniversityTypeDetails, null=True, related_name='campus_university_type_rel',
+                                        on_delete=models.SET_NULL)
 
 
     class Meta:
@@ -436,6 +453,10 @@ class ProgramDetails(BaseModel):
     study_mode = models.ManyToManyField(ProgramStudyModeDetails, blank=True)
     department = models.ForeignKey(Department, null=True, related_name='program_department_rel',
                                     on_delete=models.SET_NULL)
+    university_type = models.ForeignKey(UniversityTypeDetails, null=True, related_name='program_university_type_rel',
+                                   on_delete=models.SET_NULL)
+    acceptance_avg = models.CharField(max_length=150, blank=True, null=True)
+    capacity_avg = models.CharField(max_length=150, blank=True, null=True)
     class Meta:
         ordering = ('program_name',)
 
@@ -461,6 +482,8 @@ class ProgramFeeDetails(BaseModel):
                                 on_delete=models.SET_NULL)
     total_amount = models.FloatField(null=True, blank=True, default=0.0)
     program_fee = models.ManyToManyField(ProgramFeeType, blank=True)
+    university_type = models.ForeignKey(UniversityTypeDetails, null=True, related_name='program_fee_university_type_rel',
+                                        on_delete=models.SET_NULL)
 
 
 
@@ -600,7 +623,8 @@ class LearningCentersDetails(BaseModel):
     status = models.BooleanField(default=True)
     university = models.ForeignKey(UniversityDetails, null=True, related_name='learning_university_rel',
                                    on_delete=models.SET_NULL)
-
+    university_type = models.ForeignKey(UniversityTypeDetails, null=True, related_name='learning_university_type_rel',
+                                        on_delete=models.SET_NULL)
     class Meta:
         ordering = ('id',)
 
@@ -634,6 +658,8 @@ class CalenderDetails(BaseModel):
     start_date = models.DateField()
     end_date = models.DateField()
     status = models.BooleanField(default=True)
+    university_type = models.ForeignKey(UniversityTypeDetails, null=True, related_name='calender_university_type_rel',
+                                        on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ('-id',)
@@ -754,3 +780,5 @@ class ProgramRegistrationFeeDetails(BaseModel):
 
     class Meta:
         ordering = ('-id',)
+
+

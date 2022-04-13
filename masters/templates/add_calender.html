@@ -103,22 +103,20 @@
             $(document).ready(function () {
                 $("#status").Sswitch({});
 
-                $('input[type="radio"]').on('change', function () {
-                    var university_type = $('input[name="university_type"]:checked').val();
+$(document).on("change", "#university_type", function (e) {
+                    var university_type_id = $(this).val();
+                    console.log("university_type_id" + university_type_id);
                     var url = '/student/get_university_from_type/';
-                    get_university_from_university_type(url, university_type)
-
-
+                    get_university_from_university_type(url, university_type_id)
                 })
-
             });
 
-            function get_university_from_university_type(url, university_type) {
+function get_university_from_university_type(url, university_type_id) {
                 $.ajax({
                     type: 'POST',
                     url: url,
                     data: {
-                        university_type: university_type,
+                        university_type_id: university_type_id,
                         csrfmiddlewaretoken: '{{ csrf_token }}',
                     },
                     success: function (data) {
@@ -137,7 +135,6 @@
                     }
                 });
             }
-
 
             window.setTimeout(function () {
                 $(".alert").fadeTo(500, 0).slideUp(500, function () {
@@ -199,19 +196,23 @@
 
                         <div class="row item_experience" id="item_experience_1">
                             <div class="row">
+
                             <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'University Type' %}: <span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <input class="current" type="radio" checked name="university_type"
-                                               id="university_main"
-                                               value="Main">
-                                        <span style="padding:inherit">Main</span>&nbsp;&nbsp;
-                                        <input class="current" type="radio" name="university_type" value="Partner"
-                                               id="university_partner">
-                                        <span style="padding:inherit">International</span>
-                                    </div>
-                                </div>
+    <label class="col-md-2 control-label">{% trans 'University Type' %}:<span
+            style="color: red">*</span></label>
+    <div class="col-md-3">
+        <select id='university_type' title="Select University"
+                name="university_type"
+                class="form-control" required>
+            <option selected="selected" value=""> Please Select</option>
+            {% for rec in university_type_recs %}
+                <option value="{{ rec.id }}">{{ rec.university_type|default_if_none:"" }}</option>
+            {% endfor %}
+
+        </select>
+    </div>
+</div>
+
 
                                 <div class="">
                                     <label class="col-md-2 control-label">{% trans 'University' %}:<span
@@ -273,21 +274,21 @@
 
                             <br>
                             <div class="row">
-                            <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'Semester' %}:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <select id='semester' title="Select Semester"
-                                                name="semester"
-                                                class="form-control" required>
-                                            <option selected="selected" value=""> Please Select</option>
-                                            {% for rec in semester_recs %}
-                                                <option value="{{ rec.id }}">{{ rec.semester_name|default_if_none:"" }}</option>
-                                            {% endfor %}
-
-                                        </select>
-                                    </div>
-                                </div>
+{#                            <div class="">#}
+{#                                    <label class="col-md-2 control-label">{% trans 'Semester' %}:<span#}
+{#                                            style="color: red">*</span></label>#}
+{#                                    <div class="col-md-3">#}
+{#                                        <select id='semester' title="Select Semester"#}
+{#                                                name="semester"#}
+{#                                                class="form-control" required>#}
+{#                                            <option selected="selected" value=""> Please Select</option>#}
+{#                                            {% for rec in semester_recs %}#}
+{#                                                <option value="{{ rec.id }}">{{ rec.semester_name|default_if_none:"" }}</option>#}
+{#                                            {% endfor %}#}
+{##}
+{#                                        </select>#}
+{#                                    </div>#}
+{#                                </div>#}
                                 <div class="">
                                     <label class="col-md-2 control-label">{% trans 'Activity' %}:<span
                                             style="color: red">*</span></label>

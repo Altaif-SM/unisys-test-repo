@@ -205,11 +205,12 @@
                             <td style="display: none"><input id="learning_centers_id" value="{{ rec.id }}"></td>
                             <td>{{ rec.lc_name|default_if_none:"" }}</td>
                             <td>{{ rec.university.university_name|default_if_none:"" }}</td>
-                        {% if rec.university.is_partner_university == False %}
-                                     <td>Main</td>
-                                {% else %}
-                                    <td>International</td>
-                                {% endif %}
+                            <td>{{ rec.university_type.university_type|default_if_none:"" }}</td>
+{#                        {% if rec.university.is_partner_university == False %}#}
+{#                                     <td>Main</td>#}
+{#                                {% else %}#}
+{#                                    <td>International</td>#}
+{#                                {% endif %}#}
                             <td>{{ rec.country.country_name|title }}</td>
                             <td>{{ rec.lc_email|default_if_none:"" }}</td>
                             <td>{{ rec.lc_tel|default_if_none:"" }}</td>
