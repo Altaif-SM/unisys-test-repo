@@ -3852,7 +3852,9 @@ def get_faculty_from_study_level(request):
     if university:
         program_recs = program_recs.filter(university_id=university)
     if study_level:
-        program_recs = program_recs.filter(study_type_id=study_level)
+        program_recs = program_recs.filter(study_level_id=study_level)
+    if study_mode:
+        program_recs = program_recs.filter(study_type_id=study_mode)
     if program_recs:
         for rec in program_recs:
             if not rec.faculty.id in faculty_ids:
@@ -3895,7 +3897,9 @@ def get_faculty_from_study_level_2(request):
     if university:
         program_recs = program_recs.filter(university_id=university)
     if study_level:
-        program_recs = program_recs.filter(study_type_id=study_level)
+        program_recs = program_recs.filter(study_level_id=study_level)
+    if study_mode:
+        program_recs = program_recs.filter(study_type_id=study_mode)
     if program_recs:
         for rec in program_recs:
             if not rec.faculty.id in faculty_ids:
@@ -3949,7 +3953,9 @@ def get_faculty_from_study_level_3(request):
     if university:
         program_recs = program_recs.filter(university_id=university)
     if study_level:
-        program_recs = program_recs.filter(study_type_id=study_level)
+        program_recs = program_recs.filter(study_level_id=study_level)
+    if study_mode:
+        program_recs = program_recs.filter(study_type_id=study_mode)
     if program_recs:
         for rec in program_recs:
             if not rec.faculty.id in faculty_ids:

@@ -2589,7 +2589,7 @@ def applicant_intake_info(request):
 
         program_recs = ProgramDetails.objects.filter(is_delete=False)
         if application_obj.program_mode:
-            program_recs = program_recs.filter(study_type_id=application_obj.program_mode.id)
+            program_recs = program_recs.filter(study_type_id=application_obj.program_mode.id,study_level_id=application_obj.study_level.id)
         # if application_obj.study_mode:
             for rec in program_recs:
                 # for mode in rec.study_mode.filter(study_mode=application_obj.study_mode):
@@ -2597,7 +2597,7 @@ def applicant_intake_info(request):
 
         program_recs_2 = ProgramDetails.objects.filter(is_delete=False)
         if application_obj.program_mode_2:
-            program_recs_2 = program_recs_2.filter(study_type_id=application_obj.program_mode_2.id)
+            program_recs_2 = program_recs_2.filter(study_type_id=application_obj.program_mode_2.id,study_level_id=application_obj.study_level_2.id)
         # if application_obj.study_mode_2:
             for rec in program_recs_2:
                 # for mode in rec.study_mode.filter(study_mode=application_obj.study_mode_2):
@@ -2605,7 +2605,7 @@ def applicant_intake_info(request):
 
         program_recs_3 = ProgramDetails.objects.filter(is_delete=False)
         if application_obj.program_mode_3:
-            program_recs_3 = program_recs_3.filter(study_type_id=application_obj.program_mode_3.id)
+            program_recs_3 = program_recs_3.filter(study_type_id=application_obj.program_mode_3.id,study_level_id=application_obj.study_level_3.id)
         # if application_obj.study_mode_3:
             for rec in program_recs_3:
                 # for mode in rec.study_mode.filter(study_mode=application_obj.study_mode_3):
@@ -2838,6 +2838,7 @@ def save_update_applicant_intake_info(request):
             application_obj.program_mode_3_id = request.POST.get('study_level_3', None)
             # if request.POST.get('country'):
             application_obj.learning_country_id = request.POST.get('country',None)
+            application_obj.university_type_id = request.POST.get('university_type',None)
             application_obj.intake_flag = True
             application_obj.save()
             redirect_flag = True
