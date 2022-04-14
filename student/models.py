@@ -225,6 +225,7 @@ class ApplicationDetails(BaseModel):
     is_offer_accepted = models.BooleanField(default=False)
     university_type = models.ForeignKey('masters.UniversityTypeDetails', null=True, related_name='application_university_type_rel',
                                         on_delete=models.SET_NULL)
+    acceptance_avg = models.CharField(max_length=150, blank=True, null=True)
 
     class Meta:
         ordering = ('-created_on',)
