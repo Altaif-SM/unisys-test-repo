@@ -427,6 +427,105 @@
 
                 })
 
+            $(document).on("change", "#acceptance_avg", function (e) {
+
+                    var url = '/student/get_all_acceptance_avg_program_mode/';
+                    get_all_acceptance_avg_program_mode(url)
+
+                })
+
+            function get_all_acceptance_avg_program_mode(url) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+
+                            $('#learning_centre').empty();
+                            $('#learning_centre').append(
+                                '<option value="" >Please select</option>');
+
+
+                            $('#faculty').empty();
+                            $('#faculty').append(
+                                '<option value="" >Please select</option>');
+
+
+                            $('#program').empty();
+                            $('#program').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_mode').empty();
+                            $('#program_mode').append(
+                                '<option value="" >Please select</option>');
+
+
+                            $('#faculty_2').empty();
+                            $('#faculty_2').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_2').empty();
+                            $('#program_2').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_mode_2').empty();
+                            $('#program_mode_2').append(
+                                '<option value="" >Please select</option>');
+
+
+
+                            $('#faculty_3').empty();
+                            $('#faculty_3').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_3').empty();
+                            $('#program_3').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_mode_3').empty();
+                            $('#program_mode_3').append(
+                                '<option value="" >Please select</option>');
+
+
+                            $('#study_level').empty();
+                            $('#study_level_2').empty();
+                            $('#study_level_3').empty();
+
+
+
+                            $('#study_level').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#study_level').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['study_type'] + '</option>')
+                            }
+
+                             $('#study_level_2').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#study_level_2').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['study_type'] + '</option>')
+                            }
+
+                             $('#study_level_3').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#study_level_3').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['study_type'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
              function get_year_from_study_level(url, program_level, university) {
                     $.ajax({
                         type: 'POST',
@@ -1216,12 +1315,13 @@
                     var university = $('#university').val();
                     var study_level = $('#study_level').val();
                     var department = $('#department').val();
+                    var acceptance_avg = $('#acceptance_avg').val();
 
                     {#var url = '/masters/get_departments_from_faculty/';#}
                     {#get_departments_from_faculty(url, faculty_id)#}
 
                     var url = '/masters/get_programs_from_faculty/';
-                    get_programs_from_faculty(url, study_mode, university, study_level, faculty_id, department)
+                    get_programs_from_faculty(url, study_mode, university, study_level, faculty_id, department, acceptance_avg)
 
                 })
 
@@ -1268,7 +1368,7 @@
                     });
                 }
 
-                function get_programs_from_faculty(url, study_mode, university, study_level, faculty, department) {
+                function get_programs_from_faculty(url, study_mode, university, study_level, faculty, department, acceptance_avg) {
                     $.ajax({
                         type: 'POST',
                         url: url,
@@ -1278,6 +1378,7 @@
                             study_level: study_level,
                             faculty: faculty,
                             department: department,
+                            acceptance_avg: acceptance_avg,
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
@@ -1319,12 +1420,13 @@
                     var university = $('#university').val();
                     var study_level = $('#study_level_2').val();
                     var department = $('#department_2').val();
+                    var acceptance_avg = $('#acceptance_avg').val();
 
                     var url = '/masters/get_departments_from_faculty_2/';
                     get_departments_from_faculty_2(url, faculty_id)
 
                     var url = '/masters/get_programs_from_faculty_2/';
-                    get_programs_from_faculty_2(url, study_mode, university, study_level, faculty_id, department)
+                    get_programs_from_faculty_2(url, study_mode, university, study_level, faculty_id, department,acceptance_avg)
 
                 })
 
@@ -1371,7 +1473,7 @@
                     });
                 }
 
-                function get_programs_from_faculty_2(url, study_mode, university, study_level, faculty, department) {
+                function get_programs_from_faculty_2(url, study_mode, university, study_level, faculty, department,acceptance_avg) {
                     $.ajax({
                         type: 'POST',
                         url: url,
@@ -1381,6 +1483,7 @@
                             study_level: study_level,
                             faculty: faculty,
                             department: department,
+                            acceptance_avg: acceptance_avg,
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
@@ -1421,12 +1524,13 @@
                     var university = $('#university').val();
                     var study_level = $('#study_level_3').val();
                     var department = $('#department_3').val();
+                    var acceptance_avg = $('#acceptance_avg').val();
 
                     var url = '/masters/get_departments_from_faculty_3/';
                     get_departments_from_faculty_3(url, faculty_id)
 
                     var url = '/masters/get_programs_from_faculty_3/';
-                    get_programs_from_faculty_3(url, study_mode, university, study_level, faculty_id, department)
+                    get_programs_from_faculty_3(url, study_mode, university, study_level, faculty_id, department,acceptance_avg)
 
                 })
 
@@ -1473,7 +1577,7 @@
                     });
                 }
 
-                function get_programs_from_faculty_3(url, study_mode, university, study_level, faculty, department) {
+                function get_programs_from_faculty_3(url, study_mode, university, study_level, faculty, department,acceptance_avg) {
                     $.ajax({
                         type: 'POST',
                         url: url,
@@ -1483,6 +1587,7 @@
                             study_level: study_level,
                             faculty: faculty,
                             department: department,
+                            acceptance_avg: acceptance_avg,
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
@@ -1936,7 +2041,7 @@
                                             style="color: red">*</span></label>
                                     <div class="col-md-2">
                                         <input onkeypress='validate_avergare(event)' type="text" title="Enter Acceptance(Avg)" id="acceptance_avg"
-                                               value=""
+                                               value="{{ application_obj.acceptance_avg|default_if_none:"" }}"
                                                name="acceptance_avg"
                                                class="form-control" required>
 

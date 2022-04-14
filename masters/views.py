@@ -3456,6 +3456,8 @@ def get_programs_from_faculty(request):
     study_level = request.POST.get('study_level', None)
     faculty = request.POST.get('faculty', None)
     department = request.POST.get('department', None)
+    acceptance_avg = request.POST.get('acceptance_avg', None)
+
     program_recs = ProgramDetails.objects.filter(is_delete=False)
 
     if university:
@@ -3477,10 +3479,11 @@ def get_programs_from_faculty(request):
 
     # if program_list:
     for rec in program_recs:
-        raw_dict = {}
-        raw_dict['id'] = rec.id
-        raw_dict['program'] = rec.program_name
-        final_list.append(raw_dict)
+        if int(acceptance_avg) >= int(rec.acceptance_avg):
+            raw_dict = {}
+            raw_dict['id'] = rec.id
+            raw_dict['program'] = rec.program_name
+            final_list.append(raw_dict)
     return JsonResponse(final_list, safe=False)
 
 def get_programs_from_faculty_2(request):
@@ -3491,6 +3494,8 @@ def get_programs_from_faculty_2(request):
     study_level = request.POST.get('study_level', None)
     faculty = request.POST.get('faculty', None)
     department = request.POST.get('department', None)
+    acceptance_avg = request.POST.get('acceptance_avg', None)
+
     program_recs = ProgramDetails.objects.filter(is_delete=False)
 
     if university:
@@ -3512,10 +3517,11 @@ def get_programs_from_faculty_2(request):
 
     # if program_list:
     for rec in program_recs:
-        raw_dict = {}
-        raw_dict['id'] = rec.id
-        raw_dict['program'] = rec.program_name
-        final_list.append(raw_dict)
+        if int(acceptance_avg) >= int(rec.acceptance_avg):
+            raw_dict = {}
+            raw_dict['id'] = rec.id
+            raw_dict['program'] = rec.program_name
+            final_list.append(raw_dict)
     return JsonResponse(final_list, safe=False)
 
 
@@ -3527,6 +3533,8 @@ def get_programs_from_faculty_3(request):
     study_level = request.POST.get('study_level', None)
     faculty = request.POST.get('faculty', None)
     department = request.POST.get('department', None)
+    acceptance_avg = request.POST.get('acceptance_avg', None)
+
     program_recs = ProgramDetails.objects.filter(is_delete=False)
 
     if university:
@@ -3548,10 +3556,11 @@ def get_programs_from_faculty_3(request):
 
     # if program_list:
     for rec in program_recs:
-        raw_dict = {}
-        raw_dict['id'] = rec.id
-        raw_dict['program'] = rec.program_name
-        final_list.append(raw_dict)
+        if int(acceptance_avg) >= int(rec.acceptance_avg):
+            raw_dict = {}
+            raw_dict['id'] = rec.id
+            raw_dict['program'] = rec.program_name
+            final_list.append(raw_dict)
     return JsonResponse(final_list, safe=False)
 
 

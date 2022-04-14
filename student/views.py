@@ -2663,10 +2663,11 @@ def applicant_intake_info(request):
 
         # if program_list:
         for rec in program_recs:
-            raw_dict = {}
-            raw_dict['id'] = rec.id
-            raw_dict['program'] = rec.program_name
-            program_final_list.append(raw_dict)
+            if int(application_obj.acceptance_avg) >= int(rec.acceptance_avg):
+                raw_dict = {}
+                raw_dict['id'] = rec.id
+                raw_dict['program'] = rec.program_name
+                program_final_list.append(raw_dict)
 
         program_2_recs = ProgramDetails.objects.filter(is_delete=False)
         if application_obj.university:
@@ -2688,10 +2689,11 @@ def applicant_intake_info(request):
 
         # if program_2_list:
         for rec in program_2_recs:
-            raw_dict = {}
-            raw_dict['id'] = rec.id
-            raw_dict['program'] = rec.program_name
-            program_2_final_list.append(raw_dict)
+            if int(application_obj.acceptance_avg) >= int(rec.acceptance_avg):
+                raw_dict = {}
+                raw_dict['id'] = rec.id
+                raw_dict['program'] = rec.program_name
+                program_2_final_list.append(raw_dict)
 
         program_3_recs = ProgramDetails.objects.filter(is_delete=False)
         if application_obj.university:
@@ -2713,10 +2715,11 @@ def applicant_intake_info(request):
 
         # if program_3_list:
         for rec in program_3_recs:
-            raw_dict = {}
-            raw_dict['id'] = rec.id
-            raw_dict['program'] = rec.program_name
-            program_3_final_list.append(raw_dict)
+            if int(application_obj.acceptance_avg) >= int(rec.acceptance_avg):
+                raw_dict = {}
+                raw_dict['id'] = rec.id
+                raw_dict['program'] = rec.program_name
+                program_3_final_list.append(raw_dict)
 
 
 
@@ -2839,6 +2842,7 @@ def save_update_applicant_intake_info(request):
             # if request.POST.get('country'):
             application_obj.learning_country_id = request.POST.get('country',None)
             application_obj.university_type_id = request.POST.get('university_type',None)
+            application_obj.acceptance_avg = request.POST.get('acceptance_avg',None)
             application_obj.intake_flag = True
             application_obj.save()
             redirect_flag = True
@@ -3048,3 +3052,13 @@ def get_all_study_level(request):
         raw_dict['study_level']=rec.study_level
         study_level_list.append(raw_dict)
     return JsonResponse(study_level_list, safe=False)
+
+def get_all_acceptance_avg_program_mode(request):
+    study_type_list = []
+    study_type_recs = StudyTypeDetails.objects.all()
+    for rec in study_type_recs:
+        raw_dict = {}
+        raw_dict['id']=rec.id
+        raw_dict['study_type']=rec.study_type
+        study_type_list.append(raw_dict)
+    return JsonResponse(study_type_list, safe=False)
