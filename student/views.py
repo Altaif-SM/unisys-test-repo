@@ -2597,7 +2597,7 @@ def applicant_intake_info(request):
 
         program_recs_2 = ProgramDetails.objects.filter(is_delete=False)
         if application_obj.program_mode_2:
-            program_recs_2 = program_recs_2.filter(study_type_id=application_obj.program_mode_2.id,study_level_id=application_obj.study_level_2.id)
+            program_recs_2 = program_recs_2.filter(study_type_id=application_obj.program_mode_2.id,study_level_id=application_obj.study_level.id)
         # if application_obj.study_mode_2:
             for rec in program_recs_2:
                 # for mode in rec.study_mode.filter(study_mode=application_obj.study_mode_2):
@@ -2605,7 +2605,7 @@ def applicant_intake_info(request):
 
         program_recs_3 = ProgramDetails.objects.filter(is_delete=False)
         if application_obj.program_mode_3:
-            program_recs_3 = program_recs_3.filter(study_type_id=application_obj.program_mode_3.id,study_level_id=application_obj.study_level_3.id)
+            program_recs_3 = program_recs_3.filter(study_type_id=application_obj.program_mode_3.id,study_level_id=application_obj.study_level.id)
         # if application_obj.study_mode_3:
             for rec in program_recs_3:
                 # for mode in rec.study_mode.filter(study_mode=application_obj.study_mode_3):
@@ -2836,14 +2836,14 @@ def save_update_applicant_intake_info(request):
             application_obj.program_mode_id = request.POST.get('study_level',None)
 
             application_obj.study_mode_2 = request.POST.get('study_mode_2',None)
-            application_obj.study_level_2_id = request.POST.get('study_level_2',None)
+            # application_obj.study_level_2_id = request.POST.get('study_level_2',None)
             application_obj.faculty_2_id = request.POST.get('faculty_2',None)
             application_obj.department_2_id = request.POST.get('department_2', None)
             application_obj.program_2_id = request.POST.get('program_2',None)
             application_obj.program_mode_2_id = request.POST.get('study_level_2',None)
 
             application_obj.study_mode_3 = request.POST.get('study_mode_3', None)
-            application_obj.study_level_3_id = request.POST.get('study_level_3', None)
+            # application_obj.study_level_3_id = request.POST.get('study_level_3', None)
             application_obj.faculty_3_id = request.POST.get('faculty_3', None)
             application_obj.department_3_id = request.POST.get('department_3', None)
             application_obj.program_3_id = request.POST.get('program_3', None)
