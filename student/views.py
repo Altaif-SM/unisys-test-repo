@@ -2663,11 +2663,14 @@ def applicant_intake_info(request):
 
         # if program_list:
         for rec in program_recs:
-            if int(application_obj.acceptance_avg) >= int(rec.acceptance_avg):
-                raw_dict = {}
-                raw_dict['id'] = rec.id
-                raw_dict['program'] = rec.program_name
-                program_final_list.append(raw_dict)
+            try:
+                if int(application_obj.acceptance_avg) >= int(rec.acceptance_avg):
+                    raw_dict = {}
+                    raw_dict['id'] = rec.id
+                    raw_dict['program'] = rec.program_name
+                    program_final_list.append(raw_dict)
+            except:
+                pass
 
         program_2_recs = ProgramDetails.objects.filter(is_delete=False)
         if application_obj.university:
@@ -2689,11 +2692,14 @@ def applicant_intake_info(request):
 
         # if program_2_list:
         for rec in program_2_recs:
-            if int(application_obj.acceptance_avg) >= int(rec.acceptance_avg):
-                raw_dict = {}
-                raw_dict['id'] = rec.id
-                raw_dict['program'] = rec.program_name
-                program_2_final_list.append(raw_dict)
+            try:
+                if int(application_obj.acceptance_avg) >= int(rec.acceptance_avg):
+                    raw_dict = {}
+                    raw_dict['id'] = rec.id
+                    raw_dict['program'] = rec.program_name
+                    program_2_final_list.append(raw_dict)
+            except:
+                pass
 
         program_3_recs = ProgramDetails.objects.filter(is_delete=False)
         if application_obj.university:
@@ -2715,11 +2721,14 @@ def applicant_intake_info(request):
 
         # if program_3_list:
         for rec in program_3_recs:
-            if int(application_obj.acceptance_avg) >= int(rec.acceptance_avg):
-                raw_dict = {}
-                raw_dict['id'] = rec.id
-                raw_dict['program'] = rec.program_name
-                program_3_final_list.append(raw_dict)
+            try:
+                if int(application_obj.acceptance_avg) >= int(rec.acceptance_avg):
+                    raw_dict = {}
+                    raw_dict['id'] = rec.id
+                    raw_dict['program'] = rec.program_name
+                    program_3_final_list.append(raw_dict)
+            except:
+                pass
 
 
 
@@ -2827,14 +2836,14 @@ def save_update_applicant_intake_info(request):
             application_obj.program_mode_id = request.POST.get('study_level',None)
 
             application_obj.study_mode_2 = request.POST.get('study_mode_2',None)
-            # application_obj.study_level_2_id = request.POST.get('study_level_2',None)
+            application_obj.study_level_2_id = request.POST.get('study_level_2',None)
             application_obj.faculty_2_id = request.POST.get('faculty_2',None)
             application_obj.department_2_id = request.POST.get('department_2', None)
             application_obj.program_2_id = request.POST.get('program_2',None)
             application_obj.program_mode_2_id = request.POST.get('study_level_2',None)
 
             application_obj.study_mode_3 = request.POST.get('study_mode_3', None)
-            # application_obj.study_level_3_id = request.POST.get('study_level_3', None)
+            application_obj.study_level_3_id = request.POST.get('study_level_3', None)
             application_obj.faculty_3_id = request.POST.get('faculty_3', None)
             application_obj.department_3_id = request.POST.get('department_3', None)
             application_obj.program_3_id = request.POST.get('program_3', None)
