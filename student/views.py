@@ -2739,8 +2739,11 @@ def applicant_intake_info(request):
             #     university_recs = UniversityDetails.objects.filter(is_delete=False,
             #                                                        is_partner_university=True).order_by('-id')
             # else:
-            university_recs = UniversityDetails.objects.filter(is_delete=False,
-                                                                   university_type_id=application_obj.university_type.id).order_by('-id')
+            try:
+                university_recs = UniversityDetails.objects.filter(is_delete=False,
+                                                                   university_type_id=application_obj.university_type.id,type_id=application_obj.type.id).order_by('-id')
+            except:
+                pass
         # else:
         #     university_recs = UniversityDetails.objects.filter(is_delete=False,
         #                                                        is_partner_university=False).order_by('-id')
