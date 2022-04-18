@@ -2501,6 +2501,7 @@ def applicant_intake_info(request):
     religion_recs = ReligionDetails.objects.all()
     student_recs = StudentDetails.objects.filter(user__is_active = True)
     university_type_recs = UniversityTypeDetails.objects.filter(status=True)
+    type_recs = TypeDetails.objects.filter(status=True)
     year_recs = ''
     semester_recs = ''
     university_recs =''
@@ -2778,7 +2779,8 @@ def applicant_intake_info(request):
                                                   'faculty_3_final_list':faculty_3_final_list,
                                                   'department_3_recs':department_3_recs,
                                                   'program_3_final_list':program_3_final_list,
-                                                  'university_type_recs':university_type_recs
+                                                  'university_type_recs':university_type_recs,
+                                                  'type_recs':type_recs
                                                   })
 
 
@@ -2852,6 +2854,7 @@ def save_update_applicant_intake_info(request):
             application_obj.learning_country_id = request.POST.get('country',None)
             application_obj.university_type_id = request.POST.get('university_type',None)
             application_obj.acceptance_avg = request.POST.get('acceptance_avg',None)
+            application_obj.type_id = request.POST.get('type',None)
             application_obj.intake_flag = True
             application_obj.save()
             redirect_flag = True
@@ -3071,3 +3074,27 @@ def get_all_acceptance_avg_program_mode(request):
         raw_dict['study_type']=rec.study_type
         study_type_list.append(raw_dict)
     return JsonResponse(study_type_list, safe=False)
+
+
+def get_type_details(request):
+    type_list = []
+    type_recs = TypeDetails.objects.all()
+    for rec in type_recs:
+        raw_dict = {}
+        raw_dict['id']=rec.id
+        raw_dict['type']=rec.type
+        type_list.append(raw_dict)
+    return JsonResponse(type_list, safe=False)
+
+
+def get_university_from_type_scope(request):
+    finalDict = []
+    type_id = request.POST.get('type_id', None)
+    university_type_id = request.POST.get('university_type_id', None)
+    university_recs = UniversityDetails.objects.filter(is_delete=False, university_type_id = university_type_id,type_id = type_id).order_by('-id')
+    for rec in university_recs:
+        raw_dict = {}
+        raw_dict['university_name']=rec.university_name
+        raw_dict['id']=rec.id
+        finalDict.append(raw_dict)
+    return JsonResponse(finalDict, safe=False)

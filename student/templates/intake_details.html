@@ -148,6 +148,8 @@
 
                 })*/
 
+
+
                 $(document).on("change", "#university_type", function (e) {
                     var university_type_id = $(this).val();
                     var url = '/student/get_university_from_type/';
@@ -156,9 +158,170 @@
                     var url = '/student/get_all_program_mode/';
                     get_all_program_mode(url)
 
-                     var url = '/student/get_all_study_level/';
+                    var url = '/student/get_all_study_level/';
                     get_all_study_level(url)
+
+                     var url = '/student/get_type_details/';
+                    get_type_details(url)
                 })
+
+             $(document).on("change", "#type", function (e) {
+                    var type_id = $(this).val();
+                    var university_type_id = $('#university_type').val();
+                    var url = '/student/get_university_from_type_scope/';
+                    get_university_from_type_scope(url, type_id,university_type_id)
+
+                    var url = '/student/get_all_program_mode/';
+                    get_all_program_mode(url)
+
+                   var url = '/student/get_all_study_level/';
+                    get_all_study_level(url)
+
+                })
+
+            function get_university_from_type_scope(url, type_id,university_type_id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            type_id: type_id,
+                            university_type_id: university_type_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+
+                            $('#university').empty();
+                            $('#university').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#year').empty();
+                            $('#year').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#semester').empty();
+                            $('#semester').append(
+                                '<option value="" >Please select</option>');
+
+
+                            $('#learning_centre').empty();
+                            $('#learning_centre').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#study_mode').empty();
+                            $('#study_mode').append(
+                                '<option value="" >Please select</option>');
+                            $('#study_mode').append(
+                                '<option value="Online" >Online</option>');
+                            $('#study_mode').append(
+                                '<option value="On Campus" >On Campus</option>');
+
+
+                            $('#faculty').empty();
+                            $('#faculty').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#department').empty();
+                            $('#department').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program').empty();
+                            $('#program').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_mode').empty();
+                            $('#program_mode').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#study_mode_2').empty();
+                            $('#study_mode_2').append(
+                                '<option value="" >Please select</option>');
+                            $('#study_mode_2').append(
+                                '<option value="Online" >Online</option>');
+                            $('#study_mode_2').append(
+                                '<option value="On Campus" >On Campus</option>');
+
+
+                            $('#faculty_2').empty();
+                            $('#faculty_2').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#department_2').empty();
+                            $('#department_2').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_2').empty();
+                            $('#program_2').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_mode_2').empty();
+                            $('#program_mode_2').append(
+                                '<option value="" >Please select</option>');
+
+
+                            $('#study_mode_3').empty();
+                            $('#study_mode_3').append(
+                                '<option value="" >Please select</option>');
+                            $('#study_mode_3').append(
+                                '<option value="Online" >Online</option>');
+                            $('#study_mode_3').append(
+                                '<option value="On Campus" >On Campus</option>');
+
+
+                            $('#faculty_3').empty();
+                            $('#faculty_3').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#department_3').empty();
+                            $('#department_3').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_3').empty();
+                            $('#program_3').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_mode_3').empty();
+                            $('#program_mode_3').append(
+                                '<option value="" >Please select</option>');
+
+
+                            for (var i = 0; i < data.length; i++) {
+                                $('#university').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['university_name'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+
+            function get_type_details(url) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            $('#type').empty();
+                            $('#type').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#type').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['type'] + '</option>')
+                            }
+
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
 
             function get_all_study_level(url) {
                     $.ajax({
@@ -239,6 +402,10 @@
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
+
+                             $('#type').empty();
+                            $('#type').append(
+                                '<option value="" >Please select</option>');
 
                             $('#university').empty();
                             $('#university').append(
@@ -1918,7 +2085,34 @@
     </div>
 </div>
 
+
                         </div>
+                    <br>
+
+                    <div class="row">
+                        <div class="">
+    <label class="col-md-2 control-label">{% trans 'Type' %}:<span
+            style="color: red">*</span></label>
+    <div class="col-md-4">
+        <select id='type' title="Select Type"
+                name="type"
+                class="form-control" required>
+            {% if application_obj.type %}
+                <option style="display:none;" selected="selected"
+                        value="{{ application_obj.type.id|default_if_none:"" }}"> {{ application_obj.type.type|default_if_none:"" }}</option>
+            {% else %}
+                <option selected="selected" value=""> Please Select</option>
+            {% endif %}
+            {% for rec in type_recs %}
+                <option value="{{ rec.id }}">{{ rec.type|default_if_none:"" }}</option>
+            {% endfor %}
+
+        </select>
+    </div>
+</div>
+
+
+                    </div>
 
                         <br>
                         <div class="row">

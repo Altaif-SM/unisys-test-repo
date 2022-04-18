@@ -1892,7 +1892,7 @@ def edit_university(request, university_id=None):
         return redirect('/masters/university_settings/')
     university_type_recs = UniversityTypeDetails.objects.filter(status=True)
     type_recs = TypeDetails.objects.filter(status=True)
-    return render(request, "edit_university.html", {'university_obj': university_obj,'type_recs':type_recs})
+    return render(request, "edit_university.html", {'university_obj': university_obj,'type_recs':type_recs,'university_type_recs':university_type_recs})
 
 def delete_university(request):
     if request.method == 'POST':
