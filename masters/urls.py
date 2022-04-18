@@ -285,4 +285,9 @@ urlpatterns = [
     path('edit_university_type/<int:university_type_id>/', views.edit_university_type, name='edit_university_type'),
     path('delete_university_type/', views.delete_university_type, name='delete_university_type'),
 
+    path('type_settings/', views.type_settings, name='type_settings'),
+    path('add_type/', views.add_type, name='add_type'),
+    path('edit_type/<int:type_id>/', views.edit_type, name='edit_type'),
+    path('delete_type/', views.delete_type, name='delete_type'),
+
 ]

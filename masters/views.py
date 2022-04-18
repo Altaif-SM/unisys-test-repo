@@ -1832,6 +1832,7 @@ def add_university(request):
     if request.method == 'POST':
         university_logo = request.FILES.get('university_logo', None)
         university_type = request.POST.get('university_type')
+        type = request.POST.get('type')
         university_name = request.POST.get('university_name')
         email = request.POST.get('email')
         telephone = request.POST.get('telephone')
@@ -1845,7 +1846,7 @@ def add_university(request):
         try:
             university_obj = UniversityDetails.objects.create(
                                              university_name=university_name, email=email,telephone = telephone,website = website,
-                                             address = university_address,is_active = status,university_type_id = university_type)
+                                             address = university_address,is_active = status,university_type_id = university_type,type_id = type)
             if university_logo:
                 university_obj.university_logo = university_logo
                 university_obj.save()
@@ -1854,13 +1855,15 @@ def add_university(request):
             messages.warning(request, "Record not saved.")
         return redirect('/masters/university_settings/')
     university_type_recs = UniversityTypeDetails.objects.filter(status = True)
-    return render(request, 'add_university.html',{'university_type_recs':university_type_recs})
+    type_recs = TypeDetails.objects.filter(status = True)
+    return render(request, 'add_university.html',{'university_type_recs':university_type_recs,'type_recs':type_recs})
 
 def edit_university(request, university_id=None):
     university_obj = UniversityDetails.objects.get(id=university_id)
     if request.method == 'POST':
         university_logo = request.FILES.get('university_logo', None)
         university_type = request.POST.get('university_type')
+        type = request.POST.get('type')
         university_name = request.POST.get('university_name')
         email = request.POST.get('email')
         telephone = request.POST.get('telephone')
@@ -1873,6 +1876,7 @@ def edit_university(request, university_id=None):
             status = False
         try:
             university_obj.university_type_id = university_type
+            university_obj.type_id = type
             university_obj.university_name = university_name
             university_obj.email = email
             university_obj.telephone = telephone
@@ -1887,7 +1891,8 @@ def edit_university(request, university_id=None):
             messages.warning(request, "Record not saved.")
         return redirect('/masters/university_settings/')
     university_type_recs = UniversityTypeDetails.objects.filter(status=True)
-    return render(request, "edit_university.html", {'university_obj': university_obj,'university_type_recs':university_type_recs})
+    type_recs = TypeDetails.objects.filter(status=True)
+    return render(request, "edit_university.html", {'university_obj': university_obj,'type_recs':type_recs})
 
 def delete_university(request):
     if request.method == 'POST':
@@ -4226,3 +4231,60 @@ def delete_university_type(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/university_type_settings/')
+
+
+
+def type_settings(request):
+    type_recs = TypeDetails.objects.filter()
+    return render(request, 'type_settings.html', {'type_recs': type_recs})
+
+
+def add_type(request):
+    if request.method == 'POST':
+        type = request.POST.get('type')
+        status = request.POST.get('status')
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            if not TypeDetails.objects.filter(type=type).exists():
+                TypeDetails.objects.create(type=type,status = status)
+            else:
+                messages.warning(request, "Type already exists.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/type_settings/')
+    return render(request, 'add_type.html')
+
+def edit_type(request, type_id=None):
+    type_obj = TypeDetails.objects.get(id=type_id)
+    if request.method == 'POST':
+        type = request.POST.get('type')
+        status = request.POST.get('status')
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            if not TypeDetails.objects.filter(type=type).exclude(id=type_id).exists():
+                type_obj.type = type
+                type_obj.status = status
+                type_obj.save()
+                messages.success(request, "Record saved.")
+            else:
+                messages.warning(request, "Type already exists.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/type_settings/')
+    return render(request, "edit_type.html", {'type_obj': type_obj})
+
+def delete_type(request):
+    if request.method == 'POST':
+        type_delete_id = request.POST.get('type_delete_id')
+        try:
+            TypeDetails.objects.filter(id=type_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/type_settings/')

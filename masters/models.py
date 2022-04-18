@@ -81,6 +81,15 @@ class UniversityTypeDetails(BaseModel):
         ordering = ('id',)
 
 
+class TypeDetails(BaseModel):
+    type = models.CharField(max_length=150, blank=True, null=True)
+    status = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ('id',)
+
+
+
 class AllCountries(BaseModel):
     country_name = models.CharField(max_length=100, blank=True, null=True)
     country_name = models.CharField(max_length=100, blank=True, null=True)
@@ -294,6 +303,9 @@ class UniversityDetails(BaseModel):
     is_partner_university = models.BooleanField(default=False)
     university_type = models.ForeignKey(UniversityTypeDetails, null=True, related_name='university_type_rel',
                                 on_delete=models.SET_NULL)
+
+    type = models.ForeignKey(TypeDetails, null=True, related_name='type_rel',
+                                        on_delete=models.SET_NULL)
 
 
     class Meta:

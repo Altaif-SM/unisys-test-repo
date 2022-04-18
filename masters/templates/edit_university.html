@@ -209,7 +209,38 @@
                                     </div>
                                 </div>
 
-                                <div class="">
+                            <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Type' %}:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select id='type' title="Select Type"
+                                                name="type"
+                                                class="form-control" required>
+                                           {% if university_obj.type %}
+                                                <option style="display:none;" selected="selected"
+                                                        value="{{ university_obj.type.id|default_if_none:"" }}"> {{ university_obj.type.type|default_if_none:"" }}</option>
+                                            {% else %}
+                                                <option selected="selected" value=""> Please Select</option>
+                                            {% endif %}
+                                            {% for rec in type_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.type|default_if_none:"" }}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                </div>
+
+
+
+
+
+
+                            </div>
+                            <br>
+
+
+                            <div class="row">
+                                 <div class="">
                                     <label class="col-md-2 control-label">University Name:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
@@ -221,14 +252,6 @@
                                     </div>
                                 </div>
 
-
-
-
-                            </div>
-                            <br>
-
-
-                            <div class="row">
                                  <div class="">
                                     <label class="col-md-2 control-label">Email:<span
                                             style="color: red">*</span></label>
@@ -241,6 +264,16 @@
                                     </div>
                                 </div>
 
+
+
+
+
+
+
+                            </div>
+                            <br>
+
+                            <div class="row">
                                 <div class="">
                                     <label class="col-md-2 control-label">Telephone:<span
                                             style="color: red">*</span></label>
@@ -253,14 +286,6 @@
                                     </div>
                                 </div>
 
-
-
-
-
-                            </div>
-                            <br>
-
-                            <div class="row">
                             <div class="">
                                     <label class="col-md-2 control-label">Website:<span
                                             style="color: red">*</span></label>
@@ -273,17 +298,7 @@
                                     </div>
                                 </div>
 
-                                <div class="">
-                                    <label class="col-md-2 control-label">Address:<span
-                                            style="color: red">*</span>
 
-                                    </label>
-                                    <div class="col-md-3">
-                                        <textarea rows="2" class="form-control " required id="university_address"
-                                                  name="university_address">{{ university_obj.address|default_if_none:"" }}</textarea>
-
-                                    </div>
-                                </div>
 
 
 
@@ -295,6 +310,18 @@
 
                         <br>
                         <div class="row">
+                         <div class="">
+                                    <label class="col-md-2 control-label">Address:<span
+                                            style="color: red">*</span>
+
+                                    </label>
+                                    <div class="col-md-3">
+                                        <textarea rows="2" class="form-control " required id="university_address"
+                                                  name="university_address">{{ university_obj.address|default_if_none:"" }}</textarea>
+
+                                    </div>
+                                </div>
+
                           {% if university_obj.university_logo %}
                                     <div class="">
                                         <label class="col-md-2 control-label">Logo:
@@ -336,7 +363,12 @@
 
                                     </div>
                                 {% endif %}
-                            <div class="">
+
+
+                        </div>
+                        <br>
+                        <div class="row">
+                             <div class="">
                                     <label class="col-md-2 control-label">Status:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
@@ -348,7 +380,6 @@
 
                                     </div>
                                 </div>
-
                         </div>
 
 
