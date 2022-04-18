@@ -3484,11 +3484,14 @@ def get_programs_from_faculty(request):
 
     # if program_list:
     for rec in program_recs:
-        if int(acceptance_avg) >= int(rec.acceptance_avg):
-            raw_dict = {}
-            raw_dict['id'] = rec.id
-            raw_dict['program'] = rec.program_name
-            final_list.append(raw_dict)
+        try:
+            if int(acceptance_avg) >= int(rec.acceptance_avg):
+                raw_dict = {}
+                raw_dict['id'] = rec.id
+                raw_dict['program'] = rec.program_name
+                final_list.append(raw_dict)
+        except:
+            pass
     return JsonResponse(final_list, safe=False)
 
 def get_programs_from_faculty_2(request):
