@@ -1502,7 +1502,7 @@ License: You must have a valid license purchased only from themeforest(the above
                          {% endif %}
                     {% endif %}
                     {% if user.is_student %}
-                         {% if user.get_student_application.offer_accepted %}
+                         {% if user.get_student_application.matric_cards %}
                             <li id="matric_card"><a href="{% url 'student:application_matric_card' %}" >{% trans 'Matric Card' %}</a></li>
                          {% endif %}
                     {% endif %}
