@@ -148,11 +148,21 @@ def registration_checkout(request):
             return render(request, 'no_registration_fee.html',{'application_obj':application_obj})
         is_university = False
         program_fee_obj = ''
-        if not ProgramFeeDetails.objects.filter(university_id = application_obj.university.id).exists():
+
+        if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False:
+            program_id = application_obj.program.id
+        elif application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False:
+            program_id = application_obj.program_2.id
+        elif application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True:
+            program_id = application_obj.program_3.id
+        else:
+            program_id = application_obj.program.id
+
+        if not ProgramFeeDetails.objects.filter(university_id = application_obj.university.id,program_id = program_id).exists():
             is_university = True
             return render(request, 'no_registration_fee.html',{'application_obj':application_obj,'is_university':is_university})
         else:
-            program_fee_obj = ProgramFeeDetails.objects.get(university_id = application_obj.university.id)
+            program_fee_obj = ProgramFeeDetails.objects.get(university_id = application_obj.university.id,program_id = program_id)
         order_obj = None
         if ProgramRegistrationFeeDetails.objects.filter(application_id=request.user.get_application.id).exists():
             order_obj = ProgramRegistrationFeeDetails.objects.get(application_id_id=request.user.get_application.id)
@@ -167,8 +177,18 @@ class CreateRegistrationCheckoutSessionView(View):
         YOUR_DOMAIN = settings.SERVER_HOST_NAME
         application_obj = request.user.get_application
         payement_obj = 1000
-        if ProgramFeeDetails.objects.filter(university_id=application_obj.university.id).exists():
-            payement_obj = ProgramFeeDetails.objects.get(university_id=application_obj.university.id)
+
+        if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False:
+            program_id = application_obj.program.id
+        elif application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False:
+            program_id = application_obj.program_2.id
+        elif application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True:
+            program_id = application_obj.program_3.id
+        else:
+            program_id = application_obj.program.id
+
+        if ProgramFeeDetails.objects.filter(university_id=application_obj.university.id,program_id = program_id).exists():
+            payement_obj = ProgramFeeDetails.objects.get(university_id=application_obj.university.id,program_id = program_id)
         try:
             checkout_session = stripe.checkout.Session.create(
                 line_items=[

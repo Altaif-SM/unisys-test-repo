@@ -2167,8 +2167,8 @@ def add_program_fee(request):
         total_amount = request.POST.get('total_amount')
         program_fee_count = request.POST.get('program_fee_count')
 
-        if ProgramFeeDetails.objects.filter(university_id=university).exists():
-            messages.warning(request, "University Name already exists.")
+        if ProgramFeeDetails.objects.filter(university_id=university,program_id=program).exists():
+            messages.warning(request, "Program Fee already exists.")
             return redirect('/masters/program_fee_settings/')
         try:
             program_fee_obj = ProgramFeeDetails.objects.create(university_id=university,country_id = country,
@@ -2211,8 +2211,8 @@ def edit_program_fee(request, program_id=None):
         discount = request.POST.get('discount')
         total_amount = request.POST.get('total_amount')
         program_fee_count = request.POST.get('program_fee_count')
-        if ProgramFeeDetails.objects.filter(~Q(id=program_id), university_id=university).exists():
-            messages.warning(request, "University Name already exists.")
+        if ProgramFeeDetails.objects.filter(~Q(id=program_id), university_id=university,program_id = program).exists():
+            messages.warning(request, "Program Fee already exists.")
             return redirect('/masters/program_fee_settings/')
 
         try:

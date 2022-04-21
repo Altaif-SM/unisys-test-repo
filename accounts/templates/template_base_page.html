@@ -1465,7 +1465,7 @@ License: You must have a valid license purchased only from themeforest(the above
                         {% endif %}
 
                      {% if user.is_student %}
-                         {% if user.get_student_application.personal_info_flag %}
+                         {% if user.get_student_application.offer_accepted %}
                             <li id="offer_accepted"><a href="{% url 'payments:registration_checkout' %}" >{% trans 'Program Registration Payment' %}</a></li>
                          {% endif %}
                     {% endif %}
