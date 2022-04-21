@@ -214,5 +214,7 @@ class CreateRegistrationCheckoutSessionView(View):
             return str(e)
 
 def stripe_registration_checkout_success(request, session_id):
+    application_obj = request.user.get_application
     ProgramRegistrationFeeDetails.objects.create(application_id=request.user.get_application)
+    ApplicationDetails.objects.filter(id = application_obj.id).update(is_paid_registration_fee = True)
     return redirect('/payments/registration_checkout/')
