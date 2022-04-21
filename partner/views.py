@@ -281,6 +281,20 @@ def filter_registered_application(request):
                    'degree_recs': degree_recs})
 
 
+def template_approving_matric_cards(request):
+    try:
+        applicant_recs_1 = ApplicationDetails.objects.filter(is_applied_matric_card = True,matric_card_status = 'Pending')
+        applicant_recs_2 = ApplicationDetails.objects.filter(is_applied_matric_card = True,matric_card_status = 'Approved')
+        applicant_recs_3 = ApplicationDetails.objects.filter(is_applied_matric_card = True,matric_card_status = 'Incomplete')
+
+        return render(request, 'template_matric_cards.html', {
+                       'applicant_recs_1':applicant_recs_1,
+                       'applicant_recs_2':applicant_recs_2,
+                       'applicant_recs_3':applicant_recs_3,
+                       })
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+
 def template_approving_application(request):
     applicant_recs = ''
     documents_recs = DocumentDetails.objects.all()
@@ -325,6 +339,7 @@ def template_approving_application(request):
                            })
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
+        return redirect('/partner/template_approving_application/')
 
 
 

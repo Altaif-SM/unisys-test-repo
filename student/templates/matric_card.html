@@ -1,0 +1,322 @@
+{% extends "template_base_page.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+
+
+            $(document).ready(function () {
+
+
+                $(document).on("click", "#save_id", function () {
+                    $('#id_accept_student_model').modal();
+                });
+
+                 $(document).on("click", "#submit_appplication", function () {
+                    $("#form_sample_1").submit();
+                });
+
+
+
+
+
+
+
+
+
+
+                $('#sample_1').dataTable().fnDestroy();
+                $('#sample_1').dataTable({
+                    "aoColumnDefs": [
+                        {'bSortable': false}
+                    ]
+                });
+            });
+        }
+
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+
+
+    </script>
+
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'student:student_home' %}">{% trans 'Home' %}</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span>{% trans 'Matric Card' %}</span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        {#        <div class="portlet-title">#}
+        {#            <div class="caption">#}
+        {#                <i class="icon-settings font-red"></i>#}
+        {#                <span class="caption-subject font-red sbold uppercase">Scholarship Selection </span>#}
+        {#            </div>#}
+        {#        </div>#}
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form action="{% url 'student:application_matric_card' %}"
+                      id="id_form"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-body">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-settings font-red"></i>
+                                <span class="caption-subject font-red sbold uppercase">{% trans 'Matric Card' %}:</span>
+                            </div>
+                        </div>
+                        <hr>
+                        {% if application_obj.first_interview == False and  application_obj.first_interview_attend == False %}
+                            <div class="row">
+
+                         <div class="">
+                                <div class="col-md-8" style="margin-left: 10%;font-size:15px;color: red">
+                                   There is no offer letter approved from university yet.
+
+                                </div>
+                            </div>
+                            <br>
+
+                        </div>
+                        {% else %}
+                             <div class="row">
+                    <div class="">
+                        <label class="col-md-2 control-label">{% trans 'Profile Pic' %}:</label>
+                        <div class="col-md-3">
+                            <a href="{{ attachement_obj.0.image.url }}" download>
+                                <img src="{{ attachement_obj.0.image.url }}" alt="image"
+                                     width="80" height="85">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                            <br>
+                            <div class="row">
+                            <input hidden id="value_check" name="value_check">
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'First Name' %}:</label>
+                                <div class="col-md-3">
+                                    <input readonly type="text" title="Enter Middle Name" id="middle_name" name="middle_name"
+                                           value="{{ application_obj.first_name }}" class="form-control value_check">
+                                </div>
+                            </div>
+
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Last Name' %}:</label>
+                                <div class="col-md-3">
+                                    <input readonly type="text" title="Enter Middle Name" id="middle_name" name="middle_name"
+                                           value="{{ application_obj.last_name }}" class="form-control value_check">
+                                </div>
+                            </div>
+
+
+                        </div>
+                            <br>
+                            <div class="row">
+                            <input hidden id="value_check" name="value_check">
+                                <div class="">
+                                <label class="col-md-2 control-label">{% trans 'University' %}: </label>
+                                <div class="col-md-3">
+                                    <input readonly type="text" title="Enter Middle Name" id="middle_name" name="middle_name"
+                                           value="{{ application_obj.university.university_name|default_if_none:"" }}" class="form-control value_check">
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Academic Year' %}: </label>
+                                <div class="col-md-3">
+                                    <input readonly type="text" title="Enter Middle Name" id="middle_name" name="middle_name"
+                                           value="{{ application_obj.academic_year.year_name|default_if_none:"" }}" class="form-control value_check">
+                                </div>
+                            </div>
+
+
+
+
+
+
+                        </div>
+                            <br>
+                            <div class="row">
+                            <input hidden id="value_check" name="value_check">
+
+<div class="">
+                                <label class="col-md-2 control-label">{% trans 'Semester' %}:</label>
+                                <div class="col-md-3">
+                                    <input readonly type="text" title="Enter Middle Name" id="middle_name" name="middle_name"
+                                           value="{{ application_obj.semester.semester|default_if_none:"" }} {{ application_obj.semester.start_date|date:"Y-m-d" }} - {{ application_obj.semester.end_date|date:"Y-m-d" }}" class="form-control value_check">
+                                </div>
+                            </div>
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Program' %}:</label>
+                                <div class="col-md-3">
+                                    <input readonly type="text" title="Enter Middle Name" id="middle_name" name="middle_name"
+                                           value="{% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.program.program_name|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.program_2.program_name|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.program_3.program_name|default_if_none:"" }} {% else %}{{ application_obj.program.program_name|default_if_none:"" }}{% endif %}" class="form-control value_check">
+                                </div>
+                            </div>
+
+
+                        </div>
+                            <br>
+                            <div class="row">
+                            <input hidden id="value_check" name="value_check">
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Level of Study' %}: </label>
+                                <div class="col-md-3">
+                                    <input readonly type="text" title="Enter Middle Name" id="middle_name" name="middle_name"
+                                           value="{{ application_obj.study_level.study_level|default_if_none:"" }}" class="form-control value_check">
+                                </div>
+                            </div>
+
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Faculty' %}:</label>
+                                <div class="col-md-3">
+                                    <input readonly type="text" title="Enter Middle Name" id="middle_name" name="middle_name"
+                                           value="{% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.faculty.faculty_name|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.faculty_2.faculty_name|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.faculty_3.faculty_name|default_if_none:"" }} {% else %}{{ application_obj.faculty.faculty_name|default_if_none:"" }}{% endif %}" class="form-control value_check">
+                                </div>
+                            </div>
+
+
+                        </div>
+                            <br>
+                             <div class="row">
+                            <input hidden id="value_check" name="value_check">
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Mode' %}: </label>
+                                <div class="col-md-3">
+                                    <input readonly type="text" title="Enter Middle Name" id="middle_name" name="middle_name"
+                                           value="{% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.program_mode.study_type|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.program_mode_2.study_type|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.program_mode_3.study_type|default_if_none:"" }} {% else %}{{ application_obj.program_mode.study_type|default_if_none:"" }}{% endif %}" class="form-control value_check">
+                                </div>
+                            </div>
+
+                            {% if application_obj.is_applied_matric_card %}
+                              <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Card Status' %}: </label>
+                                <div class="col-md-3">
+                                    <input readonly type="text" title="Enter Middle Name" id="middle_name" name="middle_name"
+                                           value="{% if  application_obj.matric_card_status == 'Pending' %}Pending{% elif  application_obj.matric_card_status == 'Approved' %}Approved{% elif  application_obj.matric_card_status == 'Rejected' %}Rejected{% else %}Pending{% endif %}" class="form-control value_check">
+                                </div>
+                            </div>
+                                {% endif %}
+
+
+
+
+
+
+                        </div>
+                            <br>
+
+                        <div class="row">
+                            <div class="col-md-offset-3 col-md-9">
+
+
+                                {% if application_obj %}
+                                    {% if not application_obj.is_applied_matric_card %}
+                                        <button type="button" class="btn green" id="save_id" style="margin-left:70%">{% trans 'Apply' %}
+                                        </button>
+                                    {% endif %}
+                                {% endif %}
+
+                            </div>
+                        </div>
+                         {% endif %}
+
+
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="id_accept_student_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{% url 'student:application_matric_card' %}"
+                        id="form_sample_1"
+                        class="form-horizontal"
+                        method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h4 class="modal-title" style="color: #2a015e; text-align: center"><b>Confirmation</b></h4>
+                    </div>
+                    <div class="modal-body">
+                        <p> Are you sure, you want to apply for Matric Card? </p>
+                        <p> After submission you will not be able to modify. </p>
+                        <input type="hidden" name="app_id" value="{{ application_obj.id }}">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancel_model" data-dismiss="modal" class="btn dark btn-outline">
+                            Cancel
+                        </button>
+                        <button type="button" id="submit_appplication" class="btn green">Confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -136,6 +136,7 @@ urlpatterns = [
                   path('get_all_study_level/', views.get_all_study_level, name='get_all_study_level'),
                   path('get_faculty_from_university/', views.get_faculty_from_university, name='get_faculty_from_university'),
                   path('get_all_acceptance_avg_program_mode/', views.get_all_acceptance_avg_program_mode, name='get_all_acceptance_avg_program_mode'),
+                  path('application_matric_card/', views.application_matric_card, name='application_matric_card'),
 
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

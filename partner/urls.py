@@ -23,8 +23,8 @@ urlpatterns = [
                   path('template_applicant_all_details/<int:app_id>/', views.template_applicant_all_details,
                        name='template_applicant_all_details'),
 
-                  path('template_approving_application/', views.template_approving_application,
-                       name='template_approving_application'),
+                  path('template_approving_matric_cards/', views.template_approving_matric_cards,name='template_approving_matric_cards'),
+                  path('template_approving_application/', views.template_approving_application,name='template_approving_application'),
                   path('filter_application_status/', views.filter_application_status, name='filter_application_status'),
                   path('change_application_status/', views.change_application_status, name='change_application_status'),
                   path('change_final_application_status/', views.change_final_application_status,

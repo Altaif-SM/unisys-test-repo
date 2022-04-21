@@ -3101,3 +3101,36 @@ def get_university_from_type_scope(request):
         raw_dict['id']=rec.id
         finalDict.append(raw_dict)
     return JsonResponse(finalDict, safe=False)
+
+def application_matric_card(request):
+    if request.method == 'POST':
+        try:
+            ApplicationDetails.objects.filter(application_id=request.user.get_application_id).update(
+                is_applied_matric_card=True)
+            ApplicationHistoryDetails.objects.create(applicant_id=request.user.get_application,
+                                                     status='Matric Card Requested',
+                                                     remark='Your Matric Card is submitted and your University will be notified on further updates regarding your applications.')
+            application_notification(request.user.get_application.id,
+                                     'You have successfully applied Matric Card.')
+            admin_notification(request.user.get_application.id,
+                               str(request.user.get_application.get_full_name()) + ' have accepted offer letter.')
+            messages.success(request, "Matric Card submitted successfully.")
+        except Exception as e:
+            messages.warning(request, "Form have some error" + str(e))
+        return redirect('/student/application_matric_card/')
+    else:
+        application_obj = ''
+        try:
+            application_obj = request.user.get_application
+        except Exception as e:
+            messages.warning(request, "Please fill the personal details first.")
+            return redirect('/student/applicant_personal_info/')
+        try:
+            if request.user.get_application:
+                application_obj = request.user.get_application
+        except Exception as e:
+            messages.warning(request, "Form have some error" + str(e))
+        attachement_obj = application_obj.applicant_attachement_rel.all() if application_obj.applicant_attachement_rel.all() else ''
+        return render(request, 'matric_card.html', {'application_obj': application_obj,'attachement_obj':attachement_obj})
+
+

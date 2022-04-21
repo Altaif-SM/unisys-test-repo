@@ -993,8 +993,13 @@ License: You must have a valid license purchased only from themeforest(the above
                                         </li>
 
                                 <li class="nav-item ">
-                                            <a href="{% url 'partner:accepted_application' %}"
+                                            <a href="{% url 'partner:template_approving_application' %}"
                                                class="nav-link ">{% trans 'Offer Accepted Applicant' %}</a>
+                                        </li>
+
+                                <li class="nav-item ">
+                                            <a href="{% url 'partner:template_approving_matric_cards' %}"
+                                               class="nav-link ">{% trans 'Approving Matric Cards' %}</a>
                                         </li>
 
 
@@ -1400,6 +1405,33 @@ License: You must have a valid license purchased only from themeforest(the above
                     </div>  <!-- END tabpane -->
 
 
+                <div class="tab-pane " id="matric_card_list">
+                        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
+                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+
+
+
+
+
+
+
+                        {% if 'student.can_view_student_application_progress_history' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'student:application_matric_card' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="fa fa-id-card-o"></i>
+                                        <span class="title">{% trans 'Matric Card' %}</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+
+                        </ul>
+                        <!-- END SIDEBAR MENU -->
+                    </div>  <!-- END tabpane -->
+
+
                     <div class="tab-pane " id="payments">
                         <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
@@ -1471,7 +1503,7 @@ License: You must have a valid license purchased only from themeforest(the above
                     {% endif %}
                     {% if user.is_student %}
                          {% if user.get_student_application.offer_accepted %}
-                            <li id="offer_accepted"><a href="{% url 'payments:registration_checkout' %}" >{% trans 'Matric/Smart Card' %}</a></li>
+                            <li id="matric_card"><a href="{% url 'student:application_matric_card' %}" >{% trans 'Matric Card' %}</a></li>
                          {% endif %}
                     {% endif %}
 
@@ -1629,7 +1661,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-    {% if request.resolver_match.url_name == 'template_approving_application' or request.resolver_match.url_name == 'approved_application' or request.resolver_match.url_name == 'accepted_application' or request.resolver_match.url_name == 'edit_document' or request.resolver_match.url_name == 'document_settings' or  request.resolver_match.url_name == 'template_applicant_all_details'  %}
+    {% if request.resolver_match.url_name == 'template_approving_application' or request.resolver_match.url_name == 'approved_application' or request.resolver_match.url_name == 'accepted_application' or request.resolver_match.url_name == 'edit_document' or request.resolver_match.url_name == 'document_settings' or  request.resolver_match.url_name == 'template_applicant_all_details'  or request.resolver_match.url_name == 'template_approving_matric_cards'%}
         {
             var element = document.getElementById("c");
             element.classList.add("active");
@@ -1679,6 +1711,16 @@ License: You must have a valid license purchased only from themeforest(the above
             element.classList.add("active");
 
             var element = document.getElementById("offer_accepted");
+            element.classList.add("active");
+        }
+    {% endif %}
+
+     {% if request.resolver_match.url_name == 'application_matric_card' %}
+        {
+            var element = document.getElementById("matric_card_list");
+            element.classList.add("active");
+
+            var element = document.getElementById("matric_card");
             element.classList.add("active");
         }
     {% endif %}

@@ -230,6 +230,9 @@ class ApplicationDetails(BaseModel):
                                         related_name='application_type_rel',
                                         on_delete=models.SET_NULL)
     is_paid_registration_fee = models.BooleanField(default=False)
+    is_applied_matric_card = models.BooleanField(default=False)
+    matric_card_status = models.CharField(max_length=50, default="Pending", blank=True, null=True)
+
     class Meta:
         ordering = ('-created_on',)
 
