@@ -1367,6 +1367,22 @@ License: You must have a valid license purchased only from themeforest(the above
                             {% endif %}
 
 
+
+
+                        </ul>
+                        <!-- END SIDEBAR MENU -->
+                    </div>  <!-- END tabpane -->
+
+                <div class="tab-pane " id="program_registration">
+                        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
+                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+
+
+
+
+
+
+
                         {% if 'student.can_view_student_application_progress_history' in perms %}
                                 <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'payments:registration_checkout' %}"
@@ -1447,6 +1463,12 @@ License: You must have a valid license purchased only from themeforest(the above
                         {% if user.is_student %}
                             <li id="app_offer_status"><a href="{% url 'student:application_offer_letter' %}" >{% trans 'Offer Status' %}</a></li>
                         {% endif %}
+
+                     {% if user.is_student %}
+                         {% if user.get_student_application.personal_info_flag %}
+                            <li id="offer_accepted"><a href="{% url 'payments:registration_checkout' %}" >{% trans 'Program Registration Payment' %}</a></li>
+                         {% endif %}
+                    {% endif %}
 
 {#                        {% if user.is_student %}#}
 {#                            <li id="app_payments"><a href="{% url 'payments:checkout' %}" >{% trans 'Payments' %}</a></li>#}
@@ -1636,12 +1658,22 @@ License: You must have a valid license purchased only from themeforest(the above
 
 
 
-    {% if request.resolver_match.url_name == 'application_offer_letter' or request.resolver_match.url_name == 'acceptance_declaration' or request.resolver_match.url_name == 'registration_checkout' %}
+    {% if request.resolver_match.url_name == 'application_offer_letter' or request.resolver_match.url_name == 'acceptance_declaration' %}
         {
             var element = document.getElementById("offer_status");
             element.classList.add("active");
 
             var element = document.getElementById("app_offer_status");
+            element.classList.add("active");
+        }
+    {% endif %}
+
+    {% if request.resolver_match.url_name == 'registration_checkout' %}
+        {
+            var element = document.getElementById("program_registration");
+            element.classList.add("active");
+
+            var element = document.getElementById("offer_accepted");
             element.classList.add("active");
         }
     {% endif %}
