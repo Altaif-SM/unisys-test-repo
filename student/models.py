@@ -229,6 +229,7 @@ class ApplicationDetails(BaseModel):
     type = models.ForeignKey('masters.TypeDetails', null=True,
                                         related_name='application_type_rel',
                                         on_delete=models.SET_NULL)
+    is_paid_registration_fee = models.BooleanField(default=False)
     class Meta:
         ordering = ('-created_on',)
 
