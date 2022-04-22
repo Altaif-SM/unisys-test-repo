@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    @page {
+      size: A6 landscape;
+        width: 400px;
+        height: 100px;
+        border: 1px solid black;
+      background: url('{{ context.backgroud_image }}');
+      margin: 30px 30px 40px;
+      padding: 20px 12px 0px;
+    }
+    @font-face {
+      font-family: 'lucida_calligraphyitalic';
+      src: url('../fonts/lucida_calligraphy_italic_1-webfont.woff2') format('woff2'),
+        url('../fonts/lucida_calligraphy_italic_1-webfont.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+
+    }
+
+  </style>
+</head>
+
+<body>
+  <table width="650" style="font-size:18px;">
+    <tbody>
+      <tr>
+        <td>
+          <table width="900">
+            <tbody>
+              <tr>
+                  <td style="font-size: 15px;" align="left">
+
+                </td>
+
+
+                <td align="right" style="font-size: 15px;">
+                <img src="{{ profile_pic }}" width="80" height="50">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+{#      <tr>#}
+{#        <td >#}
+{#            <table width="750" style="padding-top: 6px;">#}
+{#                <tbody>#}
+{#                  <tr>#}
+{#                    <td align="center" style="font-size: 19px;">#}
+{##}
+{#                    </td>#}
+{#                  </tr>#}
+{#                </tbody>#}
+{#              </table>#}
+{#        </td>#}
+{#      </tr>#}
+{#      <tr>#}
+{#        <td>#}
+{#          <table width="850" style="padding-top: 5px;">#}
+{#            <tbody>#}
+{#              <tr>#}
+{#                   <td width="170px">#}
+{##}
+{#                </td>#}
+{#                <td width="60px" align="left" >#}
+{#                 <h2 style="font-size: 16px;color:green;font-weight: bold;">ID No.</h2>#}
+{#                </td>#}
+{#                <td style="" align="left" width="150px">#}
+{#                    <h3 style="padding-left: 2px;font-size: 13px;"> EAG00011 </h3>#}
+{#                  <!-- <input type="text"  id="" placeholder="" style="width:100px;"> -->#}
+{#                </td>#}
+{#                   <td style="" align="left" width="150px">#}
+{##}
+{#                </td>#}
+{#              </tr>#}
+{#            </tbody>#}
+{#          </table>#}
+{#        </td>#}
+{#      </tr>#}
+
+      <tr>
+        <td>
+          <table width="1000" style="padding-top: 0px;">
+            <tbody>
+              <tr>
+                   <td width="50px">
+
+                </td>
+                <td width="740px" align="center">
+                 <h2 style="font-size: 16px;color:black;font-weight: bold;text-align: center">{{ application_obj.first_name }} {{ application_obj.last_name }}</h2>
+                </td>
+                <td style="" align="left" width="50px">
+
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+
+{#      <tr>#}
+{#        <td>#}
+{#          <table width="850">#}
+{#            <tbody>#}
+{#              <tr>#}
+{#                   <td width="260px">#}
+{##}
+{#                </td>#}
+{#                <td width="420px" align="left" >#}
+{#                 <h1 class="_sh" style="font-size: 15px;color:green;font-weight: bold;text-align: center;">Software Engineer</h1>#}
+{##}
+{#                </td>#}
+{#                <td style="" align="left" width="210px">#}
+{##}
+{#                </td>#}
+{#              </tr>#}
+{#            </tbody>#}
+{#          </table>#}
+{#        </td>#}
+{#      </tr>#}
+{##}
+{#      <tr style="padding-top: -3px;">#}
+{#        <td>#}
+{#          <table width="850">#}
+{#            <tbody>#}
+{#              <tr>#}
+{#                   <td width="320px">#}
+{##}
+{#                </td>#}
+{#                <td width="320px" align="left" >#}
+{#                 <h2 style="font-size: 15px;color:green;font-weight: bold;">Member</h2>#}
+{#                </td>#}
+{#                <td style="" align="left" width="200px">#}
+{##}
+{#                </td>#}
+{#              </tr>#}
+{#            </tbody>#}
+{#          </table>#}
+{#        </td>#}
+{#      </tr>#}
+
+
+{#      <tr>#}
+{#        <td>#}
+{#          <table width="850" style="font-weight: bold">#}
+{#            <tbody>#}
+{#              <tr>#}
+{#                <td width="510px" style="padding-top: -10px;">#}
+{#                     <img src="" width="90" height="100" >#}
+{#                </td>#}
+{#                <td   width="20px">#}
+{##}
+{#                </td>#}
+{#                  <td   width="400px" align="right">#}
+{#                    <table width="850">#}
+{#                            <tbody>#}
+{#                            <tr style="padding: 0px;">#}
+{#                                <td width="360px">#}
+{##}
+{#                                    <img src="" width="100" height="30">#}
+{#                                </td>#}
+{#                            </tr>#}
+{#                             <tr>#}
+{#                                <td width="360px" style="font-size: 13px;">#}
+{#                                        Authorized Sign:#}
+{#                                </td>#}
+{#                            </tr>#}
+{#                             <tr>#}
+{#                                <td width="360px" style="font-size: 13px;">#}
+{#                                      Maulana Mahmood A.Madani#}
+{#                                </td>#}
+{#                            </tr>#}
+{#                            <tr>#}
+{#                                <td width="360px" style="font-size: 13px;">#}
+{#                                     General Secretary#}
+{#                                </td>#}
+{#                            </tr>#}
+{#                            </tbody>#}
+{#                        </table>#}
+{#                </td>#}
+{#              </tr>#}
+{#            </tbody>#}
+{#          </table>#}
+{#        </td>#}
+{#      </tr>#}
+
+
+
+    </tbody>
+  </table>
+
+  <table width="650" style="font-size:18px;">
+    <tbody>
+
+      <tr>
+        <td >
+            <table width="750" style="padding-top: 6px;">
+                <tbody>
+                  <tr>
+                    <td align="center" style="font-size: 19px;">
+
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <table width="900" style="padding-top: 5px;">
+            <tbody>
+            <tr>
+
+                <td width="90px" align="left" >
+                 <h2 style="font-size: 16px;color:green;font-weight: bold;">Student ID:</h2>
+                </td>
+                <td  align="left" width="500px">
+                    <h2 style="padding-left: 15px;font-size: 14px;font-weight: bold;">{{ student_id }}</h2>
+                  <!-- <input type="text"  id="" placeholder="" style="width:100px;"> -->
+                </td>
+                   <td style="" align="left" width="50px">
+
+                </td>
+
+              </tr>
+             <tr>
+
+                <td width="90px" align="left" >
+                 <h2 style="font-size: 16px;color:green;font-weight: bold;">Year:</h2>
+                </td>
+                <td style="" align="left" width="150px">
+                    <h2 style="padding-left: 15px;font-size: 14px;font-weight: bold;">{{ application_obj.academic_year.year_name }}</h2>
+                  <!-- <input type="text"  id="" placeholder="" style="width:100px;"> -->
+                </td>
+                   <td style="" align="left" width="150px">
+
+                </td>
+
+              </tr>
+             <tr>
+
+                <td width="90px" align="left" >
+                 <h2 style="font-size: 16px;color:green;font-weight: bold;">Semester:</h2>
+                </td>
+                <td  align="left" width="500px">
+                    <h2 style="padding-left: 15px;font-size: 14px;font-weight: bold;">{{ application_obj.semester.semester|default_if_none:"" }} {{ application_obj.semester.start_date|date:"Y-m-d" }} - {{ application_obj.semester.end_date|date:"Y-m-d" }}</h2>
+                  <!-- <input type="text"  id="" placeholder="" style="width:100px;"> -->
+                </td>
+                   <td style="" align="left" width="50px">
+
+                </td>
+
+              </tr>
+             <tr>
+
+                <td width="90px" align="left" >
+                 <h2 style="font-size: 16px;color:green;font-weight: bold;">Study:</h2>
+                </td>
+                <td  align="left" width="250px">
+                    <h2 style="padding-left: 15px;font-size: 14px;font-weight: bold;">{{ application_obj.study_level.study_level|default_if_none:"" }}</h2>
+                </td>
+                   <td style="" align="left" width="50px">
+
+                </td>
+
+              </tr>
+{#            <tr>#}
+{##}
+{#                <td width="90px" align="left" >#}
+{#                 <h2 style="font-size: 16px;color:green;font-weight: bold;">Valid For:</h2>#}
+{#                </td>#}
+{#                <td  align="left" width="250px">#}
+{#                    <h2 style="padding-left: 15px;font-size: 14px;font-weight: bold;">-</h2>#}
+{#                </td>#}
+{#                   <td style="" align="left" width="50px">#}
+{##}
+{#                </td>#}
+{##}
+{#              </tr>#}
+
+            <tr>
+
+                <td width="90px" align="left" >
+{#                 <h2 style="font-size: 16px;color:green;font-weight: bold;">Valid For:</h2>#}
+                </td>
+                <td  align="left" width="250px">
+                    <h2 style="padding-left: 15px;font-size: 14px;font-weight: bold;">University of Science and Technology</h2>
+                </td>
+                   <td style="" align="left" width="50px">
+
+                </td>
+
+              </tr>
+
+
+
+            </tbody>
+          </table>
+        </td>
+      </tr>
+
+{#      <tr style="padding-top: 6px;">#}
+{#        <td>#}
+{#            <hr>#}
+{#        </td>#}
+{#      </tr>#}
+{##}
+{#      <tr>#}
+{#        <td>#}
+{#          <table width="850" >#}
+{#            <tbody>#}
+{#              <tr>#}
+{#                   <td width="360px">#}
+{##}
+{#                </td>#}
+{#                <td width="320px" align="left" >#}
+{##}
+{#                </td>#}
+{#                <td style="" align="left" width="210px">#}
+{##}
+{#                </td>#}
+{#              </tr>#}
+{#            </tbody>#}
+{#          </table>#}
+{#        </td>#}
+{#      </tr>#}
+{##}
+{##}
+{#      <tr>#}
+{#        <td>#}
+{#          <table width="100%" style="padding-top: 5px;">#}
+{#            <tbody>#}
+{#              <tr>#}
+{#                <td width="80px">#}
+{##}
+{#                </td>#}
+{##}
+{#                  <td align="center">#}
+{#                    <table>#}
+{#                            <tbody>#}
+{#                            <tr style="padding: 2px;">#}
+{#                                <td width="360px">#}
+{#                                 <h1 style="font-size: 30px;color:green;font-weight: bolder;">Jamiat Ulama-i-Hind</h1>#}
+{#                                </td>#}
+{#                            </tr>#}
+{#                             <tr style="padding-top: -6px;">#}
+{#                                <td width="360px" style="font-size: 13px;font-weight: bolder;">#}
+{#                                        1, Bahadur Shah Zafar Marg, New Delhi-110002#}
+{#                                </td>#}
+{#                            </tr>#}
+{#                             <tr style="padding: 2px;">#}
+{#                                <td width="360px" style="font-size: 13px;font-weight: bolder;">#}
+{#                                    Tel: +91 23311455, 23317729 Fax: 23316173#}
+{#                                </td>#}
+{#                            </tr>#}
+{#                            <tr style="padding: 2px;">#}
+{#                                <td width="360px" style="font-size: 13px;font-weight: bolder;">#}
+{#                                    URL:https://jamiat.org.in *  E-mail: info@jamiat.org.in#}
+{#                                </td>#}
+{#                            </tr>#}
+{#                            </tbody>#}
+{#                        </table>#}
+{#                </td>#}
+{#              </tr>#}
+{#            </tbody>#}
+{#          </table>#}
+{#        </td>#}
+{#      </tr>#}
+
+
+
+    </tbody>
+  </table>
+</body>
+
+</html>

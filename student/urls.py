@@ -120,8 +120,8 @@ urlpatterns = [
                   path('application_offer_letter/', views.application_offer_letter, name='application_offer_letter'),
 
 
-                  path('application_offer_letter_pdf/<int:app_id>/', views.application_offer_letter_pdf,
-                       name='application_offer_letter_pdf'),
+                  path('application_offer_letter_pdf/<int:app_id>/', views.application_offer_letter_pdf,name='application_offer_letter_pdf'),
+                  path('matric_card/<int:app_id>/', views.matric_card,name='matric_card'),
 
                   path('applicant_intake_info/', views.applicant_intake_info, name='applicant_intake_info'),
                   path('get_learning_centre_from_country/', views.get_learning_centre_from_country, name='get_learning_centre_from_country'),

@@ -97,12 +97,6 @@
 
     <!-- BEGIN VALIDATION STATES-->
     <div class="portlet light portlet-fit portlet-form ">
-        {#        <div class="portlet-title">#}
-        {#            <div class="caption">#}
-        {#                <i class="icon-settings font-red"></i>#}
-        {#                <span class="caption-subject font-red sbold uppercase">Scholarship Selection </span>#}
-        {#            </div>#}
-        {#        </div>#}
 
         <div class="portlet-body">
             <div class="form-body">
@@ -270,7 +264,6 @@
 
 
                         </div>
-                            <br>
 
                         <div class="row">
                             <div class="col-md-offset-3 col-md-9">
@@ -291,6 +284,36 @@
 
                     </div>
                 </form>
+            <hr>
+            <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-settings font-red"></i>
+                                <span class="caption-subject font-red sbold uppercase">{% trans 'Download Matric Card' %}:</span>
+                            </div>
+                        </div>
+            <br>
+
+
+            <div class="row">
+                    <div class="">
+                        <label class="col-md-2 control-label">{% trans 'Matric/Smart Card' %}:</label>
+
+                        <div class="col-md-4">
+                            {% if application_obj.first_interview_attend %}
+                                <a href="{% url 'student:matric_card' application_obj.id %}" target="_blank">{% trans 'Download Matric Card' %}</a>
+                            {% else %}
+                                ----
+                            {% endif %}
+                        </div>
+
+                    </div>
+
+
+
+
+                </div>
+            <hr>
+
             </div>
         </div>
     </div>

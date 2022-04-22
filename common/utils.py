@@ -491,6 +491,17 @@ def render_to_pdf(path: str, params: dict):
     else:
         return HttpResponse("Error Rendering PDF", status=400)
 
+def render_to_matric_card_pdf(template_src, context_dict={}):
+    template = get_template(template_src)
+    html = template.render(context_dict)
+    result = BytesIO()
+    # result = StringIO.StringIO()
+    # pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
+    pdf = pisa.pisaDocument(BytesIO(html.encode("UTF-8")), result)
+    if not pdf.err:
+        return HttpResponse(result.getvalue(), content_type='application/pdf')
+    return None
+
 def render_to_file(path: str, params: dict):
     template = get_template(path)
     html = template.render(params)
