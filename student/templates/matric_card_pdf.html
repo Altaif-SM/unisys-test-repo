@@ -36,19 +36,24 @@
           <table width="900">
             <tbody>
               <tr>
-                  <td style="font-size: 15px;" align="left">
-
-                </td>
+{#                  <td style="font-size: 15px;" align="left">#}
+{##}
+{#                </td>#}
+{#                   <td style="font-size: 15px;width:1000px"; align="center">#}
+{#                <img src="{{ profile_pic }}" width="300" height="100">#}
+{#                </td>#}
 
 
                 <td align="right" style="font-size: 15px;">
                 <img src="{{ profile_pic }}" width="80" height="50">
                 </td>
+
               </tr>
             </tbody>
           </table>
         </td>
       </tr>
+
 {#      <tr>#}
 {#        <td >#}
 {#            <table width="750" style="padding-top: 6px;">#}
@@ -95,7 +100,7 @@
 
                 </td>
                 <td width="740px" align="center">
-                 <h2 style="font-size: 16px;color:black;font-weight: bold;text-align: center">{{ application_obj.first_name }} {{ application_obj.last_name }}</h2>
+                 <h2 style="font-size: 16px;color:black;font-weight: bold;text-align: center;">{{ application_obj.university.university_name }}</h2>
                 </td>
                 <td style="" align="left" width="50px">
 
@@ -231,6 +236,21 @@
                 </td>
 
               </tr>
+
+            <tr>
+
+                <td width="90px" align="left" >
+                 <h2 style="font-size: 16px;color:green;font-weight: bold;">Name:</h2>
+                </td>
+                <td  align="left" width="500px">
+                    <h2 style="padding-left: 15px;font-size: 14px;font-weight: bold;">{{ application_obj.first_name }} {{ application_obj.last_name }}</h2>
+                  <!-- <input type="text"  id="" placeholder="" style="width:100px;"> -->
+                </td>
+                   <td style="" align="left" width="50px">
+
+                </td>
+
+              </tr>
              <tr>
 
                 <td width="90px" align="left" >
@@ -286,19 +306,19 @@
 {##}
 {#              </tr>#}
 
-            <tr>
-
-                <td width="90px" align="left" >
+{#            <tr>#}
+{##}
+{#                <td width="90px" align="left" >#}
 {#                 <h2 style="font-size: 16px;color:green;font-weight: bold;">Valid For:</h2>#}
-                </td>
-                <td  align="left" width="250px">
-                    <h2 style="padding-left: 15px;font-size: 14px;font-weight: bold;">University of Science and Technology</h2>
-                </td>
-                   <td style="" align="left" width="50px">
-
-                </td>
-
-              </tr>
+{#                </td>#}
+{#                <td  align="left" width="250px">#}
+{#                    <h2 style="padding-left: 15px;font-size: 14px;font-weight: bold;">University of Science and Technology</h2>#}
+{#                </td>#}
+{#                   <td style="" align="left" width="50px">#}
+{##}
+{#                </td>#}
+{##}
+{#              </tr>#}
 
 
 
