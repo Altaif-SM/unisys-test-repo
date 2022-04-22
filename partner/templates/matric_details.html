@@ -1,0 +1,203 @@
+{% extends "template_base_page.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+{% load custom_tags %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+            $(document).ready(function () {
+                $(document).on("click", "#button_pdf_id", function (e) {
+                    $('#form_pdf_id').submit();
+                });
+
+
+                $(document).on("click", "#btn_supervisor", function (e) {
+
+                    $('#supervisior_modal').modal();
+                })
+
+
+            });
+        }
+
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'accounts:home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span> {% trans 'Matric Card Details' %}</span>
+
+            </li>
+        </ul>
+    </div>
+
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase"> {% trans 'Matric Card Details' %}</span>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="portlet-body">
+            <div class="form-body">
+
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-1 control-label">Profile Pic:</label>
+                        <div class="col-md-3">
+                            {% if attachement_obj.0.image %}
+                            <a href="{{ attachement_obj.0.image.url }}" download>
+                                <img src="{{ attachement_obj.0.image.url }}" alt="image"
+                                     width="104" height="142">
+                            {% endif %}
+                            </a>
+                        </div>
+                    </div>
+
+
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-2 control-label">First Name:</label>
+                        <div class="col-md-3">
+                            <span class="">{{ application_obj.first_name|default_if_none:"" }}</span>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="">
+                        <label class="col-md-2 control-label">Last Name:</label>
+                        <div class="col-md-3">
+                            <span class="">{{ application_obj.last_name|default_if_none:"" }}</span>
+                        </div>
+                    </div>
+
+
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-2 control-label">University:</label>
+                        <div class="col-md-3">
+                            <span class="">{{ application_obj.university.university_name|default_if_none:"" }}</span>
+                        </div>
+                    </div>
+                    <div class="">
+                        <label class="col-md-2 control-label">Academic Year:</label>
+                        <div class="col-md-3">
+                            <span class="">{{ application_obj.academic_year.year_name|default_if_none:"" }}</span>
+
+                        </div>
+                    </div>
+
+                </div>
+            <br>
+            <div class="row">
+                    <div class="">
+                        <label class="col-md-2 control-label">Semester:</label>
+                        <div class="col-md-3">
+                            <span class="">{{ application_obj.semester.semester|default_if_none:"" }} {{ application_obj.semester.start_date|date:"Y-m-d" }} - {{ application_obj.semester.end_date|date:"Y-m-d" }}</span>
+                        </div>
+                    </div>
+                    <div class="">
+                        <label class="col-md-2 control-label">Program:</label>
+                        <div class="col-md-3">
+                            <span class="">{% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.program.program_name|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.program_2.program_name|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.program_3.program_name|default_if_none:"" }} {% else %}{{ application_obj.program.program_name|default_if_none:"" }}{% endif %}</span>
+
+                        </div>
+                    </div>
+
+                </div>
+            <br>
+            <div class="row">
+                    <div class="">
+                        <label class="col-md-2 control-label">Level of Study:</label>
+                        <div class="col-md-3">
+                            <span class="">{{ application_obj.study_level.study_level|default_if_none:"" }}</span>
+                        </div>
+                    </div>
+                    <div class="">
+                        <label class="col-md-2 control-label">Faculty:</label>
+                        <div class="col-md-3">
+                            <span class="">{% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.faculty.faculty_name|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.faculty_2.faculty_name|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.faculty_3.faculty_name|default_if_none:"" }} {% else %}{{ application_obj.faculty.faculty_name|default_if_none:"" }}{% endif %}</span>
+
+                        </div>
+                    </div>
+
+                </div>
+            <br>
+            <div class="row">
+                    <div class="">
+                        <label class="col-md-2 control-label">Mode:</label>
+                        <div class="col-md-3">
+                            <span class="">{% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.program_mode.study_type|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.program_mode_2.study_type|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.program_mode_3.study_type|default_if_none:"" }} {% else %}{{ application_obj.program_mode.study_type|default_if_none:"" }}{% endif %}</span>
+                        </div>
+                    </div>
+             <div class="">
+                        <label class="col-md-2 control-label">Card Status:</label>
+                        <div class="col-md-3">
+                        {% if application_obj.matric_card_status == 'REQUESTED' %}
+                            <span class="" style="margin-top:8px;color: red">REQUESTED
+
+
+                            </span>
+                        {% else %}
+                            <span class="" style="margin-top:8px;color: green">APPROVED
+
+
+                            </span>
+
+                        {% endif %}
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}

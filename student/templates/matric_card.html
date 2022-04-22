@@ -253,8 +253,13 @@
                               <div class="">
                                 <label class="col-md-2 control-label">{% trans 'Card Status' %}: </label>
                                 <div class="col-md-3">
-                                    <input readonly type="text" title="Enter Middle Name" id="middle_name" name="middle_name"
-                                           value="{% if  application_obj.matric_card_status == 'Pending' %}Pending{% elif  application_obj.matric_card_status == 'Approved' %}Approved{% elif  application_obj.matric_card_status == 'Rejected' %}Rejected{% else %}Pending{% endif %}" class="form-control value_check">
+                                {% if application_obj.matric_card_status == 'REQUESTED' %}
+                                    <p style="margin-top:8px;color: red">
+                                    REQUESTED
+                                    </p>
+                                    {% else %}
+                                    <p style="margin-top:8px;color: green">APPROVED</p>
+                                    {% endif %}
                                 </div>
                             </div>
                                 {% endif %}

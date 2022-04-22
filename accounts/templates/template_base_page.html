@@ -1661,7 +1661,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-    {% if request.resolver_match.url_name == 'template_approving_application' or request.resolver_match.url_name == 'approved_application' or request.resolver_match.url_name == 'accepted_application' or request.resolver_match.url_name == 'edit_document' or request.resolver_match.url_name == 'document_settings' or  request.resolver_match.url_name == 'template_applicant_all_details'  or request.resolver_match.url_name == 'template_approving_matric_cards'%}
+    {% if request.resolver_match.url_name == 'template_approving_application' or request.resolver_match.url_name == 'approved_application' or request.resolver_match.url_name == 'accepted_application' or request.resolver_match.url_name == 'edit_document' or request.resolver_match.url_name == 'document_settings' or  request.resolver_match.url_name == 'template_applicant_all_details'  or request.resolver_match.url_name == 'template_approving_matric_cards' or request.resolver_match.url_name == 'matric_card_details'%}
         {
             var element = document.getElementById("c");
             element.classList.add("active");

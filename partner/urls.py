@@ -20,9 +20,10 @@ urlpatterns = [
                        name='filter_registered_application'),
                   path('export_registered_application/', views.export_registered_application,
                        name='export_registered_application'),
-                  path('template_applicant_all_details/<int:app_id>/', views.template_applicant_all_details,
-                       name='template_applicant_all_details'),
+                  path('template_applicant_all_details/<int:app_id>/', views.template_applicant_all_details,name='template_applicant_all_details'),
+                  path('matric_card_details/<int:app_id>/', views.matric_card_details,name='matric_card_details'),
 
+                  path('approve_matric_card/', views.approve_matric_card,name='approve_matric_card'),
                   path('template_approving_matric_cards/', views.template_approving_matric_cards,name='template_approving_matric_cards'),
                   path('template_approving_application/', views.template_approving_application,name='template_approving_application'),
                   path('filter_application_status/', views.filter_application_status, name='filter_application_status'),

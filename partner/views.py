@@ -283,14 +283,12 @@ def filter_registered_application(request):
 
 def template_approving_matric_cards(request):
     try:
-        applicant_recs_1 = ApplicationDetails.objects.filter(is_applied_matric_card = True,matric_card_status = 'Pending')
-        applicant_recs_2 = ApplicationDetails.objects.filter(is_applied_matric_card = True,matric_card_status = 'Approved')
-        applicant_recs_3 = ApplicationDetails.objects.filter(is_applied_matric_card = True,matric_card_status = 'Incomplete')
+        applicant_recs_1 = ApplicationDetails.objects.filter(is_applied_matric_card = True,matric_card_status = 'REQUESTED')
+        applicant_recs_2 = ApplicationDetails.objects.filter(is_applied_matric_card = True,matric_card_status = 'APPROVED')
 
         return render(request, 'template_matric_cards.html', {
                        'applicant_recs_1':applicant_recs_1,
-                       'applicant_recs_2':applicant_recs_2,
-                       'applicant_recs_3':applicant_recs_3,
+                       'applicant_recs_2':applicant_recs_2
                        })
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
@@ -2564,3 +2562,30 @@ def accepted_application(request):
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
     return render(request, 'offer_accepted_applications.html',{'accepted_applicants': accepted_applicants,'context':context})
+
+def matric_card_details(request, app_id):
+    try:
+        application_obj = ApplicationDetails.objects.get(id=app_id)
+        attachement_obj = application_obj.applicant_attachement_rel.all() if application_obj.applicant_attachement_rel.all() else ''
+        return render(request, 'matric_details.html', {'application_obj': application_obj,'attachement_obj':attachement_obj})
+    except Exception as e:
+        messages.warning(request, "Form have some error " + str(e))
+        return redirect("/")
+
+def approve_matric_card(request):
+    try:
+        check_ids = json.loads(request.POST.get('check_ids'))
+        interview_type = request.POST.get('interview_type')
+        for application in check_ids:
+            application_obj = ApplicationDetails.objects.get(id=application)
+            if interview_type == 'APPROVED':
+                application_obj.matric_card_status = 'APPROVED'
+                application_obj.save()
+                application_notification(application_obj.id, 'You have Approved Matric Card Successfully.')
+                ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
+                                                             status='Matric Card',
+                                                             remark='Congratulations! We are pleased to inform you that the University ####### approved Matric Card Successfully.')
+                messages.success(request, application_obj.first_name.title() + " Matric Card approved Successfully.")
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+    return redirect('/partner/template_approving_matric_cards/')
