@@ -206,11 +206,8 @@
 
 
                          <td>{{ rec.university.university_name|default_if_none:"" }}</td>
-                        {% if rec.university.is_partner_university == True %}
-                                <td>International</td>
-                            {% else %}
-                                <td>Main</td>
-                            {% endif %}
+                         <td>{{ rec.university.university_type.university_type|default_if_none:"" }}</td>
+
 
 
                             <td>{{ rec.email|default_if_none:"" }}</td>

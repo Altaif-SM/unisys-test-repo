@@ -11,7 +11,7 @@ from accounts.service import *
 from accounts.models import UserRole
 from student.models import StudentDetails, ApplicationDetails, ScholarshipSelectionDetails
 from masters.models import AddressDetails, CountryDetails, ScholarshipDetails, GuardianDetails, EmailTemplates, \
-    YearDetails,FacultyDetails,ProgramDetails
+    YearDetails,FacultyDetails,ProgramDetails,UniversityTypeDetails
 from partner.models import PartnerDetails
 from donor.models import DonorDetails
 import json
@@ -998,6 +998,7 @@ def add_staff(request):
         return redirect('/accounts/staff_settings/')
     university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
                                                        is_partner_university=False).order_by('-id')
+    university_type_recs = UniversityTypeDetails.objects.filter(status=True)
     staff_dict = {
         'first_name': '',
         'last_name': '',
@@ -1012,7 +1013,8 @@ def add_staff(request):
         'academic_settings_list': academic_settings_list,
         'module_settings_list': module_settings_list,
         'permission_list': [],
-        'university_recs':university_recs
+        'university_recs':university_recs,
+        'university_type_recs':university_type_recs
 
     }
     return render(request, 'add_staff.html',{'country_list':country_list,'staff_dict':staff_dict})
@@ -1127,15 +1129,18 @@ def edit_staff(request, staff_id=None):
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/accounts/staff_settings/')
-    if user_obj.university:
-        if user_obj.university.is_partner_university == False:
-            university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university = False).order_by('-id')
-        else:
-            university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
-                                                           is_partner_university=True).order_by('-id')
-    else:
-        university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
-                                                               is_partner_university=False).order_by('-id')
+    # if user_obj.university:
+    #     if user_obj.university.is_partner_university == False:
+    #         university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university = False).order_by('-id')
+    #     else:
+    #         university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
+    #                                                        is_partner_university=True).order_by('-id')
+    # else:
+    #     university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
+    #                                                            is_partner_university=False).order_by('-id')
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
+                                                       university_type_id=user_obj.university.university_type.id).order_by(
+        '-id')
     is_faculty = False
     if user_obj.role.all():
         if user_obj.role.all()[0].name == 'Faculty':
@@ -1168,6 +1173,7 @@ def edit_staff(request, staff_id=None):
                 raw_dict['id'] = rec.id
                 raw_dict['program'] = rec.program_name
                 program_list.append(raw_dict)
+    university_type_recs = UniversityTypeDetails.objects.filter(status=True)
 
     user_obj = {
         'id': user_obj.id,
@@ -1195,6 +1201,8 @@ def edit_staff(request, staff_id=None):
         'program_id': user_obj.program.id if user_obj.program else None,
         'program': user_obj.program.program_name if user_obj.program else None,
         'program_list': program_list,
+        'university_type_recs':university_type_recs
+
     }
     return render(request, "edit_staff.html", {'user_obj': user_obj,'country_list':country_list})
 
