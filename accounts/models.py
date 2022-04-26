@@ -227,6 +227,10 @@ class User(AbstractUser):
                 form_vals['intake_flag'] = applicaton_obj.intake_flag
                 form_vals['offer_accepted'] = applicaton_obj.is_offer_accepted
                 form_vals['matric_cards'] = applicaton_obj.is_paid_registration_fee
+                if applicaton_obj.matric_card_status == 'APPROVED':
+                    form_vals['course_registration'] = True
+                else:
+                    form_vals['course_registration'] = False
 
                 form_vals[
                     'english_qualification'] = applicaton_obj.english_applicant_rel.filter()[0].english_qualification if applicaton_obj.english_applicant_rel.all() else False
@@ -253,6 +257,7 @@ class User(AbstractUser):
                 form_vals['working_experience'] = False
                 form_vals['offer_accepted'] = False
                 form_vals['matric_cards'] = False
+                form_vals['course_registration'] = False
 
                 return form_vals
         else:

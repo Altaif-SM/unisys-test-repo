@@ -3182,3 +3182,21 @@ def matric_card(request, app_id):
         pdf = file.read()
         file.close()
         return HttpResponse(pdf, 'application/pdf')
+
+
+def course_registration(request):
+    application_obj = request.user.get_application
+    matric_no = hex(binascii.crc32(str(application_obj.id).encode()))[2:]
+    course_recs = ''
+    if application_obj.choice_1 == False and application_obj.choice_2 == False and application_obj.choice_3 == False and application_obj.is_accepted == False:
+        program_id = application_obj.program.id
+    elif application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False and application_obj.is_accepted == False:
+        program_id = application_obj.program_2.id
+    else:
+        program_id = application_obj.program_3.id
+    if ProgramDetails.objects.filter(id = program_id).exists():
+        program_obj = ProgramDetails.objects.get(id = program_id)
+        course_recs = program_obj.course.all()
+
+    return render(request, 'course_registration.html',{'application_obj':application_obj,
+                                                       'matric_no':matric_no,'course_recs':course_recs})

@@ -1432,6 +1432,27 @@ License: You must have a valid license purchased only from themeforest(the above
                     </div>  <!-- END tabpane -->
 
 
+                 <div class="tab-pane " id="course_registration_list">
+                        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
+                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+
+                        {% if 'student.can_view_student_application_progress_history' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'student:course_registration' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="fa fa-registered"></i>
+                                        <span class="title">{% trans 'Course Registration' %}</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+
+                        </ul>
+                        <!-- END SIDEBAR MENU -->
+                    </div>  <!-- END tabpane -->
+
+
                     <div class="tab-pane " id="payments">
                         <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
@@ -1504,6 +1525,12 @@ License: You must have a valid license purchased only from themeforest(the above
                     {% if user.is_student %}
                          {% if user.get_student_application.matric_cards %}
                             <li id="matric_card"><a href="{% url 'student:application_matric_card' %}" >{% trans 'Matric Card' %}</a></li>
+                         {% endif %}
+                    {% endif %}
+
+                     {% if user.is_student %}
+                         {% if user.get_student_application.course_registration %}
+                            <li id="course_registration"><a href="{% url 'student:course_registration' %}" >{% trans 'Course Registration' %}</a></li>
                          {% endif %}
                     {% endif %}
 
@@ -1721,6 +1748,16 @@ License: You must have a valid license purchased only from themeforest(the above
             element.classList.add("active");
 
             var element = document.getElementById("matric_card");
+            element.classList.add("active");
+        }
+    {% endif %}
+
+     {% if request.resolver_match.url_name == 'course_registration' %}
+        {
+            var element = document.getElementById("course_registration_list");
+            element.classList.add("active");
+
+            var element = document.getElementById("course_registration");
             element.classList.add("active");
         }
     {% endif %}
