@@ -2330,12 +2330,13 @@ def add_program(request):
         status = request.POST.get('status')
         study_mode_recs = request.POST.getlist('study_mode[]')
         campus_recs = request.POST.getlist('campus')
+        course_count = request.POST.get('course_count')
         if status == 'on':
             status = True
         else:
             status = False
         try:
-            program_obj = ProgramDetails.objects.create(faculty_id=faculty,university_id=university,program_type = program_type,department_id = department,
+            program_obj = ProgramDetails.objects.create(faculty_id=faculty,university_id=university,department_id = department,
                                              program_name=program_name,program_overview = program_overview,program_objective = program_objective,
                                              program_vision = program_vision,program_mission = program_mission,status = status,study_type_id = study_type,study_level_id = study_level,
                                                         university_type_id = university_type,acceptance_avg = acceptance_avg,capacity_avg = capacity_avg)
@@ -2349,6 +2350,19 @@ def add_program(request):
             for campus_id in campus_recs:
                 program_campus_obj = ProgramCampusDetails.objects.create(campus_id=campus_id)
                 program_obj.campus.add(program_campus_obj)
+
+            program_obj.course.clear()
+            for count in range(int(course_count)):
+                try:
+                    count = count + 1
+                    if (request.POST['code_' + str(count)] is not '') or (request.POST['title_' + str(count)] is not '') or (request.POST['unit_' + str(count)] is not '') or (request.POST['type_' + str(count)] is not ''):
+                        course_obj = CourseDetails.objects.create(code=request.POST['code_' + str(count)],
+                                                              title=request.POST['title_' + str(count)],
+                                                              unit=request.POST['unit_' + str(count)],
+                                                              type=request.POST['type_' + str(count)])
+                        program_obj.course.add(course_obj)
+                except Exception as e:
+                    pass
 
             messages.success(request, "Record saved.")
         except:
@@ -2390,6 +2404,7 @@ def edit_program(request, program_id=None):
         campus_recs = request.POST.getlist('campus')
         # program_fee = request.POST.get('program_fee')
         # credit_hrs = request.POST.get('credit_hrs')
+        course_count = request.POST.get('course_count')
         if status == 'on':
             status = True
         else:
@@ -2400,7 +2415,6 @@ def edit_program(request, program_id=None):
             program_obj.capacity_avg = capacity_avg
             program_obj.university_id = university
             program_obj.faculty_id = faculty
-            program_obj.program_type = program_type
             program_obj.department_id = department
             # program_obj.campus_id = campus
             # program_obj.program_id = program_id
@@ -2427,6 +2441,19 @@ def edit_program(request, program_id=None):
                 program_campus_obj = ProgramCampusDetails.objects.create(campus_id=campus_id)
                 program_obj.campus.add(program_campus_obj)
 
+            program_obj.course.clear()
+            for count in range(int(course_count)):
+                try:
+                    count = count + 1
+                    if (request.POST['code_' + str(count)] is not '') or (request.POST['title_' + str(count)] is not '') or (request.POST['unit_' + str(count)] is not '') or (request.POST['type_' + str(count)] is not ''):
+                        course_obj = CourseDetails.objects.create(code=request.POST['code_' + str(count)],
+                                                              title=request.POST['title_' + str(count)],
+                                                              unit=request.POST['unit_' + str(count)],
+                                                              type=request.POST['type_' + str(count)])
+                        program_obj.course.add(course_obj)
+                except Exception as e:
+                    pass
+
             messages.success(request, "Record saved.")
         except:
             messages.warning(request, "Record not saved.")
@@ -2448,7 +2475,10 @@ def edit_program(request, program_id=None):
     selected_campus_list = list(program_obj.campus.values_list('campus_id',flat = True))
     department_recs = program_obj.faculty.department.all()
     university_type_recs = UniversityTypeDetails.objects.filter(status=True)
-    return render(request, "edit_program.html", {'program_obj': program_obj,'university_recs':university_recs,'study_mode_recs':study_mode_recs,'study_level_recs':study_level_recs,'study_type_recs':study_type_recs,'faculty_recs':faculty_recs,'campus_recs':campus_recs,'study_mode_list':study_mode_list,'selected_study_mode_list':selected_study_mode_list,'selected_campus_list':selected_campus_list,'department_recs':department_recs,'university_type_recs':university_type_recs})
+    course_count = program_obj.course.all().count()
+    course_obj = program_obj.course.all()
+    return render(request, "edit_program.html", {'program_obj': program_obj,'university_recs':university_recs,'course_count':course_count,'course_obj':course_obj,
+                                                 'study_mode_recs':study_mode_recs,'study_level_recs':study_level_recs,'study_type_recs':study_type_recs,'faculty_recs':faculty_recs,'campus_recs':campus_recs,'study_mode_list':study_mode_list,'selected_study_mode_list':selected_study_mode_list,'selected_campus_list':selected_campus_list,'department_recs':department_recs,'university_type_recs':university_type_recs})
 
 
 def delete_program(request):

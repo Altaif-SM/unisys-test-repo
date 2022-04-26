@@ -437,6 +437,12 @@ class ProgramCampusDetails(models.Model):
 class ProgramStudyModeDetails(models.Model):
     study_mode = models.CharField(max_length=100, blank=True, null=True)
 
+class CourseDetails(models.Model):
+    code = models.CharField(max_length=150, blank=True, null=True)
+    title = models.CharField(max_length=150, blank=True, null=True)
+    unit = models.CharField(max_length=150, blank=True, null=True)
+    type = models.CharField(max_length=150, blank=True, null=True)
+
 class ProgramFeeType(models.Model):
     fee_type = models.CharField(max_length=100, blank=True, null=True)
     amount = models.FloatField(null=True, blank=True, default=0.0)
@@ -469,6 +475,7 @@ class ProgramDetails(BaseModel):
                                    on_delete=models.SET_NULL)
     acceptance_avg = models.CharField(max_length=150, blank=True, null=True)
     capacity_avg = models.CharField(max_length=150, blank=True, null=True)
+    course = models.ManyToManyField(CourseDetails, blank=True)
     class Meta:
         ordering = ('program_name',)
 
