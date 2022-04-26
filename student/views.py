@@ -3188,9 +3188,9 @@ def course_registration(request):
     application_obj = request.user.get_application
     matric_no = hex(binascii.crc32(str(application_obj.id).encode()))[2:]
     course_recs = ''
-    if application_obj.choice_1 == False and application_obj.choice_2 == False and application_obj.choice_3 == False and application_obj.is_accepted == False:
+    if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False and application_obj.is_accepted == True:
         program_id = application_obj.program.id
-    elif application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False and application_obj.is_accepted == False:
+    elif application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False and application_obj.is_accepted == True:
         program_id = application_obj.program_2.id
     else:
         program_id = application_obj.program_3.id
