@@ -300,19 +300,74 @@ def template_approving_application(request):
         context = {}
         if request.user.is_administrator():
             applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission = True,year=get_current_year(request),university=request.user.university)
+
+
+            applicant_recs_1 = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
+                                                                 year=get_current_year(request), choice_1=False,
+                                                                 choice_2=False, choice_3=False, is_accepted=False,university=request.user.university
+                                                                 )
+            applicant_recs_2 = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
+                                                                 year=get_current_year(request), choice_1=True,
+                                                                 choice_2=False, choice_3=False, is_accepted=False,university=request.user.university
+                                                                 )
+            applicant_recs_3 = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
+                                                                 year=get_current_year(request), choice_1=True,
+                                                                 choice_2=True, choice_3=False, is_accepted=False,university=request.user.university)
+
             context['my_template'] = 'template_university_base_page.html'
             return render(request, 'admission_unit_approve_reject.html',
-                          {'applicant_recs': applicant_recs, 'documents_recs': documents_recs, 'context': context})
+                          {'applicant_recs': applicant_recs, 'documents_recs': documents_recs, 'context': context,
+                           'applicant_recs_1':applicant_recs_1,
+                           'applicant_recs_2':applicant_recs_2,
+                           'applicant_recs_3':applicant_recs_3})
         elif request.user.is_faculty():
             applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission = True,year=get_current_year(request),faculty=request.user.faculty)
+            applicant_recs_1 = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
+                                                                 year=get_current_year(request), choice_1=False,
+                                                                 choice_2=False, choice_3=False, is_accepted=False,
+                                                                 faculty=request.user.faculty,admission_unit_status = 'Approved'
+                                                                 )
+            applicant_recs_2 = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
+                                                                 year=get_current_year(request), choice_1=True,
+                                                                 choice_2=False, choice_3=False, is_accepted=False,
+                                                                 faculty_2=request.user.faculty,admission_unit_status = 'Approved'
+                                                                 )
+            applicant_recs_3 = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
+                                                                 year=get_current_year(request), choice_1=True,
+                                                                 choice_2=True, choice_3=False, is_accepted=False,
+                                                                 faculty_3=request.user.faculty,admission_unit_status = 'Approved')
+
+
             context['my_template'] = 'template_university_base_page.html'
             return render(request, 'approve_reject_application.html',
-                          {'applicant_recs': applicant_recs, 'documents_recs': documents_recs, 'context': context})
+                          {'applicant_recs': applicant_recs, 'documents_recs': documents_recs, 'context': context,
+                           'applicant_recs_1':applicant_recs_1,
+                           'applicant_recs_2':applicant_recs_2,
+                           'applicant_recs_3':applicant_recs_3
+                           })
         elif request.user.is_program():
             applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission = True,year=get_current_year(request),program=request.user.program)
+            applicant_recs_1 = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
+                                                                 year=get_current_year(request), choice_1=False,
+                                                                 choice_2=False, choice_3=False, is_accepted=False,
+                                                                 program=request.user.program,admission_unit_status = 'Approved'
+                                                                 )
+            applicant_recs_2 = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
+                                                                 year=get_current_year(request), choice_1=True,
+                                                                 choice_2=False, choice_3=False, is_accepted=False,
+                                                                 program_2=request.user.program,admission_unit_status = 'Approved'
+                                                                 )
+            applicant_recs_3 = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
+                                                                 year=get_current_year(request), choice_1=True,
+                                                                 choice_2=True, choice_3=False, is_accepted=False,
+                                                                 program_3=request.user.program,admission_unit_status = 'Approved')
             context['my_template'] = 'template_university_base_page.html'
             return render(request, 'program_approve_reject_application.html',
-                          {'applicant_recs': applicant_recs, 'documents_recs': documents_recs, 'context': context})
+                          {'applicant_recs': applicant_recs, 'documents_recs': documents_recs, 'context': context,
+                           'applicant_recs_1':applicant_recs_1,
+                           'applicant_recs_2':applicant_recs_2,
+                           'applicant_recs_3':applicant_recs_3,
+                           })
         elif request.user.is_supervisor():
             applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission = True,year=get_current_year(request),supervisor=request.user)
             context['my_template'] = 'template_university_base_page.html'
@@ -1034,6 +1089,19 @@ def change_application_status(request):
                         messages.warning(request, "Applicant " + application_obj.first_name.title() + " is already approved.")
                         continue
 
+                if request.user.is_administrator():
+                    if not application_obj.admission_unit_status == 'Approved':
+                        application_obj.admission_unit_status = 'Approved'
+                        application_obj.save()
+                        application_notification(application_obj.id, 'Admission Unit Application Approved')
+                        ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
+                                                                 status='Admission Unit Application Approved',
+                                                                 remark='Your application has approved from Admission Unit.')
+                        messages.success(request, application_obj.first_name.title() + " application approved.")
+                    else:
+                        messages.warning(request, "Applicant " + application_obj.first_name.title() + " is already approved.")
+                        continue
+
             elif interview_type == 'Rejected':
                 if request.user.is_faculty():
                     if not application_obj.faculty_status == 'Rejected':
@@ -1082,6 +1150,9 @@ def change_application_status(request):
                                             application_obj.first_name,logo_url,program_name)
                 except:
                     pass
+
+                if request.user.is_administrator():
+                    application_obj.admission_unit_status = 'Pending'
 
                 if priorities == '1':
                     application_obj.choice_1 = True

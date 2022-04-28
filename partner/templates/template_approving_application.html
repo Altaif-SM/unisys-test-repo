@@ -469,9 +469,10 @@
                                             </th>
                                             <th>{% trans 'Student Name' %}</th>
                                             <th>{% trans 'University' %}</th>
-                                            <th>{% trans 'University Type' %}</th>
+                                            <th>{% trans 'Type' %}</th>
                                             <th>{% trans 'Faculty' %}</th>
                                             <th>{% trans 'Program' %}</th>
+                                            <th>{% trans 'Mode' %}</th>
                                             <th>{% trans 'Status' %}</th>
                                             <th>{% trans 'Action' %}</th>
                                         </tr>
@@ -499,11 +500,8 @@
                                                 <td>
                                                     {{ rec.university.university_name|default_if_none:"" }}
                                                 </td>
-                                                {% if rec.university.is_partner_university == True %}
-                                                    <td>International</td>
-                                                {% else %}
-                                                    <td>Main</td>
-                                                {% endif %}
+
+                                            <td>{{ rec.university_type.university_type|default_if_none:"" }}</td>
 
                                                 <td>
                                                     {{ rec.faculty.faculty_name|default_if_none:"" }}
@@ -512,6 +510,8 @@
                                                 <td>
                                                     {{ rec.program.program_name|default_if_none:"" }}
                                                 </td>
+
+                                                <td>{{ rec.program_mode.study_type|default_if_none:"" }}</td>
 
 
                                                 <td>
@@ -557,9 +557,10 @@
                                             </th>
                                             <th>{% trans 'Student Name' %}</th>
                                             <th>{% trans 'University' %}</th>
-                                            <th>{% trans 'University Type' %}</th>
+                                            <th>{% trans 'Type' %}</th>
                                             <th>{% trans 'Faculty' %}</th>
                                             <th>{% trans 'Program' %}</th>
+                                            <th>{% trans 'Mode' %}</th>
                                             <th>{% trans 'Status' %}</th>
                                             <th>{% trans 'Action' %}</th>
                                         </tr>
@@ -587,11 +588,7 @@
                                                 <td>
                                                     {{ rec.university.university_name|default_if_none:"" }}
                                                 </td>
-                                                {% if rec.university.is_partner_university == True %}
-                                                    <td>International</td>
-                                                {% else %}
-                                                    <td>Main</td>
-                                                {% endif %}
+                                                 <td>{{ rec.university_type.university_type|default_if_none:"" }}</td>
 
                                                 <td>
                                                     {{ rec.faculty_2.faculty_name|default_if_none:"" }}
@@ -600,6 +597,8 @@
                                                 <td>
                                                     {{ rec.program_2.program_name|default_if_none:"" }}
                                                 </td>
+
+                                            <td>{{ rec.program_mode_2.study_type|default_if_none:"" }}</td>
 
 
                                                 <td>
@@ -646,9 +645,10 @@
                                             </th>
                                             <th>{% trans 'Student Name' %}</th>
                                             <th>{% trans 'University' %}</th>
-                                            <th>{% trans 'University Type' %}</th>
+                                            <th>{% trans 'Type' %}</th>
                                             <th>{% trans 'Faculty' %}</th>
                                             <th>{% trans 'Program' %}</th>
+                                            <th>{% trans 'Mode' %}</th>
                                             <th>{% trans 'Status' %}</th>
                                             <th>{% trans 'Action' %}</th>
                                         </tr>
@@ -676,11 +676,7 @@
                                                 <td>
                                                     {{ rec.university.university_name|default_if_none:"" }}
                                                 </td>
-                                                {% if rec.university.is_partner_university == True %}
-                                                    <td>International</td>
-                                                {% else %}
-                                                    <td>Main</td>
-                                                {% endif %}
+                                                 <td>{{ rec.university_type.university_type|default_if_none:"" }}</td>
 
                                                 <td>
                                                     {{ rec.faculty_3.faculty_name|default_if_none:"" }}
@@ -689,6 +685,8 @@
                                                 <td>
                                                     {{ rec.program_3.program_name|default_if_none:"" }}
                                                 </td>
+
+                                            <td>{{ rec.program_mode_3.study_type|default_if_none:"" }}</td>
 
 
                                                 <td>
