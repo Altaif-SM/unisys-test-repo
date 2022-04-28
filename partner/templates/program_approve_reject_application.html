@@ -357,8 +357,8 @@
                                         {#                                        {% elif request.user.is_program %}#}
                                         <th>{% trans 'Program' %}</th>
                                         <th>{% trans 'Mode' %}</th>
-                                        <th>{% trans 'Assign Supervisor' %}</th>
-                                        <th>{% trans 'Supervisor Status' %}</th>
+{#                                        <th>{% trans 'Assign Supervisor' %}</th>#}
+{#                                        <th>{% trans 'Supervisor Status' %}</th>#}
                                         {#                                        {% endif %}#}
 
 
@@ -414,20 +414,20 @@
 
                                             {#                                            {% endif %}#}
 
-                                            <td>
-                                                {% if rec.supervisor %}
-                                                    {{ rec.supervisor.email|default_if_none:"" }}
-                                                {% else %}
-                                                    -
-                                                {% endif %}
-                                            </td>
-                                            <td>
-                                               {% if rec.supervisor %}
-                                                   <span style="color:{% if rec.supervisor_status == 'Requested' %}peru{% elif rec.supervisor_status == 'Approved' %}green{% else %}red{% endif %}"><b>{{ rec.supervisor_status|default_if_none:"" }}</b></span>
-                                                {% else %}
-                                                    -
-                                                {% endif %}
-                                            </td>
+{#                                            <td>#}
+{#                                                {% if rec.supervisor %}#}
+{#                                                    {{ rec.supervisor.email|default_if_none:"" }}#}
+{#                                                {% else %}#}
+{#                                                    -#}
+{#                                                {% endif %}#}
+{#                                            </td>#}
+{#                                            <td>#}
+{#                                               {% if rec.supervisor %}#}
+{#                                                   <span style="color:{% if rec.supervisor_status == 'Requested' %}peru{% elif rec.supervisor_status == 'Approved' %}green{% else %}red{% endif %}"><b>{{ rec.supervisor_status|default_if_none:"" }}</b></span>#}
+{#                                                {% else %}#}
+{#                                                    -#}
+{#                                                {% endif %}#}
+{#                                            </td>#}
 
                                             <td>
                                                 <span style="color:{% if rec.program_status == 'Pending' %}peru{% elif rec.program_status == 'Approved' %}green{% else %}red{% endif %}"><b>{{ rec.program_status|default_if_none:"" }}</b></span>
