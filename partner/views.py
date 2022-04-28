@@ -1153,6 +1153,8 @@ def change_application_status(request):
 
                 if request.user.is_administrator():
                     application_obj.admission_unit_status = 'Pending'
+                    application_obj.faculty_status = 'Pending'
+                    application_obj.program_status = 'Pending'
 
                 if priorities == '1':
                     application_obj.choice_1 = True
