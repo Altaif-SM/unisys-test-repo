@@ -182,6 +182,7 @@ class ApplicationDetails(BaseModel):
     study_mode = models.CharField(max_length=50, blank=True, null=True)
     program_mode = models.ForeignKey('masters.StudyTypeDetails', null=True, related_name='program_mode_rel',
                                    on_delete=models.SET_NULL)
+    admission_unit_status = models.CharField(max_length=50, default="Pending", blank=True, null=True)
     faculty_status = models.CharField(max_length=50, default="Pending",blank=True, null=True)
     program_status = models.CharField(max_length=50, default="Pending",blank=True, null=True)
     supervisor = models.ForeignKey('accounts.User', blank=True, null=True,
