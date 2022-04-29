@@ -225,11 +225,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                 {% endif %}
                             {% else %}
                                 {#                                <img alt="" class="img-circle" src="../../media/{{ user.get_application.image }}"/>#}
-                                <b><span
-{#                                        class="username username-hide-on-mobile">{{ request.user.university.university_name|default_if_none:"" }} - {% if user.role.all.0.name == 'Administrator' %}(Admission Unit){% elif user.role.all.0.name == 'Faculty' %}({{ user.faculty.faculty_name|default_if_none:"" }}){% else %}({{ user.program.program_name|default_if_none:"" }}){% endif %}</span></b>#}
-                                        class="username username-hide-on-mobile">{{ request.user.university.university_name|default_if_none:"" }} - {% if user.role.all.0.name == 'Administrator' %}(Admission Unit){% elif user.role.all.0.name == 'Faculty' %}(Faculty){% elif user.role.all.0.name == 'Supervisor' %}(Supervisor){% else %}(Program){% endif %}</span></b>
-                                {#                                <br>#}
-                                {#                                <span class="username username-hide-on-mobile"> {{ user.get_application_id }}#}
+{#                                <b><span class="username username-hide-on-mobile">{{ request.user.university.university_name|default_if_none:"" }} - {% if user.role.all.0.name == 'Administrator' %}(Admission Unit){% elif user.role.all.0.name == 'Faculty' %}(Faculty){% elif user.role.all.0.name == 'Supervisor' %}(Supervisor){% else %}(Program){% endif %}</span></b>#}
+                                <b><span class="username username-hide-on-mobile" style="text-transform: uppercase">Dashboard - {% if user.role.all.0.name == 'Administrator' %}Admission Unit{% elif user.role.all.0.name == 'Faculty' %}{{ user.faculty.faculty_name|default_if_none:"" }}{% else %}{{ user.program.program_name|default_if_none:"" }}{% endif %} </span></b>
                                 </span>
 
 
@@ -534,15 +531,15 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </a>
 
                             </li>
-                        {% elif not user.is_student %}
-                            <li class="nav-item " id="dashboard">
-                                <a href="/accounts/dashboard/" class="nav-link nav-toggle">
-                                    <i class="glyphicon glyphicon-stats"></i>
-                                    <span class="title">{% trans 'Dashboard' %}</span>
-                                    <span class="selected"></span>
-                                </a>
-
-                            </li>
+{#                        {% elif not user.is_student %}#}
+{#                            <li class="nav-item " id="dashboard">#}
+{#                                <a href="/accounts/dashboard/" class="nav-link nav-toggle">#}
+{#                                    <i class="glyphicon glyphicon-stats"></i>#}
+{#                                    <span class="title">{% trans 'Dashboard' %}</span>#}
+{#                                    <span class="selected"></span>#}
+{#                                </a>#}
+{##}
+{#                            </li>#}
                         {% endif %}
 
                         {% if user.is_student %}
@@ -1347,9 +1344,9 @@ License: You must have a valid license purchased only from themeforest(the above
                     <ul class="nav nav-tabs menu" style="border-bottom: none">
                         {#<li class="active"><a href="#a" data-toggle="tab">Dashboard</a></li>#}
                         {% if not user.is_student %}
-                            {% if 'System Settings' in access_list %}
-                                <li id="setting_anch"><a href="#b" data-toggle="tab">{% trans 'Master Settings' %}</a></li>
-                            {% elif 'User Settings' in access_list %}
+{#                            {% if 'System Settings' in access_list %}#}
+{#                                <li id="setting_anch"><a href="#b" data-toggle="tab">{% trans 'Master Settings' %}</a></li>#}
+                            {% if 'User Settings' in access_list %}
                                 <li id="setting_anch"><a href="#b" data-toggle="tab">{% trans 'Master Settings' %}</a></li>
                             {% elif 'University Settings' in access_list %}
                                 <li id="setting_anch"><a href="#b" data-toggle="tab">{% trans 'Master Settings' %}</a></li>
