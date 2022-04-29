@@ -171,6 +171,7 @@ urlpatterns = [
     path('program_settings/', views.program_settings, name='program_settings'),
     path('add_program/', views.add_program, name='add_program'),
     path('edit_program/<int:program_id>/', views.edit_program, name='edit_program'),
+    path('edit_study_plan/<int:program_id>/', views.edit_study_plan, name='edit_study_plan'),
     path('delete_program/', views.delete_program, name='delete_program'),
 
     path('year_settings/', views.year_settings, name='year_settings'),
@@ -289,5 +290,6 @@ urlpatterns = [
     path('add_type/', views.add_type, name='add_type'),
     path('edit_type/<int:type_id>/', views.edit_type, name='edit_type'),
     path('delete_type/', views.delete_type, name='delete_type'),
+    path('view_semester_subject_list/', views.view_semester_subject_list, name='view_semester_subject_list'),
 
 ]

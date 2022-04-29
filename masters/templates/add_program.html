@@ -116,7 +116,7 @@
                     var course_counter = 1;
                      $(".add_course_details").click(function () {
                     course_counter = course_counter + 1;
-                    var course_details = '<hr><div class="row course_details" style="margin-top: 30px" id="course_details_' + course_counter + '"><div class="row"><div class=""><label class="col-md-2 control-label">Code:</label><div class="col-md-3"><input type="text" title="Enter Code" id="code_' + course_counter + '" name="code_' + course_counter + '" value="" class="form-control eng_emp"></div></div><div class=""><label class="col-md-2 control-label">Title:</label><div class="col-md-3"><input type="text" title="Enter Title" id="title_' + course_counter + '" name="title_' + course_counter + '" value="" class="form-control eng_emp"></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Unit:</label><div class="col-md-3"><input type="text" title="Enter Unit" id="unit_' + course_counter + '" name="unit_' + course_counter + '" value="" class="form-control eng_emp"></div></div><div class=""><label class="col-md-2 control-label">Type:</label><div class="col-md-3"><select id="type_' + course_counter + '" title="Select Type" name="type_' + course_counter + '" class="form-control select_data chk"><option value="">Please Select</option><option value="Core (C)">Core (C)</option><option value="Elective (E)">Elective (E)</option></select></div></div><div class=""><div class="col-md-1" style="margin-top: -55px;"><a href="javascript:;" class="delete_course btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div></div>';
+                    var course_details = '<hr><div class="row course_details" style="margin-top: 30px" id="course_details_' + course_counter + '"><div class="row"><div class=""><label class="col-md-2 control-label">Code:</label><div class="col-md-3"><input type="text" title="Enter Code" id="code_' + course_counter + '" name="code_' + course_counter + '" value="" class="form-control eng_emp"></div></div><div class=""><label class="col-md-2 control-label">Subject Name:</label><div class="col-md-3"><input type="text" title="Enter Title" id="title_' + course_counter + '" name="title_' + course_counter + '" value="" class="form-control eng_emp"></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Unit:</label><div class="col-md-3"><input type="text" title="Enter Unit" id="unit_' + course_counter + '" name="unit_' + course_counter + '" value="" class="form-control eng_emp"></div></div><div class=""><label class="col-md-2 control-label">Subject Type:</label><div class="col-md-3"><select id="type_' + course_counter + '" title="Select Type" name="type_' + course_counter + '" class="form-control select_data chk"><option value="">Please Select</option><option value="Core">Core</option><option value="Elective">Elective</option><option value="University Requirement">University Requirement</option><option value="Faculty Requirement">Faculty Requirement</option></select></div></div><div class=""><div class="col-md-1" style="margin-top: -55px;"><a href="javascript:;" class="delete_course btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div></div>';
                     $(course_details).removeAttr().hide().insertAfter(".course_details:last").slideDown(300);
                 });
 
@@ -646,91 +646,8 @@
 
 
                         </div>
-                    <hr>
 
-
-                    <input hidden type="text" id="course_count" name="course_count">
-
-                        <div class="" style="float: right;padding-right: 90px; margin-top: 30px">
-                                <div class="" >
-                                    <a href="javascript:;" id="add" class="btn btn-icon-only green add_course_details"
-                                       style="margin-top:30px">
-                                        <i class="fa fa-plus "></i>
-                                    </a>
-                                </div>
-                            </div>
-
-                    <div class="portlet-title" style="margin-left:-15px;font-size: 16px;">
-                            <div class="caption">
-                                <span class="caption-subject font-red sbold uppercase"> <i
-                                        class="icon-settings font-red"></i>{% trans 'Course Details' %}</span>
-                            </div>
-                        </div>
-                        <hr>
-
-                            <div class="row course_details" style="margin-top: 30px" id="course_details_1">
-                            <div class="row">
-
-                                <div class="">
-                                    <label class="col-md-2 control-label">Code:</label>
-                                    <div class="col-md-3">
-                                        <input type="text" title="Enter Code"
-                                                   id="code_1"
-                                                   name="code_1"
-                                                   value=""
-                                                   class="form-control eng_emp">
-                                    </div>
-                                </div>
-
-
-
-
-                                <div class="">
-                                    <label class="col-md-2 control-label">Title:</label>
-                                    <div class="col-md-3">
-                                        <input type="text" title="Enter Title" id="title_1"
-                                               name="title_1" value=""
-                                               class="form-control eng_emp">
-                                    </div>
-                                </div>
-
-
-                            </div>
-                              <br>
-                            <div class="row">
-
-                                <div class="">
-                                    <label class="col-md-2 control-label">Unit:</label>
-                                    <div class="col-md-3">
-                                        <input type="text" title="Enter Unit" id="unit_1"
-                                               name="unit_1"
-                                               value=""
-                                               class="form-control eng_emp">
-                                    </div>
-                                </div>
-
-
-                                <div class="">
-                                            <label class="col-md-2 control-label">Type:</label>
-                                            <div class="col-md-3">
-
-                                                <select id='type_1' title="Select Type" name="type_1"
-                                                        class="form-control select_data chk">
-                                                        <option value=''>{% trans 'Please Select' %}</option>
-                                                        <option value='Core (C)'>Core (C)</option>
-                                                        <option value='Elective (E)'>Elective (E)</option>
-                                                </select>
-
-
-
-
-                                            </div>
-
-                                        </div>
-
-                            </div>
-                            </div>
-                    <br><br>
+                    <br>
 
                         <div class="row">
                             <div class="col-md-offset-5 col-md-7">
@@ -747,7 +664,162 @@
 
 
 
+
+
                 </form>
+
+{#            <form action="{% url 'masters:add_program' %}"#}
+{#                      id="id_form"#}
+{#                      class="form-horizontal"#}
+{#                      method="POST" enctype="multipart/form-data">#}
+{#                    {% csrf_token %}#}
+{##}
+{#                    <input hidden type="text" id="course_count" name="course_count">#}
+{##}
+{#                <hr>#}
+{#                    <div class="portlet-title" style="margin-left:-15px;font-size: 16px;">#}
+{#                            <div class="caption">#}
+{#                                <span class="caption-subject font-red sbold uppercase"> <i#}
+{#                                        class="icon-settings font-red"></i>{% trans 'Program Study Plan' %}</span>#}
+{##}
+{#                                <br>#}
+{#                <span style="font-family: 'Times New Roman';font-size: 16px;"><b>({% trans 'Semester Based System' %})</b></span>#}
+{##}
+{#                                <span style="margin-left: 60%;font-family: 'Times New Roman'"><a target="_blank" href="/masters/view_semester_subject_list/" id="add"#}
+{#                                       >View Semester Based Subject List#}
+{##}
+{#                                    </a></span>#}
+{##}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <hr>#}
+{#                 <div class="row year_sem_details" style="margin-top: 30px" id="year_sem_details_1">#}
+{#                 <div class="row">#}
+{##}
+{#                                <div class="">#}
+{#                                    <label class="col-md-2 control-label"><b>Year:</b></label>#}
+{#                                    <div class="col-md-3">#}
+{#                                       <select id='year' title="Select Year"#}
+{#                                                        name="year"#}
+{#                                                        class="form-control chk">#}
+{#                                                   <option style="display:none" selected="selected" id="" value="">#}
+{#                                                            Please#}
+{#                                                            Select#}
+{#                                                        </option>#}
+{##}
+{#                                                    {% for rec in passing_year_recs %}#}
+{#                                                        <option value='{{ rec.year }}'>{{ rec.year }}</option>#}
+{#                                                    {% endfor %}#}
+{#                                                </select>#}
+{#                                    </div>#}
+{#                                </div>#}
+{##}
+{##}
+{##}
+{##}
+{#                                <div class="">#}
+{#                                    <label class="col-md-2 control-label"><b>Semester:</b></label>#}
+{#                                    <div class="col-md-3">#}
+{#                                        <input type="text" title="Enter Semester" id="semester"#}
+{#                                               name="semester" value=""#}
+{#                                               class="form-control eng_emp">#}
+{#                                    </div>#}
+{#                                </div>#}
+{##}
+{##}
+{#                            </div>#}
+{#                 </div>#}
+{#                            <div class="row course_details" style="margin-top: 30px" id="course_details_1">#}
+{#                            <div class="row">#}
+{##}
+{#                                <div class="">#}
+{#                                    <label class="col-md-2 control-label">Code:</label>#}
+{#                                    <div class="col-md-3">#}
+{#                                        <input type="text" title="Enter Code"#}
+{#                                                   id="code_1"#}
+{#                                                   name="code_1"#}
+{#                                                   value=""#}
+{#                                                   class="form-control eng_emp">#}
+{#                                    </div>#}
+{#                                </div>#}
+{##}
+{##}
+{##}
+{##}
+{#                                <div class="">#}
+{#                                    <label class="col-md-2 control-label">Subject Name:</label>#}
+{#                                    <div class="col-md-3">#}
+{#                                        <input type="text" title="Enter Title" id="title_1"#}
+{#                                               name="title_1" value=""#}
+{#                                               class="form-control eng_emp">#}
+{#                                    </div>#}
+{#                                </div>#}
+{##}
+{#                                <div class="" >#}
+{#                                <div class="" >#}
+{#                                    <a href="javascript:;" id="add" class="btn btn-icon-only green add_course_details"#}
+{#                                       >#}
+{#                                        <i class="fa fa-plus "></i>#}
+{#                                    </a>#}
+{#                                </div>#}
+{#                            </div>#}
+{##}
+{##}
+{#                            </div>#}
+{#                              <br>#}
+{#                            <div class="row">#}
+{##}
+{#                                <div class="">#}
+{#                                    <label class="col-md-2 control-label">Unit:</label>#}
+{#                                    <div class="col-md-3">#}
+{#                                        <input type="text" title="Enter Unit" id="unit_1"#}
+{#                                               name="unit_1"#}
+{#                                               value=""#}
+{#                                               class="form-control eng_emp">#}
+{#                                    </div>#}
+{#                                </div>#}
+{##}
+{##}
+{#                                <div class="">#}
+{#                                            <label class="col-md-2 control-label">Subject Type:</label>#}
+{#                                            <div class="col-md-3">#}
+{##}
+{#                                                <select id='type_1' title="Select Type" name="type_1"#}
+{#                                                        class="form-control select_data chk">#}
+{#                                                        <option value=''>{% trans 'Please Select' %}</option>#}
+{#                                                        <option value='Core'>Core</option>#}
+{#                                                        <option value='Elective'>Elective</option>#}
+{#                                                        <option value='University Requirement'>University Requirement</option>#}
+{#                                                        <option value='Faculty Requirement'>Faculty Requirement</option>#}
+{#                                                </select>#}
+{##}
+{##}
+{##}
+{##}
+{#                                            </div>#}
+{##}
+{#                                        </div>#}
+{##}
+{#                            </div>#}
+{#                            </div>#}
+{#                <hr>#}
+{#                <div class="row">#}
+{#                            <div class="col-md-offset-5 col-md-7">#}
+{#                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"#}
+{#                                        onclick="window.location='{% url "masters:program_settings" %}'">#}
+{#                                    Back#}
+{#                                </button>#}
+{##}
+{#                                <button type="submit" class="btn green" id="save_form" style="">Save#}
+{#                                </button>#}
+{#                            </div>#}
+{#                        </div>#}
+{##}
+{#            </form>#}
+
+
+
+
             </div>
 
         </div>

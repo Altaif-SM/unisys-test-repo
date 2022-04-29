@@ -2352,17 +2352,18 @@ def add_program(request):
                 program_obj.campus.add(program_campus_obj)
 
             program_obj.course.clear()
-            for count in range(int(course_count)):
-                try:
-                    count = count + 1
-                    if (request.POST['code_' + str(count)] is not '') or (request.POST['title_' + str(count)] is not '') or (request.POST['unit_' + str(count)] is not '') or (request.POST['type_' + str(count)] is not ''):
-                        course_obj = CourseDetails.objects.create(code=request.POST['code_' + str(count)],
-                                                              title=request.POST['title_' + str(count)],
-                                                              unit=request.POST['unit_' + str(count)],
-                                                              type=request.POST['type_' + str(count)])
-                        program_obj.course.add(course_obj)
-                except Exception as e:
-                    pass
+            if course_count:
+                for count in range(int(course_count)):
+                    try:
+                        count = count + 1
+                        if (request.POST['code_' + str(count)] is not '') or (request.POST['title_' + str(count)] is not '') or (request.POST['unit_' + str(count)] is not '') or (request.POST['type_' + str(count)] is not ''):
+                            course_obj = CourseDetails.objects.create(code=request.POST['code_' + str(count)],
+                                                                  title=request.POST['title_' + str(count)],
+                                                                  unit=request.POST['unit_' + str(count)],
+                                                                  type=request.POST['type_' + str(count)])
+                            program_obj.course.add(course_obj)
+                    except Exception as e:
+                        pass
 
             messages.success(request, "Record saved.")
         except:
@@ -2376,7 +2377,8 @@ def add_program(request):
     campus_recs = CampusBranchesDetails.objects.filter().order_by('-id')
     study_mode_list = ['Online', 'On Campus']
     university_type_recs = UniversityTypeDetails.objects.filter(status=True)
-    return render(request, 'add_program.html',{'university_recs':university_recs,'faculty_recs':faculty_recs,'study_level_recs':study_level_recs,'study_mode_recs':study_mode_recs,'study_type_recs':study_type_recs,'campus_recs':campus_recs,'study_mode_list':study_mode_list,'university_type_recs':university_type_recs})
+    passing_year_recs = PassingYear.objects.filter().order_by('-year')
+    return render(request, 'add_program.html',{'university_recs':university_recs,'faculty_recs':faculty_recs,'study_level_recs':study_level_recs,'study_mode_recs':study_mode_recs,'study_type_recs':study_type_recs,'campus_recs':campus_recs,'study_mode_list':study_mode_list,'university_type_recs':university_type_recs,'passing_year_recs':passing_year_recs})
 
 
 def edit_program(request, program_id=None):
@@ -2477,8 +2479,9 @@ def edit_program(request, program_id=None):
     university_type_recs = UniversityTypeDetails.objects.filter(status=True)
     course_count = program_obj.course.all().count()
     course_obj = program_obj.course.all()
+    passing_year_recs = PassingYear.objects.filter().order_by('-year')
     return render(request, "edit_program.html", {'program_obj': program_obj,'university_recs':university_recs,'course_count':course_count,'course_obj':course_obj,
-                                                 'study_mode_recs':study_mode_recs,'study_level_recs':study_level_recs,'study_type_recs':study_type_recs,'faculty_recs':faculty_recs,'campus_recs':campus_recs,'study_mode_list':study_mode_list,'selected_study_mode_list':selected_study_mode_list,'selected_campus_list':selected_campus_list,'department_recs':department_recs,'university_type_recs':university_type_recs})
+                                                 'study_mode_recs':study_mode_recs,'study_level_recs':study_level_recs,'study_type_recs':study_type_recs,'faculty_recs':faculty_recs,'campus_recs':campus_recs,'study_mode_list':study_mode_list,'selected_study_mode_list':selected_study_mode_list,'selected_campus_list':selected_campus_list,'department_recs':department_recs,'university_type_recs':university_type_recs,'passing_year_recs':passing_year_recs})
 
 
 def delete_program(request):
@@ -4321,3 +4324,31 @@ def delete_type(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/type_settings/')
+
+
+def view_semester_subject_list(request):
+    study_plan_recs = StudyPlanDetails.objects.all()
+    return render(request, 'view_semester_subject_list.html',{'study_plan_recs':study_plan_recs})
+
+def edit_study_plan(request, program_id=None):
+    if request.method == 'POST':
+        year = request.POST.get('year')
+        semester = request.POST.get('semester')
+        course_count = request.POST.get('course_count')
+        try:
+            study_plan_obj = StudyPlanDetails.objects.create(program_id = program_id,year_id=year,semester = semester)
+            for count in range(int(course_count)):
+                try:
+                    count = count + 1
+                    if (request.POST['code_' + str(count)] is not '') or (request.POST['title_' + str(count)] is not '') or (request.POST['unit_' + str(count)] is not '') or (request.POST['type_' + str(count)] is not ''):
+                        course_obj = CourseDetails.objects.create(code=request.POST['code_' + str(count)],
+                                                              title=request.POST['title_' + str(count)],
+                                                              unit=request.POST['unit_' + str(count)],
+                                                              type=request.POST['type_' + str(count)])
+                        study_plan_obj.course.add(course_obj)
+                except Exception as e:
+                    pass
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/program_settings/')
