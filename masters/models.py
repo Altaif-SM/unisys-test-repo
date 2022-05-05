@@ -498,7 +498,8 @@ class StudyPlanDetails(BaseModel):
     course = models.ManyToManyField(CourseDetails, blank=True)
     start_date = models.DateField(null=True)
     end_date = models.DateField(null=True)
-
+    academic_year = models.ForeignKey(YearDetails, null=True, related_name='study_plan_academic_year_rel',
+                             on_delete=models.SET_NULL)
 
 class ProgramFeeDetails(BaseModel):
     university = models.ForeignKey(UniversityDetails, null=True, related_name='program_fee_university_rel',

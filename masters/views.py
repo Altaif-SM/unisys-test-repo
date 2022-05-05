@@ -2480,8 +2480,9 @@ def edit_program(request, program_id=None):
     course_count = program_obj.course.all().count()
     course_obj = program_obj.course.all()
     passing_year_recs = PassingYear.objects.filter().order_by('-year')
+    year_recs = YearDetails.objects.all()
     return render(request, "edit_program.html", {'program_obj': program_obj,'university_recs':university_recs,'course_count':course_count,'course_obj':course_obj,
-                                                 'study_mode_recs':study_mode_recs,'study_level_recs':study_level_recs,'study_type_recs':study_type_recs,'faculty_recs':faculty_recs,'campus_recs':campus_recs,'study_mode_list':study_mode_list,'selected_study_mode_list':selected_study_mode_list,'selected_campus_list':selected_campus_list,'department_recs':department_recs,'university_type_recs':university_type_recs,'passing_year_recs':passing_year_recs})
+                                                 'study_mode_recs':study_mode_recs,'study_level_recs':study_level_recs,'study_type_recs':study_type_recs,'faculty_recs':faculty_recs,'campus_recs':campus_recs,'study_mode_list':study_mode_list,'selected_study_mode_list':selected_study_mode_list,'selected_campus_list':selected_campus_list,'department_recs':department_recs,'university_type_recs':university_type_recs,'passing_year_recs':passing_year_recs,'year_recs':year_recs})
 
 
 def delete_program(request):
@@ -4338,7 +4339,7 @@ def edit_study_plan(request, program_id=None):
         end_date = request.POST.get('end_date')
         course_count = request.POST.get('course_count')
         try:
-            study_plan_obj = StudyPlanDetails.objects.create(program_id = program_id,year_id=year,semester = semester, start_date = start_date, end_date = end_date)
+            study_plan_obj = StudyPlanDetails.objects.create(program_id = program_id,academic_year_id=year,semester = semester, start_date = start_date, end_date = end_date)
             for count in range(int(course_count)):
                 try:
                     count = count + 1
