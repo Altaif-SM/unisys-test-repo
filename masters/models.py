@@ -443,6 +443,7 @@ class CourseDetails(models.Model):
     unit = models.CharField(max_length=150, blank=True, null=True)
     type = models.CharField(max_length=150, blank=True, null=True)
 
+
 class ProgramFeeType(models.Model):
     fee_type = models.CharField(max_length=100, blank=True, null=True)
     amount = models.FloatField(null=True, blank=True, default=0.0)
@@ -497,6 +498,8 @@ class StudyPlanDetails(BaseModel):
                                     on_delete=models.SET_NULL)
     semester = models.CharField(max_length=180, blank=True, null=True)
     course = models.ManyToManyField(CourseDetails, blank=True)
+    start_date = models.DateField(null=True)
+    end_date = models.DateField(null=True)
 
 
 class ProgramFeeDetails(BaseModel):

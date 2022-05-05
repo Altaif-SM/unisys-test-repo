@@ -4334,9 +4334,11 @@ def edit_study_plan(request, program_id=None):
     if request.method == 'POST':
         year = request.POST.get('year')
         semester = request.POST.get('semester')
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
         course_count = request.POST.get('course_count')
         try:
-            study_plan_obj = StudyPlanDetails.objects.create(program_id = program_id,year_id=year,semester = semester)
+            study_plan_obj = StudyPlanDetails.objects.create(program_id = program_id,year_id=year,semester = semester, start_date = start_date, end_date = end_date)
             for count in range(int(course_count)):
                 try:
                     count = count + 1
