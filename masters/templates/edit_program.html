@@ -796,8 +796,8 @@
                                                             Select
                                                         </option>
 
-                                                    {% for rec in passing_year_recs %}
-                                                        <option value='{{ rec.id }}'>{{ rec.year }}</option>
+                                                    {% for rec in year_recs %}
+                                                        <option value='{{ rec.id }}'>{{ rec.year_name|default_if_none:"" }}</option>
                                                     {% endfor %}
                                                 </select>
                                     </div>

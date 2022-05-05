@@ -205,7 +205,7 @@
 {#                            <td>{{ rec.program_type|default_if_none:"" }}</td>#}
 
                             <td>{{ rec.program.program_name|default_if_none:"" }}</td>
-                            <td>{{ rec.year.year|default_if_none:"" }}</td>
+                            <td>{{ rec.academic_year.year_name|default_if_none:"" }}</td>
 
                             <td>{{ rec.semester|default_if_none:"" }}</td>
                             <td>{{ rec.start_date|date:"Y-m-d" }}</td>
