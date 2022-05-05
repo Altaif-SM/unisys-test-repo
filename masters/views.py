@@ -4326,8 +4326,8 @@ def delete_type(request):
         return redirect('/masters/type_settings/')
 
 
-def view_semester_subject_list(request):
-    study_plan_recs = StudyPlanDetails.objects.all()
+def view_semester_subject_list(request, program_id=None):
+    study_plan_recs = StudyPlanDetails.objects.filter(program_id = program_id)
     return render(request, 'view_semester_subject_list.html',{'study_plan_recs':study_plan_recs})
 
 def edit_study_plan(request, program_id=None):

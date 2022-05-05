@@ -290,6 +290,6 @@ urlpatterns = [
     path('add_type/', views.add_type, name='add_type'),
     path('edit_type/<int:type_id>/', views.edit_type, name='edit_type'),
     path('delete_type/', views.delete_type, name='delete_type'),
-    path('view_semester_subject_list/', views.view_semester_subject_list, name='view_semester_subject_list'),
+    path('view_semester_subject_list/<int:program_id>/', views.view_semester_subject_list, name='view_semester_subject_list'),
 
 ]

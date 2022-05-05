@@ -773,10 +773,11 @@
                                 <br>
                 <span style="font-family: 'Times New Roman';font-size: 16px;"><b>({% trans 'Semester Based System' %})</b></span>
 
-                                <span style="margin-left: 60%;font-family: 'Times New Roman'"><a target="_blank" href="/masters/view_semester_subject_list/" id="add"
+                                <span style="margin-left: 60%;font-family: 'Times New Roman'"><a target="_blank" href="{% url 'masters:view_semester_subject_list' program_obj.id %}" id="add"
                                        >View Semester Based Subject List
 
                                     </a></span>
+
 
                             </div>
                         </div>
