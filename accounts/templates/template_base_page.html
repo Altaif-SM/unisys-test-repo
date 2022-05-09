@@ -1752,7 +1752,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-     {% if request.resolver_match.url_name == 'course_registration' %}
+     {% if request.resolver_match.url_name == 'course_registration' or  request.resolver_match.url_name == 'course_registration_checkout' %}
         {
             var element = document.getElementById("course_registration_list");
             element.classList.add("active");

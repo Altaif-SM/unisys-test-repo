@@ -76,18 +76,13 @@
 
 
                 $('.status_change').click(function () {
-
-
                     var favorite = [];
                     $.each($("input[name='check']:checked"), function () {
-
                         favorite.push($(this).val());
                     });
-                    alert(JSON.stringify(favorite));
+                    {#alert(JSON.stringify(favorite));#}
                     $("#check_ids").val(JSON.stringify(favorite));
-                    $("#interview_type").val("APPROVED");
                     $('#form_submit').submit()
-
                 })
 
 
@@ -305,10 +300,11 @@
                 <hr>
 
                 {% if course_filter %}
-                     <form method="post" action="{% url 'partner:change_application_status' %}" id="form_submit">
+                     <form method="post" action="{% url 'payments:course_registration_checkout' %}" id="form_submit">
                             {% csrf_token %}
 
                     <input type="text" hidden id="check_ids" name="check_ids">
+                    <input type="text" hidden id="total_unit" name="total_unit" value="{{ unit_count }}">
 
                     <div class="portlet-title">
                         <div class="caption">

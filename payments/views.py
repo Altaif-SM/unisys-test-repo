@@ -218,3 +218,14 @@ def stripe_registration_checkout_success(request, session_id):
     ProgramRegistrationFeeDetails.objects.create(application_id=request.user.get_application)
     ApplicationDetails.objects.filter(id = application_obj.id).update(is_paid_registration_fee = True)
     return redirect('/payments/registration_checkout/')
+
+
+def course_registration_checkout(request):
+    try:
+        total_unit = request.POST.get('total_unit', None)
+        total_pay_amount = float(360) * float(total_unit)
+        return render(request, 'course_registration_checkout.html', {'total_unit': total_unit,
+                                                                     'total_pay_amount':total_pay_amount})
+    except Exception as e:
+        messages.warning(request, "Please Fill The Application Form First ... ")
+        return redirect("/")
