@@ -299,6 +299,10 @@
                                         </option>
                                     {% endif %}
 
+                                 {% for rec in semester_list %}
+                                        <option value='{{ rec.id }}'>{{ rec.semester|default_if_none:"" }}</option>
+                                    {% endfor %}
+
                                 </select>
                             </div>
                         </div>
@@ -405,15 +409,18 @@
 
                         </div>
                     </div>
-                {% endif %}
 
-            <div class="row">
+                    <div class="row">
                             <div class="col-md-offset-10 col-md-7">
 
                                 <button type="submit" class="btn blue status_change" id="save_form" style="margin-left:14%">Proceed
                                 </button>
                             </div>
                         </div>
+
+                {% endif %}
+
+
 
 
             </div>

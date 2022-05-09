@@ -3215,15 +3215,25 @@ def course_registration(request):
             for rec in course_recs:
                 unit_count = int(unit_count) + int(rec.unit)
 
+        semester_list = []
+        semester_recs = StudyPlanDetails.objects.filter(academic_year_id=year, program_id=study_plan_obj.program_id)
+        for rec in semester_recs:
+            raw_dict = {}
+            raw_dict['semester'] = rec.semester
+            raw_dict['id'] = rec.id
+            semester_list.append(raw_dict)
+
         course_filter = True
         return render(request, 'course_registration.html', {'application_obj': application_obj,
                                                             'matric_no': matric_no, 'course_recs': course_recs,
                                                             'year_list': year_list, 'program_id': program_id,
                                                             'year_obj':year_obj,'study_plan_obj':study_plan_obj,
                                                             'course_filter':course_filter,
-                                                            'unit_count':unit_count})
+                                                            'unit_count':unit_count,
+                                                            'semester_list':semester_list})
 
     else:
+        semester_list = []
         unit_count = 0
         course_filter = False
         application_obj = request.user.get_application
@@ -3249,7 +3259,8 @@ def course_registration(request):
                                                        'matric_no':matric_no,'course_recs':course_recs,
                                                            'year_list':year_list,'program_id':program_id,
                                                            'year_obj':year_obj,'course_filter':course_filter,
-                                                           'unit_count':unit_count})
+                                                           'unit_count':unit_count,
+                                                           'semester_list':semester_list})
 
 
 
