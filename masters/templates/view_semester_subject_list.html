@@ -217,7 +217,7 @@
                             </td>
 
                         <td>{% for rec in rec.course.all %}
-                                <span>{{ rec.title|default_if_none:"" }}</span><br>
+                                <span>{{ forloop.counter }}. {{ rec.title|default_if_none:"" }}</span><br>
                             {% endfor %}
                             </td>
 
