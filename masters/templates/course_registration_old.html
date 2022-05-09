@@ -1,0 +1,353 @@
+{% extends "template_base_page.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+{% block styleBlock %}
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+    </style>
+{% endblock %}
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+
+
+            $(document).ready(function () {
+
+
+                $('#example').dataTable();
+                $('#example_2').dataTable();
+
+
+                $('.select_all').click(function () {
+                    var checked_status = this.checked;
+                    $(this).closest('table').find('input:checkbox').each(function () {
+                        this.checked = checked_status;
+                    });
+                })
+
+                $('.select_all_2').click(function () {
+                    var checked_status = this.checked;
+                    $(this).closest('table').find('input:checkbox').each(function () {
+                        this.checked = checked_status;
+                    });
+                })
+
+                $('.select_all_3').click(function () {
+                    var checked_status = this.checked;
+                    $(this).closest('table').find('input:checkbox').each(function () {
+                        this.checked = checked_status;
+                    });
+                })
+
+
+
+
+
+
+
+                $('.status_change').click(function () {
+
+
+
+                    var priorities = $("#priorities").val();
+
+                    if (parseInt(priorities) == 1) {
+                        var checked = $('#example').find('input[name="check"]:checked').length;
+                    } else if (parseInt(priorities) == 2) {
+                        var checked = $('#example_2').find('input[name="check"]:checked').length;
+                    }
+
+                    if (!checked) {
+                        alert('Please select at least one record to proceed..!');
+                        return false;
+                    }
+
+                    var favorite = [];
+
+                    if (!checked)
+                        alert('Please select at least one record to proceed..!');
+                    else {
+                        $.each($("input[name='check']:checked"), function () {
+
+                            favorite.push($(this).val());
+                        });
+                        {#alert(JSON.stringify(favorite));#}
+                        $("#check_ids").val(JSON.stringify(favorite));
+                        $("#interview_type").val("APPROVED");
+                        $('#form_submit').submit()
+                    }
+
+                })
+
+
+
+
+
+
+                $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                    var target = $(e.target).attr("data-id")
+                    $("#priorities").val(target);
+                    var priorities = $("#priorities").val();
+                    if (parseInt(priorities) == 1) {
+                        $('#example').find('input[name="select_all"]:checked').removeAttr("checked");
+                        $('#example').find('input[name="check"]:checked').removeAttr("checked");
+                        $('#example_2').find('input[name="select_all_2"]:checked').removeAttr("checked");
+                        $('#example_2').find('input[name="check"]:checked').removeAttr("checked");
+                        $('#example_3').find('input[name="select_all_3"]:checked').removeAttr("checked");
+                        $('#example_3').find('input[name="check"]:checked').removeAttr("checked");
+                    } else if (parseInt(priorities) == 2) {
+                        $('#example').find('input[name="select_all"]:checked').removeAttr("checked");
+                        $('#example').find('input[name="check"]:checked').removeAttr("checked");
+                        $('#example_2').find('input[name="select_all_2"]:checked').removeAttr("checked");
+                        $('#example_2').find('input[name="check"]:checked').removeAttr("checked");
+                        $('#example_3').find('input[name="select_all_3"]:checked').removeAttr("checked");
+                        $('#example_3').find('input[name="check"]:checked').removeAttr("checked");
+                    } else if (parseInt(priorities) == 3) {
+                        $('#example').find('input[name="select_all"]:checked').removeAttr("checked");
+                        $('#example').find('input[name="check"]:checked').removeAttr("checked");
+                        $('#example_2').find('input[name="select_all_2"]:checked').removeAttr("checked");
+                        $('#example_2').find('input[name="check"]:checked').removeAttr("checked");
+                        $('#example_3').find('input[name="select_all_3"]:checked').removeAttr("checked");
+                        $('#example_3').find('input[name="check"]:checked').removeAttr("checked");
+
+                    }
+
+
+                });
+
+
+            });
+
+            $('#sample_1').dataTable().fnDestroy();
+            $('#sample_1').dataTable({
+                "aoColumnDefs": [
+                    {'bSortable': false}
+                ]
+            });
+
+            window.setTimeout(function () {
+                $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                    $(this).remove();
+                });
+            }, 4000);
+        }
+    </script>
+
+{% endblock %}
+
+
+{% block content %}
+
+
+    <div class="portlet light">
+        <div class="portlet-body">
+        <div class="portlet light portlet-fit portlet-form ">
+                    <i class="icon-settings font-red"></i>
+                    <span class="caption-subject font-red sbold uppercase">{% trans 'Course Registration' %}</span>
+                <span style="font-family: 'Times New Roman';font-size: 16px;"><b>({% trans 'Semester Based System' %})</b></span>
+                </div>
+
+
+            <div class="invoice">
+
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                            <tr>
+                                <th>
+
+                                </th>
+                                <th class="hidden-480">
+
+                                </th>
+                                <th class="hidden-480">
+
+                                </th>
+
+
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr>
+                                <td>
+
+                                </td>
+                                <td class="hidden-480">
+                                   <b>Name :</b>
+                                </td>
+                                <td class="hidden-480" style="text-transform: uppercase">
+                                    {{ application_obj.first_name|default_if_none:"" }} {{ application_obj.last_name|default_if_none:"" }}
+                                </td>
+
+                                <td>
+
+                                </td>
+                                <td class="hidden-480">
+                                   <b>Matric No :</b>
+                                </td>
+                                <td class="hidden-480">
+                                    {{ matric_no|default_if_none:"" }}
+                                </td>
+
+
+
+
+
+                            </tr>
+                            <tr>
+                                <td>
+
+                                </td>
+                                <td class="hidden-480">
+                                   <b>Status :</b>
+                                </td>
+                                <td class="hidden-480">
+                                    ACTIVE
+                                </td>
+
+                                 <td>
+
+                                </td>
+                                <td class="hidden-480">
+                                   <b>University :</b>
+                                </td>
+                                <td class="hidden-480">
+                                    {{ application_obj.university.university_name|default_if_none:"" }}
+                                </td>
+
+
+                            </tr>
+                            <tr>
+                                <td>
+
+                                </td>
+                                <td class="hidden-480">
+                                   <b>Programme :</b>
+                                </td>
+                                <td class="hidden-480">
+                                    {% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.program.program_name|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.program_2.program_name|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.program_3.program_name|default_if_none:"" }} {% else %}{{ application_obj.program.program_name|default_if_none:"" }}{% endif %}
+                                </td>
+
+                            <td>
+
+                                </td>
+                                <td class="hidden-480">
+                                   <b>Mode :</b>
+                                </td>
+                                <td class="hidden-480">
+                                    {% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.program_mode.study_type|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.program_mode_2.study_type|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.program_mode_3.study_type|default_if_none:"" }} {% else %}{{ application_obj.program_mode.study_type|default_if_none:"" }}{% endif %}
+                                </td>
+
+
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            <br>
+
+
+            <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase"> {% trans 'ADD COURSES' %}</span>
+            </div>
+        </div>
+            <div class="actions" style="text-align: right;margin-right:30px;margin-top: -20px;">
+            <div class="btn-group">
+                <a class="btn green-haze btn-outline btn-circle btn-sm" data-toggle="dropdown" style="top: -16px;"
+                   data-hover="dropdown" data-close-others="true"> Actions
+                    <i class="fa fa-angle-down"></i>
+                </a>
+                <ul class="dropdown-menu pull-right" id="action">
+
+
+                    <li><a class="status_change"
+                           id="First Interview attended"> {% trans 'Confirmed' %}</a></li>
+
+                </ul>
+            </div>
+        </div>
+            <div class="tabbable-custom nav-justified">
+                            <ul class="nav nav-tabs nav-justified">
+                                <li class="active">
+                                    <a data-id="1" href="#tab_1_1_1" data-toggle="tab" style="text-align: left">
+                                        <b>Courses Offered : Select course(s) to register</b></a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab_1_1_1">
+                                    <table name="data"
+                                           class="data table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer"
+                                           id="example" role="grid" aria-describedby="sample_1_info">
+                                        <thead>
+                                        <tr>
+                                            <th style="display: none"></th>
+                                            <th>
+                                                <input name="select_all" id="select_all" class="select_all" value="1"
+                                                       type="checkbox">
+
+                                            </th>
+                                            <th>{% trans 'Code' %}</th>
+                                            <th>{% trans 'Title' %}</th>
+                                            <th>{% trans 'Unit' %}</th>
+                                            <th>{% trans 'Type' %}</th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody id="tbody">
+                                        {% for rec in course_recs %}
+                                            <tr id="item{{ forloop.counter }}" class="item">
+                                                <td style="display: none">
+                                                    <input id="application_id" class="application_id"
+                                                           value="{{ rec.id }}">
+                                                </td>
+
+                                                <td>
+                                                    <input name="check" type="checkbox" class="checkboxes"
+                                                           value="{{ rec.id }}">
+                                                </td>
+                                                <td>
+                                                   {{ rec.code|default_if_none:"" }}
+                                                </td>
+                                                <td>
+                                                    {{ rec.title|default_if_none:"" }}
+                                                </td>
+                                               <td>
+                                                   {{ rec.unit|default_if_none:"" }}
+                                               </td>
+                                            <td>
+                                                   {{ rec.type|default_if_none:"" }}
+                                               </td>
+
+
+
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+{% endblock %}

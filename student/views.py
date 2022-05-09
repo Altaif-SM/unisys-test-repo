@@ -3185,18 +3185,82 @@ def matric_card(request, app_id):
 
 
 def course_registration(request):
-    application_obj = request.user.get_application
-    matric_no = hex(binascii.crc32(str(application_obj.id).encode()))[2:]
-    course_recs = ''
-    if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False and application_obj.is_accepted == True:
-        program_id = application_obj.program.id
-    elif application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False and application_obj.is_accepted == True:
-        program_id = application_obj.program_2.id
-    else:
-        program_id = application_obj.program_3.id
-    if ProgramDetails.objects.filter(id = program_id).exists():
-        program_obj = ProgramDetails.objects.get(id = program_id)
-        course_recs = program_obj.course.all()
+    if request.method == 'POST':
+        year = request.POST.get('year', None)
+        semester = request.POST.get('semester', None)
+        year_obj = ''
+        course_recs = ''
+        study_plan_obj = StudyPlanDetails.objects.get(id=semester)
+        course_recs = study_plan_obj.course.all()
+        application_obj = request.user.get_application
+        matric_no = hex(binascii.crc32(str(application_obj.id).encode()))[2:]
+        program_id = ''
+        if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False and application_obj.is_accepted == True:
+            program_id = application_obj.program.id
+        elif application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False and application_obj.is_accepted == True:
+            program_id = application_obj.program_2.id
+        else:
+            program_id = application_obj.program_3.id
+        year_list = []
+        year_ids = []
+        study_plan_recs = StudyPlanDetails.objects.filter(program_id=program_id)
+        for rec in study_plan_recs:
+            if rec.academic_year.id not in year_ids:
+                year_ids.append(rec.academic_year.id)
+                year_list.append(rec.academic_year)
+        if year:
+            year_obj = YearDetails.objects.get(id = year)
+        unit_count = 0
+        if course_recs:
+            for rec in course_recs:
+                unit_count = int(unit_count) + int(rec.unit)
 
-    return render(request, 'course_registration.html',{'application_obj':application_obj,
-                                                       'matric_no':matric_no,'course_recs':course_recs})
+        course_filter = True
+        return render(request, 'course_registration.html', {'application_obj': application_obj,
+                                                            'matric_no': matric_no, 'course_recs': course_recs,
+                                                            'year_list': year_list, 'program_id': program_id,
+                                                            'year_obj':year_obj,'study_plan_obj':study_plan_obj,
+                                                            'course_filter':course_filter,
+                                                            'unit_count':unit_count})
+
+    else:
+        unit_count = 0
+        course_filter = False
+        application_obj = request.user.get_application
+        matric_no = hex(binascii.crc32(str(application_obj.id).encode()))[2:]
+        study_plan_obj = ''
+        year_obj = ''
+        course_recs = ''
+        program_id = ''
+        if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False and application_obj.is_accepted == True:
+            program_id = application_obj.program.id
+        elif application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False and application_obj.is_accepted == True:
+            program_id = application_obj.program_2.id
+        else:
+            program_id = application_obj.program_3.id
+        year_list = []
+        year_ids = []
+        study_plan_recs = StudyPlanDetails.objects.filter(program_id=program_id)
+        for rec in study_plan_recs:
+            if rec.academic_year.id not in year_ids:
+                year_ids.append(rec.academic_year.id)
+                year_list.append(rec.academic_year)
+        return render(request, 'course_registration.html',{'application_obj':application_obj,
+                                                       'matric_no':matric_no,'course_recs':course_recs,
+                                                           'year_list':year_list,'program_id':program_id,
+                                                           'year_obj':year_obj,'course_filter':course_filter,
+                                                           'unit_count':unit_count})
+
+
+
+def get_semester_from_year(request):
+    finalDict = []
+    year_id = request.POST.get('year_id', None)
+    program_id = request.POST.get('program_id', None)
+    study_plan_recs = StudyPlanDetails.objects.filter(academic_year_id = year_id,program_id = program_id)
+    for rec in study_plan_recs:
+        raw_dict = {}
+        raw_dict['semester']=rec.semester
+        raw_dict['id']=rec.id
+        finalDict.append(raw_dict)
+    return JsonResponse(finalDict, safe=False)

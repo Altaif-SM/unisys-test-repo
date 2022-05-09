@@ -15,6 +15,39 @@
 
             $(document).ready(function () {
 
+                $(document).on("change", "#year", function (e) {
+                    var year_id = $(this).val();
+                    var program_id = $('#program_id').val();
+                    var url = '/student/get_semester_from_year/';
+                    get_semester_from_year(url, year_id, program_id)
+                })
+
+                function get_semester_from_year(url, year_id, program_id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            year_id: year_id,
+                            program_id: program_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            $('#semester').empty();
+                            $('#semester').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#semester').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['semester'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
 
                 $('#example').dataTable();
                 $('#example_2').dataTable();
@@ -42,13 +75,7 @@
                 })
 
 
-
-
-
-
-
                 $('.status_change').click(function () {
-
 
 
                     var priorities = $("#priorities").val();
@@ -80,10 +107,6 @@
                     }
 
                 })
-
-
-
-
 
 
                 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
@@ -143,206 +166,254 @@
 
     <div class="portlet light">
         <div class="portlet-body">
-        <div class="portlet light portlet-fit portlet-form ">
-                    <i class="icon-settings font-red"></i>
-                    <span class="caption-subject font-red sbold uppercase">{% trans 'Course Registration' %}</span>
-                </div>
+            <div class="portlet light portlet-fit portlet-form ">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">{% trans 'Course Registration' %}</span>
+                <span style="font-family: 'Times New Roman';font-size: 16px;"><b>({% trans 'Semester Based System' %})</b></span>
+            </div>
 
 
             <div class="invoice">
 
-
                 <div class="row">
-                    <div class="col-xs-6">
-                        <table class="table table-striped table-hover">
-                            <thead>
-                            <tr>
-                                <th>
 
-                                </th>
-                                <th class="hidden-480">
-
-                                </th>
-                                <th class="hidden-480">
-
-                                </th>
-
-
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            <tr>
-                                <td>
-                                   #
-                                </td>
-                                <td class="hidden-480">
-                                   <b>Name</b>
-                                </td>
-                                <td class="hidden-480" style="text-transform: uppercase">
-                                    {{ application_obj.first_name|default_if_none:"" }} {{ application_obj.last_name|default_if_none:"" }}
-                                </td>
-
-
-                            </tr>
-                            <tr>
-                                <td>
-                                   #
-                                </td>
-                                <td class="hidden-480">
-                                   <b>Matric No.</b>
-                                </td>
-                                <td class="hidden-480">
-                                    {{ matric_no|default_if_none:"" }}
-                                </td>
-
-
-                            </tr>
-                            <tr>
-                                <td>
-                                   #
-                                </td>
-                                <td class="hidden-480">
-                                   <b>Status</b>
-                                </td>
-                                <td class="hidden-480">
-                                    ACTIVE
-                                </td>
-
-
-                            </tr>
-                            <tr>
-                                <td>
-                                   #
-                                </td>
-                                <td class="hidden-480">
-                                   <b>University</b>
-                                </td>
-                                <td class="hidden-480">
-                                    {{ application_obj.university.university_name|default_if_none:"" }}
-                                </td>
-
-
-                            </tr>
-                            <tr>
-                                <td>
-                                   #
-                                </td>
-                                <td class="hidden-480">
-                                   <b>Programme</b>
-                                </td>
-                                <td class="hidden-480">
-                                    {% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.program.program_name|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.program_2.program_name|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.program_3.program_name|default_if_none:"" }} {% else %}{{ application_obj.program.program_name|default_if_none:"" }}{% endif %}
-                                </td>
-
-
-                            </tr>
-                            <tr>
-                                <td>
-                                   #
-                                </td>
-                                <td class="hidden-480">
-                                   <b>Mode</b>
-                                </td>
-                                <td class="hidden-480">
-                                    {% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.program_mode.study_type|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.program_mode_2.study_type|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.program_mode_3.study_type|default_if_none:"" }} {% else %}{{ application_obj.program_mode.study_type|default_if_none:"" }}{% endif %}
-                                </td>
-
-
-                            </tr>
-
-                            </tbody>
-                        </table>
+                    <div class="">
+                        <label class="col-md-2 control-label">Name:</label>
+                        <div class="col-md-3">
+                            <span style="text-transform: uppercase">{{ application_obj.first_name|default_if_none:"" }} {{ application_obj.last_name|default_if_none:"" }}</span>
+                        </div>
                     </div>
+
+                    <div class="">
+                        <label class="col-md-2 control-label">Matric No:</label>
+                        <div class="col-md-3">
+                            {{ matric_no|default_if_none:"" }}
+                        </div>
+                    </div>
+
+
+                </div>
+                <br>
+                <div class="row">
+
+                    <div class="">
+                        <label class="col-md-2 control-label">Status:</label>
+                        <div class="col-md-3">
+                            <span style="color: green">ACTIVE</span>
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-2 control-label">University:</label>
+                        <div class="col-md-3">
+                            {{ application_obj.university.university_name|default_if_none:"" }}
+                        </div>
+                    </div>
+
+
+                </div>
+                <br>
+                <div class="row">
+
+                    <div class="">
+                        <label class="col-md-2 control-label">Programme:</label>
+                        <div class="col-md-3">
+                            {% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}
+                                {{ application_obj.program.program_name|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}
+                                {{ application_obj.program_2.program_name|default_if_none:"" }}
+                                {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.program_3.program_name|default_if_none:"" }} {% else %}
+                                {{ application_obj.program.program_name|default_if_none:"" }}{% endif %}
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-2 control-label">Mode:</label>
+                        <div class="col-md-3">
+                            {% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}
+                                {{ application_obj.program_mode.study_type|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}
+                                {{ application_obj.program_mode_2.study_type|default_if_none:"" }}
+                                {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.program_mode_3.study_type|default_if_none:"" }} {% else %}
+                                {{ application_obj.program_mode.study_type|default_if_none:"" }}{% endif %}
+                        </div>
+                    </div>
+
+
                 </div>
 
 
-            <div class="portlet-title">
-            <div class="caption">
-                <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> {% trans 'ADD COURSES' %}</span>
-            </div>
-        </div>
-            <div class="actions" style="text-align: right;margin-right:30px;margin-top: -20px;">
-            <div class="btn-group">
-                <a class="btn green-haze btn-outline btn-circle btn-sm" data-toggle="dropdown" style="top: -16px;"
-                   data-hover="dropdown" data-close-others="true"> Actions
-                    <i class="fa fa-angle-down"></i>
-                </a>
-                <ul class="dropdown-menu pull-right" id="action">
+                <hr>
+                <form action="{% url 'student:course_registration' %}"
+                      id="edit_study_plan_form"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="program_id" id="program_id" value="{{ program_id }}">
+
+                    <div class="row">
 
 
-                    <li><a class="status_change"
-                           id="First Interview attended"> {% trans 'Confirmed' %}</a></li>
-
-                </ul>
-            </div>
-        </div>
-            <div class="tabbable-custom nav-justified">
-                            <ul class="nav nav-tabs nav-justified">
-                                <li class="active">
-                                    <a data-id="1" href="#tab_1_1_1" data-toggle="tab" style="text-align: left">
-                                        <b>Courses Offered : Select course(s) to register</b></a>
-                                </li>
-                            </ul>
-                            <div class="tab-content">
-                                <div class="tab-pane active" id="tab_1_1_1">
-                                    <table name="data"
-                                           class="data table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer"
-                                           id="example" role="grid" aria-describedby="sample_1_info">
-                                        <thead>
-                                        <tr>
-                                            <th style="display: none"></th>
-                                            <th>
-                                                <input name="select_all" id="select_all" class="select_all" value="1"
-                                                       type="checkbox">
-
-                                            </th>
-                                            <th>{% trans 'Code' %}</th>
-                                            <th>{% trans 'Title' %}</th>
-                                            <th>{% trans 'Unit' %}</th>
-                                            <th>{% trans 'Type' %}</th>
-                                        </tr>
-                                        </thead>
-
-                                        <tbody id="tbody">
-                                        {% for rec in course_recs %}
-                                            <tr id="item{{ forloop.counter }}" class="item">
-                                                <td style="display: none">
-                                                    <input id="application_id" class="application_id"
-                                                           value="{{ rec.id }}">
-                                                </td>
-
-                                                <td>
-                                                    <input name="check" type="checkbox" class="checkboxes"
-                                                           value="{{ rec.id }}">
-                                                </td>
-                                                <td>
-                                                   {{ rec.code|default_if_none:"" }}
-                                                </td>
-                                                <td>
-                                                    {{ rec.title|default_if_none:"" }}
-                                                </td>
-                                               <td>
-                                                   {{ rec.unit|default_if_none:"" }}
-                                               </td>
-                                            <td>
-                                                   {{ rec.type|default_if_none:"" }}
-                                               </td>
-
-
-
-                                            </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-
+                        <div class="">
+                            <label style="text-align:left" class="col-md-2 control-label">Select Year:</label>
+                            <div class="col-md-3">
+                                <select id='year' title="Select Year" required
+                                        name="year"
+                                        class="form-control chk">
+                                    {% if year_obj %}
+                                        <option style="display:none" selected="selected" id=""
+                                                value="{{ year_obj.id }}">
+                                            {{ year_obj.year_name|default_if_none:"" }}
+                                        </option>
+                                    {% else %}
+                                        <option style="display:none" selected="selected" id="" value="">
+                                            Please
+                                            Select
+                                        </option>
+                                    {% endif %}
+                                    {% for rec in year_list %}
+                                        <option value='{{ rec.id }}'>{{ rec.year_name|default_if_none:"" }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
 
 
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="">
+                            <label style="text-align:left" class="col-md-2 control-label">Select Semester:</label>
+                            <div class="col-md-3">
+                                <select id='semester' title="Select Semester" required
+                                        name="semester"
+                                        class="form-control chk">
 
+                                    {% if study_plan_obj %}
+                                        <option style="display:none" selected="selected" id=""
+                                                value="{{ study_plan_obj.id }}">
+                                            {{ study_plan_obj.semester|default_if_none:"" }}
+                                        </option>
+                                    {% else %}
+                                        <option style="display:none" selected="selected" id="" value="">
+                                            Please
+                                            Select
+                                        </option>
+                                    {% endif %}
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="">
+                            <div class="col-md-3">
+                                <button type="submit" class="btn green" id="back"
+                                >
+                                    Filter
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </form>
+                <hr>
+
+                {% if course_filter %}
+
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="icon-settings font-red"></i>
+                            <span class="caption-subject font-red sbold uppercase"> {% trans 'ADD COURSES' %}</span>
+                        </div>
+                    </div>
+                    <br>
+{#                    <div class="actions" style="text-align: right;margin-right:30px;margin-top: -20px;">#}
+{#                        <div class="btn-group">#}
+{#                            <a class="btn green-haze btn-outline btn-circle btn-sm" data-toggle="dropdown"#}
+{#                               style="top: -16px;"#}
+{#                               data-hover="dropdown" data-close-others="true"> Actions#}
+{#                                <i class="fa fa-angle-down"></i>#}
+{#                            </a>#}
+{#                            <ul class="dropdown-menu pull-right" id="action">#}
+{##}
+{##}
+{#                                <li><a class="status_change"#}
+{#                                       id="First Interview attended"> {% trans 'Confirmed' %}</a></li>#}
+{##}
+{#                            </ul>#}
+{#                        </div>#}
+{#                    </div>#}
+                    <div class="tabbable-custom nav-justified">
+                        <ul class="nav nav-tabs nav-justified">
+                            <li class="active">
+                                <a data-id="1" href="#tab_1_1_1" data-toggle="tab" style="text-align: left">
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab_1_1_1">
+                                <table name="data"
+                                       class="data table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer"
+                                       id="example" role="grid" aria-describedby="sample_1_info">
+                                    <thead>
+                                    <tr>
+                                        <th style="display: none"></th>
+                                        <th>
+                                            <input name="select_all" id="select_all" class="select_all" value="1"
+                                                   type="checkbox" disabled checked>
+
+                                        </th>
+                                        <th>{% trans 'Code' %}</th>
+                                        <th>{% trans 'Title' %}</th>
+                                        <th>{% trans 'Type' %}</th>
+                                        <th>{% trans 'Unit' %}</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody id="tbody">
+                                    {% for rec in course_recs %}
+                                        <tr id="item{{ forloop.counter }}" class="item">
+                                            <td style="display: none">
+                                                <input id="application_id" class="application_id"
+                                                       value="{{ rec.id }}">
+                                            </td>
+
+                                            <td>
+                                                <input name="check" type="checkbox" class="checkboxes" disabled checked
+                                                       value="{{ rec.id }}">
+                                            </td>
+                                            <td>
+                                                {{ rec.code|default_if_none:"" }}
+                                            </td>
+                                            <td>
+                                                {{ rec.title|default_if_none:"" }}
+                                            </td>
+                                            <td>
+                                                {{ rec.type|default_if_none:"" }}
+                                            </td>
+                                            <td>
+                                                {{ rec.unit|default_if_none:"" }}
+                                            </td>
+
+
+
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                {% endif %}
+
+            <div class="row">
+                            <div class="col-md-offset-10 col-md-7">
+
+                                <button type="submit" class="btn blue status_change" id="save_form" style="margin-left:14%">Proceed
+                                </button>
+                            </div>
+                        </div>
 
 
             </div>
