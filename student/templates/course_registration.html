@@ -78,33 +78,15 @@
                 $('.status_change').click(function () {
 
 
-                    var priorities = $("#priorities").val();
-
-                    if (parseInt(priorities) == 1) {
-                        var checked = $('#example').find('input[name="check"]:checked').length;
-                    } else if (parseInt(priorities) == 2) {
-                        var checked = $('#example_2').find('input[name="check"]:checked').length;
-                    }
-
-                    if (!checked) {
-                        alert('Please select at least one record to proceed..!');
-                        return false;
-                    }
-
                     var favorite = [];
+                    $.each($("input[name='check']:checked"), function () {
 
-                    if (!checked)
-                        alert('Please select at least one record to proceed..!');
-                    else {
-                        $.each($("input[name='check']:checked"), function () {
-
-                            favorite.push($(this).val());
-                        });
-                        {#alert(JSON.stringify(favorite));#}
-                        $("#check_ids").val(JSON.stringify(favorite));
-                        $("#interview_type").val("APPROVED");
-                        $('#form_submit').submit()
-                    }
+                        favorite.push($(this).val());
+                    });
+                    alert(JSON.stringify(favorite));
+                    $("#check_ids").val(JSON.stringify(favorite));
+                    $("#interview_type").val("APPROVED");
+                    $('#form_submit').submit()
 
                 })
 
@@ -299,7 +281,7 @@
                                         </option>
                                     {% endif %}
 
-                                 {% for rec in semester_list %}
+                                    {% for rec in semester_list %}
                                         <option value='{{ rec.id }}'>{{ rec.semester|default_if_none:"" }}</option>
                                     {% endfor %}
 
@@ -323,6 +305,10 @@
                 <hr>
 
                 {% if course_filter %}
+                     <form method="post" action="{% url 'partner:change_application_status' %}" id="form_submit">
+                            {% csrf_token %}
+
+                    <input type="text" hidden id="check_ids" name="check_ids">
 
                     <div class="portlet-title">
                         <div class="caption">
@@ -331,22 +317,6 @@
                         </div>
                     </div>
                     <br>
-{#                    <div class="actions" style="text-align: right;margin-right:30px;margin-top: -20px;">#}
-{#                        <div class="btn-group">#}
-{#                            <a class="btn green-haze btn-outline btn-circle btn-sm" data-toggle="dropdown"#}
-{#                               style="top: -16px;"#}
-{#                               data-hover="dropdown" data-close-others="true"> Actions#}
-{#                                <i class="fa fa-angle-down"></i>#}
-{#                            </a>#}
-{#                            <ul class="dropdown-menu pull-right" id="action">#}
-{##}
-{##}
-{#                                <li><a class="status_change"#}
-{#                                       id="First Interview attended"> {% trans 'Confirmed' %}</a></li>#}
-{##}
-{#                            </ul>#}
-{#                        </div>#}
-{#                    </div>#}
                     <div class="tabbable-custom nav-justified">
                         <ul class="nav nav-tabs nav-justified">
                             <li class="active">
@@ -400,9 +370,37 @@
                                             </td>
 
 
+                                        </tr>
+
+
+                                    {% endfor %}
+
+                                    <tr id="item{{ forloop.counter }}" class="item">
+                                            <td style="display: none">
+                                                <input id="application_id" class="application_id"
+                                                       value="{{ rec.id }}">
+                                            </td>
+
+                                            <td>
+
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+                                                <b>{{ unit_count }}</b>
+                                            </td>
+
 
                                         </tr>
-                                    {% endfor %}
+
+
                                     </tbody>
                                 </table>
                             </div>
@@ -410,17 +408,19 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                            <div class="col-md-offset-10 col-md-7">
 
-                                <button type="submit" class="btn blue status_change" id="save_form" style="margin-left:14%">Proceed
-                                </button>
-                            </div>
+                    <div class="row">
+                        <div class="col-md-offset-10 col-md-7">
+
+                            <button type="submit" class="btn blue status_change" id="save_form" style="margin-left:14%">
+                                Proceed
+                            </button>
                         </div>
+                    </div>
+
+                     </form>
 
                 {% endif %}
-
-
 
 
             </div>
