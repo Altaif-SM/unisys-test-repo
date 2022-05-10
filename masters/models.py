@@ -820,3 +820,18 @@ class SemesterFeeType(models.Model):
 class SemesterBasedFeeDetails(BaseModel):
     study_plan = models.ForeignKey(StudyPlanDetails, null=True, related_name='study_plan_semester_rel',on_delete=models.SET_NULL)
     semester_fee = models.ManyToManyField(SemesterFeeType, blank=True)
+
+class CourseFeeDetails(BaseModel):
+    transaction_id = models.CharField(max_length=255, blank=True, null=True)
+    status = models.CharField(max_length=50, blank=True, null=True)
+    currency_code = models.CharField(max_length=100, blank=True, null=True)
+    amount = models.CharField(max_length=100, blank=True, null=True)
+    application_id = models.ForeignKey(ApplicationDetails, null=True, related_name='course_registration_fee_id',
+                                       on_delete=models.SET_NULL)
+    university = models.ForeignKey(UniversityDetails, null=True, related_name='course_registration_fee_rel',
+                                   on_delete=models.SET_NULL)
+    study_plan = models.ForeignKey(StudyPlanDetails, null=True, related_name='course_study_plan_rel',
+                                   on_delete=models.SET_NULL)
+
+    class Meta:
+        ordering = ('-id',)

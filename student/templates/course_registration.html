@@ -300,7 +300,9 @@
                 <hr>
 
                 {% if course_filter %}
-                     <form method="post" action="{% url 'payments:course_registration_checkout' %}" id="form_submit">
+                     <form method="post" action="{% url 'payments:course_registration_checkout' study_plan_obj.id %}" id="form_submit">
+
+
                             {% csrf_token %}
 
                     <input type="text" hidden id="check_ids" name="check_ids">

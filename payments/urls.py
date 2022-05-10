@@ -11,7 +11,7 @@ urlpatterns = [
     path('payment_complete/', views.payment_complete, name='payment_complete'),
     path('order_complete/<str:transaction_id>/', views.order_complete, name='order_complete'),
     path('stripe_checkout_success/<str:session_id>/', views.stripe_checkout_success, name='stripe_checkout_success'),
-    path('stripe_registration_checkout_success/<str:session_id>/', views.stripe_registration_checkout_success, name='stripe_registration_checkout_success'),
+
 
 
 
@@ -22,8 +22,10 @@ urlpatterns = [
 
     path('registration_checkout/', views.registration_checkout, name='registration_checkout'),
     path('create_registration_checkout_session/', views.CreateRegistrationCheckoutSessionView.as_view(),name='create_registration_checkout_session'),
+    path('stripe_registration_checkout_success/<str:session_id>/', views.stripe_registration_checkout_success, name='stripe_registration_checkout_success'),
 
-    path('course_registration_checkout/', views.course_registration_checkout, name='course_registration_checkout'),
-
+    path('course_registration_checkout/<int:semester_id>/', views.course_registration_checkout, name='course_registration_checkout'),
+    path('course_registration_checkout_session/', views.CourseRegistrationCheckoutSessionView.as_view(),name='course_registration_checkout_session'),
+    path('stripe_course_checkout_success/<int:semester_id>/', views.stripe_course_checkout_success, name='stripe_course_checkout_success'),
 
 ]

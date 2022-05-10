@@ -219,13 +219,69 @@ def stripe_registration_checkout_success(request, session_id):
     ApplicationDetails.objects.filter(id = application_obj.id).update(is_paid_registration_fee = True)
     return redirect('/payments/registration_checkout/')
 
-
-def course_registration_checkout(request):
+def course_registration_checkout(request, semester_id=None):
     try:
-        total_unit = request.POST.get('total_unit', None)
-        total_pay_amount = float(360) * float(total_unit)
-        return render(request, 'course_registration_checkout.html', {'total_unit': total_unit,
-                                                                     'total_pay_amount':total_pay_amount})
+        application_obj = request.user.get_application
+        semester_fee_obj = ''
+        total_amount = 0
+        if not SemesterBasedFeeDetails.objects.filter(study_plan_id = semester_id).exists():
+            return render(request, 'no_course_registration_fee.html',{'application_obj':application_obj})
+        else:
+            semester_fee_obj = SemesterBasedFeeDetails.objects.get(study_plan_id = semester_id)
+            semester_fee_recs = semester_fee_obj.semester_fee.all()
+            for rec in semester_fee_recs:
+                total_amount = float(total_amount) + float(rec.amount)
+
+        checkout_page = False
+        if CourseFeeDetails.objects.filter(study_plan_id = semester_id).exists():
+            checkout_page = True
+        return render(request, 'course_registration_checkout.html', {'application_obj': application_obj,
+                                                                     'semester_fee_obj':semester_fee_obj,
+                                                                     'total_amount':total_amount,
+                                                                     'semester_id':semester_id,
+                                                                     'checkout_page':checkout_page})
     except Exception as e:
         messages.warning(request, "Please Fill The Application Form First ... ")
         return redirect("/")
+
+
+class CourseRegistrationCheckoutSessionView(View):
+    def post(self, request, *args, **kwargs):
+        YOUR_DOMAIN = settings.SERVER_HOST_NAME
+        semester_id = json.loads(request.body)['semester_id']
+        total_amount = 0
+        semester_fee_obj = SemesterBasedFeeDetails.objects.get(study_plan_id=semester_id)
+        semester_fee_recs = semester_fee_obj.semester_fee.all()
+        for rec in semester_fee_recs:
+            total_amount = float(total_amount) + float(rec.amount)
+        checkout_session = stripe.checkout.Session.create(
+            line_items=[
+                {
+                    'price_data': {
+                        'currency': 'usd',
+                        'unit_amount': int(float(total_amount)*100),
+                        'product_data': {
+                            'name': 'Course Registration Payment',
+                            'images': ['http://51.75.54.229:9092/static/images/university_logo.png'],
+                        },
+                    },
+                    'quantity': 1,
+                },
+            ],
+            payment_method_types=['card'],
+            mode='payment',
+            # success_url=YOUR_DOMAIN + 'payments/stripe_course_checkout_success/session_id={CHECKOUT_SESSION_ID}',
+            success_url=YOUR_DOMAIN + 'payments/stripe_course_checkout_success/' + str(semester_id),
+            cancel_url=YOUR_DOMAIN + 'payments/course_registration_checkout/'+str(semester_id),
+
+        )
+        try:
+            return JsonResponse({'id': checkout_session.id})
+        except Exception as e:
+            return str(e)
+
+
+
+def stripe_course_checkout_success(request,semester_id):
+    CourseFeeDetails.objects.create(study_plan_id = semester_id)
+    return redirect('/payments/course_registration_checkout/'+str(semester_id))
