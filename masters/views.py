@@ -4409,3 +4409,40 @@ def edit_semester_based(request, semester_id=None):
         return render(request, "edit_semester_based.html",{'study_plan_obj':study_plan_obj,
                                                            'year_recs':year_recs,
                                                            'course_total_count':course_total_count})
+
+
+def semester_fee_details(request, semester_id=None):
+    study_plan_obj = StudyPlanDetails.objects.get(id = semester_id)
+    semester_fee_obj = ''
+    if SemesterBasedFeeDetails.objects.filter(study_plan_id=semester_id).exists():
+        semester_fee_obj = SemesterBasedFeeDetails.objects.get(study_plan_id=semester_id)
+    semester_count = 0
+    if semester_fee_obj:
+        semester_count = semester_fee_obj.semester_fee.all().count()
+    if request.method == 'POST':
+        program_fee_count = request.POST.get('program_fee_count')
+        try:
+            if SemesterBasedFeeDetails.objects.filter(study_plan_id=semester_id).exists():
+                semester_fee_obj = SemesterBasedFeeDetails.objects.get(study_plan_id=semester_id)
+            else:
+                semester_fee_obj = SemesterBasedFeeDetails.objects.create(study_plan_id=semester_id)
+            semester_fee_obj.semester_fee.clear()
+            for x in range(int(program_fee_count)):
+                try:
+                    x = x + 1
+                    semester_fee_type_obj = SemesterFeeType.objects.create(
+                        fee_type=request.POST.get('fee_type_' + str(x)),
+                        amount=request.POST.get('amount_' + str(x))
+                        )
+                    semester_fee_obj.semester_fee.add(semester_fee_type_obj)
+                except:
+                    pass
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/view_semester_subject_list/'+str(study_plan_obj.program.id))
+    return render(request, 'semester_fee_details.html', {
+        'semester_fee_obj': semester_fee_obj,
+        'study_plan_obj': study_plan_obj,
+        'semester_count': semester_count,
+    })

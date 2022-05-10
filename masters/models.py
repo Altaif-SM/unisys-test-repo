@@ -812,3 +812,11 @@ class ProgramRegistrationFeeDetails(BaseModel):
         ordering = ('-id',)
 
 
+
+class SemesterFeeType(models.Model):
+    fee_type = models.CharField(max_length=100, blank=True, null=True)
+    amount = models.FloatField(null=True, blank=True, default=0.0)
+
+class SemesterBasedFeeDetails(BaseModel):
+    study_plan = models.ForeignKey(StudyPlanDetails, null=True, related_name='study_plan_semester_rel',on_delete=models.SET_NULL)
+    semester_fee = models.ManyToManyField(SemesterFeeType, blank=True)

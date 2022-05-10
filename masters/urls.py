@@ -296,4 +296,6 @@ urlpatterns = [
     path('delete_semester_based/', views.delete_semester_based, name='delete_semester_based'),
     path('edit_semester_based/<int:semester_id>/', views.edit_semester_based, name='edit_semester_based'),
 
+    path('semester_fee_details/<int:semester_id>/', views.semester_fee_details, name='semester_fee_details'),
+
 ]
