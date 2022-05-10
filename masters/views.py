@@ -4329,7 +4329,7 @@ def delete_type(request):
 
 def view_semester_subject_list(request, program_id=None):
     study_plan_recs = StudyPlanDetails.objects.filter(program_id = program_id)
-    return render(request, 'view_semester_subject_list.html',{'study_plan_recs':study_plan_recs})
+    return render(request, 'view_semester_subject_list.html',{'study_plan_recs':study_plan_recs,'program_id':program_id})
 
 def edit_study_plan(request, program_id=None):
     if request.method == 'POST':
@@ -4355,3 +4355,17 @@ def edit_study_plan(request, program_id=None):
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/program_settings/')
+
+
+def delete_semester_based(request):
+    if request.method == 'POST':
+        semester_delete_id = request.POST.get('semester_delete_id')
+        program_id = request.POST.get('program_id')
+        try:
+            study_plan_obj = StudyPlanDetails.objects.get(id=semester_delete_id)
+            study_plan_obj.course.clear()
+            StudyPlanDetails.objects.filter(id=semester_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/view_semester_subject_list/'+str(program_id))

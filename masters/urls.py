@@ -9,6 +9,8 @@ app_name = 'masters'
 
 
 
+
+
 urlpatterns = [
 
     # *******------------- Year Master ---------------************
@@ -291,5 +293,6 @@ urlpatterns = [
     path('edit_type/<int:type_id>/', views.edit_type, name='edit_type'),
     path('delete_type/', views.delete_type, name='delete_type'),
     path('view_semester_subject_list/<int:program_id>/', views.view_semester_subject_list, name='view_semester_subject_list'),
+    path('delete_semester_based/', views.delete_semester_based, name='delete_semester_based'),
 
 ]
