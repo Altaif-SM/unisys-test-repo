@@ -4369,3 +4369,43 @@ def delete_semester_based(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/view_semester_subject_list/'+str(program_id))
+
+def edit_semester_based(request, semester_id=None):
+    study_plan_obj = StudyPlanDetails.objects.get(id=semester_id)
+    if request.method == 'POST':
+        year = request.POST.get('year')
+        semester = request.POST.get('semester')
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+        course_count = request.POST.get('course_count')
+        try:
+            study_plan_obj.academic_year_id = year
+            study_plan_obj.semester = semester
+            study_plan_obj.start_date = start_date
+            study_plan_obj.end_date = end_date
+            study_plan_obj.save()
+            study_plan_obj.course.clear()
+            for count in range(int(course_count)):
+                try:
+                    count = count + 1
+                    if (request.POST['code_' + str(count)] is not '') or (
+                            request.POST['title_' + str(count)] is not '') or (
+                            request.POST['unit_' + str(count)] is not '') or (
+                            request.POST['type_' + str(count)] is not ''):
+                        course_obj = CourseDetails.objects.create(code=request.POST['code_' + str(count)],
+                                                                  title=request.POST['title_' + str(count)],
+                                                                  unit=request.POST['unit_' + str(count)],
+                                                                  type=request.POST['type_' + str(count)])
+                        study_plan_obj.course.add(course_obj)
+                except Exception as e:
+                    pass
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/view_semester_subject_list/'+str(study_plan_obj.program.id))
+    else:
+        year_recs = YearDetails.objects.all()
+        course_total_count = study_plan_obj.course.all().count()
+        return render(request, "edit_semester_based.html",{'study_plan_obj':study_plan_obj,
+                                                           'year_recs':year_recs,
+                                                           'course_total_count':course_total_count})

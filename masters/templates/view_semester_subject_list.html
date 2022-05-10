@@ -194,7 +194,7 @@
                         <th> {% trans 'Subject Name' %}</th>
                         <th> {% trans 'Unit' %}</th>
                         <th> {% trans 'Subject Type' %}</th>
-                        <th width="10%">Action</th>
+                        <th width="15%">Action</th>
                     </tr>
                     </thead>
 
@@ -233,6 +233,12 @@
                             </td>
 
                         <td>
+
+                            <a href="{% url 'masters:edit_semester_based' rec.id %}">
+                                <span type="button" name="edit" id="edit{{ forloop.counter }}"
+                                      class=" edit_btn btn blue glyphicon glyphicon-pencil">
+                                </span>
+                                    </a>
 
                                 <span type="button" name="delete" id="delete{{ forloop.counter }}"
                                         class=" delete btn red glyphicon glyphicon-trash">
