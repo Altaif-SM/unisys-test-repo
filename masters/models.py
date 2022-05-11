@@ -837,3 +837,13 @@ class CourseFeeDetails(BaseModel):
 
     class Meta:
         ordering = ('-id',)
+
+class PrerequisiteCourseDetails(BaseModel):
+    code = models.CharField(max_length=100, blank=True, null=True)
+    course = models.CharField(max_length=150, blank=True, null=True)
+
+    class Meta:
+        ordering = ('-id',)
+
+    def __str__(self):
+        return self.code

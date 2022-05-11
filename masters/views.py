@@ -4464,3 +4464,50 @@ def semester_fee_details(request, semester_id=None):
         'study_plan_obj': study_plan_obj,
         'semester_count': semester_count,
     })
+
+
+def course_master_settings(request):
+    prerequisite_course_details = PrerequisiteCourseDetails.objects.all()
+    return render(request, 'prerequisite_course_details.html', {'prerequisite_course_details': prerequisite_course_details})
+
+def add_courses(request):
+    code = request.POST.get('code')
+    course = request.POST.get('course')
+    try:
+        if not PrerequisiteCourseDetails.objects.filter(code=code,course = course).exists():
+            PrerequisiteCourseDetails.objects.create(code=code,course = course)
+            messages.success(request, "Record saved.")
+        else:
+            messages.warning(request, "Course already exists.")
+    except:
+        messages.warning(request, "Record not saved.")
+    return redirect('/masters/course_master_settings/')
+
+
+def update_course(request):
+    course_id = request.POST.get('course_id')
+    code = request.POST.get('code')
+    course = request.POST.get('course')
+    try:
+        if not PrerequisiteCourseDetails.objects.filter(~Q(id=course_id), code=code,course = course).exists():
+            PrerequisiteCourseDetails.objects.filter(id=course_id).update(code=code,
+                                                                  course=course)
+            messages.success(request, "Record saved.")
+            return HttpResponse(json.dumps({'success': 'Record saved.'}), content_type="application/json")
+        else:
+            messages.warning(request, "Course already exists.")
+            return HttpResponse(json.dumps({'success': 'Record saved.'}), content_type="application/json")
+    except:
+        messages.warning(request, "Record not saved.")
+    return redirect('/masters/course_master_settings/')
+
+
+def delete_course(request):
+    if request.method == 'POST':
+        course_mode_delete_id = request.POST.get('course_mode_delete_id')
+        try:
+            PrerequisiteCourseDetails.objects.filter(id=course_mode_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/course_master_settings/')
