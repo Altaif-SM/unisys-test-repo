@@ -48,7 +48,7 @@
                     <div class="">
                         <label class="col-md-2 control-label">SEMESTER:</label>
                         <div class="col-md-2">
-                            <span style="text-transform: uppercase;font-weight: bold">{{ semester_fee_obj.study_plan.semester|default_if_none:"" }}</span>
+                            <span style="text-transform: uppercase;font-weight: bold">{{ semester_fee_obj.study_plan.study_semester.semester|default_if_none:"" }} {{ semester_fee_obj.study_plan.study_semester.start_date|date:"Y-m-d" }} - {{ semester_fee_obj.study_plan.study_semester.end_date|date:"Y-m-d" }}</span>
 
                         </div>
                     </div>
