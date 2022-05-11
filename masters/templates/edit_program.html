@@ -1186,181 +1186,201 @@
             </form>
                                 </div>
                                 <div class="tab-pane" id="tab_1_1_2">
-{#                                    <form action="{% url 'masters:edit_study_plan' program_obj.id %}"#}
-{#                      id="edit_study_plan_form"#}
-{#                      class="form-horizontal"#}
-{#                      method="POST" enctype="multipart/form-data">#}
-{#                    {% csrf_token %}#}
-{##}
-{#                    <input hidden type="text" id="course_count" name="course_count">#}
-{##}
-{##}
-{#                    <div class="portlet-title" style="margin-left:0px;font-size: 16px;">#}
-{#                            <div class="caption">#}
-{##}
-{##}
-{#                                <span style="margin-left: 78%;font-family: 'Times New Roman'"><a target="_blank" href="{% url 'masters:view_semester_subject_list' program_obj.id %}" id="add"#}
-{#                                       >View Credit Based Subject List#}
-{##}
-{#                                    </a>#}
-{#                                </span>#}
-{##}
-{##}
-{#                            </div>#}
-{#                        </div>#}
-{#                        <hr>#}
-{#                 <div class="row year_sem_details" style="margin-top: 30px" id="year_sem_details_1">#}
-{#                 <div class="row">#}
-{##}
-{#                                <div class="">#}
-{#                                    <label class="col-md-2 control-label"><b>Year:</b></label>#}
-{#                                    <div class="col-md-3">#}
-{#                                       <select id='year' title="Select Year" required#}
-{#                                                        name="year"#}
-{#                                                        class="form-control chk">#}
-{#                                                   <option style="display:none" selected="selected" id="" value="">#}
-{#                                                            Please#}
-{#                                                            Select#}
-{#                                                        </option>#}
-{##}
-{#                                                    {% for rec in year_list %}#}
-{#                                                        <option value='{{ rec.id }}'>{{ rec.year|default_if_none:"" }}</option>#}
-{#                                                    {% endfor %}#}
-{#                                                </select>#}
-{#                                    </div>#}
-{#                                </div>#}
-{##}
-{##}
-{##}
-{##}
-{#                                <div class="">#}
-{#                                    <label class="col-md-2 control-label"><b>Semester:</b></label>#}
-{#                                    <div class="col-md-3">#}
-{#                                        <input required type="text" title="Enter Semester" id="semester"#}
-{#                                               name="semester" value=""#}
-{#                                               class="form-control eng_emp">#}
-{#                                    </div>#}
-{#                                </div>#}
-{##}
-{##}
-{#                            </div>#}
-{#                 <br>#}
-{#                 <div class="row">#}
-{##}
-{##}
-{#                                     <div class="">#}
-{#                                    <label class="col-md-2 control-label">Start Date:</label>#}
-{#                                    <div class="col-md-3">#}
-{#                                        <input type="date" required title="Enter Start Date" id="start_date"#}
-{#                                               name="start_date"#}
-{#                                               value=""#}
-{#                                               class="form-control eng_emp">#}
-{#                                    </div>#}
-{#                                </div>#}
-{##}
-{#                                    <div class="">#}
-{#                                    <label class="col-md-2 control-label">End Date:</label>#}
-{#                                    <div class="col-md-3">#}
-{#                                        <input type="date" required title="Enter End Date" id="end_date"#}
-{#                                               name="end_date"#}
-{#                                               value=""#}
-{#                                               class="form-control eng_emp">#}
-{#                                    </div>#}
-{#                                </div>#}
-{##}
-{##}
-{#                                </div>#}
-{#                 </div>#}
-{#                            <div class="row course_details" style="margin-top: 30px" id="course_details_1">#}
-{#                            <div class="row">#}
-{##}
-{#                                <div class="">#}
-{#                                    <label class="col-md-2 control-label">Code:</label>#}
-{#                                    <div class="col-md-3">#}
-{#                                        <input type="text" title="Enter Code" required#}
-{#                                                   id="code_1"#}
-{#                                                   name="code_1"#}
-{#                                                   value=""#}
-{#                                                   class="form-control eng_emp">#}
-{#                                    </div>#}
-{#                                </div>#}
-{##}
-{##}
-{##}
-{##}
-{#                                <div class="">#}
-{#                                    <label class="col-md-2 control-label">Subject Name:</label>#}
-{#                                    <div class="col-md-3">#}
-{#                                        <input type="text" title="Enter Title" id="title_1" required#}
-{#                                               name="title_1" value=""#}
-{#                                               class="form-control eng_emp">#}
-{#                                    </div>#}
-{#                                </div>#}
-{##}
-{#                                <div class="" >#}
-{#                                <div class="" >#}
-{#                                    <a href="javascript:;" id="add" class="btn btn-icon-only green add_course_details"#}
-{#                                       >#}
-{#                                        <i class="fa fa-plus "></i>#}
-{#                                    </a>#}
-{#                                </div>#}
-{#                            </div>#}
-{##}
-{##}
-{#                            </div>#}
-{#                              <br>#}
-{#                            <div class="row">#}
-{##}
-{#                                <div class="">#}
-{#                                    <label class="col-md-2 control-label">Unit:</label>#}
-{#                                    <div class="col-md-3">#}
-{#                                        <input type="text" title="Enter Unit" id="unit_1" required#}
-{#                                               name="unit_1"#}
-{#                                               value=""#}
-{#                                               class="form-control eng_emp">#}
-{#                                    </div>#}
-{#                                </div>#}
-{##}
-{##}
-{##}
-{#                                <div class="">#}
-{#                                            <label class="col-md-2 control-label">Subject Type:</label>#}
-{#                                            <div class="col-md-3">#}
-{##}
-{#                                                <select id='type_1' title="Select Type" name="type_1" required#}
-{#                                                        class="form-control select_data chk">#}
-{#                                                        <option value=''>{% trans 'Please Select' %}</option>#}
-{#                                                        <option value='Core'>Core</option>#}
-{#                                                        <option value='Elective'>Elective</option>#}
-{#                                                        <option value='University Requirement'>University Requirement</option>#}
-{#                                                        <option value='Faculty Requirement'>Faculty Requirement</option>#}
-{#                                                </select>#}
-{##}
-{##}
-{##}
-{##}
-{#                                            </div>#}
-{##}
-{#                                        </div>#}
-{##}
-{#                            </div>#}
-{##}
-{##}
-{#                            </div>#}
-{#                <hr>#}
-{#                <div class="row">#}
-{#                            <div class="col-md-offset-5 col-md-7">#}
-{#                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"#}
-{#                                        onclick="window.location='{% url "masters:program_settings" %}'">#}
-{#                                    Back#}
-{#                                </button>#}
-{##}
-{#                                <button type="submit" class="btn green" id="study_plan_form" style="">Save#}
-{#                                </button>#}
-{#                            </div>#}
-{#                        </div>#}
-{##}
-{#            </form>#}
+                                    <form action="{% url 'masters:edit_study_plan' program_obj.id %}"
+                      id="credit_edit_study_plan_form"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <input hidden type="text" id="credit_course_count" name="credit_course_count">
+
+
+                    <div class="portlet-title" style="margin-left:0px;font-size: 16px;">
+                            <div class="caption">
+
+
+                                <span style="margin-left: 78%;font-family: 'Times New Roman'"><a target="_blank" href="{% url 'masters:view_semester_subject_list' program_obj.id %}" id="add"
+                                       >View Credit Based Subject List
+
+                                    </a>
+                                </span>
+
+
+                            </div>
+                        </div>
+
+                        <hr>
+
+                                        <div class="row year_sem_details" style="margin-top: 30px" id="year_sem_details_1">
+                 <div class="row">
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Min Number of Credits:</label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter Min Credit" required
+                                                   id="min_credit"
+                                                   name="min_credit"
+                                                   value=""
+                                                   class="form-control eng_emp">
+
+                                    </div>
+                                </div>
+
+
+                 <div class="">
+                                    <label class="col-md-2 control-label">Max Number of Credits:</label>
+                                    <div class="col-md-3">
+                                       <input type="text" title="Enter Max Credit" required
+                                                   id="max_credit"
+                                                   name="max_credit"
+                                                   value=""
+                                                   class="form-control eng_emp">
+                                    </div>
+                                </div>
+
+
+
+
+
+
+
+                            </div>
+                 </div>
+
+                            <div class="row credit_course_details" style="margin-top: 30px" id="credit_course_details_1">
+                            <div class="row">
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Code:</label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter Code" required
+                                                   id="credit_code_1"
+                                                   name="credit_code_1"
+                                                   value=""
+                                                   class="form-control eng_emp">
+                                    </div>
+                                </div>
+
+
+
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Subject Name:</label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter Subject Name" id="credit_title_1" required
+                                               name="credit_title_1" value=""
+                                               class="form-control eng_emp">
+                                    </div>
+                                </div>
+
+                                <div class="" >
+                                <div class="" >
+                                    <a href="javascript:;" id="add" class="btn btn-icon-only green add_credit_course_details"
+                                       >
+                                        <i class="fa fa-plus "></i>
+                                    </a>
+                                </div>
+                            </div>
+
+
+                            </div>
+                              <br>
+                            <div class="row">
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Unit:</label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter Unit" id="credit_unit_1" required
+                                               name="credit_unit_1"
+                                               value=""
+                                               class="form-control eng_emp">
+                                    </div>
+                                </div>
+
+
+
+                                <div class="">
+                                            <label class="col-md-2 control-label">Subject Type:</label>
+                                            <div class="col-md-3">
+
+                                                <select id='credit_type_1' title="Select Type" name="credit_type_1" required
+                                                        class="form-control select_data chk">
+                                                        <option value=''>{% trans 'Please Select' %}</option>
+                                                        <option value='Core'>Core</option>
+                                                        <option value='Elective'>Elective</option>
+                                                        <option value='University Requirement'>University Requirement</option>
+                                                        <option value='Faculty Requirement'>Faculty Requirement</option>
+                                                </select>
+
+
+
+
+                                            </div>
+
+                                        </div>
+
+                            </div>
+                                <br>
+                                <div class="row">
+
+                                <div class="">
+                                            <label class="col-md-2 control-label">Is Prerequisite:</label>
+                                            <div class="col-md-3">
+
+                                                <select id='credit_prerequisite_1' title="Select Type" name="credit_prerequisite_1" required
+                                                        class="form-control select_data chk">
+                                                        <option value=''>{% trans 'Please Select' %}</option>
+                                                        <option value='Yes'>Yes</option>
+                                                        <option value='No'>No</option>
+                                                </select>
+
+
+
+
+                                            </div>
+
+                                        </div>
+
+
+
+                                <div class="">
+                                            <label class="col-md-2 control-label">Course:</label>
+                                            <div class="col-md-3">
+
+                                                <select id='credit_course_1' title="Select Type" name="credit_course_1" required
+                                                        class="form-control select_data chk">
+                                                        <option value=''>{% trans 'Please Select' %}</option>
+
+                                                    {% for rec in prerequisite_course_recs %}
+                                                        <option value='{{ rec.id }}'>{{ rec.course|default_if_none:"" }}</option>
+                                                    {% endfor %}
+                                                </select>
+
+
+
+
+                                            </div>
+
+                                        </div>
+
+                            </div>
+
+
+                            </div>
+                <hr>
+                <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                                        onclick="window.location='{% url "masters:program_settings" %}'">
+                                    Back
+                                </button>
+
+                                <button type="submit" class="btn green" id="study_plan_form" style="">Save
+                                </button>
+                            </div>
+                        </div>
+
+            </form>
 
                                 </div>
 

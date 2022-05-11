@@ -2478,9 +2478,13 @@ def edit_program(request, program_id=None,type = None):
             raw_dict['year'] = rec.year.year_name
             year_list.append(raw_dict)
 
+    prerequisite_course_recs = PrerequisiteCourseDetails.objects.all()
+
     return render(request, "edit_program.html", {'program_obj': program_obj,'university_recs':university_recs,'course_count':course_count,'course_obj':course_obj,
-                                                 'study_mode_recs':study_mode_recs,'study_level_recs':study_level_recs,'study_type_recs':study_type_recs,'faculty_recs':faculty_recs,'campus_recs':campus_recs,'study_mode_list':study_mode_list,'selected_study_mode_list':selected_study_mode_list,'selected_campus_list':selected_campus_list,'department_recs':department_recs,'university_type_recs':university_type_recs,'passing_year_recs':passing_year_recs,'year_recs':year_recs,
-                                                 'year_list':year_list})
+                                                 'study_mode_recs':study_mode_recs,'study_level_recs':study_level_recs,'study_type_recs':study_type_recs,'faculty_recs':faculty_recs,'campus_recs':campus_recs,'study_mode_list':study_mode_list,'selected_study_mode_list':selected_study_mode_list,'selected_campus_list':selected_campus_list,'department_recs':department_recs,
+                                                 'university_type_recs':university_type_recs,'passing_year_recs':passing_year_recs,'year_recs':year_recs,
+                                                 'year_list':year_list,
+                                                 'prerequisite_course_recs':prerequisite_course_recs})
 
 
 def delete_program(request):
