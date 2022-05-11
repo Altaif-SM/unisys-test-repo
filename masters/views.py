@@ -906,6 +906,7 @@ def template_development_program_master(request):
 #         messages.warning(request, "Record not saved.")
 #     return redirect('/masters/template_development_program_master/')
 
+
 def save_development_program_master(request):
     program_name = request.POST.get('program_name')
     objectives = request.POST.get('objectives')
@@ -2351,19 +2352,7 @@ def add_program(request):
                 program_campus_obj = ProgramCampusDetails.objects.create(campus_id=campus_id)
                 program_obj.campus.add(program_campus_obj)
 
-            program_obj.course.clear()
-            if course_count:
-                for count in range(int(course_count)):
-                    try:
-                        count = count + 1
-                        if (request.POST['code_' + str(count)] is not '') or (request.POST['title_' + str(count)] is not '') or (request.POST['unit_' + str(count)] is not '') or (request.POST['type_' + str(count)] is not ''):
-                            course_obj = CourseDetails.objects.create(code=request.POST['code_' + str(count)],
-                                                                  title=request.POST['title_' + str(count)],
-                                                                  unit=request.POST['unit_' + str(count)],
-                                                                  type=request.POST['type_' + str(count)])
-                            program_obj.course.add(course_obj)
-                    except Exception as e:
-                        pass
+
 
             messages.success(request, "Record saved.")
         except:
@@ -2381,7 +2370,7 @@ def add_program(request):
     return render(request, 'add_program.html',{'university_recs':university_recs,'faculty_recs':faculty_recs,'study_level_recs':study_level_recs,'study_mode_recs':study_mode_recs,'study_type_recs':study_type_recs,'campus_recs':campus_recs,'study_mode_list':study_mode_list,'university_type_recs':university_type_recs,'passing_year_recs':passing_year_recs})
 
 
-def edit_program(request, program_id=None):
+def edit_program(request, program_id=None,type = None):
     program_obj = ProgramDetails.objects.get(id=program_id)
     if request.method == 'POST':
         university = request.POST.get('university')
@@ -2443,26 +2432,24 @@ def edit_program(request, program_id=None):
                 program_campus_obj = ProgramCampusDetails.objects.create(campus_id=campus_id)
                 program_obj.campus.add(program_campus_obj)
 
-            program_obj.course.clear()
-            for count in range(int(course_count)):
-                try:
-                    count = count + 1
-                    if (request.POST['code_' + str(count)] is not '') or (request.POST['title_' + str(count)] is not '') or (request.POST['unit_' + str(count)] is not '') or (request.POST['type_' + str(count)] is not ''):
-                        course_obj = CourseDetails.objects.create(code=request.POST['code_' + str(count)],
-                                                              title=request.POST['title_' + str(count)],
-                                                              unit=request.POST['unit_' + str(count)],
-                                                              type=request.POST['type_' + str(count)])
-                        program_obj.course.add(course_obj)
-                except Exception as e:
-                    pass
+            # program_obj.course.clear()
+            # for count in range(int(course_count)):
+            #     try:
+            #         count = count + 1
+            #         if (request.POST['code_' + str(count)] is not '') or (request.POST['title_' + str(count)] is not '') or (request.POST['unit_' + str(count)] is not '') or (request.POST['type_' + str(count)] is not ''):
+            #             course_obj = CourseDetails.objects.create(code=request.POST['code_' + str(count)],
+            #                                                   title=request.POST['title_' + str(count)],
+            #                                                   unit=request.POST['unit_' + str(count)],
+            #                                                   type=request.POST['type_' + str(count)])
+            #             program_obj.course.add(course_obj)
+            #     except Exception as e:
+            #         pass
 
             messages.success(request, "Record saved.")
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/program_settings/')
-    # if program_obj.university.is_partner_university == False:
-    #     university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university = False).order_by('-id')
-    # else:
+
     university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
                                                            university_type_id=program_obj.university_type.id).order_by('-id')
     study_mode_recs = StudyModeDetails.objects.filter().order_by('-id')
@@ -2481,8 +2468,19 @@ def edit_program(request, program_id=None):
     course_obj = program_obj.course.all()
     passing_year_recs = PassingYear.objects.filter().order_by('-year')
     year_recs = YearDetails.objects.all()
+
+    year_list = []
+    semester_recs = SemesterDetails.objects.filter(university_id=program_obj.university.id)
+    if semester_recs:
+        for rec in semester_recs:
+            raw_dict = {}
+            raw_dict['id'] = rec.year.id
+            raw_dict['year'] = rec.year.year_name
+            year_list.append(raw_dict)
+
     return render(request, "edit_program.html", {'program_obj': program_obj,'university_recs':university_recs,'course_count':course_count,'course_obj':course_obj,
-                                                 'study_mode_recs':study_mode_recs,'study_level_recs':study_level_recs,'study_type_recs':study_type_recs,'faculty_recs':faculty_recs,'campus_recs':campus_recs,'study_mode_list':study_mode_list,'selected_study_mode_list':selected_study_mode_list,'selected_campus_list':selected_campus_list,'department_recs':department_recs,'university_type_recs':university_type_recs,'passing_year_recs':passing_year_recs,'year_recs':year_recs})
+                                                 'study_mode_recs':study_mode_recs,'study_level_recs':study_level_recs,'study_type_recs':study_type_recs,'faculty_recs':faculty_recs,'campus_recs':campus_recs,'study_mode_list':study_mode_list,'selected_study_mode_list':selected_study_mode_list,'selected_campus_list':selected_campus_list,'department_recs':department_recs,'university_type_recs':university_type_recs,'passing_year_recs':passing_year_recs,'year_recs':year_recs,
+                                                 'year_list':year_list})
 
 
 def delete_program(request):
@@ -4339,16 +4337,15 @@ def edit_study_plan(request, program_id=None):
         end_date = request.POST.get('end_date')
         course_count = request.POST.get('course_count')
         try:
-            study_plan_obj = StudyPlanDetails.objects.create(program_id = program_id,academic_year_id=year,semester = semester, start_date = start_date, end_date = end_date)
+            study_plan_obj = StudyPlanDetails.objects.create(program_id = program_id,academic_year_id=year,study_semester_id = semester)
             for count in range(int(course_count)):
                 try:
                     count = count + 1
-                    if (request.POST['code_' + str(count)] is not '') or (request.POST['title_' + str(count)] is not '') or (request.POST['unit_' + str(count)] is not '') or (request.POST['type_' + str(count)] is not ''):
-                        course_obj = CourseDetails.objects.create(code=request.POST['code_' + str(count)],
-                                                              title=request.POST['title_' + str(count)],
-                                                              unit=request.POST['unit_' + str(count)],
-                                                              type=request.POST['type_' + str(count)])
-                        study_plan_obj.course.add(course_obj)
+                    course_obj = CourseDetails.objects.create(code=request.POST['code_' + str(count)],
+                                                          title=request.POST['title_' + str(count)],
+                                                          unit=request.POST['unit_' + str(count)],
+                                                          type=request.POST['type_' + str(count)])
+                    study_plan_obj.course.add(course_obj)
                 except Exception as e:
                     pass
             messages.success(request, "Record saved.")
@@ -4380,7 +4377,7 @@ def edit_semester_based(request, semester_id=None):
         course_count = request.POST.get('course_count')
         try:
             study_plan_obj.academic_year_id = year
-            study_plan_obj.semester = semester
+            study_plan_obj.study_semester_id = semester
             study_plan_obj.start_date = start_date
             study_plan_obj.end_date = end_date
             study_plan_obj.save()
@@ -4388,15 +4385,11 @@ def edit_semester_based(request, semester_id=None):
             for count in range(int(course_count)):
                 try:
                     count = count + 1
-                    if (request.POST['code_' + str(count)] is not '') or (
-                            request.POST['title_' + str(count)] is not '') or (
-                            request.POST['unit_' + str(count)] is not '') or (
-                            request.POST['type_' + str(count)] is not ''):
-                        course_obj = CourseDetails.objects.create(code=request.POST['code_' + str(count)],
-                                                                  title=request.POST['title_' + str(count)],
-                                                                  unit=request.POST['unit_' + str(count)],
-                                                                  type=request.POST['type_' + str(count)])
-                        study_plan_obj.course.add(course_obj)
+                    course_obj = CourseDetails.objects.create(code=request.POST['code_' + str(count)],
+                                                              title=request.POST['title_' + str(count)],
+                                                              unit=request.POST['unit_' + str(count)],
+                                                              type=request.POST['type_' + str(count)])
+                    study_plan_obj.course.add(course_obj)
                 except Exception as e:
                     pass
             messages.success(request, "Record saved.")
@@ -4406,9 +4399,34 @@ def edit_semester_based(request, semester_id=None):
     else:
         year_recs = YearDetails.objects.all()
         course_total_count = study_plan_obj.course.all().count()
+        year_list = []
+        semester_recs = SemesterDetails.objects.filter(university_id=study_plan_obj.program.university.id)
+        if semester_recs:
+            for rec in semester_recs:
+                raw_dict = {}
+                raw_dict['id'] = rec.year.id
+                raw_dict['year'] = rec.year.year_name
+                year_list.append(raw_dict)
+
+        semester_list = []
+        semester_recs = SemesterDetails.objects.all()
+        if study_plan_obj.academic_year:
+            semester_recs = semester_recs.filter(year_id=study_plan_obj.academic_year.id)
+        if study_plan_obj.program.university:
+            semester_recs = semester_recs.filter(university_id=study_plan_obj.program.university.id)
+        if semester_recs:
+            for rec in semester_recs:
+                for sem in rec.semester.all():
+                    raw_dict = {}
+                    raw_dict['id'] = sem.id
+                    raw_dict['semester'] = str(sem.semester + ' ' + (str(sem.start_date) + ' - ' + str(sem.end_date)))
+                    semester_list.append(raw_dict)
+
         return render(request, "edit_semester_based.html",{'study_plan_obj':study_plan_obj,
                                                            'year_recs':year_recs,
-                                                           'course_total_count':course_total_count})
+                                                           'course_total_count':course_total_count,
+                                                           'year_list':year_list,
+                                                           'semester_list':semester_list})
 
 
 def semester_fee_details(request, semester_id=None):

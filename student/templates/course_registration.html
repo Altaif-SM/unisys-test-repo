@@ -267,7 +267,7 @@
                                     {% if study_plan_obj %}
                                         <option style="display:none" selected="selected" id=""
                                                 value="{{ study_plan_obj.id }}">
-                                            {{ study_plan_obj.semester|default_if_none:"" }}
+                                            {{ study_plan_obj.study_semester.semester|default_if_none:"" }} {{ study_plan_obj.study_semester.start_date|date:"Y-m-d" }} - {{ study_plan_obj.study_semester.end_date|date:"Y-m-d" }}
                                         </option>
                                     {% else %}
                                         <option style="display:none" selected="selected" id="" value="">

@@ -3219,7 +3219,7 @@ def course_registration(request):
         semester_recs = StudyPlanDetails.objects.filter(academic_year_id=year, program_id=study_plan_obj.program_id)
         for rec in semester_recs:
             raw_dict = {}
-            raw_dict['semester'] = rec.semester
+            raw_dict['semester'] = str(rec.study_semester.semester + ' ' + (str(rec.study_semester.start_date) + ' - ' + str(rec.study_semester.end_date)))
             raw_dict['id'] = rec.id
             semester_list.append(raw_dict)
 
@@ -3271,7 +3271,7 @@ def get_semester_from_year(request):
     study_plan_recs = StudyPlanDetails.objects.filter(academic_year_id = year_id,program_id = program_id)
     for rec in study_plan_recs:
         raw_dict = {}
-        raw_dict['semester']=rec.semester
+        raw_dict['semester'] = str(rec.study_semester.semester + ' ' + (str(rec.study_semester.start_date) + ' - ' + str(rec.study_semester.end_date)))
         raw_dict['id']=rec.id
         finalDict.append(raw_dict)
     return JsonResponse(finalDict, safe=False)

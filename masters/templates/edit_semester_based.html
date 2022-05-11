@@ -102,6 +102,41 @@
         window.onload = function () {
 
             $(document).ready(function () {
+
+                 $(document).on("change", "#year", function (e) {
+                    var year = $(this).val();
+                    var university = $('#university').val();
+                    var program_level = $('#program_level').val();
+                    var url = '/masters/get_intake_semester_from_year/';
+                    get_intake_semester_from_year(url, year, university,program_level)
+                })
+
+            function get_intake_semester_from_year(url, year, university,program_level) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            year: year,
+                            program_level: program_level,
+                            university: university,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            $('#semester').empty();
+                            $('#semester').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#semester').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['semester'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
                 var values = "{{ selected_campus_list }}";
                 $('#campus').find('option').filter(function (idx, option) {
                     if ($.inArray(option.value, values) !== -1) {
@@ -314,6 +349,7 @@
                     {% csrf_token %}
 
                     <input hidden type="text" id="course_count" name="course_count">
+                    <input hidden type="text" id="university" name="university" value="{{ study_plan_obj.program.university.id }}">
 
                     <div class="portlet-title" style="margin-left:-15px;font-size: 16px;">
                             <div class="caption">
@@ -352,8 +388,9 @@
 
 
 
-                                                    {% for rec in year_recs %}
-                                                        <option value='{{ rec.id }}'>{{ rec.year_name|default_if_none:"" }}</option>
+
+                                         {% for rec in year_list %}
+                                                        <option value='{{ rec.id }}'>{{ rec.year|default_if_none:"" }}</option>
                                                     {% endfor %}
                                                 </select>
                                     </div>
@@ -362,43 +399,37 @@
 
 
 
-                                <div class="">
+
+                 <div class="">
                                     <label class="col-md-2 control-label"><b>Semester:</b></label>
                                     <div class="col-md-3">
-                                        <input required type="text" title="Enter Semester" id="semester"
-                                               name="semester" value="{{ study_plan_obj.semester|default_if_none:"" }}"
-                                               class="form-control eng_emp">
+                                       <select id='semester' title="Enter Semester" required
+                                                        name="semester"
+                                                        class="form-control chk">
+                                                    {% if study_plan_obj.study_semester %}
+                                                    <option style="display:none" selected="selected" id="" value="{{ study_plan_obj.study_semester.semester.id }}">
+                                                            {{ study_plan_obj.study_semester.semester|default_if_none:"" }} {{ study_plan_obj.study_semester.start_date|date:"Y-m-d" }} - {{ study_plan_obj.study_semester.end_date|date:"Y-m-d" }}
+
+                                                        </option>
+                                                    {% else %}
+                                                        <option style="display:none" selected="selected" id="" value="">
+                                                            Please
+                                                            Select
+                                                        </option>
+                                                    {% endif %}
+
+                                       {% for rec in semester_list %}
+                                                        <option value='{{ rec.id }}'>{{ rec.semester|default_if_none:"" }}</option>
+                                                    {% endfor %}
+
+
+                                                </select>
                                     </div>
                                 </div>
 
 
                             </div>
-                 <br>
-                 <div class="row">
 
-
-                                     <div class="">
-                                    <label class="col-md-2 control-label">Start Date:</label>
-                                    <div class="col-md-3">
-                                        <input type="date" required title="Enter Start Date" id="start_date"
-                                               name="start_date"
-                                               value="{{ study_plan_obj.start_date|date:"Y-m-d" }}"
-                                               class="form-control eng_emp">
-                                    </div>
-                                </div>
-
-                                    <div class="">
-                                    <label class="col-md-2 control-label">End Date:</label>
-                                    <div class="col-md-3">
-                                        <input type="date" required title="Enter End Date" id="end_date"
-                                               name="end_date"
-                                               value="{{ study_plan_obj.end_date|date:"Y-m-d" }}"
-                                               class="form-control eng_emp">
-                                    </div>
-                                </div>
-
-
-                                </div>
                  </div>
 
                  <div class="" style="margin-left: 86%;margin-bottom: -2%">

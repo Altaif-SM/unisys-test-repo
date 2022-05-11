@@ -188,8 +188,8 @@
                         <th> {% trans 'Program' %}</th>
                         <th> {% trans 'Academic Year' %}</th>
                         <th> {% trans 'Semester' %}</th>
-                        <th> {% trans 'Start Date' %}</th>
-                        <th> {% trans 'End Date' %}</th>
+{#                        <th> {% trans 'Start Date' %}</th>#}
+{#                        <th> {% trans 'End Date' %}</th>#}
                         <th> {% trans 'Code' %}</th>
                         <th> {% trans 'Subject Name' %}</th>
                         <th> {% trans 'Unit' %}</th>
@@ -209,9 +209,10 @@
                             <td>{{ rec.program.program_name|default_if_none:"" }}</td>
                             <td>{{ rec.academic_year.year_name|default_if_none:"" }}</td>
 
-                            <td>{{ rec.semester|default_if_none:"" }}</td>
-                            <td>{{ rec.start_date|date:"Y-m-d" }}</td>
-                            <td>{{ rec.end_date|date:"Y-m-d" }}</td>
+                            <td>{{ rec.study_semester.semester|default_if_none:"" }} {{ rec.study_semester.start_date|date:"Y-m-d" }} - {{ rec.study_semester.end_date|date:"Y-m-d" }}</td>
+
+{#                            <td>{{ rec.study_semester.start_date|date:"Y-m-d" }}</td>#}
+{#                            <td>{{ rec.study_semester.end_date|date:"Y-m-d" }}</td>#}
 
                             <td>{% for rec in rec.course.all %}
                                 <span>{{ rec.code|default_if_none:"" }}</span><br>
