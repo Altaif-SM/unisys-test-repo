@@ -4337,8 +4337,6 @@ def edit_study_plan(request, program_id=None):
     if request.method == 'POST':
         year = request.POST.get('year')
         semester = request.POST.get('semester')
-        start_date = request.POST.get('start_date')
-        end_date = request.POST.get('end_date')
         course_count = request.POST.get('course_count')
         try:
             study_plan_obj = StudyPlanDetails.objects.create(program_id = program_id,academic_year_id=year,study_semester_id = semester)
@@ -4355,7 +4353,7 @@ def edit_study_plan(request, program_id=None):
             messages.success(request, "Record saved.")
         except:
             messages.warning(request, "Record not saved.")
-        return redirect('/masters/program_settings/')
+        return redirect('/masters/view_semester_subject_list/'+str(program_id))
 
 
 def delete_semester_based(request):
@@ -4515,3 +4513,85 @@ def delete_course(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/course_master_settings/')
+
+def credit_study_plan(request, program_id=None):
+    if request.method == 'POST':
+        min_credit = request.POST.get('min_credit')
+        max_credit = request.POST.get('max_credit')
+        credit_course_count = request.POST.get('credit_course_count')
+        try:
+            credit_study_plan_obj = CreditStudyPlanDetails.objects.create(program_id = program_id,min_credit=min_credit,max_credit = max_credit)
+            for count in range(int(credit_course_count)):
+                try:
+                    count = count + 1
+                    if request.POST['credit_prerequisite_' + str(count)] == 'Yes':
+                        credit_prerequisite = True
+                        if request.POST['credit_course_' + str(count)] == '':
+                            credit_course = None
+                        else:
+                            credit_course = request.POST['credit_course_' + str(count)]
+                    else:
+                        credit_prerequisite = False
+                        credit_course = None
+                    course_obj = CreditCourseDetails.objects.create(code=request.POST['credit_code_' + str(count)],
+                                                          title=request.POST['credit_title_' + str(count)],
+                                                          unit=request.POST['credit_unit_' + str(count)],
+                                                          type=request.POST['credit_type_' + str(count)],
+                                                          is_prerequisite=credit_prerequisite,
+                                                          course_id=credit_course,
+                                                                    )
+                    credit_study_plan_obj.credit_course.add(course_obj)
+                except Exception as e:
+                    pass
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/view_credit_study_plan/'+str(program_id))
+
+def view_credit_study_plan(request, program_id=None):
+    credit_study_plan_recs = CreditStudyPlanDetails.objects.filter(program_id = program_id)
+    return render(request, 'view_credit_study_plan.html',{'credit_study_plan_recs':credit_study_plan_recs,'program_id':program_id})
+
+def edit_credit_based(request, credit_id=None):
+    credit_study_plan_obj = CreditStudyPlanDetails.objects.get(id=credit_id)
+    if request.method == 'POST':
+        min_credit = request.POST.get('min_credit')
+        max_credit = request.POST.get('max_credit')
+        credit_course_count = request.POST.get('credit_course_count')
+        try:
+            credit_study_plan_obj.min_credit = min_credit
+            credit_study_plan_obj.max_credit = max_credit
+            credit_study_plan_obj.save()
+            credit_study_plan_obj.credit_course.clear()
+            for count in range(int(credit_course_count)):
+                try:
+                    count = count + 1
+                    if request.POST['credit_prerequisite_' + str(count)] == 'Yes':
+                        credit_prerequisite = True
+                        if request.POST['credit_course_' + str(count)] == '':
+                            credit_course = None
+                        else:
+                            credit_course = request.POST['credit_course_' + str(count)]
+                    else:
+                        credit_prerequisite = False
+                        credit_course = None
+                    course_obj = CreditCourseDetails.objects.create(code=request.POST['credit_code_' + str(count)],
+                                                          title=request.POST['credit_title_' + str(count)],
+                                                          unit=request.POST['credit_unit_' + str(count)],
+                                                          type=request.POST['credit_type_' + str(count)],
+                                                          is_prerequisite=credit_prerequisite,
+                                                          course_id=credit_course,
+                                                                    )
+                    credit_study_plan_obj.credit_course.add(course_obj)
+                except Exception as e:
+                    pass
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/view_credit_study_plan/' + str(credit_study_plan_obj.program.id))
+    else:
+        prerequisite_course_recs = PrerequisiteCourseDetails.objects.all()
+        credit_course_total_count = credit_study_plan_obj.credit_course.all().count()
+        return render(request, "edit_credit_based.html",{'credit_study_plan_obj':credit_study_plan_obj,
+                                                         'prerequisite_course_recs':prerequisite_course_recs,
+                                                         'credit_course_total_count':credit_course_total_count})

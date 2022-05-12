@@ -296,6 +296,7 @@ urlpatterns = [
     path('delete_semester_based/', views.delete_semester_based, name='delete_semester_based'),
     path('edit_semester_based/<int:semester_id>/', views.edit_semester_based, name='edit_semester_based'),
 
+
     path('semester_fee_details/<int:semester_id>/', views.semester_fee_details, name='semester_fee_details'),
 
     path('course_master_settings/', views.course_master_settings, name='course_master_settings'),
@@ -303,4 +304,7 @@ urlpatterns = [
     path('update_course/', views.update_course, name='update_course'),
     path('delete_course/', views.delete_course, name='delete_course'),
 
+    path('credit_study_plan/<int:program_id>/', views.credit_study_plan, name='credit_study_plan'),
+    path('view_credit_study_plan/<int:program_id>/', views.view_credit_study_plan, name='view_credit_study_plan'),
+    path('edit_credit_based/<int:credit_id>/', views.edit_credit_based, name='edit_credit_based'),
 ]

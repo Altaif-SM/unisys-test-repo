@@ -153,7 +153,7 @@
             </li>
 
             <li>
-                <span> {% trans 'Semester Based Course List' %} </span>
+                <span> {% trans 'Credit Based Course List' %} </span>
             </li>
         </ul>
     </div>
@@ -169,7 +169,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> {% trans 'Semester Based Course List' %}</span>
+                <span class="caption-subject font-red sbold uppercase"> {% trans 'Credit Based Course List' %}</span>
             </div>
         </div>
 
@@ -186,70 +186,85 @@
                         {#                        <th>Program ID</th>#}
 {#                        <th> {% trans 'Type of Program' %}</th>#}
                         <th> {% trans 'Program' %}</th>
-                        <th> {% trans 'Academic Year' %}</th>
-                        <th> {% trans 'Semester' %}</th>
-{#                        <th> {% trans 'Start Date' %}</th>#}
-{#                        <th> {% trans 'End Date' %}</th>#}
+                        <th> {% trans 'Min Credit' %}</th>
+                        <th> {% trans 'Max Credit' %}</th>
 {#                        <th> {% trans 'Code' %}</th>#}
 {#                        <th> {% trans 'Subject Name' %}</th>#}
 {#                        <th> {% trans 'Unit' %}</th>#}
 {#                        <th> {% trans 'Subject Type' %}</th>#}
+{#                        <th> {% trans 'Is Prerequisite' %}</th>#}
+{#                        <th> {% trans 'Course' %}</th>#}
                         <th width="15%"> {% trans 'Fee' %}</th>
                         <th width="15%">Action</th>
                     </tr>
                     </thead>
 
                     <tbody id="tbody">
-                    {% for rec in study_plan_recs %}
+                    {% for rec in credit_study_plan_recs %}
                         <tr id="item{{ forloop.counter }}" class="item">
                             <td style="display: none"><input id="semester_id" value="{{ rec.id }}"></td>
-                            {#                            <td>{{ rec.program_id|default_if_none:"" }}</td>#}
-{#                            <td>{{ rec.program_type|default_if_none:"" }}</td>#}
-
                             <td>{{ rec.program.program_name|default_if_none:"" }}</td>
-                            <td>{{ rec.academic_year.year_name|default_if_none:"" }}</td>
-
-                            <td>{{ rec.study_semester.semester|default_if_none:"" }} {{ rec.study_semester.start_date|date:"Y-m-d" }} - {{ rec.study_semester.end_date|date:"Y-m-d" }}</td>
-
-{#                            <td>{{ rec.study_semester.start_date|date:"Y-m-d" }}</td>#}
-{#                            <td>{{ rec.study_semester.end_date|date:"Y-m-d" }}</td>#}
-
-{#                            <td>{% for rec in rec.course.all %}#}
-{#                                <span><b>{{ forloop.counter }}. </b>{{ rec.code|default_if_none:"" }}</span><br>#}
+                            <td>{{ rec.min_credit|default_if_none:"" }}</td>
+                            <td>{{ rec.max_credit|default_if_none:"" }}</td>
+{#                            <td>{% for rec in rec.credit_course.all %}#}
+{#                                <b>{{ forloop.counter }}. </b><span>{{ rec.code|default_if_none:"" }}</span><br>#}
 {#                            {% endfor %}#}
 {#                            </td>#}
 
-{#                        <td>{% for rec in rec.course.all %}#}
+{#                        <td>{% for rec in rec.credit_course.all %}#}
 {#                            <span><b>{{ forloop.counter }}. </b> {{ rec.title|default_if_none:"" }}</span><br>#}
 {#                            {% endfor %}#}
 {#                            </td>#}
 
-{#                        <td>{% for rec in rec.course.all %}#}
-{#                                <span><b>{{ forloop.counter }}. </b>{{ rec.unit|default_if_none:"" }}</span><br>#}
+{#                        <td>{% for rec in rec.credit_course.all %}#}
+{#                                <b>{{ forloop.counter }}. </b><span>{{ rec.unit|default_if_none:"" }}</span><br>#}
 {#                            {% endfor %}#}
 {#                            </td>#}
 
-{#                        <td>{% for rec in rec.course.all %}#}
-{#                                <span><b>{{ forloop.counter }}. </b>{{ rec.type|default_if_none:"" }}</span><br>#}
+{#                        <td>{% for rec in rec.credit_course.all %}#}
+{#                                <b>{{ forloop.counter }}. </b><span>{{ rec.type|default_if_none:"" }}</span><br>#}
 {#                            {% endfor %}#}
 {#                            </td>#}
 
-                        <td>
+
+{#                        <td>{% for rec in rec.credit_course.all %}#}
+{#                            {% if rec.is_prerequisite == True %}#}
+{#                                <b>{{ forloop.counter }}. </b><span>Yes</span><br>#}
+{##}
+{#                            {% else %}#}
+{#                                <b>{{ forloop.counter }}. </b><span>No</span><br>#}
+{#                            {% endif %}#}
+{#                            {% endfor %}#}
+{#                            </td>#}
+
+{#                        <td>{% for rec in rec.credit_course.all %}#}
+{#                                {% if rec.course %}#}
+{#                                    <b>{{ forloop.counter }}.</b><span>{{ rec.course.course|default_if_none:"" }} ({{ rec.course.code|default_if_none:"" }})</span><br>#}
+{#                                {% else %}#}
+{#                                    <b>{{ forloop.counter }}.</b> -#}
+{#                                {% endif %}#}
+{##}
+{#                            {% endfor %}#}
+{#                            </td>#}
+
+                            <td>
 
 
 
-                            <a href="{% url 'masters:semester_fee_details' rec.id %}">Fee Details
+                            <a href="javascript:void(0)">Fee Details
 
                                     </a>
 
 
                             </td>
 
+
+
                         <td>
 
 
 
-                            <a href="{% url 'masters:edit_semester_based' rec.id %}">
+                            <a href="{% url 'masters:edit_credit_based' rec.id %}">
                                 <span type="button" name="edit" id="edit{{ forloop.counter }}"
                                       class=" edit_btn btn blue glyphicon glyphicon-pencil">
                                 </span>

@@ -847,3 +847,19 @@ class PrerequisiteCourseDetails(BaseModel):
 
     def __str__(self):
         return self.code
+
+class CreditCourseDetails(models.Model):
+    code = models.CharField(max_length=150, blank=True, null=True)
+    title = models.CharField(max_length=150, blank=True, null=True)
+    unit = models.CharField(max_length=150, blank=True, null=True)
+    type = models.CharField(max_length=150, blank=True, null=True)
+    is_prerequisite = models.BooleanField(default=False)
+    course = models.ForeignKey(PrerequisiteCourseDetails, null=True, related_name='study_plan_course_program_rel',
+                                on_delete=models.SET_NULL)
+
+class CreditStudyPlanDetails(BaseModel):
+    program = models.ForeignKey(ProgramDetails, null=True, related_name='study_plan_credit_program_rel',
+                             on_delete=models.SET_NULL)
+    min_credit = models.CharField(max_length=50, blank=True, null=True)
+    max_credit = models.CharField(max_length=50, blank=True, null=True)
+    credit_course = models.ManyToManyField(CreditCourseDetails, blank=True)

@@ -1,15 +1,160 @@
-<select id='year' title="Select Year" name="year"
-        class="form-control chk">
-    <option style="display:none" selected="selected" id="" value="">
-        Please
-        Select
-    </option>
+<div class="row credit_course_details" style="margin-top: 30px" id="credit_course_details_1">
+    <div class="row">
+        <div class=""><label class="col-md-2 control-label">Code:</label>
+            <div class="col-md-3"><input type="text" title="Enter Code" required id="credit_code_1" name="credit_code_1"
+                                         value="" class="form-control eng_emp"></div>
+        </div>
+        <div class=""><label class="col-md-2 control-label">Subject Name:</label>
+            <div class="col-md-3"><input type="text" title="Enter Subject Name" id="credit_title_1" required
+                                         name="credit_title_1" value="" class="form-control eng_emp"></div>
+        </div>
+        <div class="">
+            <div class=""><a href="javascript:;" id="add" class="btn btn-icon-only green add_credit_course_details"><i
+                    class="fa fa-plus "></i></a></div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class=""><label class="col-md-2 control-label">Unit:</label>
+            <div class="col-md-3"><input type="text" title="Enter Unit" id="credit_unit_1" required name="credit_unit_1"
+                                         value="" class="form-control eng_emp"></div>
+        </div>
+        <div class=""><label class="col-md-2 control-label">Subject Type:</label>
+            <div class="col-md-3"><select id='credit_type_1' title="Select Type" name="credit_type_1" required
+                                          class="form-control select_data chk">
+                <option value=''>Please Select</option>
+                <option value='Core'>Core</option>
+                <option value='Elective'>Elective</option>
+                <option value='University Requirement'>University Requirement</option>
+                <option value='Faculty Requirement'>Faculty Requirement</option>
+            </select></div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class=""><label class="col-md-2 control-label">Is Prerequisite:</label>
+            <div class="col-md-3"><select id='credit_prerequisite_1' title="Select Type" name="credit_prerequisite_1"
+                                          required class="form-control select_data chk">
+                <option value=''>Please Select</option>
+                <option value='Yes'>Yes</option>
+                <option value='No'>No</option>
+            </select></div>
+        </div>
+        <div class=""><label class="col-md-2 control-label">Course:</label>
+            <div class="col-md-3"><select id='credit_course_1' title="Select Type" name="credit_course_1" required
+                                          class="form-control select_data chk">
+                <option value=''>Please Select</option>{% for rec in prerequisite_course_recs %}
+                <option value='{{ rec.id }}'>{{ rec.course|default_if_none:"" }}</option>{% endfor %}</select></div>
+        </div>
+    </div>
+    <div class="">
+        <div class="col-md-1" style="margin-top: -55px;"><a href="javascript:;"
+                                                            class="delete_course btn btn-icon-only purple" style=""><i
+                class="fa fa-times"></i></a></div>
+    </div>
+</div>
 
-    {% for rec in passing_year_recs %}
-        <option value='{{ rec.year }}'>{{ rec.year }}</option>
-    {% endfor %}
-</select>
 
-<hr><div class="row course_details" style="margin-top: 30px" id="course_details_' + course_counter + '"><div class="row"><div class=""><label class="col-md-2 control-label">Code:</label><div class="col-md-3"><input type="text" title="Enter Code" id="code_' + course_counter + '" name="code_' + course_counter + '" value="" class="form-control eng_emp"></div></div><div class=""><label class="col-md-2 control-label">Subject Name:</label><div class="col-md-3"><input type="text" title="Enter Title" id="title_' + course_counter + '" name="title_' + course_counter + '" value="" class="form-control eng_emp"></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Unit:</label><div class="col-md-3"><input type="text" title="Enter Unit" id="unit_' + course_counter + '" name="unit_' + course_counter + '" value="" class="form-control eng_emp"></div></div><div class=""><label class="col-md-2 control-label">Subject Type:</label><div class="col-md-3"><select id="type_' + course_counter + '" title="Select Type" name="type_' + course_counter + '" class="form-control select_data chk"><option value="">Please Select</option><option value="Core">Core</option><option value="Elective">Elective</option><option value="University Requirement">University Requirement</option><option value="Faculty Requirement">Faculty Requirement</option></select></div></div><div class=""><div class="col-md-1" style="margin-top: -55px;"><a href="javascript:;" class="delete_course btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Start Date:</label><div class="col-md-3"><input type="date" title="Enter Start Date" id="start_date_1" name="start_date_1" value="" class="form-control eng_emp"></div></div><div class=""><label class="col-md-2 control-label">End Date:</label><div class="col-md-3"><input type="date" title="Enter End Date" id="end_date_1" name="end_date_1" value="" class="form-control eng_emp"></div></div></div></div>
+<div class="row course_details" style="margin-top: 30px" id="course_details_' + course_counter + '">
+    <div class="row">
+        <div class=""><label class="col-md-2 control-label">Code:</label>
+            <div class="col-md-3"><input required type="text" title="Enter Code" id="code_' + course_counter + '"
+                                         name="code_' + course_counter + '" value="" class="form-control eng_emp"></div>
+        </div>
+        <div class=""><label class="col-md-2 control-label">Subject Name:</label>
+            <div class="col-md-3"><input required type="text" title="Enter Title" id="title_' + course_counter + '"
+                                         name="title_' + course_counter + '" value="" class="form-control eng_emp">
+            </div>
+        </div>
+    </div>
+    <br>
 
-br<div class="row"><div class=""><label class="col-md-2 control-label">Start Date:</label><div class="col-md-3"><input type="date" title="Enter Start Date" id="start_date_1" name="start_date_1" value="" class="form-control eng_emp"></div></div><div class=""><label class="col-md-2 control-label">End Date:</label><div class="col-md-3"><input type="date" title="Enter End Date" id="end_date_1" name="end_date_1" value="" class="form-control eng_emp"></div></div></div>
+    <div class="row">
+        <div class=""><label class="col-md-2 control-label">Unit:</label>
+            <div class="col-md-3"><input required type="text" title="Enter Unit" id="unit_' + course_counter + '"
+                                         name="unit_' + course_counter + '" value="" class="form-control eng_emp"></div>
+        </div>
+        <div class=""><label class="col-md-2 control-label">Subject Type:</label>
+            <div class="col-md-3"><select required id="type_' + course_counter + '" title="Select Type"
+                                          name="type_' + course_counter + '" class="form-control select_data chk">
+                <option value="">Please Select</option>
+                <option value="Core">Core</option>
+                <option value="Elective">Elective</option>
+                <option value="University Requirement">University Requirement</option>
+                <option value="Faculty Requirement">Faculty Requirement</option>
+            </select></div>
+        </div>
+        <div class="">
+            <div class="col-md-1" style="margin-top: -55px;"><a href="javascript:;"
+                                                                class="delete_course btn btn-icon-only purple" style=""><i
+                    class="fa fa-times"></i></a></div>
+        </div>
+    </div>
+</div>
+
+
+<div class="">
+    <div class="col-md-1" style="margin-top: -55px;"><a href="javascript:;"
+                                                        class="delete_course btn btn-icon-only purple" style=""><i
+            class="fa fa-times"></i></a></div>
+</div>
+<div class="row credit_course_details" style="margin-top: 30px"
+     id="credit_course_details_' + credit_course_counter + '">
+    <div class="row">
+        <div class=""><label class="col-md-2 control-label">Code:</label>
+            <div class="col-md-3"><input type="text" title="Enter Code" required
+                                         id="credit_code_' + credit_course_counter + '"
+                                         name="credit_code_' + credit_course_counter + '" value=""
+                                         class="form-control eng_emp"></div>
+        </div>
+        <div class=""><label class="col-md-2 control-label">Subject Name:</label>
+            <div class="col-md-3"><input type="text" title="Enter Subject Name"
+                                         id="credit_title_' + credit_course_counter + '" required
+                                         name="credit_title_' + credit_course_counter + '" value=""
+                                         class="form-control eng_emp"></div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class=""><label class="col-md-2 control-label">Unit:</label>
+            <div class="col-md-3"><input type="text" title="Enter Unit" id="credit_unit_' + credit_course_counter + '"
+                                         required name="credit_unit_' + credit_course_counter + '" value=""
+                                         class="form-control eng_emp"></div>
+        </div>
+        <div class=""><label class="col-md-2 control-label">Subject Type:</label>
+            <div class="col-md-3"><select id="credit_type_' + credit_course_counter + '" title="Select Type"
+                                          name="credit_type_' + credit_course_counter + '" required
+                                          class="form-control select_data chk">
+                <option value="">Please Select</option>
+                <option value="Core">Core</option>
+                <option value="Elective">Elective</option>
+                <option value="University Requirement">University Requirement</option>
+                <option value="Faculty Requirement">Faculty Requirement</option>
+            </select></div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class=""><label class="col-md-2 control-label">Is Prerequisite:</label>
+            <div class="col-md-3"><select id="credit_prerequisite_' + credit_course_counter + '" title="Select Type"
+                                          name="credit_prerequisite_' + credit_course_counter + '" required
+                                          class="form-control select_data chk">
+                <option value="">Please Select</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select></div>
+        </div>
+        <div class=""><label class="col-md-2 control-label">Course:</label>
+            <div class="col-md-3"><select id="credit_course_' + credit_course_counter + '" title="Select Type"
+                                          name="credit_course_' + credit_course_counter + '" required
+                                          class="form-control select_data chk">
+                <option value="">Please Select</option>{% for rec in prerequisite_course_recs %}
+                <option value="{{ rec.id }}">{{ rec.course|default_if_none:"" }}</option>{% endfor %}</select></div>
+        </div>
+    </div>
+    <div class="">
+        <div class="col-md-1" style="margin-top: -55px;"><a href="javascript:;"
+                                                            class="delete_course btn btn-icon-only purple" style=""><i
+                class="fa fa-times"></i></a></div>
+    </div>
+</div>

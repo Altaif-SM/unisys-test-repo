@@ -132,7 +132,6 @@
             $(".add_course_details").click(function () {
                     course_counter = course_counter + 1;
                     var course_details = '<hr><div class="row course_details" style="margin-top: 30px" id="course_details_' + course_counter + '"><div class="row"><div class=""><label class="col-md-2 control-label">Code:</label><div class="col-md-3"><input required type="text" title="Enter Code" id="code_' + course_counter + '" name="code_' + course_counter + '" value="" class="form-control eng_emp"></div></div><div class=""><label class="col-md-2 control-label">Subject Name:</label><div class="col-md-3"><input required type="text" title="Enter Title" id="title_' + course_counter + '" name="title_' + course_counter + '" value="" class="form-control eng_emp"></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Unit:</label><div class="col-md-3"><input required type="text" title="Enter Unit" id="unit_' + course_counter + '" name="unit_' + course_counter + '" value="" class="form-control eng_emp"></div></div><div class=""><label class="col-md-2 control-label">Subject Type:</label><div class="col-md-3"><select required id="type_' + course_counter + '" title="Select Type" name="type_' + course_counter + '" class="form-control select_data chk"><option value="">Please Select</option><option value="Core">Core</option><option value="Elective">Elective</option><option value="University Requirement">University Requirement</option><option value="Faculty Requirement">Faculty Requirement</option></select></div></div><div class=""><div class="col-md-1" style="margin-top: -55px;"><a href="javascript:;" class="delete_course btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div></div>';
-                    {#var course_details = '<hr><div class="row course_details" style="margin-top: 30px" id="course_details_' + course_counter + '"><div class="row"><div class=""><label class="col-md-2 control-label">Code:</label><div class="col-md-3"><input type="text" title="Enter Code" id="code_' + course_counter + '" name="code_' + course_counter + '" value="" class="form-control eng_emp"></div></div><div class=""><label class="col-md-2 control-label">Subject Name:</label><div class="col-md-3"><input type="text" title="Enter Title" id="title_' + course_counter + '" name="title_' + course_counter + '" value="" class="form-control eng_emp"></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Unit:</label><div class="col-md-3"><input type="text" title="Enter Unit" id="unit_' + course_counter + '" name="unit_' + course_counter + '" value="" class="form-control eng_emp"></div></div><div class=""><label class="col-md-2 control-label">Subject Type:</label><div class="col-md-3"><select id="type_' + course_counter + '" title="Select Type" name="type_' + course_counter + '" class="form-control select_data chk"><option value="">Please Select</option><option value="Core">Core</option><option value="Elective">Elective</option><option value="University Requirement">University Requirement</option><option value="Faculty Requirement">Faculty Requirement</option></select></div></div><div class=""><div class="col-md-1" style="margin-top: -55px;"><a href="javascript:;" class="delete_course btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Start Date:</label><div class="col-md-3"><input type="date" title="Enter Start Date" id="start_date_' + course_counter + '" name="start_date_' + course_counter + '" value="" class="form-control eng_emp"></div></div><div class=""><label class="col-md-2 control-label">End Date:</label><div class="col-md-3"><input type="date" title="Enter End Date" id="end_date_' + course_counter + '" name="end_date_' + course_counter + '" value="" class="form-control eng_emp"></div></div></div></div>';#}
                     $(course_details).removeAttr().hide().insertAfter(".course_details:last").slideDown(300);
                 });
 
@@ -143,11 +142,38 @@
 
 
 
+
+
                        $(document).on("click", "#edit_study_plan_form", function (e) {
                            var rowCount = $(".course_details").length;
                              $('#course_count').val(rowCount);
 
                        });
+
+                        {% if credit_course_obj %}
+                    var credit_course_counter = $('.credit_course_details').length;
+                {% else %}
+                    var credit_course_counter = 1;
+                {% endif %}
+
+
+                        $(".add_credit_course_details").click(function () {
+                    credit_course_counter = credit_course_counter + 1;
+                    var credit_course_details = '<hr><div class="row credit_course_details" style="margin-top: 30px" id="credit_course_details_' + credit_course_counter + '"><div class="row"><div class=""><label class="col-md-2 control-label">Code:</label><div class="col-md-3"><input type="text" title="Enter Code" required id="credit_code_' + credit_course_counter + '" name="credit_code_' + credit_course_counter + '" value="" class="form-control eng_emp"></div></div><div class=""><label class="col-md-2 control-label">Subject Name:</label><div class="col-md-3"><input type="text" title="Enter Subject Name" id="credit_title_' + credit_course_counter + '" required name="credit_title_' + credit_course_counter + '" value="" class="form-control eng_emp"></div></div><div class=""><div class="col-md-1" ><a href="javascript:;" class="credit_delete_course btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Unit:</label><div class="col-md-3"><input type="text" title="Enter Unit" id="credit_unit_' + credit_course_counter + '" required name="credit_unit_' + credit_course_counter + '" value="" class="form-control eng_emp"></div></div><div class=""><label class="col-md-2 control-label">Subject Type:</label><div class="col-md-3"><select id="credit_type_' + credit_course_counter + '" title="Select Type" name="credit_type_' + credit_course_counter + '" required class="form-control select_data chk"><option value="">Please Select</option><option value="Core">Core</option><option value="Elective">Elective</option><option value="University Requirement">University Requirement</option><option value="Faculty Requirement">Faculty Requirement</option></select></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Is Prerequisite:</label><div class="col-md-3"><select id="credit_prerequisite_' + credit_course_counter + '" title="Select Type" name="credit_prerequisite_' + credit_course_counter + '" required class="form-control select_data chk"><option value="">Please Select</option><option value="Yes">Yes</option><option value="No">No</option></select></div></div><div class=""><label class="col-md-2 control-label">Course:</label><div class="col-md-3"><select id="credit_course_' + credit_course_counter + '" title="Select Type" name="credit_course_' + credit_course_counter + '" class="form-control select_data chk"><option value="">Please Select</option>{% for rec in prerequisite_course_recs %}<option value="{{ rec.id }}">({{ rec.code|default_if_none:"" }}) {{ rec.course|default_if_none:"" }}</option>{% endfor %}</select></div></div></div></div>';
+                    $(credit_course_details).removeAttr().hide().insertAfter(".credit_course_details:last").slideDown(300);
+                });
+
+                         $(document).on("click", ".credit_delete_course", function () {
+                    $(this).parents('.credit_course_details').next().closest('hr').remove();
+                    $(this).parents('.credit_course_details').remove();
+                });
+
+                          $(document).on("click", "#credit_edit_study_plan_form", function (e) {
+                           var rowCount = $(".credit_course_details").length;
+                             $('#credit_course_count').val(rowCount);
+
+                       });
+
 
                     $(document).on("change", "#year", function (e) {
                     var year = $(this).val();
@@ -1186,7 +1212,7 @@
             </form>
                                 </div>
                                 <div class="tab-pane" id="tab_1_1_2">
-                                    <form action="{% url 'masters:edit_study_plan' program_obj.id %}"
+                                    <form action="{% url 'masters:credit_study_plan' program_obj.id %}"
                       id="credit_edit_study_plan_form"
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
@@ -1199,7 +1225,7 @@
                             <div class="caption">
 
 
-                                <span style="margin-left: 78%;font-family: 'Times New Roman'"><a target="_blank" href="{% url 'masters:view_semester_subject_list' program_obj.id %}" id="add"
+                                <span style="margin-left: 78%;font-family: 'Times New Roman'"><a target="_blank" href="{% url 'masters:view_credit_study_plan' program_obj.id %}" id="add"
                                        >View Credit Based Subject List
 
                                     </a>
@@ -1211,7 +1237,7 @@
 
                         <hr>
 
-                                        <div class="row year_sem_details" style="margin-top: 30px" id="year_sem_details_1">
+                                        <div class="row credit_details" style="margin-top: 30px" id="credit_details_1">
                  <div class="row">
 
                                 <div class="">
@@ -1347,12 +1373,12 @@
                                             <label class="col-md-2 control-label">Course:</label>
                                             <div class="col-md-3">
 
-                                                <select id='credit_course_1' title="Select Type" name="credit_course_1" required
+                                                <select id='credit_course_1' title="Select Type" name="credit_course_1"
                                                         class="form-control select_data chk">
                                                         <option value=''>{% trans 'Please Select' %}</option>
 
                                                     {% for rec in prerequisite_course_recs %}
-                                                        <option value='{{ rec.id }}'>{{ rec.course|default_if_none:"" }}</option>
+                                                        <option value='{{ rec.id }}'>({{ rec.code|default_if_none:"" }}) {{ rec.course|default_if_none:"" }} </option>
                                                     {% endfor %}
                                                 </select>
 

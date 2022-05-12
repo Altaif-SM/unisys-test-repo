@@ -156,33 +156,34 @@
                 })*/
 
 
-                var course_counter = 1;
-                {% if course_total_count == 0 %}
-                    var course_counter = 1;
+                var credit_course_counter = 1;
+                {% if credit_course_total_count == 0 %}
+                    var credit_course_counter = 1;
                 {% else %}
-                    var course_counter = "{{ course_total_count }}"
+                    var credit_course_counter = "{{ credit_course_total_count }}"
                 {% endif %}
 
-            $(".add_course_details").click(function () {
-                    course_counter = parseInt(course_counter) + 1;
-                    var course_details = '<hr><div class="row course_details" style="margin-top: 30px" id="course_details_' + course_counter + '"><div class="row"><div class=""><label class="col-md-2 control-label">Code:</label><div class="col-md-3"><input required type="text" title="Enter Code" id="code_' + course_counter + '" name="code_' + course_counter + '" value="" class="form-control eng_emp"></div></div><div class=""><label class="col-md-2 control-label">Subject Name:</label><div class="col-md-3"><input required type="text" title="Enter Title" id="title_' + course_counter + '" name="title_' + course_counter + '" value="" class="form-control eng_emp"></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Unit:</label><div class="col-md-3"><input required type="text" title="Enter Unit" id="unit_' + course_counter + '" name="unit_' + course_counter + '" value="" class="form-control eng_emp"></div></div><div class=""><label class="col-md-2 control-label">Subject Type:</label><div class="col-md-3"><select required id="type_' + course_counter + '" title="Select Type" name="type_' + course_counter + '" class="form-control select_data chk"><option value="">Please Select</option><option value="Core">Core</option><option value="Elective">Elective</option><option value="University Requirement">University Requirement</option><option value="Faculty Requirement">Faculty Requirement</option></select></div></div><div class=""><div class="col-md-1" style="margin-top: -55px;"><a href="javascript:;" class="delete_course btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div></div>';
-                    {#var course_details = '<hr><div class="row course_details" style="margin-top: 30px" id="course_details_' + course_counter + '"><div class="row"><div class=""><label class="col-md-2 control-label">Code:</label><div class="col-md-3"><input type="text" title="Enter Code" id="code_' + course_counter + '" name="code_' + course_counter + '" value="" class="form-control eng_emp"></div></div><div class=""><label class="col-md-2 control-label">Subject Name:</label><div class="col-md-3"><input type="text" title="Enter Title" id="title_' + course_counter + '" name="title_' + course_counter + '" value="" class="form-control eng_emp"></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Unit:</label><div class="col-md-3"><input type="text" title="Enter Unit" id="unit_' + course_counter + '" name="unit_' + course_counter + '" value="" class="form-control eng_emp"></div></div><div class=""><label class="col-md-2 control-label">Subject Type:</label><div class="col-md-3"><select id="type_' + course_counter + '" title="Select Type" name="type_' + course_counter + '" class="form-control select_data chk"><option value="">Please Select</option><option value="Core">Core</option><option value="Elective">Elective</option><option value="University Requirement">University Requirement</option><option value="Faculty Requirement">Faculty Requirement</option></select></div></div><div class=""><div class="col-md-1" style="margin-top: -55px;"><a href="javascript:;" class="delete_course btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Start Date:</label><div class="col-md-3"><input type="date" title="Enter Start Date" id="start_date_' + course_counter + '" name="start_date_' + course_counter + '" value="" class="form-control eng_emp"></div></div><div class=""><label class="col-md-2 control-label">End Date:</label><div class="col-md-3"><input type="date" title="Enter End Date" id="end_date_' + course_counter + '" name="end_date_' + course_counter + '" value="" class="form-control eng_emp"></div></div></div></div>';#}
-                    $(course_details).removeAttr().hide().insertAfter(".course_details:last").slideDown(300);
-                });
-
-                      $(document).on("click", ".delete_course", function () {
-                    $(this).parents('.course_details').next().closest('hr').remove();
-                    $(this).parents('.course_details').remove();
+             $(".add_credit_course_details").click(function () {
+                    credit_course_counter = parseInt(credit_course_counter) + 1;
+                    var credit_course_details = '<hr><div class="row credit_course_details" style="margin-top: 30px" id="credit_course_details_' + credit_course_counter + '"><div class="row"><div class=""><label class="col-md-2 control-label">Code:</label><div class="col-md-3"><input type="text" title="Enter Code" required id="credit_code_' + credit_course_counter + '" name="credit_code_' + credit_course_counter + '" value="" class="form-control eng_emp"></div></div><div class=""><label class="col-md-2 control-label">Subject Name:</label><div class="col-md-3"><input type="text" title="Enter Subject Name" id="credit_title_' + credit_course_counter + '" required name="credit_title_' + credit_course_counter + '" value="" class="form-control eng_emp"></div></div><div class=""><div class="col-md-1" ><a href="javascript:;" class="credit_delete_course btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Unit:</label><div class="col-md-3"><input type="text" title="Enter Unit" id="credit_unit_' + credit_course_counter + '" required name="credit_unit_' + credit_course_counter + '" value="" class="form-control eng_emp"></div></div><div class=""><label class="col-md-2 control-label">Subject Type:</label><div class="col-md-3"><select id="credit_type_' + credit_course_counter + '" title="Select Type" name="credit_type_' + credit_course_counter + '" required class="form-control select_data chk"><option value="">Please Select</option><option value="Core">Core</option><option value="Elective">Elective</option><option value="University Requirement">University Requirement</option><option value="Faculty Requirement">Faculty Requirement</option></select></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Is Prerequisite:</label><div class="col-md-3"><select id="credit_prerequisite_' + credit_course_counter + '" title="Select Type" name="credit_prerequisite_' + credit_course_counter + '" required class="form-control select_data chk"><option value="">Please Select</option><option value="Yes">Yes</option><option value="No">No</option></select></div></div><div class=""><label class="col-md-2 control-label">Course:</label><div class="col-md-3"><select id="credit_course_' + credit_course_counter + '" title="Select Type" name="credit_course_' + credit_course_counter + '" class="form-control select_data chk"><option value="">Please Select</option>{% for rec in prerequisite_course_recs %}<option value="{{ rec.id }}">({{ rec.code|default_if_none:"" }}) {{ rec.course|default_if_none:"" }}</option>{% endfor %}</select></div></div></div></div>';
+                    $(credit_course_details).removeAttr().hide().insertAfter(".credit_course_details:last").slideDown(300);
                 });
 
 
+            $(document).on("click", ".credit_delete_course", function () {
+                    $(this).parents('.credit_course_details').next().closest('hr').remove();
+                    $(this).parents('.credit_course_details').remove();
+                });
 
-                       $(document).on("click", "#edit_study_plan_form", function (e) {
-                           var rowCount = $(".course_details").length;
-                             $('#course_count').val(rowCount);
+
+
+
+
+$(document).on("click", "#credit_edit_study_plan_form", function (e) {
+                           var rowCount = $(".credit_course_details").length;
+                             $('#credit_course_count').val(rowCount);
 
                        });
-
 
 
 
@@ -342,14 +343,13 @@
             <div class="form-body">
 
 
-                 <form action="{% url 'masters:edit_semester_based' study_plan_obj.id %}"
-                      id="edit_study_plan_form"
+                 <form action="{% url 'masters:edit_credit_based' credit_study_plan_obj.id %}"
+                      id="credit_edit_study_plan_form"
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
-                    <input hidden type="text" id="course_count" name="course_count">
-                    <input hidden type="text" id="university" name="university" value="{{ study_plan_obj.program.university.id }}">
+                    <input hidden type="text" id="credit_course_count" name="credit_course_count">
 
                     <div class="portlet-title" style="margin-left:-15px;font-size: 16px;">
                             <div class="caption">
@@ -357,7 +357,7 @@
                                         class="icon-settings font-red"></i>{% trans 'Edit Program Study Plan' %}</span>
 
                                 <br>
-                <span style="font-family: 'Times New Roman';font-size: 16px;"><b>({% trans 'Semester Based System' %})</b></span>
+                <span style="font-family: 'Times New Roman';font-size: 16px;"><b>({% trans 'Credit Based System' %})</b></span>
 
 
 
@@ -365,91 +365,62 @@
                             </div>
                         </div>
                         <hr>
-                 <div class="row year_sem_details" style="margin-top: 30px" id="year_sem_details_1">
+                 <div class="row credit_details" style="margin-top: 30px" id="credit_details_1">
                  <div class="row">
 
                                 <div class="">
-                                    <label class="col-md-2 control-label"><b>Year:</b></label>
+                                    <label class="col-md-2 control-label">Min Number of Credits:</label>
                                     <div class="col-md-3">
-                                       <select id='year' title="Select Year" required
-                                                        name="year"
-                                                        class="form-control chk">
+                                        <input type="text" title="Enter Min Credit" required
+                                                   id="min_credit"
+                                                   name="min_credit"
+                                                   value="{{ credit_study_plan_obj.min_credit|default_if_none:"" }}"
+                                                   class="form-control eng_emp">
 
-                                                    {% if study_plan_obj.academic_year %}
-                                                    <option style="display:none" selected="selected" id="" value="{{ study_plan_obj.academic_year.id }}">
-                                                            {{ study_plan_obj.academic_year.year_name|default_if_none:"" }}
-                                                        </option>
-                                                    {% else %}
-                                                        <option style="display:none" selected="selected" id="" value="">
-                                                            Please
-                                                            Select
-                                                        </option>
-                                                    {% endif %}
-
-
-
-
-                                         {% for rec in year_list %}
-                                                        <option value='{{ rec.id }}'>{{ rec.year|default_if_none:"" }}</option>
-                                                    {% endfor %}
-                                                </select>
                                     </div>
                                 </div>
-
-
-
 
 
                  <div class="">
-                                    <label class="col-md-2 control-label"><b>Semester:</b></label>
+                                    <label class="col-md-2 control-label">Max Number of Credits:</label>
                                     <div class="col-md-3">
-                                       <select id='semester' title="Enter Semester" required
-                                                        name="semester"
-                                                        class="form-control chk">
-                                                    {% if study_plan_obj.study_semester %}
-                                                    <option style="display:none" selected="selected" id="" value="{{ study_plan_obj.study_semester.id }}">{{ study_plan_obj.study_semester.semester|default_if_none:"" }} {{ study_plan_obj.study_semester.start_date|date:"Y-m-d" }} - {{ study_plan_obj.study_semester.end_date|date:"Y-m-d" }}</option>
-                                                    {% else %}
-                                                        <option style="display:none" selected="selected" id="" value="">
-                                                            Please
-                                                            Select
-                                                        </option>
-                                                    {% endif %}
-
-                                       {% for rec in semester_list %}
-                                                        <option value='{{ rec.id }}'>{{ rec.semester|default_if_none:"" }}</option>
-                                                    {% endfor %}
-
-
-                                                </select>
+                                       <input type="text" title="Enter Max Credit" required
+                                                   id="max_credit"
+                                                   name="max_credit"
+                                                   value="{{ credit_study_plan_obj.max_credit|default_if_none:"" }}"
+                                                   class="form-control eng_emp">
                                     </div>
                                 </div>
 
 
+
+
+
+
+
                             </div>
-
                  </div>
-
-                 <div class="" style="margin-left: 86%;margin-bottom: -1%">
+                                <div class="" style="margin-left: 86%;margin-bottom: -1%">
                                 <div class="" >
-                                    <a href="javascript:;" id="add" class="btn btn-icon-only green add_course_details"
+                                    <a href="javascript:;" id="add" class="btn btn-icon-only green add_credit_course_details"
                                        >
                                         <i class="fa fa-plus "></i>
                                     </a>
                                 </div>
-                            </div>
+                                </div>
+                  {% for rec in credit_study_plan_obj.credit_course.all %}
+                      <hr>
 
-                            {% for rec in study_plan_obj.course.all %}
-                                <hr>
-                            <div class="row course_details" style="margin-top: 30px" id="course_details_1">
+                            <div class="row credit_course_details" style="margin-top: 30px" id="credit_course_details_{{ forloop.counter }}">
                             <div class="row">
 
                                 <div class="">
                                     <label class="col-md-2 control-label">Code:</label>
                                     <div class="col-md-3">
                                         <input type="text" title="Enter Code" required
-                                                   id="code_{{ forloop.counter }}"
-                                                   name="code_{{ forloop.counter }}"
-                                                   value="{{ rec.code|default_if_none:"" }}"
+                                                   id="credit_code_{{ forloop.counter }}"
+                                                   name="credit_code_{{ forloop.counter }}"
+                                                   value="{{ rec.code|default_if_none:""}}"
                                                    class="form-control eng_emp">
                                     </div>
                                 </div>
@@ -460,8 +431,8 @@
                                 <div class="">
                                     <label class="col-md-2 control-label">Subject Name:</label>
                                     <div class="col-md-3">
-                                        <input type="text" title="Enter Title" id="title_{{ forloop.counter }}" required
-                                               name="title_{{ forloop.counter }}" value="{{ rec.title|default_if_none:"" }}"
+                                        <input type="text" title="Enter Subject Name" id="credit_title_{{ forloop.counter }}" required
+                                               name="credit_title_{{ forloop.counter }}" value="{{ rec.title|default_if_none:"" }}"
                                                class="form-control eng_emp">
                                     </div>
                                 </div>
@@ -476,8 +447,8 @@
                                 <div class="">
                                     <label class="col-md-2 control-label">Unit:</label>
                                     <div class="col-md-3">
-                                        <input type="text" title="Enter Unit" id="unit_{{ forloop.counter }}" required
-                                               name="unit_{{ forloop.counter }}"
+                                        <input type="text" title="Enter Unit" id="credit_unit_{{ forloop.counter }}" required
+                                               name="credit_unit_{{ forloop.counter }}"
                                                value="{{ rec.unit|default_if_none:"" }}"
                                                class="form-control eng_emp">
                                     </div>
@@ -489,7 +460,8 @@
                                             <label class="col-md-2 control-label">Subject Type:</label>
                                             <div class="col-md-3">
 
-                                                <select id='type_{{ forloop.counter }}' title="Select Type" name="type_{{ forloop.counter }}" required
+
+                                                <select id='credit_type_{{ forloop.counter }}' title="Select Type" name="credit_type_{{ forloop.counter }}" required
                                                         class="form-control select_data chk">
                                                         {% if rec.type %}
                                                              <option style="display:none" selected="selected" id="" value="{{ rec.type|default_if_none:"" }}">
@@ -513,15 +485,75 @@
                                         </div>
 
                             </div>
+                                <br>
+                                <div class="row">
+
+                                <div class="">
+                                            <label class="col-md-2 control-label">Is Prerequisite:</label>
+                                            <div class="col-md-3">
+
+
+                                                <select id='credit_prerequisite_{{ forloop.counter }}' title="Select Prerequisite" name="credit_prerequisite_{{ forloop.counter }}" required
+                                                        class="form-control select_data chk">
+                                                        {% if rec.is_prerequisite == True %}
+                                                            <option style="display:none" selected="selected" id="" value="Yes">Yes</option>
+                                                        {% else %}
+                                                             <option style="display:none" selected="selected" id="" value="No">No</option>
+                                                        {% endif %}
+                                                        <option value='Yes'>Yes</option>
+                                                        <option value='No'>No</option>
+
+
+
+                                                </select>
+
+
+
+
+
+                                            </div>
+
+                                        </div>
+
+
+
+                                <div class="">
+                                            <label class="col-md-2 control-label">Course:</label>
+                                            <div class="col-md-3">
+
+
+                                            <select id='credit_course_{{ forloop.counter }}' title="Select Type" name="credit_course_{{ forloop.counter }}"
+                                                        class="form-control select_data chk">
+                                                        {% if rec.course %}
+                                                             <option style="display:none" selected="selected" id="" value="{{ rec.course.id|default_if_none:"" }}">
+                                                            ({{ rec.course.code|default_if_none:"" }}) {{ rec.course.course|default_if_none:"" }}
+                                                        </option>
+                                                            {% else %}
+                                                            <option value=''>{% trans 'Please Select' %}</option>
+                                                        {% endif %}
+
+                                                        {% for rec in prerequisite_course_recs %}
+                                                        <option value='{{ rec.id }}'>({{ rec.code|default_if_none:"" }}) {{ rec.course|default_if_none:"" }} </option>
+                                                    {% endfor %}
+                                                </select>
+
+
+
+
+                                            </div>
+
+                                        </div>
+
+                            </div>
 
 
                             </div>
-                            {% endfor %}
+                 {% endfor %}
                 <hr>
                 <div class="row">
                             <div class="col-md-offset-5 col-md-7">
                                 <button type="button" class="btn blue" id="back" style="margin-left: 70%"
-                                        onclick="window.location='{% url 'masters:view_semester_subject_list' study_plan_obj.program.id %}'">
+                                        onclick="window.location='{% url 'masters:view_credit_study_plan' credit_study_plan_obj.program.id %}'">
 
                                     Back
                                 </button>
