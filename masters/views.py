@@ -4595,3 +4595,16 @@ def edit_credit_based(request, credit_id=None):
         return render(request, "edit_credit_based.html",{'credit_study_plan_obj':credit_study_plan_obj,
                                                          'prerequisite_course_recs':prerequisite_course_recs,
                                                          'credit_course_total_count':credit_course_total_count})
+
+def delete_credit_based(request):
+    if request.method == 'POST':
+        credit_delete_id = request.POST.get('credit_delete_id')
+        program_id = request.POST.get('program_id')
+        try:
+            credit_study_plan_obj = CreditStudyPlanDetails.objects.get(id=credit_delete_id)
+            credit_study_plan_obj.credit_course.clear()
+            CreditStudyPlanDetails.objects.filter(id=credit_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/view_credit_study_plan/' + str(program_id))

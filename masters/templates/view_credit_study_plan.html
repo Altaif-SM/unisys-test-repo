@@ -53,8 +53,8 @@
 
                     $('#id_delete_program_model').modal();
                     var parent_id = $(this).closest('tr').attr('id');
-                    var semester_id = $('#' + parent_id + ' #semester_id').val();
-                    $("#semester_delete_id").val(semester_id)
+                    var credit_id = $('#' + parent_id + ' #credit_id').val();
+                    $("#credit_delete_id").val(credit_id)
 
                     {#var url = '/masters/delete_semester/';#}
                     {#delete_semester_info(url, language_id)#}
@@ -202,7 +202,7 @@
                     <tbody id="tbody">
                     {% for rec in credit_study_plan_recs %}
                         <tr id="item{{ forloop.counter }}" class="item">
-                            <td style="display: none"><input id="semester_id" value="{{ rec.id }}"></td>
+                            <td style="display: none"><input id="credit_id" value="{{ rec.id }}"></td>
                             <td>{{ rec.program.program_name|default_if_none:"" }}</td>
                             <td>{{ rec.min_credit|default_if_none:"" }}</td>
                             <td>{{ rec.max_credit|default_if_none:"" }}</td>
@@ -291,12 +291,12 @@
     <div id="id_delete_program_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{% url 'masters:delete_semester_based' %}"
+                <form action="{% url 'masters:delete_credit_based' %}"
                       id="form_sample_1"
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <input type="hidden" id="semester_delete_id" name="semester_delete_id">
+                    <input type="hidden" id="credit_delete_id" name="credit_delete_id">
                     <input type="hidden" id="program_id" name="program_id" value="{{ program_id }}">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
@@ -304,8 +304,8 @@
                         </h4>
                     </div>
                     <div class="modal-body">
-                        <p> {% trans 'Are you sure, you want to delete Semester?' %} </p>
-                        <p> {% trans 'After delete you will not be able to modify the Semester.' %} </p>
+                        <p> {% trans 'Are you sure, you want to delete Credit Course?' %} </p>
+                        <p> {% trans 'After delete you will not be able to modify the Credit Course.' %} </p>
 
                     </div>
                     <div class="modal-footer">
