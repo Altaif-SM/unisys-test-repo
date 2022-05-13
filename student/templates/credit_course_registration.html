@@ -15,54 +15,20 @@
 
             $(document).ready(function () {
 
-                $(document).on("change", "#year", function (e) {
-                    var year_id = $(this).val();
-                    var program_id = $('#program_id').val();
-                    var url = '/student/get_semester_from_year/';
-                    get_semester_from_year(url, year_id, program_id)
-                })
 
-                 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
                     var target = $(e.target).attr("data-id")
                     var priorities = target
-                   if (parseInt(priorities) == 1) {
+                    if (parseInt(priorities) == 1) {
                         $(location).prop('href', "{% url 'student:semester_course_registration' %}")
 
-                    }
-                     else if(parseInt(priorities) == 2){
-                         $(location).prop('href', "{% url 'student:credit_course_registration' %}")
+                    } else if (parseInt(priorities) == 2) {
+                        $(location).prop('href', "{% url 'student:credit_course_registration' %}")
 
-                     }
+                    }
 
 
                 });
-
-
-                function get_semester_from_year(url, year_id, program_id) {
-                    $.ajax({
-                        type: 'POST',
-                        url: url,
-                        data: {
-                            year_id: year_id,
-                            program_id: program_id,
-                            csrfmiddlewaretoken: '{{ csrf_token }}',
-                        },
-                        success: function (data) {
-
-                            $('#semester').empty();
-                            $('#semester').append(
-                                '<option value="" >Please select</option>');
-                            for (var i = 0; i < data.length; i++) {
-                                $('#semester').append(
-                                    '<option value="' + data[i]['id'] + '">'
-                                    + data[i]['semester'] + '</option>')
-                            }
-                        },
-                        error: function (xhr, msg, err) {
-                            alert(xhr.responseJSON.error);
-                        }
-                    });
-                }
 
 
                 $('#example').dataTable();
@@ -76,62 +42,41 @@
                     });
                 })
 
-                $('.select_all_2').click(function () {
-                    var checked_status = this.checked;
-                    $(this).closest('table').find('input:checkbox').each(function () {
-                        this.checked = checked_status;
+
+                $('.credit_status_change').click(function () {
+                    var min_credit = parseInt($('#min_credit').val());
+                    var max_credit = parseInt($('#max_credit').val());
+
+                    var checked = $('#example').find('input[name="check"]:checked').length;
+                    if (!checked) {
+                        alert('Please select at least one record to proceed..!');
+                        return false;
+                    }
+
+                    var total_unit = 0;
+                    $.each($("input[name='check']:checked"), function () {
+                        var parent_id = $(this).closest('tr').attr('id');
+                        var unit = parseInt($('#' + parent_id + ' .unit').val());
+                        total_unit = total_unit + unit
                     });
-                })
 
-                $('.select_all_3').click(function () {
-                    var checked_status = this.checked;
-                    $(this).closest('table').find('input:checkbox').each(function () {
-                        this.checked = checked_status;
-                    });
-                })
+                    if (total_unit < min_credit) {
+                        alert('Reminder of Credit Hours Below limit. Return and make sure not bellowing ' + min_credit + ' credit hours.');
+                        return false;
+                    } else if (total_unit > max_credit) {
+                         alert('Reminder of Credit Hours Exceeds limit. Return and make sure not exceeding ' + max_credit + ' credit hours.');
+                        return false;
+                    }
 
 
-                $('.status_change').click(function () {
                     var favorite = [];
                     $.each($("input[name='check']:checked"), function () {
                         favorite.push($(this).val());
                     });
                     {#alert(JSON.stringify(favorite));#}
                     $("#check_ids").val(JSON.stringify(favorite));
-                    $('#form_submit').submit()
+                    $('#credit_form_submit').submit()
                 })
-
-
-                $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-                    var target = $(e.target).attr("data-id")
-                    $("#priorities").val(target);
-                    var priorities = $("#priorities").val();
-                    if (parseInt(priorities) == 1) {
-                        $('#example').find('input[name="select_all"]:checked').removeAttr("checked");
-                        $('#example').find('input[name="check"]:checked').removeAttr("checked");
-                        $('#example_2').find('input[name="select_all_2"]:checked').removeAttr("checked");
-                        $('#example_2').find('input[name="check"]:checked').removeAttr("checked");
-                        $('#example_3').find('input[name="select_all_3"]:checked').removeAttr("checked");
-                        $('#example_3').find('input[name="check"]:checked').removeAttr("checked");
-                    } else if (parseInt(priorities) == 2) {
-                        $('#example').find('input[name="select_all"]:checked').removeAttr("checked");
-                        $('#example').find('input[name="check"]:checked').removeAttr("checked");
-                        $('#example_2').find('input[name="select_all_2"]:checked').removeAttr("checked");
-                        $('#example_2').find('input[name="check"]:checked').removeAttr("checked");
-                        $('#example_3').find('input[name="select_all_3"]:checked').removeAttr("checked");
-                        $('#example_3').find('input[name="check"]:checked').removeAttr("checked");
-                    } else if (parseInt(priorities) == 3) {
-                        $('#example').find('input[name="select_all"]:checked').removeAttr("checked");
-                        $('#example').find('input[name="check"]:checked').removeAttr("checked");
-                        $('#example_2').find('input[name="select_all_2"]:checked').removeAttr("checked");
-                        $('#example_2').find('input[name="check"]:checked').removeAttr("checked");
-                        $('#example_3').find('input[name="select_all_3"]:checked').removeAttr("checked");
-                        $('#example_3').find('input[name="check"]:checked').removeAttr("checked");
-
-                    }
-
-
-                });
 
 
             });
@@ -159,53 +104,75 @@
 
 
     <div class="tabbable-custom nav-justified">
-                            <ul class="nav nav-tabs nav-justified">
-                                <li>
-                                    <a data-id="1" href="#tab_1_1_1" data-toggle="tab" >
-                                        COURSE REGISTRATION (Semester Based System) </a>
-                                </li>
-                                <li class="active">
-                                    <a data-id="2" href="#tab_1_1_2" data-toggle="tab">
-                                        COURSE REGISTRATION (Credit Based System) </a>
-                                </li>
+        <ul class="nav nav-tabs nav-justified">
+            <li>
+                <a data-id="1" href="#tab_1_1_1" data-toggle="tab">
+                    COURSE REGISTRATION (Semester Based System) </a>
+            </li>
+            <li class="active">
+                <a data-id="2" href="#tab_1_1_2" data-toggle="tab">
+                    COURSE REGISTRATION (Credit Based System) </a>
+            </li>
 
-                            </ul>
+        </ul>
 
-                            <div class="tab-content">
-                                <div class="tab-pane" id="tab_1_1_1">
+        <div class="tab-content">
+            <div class="tab-pane" id="tab_1_1_1">
+            </div>
+            <div class="tab-pane active" id="tab_1_1_2">
+                <br>
+
+
+
+                <br>
+                <div class="tabbable-custom nav-justified">
+                    <ul class="nav nav-tabs nav-justified">
+
+                        <li class="active">
+                            <a data-id="11" href="#tab_1_1_1_1" data-toggle="tab">
+                                Available Courses </a>
+                        </li>
+
+                        <li class="">
+                            <a data-id="12" href="#tab_1_1_1_2" data-toggle="tab">
+                                Registered Courses </a>
+                        </li>
+
+                    </ul>
+                    <div class="tab-content">
+
+                        <div class="tab-pane active" id="tab_1_1_1_1">
+                            <form method="post" action="{% url 'student:credit_course_registration' %}" id="credit_form_submit">
+
+
+                                {% csrf_token %}
+                                <input type="hidden" value="{{ credit_study_plan_obj.min_credit|default_if_none:"" }}"
+                                       name="min_credit" id="min_credit">
+                                <input type="hidden" value="{{ credit_study_plan_obj.max_credit|default_if_none:"" }}"
+                                       name="max_credit" id="max_credit">
+                                <input type="hidden" name="program_id" id="program_id" value="{{ program_id }}">
+                            <input type="text" hidden id="check_ids" name="check_ids">
+
+                                <br>
+                                <div style="margin-left: 0px !important; margin-right: 0px !important;" class="row">
+
+                                    <div class="">
+                                        <label class="col-md-2 control-label">Min Number of Credits:</label>
+                                        <div class="col-md-2">
+                                            <span style="text-transform: uppercase">{{ credit_study_plan_obj.min_credit|default_if_none:"" }}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="">
+                                        <label class="col-md-2 control-label">Max Number of Credits:</label>
+                                        <div class="col-md-2">
+                                            {{ credit_study_plan_obj.max_credit|default_if_none:"" }}
+                                        </div>
+                                    </div>
+
+
                                 </div>
-                                <div class="tab-pane active" id="tab_1_1_2">
-                                    <br>
-
-
-
-
-
-                     <form method="post" action="" id="form_submit">
-
-
-                            {% csrf_token %}
-
-                    <input type="text" hidden id="check_ids" name="check_ids">
-                    <input type="text" hidden id="total_unit" name="total_unit" value="{{ unit_count }}">
-
-                    <br>
-                    <div class="tabbable-custom nav-justified">
-                        <ul class="nav nav-tabs nav-justified">
-
-                            <li class="active">
-                                    <a data-id="11" href="#tab_1_1_1_1" data-toggle="tab" >
-                                        Available Courses </a>
-                                </li>
-
-                            <li class="">
-                                    <a data-id="12" href="#tab_1_1_1_2" data-toggle="tab" >
-                                        Registered Courses </a>
-                                </li>
-
-                        </ul>
-                        <div class="tab-content">
-                            <div class="tab-pane active" id="tab_1_1_1_1">
+                                <hr>
                                 <table name="data"
                                        class="data table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer"
                                        id="example" role="grid" aria-describedby="sample_1_info">
@@ -214,15 +181,15 @@
                                         <th style="display: none"></th>
                                         <th>
                                             <input name="select_all" id="select_all" class="select_all" value="1"
-                                                   type="checkbox"  >
+                                                   type="checkbox">
 
                                         </th>
                                         <th>{% trans 'Code' %}</th>
                                         <th>{% trans 'Title' %}</th>
                                         <th>{% trans 'Type' %}</th>
-                                        <th>{% trans 'Unit' %}</th>
                                         <th>{% trans 'Is Prerequisite' %}</th>
                                         <th>{% trans 'Course' %}</th>
+                                        <th>{% trans 'Unit' %}</th>
                                     </tr>
                                     </thead>
 
@@ -247,17 +214,15 @@
                                             <td>
                                                 {{ rec.type|default_if_none:"" }}
                                             </td>
+
                                             <td>
-                                                {{ rec.unit|default_if_none:"" }}
-                                            </td>
-                                        <td>
                                                 {% if rec.is_prerequisite == True %}
                                                     Yes
                                                 {% else %}
                                                     No
                                                 {% endif %}
                                             </td>
-                                        <td>
+                                            <td>
                                                 {% if rec.course %}
                                                     {{ rec.course.course|default_if_none:"" }}
                                                 {% else %}
@@ -265,6 +230,14 @@
 
                                                 {% endif %}
                                             </td>
+                                            <td width="5%">
+                                                <input class="form-control data unit" name="" type="text"
+                                                       id="unit_{{ forloop.counter }}"
+                                                       value="{{ rec.unit|default_if_none:"" }}"
+
+                                                       disabled>
+
+                                            </td>
 
 
                                         </tr>
@@ -273,97 +246,109 @@
                                     {% endfor %}
 
 
-
                                     </tbody>
                                 </table>
-                            </div>
+                            {% if credit_course_recs %}
+                                <br>
+
+
+                                <div class="row">
+                                    <div class="col-md-offset-10 col-md-7">
+
+                                        <button type="submit" class="btn blue credit_status_change"
+                                                id="save_form_credit" style="margin-left:14%">
+                                            Proceed
+                                        </button>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            </form>
+                        </div>
+
 
                         <div class="tab-pane" id="tab_1_1_1_2">
-                                <table name="data"
-                                       class="data table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer"
-                                       id="example_2" role="grid" aria-describedby="sample_1_info">
-                                    <thead>
-                                    <tr>
+                            <table name="data"
+                                   class="data table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer"
+                                   id="example_2" role="grid" aria-describedby="sample_1_info">
+                                <thead>
+                                <tr>
                                         <th style="display: none"></th>
-                                        <th>
-                                            <input name="select_all" id="select_all" class="select_all" value="1"
-                                                   type="checkbox" disabled checked>
 
-                                        </th>
                                         <th>{% trans 'Code' %}</th>
                                         <th>{% trans 'Title' %}</th>
                                         <th>{% trans 'Type' %}</th>
-                                        <th>{% trans 'Unit' %}</th>
                                         <th>{% trans 'Is Prerequisite' %}</th>
                                         <th>{% trans 'Course' %}</th>
+                                        <th>{% trans 'Unit' %}</th>
                                     </tr>
-                                    </thead>
+                                </thead>
 
-                                    <tbody id="tbody">
-                                    {% for rec in registered_credit_course_recs %}
-                                        <tr id="item{{ forloop.counter }}" class="item">
+                                <tbody id="tbody">
+                                {% for rec in registered_course_recs %}
+                                     <tr id="item{{ forloop.counter }}" class="item">
                                             <td style="display: none">
                                                 <input id="application_id" class="application_id"
                                                        value="{{ rec.id }}">
                                             </td>
 
+
                                             <td>
-                                                <input name="check" type="checkbox" class="checkboxes" disabled checked
-                                                       value="{{ rec.id }}">
-                                            </td>
-                                            <td>
-                                                {{ rec.code|default_if_none:"" }}
+                                                {{ rec.course.code|default_if_none:"" }}
                                             </td>
                                             <td>
-                                                {{ rec.title|default_if_none:"" }}
+                                                {{ rec.course.title|default_if_none:"" }}
                                             </td>
                                             <td>
-                                                {{ rec.type|default_if_none:"" }}
+                                                {{ rec.course.type|default_if_none:"" }}
+                                            </td>
+
+                                            <td>
+                                                {% if rec.course.is_prerequisite == True %}
+                                                    Yes
+                                                {% else %}
+                                                    No
+                                                {% endif %}
                                             </td>
                                             <td>
-                                                {{ rec.unit|default_if_none:"" }}
+                                                {% if rec.course.course %}
+                                                    {{ rec.course.course.course|default_if_none:"" }}
+                                                {% else %}
+                                                    -
+
+                                                {% endif %}
                                             </td>
-                                        <td>
-                                                {{ rec.unit|default_if_none:"" }}
-                                            </td>
-                                        <td>
-                                                {{ rec.unit|default_if_none:"" }}
+                                            <td width="5%">
+                                                <input class="form-control data unit" name="" type="text"
+                                                       id="unit_{{ forloop.counter }}"
+                                                       value="{{ rec.course.unit|default_if_none:"" }}"
+
+                                                       disabled>
+
                                             </td>
 
 
                                         </tr>
 
 
-                                    {% endfor %}
+                                {% endfor %}
 
 
-
-
-                                    </tbody>
-                                </table>
-                            </div>
-
+                                </tbody>
+                            </table>
                         </div>
+
                     </div>
+                </div>
 
 
-{#                    <div class="row">#}
-{#                        <div class="col-md-offset-10 col-md-7">#}
-{##}
-{#                            <button type="submit" class="btn blue status_change" id="save_form" style="margin-left:14%">#}
-{#                                Proceed#}
-{#                            </button>#}
-{#                        </div>#}
-{#                    </div>#}
-
-                     </form>
 
 
-                                </div>
+            </div>
 
 
-                            </div>
-                        </div>
+        </div>
+    </div>
 
 
 

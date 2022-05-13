@@ -3162,26 +3162,6 @@ def matric_card(request, app_id):
         messages.warning(request, "Form have some error" + str(e))
     return redirect('/student/application_matric_card/')
 
-    application_obj = ApplicationDetails.objects.get(id=app_id)
-    if application_obj.first_interview_attend:
-        header_path = ''
-        if application_obj.university.university_logo:
-            # header_path = settings.MEDIA_ROOT + 'university_logo.png'
-            header_path = application_obj.university.university_logo.path
-        created_on = application_obj.created_on.strftime("%d %B %Y")
-        registration_number = int(application_obj.created_on.timestamp())
-        current_date = datetime.datetime.now().strftime("%d %B %Y")
-        student_id = hex(binascii.crc32(str(app_id).encode()))[2:]
-        template = get_template('application_offer_letter_pdf.html')
-        Context = ({'application_obj': application_obj, 'header_path': header_path, 'current_date': current_date,
-                    'student_id': student_id, 'created_on': created_on, 'registration_number': registration_number})
-        html = template.render(Context)
-        file = open('test.pdf', "w+b")
-        pisa.CreatePDF(html.encode('utf-8'), dest=file, encoding='utf-8')
-        file.seek(0)
-        pdf = file.read()
-        file.close()
-        return HttpResponse(pdf, 'application/pdf')
 
 
 def semester_course_registration(request):
@@ -3279,56 +3259,15 @@ def get_semester_from_year(request):
 
 def credit_course_registration(request):
     if request.method == 'POST':
-        year = request.POST.get('year', None)
-        semester = request.POST.get('semester', None)
-        year_obj = ''
-        course_recs = ''
-        study_plan_obj = StudyPlanDetails.objects.get(id=semester)
-        course_recs = study_plan_obj.course.all()
-        application_obj = request.user.get_application
-        matric_no = hex(binascii.crc32(str(application_obj.id).encode()))[2:]
-        program_id = ''
-        if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False and application_obj.is_accepted == True:
-            program_id = application_obj.program.id
-        elif application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False and application_obj.is_accepted == True:
-            program_id = application_obj.program_2.id
-        else:
-            program_id = application_obj.program_3.id
-        year_list = []
-        year_ids = []
-        study_plan_recs = StudyPlanDetails.objects.filter(program_id=program_id)
-        for rec in study_plan_recs:
-            if rec.academic_year.id not in year_ids:
-                year_ids.append(rec.academic_year.id)
-                year_list.append(rec.academic_year)
-        if year:
-            year_obj = YearDetails.objects.get(id = year)
-        unit_count = 0
-        if course_recs:
-            for rec in course_recs:
-                unit_count = int(unit_count) + int(rec.unit)
-
-        semester_list = []
-        semester_recs = StudyPlanDetails.objects.filter(academic_year_id=year, program_id=study_plan_obj.program_id)
-        for rec in semester_recs:
-            raw_dict = {}
-            raw_dict['semester'] = str(rec.study_semester.semester + ' ' + (str(rec.study_semester.start_date) + ' - ' + str(rec.study_semester.end_date)))
-            raw_dict['id'] = rec.id
-            semester_list.append(raw_dict)
-
-        course_filter = True
-        return render(request, 'course_registration.html', {'application_obj': application_obj,
-                                                            'matric_no': matric_no, 'course_recs': course_recs,
-                                                            'year_list': year_list, 'program_id': program_id,
-                                                            'year_obj':year_obj,'study_plan_obj':study_plan_obj,
-                                                            'course_filter':course_filter,
-                                                            'unit_count':unit_count,
-                                                            'semester_list':semester_list})
-
+        check_ids = json.loads(request.POST.get('check_ids'))
+        program_id = request.POST.get('program_id', None)
+        for rec in check_ids:
+            try:
+                StudentRegisteredCreditCourseDetails.objects.create(application_id=request.user.get_application,program_id = program_id,course_id = rec)
+            except Exception as e:
+                pass
+        return redirect('/student/credit_course_registration/')
     else:
-        semester_list = []
-        unit_count = 0
-        course_filter = False
         application_obj = request.user.get_application
         matric_no = hex(binascii.crc32(str(application_obj.id).encode()))[2:]
         study_plan_obj = ''
@@ -3342,13 +3281,17 @@ def credit_course_registration(request):
         else:
             program_id = application_obj.program_3.id
         credit_course_recs = ''
+        registered_course_ids = StudentRegisteredCreditCourseDetails.objects.filter(
+            application_id=request.user.get_application).values_list('course_id', flat=True)
         credit_study_plan_obj = CreditStudyPlanDetails.objects.get(program_id=program_id)
-        credit_course_recs = credit_study_plan_obj.credit_course.all()
+        credit_course_recs = credit_study_plan_obj.credit_course.filter().exclude(id__in = registered_course_ids)
+
+        registered_course_recs = StudentRegisteredCreditCourseDetails.objects.filter(application_id=request.user.get_application)
 
         return render(request, 'credit_course_registration.html',{'application_obj':application_obj,
                                                        'matric_no':matric_no,'course_recs':course_recs,
                                                            'program_id':program_id,
-                                                           'year_obj':year_obj,'course_filter':course_filter,
-                                                           'unit_count':unit_count,
-                                                           'semester_list':semester_list,
-                                                                  'credit_course_recs':credit_course_recs})
+                                                           'year_obj':year_obj,
+                                                                  'credit_course_recs':credit_course_recs,
+                                                                  'credit_study_plan_obj':credit_study_plan_obj,
+                                                                  'registered_course_recs':registered_course_recs})

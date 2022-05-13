@@ -863,3 +863,12 @@ class CreditStudyPlanDetails(BaseModel):
     min_credit = models.CharField(max_length=50, blank=True, null=True)
     max_credit = models.CharField(max_length=50, blank=True, null=True)
     credit_course = models.ManyToManyField(CreditCourseDetails, blank=True)
+
+
+class StudentRegisteredCreditCourseDetails(BaseModel):
+    application_id = models.ForeignKey(ApplicationDetails, null=True, related_name='student_credit_application_id',
+                                       on_delete=models.SET_NULL)
+    program = models.ForeignKey(ProgramDetails, null=True, related_name='student_credit_registered_course',
+                             on_delete=models.SET_NULL)
+    course = models.ForeignKey(CreditCourseDetails, null=True, related_name='student_credit_credit_course',
+                                on_delete=models.SET_NULL)
