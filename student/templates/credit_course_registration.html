@@ -64,7 +64,7 @@
                         alert('Reminder of Credit Hours Below limit. Return and make sure not bellowing ' + min_credit + ' credit hours.');
                         return false;
                     } else if (total_unit > max_credit) {
-                         alert('Reminder of Credit Hours Exceeds limit. Return and make sure not exceeding ' + max_credit + ' credit hours.');
+                        alert('Reminder of Credit Hours Exceeds limit. Return and make sure not exceeding ' + max_credit + ' credit hours.');
                         return false;
                     }
 
@@ -123,7 +123,6 @@
                 <br>
 
 
-
                 <br>
                 <div class="tabbable-custom nav-justified">
                     <ul class="nav nav-tabs nav-justified">
@@ -142,7 +141,8 @@
                     <div class="tab-content">
 
                         <div class="tab-pane active" id="tab_1_1_1_1">
-                            <form method="post" action="{% url 'student:credit_course_registration' %}" id="credit_form_submit">
+                            <form method="post" action="{% url 'student:credit_course_registration' %}"
+                                  id="credit_form_submit">
 
 
                                 {% csrf_token %}
@@ -151,7 +151,7 @@
                                 <input type="hidden" value="{{ credit_study_plan_obj.max_credit|default_if_none:"" }}"
                                        name="max_credit" id="max_credit">
                                 <input type="hidden" name="program_id" id="program_id" value="{{ program_id }}">
-                            <input type="text" hidden id="check_ids" name="check_ids">
+                                <input type="text" hidden id="check_ids" name="check_ids">
 
                                 <br>
                                 <div style="margin-left: 0px !important; margin-right: 0px !important;" class="row">
@@ -187,14 +187,15 @@
                                         <th>{% trans 'Code' %}</th>
                                         <th>{% trans 'Title' %}</th>
                                         <th>{% trans 'Type' %}</th>
-                                        <th>{% trans 'Is Prerequisite' %}</th>
-                                        <th>{% trans 'Course' %}</th>
+                                        <th>{% trans 'Prerequisite' %}</th>
+                                        <th>{% trans 'Action' %}</th>
+                                        {#                                        <th>{% trans 'Course' %}</th>#}
                                         <th>{% trans 'Unit' %}</th>
                                     </tr>
                                     </thead>
 
                                     <tbody id="tbody">
-                                    {% for rec in credit_course_recs %}
+                                    {% for rec in credit_course_list %}
                                         <tr id="item{{ forloop.counter }}" class="item">
                                             <td style="display: none">
                                                 <input id="application_id" class="application_id"
@@ -216,20 +217,24 @@
                                             </td>
 
                                             <td>
-                                                {% if rec.is_prerequisite == True %}
-                                                    Yes
-                                                {% else %}
-                                                    No
-                                                {% endif %}
+                                                {{ rec.is_prerequisite|default_if_none:"" }}
                                             </td>
+
                                             <td>
-                                                {% if rec.course %}
-                                                    {{ rec.course.course|default_if_none:"" }}
+                                                {% if rec.is_prerequisite == 'Yes' %}
+                                                    {% if rec.course_registered %}
+                                                    <i style="color: green" class="fa fa-check" aria-hidden="true"></i>
                                                 {% else %}
-                                                    -
+                                                    <a href="{% url 'student:add_prerequisite_courses' rec.id %}" id="add" class="">Add Prerequisite Course</a>
 
                                                 {% endif %}
+                                                {% endif %}
+
+
+
+
                                             </td>
+
                                             <td width="5%">
                                                 <input class="form-control data unit" name="" type="text"
                                                        id="unit_{{ forloop.counter }}"
@@ -248,20 +253,20 @@
 
                                     </tbody>
                                 </table>
-                            {% if credit_course_recs %}
-                                <br>
+                                {% if credit_course_recs %}
+                                    <br>
 
 
-                                <div class="row">
-                                    <div class="col-md-offset-10 col-md-7">
+                                    <div class="row">
+                                        <div class="col-md-offset-10 col-md-7">
 
-                                        <button type="submit" class="btn blue credit_status_change"
-                                                id="save_form_credit" style="margin-left:14%">
-                                            Proceed
-                                        </button>
+                                            <button type="submit" class="btn blue credit_status_change"
+                                                    id="save_form_credit" style="margin-left:14%">
+                                                Proceed
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                            {% endif %}
+                                {% endif %}
 
                             </form>
                         </div>
@@ -273,62 +278,62 @@
                                    id="example_2" role="grid" aria-describedby="sample_1_info">
                                 <thead>
                                 <tr>
-                                        <th style="display: none"></th>
+                                    <th style="display: none"></th>
 
-                                        <th>{% trans 'Code' %}</th>
-                                        <th>{% trans 'Title' %}</th>
-                                        <th>{% trans 'Type' %}</th>
-                                        <th>{% trans 'Is Prerequisite' %}</th>
-                                        <th>{% trans 'Course' %}</th>
-                                        <th>{% trans 'Unit' %}</th>
-                                    </tr>
+                                    <th>{% trans 'Code' %}</th>
+                                    <th>{% trans 'Title' %}</th>
+                                    <th>{% trans 'Type' %}</th>
+                                    <th>{% trans 'Prerequisite' %}</th>
+                                    <th>{% trans 'Course' %}</th>
+                                    <th>{% trans 'Unit' %}</th>
+                                </tr>
                                 </thead>
 
                                 <tbody id="tbody">
                                 {% for rec in registered_course_recs %}
-                                     <tr id="item{{ forloop.counter }}" class="item">
-                                            <td style="display: none">
-                                                <input id="application_id" class="application_id"
-                                                       value="{{ rec.id }}">
-                                            </td>
+                                    <tr id="item{{ forloop.counter }}" class="item">
+                                        <td style="display: none">
+                                            <input id="application_id" class="application_id"
+                                                   value="{{ rec.id }}">
+                                        </td>
 
 
-                                            <td>
-                                                {{ rec.course.code|default_if_none:"" }}
-                                            </td>
-                                            <td>
-                                                {{ rec.course.title|default_if_none:"" }}
-                                            </td>
-                                            <td>
-                                                {{ rec.course.type|default_if_none:"" }}
-                                            </td>
+                                        <td>
+                                            {{ rec.course.code|default_if_none:"" }}
+                                        </td>
+                                        <td>
+                                            {{ rec.course.title|default_if_none:"" }}
+                                        </td>
+                                        <td>
+                                            {{ rec.course.type|default_if_none:"" }}
+                                        </td>
 
-                                            <td>
-                                                {% if rec.course.is_prerequisite == True %}
-                                                    Yes
-                                                {% else %}
-                                                    No
-                                                {% endif %}
-                                            </td>
-                                            <td>
-                                                {% if rec.course.course %}
-                                                    {{ rec.course.course.course|default_if_none:"" }}
-                                                {% else %}
-                                                    -
+                                        <td>
+                                            {% if rec.course.is_prerequisite == True %}
+                                                Yes
+                                            {% else %}
+                                                No
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if rec.course.course %}
+                                                {{ rec.course.course.course|default_if_none:"" }}
+                                            {% else %}
+                                                -
 
-                                                {% endif %}
-                                            </td>
-                                            <td width="5%">
-                                                <input class="form-control data unit" name="" type="text"
-                                                       id="unit_{{ forloop.counter }}"
-                                                       value="{{ rec.course.unit|default_if_none:"" }}"
+                                            {% endif %}
+                                        </td>
+                                        <td width="5%">
+                                            <input class="form-control data unit" name="" type="text"
+                                                   id="unit_{{ forloop.counter }}"
+                                                   value="{{ rec.course.unit|default_if_none:"" }}"
 
-                                                       disabled>
+                                                   disabled>
 
-                                            </td>
+                                        </td>
 
 
-                                        </tr>
+                                    </tr>
 
 
                                 {% endfor %}
@@ -340,8 +345,6 @@
 
                     </div>
                 </div>
-
-
 
 
             </div>

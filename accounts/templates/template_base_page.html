@@ -1760,7 +1760,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-     {% if request.resolver_match.url_name == 'semester_course_registration' or  request.resolver_match.url_name == 'course_registration_checkout' or request.resolver_match.url_name == 'credit_course_registration'%}
+     {% if request.resolver_match.url_name == 'semester_course_registration' or  request.resolver_match.url_name == 'course_registration_checkout' or request.resolver_match.url_name == 'credit_course_registration' or request.resolver_match.url_name == 'add_prerequisite_courses'%}
         {
             var element = document.getElementById("course_registration_list");
             element.classList.add("active");

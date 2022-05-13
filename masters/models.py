@@ -872,3 +872,9 @@ class StudentRegisteredCreditCourseDetails(BaseModel):
                              on_delete=models.SET_NULL)
     course = models.ForeignKey(CreditCourseDetails, null=True, related_name='student_credit_credit_course',
                                 on_delete=models.SET_NULL)
+
+class RegisteredPrerequisiteCourses(BaseModel):
+    application_id = models.ForeignKey(ApplicationDetails, null=True, related_name='student_prerequisite_application_id',
+                                       on_delete=models.SET_NULL)
+    course = models.ForeignKey(CreditCourseDetails, null=True, related_name='student_prerequisite_course',
+                                on_delete=models.SET_NULL)

@@ -3284,7 +3284,26 @@ def credit_course_registration(request):
         registered_course_ids = StudentRegisteredCreditCourseDetails.objects.filter(
             application_id=request.user.get_application).values_list('course_id', flat=True)
         credit_study_plan_obj = CreditStudyPlanDetails.objects.get(program_id=program_id)
+        credit_course_list = []
         credit_course_recs = credit_study_plan_obj.credit_course.filter().exclude(id__in = registered_course_ids)
+        for rec in credit_course_recs:
+            course_dict = {}
+            course_dict['id'] = rec.id
+            course_dict['code'] = rec.code
+            course_dict['title'] = rec.title
+            course_dict['type'] = rec.type
+            if rec.is_prerequisite:
+                course_dict['is_prerequisite'] = 'Yes'
+            else:
+                course_dict['is_prerequisite'] = 'No'
+
+            if RegisteredPrerequisiteCourses.objects.filter(course_id=rec.id).exists():
+                course_dict['course_registered'] = True
+            else:
+                course_dict['course_registered'] = False
+            course_dict['unit'] = rec.unit
+
+            credit_course_list.append(course_dict)
 
         registered_course_recs = StudentRegisteredCreditCourseDetails.objects.filter(application_id=request.user.get_application)
 
@@ -3294,4 +3313,19 @@ def credit_course_registration(request):
                                                            'year_obj':year_obj,
                                                                   'credit_course_recs':credit_course_recs,
                                                                   'credit_study_plan_obj':credit_study_plan_obj,
-                                                                  'registered_course_recs':registered_course_recs})
+                                                                  'registered_course_recs':registered_course_recs,
+                                                                  'credit_course_list':credit_course_list})
+
+
+def add_prerequisite_courses(request, course_id=None):
+    if request.method == 'POST':
+        try:
+            RegisteredPrerequisiteCourses.objects.create(application_id=request.user.get_application,
+                                                         course_id=course_id)
+        except Exception as e:
+            pass
+        return redirect('/student/credit_course_registration/')
+    else:
+        prerequisite_courses = CreditCourseDetails.objects.filter(id = course_id)
+        return render(request, 'add_prerequisite_courses.html',{'prerequisite_courses':prerequisite_courses,
+                                                                'course_id':course_id})

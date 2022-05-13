@@ -1,0 +1,137 @@
+{% extends "template_base_page.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'student:student_home' %}">{% trans 'Home' %}</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span>{% trans 'Add Prerequisite Courses' %}</span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form action="{% url 'student:add_prerequisite_courses' course_id %}"
+                      id="id_form"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-body">
+
+                        <input id="curriculum_count" name="curriculum_count" hidden>
+
+
+                        <div class="portlet-title" style="margin-left:-15px;font-size: 16px;">
+                            <div class="caption">
+                                <i class="icon-settings font-red"></i>
+                                <span class="caption-subject font-red sbold uppercase">{% trans 'Add Prerequisite Courses' %}</span>
+                            </div>
+                        </div>
+                        <hr>
+
+
+                        <div class="row">
+
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Prerequisite Courses' %}:</label>
+                                <div class="col-md-3">
+                                    <select id='prerequisite_courses' title="Select Working Status" name="prerequisite_courses"
+                                            class="form-control chk" required>
+                                        <option style="display:none" selected="selected" id="" value="">
+                                            {% trans 'Please Select' %}
+                                        </option>
+                                        {% for rec in prerequisite_courses %}
+                                            <option value="{{ rec.id }}">{{ rec.course.course|default_if_none:"" }}</option>
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                                        onclick="window.location='{% url "student:credit_course_registration" %}'">
+                                    {% trans 'Back' %}
+                                </button>
+
+
+                                <button type="submit" class="btn green" id="save_form"
+                                        >{% trans 'Save' %}
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

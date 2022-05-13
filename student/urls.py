@@ -140,5 +140,6 @@ urlpatterns = [
                   path('semester_course_registration/', views.semester_course_registration, name='semester_course_registration'),
                   path('get_semester_from_year/', views.get_semester_from_year, name='get_semester_from_year'),
                   path('credit_course_registration/', views.credit_course_registration, name='credit_course_registration'),
+                  path('add_prerequisite_courses/<int:course_id>/', views.add_prerequisite_courses, name='add_prerequisite_courses'),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
