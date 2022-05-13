@@ -137,8 +137,9 @@ urlpatterns = [
                   path('get_faculty_from_university/', views.get_faculty_from_university, name='get_faculty_from_university'),
                   path('get_all_acceptance_avg_program_mode/', views.get_all_acceptance_avg_program_mode, name='get_all_acceptance_avg_program_mode'),
                   path('application_matric_card/', views.application_matric_card, name='application_matric_card'),
-                  path('course_registration/', views.course_registration, name='course_registration'),
+                  path('semester_course_registration/', views.semester_course_registration, name='semester_course_registration'),
                   path('get_semester_from_year/', views.get_semester_from_year, name='get_semester_from_year'),
-
+                  path('semester_course_registration/', views.semester_course_registration, name='semester_course_registration'),
+                  path('credit_course_registration/', views.credit_course_registration, name='credit_course_registration'),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

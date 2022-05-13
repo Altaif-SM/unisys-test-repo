@@ -1446,7 +1446,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
                         {% if 'student.can_view_student_application_progress_history' in perms %}
                                 <li class="nav-item " id="acd_qli">
-                                    <a href="{% url 'student:course_registration' %}"
+                                    <a href="{% url 'student:semester_course_registration' %}"
                                        class="nav-link nav-toggle">
                                         <i class="fa fa-registered"></i>
                                         <span class="title">{% trans 'Course Registration' %}</span>
@@ -1538,7 +1538,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
                      {% if user.is_student %}
                          {% if user.get_student_application.course_registration %}
-                            <li id="course_registration"><a href="{% url 'student:course_registration' %}" >{% trans 'Course Registration' %}</a></li>
+                            <li id="course_registration"><a href="{% url 'student:semester_course_registration' %}" >{% trans 'Course Registration' %}</a></li>
                          {% endif %}
                     {% endif %}
 
@@ -1760,7 +1760,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-     {% if request.resolver_match.url_name == 'course_registration' or  request.resolver_match.url_name == 'course_registration_checkout' %}
+     {% if request.resolver_match.url_name == 'semester_course_registration' or  request.resolver_match.url_name == 'course_registration_checkout' or request.resolver_match.url_name == 'credit_course_registration'%}
         {
             var element = document.getElementById("course_registration_list");
             element.classList.add("active");

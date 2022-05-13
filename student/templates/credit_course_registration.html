@@ -37,6 +37,7 @@
 
                 });
 
+
                 function get_semester_from_year(url, year_id, program_id) {
                     $.ajax({
                         type: 'POST',
@@ -157,14 +158,13 @@
 
 
 
-
     <div class="tabbable-custom nav-justified">
                             <ul class="nav nav-tabs nav-justified">
-                                <li class="active">
+                                <li>
                                     <a data-id="1" href="#tab_1_1_1" data-toggle="tab" >
                                         COURSE REGISTRATION (Semester Based System) </a>
                                 </li>
-                                <li>
+                                <li class="active">
                                     <a data-id="2" href="#tab_1_1_2" data-toggle="tab">
                                         COURSE REGISTRATION (Credit Based System) </a>
                                 </li>
@@ -172,157 +172,16 @@
                             </ul>
 
                             <div class="tab-content">
-                                <div class="tab-pane active" id="tab_1_1_1">
-                                <br>
-                                    <div style="margin-left: 0px !important; margin-right: 0px !important;" class="row">
-
-                    <div class="">
-                        <label class="col-md-2 control-label">Name:</label>
-                        <div class="col-md-3">
-                            <span style="text-transform: uppercase">{{ application_obj.first_name|default_if_none:"" }} {{ application_obj.last_name|default_if_none:"" }}</span>
-                        </div>
-                    </div>
-
-                    <div class="">
-                        <label class="col-md-2 control-label">Matric No:</label>
-                        <div class="col-md-3">
-                            {{ matric_no|default_if_none:"" }}
-                        </div>
-                    </div>
+                                <div class="tab-pane" id="tab_1_1_1">
+                                </div>
+                                <div class="tab-pane active" id="tab_1_1_2">
+                                    <br>
 
 
-                </div>
-                <br>
-                <div style="margin-left: 0px !important; margin-right: 0px !important;" class="row">
-
-                    <div class="">
-                        <label class="col-md-2 control-label">Status:</label>
-                        <div class="col-md-3">
-                            <span style="color: green">ACTIVE</span>
-                        </div>
-                    </div>
-
-                    <div class="">
-                        <label class="col-md-2 control-label">University:</label>
-                        <div class="col-md-3">
-                            {{ application_obj.university.university_name|default_if_none:"" }}
-                        </div>
-                    </div>
 
 
-                </div>
-                <br>
-                <div style="margin-left: 0px !important; margin-right: 0px !important;" class="row">
 
-                    <div class="">
-                        <label class="col-md-2 control-label">Programme:</label>
-                        <div class="col-md-3">
-                            {% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}
-                                {{ application_obj.program.program_name|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}
-                                {{ application_obj.program_2.program_name|default_if_none:"" }}
-                                {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.program_3.program_name|default_if_none:"" }} {% else %}
-                                {{ application_obj.program.program_name|default_if_none:"" }}{% endif %}
-                        </div>
-                    </div>
-
-                    <div class="">
-                        <label class="col-md-2 control-label">Mode:</label>
-                        <div class="col-md-3">
-                            {% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}
-                                {{ application_obj.program_mode.study_type|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}
-                                {{ application_obj.program_mode_2.study_type|default_if_none:"" }}
-                                {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.program_mode_3.study_type|default_if_none:"" }} {% else %}
-                                {{ application_obj.program_mode.study_type|default_if_none:"" }}{% endif %}
-                        </div>
-                    </div>
-
-
-                </div>
-
-
-                <hr>
-                <form action="{% url 'student:semester_course_registration' %}"
-                      id="edit_study_plan_form"
-                      class="form-horizontal"
-                      method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <input type="hidden" name="program_id" id="program_id" value="{{ program_id }}">
-
-                    <div style="margin-left: 0px !important; margin-right: 0px !important;" class="row">
-
-
-                        <div class="">
-                            <label style="text-align:left" class="col-md-2 control-label">Select Year:</label>
-                            <div class="col-md-3">
-                                <select id='year' title="Select Year" required
-                                        name="year"
-                                        class="form-control chk">
-                                    {% if year_obj %}
-                                        <option style="display:none" selected="selected" id=""
-                                                value="{{ year_obj.id }}">
-                                            {{ year_obj.year_name|default_if_none:"" }}
-                                        </option>
-                                    {% else %}
-                                        <option style="display:none" selected="selected" id="" value="">
-                                            Please
-                                            Select
-                                        </option>
-                                    {% endif %}
-                                    {% for rec in year_list %}
-                                        <option value='{{ rec.id }}'>{{ rec.year_name|default_if_none:"" }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-
-
-                    </div>
-                    <br>
-                    <div style="margin-left: 0px !important; margin-right: 0px !important;" class="row">
-                        <div class="">
-                            <label style="text-align:left" class="col-md-2 control-label">Select Semester:</label>
-                            <div class="col-md-3">
-                                <select id='semester' title="Select Semester" required
-                                        name="semester"
-                                        class="form-control chk">
-
-                                    {% if study_plan_obj %}
-                                        <option style="display:none" selected="selected" id=""
-                                                value="{{ study_plan_obj.id }}">
-                                            {{ study_plan_obj.study_semester.semester|default_if_none:"" }} {{ study_plan_obj.study_semester.start_date|date:"Y-m-d" }} - {{ study_plan_obj.study_semester.end_date|date:"Y-m-d" }}
-                                        </option>
-                                    {% else %}
-                                        <option style="display:none" selected="selected" id="" value="">
-                                            Please
-                                            Select
-                                        </option>
-                                    {% endif %}
-
-                                    {% for rec in semester_list %}
-                                        <option value='{{ rec.id }}'>{{ rec.semester|default_if_none:"" }}</option>
-                                    {% endfor %}
-
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="">
-                            <div class="col-md-3">
-                                <button type="submit" class="btn green" id="back"
-                                >
-                                    Filter
-                                </button>
-                            </div>
-                        </div>
-
-                    </div>
-
-
-                </form>
-                <hr>
-
-                {% if course_filter %}
-                     <form method="post" action="{% url 'payments:course_registration_checkout' study_plan_obj.id %}" id="form_submit">
+                     <form method="post" action="" id="form_submit">
 
 
                             {% csrf_token %}
@@ -330,25 +189,99 @@
                     <input type="text" hidden id="check_ids" name="check_ids">
                     <input type="text" hidden id="total_unit" name="total_unit" value="{{ unit_count }}">
 
-                    <div class="portlet-title">
-                        <div class="caption">
-                            <i class="icon-settings font-red"></i>
-                            <span class="caption-subject font-red sbold uppercase"> {% trans 'ADD COURSES' %}</span>
-                        </div>
-                    </div>
                     <br>
                     <div class="tabbable-custom nav-justified">
                         <ul class="nav nav-tabs nav-justified">
+
                             <li class="active">
-                                <a data-id="1" href="#tab_1_1_1" data-toggle="tab" style="text-align: left">
-                                </a>
-                            </li>
+                                    <a data-id="11" href="#tab_1_1_1_1" data-toggle="tab" >
+                                        Available Courses </a>
+                                </li>
+
+                            <li class="">
+                                    <a data-id="12" href="#tab_1_1_1_2" data-toggle="tab" >
+                                        Registered Courses </a>
+                                </li>
+
                         </ul>
                         <div class="tab-content">
-                            <div class="tab-pane active" id="tab_1_1_1">
+                            <div class="tab-pane active" id="tab_1_1_1_1">
                                 <table name="data"
                                        class="data table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer"
                                        id="example" role="grid" aria-describedby="sample_1_info">
+                                    <thead>
+                                    <tr>
+                                        <th style="display: none"></th>
+                                        <th>
+                                            <input name="select_all" id="select_all" class="select_all" value="1"
+                                                   type="checkbox"  >
+
+                                        </th>
+                                        <th>{% trans 'Code' %}</th>
+                                        <th>{% trans 'Title' %}</th>
+                                        <th>{% trans 'Type' %}</th>
+                                        <th>{% trans 'Unit' %}</th>
+                                        <th>{% trans 'Is Prerequisite' %}</th>
+                                        <th>{% trans 'Course' %}</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody id="tbody">
+                                    {% for rec in credit_course_recs %}
+                                        <tr id="item{{ forloop.counter }}" class="item">
+                                            <td style="display: none">
+                                                <input id="application_id" class="application_id"
+                                                       value="{{ rec.id }}">
+                                            </td>
+
+                                            <td>
+                                                <input name="check" type="checkbox" class="checkboxes"
+                                                       value="{{ rec.id }}">
+                                            </td>
+                                            <td>
+                                                {{ rec.code|default_if_none:"" }}
+                                            </td>
+                                            <td>
+                                                {{ rec.title|default_if_none:"" }}
+                                            </td>
+                                            <td>
+                                                {{ rec.type|default_if_none:"" }}
+                                            </td>
+                                            <td>
+                                                {{ rec.unit|default_if_none:"" }}
+                                            </td>
+                                        <td>
+                                                {% if rec.is_prerequisite == True %}
+                                                    Yes
+                                                {% else %}
+                                                    No
+                                                {% endif %}
+                                            </td>
+                                        <td>
+                                                {% if rec.course %}
+                                                    {{ rec.course.course|default_if_none:"" }}
+                                                {% else %}
+                                                    -
+
+                                                {% endif %}
+                                            </td>
+
+
+                                        </tr>
+
+
+                                    {% endfor %}
+
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        <div class="tab-pane" id="tab_1_1_1_2">
+                                <table name="data"
+                                       class="data table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer"
+                                       id="example_2" role="grid" aria-describedby="sample_1_info">
                                     <thead>
                                     <tr>
                                         <th style="display: none"></th>
@@ -361,11 +294,13 @@
                                         <th>{% trans 'Title' %}</th>
                                         <th>{% trans 'Type' %}</th>
                                         <th>{% trans 'Unit' %}</th>
+                                        <th>{% trans 'Is Prerequisite' %}</th>
+                                        <th>{% trans 'Course' %}</th>
                                     </tr>
                                     </thead>
 
                                     <tbody id="tbody">
-                                    {% for rec in course_recs %}
+                                    {% for rec in registered_credit_course_recs %}
                                         <tr id="item{{ forloop.counter }}" class="item">
                                             <td style="display: none">
                                                 <input id="application_id" class="application_id"
@@ -388,6 +323,12 @@
                                             <td>
                                                 {{ rec.unit|default_if_none:"" }}
                                             </td>
+                                        <td>
+                                                {{ rec.unit|default_if_none:"" }}
+                                            </td>
+                                        <td>
+                                                {{ rec.unit|default_if_none:"" }}
+                                            </td>
 
 
                                         </tr>
@@ -395,30 +336,7 @@
 
                                     {% endfor %}
 
-                                    <tr id="item{{ forloop.counter }}" class="item">
-                                            <td style="display: none">
-                                                <input id="application_id" class="application_id"
-                                                       value="{{ rec.id }}">
-                                            </td>
 
-                                            <td>
-
-                                            </td>
-                                            <td>
-
-                                            </td>
-                                            <td>
-
-                                            </td>
-                                            <td>
-
-                                            </td>
-                                            <td>
-                                                <b>{{ unit_count }}</b>
-                                            </td>
-
-
-                                        </tr>
 
 
                                     </tbody>
@@ -429,20 +347,16 @@
                     </div>
 
 
-                    <div class="row">
-                        <div class="col-md-offset-10 col-md-7">
-
-                            <button type="submit" class="btn blue status_change" id="save_form" style="margin-left:14%">
-                                Proceed
-                            </button>
-                        </div>
-                    </div>
+{#                    <div class="row">#}
+{#                        <div class="col-md-offset-10 col-md-7">#}
+{##}
+{#                            <button type="submit" class="btn blue status_change" id="save_form" style="margin-left:14%">#}
+{#                                Proceed#}
+{#                            </button>#}
+{#                        </div>#}
+{#                    </div>#}
 
                      </form>
-
-                {% endif %}
-                                </div>
-                                <div class="tab-pane" id="tab_1_1_2">
 
 
                                 </div>
