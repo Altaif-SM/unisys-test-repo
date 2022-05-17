@@ -468,17 +468,24 @@
                              $('#study_level_2').append(
                                 '<option value="" >Please select</option>');
                             for (var i = 0; i < data.length; i++) {
-                                $('#study_level_2').append(
+                                if (data[i]['study_type'] !== 'Research' ){
+                                    $('#study_level_2').append(
                                     '<option value="' + data[i]['id'] + '">'
                                     + data[i]['study_type'] + '</option>')
+                                }
+
                             }
 
                              $('#study_level_3').append(
                                 '<option value="" >Please select</option>');
                             for (var i = 0; i < data.length; i++) {
-                                $('#study_level_3').append(
+                                if (data[i]['study_type'] !== 'Research' ){
+                                    $('#study_level_3').append(
                                     '<option value="' + data[i]['id'] + '">'
                                     + data[i]['study_type'] + '</option>')
+
+                                }
+
                             }
                         },
                         error: function (xhr, msg, err) {

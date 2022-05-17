@@ -2513,8 +2513,8 @@ def applicant_intake_info(request):
     # study_mode_list_2 = ['Online', 'On Campus']
     # study_mode_list_3 = ['Online', 'On Campus']
     study_mode_list = StudyTypeDetails.objects.all()
-    study_mode_list_2 = StudyTypeDetails.objects.all()
-    study_mode_list_3 = StudyTypeDetails.objects.all()
+    study_mode_list_2 = StudyTypeDetails.objects.filter().exclude(study_type = 'Research')
+    study_mode_list_3 = StudyTypeDetails.objects.filter().exclude(study_type = 'Research')
     study_level_list = ['Undergraduate', 'Postgraduate']
     study_type_recs = StudyTypeDetails.objects.all()
     study_level_recs = StudyLevelDetails.objects.filter().order_by('-id')
