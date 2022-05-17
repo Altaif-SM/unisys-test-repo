@@ -289,6 +289,27 @@
 
 
                         <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Supervisor' %}:</label>
+                                <div class="col-md-3">
+                                    <select id='supervisor' title="Select Supervisor" name="supervisor"
+                                            class="form-control">
+                                        {% if research_details.supervisor %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ research_details.supervisor.id }}"
+                                                    >{{ research_details.supervisor.email|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+                                        {% for rec in supervisor_list %}
+                                            <option value='{{ rec.id }}'>{{ rec.email|default_if_none:"" }}</option>
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+                            </div>
+
                            <div class="">
                                 <label class="col-md-2 control-label">{% trans 'Duration of Study' %}:</label>
                                 <div class="col-md-3">

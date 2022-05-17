@@ -791,3 +791,5 @@ class ResearchDetails(BaseModel):
     problems_encountered = models.TextField(blank=True, null=True)
     application_id = models.ForeignKey(ApplicationDetails, null=True, related_name='research_applicant_rel',
                                        on_delete=models.SET_NULL)
+    supervisor = models.ForeignKey(User, null=True, related_name='research_supervisor_rel',
+                                       on_delete=models.SET_NULL)

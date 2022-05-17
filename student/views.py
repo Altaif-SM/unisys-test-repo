@@ -3338,6 +3338,7 @@ def applicant_research_details(request):
         research_id = request.POST.get('research_id', None)
         program = request.POST.get('program', None)
         specialisation = request.POST.get('specialisation', None)
+        supervisor = request.POST.get('supervisor', None)
         study_duration = request.POST.get('study_duration', None)
         first_date_registration = request.POST.get('first_date_registration', None)
         completion_date = request.POST.get('completion_date', None)
@@ -3354,10 +3355,14 @@ def applicant_research_details(request):
         if not completion_date:
             completion_date = None
 
+        if not supervisor:
+            supervisor = None
+
         if research_id:
             research_obj = ResearchDetails.objects.get(id=research_id)
             research_obj.program = program
             research_obj.specialisation = specialisation
+            research_obj.supervisor_id = supervisor
             research_obj.study_duration = study_duration
             research_obj.first_date_registration = first_date_registration
             research_obj.completion_date = completion_date
@@ -3369,7 +3374,7 @@ def applicant_research_details(request):
             research_obj.problems_encountered = problems_encountered
             research_obj.save()
         else:
-            ResearchDetails.objects.create(program=program, specialisation=specialisation,
+            ResearchDetails.objects.create(program=program, specialisation=specialisation,supervisor_id = supervisor,
                                            study_duration=study_duration,
                                            first_date_registration=first_date_registration,
                                            completion_date=completion_date, research_title=research_title, project_outline = project_outline,
@@ -3391,7 +3396,10 @@ def applicant_research_details(request):
             additional_info_obj = AdditionInformationDetails.objects.get(application_id=request.user.get_application)
         if ResearchDetails.objects.filter(application_id=request.user.get_application).exists():
             research_details = ResearchDetails.objects.get(application_id=request.user.get_application)
+        role_name_list = ['Supervisor']
+        supervisor_list = User.objects.filter(role__name__in = role_name_list)
         return render(request, 'research_details.html', { 'application_obj': application_obj,
                                                          'additional_info_obj':additional_info_obj,
                                                          'student_id':student_id,
-                                                         'research_details':research_details})
+                                                         'research_details':research_details,
+                                                          'supervisor_list':supervisor_list})
