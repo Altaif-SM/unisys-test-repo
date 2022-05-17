@@ -3281,11 +3281,12 @@ def credit_course_registration(request):
         else:
             program_id = application_obj.program_3.id
         credit_course_recs = ''
+        credit_course_list = []
         registered_course_ids = StudentRegisteredCreditCourseDetails.objects.filter(
             application_id=request.user.get_application).values_list('course_id', flat=True)
-        credit_study_plan_obj = CreditStudyPlanDetails.objects.get(program_id=program_id)
-        credit_course_list = []
-        credit_course_recs = credit_study_plan_obj.credit_course.filter().exclude(id__in = registered_course_ids)
+        if CreditStudyPlanDetails.objects.filter(program_id=program_id).exists():
+            credit_study_plan_obj = CreditStudyPlanDetails.objects.get(program_id=program_id)
+            credit_course_recs = credit_study_plan_obj.credit_course.filter().exclude(id__in = registered_course_ids)
         for rec in credit_course_recs:
             course_dict = {}
             course_dict['id'] = rec.id
