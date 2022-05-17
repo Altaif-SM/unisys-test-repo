@@ -1256,7 +1256,6 @@
                 $(document).on("change", "#study_level", function (e) {
                     var study_mode = $(this).val();
                     var study_mode_value = $('#study_level :selected').text();
-                    console.log("study_mode"+study_mode_value);
                     if(study_mode_value == 'Research'){
                         $('.research_mode').show();
 
@@ -2555,7 +2554,7 @@
                                         style="color: red">*</span></label>
                                 <div class="col-md-4">
 
-                                    <a style="color: #0000C0;margin-top:10px" class="fa fa-plus">Add Research Proposal</a>
+                                    <a target="_blank" href="{% url 'student:applicant_research_details' %}" style="color: #0000C0;margin-top:10px" class="fa fa-plus">Add Research Proposal</a>
                                 </div>
 
 

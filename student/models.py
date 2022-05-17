@@ -774,3 +774,20 @@ class CreditTransferAttachmentDetails(BaseModel):
     status_verification_letter = models.FileField(upload_to='document/', null=True, blank=True)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_credit_transfer_attachement_rel',
                                      on_delete=models.SET_NULL)
+
+
+class ResearchDetails(BaseModel):
+    program = models.CharField(max_length=150, blank=True, null=True)
+    specialisation = models.CharField(max_length=150, blank=True, null=True)
+    study_duration = models.CharField(max_length=100, blank=True, null=True)
+    first_date_registration = models.DateField(null=True, blank=True)
+    completion_date = models.DateField(null=True, blank=True)
+    research_title = models.TextField(blank=True, null=True)
+    project_outline = models.TextField(blank=True, null=True)
+    data_collection = models.TextField(blank=True, null=True)
+    data_analysis = models.TextField(blank=True, null=True)
+    progress_date = models.TextField(blank=True, null=True)
+    data_collection = models.TextField(blank=True, null=True)
+    problems_encountered = models.TextField(blank=True, null=True)
+    application_id = models.ForeignKey(ApplicationDetails, null=True, related_name='research_applicant_rel',
+                                       on_delete=models.SET_NULL)

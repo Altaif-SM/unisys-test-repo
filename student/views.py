@@ -3331,3 +3331,67 @@ def add_prerequisite_courses(request, course_id=None):
         prerequisite_courses = CreditCourseDetails.objects.filter(id = course_id)
         return render(request, 'add_prerequisite_courses.html',{'prerequisite_courses':prerequisite_courses,
                                                                 'course_id':course_id})
+
+
+def applicant_research_details(request):
+    if request.method == 'POST':
+        research_id = request.POST.get('research_id', None)
+        program = request.POST.get('program', None)
+        specialisation = request.POST.get('specialisation', None)
+        study_duration = request.POST.get('study_duration', None)
+        first_date_registration = request.POST.get('first_date_registration', None)
+        completion_date = request.POST.get('completion_date', None)
+        research_title = request.POST.get('research_title', None)
+        project_outline = request.POST.get('project_outline', None)
+        data_collection = request.POST.get('data_collection', None)
+        data_analysis = request.POST.get('data_analysis', None)
+        progress_date = request.POST.get('progress_date', None)
+        problems_encountered = request.POST.get('problems_encountered', None)
+
+        if not first_date_registration:
+            first_date_registration = None
+
+        if not completion_date:
+            completion_date = None
+
+        if research_id:
+            research_obj = ResearchDetails.objects.get(id=research_id)
+            research_obj.program = program
+            research_obj.specialisation = specialisation
+            research_obj.study_duration = study_duration
+            research_obj.first_date_registration = first_date_registration
+            research_obj.completion_date = completion_date
+            research_obj.research_title = research_title
+            research_obj.project_outline = project_outline
+            research_obj.data_collection = data_collection
+            research_obj.data_analysis = data_analysis
+            research_obj.progress_date = progress_date
+            research_obj.problems_encountered = problems_encountered
+            research_obj.save()
+        else:
+            ResearchDetails.objects.create(program=program, specialisation=specialisation,
+                                           study_duration=study_duration,
+                                           first_date_registration=first_date_registration,
+                                           completion_date=completion_date, research_title=research_title, project_outline = project_outline,
+                                           data_collection = data_collection, data_analysis = data_analysis, progress_date = progress_date,
+                                           problems_encountered = problems_encountered,application_id=request.user.get_application)
+        messages.success(request, "Record saved.")
+        return redirect('/student/applicant_research_details/')
+    else:
+        research_details = ''
+        additional_info_obj = ''
+        application_obj = ''
+        try:
+            application_obj = request.user.get_application
+        except Exception as e :
+            messages.warning(request, "Please fill the personal details first.")
+            return redirect('/student/applicant_personal_info/')
+        student_id = hex(binascii.crc32(str(application_obj.id).encode()))[2:]
+        if AdditionInformationDetails.objects.filter(application_id=request.user.get_application).exists():
+            additional_info_obj = AdditionInformationDetails.objects.get(application_id=request.user.get_application)
+        if ResearchDetails.objects.filter(application_id=request.user.get_application).exists():
+            research_details = ResearchDetails.objects.get(application_id=request.user.get_application)
+        return render(request, 'research_details.html', { 'application_obj': application_obj,
+                                                         'additional_info_obj':additional_info_obj,
+                                                         'student_id':student_id,
+                                                         'research_details':research_details})
