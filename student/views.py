@@ -3280,6 +3280,7 @@ def credit_course_registration(request):
             program_id = application_obj.program_2.id
         else:
             program_id = application_obj.program_3.id
+        credit_study_plan_obj = ''
         credit_course_recs = ''
         credit_course_list = []
         registered_course_ids = StudentRegisteredCreditCourseDetails.objects.filter(
