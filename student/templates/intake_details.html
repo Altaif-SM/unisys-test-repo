@@ -451,6 +451,7 @@
                         },
                         success: function (data) {
 
+                            $('.research_mode').hide();
                             $('#study_level').empty();
                             $('#study_level_2').empty();
                             $('#study_level_3').empty();
@@ -712,6 +713,8 @@
                         success: function (data) {
 
 
+                            $('.research_mode').hide();
+
                             $('#learning_centre').empty();
                             $('#learning_centre').append(
                                 '<option value="" >Please select</option>');
@@ -775,18 +778,28 @@
                              $('#study_level_2').append(
                                 '<option value="" >Please select</option>');
                             for (var i = 0; i < data.length; i++) {
-                                $('#study_level_2').append(
+                                if (data[i]['study_type'] !== 'Research' ){
+                                    $('#study_level_2').append(
                                     '<option value="' + data[i]['id'] + '">'
                                     + data[i]['study_type'] + '</option>')
+                                }
+
                             }
 
                              $('#study_level_3').append(
                                 '<option value="" >Please select</option>');
                             for (var i = 0; i < data.length; i++) {
-                                $('#study_level_3').append(
+                                if (data[i]['study_type'] !== 'Research' ){
+                                     $('#study_level_3').append(
                                     '<option value="' + data[i]['id'] + '">'
                                     + data[i]['study_type'] + '</option>')
+                                }
                             }
+
+
+
+
+
                         },
                         error: function (xhr, msg, err) {
                             alert(xhr.responseJSON.error);
@@ -1241,8 +1254,15 @@
 
 
                 $(document).on("change", "#study_level", function (e) {
-                    console.log("Hi............")
                     var study_mode = $(this).val();
+                    var study_mode_value = $('#study_level :selected').text();
+                    console.log("study_mode"+study_mode_value);
+                    if(study_mode_value == 'Research'){
+                        $('.research_mode').show();
+
+                    }else{
+                         $('.research_mode').hide();
+                    }
                     var study_level = $('#program_level').val();
                     var university = $('#university').val();
                     var url = '/masters/get_faculty_from_study_level/';
@@ -2526,7 +2546,25 @@
 
 
                         </div>
-{#                        <br>#}
+                    {% if application_obj.program_mode.study_type == 'Research' %}
+                    <div class="row research_mode" style="margin-top: 20px;">
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Research Details' %}: <span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-4">
+
+                                    <a style="color: #0000C0;margin-top:10px" class="fa fa-plus">Add Research Proposal</a>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                    {% endif %}
+
 {##}
 {##}
 {#                        <div class="row">#}
