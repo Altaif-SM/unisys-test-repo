@@ -34,13 +34,7 @@
 
             $(document).ready(function () {
 
-                 {% if user.get_application %}
-                    {% if user.get_application.is_submitted %}
-                        $('input').prop('disabled', 'true');
-                        $('select').prop('disabled', 'true');
-                        $('label').prop('readonly', 'true');
-                    {% endif %}
-                {% endif %}
+
 
                 {#$("#father_nationality").chosen();#}
 
