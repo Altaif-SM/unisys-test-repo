@@ -473,7 +473,7 @@
                             <div class="">
                                 <label class="col-md-2 control-label">{% trans 'Title of Thesis/Research Project' %}:</label>
                                 <div class="col-md-8">
-                                    <textarea class="form-control" id="research_title" name="research_title"></textarea>
+                                    <textarea class="form-control" id="research_title" name="research_title">{{ research_details.research_title|default_if_none:"" }}</textarea>
                                 </div>
                             </div>
 

@@ -369,7 +369,7 @@ def template_approving_application(request):
                            'applicant_recs_3':applicant_recs_3,
                            })
         elif request.user.is_supervisor():
-            applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission = True,year=get_current_year(request),supervisor=request.user)
+            applicant_recs = ApplicationDetails.objects.filter(is_submitted=True,year=get_current_year(request),supervisor=request.user)
             context['my_template'] = 'template_university_base_page.html'
             return render(request, 'supervisor_approve_reject_template.html',
                           {'applicant_recs': applicant_recs, 'documents_recs': documents_recs, 'context': context})

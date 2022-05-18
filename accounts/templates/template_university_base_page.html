@@ -226,7 +226,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             {% else %}
                                 {#                                <img alt="" class="img-circle" src="../../media/{{ user.get_application.image }}"/>#}
 {#                                <b><span class="username username-hide-on-mobile">{{ request.user.university.university_name|default_if_none:"" }} - {% if user.role.all.0.name == 'Administrator' %}(Admission Unit){% elif user.role.all.0.name == 'Faculty' %}(Faculty){% elif user.role.all.0.name == 'Supervisor' %}(Supervisor){% else %}(Program){% endif %}</span></b>#}
-                                <b><span class="username username-hide-on-mobile" style="text-transform: uppercase">Dashboard - {% if user.role.all.0.name == 'Administrator' %}Admission Unit{% elif user.role.all.0.name == 'Faculty' %}{{ user.faculty.faculty_name|default_if_none:"" }}{% else %}{{ user.program.program_name|default_if_none:"" }}{% endif %} </span></b>
+                                <b><span class="username username-hide-on-mobile" style="text-transform: uppercase">Dashboard - {% if user.role.all.0.name == 'Administrator' %}Admission Unit{% elif user.role.all.0.name == 'Faculty' %}{{ user.faculty.faculty_name|default_if_none:"" }}{% elif user.role.all.0.name == 'Supervisor' %}Supervisor{% else %}{{ user.program.program_name|default_if_none:"" }}{% endif %} </span></b>
                                 </span>
 
 
@@ -939,10 +939,22 @@ License: You must have a valid license purchased only from themeforest(the above
                                         </li>
                                     {% endif %}
 {#                                    {% if 'Approving Applicant Details' in access_list %}#}
+                                 {% if not user.is_supervisor %}
                                         <li class="nav-item ">
                                             <a href="{% url 'partner:template_approving_application' %}"
                                                class="nav-link ">{% trans 'Approving Applicant Details' %}</a>
                                         </li>
+                                {% endif %}
+
+                                {% if user.is_supervisor %}
+
+                                        <li class="nav-item ">
+                                            <a href="{% url 'partner:template_approving_application' %}"
+                                               class="nav-link ">{% trans 'Approving Research Proposal' %}</a>
+                                        </li>
+                                {% endif %}
+
+
 {#                                    {% endif %}#}
 
 
