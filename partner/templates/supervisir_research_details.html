@@ -1,0 +1,571 @@
+{% extends context.my_template %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+
+            $(document).ready(function () {
+
+                 $('input').prop('disabled', 'true');
+                        $('select').prop('disabled', 'true');
+                        $('textarea').prop('disabled', 'true');
+                        $('label').prop('readonly', 'true');
+
+                 $(document).on("change", "#university_type", function (e) {
+                var university_type_id = $(this).val();
+                var url = '/student/get_university_from_type/';
+                get_university_from_university_type(url, university_type_id)
+            })
+
+            function get_university_from_university_type(url, university_type_id) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        university_type_id: university_type_id,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data) {
+
+                        $('#university').empty();
+                        $('#university').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#university').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['university_name'] + '</option>')
+                        }
+                    },
+                    error: function (xhr, msg, err) {
+                        alert(xhr.responseJSON.error);
+                    }
+                });
+            }
+
+             $(document).on("change", "#university", function (e) {
+                var university_id = $(this).val();
+                var url = '/student/get_supervisor_from_university/';
+                get_supervisor_from_university(url, university_id)
+            })
+
+            function get_supervisor_from_university(url, university_id) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        university_id: university_id,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data) {
+
+                        $('#supervisor').empty();
+                        $('#supervisor').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#supervisor').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['supervisor'] + '</option>')
+                        }
+                    },
+                    error: function (xhr, msg, err) {
+                        alert(xhr.responseJSON.error);
+                    }
+                });
+            }
+
+
+
+
+
+                {#$("#father_nationality").chosen();#}
+
+                {#$("#mother_nationality").chosen();#}
+
+                {#$("#student_id").chosen();#}
+                {#$("#agent_id").chosen();#}
+                var is_sponsored = "{{ application_obj.is_sponsored }}";
+                if(is_sponsored === 'False' || is_sponsored === ''){
+                    $(".sponsored").prop("disabled", true);
+                }
+
+                $('#save').click(function () {
+                    var count = $(".item:last").attr('id').split('_')[1];
+                    $('#sibling_count').val(count);
+
+
+                });
+
+                $(document).on("change", "#student_id", function (e) {
+                var about_know = $('#student_id').val();
+                if(about_know == 'Exam Center'){
+                    $("#agent_id").find('option').removeAttr("selected");
+                    $("#agent_id").find('option[value=""]').remove();
+                    $("#agent_id").append('<option value="" selected="selected">Please Select</option>');
+
+                    $('.campus_div').show();
+                }
+                else{
+                    $('.campus_div').hide();
+                }
+
+            })
+
+
+
+                $('input[type="radio"]').on('change', function(){
+                    var is_sponsored = $('input[name="is_sponsored"]:checked').val();
+                    if(is_sponsored === 'No'){
+                         $(".sponsored").prop("disabled", true);
+                         $('#sponsore_organisation').prop("required", false);
+                        $('#sponsore_address').prop("required", false);
+                        $('#sponsore_email').prop("required", false);
+                        $('#sponsore_contact').prop("required", false);
+
+                    }
+                    else{
+                        $(".sponsored").prop("disabled", false);
+                        $('#sponsore_organisation').prop("required", true);
+                        $('#sponsore_address').prop("required", true);
+                        $('#sponsore_email').prop("required", true);
+                        $('#sponsore_contact').prop("required", true);
+
+                    }
+                })
+
+
+                {% if sibling_obj_rec %}
+                    var count = $('.item').length;
+                {% else %}
+                    var count = 1;
+                {% endif %}
+
+                $(".add_row").click(function () {
+                    count = count + 1;
+                    var row = '<div class="row item" id="item_' + count + '" style="margin-top:15px"><div class=""><div class=""><div class="col-md-1"><a href="javascript:;" class="delete btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div><div class=""><label class="col-md-1 control-label">Name:</label><div class="col-md-2"><input type="text" title="Enter Sibling " id="sibling_' + count + '" name="sibling_' + count + '"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Gender:</label><div class="col-md-2"><input type="text" title="Enter age" id="age_' + count + '"name="age_' + count + '"class="form-control"></div></div><div class=""><label class="col-md-1 control-label">Status:</label><div class="col-md-2"> <select  title="Enter status" id="status_' + count + '" name="status_' + count + '" class="form-control"><option value="">Please Select</option><option value="Employed">Employed</option><option value="Unemployed">Unemployed</option><option value="Studying">Studying</option><option value="Deceased">Deceased</option></select><input type="text" hidden id="sibling_id_' + count + '" name="sibling_id_' + count + '"></div></div></div>'
+                    $(row).removeAttr().hide().insertAfter(".item:last").slideDown(300);
+                    {#count++;#}
+                });
+
+                $(document).on("click", ".delete", function () {
+                    $(this).parents('.item').remove();
+                    $(this).parents('.item').next('br').remove();
+                    ;
+                });
+
+
+                $(document).on("click", ".remove_doc", function (e) {
+                    var parent_id = $(this).closest('div').attr('id');
+                    $('#' + parent_id + ' .emp').val('');
+                });
+
+                $(document).on("click", ".file", function (e) {
+                    $(this).parent('.form-control').next('.file_type').trigger('click');
+                });
+
+                $('.file_type').change(function (evt) {
+
+                    var files = !!this.files ? this.files : [];
+                    if (!files.length || !window.FileReader) return;
+                    var fileExtension = ['pdf'];
+                    if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                        alert("Only formats are allowed : " + fileExtension.join(', '));
+                        $(this).val('');
+                        return false;
+                    }
+
+                    var file_name = $(this).val().split('\\')[2];
+                    $(this).prev().children().children('.file_value').val(file_name);
+                });
+
+            });
+
+
+            $('#sample_1').dataTable().fnDestroy();
+            $('#sample_1').dataTable({
+                "aoColumnDefs": [
+                    {'bSortable': false}
+                ]
+            });
+        }
+
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'student:student_home' %}">{% trans 'Home' %}</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span>{% trans 'Research Proposal' %}</span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">{% trans 'STUDENT PARTICULARS' %}</span>
+
+
+            </div>
+            <button type="button" class="btn blue" id="back"style="margin-left:75%"
+                                    onclick="window.location='{% url "partner:template_approving_application" %}'">{% trans 'Back' %}
+                            </button>
+        </div>
+
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form action="{% url 'student:applicant_research_details' %}"
+                      id="form_sample_1"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                <input type="hidden" value="{{ research_details.id }}" id="research_id" name="research_id">
+
+                    <div class="form-body">
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Name' %}:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Name" id="name" name="name"
+                                           value="{{ application_obj.first_name|default_if_none:"" }} {{ application_obj.last_name|default_if_none:"" }}" class="form-control" disabled>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Student ID Number' %}:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Student ID Number" id="student_number" name="student_number"
+                                           value="{{ student_id }}" disabled class="form-control">
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <br>
+
+
+                        <div class="row">
+
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Sponsor' %}:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Sponsor" id="sponsor" name="sponsor"
+                                           value="{{ additional_info_obj.sponsore_organisation|default_if_none:"" }}" class="form-control" disabled>
+                                </div>
+                            </div>
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Status of Candidature' %}:</label>
+                                <div class="col-md-3">
+                                    <input style="color: green" type="text" title="Enter Tel No" id="ken_tel_no"
+                                           value="ACTIVE"
+                                           name="ken_tel_no"
+                                           class="form-control" disabled>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Correspondence Address' %}:</label>
+                                <div class="col-md-8">
+                                    <textarea class="form-control" id="correspondence_address" name="correspondence_address" disabled>{{ application_obj.address.residential_address }} {{ application_obj.address.district|title }} {{ application_obj.address.country.country_name }}</textarea>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+                        <hr>
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-settings font-red"></i>
+                                <span class="caption-subject font-red sbold uppercase">{% trans 'PROGRAMME DETAILS' %}</span>
+                            </div>
+                        </div>
+                        <hr>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Program' %}:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Program" id="program" name="program" required
+                                           value="{{ research_details.program|default_if_none:"" }}" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Specialisation' %}:</label>
+                                <div class="col-md-3">
+                                    <input required type="text" title="Enter Specialisation" id="specialisation" name="specialisation"
+                                           value="{{ research_details.specialisation|default_if_none:"" }}" class="form-control">
+                                </div>
+                            </div>
+
+                        </div>
+                    <br>
+                    <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'University Type' %}:</label>
+                                <div class="col-md-3">
+
+                                <select id='university_type' title="Select University"
+                                                name="university_type"
+                                                class="form-control" required>
+                                            {% if research_details.university_type %}
+                                                <option style="display:none;" selected="selected"
+                                                        value="{{ research_details.university_type.id|default_if_none:"" }}"> {{ research_details.university_type.university_type|default_if_none:"" }}</option>
+                                            {% else %}
+                                                <option selected="selected" value=""> Please Select</option>
+                                            {% endif %}
+
+                                            {% for rec in university_type_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.university_type|default_if_none:"" }}</option>
+                                            {% endfor %}
+
+                                        </select>
+
+                                </div>
+                            </div>
+
+                           <div class="">
+                                <label class="col-md-2 control-label">{% trans 'University' %}:</label>
+                                <div class="col-md-3">
+                                   <select id='university' title="Select University"
+                                                name="university"
+                                                class="form-control" required>
+                                            {% if research_details.university %}
+                                                <option style="display:none;" selected="selected"
+                                                        value="{{ research_details.university.id|default_if_none:"" }}"> {{ research_details.university.university_name|default_if_none:"" }}</option>
+                                            {% else %}
+                                                <option selected="selected" value=""> Please Select</option>
+                                            {% endif %}
+
+                                            {% for rec in university_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.university_name|default_if_none:"" }}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <br>
+
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Supervisor' %}:</label>
+                                <div class="col-md-3">
+                                    <select id='supervisor' title="Select Supervisor" name="supervisor" required
+                                            class="form-control">
+                                        {% if research_details.supervisor %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ research_details.supervisor.id }}"
+                                                    >{{ research_details.supervisor.email|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+                                        {% for rec in supervisor_list %}
+                                            <option value='{{ rec.id }}'>{{ rec.email|default_if_none:"" }}</option>
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+                            </div>
+
+                           <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Duration of Study' %}:</label>
+                                <div class="col-md-3">
+                                    <input required type="text" title="Enter Duration of Study" id="study_duration" name="study_duration"
+                                           value="{{ research_details.study_duration|default_if_none:"" }}" class="form-control">
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <br>
+
+
+                         <div class="row">
+
+                                      <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'First Date of Registration' %}:</label>
+                                        <div class="col-md-3">
+                                            <input required type="date" id="first_date_registration" name="first_date_registration" max="2999-12-31"
+                                                   value="{{ research_details.first_date_registration|date:"Y-m-d" }}" class="form-control">
+                                        </div>
+                                    </div>
+
+                                 <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'Expected Date of Completion' %}:
+
+                                        </label>
+                                        <div class="col-md-3" id="EndDate">
+                                            <input required type="date" id="completion_date" name="completion_date" max="2999-12-31"
+                                                   value="{{ research_details.completion_date|date:"Y-m-d" }}"
+                                                   class="form-control end_date">
+                                        </div>
+                                    </div>
+
+                                 </div>
+
+
+                        <hr>
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-settings font-red"></i>
+                                <span class="caption-subject font-red sbold uppercase">{% trans 'RESEARCH DETAILS' %}</span>
+                            </div>
+                        </div>
+                        <hr>
+
+                        <div class="row">
+
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Title of Thesis/Research Project' %}:</label>
+                                <div class="col-md-8">
+                                    <textarea class="form-control" id="research_title" name="research_title">{{ research_details.research_title|default_if_none:"" }}</textarea>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+
+                        <br>
+
+
+                        <div class="row">
+                           <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Project Outline' %}:</label>
+                                <div class="col-md-8">
+                                   <textarea class="form-control" id="project_outline" name="project_outline">{{ research_details.project_outline|default_if_none:"" }}</textarea>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <br>
+
+
+                         <div class="row">
+
+                                      <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Data Collection' %}:</label>
+                                <div class="col-md-8">
+                                   <textarea class="form-control" id="data_collection" name="data_collection">{{ research_details.data_collection|default_if_none:"" }}</textarea>
+                                </div>
+                            </div>
+
+
+                                 </div>
+                        <br>
+                        <div class="row">
+
+                                      <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Data Analysis' %}:</label>
+                                <div class="col-md-8">
+                                   <textarea class="form-control" id="data_analysis" name="data_analysis">{{ research_details.data_analysis|default_if_none:"" }}</textarea>
+                                </div>
+                            </div>
+
+
+                                 </div>
+                        <br>
+                        <div class="row">
+
+                                      <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Progress to Date' %}:</label>
+                                <div class="col-md-8">
+                                   <textarea class="form-control" id="progress_date" name="progress_date">{{ research_details.progress_date|default_if_none:"" }}</textarea>
+                                </div>
+                            </div>
+
+
+                                 </div>
+                        <br>
+                        <div class="row">
+
+                                      <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Problems encountered while conducting your Research (If any)' %}:</label>
+                                <div class="col-md-8">
+                                   <textarea class="form-control" id="problems_encountered" name="problems_encountered">{{ research_details.problems_encountered|default_if_none:"" }}</textarea>
+                                </div>
+                            </div>
+
+
+                                 </div>
+
+
+
+
+
+
+                    </div>
+
+
+            </form>
+        </div>
+    </div>
+    </div>
+{% endblock %}

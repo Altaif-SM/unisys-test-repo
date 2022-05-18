@@ -8,7 +8,7 @@ from django.http import JsonResponse
 from common.utils import *
 from django.db.models import Max, Q
 from django.core.paginator import Paginator
-
+import binascii
 # Create your views here.
 from student.views import applicant_academic_english_qualification
 
@@ -369,10 +369,10 @@ def template_approving_application(request):
                            'applicant_recs_3':applicant_recs_3,
                            })
         elif request.user.is_supervisor():
-            applicant_recs = ApplicationDetails.objects.filter(is_submitted=True,year=get_current_year(request),supervisor=request.user)
+            research_objs = ResearchDetails.objects.filter(supervisor=request.user)
             context['my_template'] = 'template_university_base_page.html'
             return render(request, 'supervisor_approve_reject_template.html',
-                          {'applicant_recs': applicant_recs, 'documents_recs': documents_recs, 'context': context})
+                          {'research_objs': research_objs, 'documents_recs': documents_recs, 'context': context})
         else:
             applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission = True,year=get_current_year(request))
 
@@ -2662,3 +2662,25 @@ def approve_matric_card(request):
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
     return redirect('/partner/template_approving_matric_cards/')
+
+def research_details(request, research_id):
+    try:
+        research_details = ''
+        additional_info_obj = ''
+        application_obj = ''
+        research_details = ResearchDetails.objects.get(id=research_id)
+        application_obj = ApplicationDetails.objects.get(id = research_details.application_id.id)
+        student_id = hex(binascii.crc32(str(application_obj.id).encode()))[2:]
+        if AdditionInformationDetails.objects.filter(application_id=research_details.application_id).exists():
+            additional_info_obj = AdditionInformationDetails.objects.get(application_id=research_details.application_id)
+        context = {}
+        if request.user.is_supervisor():
+            context['my_template'] = 'template_university_base_page.html'
+        else:
+            context['my_template'] = 'template_base_page.html'
+        return render(request, 'supervisir_research_details.html',{'research_details':research_details,'context':context,
+                                                                   'additional_info_obj':additional_info_obj,'application_obj':application_obj,
+                                                                   'student_id':student_id})
+    except Exception as e:
+        messages.warning(request, "Form have some error " + str(e))
+        return redirect("/")

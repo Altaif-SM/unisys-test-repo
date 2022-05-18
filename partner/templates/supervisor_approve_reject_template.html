@@ -316,8 +316,6 @@
 {#                                        <th>{% trans 'Faculty' %}</th>#}
                                         {#                                        {% elif request.user.is_program %}#}
                                         <th>{% trans 'Program' %}</th>
-                                        <th>{% trans 'Mode' %}</th>
-                                        <th>{% trans 'Status' %}</th>
                                         <th>{% trans 'Action' %}</th>
                                         {#                                        {% endif %}#}
 
@@ -326,7 +324,7 @@
                                     </thead>
 
                                     <tbody id="tbody">
-                                    {% for rec in applicant_recs %}
+                                    {% for rec in research_objs %}
                                         <tr id="item{{ forloop.counter }}" class="item">
                                             <td style="display: none">
                                                 <input id="application_id" class="application_id" value="{{ rec.id }}">
@@ -339,7 +337,7 @@
                                             <td>
                                                 <text><a href="/partner/template_applicant_all_details/{{ rec.id }}"
                                                         {% if rec.application_rejection %}
-                                                         style="color: darkred" {% endif %}>{{ rec.first_name|title }} {{ rec.last_name|title }}</a>
+                                                         style="color: darkred" {% endif %}>{{ rec.application_id.first_name|title }} {{ rec.application_id.last_name|title }}</a>
                                                 </text>
                                             </td>
                                             <td>
@@ -356,32 +354,13 @@
 {#                                            </td>#}
                                             {#                                            {% elif request.user.is_program %}#}
                                             <td>
-                                                {{ rec.program.program_name|default_if_none:"" }}
-                                            </td>
-                                            <td>
-                                                {{ rec.program.study_type|default_if_none:"" }}
+                                                {{ rec.program|default_if_none:"" }}
                                             </td>
 
 
-                                            {#                                        <td>#}
-                                            {#                                                <text><a href="/partner/template_applicant_all_details/{{ rec.id }}"#}
-                                            {#                                                        {% if rec.application_rejection %}#}
-                                            {#                                                         style="color: darkred" {% endif %}>{{ rec.first_name|title }} {{ rec.last_name|title }}</a>#}
-                                            {#                                                </text>#}
-                                            {#                                            </td>#}
-
-                                            {#                                            {% endif %}#}
-
-                                            <td>
-                                               {% if rec.supervisor %}
-                                                   <span style="color:{% if rec.supervisor_status == 'Requested' %}peru{% elif rec.supervisor_status == 'Approved' %}green{% else %}red{% endif %}"><b>{{ rec.supervisor_status|default_if_none:"" }}</b></span>
-                                                {% else %}
-                                                    -
-                                                {% endif %}
-                                            </td>
 
                                          <td>
-                                                <a href="{% url 'partner:template_applicant_all_details' rec.id %}">
+                                                <a href="{% url 'partner:research_details' rec.id %}">
                                 <span type="button" name="edit" id="edit{{ forloop.counter }}"
                                       class=" edit_btn btn blue glyphicon glyphicon-edit">
                                 </span>

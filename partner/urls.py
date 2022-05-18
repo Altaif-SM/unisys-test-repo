@@ -100,4 +100,5 @@ urlpatterns = [
                   path('assign_supervisior/<int:application_id>/', views.assign_supervisior, name='assign_supervisior'),
                   path('approved_application/', views.approved_application, name='approved_application'),
                   path('accepted_application/', views.accepted_application, name='accepted_application'),
+                  path('research_details/<int:research_id>/', views.research_details,name='research_details'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
