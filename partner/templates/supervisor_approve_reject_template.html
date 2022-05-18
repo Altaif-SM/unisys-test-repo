@@ -181,7 +181,7 @@
                             favorite.push($(this).val());
                         });
                         $("#check_ids").val(JSON.stringify(favorite));
-                        $("#interview_type").val($(this).attr('id'));
+                        $("#research_type").val($(this).attr('id'));
                         $("#conditional_documents").val(JSON.stringify(conditional_offer));
                         $('#form_submit').submit()
                     }
@@ -201,7 +201,7 @@
                             favorite.push($(this).val());
                         });
                         $("#check_ids").val(JSON.stringify(favorite));
-                        $("#interview_type").val('Supervisor Rejected');
+                        $("#research_type").val('Supervisor Rejected');
                         $("#reject_description").val($('#incomplete_description').val());
                         $("#conditional_documents").val(JSON.stringify(conditional_offer));
                         $('#form_submit').submit()
@@ -267,12 +267,12 @@
         <div class="portlet-body">
             <div class="form-body">
                 {#                <div class="row col-md-offset-3">#}
-                <form method="post" action="{% url 'partner:change_application_status' %}" id="form_submit">
+                <form method="post" action="{% url 'partner:change_research_status' %}" id="form_submit">
                     {% csrf_token %}
                     <div class="col-md-4">
                         <div class="">
                             <input type="text" hidden id="check_ids" name="check_ids">
-                            <input type="text" hidden id="interview_type" name="interview_type">
+                            <input type="text" hidden id="research_type" name="research_type">
                             <input type="text" hidden id="conditional_documents" name="conditional_documents">
                             <input type="text" hidden id="reject_description" name="reject_description">
                         </div>
@@ -316,6 +316,10 @@
 {#                                        <th>{% trans 'Faculty' %}</th>#}
                                         {#                                        {% elif request.user.is_program %}#}
                                         <th>{% trans 'Program' %}</th>
+                                        <th>{% trans 'Specialisation' %}</th>
+                                        <th>{% trans 'Registration Date' %}</th>
+                                        <th>{% trans 'Completion Date' %}</th>
+                                        <th>{% trans 'Status' %}</th>
                                         <th>{% trans 'Action' %}</th>
                                         {#                                        {% endif %}#}
 
@@ -343,19 +347,35 @@
                                             <td>
                                                 {{ rec.university.university_name|default_if_none:"" }}
                                             </td>
-{#                                            {% if rec.university.is_partner_university == True %}#}
-{#                                                <td>International</td>#}
-{#                                            {% else %}#}
-{#                                                <td>Main</td>#}
-{#                                            {% endif %}#}
-                                            {#                                            {% if request.user.is_faculty %}#}
-{#                                            <td>#}
-{#                                                {{ rec.faculty.faculty_name|default_if_none:"" }}#}
-{#                                            </td>#}
-                                            {#                                            {% elif request.user.is_program %}#}
                                             <td>
                                                 {{ rec.program|default_if_none:"" }}
                                             </td>
+
+                                        <td>
+                                                {{ rec.specialisation|default_if_none:"" }}
+                                            </td>
+                                        <td>
+                                                {{ rec.first_date_registration|date:"Y-m-d" }}
+                                            </td>
+                                        <td>
+                                                {{ rec.completion_date|date:"Y-m-d" }}
+                                            </td>
+
+                                        {% if rec.research_status == 'Approved' %}
+                                            <td style="color: green">
+                                                {{ rec.research_status|default_if_none:"" }}
+                                            </td>
+                                        {% elif rec.research_status == 'Rejected' %}
+                                            <td style="color: red">
+                                                {{ rec.research_status|default_if_none:"" }}
+                                            </td>
+                                        {% else %}
+                                            <td style="color: yellow">
+                                                {{ rec.research_status|default_if_none:"" }}
+                                            </td>
+
+                                        {% endif %}
+
 
 
 

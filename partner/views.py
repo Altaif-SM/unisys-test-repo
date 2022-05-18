@@ -2684,3 +2684,23 @@ def research_details(request, research_id):
     except Exception as e:
         messages.warning(request, "Form have some error " + str(e))
         return redirect("/")
+
+def change_research_status(request):
+    try:
+        check_ids = json.loads(request.POST.get('check_ids'))
+        research_type = request.POST.get('research_type')
+        reject_description = request.POST.get('reject_description')
+        for application in check_ids:
+            research_obj = ResearchDetails.objects.get(id=application)
+            if research_type == 'Supervisor Approved':
+                research_obj.research_status = 'Approved'
+                research_obj.save()
+                messages.success(request, research_obj.application_id.first_name.title() + " application status changed.")
+            elif research_type == 'Supervisor Rejected':
+                research_obj.research_status = 'Rejected'
+                research_obj.research_rejection = reject_description
+                research_obj.save()
+                messages.success(request, research_obj.application_id.first_name.title() + " application rejected.")
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+    return redirect('/partner/template_approving_application/')

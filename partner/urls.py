@@ -7,7 +7,6 @@ from . import filters
 
 app_name = 'partner'
 
-
 urlpatterns = [
                   path('partner_home/', views.partner_home, name='partner_home'),
 
@@ -100,5 +99,8 @@ urlpatterns = [
                   path('assign_supervisior/<int:application_id>/', views.assign_supervisior, name='assign_supervisior'),
                   path('approved_application/', views.approved_application, name='approved_application'),
                   path('accepted_application/', views.accepted_application, name='accepted_application'),
+                  path('change_research_status/', views.change_research_status, name='change_research_status'),
                   path('research_details/<int:research_id>/', views.research_details,name='research_details'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
