@@ -3348,6 +3348,8 @@ def applicant_research_details(request):
         data_analysis = request.POST.get('data_analysis', None)
         progress_date = request.POST.get('progress_date', None)
         problems_encountered = request.POST.get('problems_encountered', None)
+        university = request.POST.get('university', None)
+        university_type = request.POST.get('university_type', None)
 
         if not first_date_registration:
             first_date_registration = None
@@ -3358,11 +3360,19 @@ def applicant_research_details(request):
         if not supervisor:
             supervisor = None
 
+        if not university:
+            university = None
+
+        if not university_type:
+            university_type = None
+
         if research_id:
             research_obj = ResearchDetails.objects.get(id=research_id)
             research_obj.program = program
             research_obj.specialisation = specialisation
             research_obj.supervisor_id = supervisor
+            research_obj.university_id = university
+            research_obj.university_type_id = university_type
             research_obj.study_duration = study_duration
             research_obj.first_date_registration = first_date_registration
             research_obj.completion_date = completion_date
@@ -3379,7 +3389,8 @@ def applicant_research_details(request):
                                            first_date_registration=first_date_registration,
                                            completion_date=completion_date, research_title=research_title, project_outline = project_outline,
                                            data_collection = data_collection, data_analysis = data_analysis, progress_date = progress_date,
-                                           problems_encountered = problems_encountered,application_id=request.user.get_application)
+                                           problems_encountered = problems_encountered,application_id=request.user.get_application,university_id = university,
+                                           university_type_id = university_type)
         messages.success(request, "Record saved.")
         return redirect('/student/applicant_research_details/')
     else:
@@ -3397,9 +3408,33 @@ def applicant_research_details(request):
         if ResearchDetails.objects.filter(application_id=request.user.get_application).exists():
             research_details = ResearchDetails.objects.get(application_id=request.user.get_application)
         role_name_list = ['Supervisor']
-        supervisor_list = User.objects.filter(role__name__in = role_name_list)
+        supervisor_list = []
+        university_type_recs = UniversityTypeDetails.objects.filter(status=True)
+        university_recs = []
+        if research_details:
+            university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
+                                                           university_type_id=research_details.university_type.id).order_by('-id')
+
+        if research_details:
+            supervisor_list = User.objects.filter(role__name__in=role_name_list,university_id = research_details.university.id)
+
         return render(request, 'research_details.html', { 'application_obj': application_obj,
                                                          'additional_info_obj':additional_info_obj,
                                                          'student_id':student_id,
                                                          'research_details':research_details,
-                                                          'supervisor_list':supervisor_list})
+                                                          'supervisor_list':supervisor_list,
+                                                          'university_type_recs':university_type_recs,
+                                                          'university_recs':university_recs})
+
+
+def get_supervisor_from_university(request):
+    supervisor_list = []
+    university_id = request.POST.get('university_id', None)
+    role_name_list = ['Supervisor']
+    users_recs = User.objects.filter(university_id = university_id,role__name__in = role_name_list)
+    for rec in users_recs:
+        raw_dict = {}
+        raw_dict['supervisor']=rec.email
+        raw_dict['id']=rec.id
+        supervisor_list.append(raw_dict)
+    return JsonResponse(supervisor_list, safe=False)

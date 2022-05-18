@@ -793,3 +793,7 @@ class ResearchDetails(BaseModel):
                                        on_delete=models.SET_NULL)
     supervisor = models.ForeignKey(User, null=True, related_name='research_supervisor_rel',
                                        on_delete=models.SET_NULL)
+    university_type = models.ForeignKey('masters.UniversityTypeDetails', null=True, related_name='research_university_type_rel',
+                                        on_delete=models.SET_NULL)
+    university = models.ForeignKey('masters.UniversityDetails', null=True, related_name='research_university_rel',
+                                   on_delete=models.SET_NULL)
