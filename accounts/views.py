@@ -1207,6 +1207,7 @@ def edit_staff(request, staff_id=None):
                     supervisor_faculty_list.append(raw_dict)
 
     supervisor_program_list = []
+    program_recs = []
     if is_supervisor == True:
         if user_obj.faculty:
             program_recs = ProgramDetails.objects.filter(university_id=user_obj.university.id, faculty_id = user_obj.faculty_id,is_delete=False)
