@@ -28,4 +28,5 @@ urlpatterns = [
     path('get_university_exists/', views.get_university_exists, name='get_university_exists'),
     path('get_faculty_from_account_type/', views.get_faculty_from_account_type, name='get_faculty_from_account_type'),
     path('get_program_from_account_type/', views.get_program_from_account_type, name='get_program_from_account_type'),
+    path('get_program_from_faculty/', views.get_program_from_faculty, name='get_program_from_faculty'),
 ]

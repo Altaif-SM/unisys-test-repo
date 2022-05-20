@@ -927,6 +927,12 @@ def add_staff(request):
     if request.method == 'POST':
         faculty = request.POST.get('faculty',None)
         program = request.POST.get('program',None)
+        supervisor_faculty = request.POST.get('supervisor_faculty',None)
+        if supervisor_faculty:
+            faculty = supervisor_faculty
+        supervisor_program = request.POST.get('supervisor_program', None)
+        if supervisor_program:
+            program = supervisor_program
         university = request.POST.get('university')
         # first_name = request.POST.get('first_name')
         # last_name = request.POST.get('last_name')
@@ -1040,6 +1046,14 @@ def edit_staff(request, staff_id=None):
     if request.method == 'POST':
         faculty = request.POST.get('faculty', None)
         program = request.POST.get('program', None)
+
+        supervisor_faculty = request.POST.get('supervisor_faculty', None)
+        if supervisor_faculty:
+            faculty = supervisor_faculty
+        supervisor_program = request.POST.get('supervisor_program', None)
+        if supervisor_program:
+            program = supervisor_program
+
         university = request.POST.get('university')
         # first_name = request.POST.get('first_name')
         # last_name = request.POST.get('last_name')
@@ -1151,6 +1165,11 @@ def edit_staff(request, staff_id=None):
         if user_obj.role.all()[0].name == 'Program':
             is_program = True
 
+    is_supervisor = False
+    if user_obj.role.all():
+        if user_obj.role.all()[0].name == 'Supervisor':
+            is_supervisor = True
+
     faculty_list = []
     faculty_ids = []
     if is_faculty == True:
@@ -1173,6 +1192,30 @@ def edit_staff(request, staff_id=None):
                 raw_dict['id'] = rec.id
                 raw_dict['program'] = rec.program_name
                 program_list.append(raw_dict)
+
+    supervisor_faculty_list = []
+    supervisor_faculty_ids = []
+    if is_supervisor == True:
+        if user_obj.university:
+            faculty_recs = ProgramDetails.objects.filter(university_id=user_obj.university.id)
+            for rec in faculty_recs:
+                if not rec.faculty.id in supervisor_faculty_ids:
+                    raw_dict = {}
+                    raw_dict['id'] = rec.faculty.id
+                    raw_dict['faculty'] = rec.faculty.faculty_name
+                    supervisor_faculty_ids.append(rec.faculty.id)
+                    supervisor_faculty_list.append(raw_dict)
+
+    supervisor_program_list = []
+    if is_supervisor == True:
+        if user_obj.faculty:
+            program_recs = ProgramDetails.objects.filter(university_id=user_obj.university.id, faculty_id = user_obj.faculty_id,is_delete=False)
+        for rec in program_recs:
+            raw_dict = {}
+            raw_dict['id'] = rec.id
+            raw_dict['program'] = rec.program_name
+            supervisor_program_list.append(raw_dict)
+
     university_type_recs = UniversityTypeDetails.objects.filter(status=True)
 
     user_obj = {
@@ -1201,7 +1244,10 @@ def edit_staff(request, staff_id=None):
         'program_id': user_obj.program.id if user_obj.program else None,
         'program': user_obj.program.program_name if user_obj.program else None,
         'program_list': program_list,
-        'university_type_recs':university_type_recs
+        'university_type_recs':university_type_recs,
+        'is_supervisor':is_supervisor,
+        'supervisor_program_list':supervisor_program_list,
+        'supervisor_faculty_list':supervisor_faculty_list,
 
     }
     return render(request, "edit_staff.html", {'user_obj': user_obj,'country_list':country_list})
@@ -1310,3 +1356,23 @@ def get_working_experience(request):
             return form_vals
     else:
         return None
+
+
+def get_program_from_faculty(request):
+    program_list = []
+    account_type = request.POST.get('account_type', None)
+    university = request.POST.get('university', None)
+    faculty_id = request.POST.get('faculty_id', None)
+    program_recs = ProgramDetails.objects.filter(is_delete=False).order_by('-id')
+    if faculty_id:
+         program_recs = ProgramDetails.objects.filter(faculty_id = faculty_id).order_by('-id')
+    if university:
+        program_recs = program_recs.filter(university_id = university)
+        for rec in program_recs:
+            raw_dict = {}
+            raw_dict['id'] = rec.id
+            raw_dict['program'] = rec.program_name
+            program_list.append(raw_dict)
+        return JsonResponse(program_list, safe=False)
+    else:
+        return JsonResponse(program_list, safe=False)
