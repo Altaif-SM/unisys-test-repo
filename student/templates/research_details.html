@@ -65,22 +65,40 @@
                 });
             }
 
+
              $(document).on("change", "#university", function (e) {
-                var university_id = $(this).val();
-                var url = '/student/get_supervisor_from_university/';
-                get_supervisor_from_university(url, university_id)
+                var university = $(this).val();
+                var account_type = '';
+                {#var url = '/student/get_supervisor_from_university/';#}
+                {#get_supervisor_from_university(url, university_id)#}
+
+
+                 var url = '/accounts/get_faculty_from_account_type/';
+                 get_faculty_from_supervisor(url, account_type,university)
+
+
+
             })
 
-            function get_supervisor_from_university(url, university_id) {
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: {
-                        university_id: university_id,
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                    },
-                    success: function (data) {
+            $(document).on("change", "#program_research", function (e) {
+                    var program = $(this).val();
+                    var faculty = $('#faculty').val();
+                    var university = $('#university').val();
+                    var url = '/student/get_supervisor_from_university/';
+                    get_supervisor_from_university(url, program,faculty,university)
+            })
 
+            function get_supervisor_from_university(url,program,faculty,university) {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {
+                    program: program,
+                    faculty: faculty,
+                    university: university,
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+                success: function (data) {
                         $('#supervisor').empty();
                         $('#supervisor').append(
                             '<option value="" >Please select</option>');
@@ -90,11 +108,78 @@
                                 + data[i]['supervisor'] + '</option>')
                         }
                     },
-                    error: function (xhr, msg, err) {
-                        alert(xhr.responseJSON.error);
-                    }
-                });
-            }
+                error: function (xhr, msg, err) {
+                    alert(xhr.responseJSON.error);
+                }
+            });
+        }
+
+
+
+             $(document).on("change", "#faculty", function (e) {
+                    var faculty_id = $(this).val();
+                    var university = $('#university').val();
+                    var account_type = ''
+                    var url = '/accounts/get_program_from_faculty/';
+                    get_program_from_faculty(url, account_type,faculty_id,university)
+            })
+
+            function get_program_from_faculty(url, account_type,faculty_id,university) {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {
+                    account_type: account_type,
+                    faculty_id: faculty_id,
+                    university: university,
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+                success: function (data) {
+                        $('#program_research').empty();
+                        $('#supervisor').empty();
+                        $('#supervisor').append(
+                            '<option value="" >Please select</option>');
+                        $('#program_research').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#program_research').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['program'] + '</option>')
+                        }
+                    },
+                error: function (xhr, msg, err) {
+                    alert(xhr.responseJSON.error);
+                }
+            });
+        }
+
+
+            function get_faculty_from_supervisor(url, account_type,university) {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {
+                    account_type: account_type,
+                    university: university,
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+                success: function (data) {
+                        $('#program').empty();
+                        $('#faculty').empty();
+                        $('#faculty').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#faculty').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['faculty'] + '</option>')
+                        }
+                    },
+                error: function (xhr, msg, err) {
+                    alert(xhr.responseJSON.error);
+                }
+            });
+        }
+
 
 
 
@@ -398,6 +483,53 @@
                         </div>
 
                         <br>
+
+                    <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Faculty' %}:</label>
+                                <div class="col-md-3">
+                                    <select id='faculty' title="Select Faculty" name="faculty" required
+                                            class="form-control">
+                                        {% if research_details.faculty %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ research_details.faculty.id }}"
+                                                    >{{ research_details.faculty.faculty_name|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+                                        {% for rec in faculty_list %}
+                                            <option value='{{ rec.id }}'>{{ rec.faculty_name|default_if_none:"" }}</option>
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+                            </div>
+
+                           <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Program' %}:</label>
+                                <div class="col-md-3">
+                                    <select id='program_research' title="Select Program" name="program_research" required
+                                            class="form-control">
+                                        {% if research_details.program_research %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ research_details.program_research.id }}"
+                                                    >{{ research_details.program_research.program_name|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+                                        {% for rec in program_list %}
+                                            <option value='{{ rec.id }}'>{{ rec.program_name|default_if_none:"" }}</option>
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    <br>
 
 
                         <div class="row">

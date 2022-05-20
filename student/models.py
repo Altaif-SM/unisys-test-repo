@@ -799,3 +799,9 @@ class ResearchDetails(BaseModel):
                                    on_delete=models.SET_NULL)
     research_status = models.CharField(max_length=50, default="Requested",blank=True, null=True)
     research_rejection = models.TextField(blank=True, null=True)
+    faculty = models.ForeignKey('masters.FacultyDetails', blank=True, null=True,
+                                related_name='faculty_research_rel',
+                                on_delete=models.SET_NULL)
+    program_research = models.ForeignKey('masters.ProgramDetails', blank=True, null=True,
+                                related_name='program_research_rel',
+                                on_delete=models.SET_NULL)
