@@ -797,7 +797,7 @@ class ResearchDetails(BaseModel):
                                         on_delete=models.SET_NULL)
     university = models.ForeignKey('masters.UniversityDetails', null=True, related_name='research_university_rel',
                                    on_delete=models.SET_NULL)
-    research_status = models.CharField(max_length=50, default="Requested",blank=True, null=True)
+    research_status = models.CharField(max_length=50, default="Pending",blank=True, null=True)
     research_rejection = models.TextField(blank=True, null=True)
     faculty = models.ForeignKey('masters.FacultyDetails', blank=True, null=True,
                                 related_name='faculty_research_rel',
@@ -805,3 +805,7 @@ class ResearchDetails(BaseModel):
     program_research = models.ForeignKey('masters.ProgramDetails', blank=True, null=True,
                                 related_name='program_research_rel',
                                 on_delete=models.SET_NULL)
+    faculty_status = models.CharField(max_length=50, default="Pending", blank=True, null=True)
+    faculty_rejection = models.TextField(blank=True, null=True)
+    program_status = models.CharField(max_length=50, default="Pending", blank=True, null=True)
+    program_rejection = models.TextField(blank=True, null=True)

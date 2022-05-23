@@ -25,6 +25,8 @@ urlpatterns = [
                   path('approve_matric_card/', views.approve_matric_card,name='approve_matric_card'),
                   path('template_approving_matric_cards/', views.template_approving_matric_cards,name='template_approving_matric_cards'),
                   path('template_approving_application/', views.template_approving_application,name='template_approving_application'),
+                  path('approving_faculty_application/', views.approving_faculty_application,name='approving_faculty_application'),
+                  path('approving_program_application/', views.approving_program_application,name='approving_program_application'),
                   path('filter_application_status/', views.filter_application_status, name='filter_application_status'),
                   path('change_application_status/', views.change_application_status, name='change_application_status'),
                   path('change_final_application_status/', views.change_final_application_status,

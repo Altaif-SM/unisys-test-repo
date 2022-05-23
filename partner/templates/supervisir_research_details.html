@@ -89,9 +89,20 @@
 
 
             </div>
+            {% if user.is_supervisor %}
             <button type="button" class="btn blue" id="back"style="margin-left:75%"
                                     onclick="window.location='{% url "partner:template_approving_application" %}'">{% trans 'Back' %}
                             </button>
+            {% elif user.is_faculty %}
+                 <button type="button" class="btn blue" id="back"style="margin-left:75%"
+                                    onclick="window.location='{% url "partner:approving_faculty_application" %}'">{% trans 'Back' %}
+                            </button>
+            {% else %}
+                 <button type="button" class="btn blue" id="back"style="margin-left:75%"
+                                    onclick="window.location='{% url "partner:approving_program_application" %}'">{% trans 'Back' %}
+                            </button>
+            {% endif %}
+
         </div>
 
 

@@ -395,7 +395,30 @@ def template_approving_application(request):
         return redirect('/partner/template_approving_application/')
 
 
+def approving_faculty_application(request):
+    try:
+        context = {}
+        if request.user.is_faculty():
+            research_objs = ResearchDetails.objects.filter(faculty=request.user.faculty)
+            context['my_template'] = 'template_university_base_page.html'
+            return render(request, 'approving_faculty_research.html',
+                          {'research_objs': research_objs, 'context': context})
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+        return redirect('/partner/approving_faculty_application/')
 
+
+def approving_program_application(request):
+    try:
+        context = {}
+        if request.user.is_program():
+            research_objs = ResearchDetails.objects.filter(program_research=request.user.program)
+            context['my_template'] = 'template_university_base_page.html'
+            return render(request, 'approving_program_application.html',
+                          {'research_objs': research_objs, 'context': context})
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+        return redirect('/partner/approving_faculty_application/')
 
 # def change_application_status(request):
 #     data_value = json.loads(request.POST.get('data_value'))
@@ -2676,6 +2699,10 @@ def research_details(request, research_id):
         context = {}
         if request.user.is_supervisor():
             context['my_template'] = 'template_university_base_page.html'
+        elif request.user.is_faculty():
+            context['my_template'] = 'template_university_base_page.html'
+        elif request.user.is_program():
+            context['my_template'] = 'template_university_base_page.html'
         else:
             context['my_template'] = 'template_base_page.html'
         return render(request, 'supervisir_research_details.html',{'research_details':research_details,'context':context,
@@ -2691,16 +2718,45 @@ def change_research_status(request):
         research_type = request.POST.get('research_type')
         reject_description = request.POST.get('reject_description')
         for application in check_ids:
-            research_obj = ResearchDetails.objects.get(id=application)
-            if research_type == 'Supervisor Approved':
-                research_obj.research_status = 'Approved'
-                research_obj.save()
-                messages.success(request, research_obj.application_id.first_name.title() + " application status changed.")
-            elif research_type == 'Supervisor Rejected':
-                research_obj.research_status = 'Rejected'
-                research_obj.research_rejection = reject_description
-                research_obj.save()
-                messages.success(request, research_obj.application_id.first_name.title() + " application rejected.")
+            if request.user.is_supervisor():
+                research_obj = ResearchDetails.objects.get(id=application)
+                if research_type == 'Supervisor Approved':
+                    research_obj.research_status = 'Approved'
+                    research_obj.save()
+                    messages.success(request, research_obj.application_id.first_name.title() + " application status changed.")
+                elif research_type == 'Supervisor Rejected':
+                    research_obj.research_status = 'Rejected'
+                    research_obj.research_rejection = reject_description
+                    research_obj.save()
+                    messages.success(request, research_obj.application_id.first_name.title() + " application rejected.")
+            elif request.user.is_faculty():
+                research_obj = ResearchDetails.objects.get(id=application)
+                if research_type == 'Faculty Approved':
+                    research_obj.faculty_status = 'Approved'
+                    research_obj.save()
+                    messages.success(request, research_obj.application_id.first_name.title() + " application status changed.")
+                elif research_type == 'Faculty Rejected':
+                    research_obj.faculty_status = 'Rejected'
+                    research_obj.faculty_rejection = reject_description
+                    research_obj.save()
+                    messages.success(request, research_obj.application_id.first_name.title() + " application rejected.")
+            elif request.user.is_program():
+                research_obj = ResearchDetails.objects.get(id=application)
+                if research_type == 'Program Approved':
+                    research_obj.program_status = 'Approved'
+                    research_obj.save()
+                    messages.success(request,
+                                     research_obj.application_id.first_name.title() + " application status changed.")
+                elif research_type == 'Program Rejected':
+                    research_obj.program_status = 'Rejected'
+                    research_obj.program_rejection = reject_description
+                    research_obj.save()
+                    messages.success(request, research_obj.application_id.first_name.title() + " application rejected.")
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
-    return redirect('/partner/template_approving_application/')
+    if request.user.is_supervisor():
+        return redirect('/partner/template_approving_application/')
+    elif request.user.is_program():
+        return redirect('/partner/approving_program_application/')
+    else:
+        return redirect('/partner/approving_faculty_application/')

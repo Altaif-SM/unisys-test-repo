@@ -169,7 +169,7 @@
                         return false;
                     }
                     var favorite = [];
-                    if ($(this).attr('id') == 'Supervisor Rejected') {
+                    if ($(this).attr('id') == 'Program Rejected') {
                         $('#reject_model').modal();
                         return false;
                     }
@@ -201,7 +201,7 @@
                             favorite.push($(this).val());
                         });
                         $("#check_ids").val(JSON.stringify(favorite));
-                        $("#research_type").val('Supervisor Rejected');
+                        $("#research_type").val('Program Rejected');
                         $("#reject_description").val($('#incomplete_description').val());
                         $("#conditional_documents").val(JSON.stringify(conditional_offer));
                         $('#form_submit').submit()
@@ -239,7 +239,7 @@
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <span>Application Settings </span>
+                <span>Module Settings </span>
                 <i class="fa fa-angle-right"></i>
             </li>
 
@@ -292,8 +292,8 @@
                                     </a>
                                     <ul class="dropdown-menu pull-right" id="action">
                                         <li><a class="status_change"
-                                               id="Supervisor Approved">{% trans 'Approve' %}</a></li>
-                                        <li><a class="status_change" id="Supervisor Rejected">{% trans 'Reject' %}</a></li>
+                                               id="Program Approved">{% trans 'Approve' %}</a></li>
+                                        <li><a class="status_change" id="Program Rejected">{% trans 'Reject' %}</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -314,16 +314,12 @@
 {#                                        <th>{% trans 'University Type' %}</th>#}
                                         {#                                        {% if request.user.is_faculty %}#}
                                         <th>{% trans 'Faculty' %}</th>
-
                                         {#                                        {% elif request.user.is_program %}#}
                                         <th>{% trans 'Program' %}</th>
 {#                                        <th>{% trans 'Specialisation' %}</th>#}
 {#                                        <th>{% trans 'Registration Date' %}</th>#}
 {#                                        <th>{% trans 'Completion Date' %}</th>#}
-                                        <th>{% trans 'Faculty Status' %}</th>
-
                                         <th>{% trans 'Program Status' %}</th>
-                                        <th>{% trans 'Supervisor Status' %}</th>
                                         <th>{% trans 'Action' %}</th>
                                         {#                                        {% endif %}#}
 
@@ -343,7 +339,8 @@
                                                        value="{{ rec.id }}">
                                             </td>
                                             <td>
-                                                <text><a href="{% url 'partner:research_details' rec.id %}">{{ rec.application_id.first_name|title }} {{ rec.application_id.last_name|title }}</a>
+                                                <text><a href="{% url 'partner:research_details' rec.id %}"
+                                                        >{{ rec.application_id.first_name|title }} {{ rec.application_id.last_name|title }}</a>
                                                 </text>
                                             </td>
                                             <td>
@@ -352,7 +349,6 @@
                                         <td>
                                                 {{ rec.faculty.faculty_name|default_if_none:"" }}
                                             </td>
-
 
 
                                             <td>
@@ -369,22 +365,8 @@
 {#                                                {{ rec.completion_date|date:"Y-m-d" }}#}
 {#                                            </td>#}
 
-                                         {% if rec.faculty_status == 'Approved' %}
-                                            <td style="color: green">
-                                                {{ rec.faculty_status|default_if_none:"" }}
-                                            </td>
-                                        {% elif rec.faculty_status == 'Rejected' %}
-                                            <td style="color: red">
-                                                {{ rec.faculty_status|default_if_none:"" }}
-                                            </td>
-                                        {% else %}
-                                            <td style="color: #8e7916">
-                                                {{ rec.faculty_status|default_if_none:"" }}
-                                            </td>
 
-                                        {% endif %}
-
-                                          {% if rec.program_status == 'Approved' %}
+                                        {% if rec.program_status == 'Approved' %}
                                             <td style="color: green">
                                                 {{ rec.program_status|default_if_none:"" }}
                                             </td>
@@ -393,23 +375,8 @@
                                                 {{ rec.program_status|default_if_none:"" }}
                                             </td>
                                         {% else %}
-                                            <td style="color: #8e7916">
+                                            <td style="color:#8e7916">
                                                 {{ rec.program_status|default_if_none:"" }}
-                                            </td>
-
-                                        {% endif %}
-
-                                        {% if rec.research_status == 'Approved' %}
-                                            <td style="color: green">
-                                                {{ rec.research_status|default_if_none:"" }}
-                                            </td>
-                                        {% elif rec.research_status == 'Rejected' %}
-                                            <td style="color: red">
-                                                {{ rec.research_status|default_if_none:"" }}
-                                            </td>
-                                        {% else %}
-                                            <td style="color: #8e7916">
-                                                {{ rec.research_status|default_if_none:"" }}
                                             </td>
 
                                         {% endif %}

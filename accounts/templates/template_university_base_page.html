@@ -944,6 +944,22 @@ License: You must have a valid license purchased only from themeforest(the above
                                             <a href="{% url 'partner:template_approving_application' %}"
                                                class="nav-link ">{% trans 'Approving Applicant Details' %}</a>
                                         </li>
+
+                                     {% if  user.is_faculty %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'partner:approving_faculty_application' %}"
+                                               class="nav-link ">{% trans 'Approving Research Proposal' %}</a>
+                                        </li>
+                                     {% endif %}
+
+                                      {% if  user.is_program %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'partner:approving_program_application' %}"
+                                               class="nav-link ">{% trans 'Approving Research Proposal' %}</a>
+                                        </li>
+                                     {% endif %}
+
+
                                 {% endif %}
 
                                 {% if user.is_supervisor %}
@@ -1537,7 +1553,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-    {% if request.resolver_match.url_name == 'template_approving_application' or request.resolver_match.url_name == 'edit_document' or request.resolver_match.url_name == 'document_settings' or  request.resolver_match.url_name == 'template_applicant_all_details' or request.resolver_match.url_name == 'research_details'  %}
+    {% if request.resolver_match.url_name == 'template_approving_application' or request.resolver_match.url_name == 'edit_document' or request.resolver_match.url_name == 'document_settings' or  request.resolver_match.url_name == 'template_applicant_all_details' or request.resolver_match.url_name == 'research_details' or  request.resolver_match.url_name == 'approving_faculty_application' or request.resolver_match.url_name == 'approving_program_application'%}
         {
             var element = document.getElementById("c");
             element.classList.add("active");
