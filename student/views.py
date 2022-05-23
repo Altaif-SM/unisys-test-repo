@@ -3385,7 +3385,7 @@ def applicant_research_details(request):
             research_obj.progress_date = progress_date
             research_obj.problems_encountered = problems_encountered
             research_obj.faculty_id = faculty
-            research_obj.program_research = program
+            research_obj.program_research_id = program
             research_obj.save()
         else:
             ResearchDetails.objects.create(program=program, specialisation=specialisation,supervisor_id = supervisor,
@@ -3422,7 +3422,17 @@ def applicant_research_details(request):
                                                            university_type_id=research_details.university_type.id).order_by('-id')
         if research_details:
             if research_details.university:
-                faculty_list = ProgramDetails.objects.filter(university_id = research_details.university.id)
+                faculty_recs = ProgramDetails.objects.filter(university_id = research_details.university.id)
+
+        faculty_ids = []
+        if faculty_recs:
+            for rec in faculty_recs:
+                if not rec.faculty.id in faculty_ids:
+                    raw_dict = {}
+                    raw_dict['id'] = rec.faculty.id
+                    raw_dict['faculty_name'] = rec.faculty.faculty_name
+                    faculty_ids.append(rec.faculty.id)
+                    faculty_list.append(raw_dict)
 
         if research_details:
             if research_details.university:
@@ -3438,7 +3448,7 @@ def applicant_research_details(request):
                 supervisor_list = supervisor_list.filter(role__name__in=role_name_list,faculty_id = research_details.faculty.id)
 
             if research_details.program_research:
-                supervisor_list = supervisor_list.filter(role__name__in=role_name_list,program_research_id = research_details.program_research.id)
+                supervisor_list = supervisor_list.filter(role__name__in=role_name_list,program_id = research_details.program_research.id)
 
         return render(request, 'research_details.html', { 'application_obj': application_obj,
                                                          'additional_info_obj':additional_info_obj,
