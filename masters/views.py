@@ -4337,7 +4337,15 @@ def edit_study_plan(request, program_id=None):
     if request.method == 'POST':
         year = request.POST.get('year')
         semester = request.POST.get('semester')
+        semester_program_category = request.POST.get('semester_program_category')
         course_count = request.POST.get('course_count')
+
+        if semester_program_category == 'Semester Based':
+            ProgramDetails.objects.filter(id = program_id).update(is_semester_based = True)
+        else:
+            ProgramDetails.objects.filter(id = program_id).update(is_semester_based = False)
+
+
         try:
             study_plan_obj = StudyPlanDetails.objects.create(program_id = program_id,academic_year_id=year,study_semester_id = semester)
             for count in range(int(course_count)):
@@ -4518,7 +4526,14 @@ def credit_study_plan(request, program_id=None):
     if request.method == 'POST':
         min_credit = request.POST.get('min_credit')
         max_credit = request.POST.get('max_credit')
+        credit_program_category = request.POST.get('credit_program_category')
         credit_course_count = request.POST.get('credit_course_count')
+
+        if credit_program_category == 'Semester Based':
+            ProgramDetails.objects.filter(id = program_id).update(is_semester_based = True)
+        else:
+            ProgramDetails.objects.filter(id = program_id).update(is_semester_based = False)
+
         try:
             credit_study_plan_obj = CreditStudyPlanDetails.objects.create(program_id = program_id,min_credit=min_credit,max_credit = max_credit)
             for count in range(int(credit_course_count)):
@@ -4608,3 +4623,15 @@ def delete_credit_based(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/view_credit_study_plan/' + str(program_id))
+
+
+def year_semester_already_exists(request):
+    semester = request.POST.get('semester', None)
+    year = request.POST.get('year', None)
+    program_id = request.POST.get('program_id', None)
+    semester_exists = False
+    if StudyPlanDetails.objects.filter(program_id = program_id,academic_year_id=year,study_semester_id = semester).exists():
+        semester_exists = True
+    else:
+        semester_exists = False
+    return JsonResponse(semester_exists, safe=False)

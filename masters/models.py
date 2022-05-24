@@ -477,6 +477,8 @@ class ProgramDetails(BaseModel):
     acceptance_avg = models.CharField(max_length=150, blank=True, null=True)
     capacity_avg = models.CharField(max_length=150, blank=True, null=True)
     course = models.ManyToManyField(CourseDetails, blank=True)
+    is_semester_based = models.BooleanField(default=True)
+
     class Meta:
         ordering = ('program_name',)
 

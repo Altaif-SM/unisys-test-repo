@@ -3181,6 +3181,18 @@ def semester_course_registration(request):
             program_id = application_obj.program_2.id
         else:
             program_id = application_obj.program_3.id
+
+        if ProgramDetails.objects.filter(id = program_id).exists():
+            if ProgramDetails.objects.get(id = program_id).is_semester_based == True:
+                is_semester_based = True
+            else:
+                is_semester_based = False
+        else:
+            is_semester_based = False
+
+        if not is_semester_based:
+            return redirect('/student/credit_course_registration/')
+
         year_list = []
         year_ids = []
         study_plan_recs = StudyPlanDetails.objects.filter(program_id=program_id)
@@ -3210,7 +3222,8 @@ def semester_course_registration(request):
                                                             'year_obj':year_obj,'study_plan_obj':study_plan_obj,
                                                             'course_filter':course_filter,
                                                             'unit_count':unit_count,
-                                                            'semester_list':semester_list})
+                                                            'semester_list':semester_list,
+                                                            'is_semester_based':is_semester_based})
 
     else:
         semester_list = []
@@ -3228,6 +3241,18 @@ def semester_course_registration(request):
             program_id = application_obj.program_2.id
         else:
             program_id = application_obj.program_3.id
+
+        if ProgramDetails.objects.filter(id = program_id).exists():
+            if ProgramDetails.objects.get(id = program_id).is_semester_based == True:
+                is_semester_based = True
+            else:
+                is_semester_based = False
+        else:
+            is_semester_based = False
+
+        if not is_semester_based:
+            return redirect('/student/credit_course_registration/')
+
         year_list = []
         year_ids = []
         study_plan_recs = StudyPlanDetails.objects.filter(program_id=program_id)
@@ -3240,7 +3265,8 @@ def semester_course_registration(request):
                                                            'year_list':year_list,'program_id':program_id,
                                                            'year_obj':year_obj,'course_filter':course_filter,
                                                            'unit_count':unit_count,
-                                                           'semester_list':semester_list})
+                                                           'semester_list':semester_list,
+                                                           'is_semester_based':is_semester_based})
 
 
 
@@ -3280,6 +3306,15 @@ def credit_course_registration(request):
             program_id = application_obj.program_2.id
         else:
             program_id = application_obj.program_3.id
+
+        if ProgramDetails.objects.filter(id = program_id).exists():
+            if ProgramDetails.objects.get(id = program_id).is_semester_based == True:
+                is_semester_based = True
+            else:
+                is_semester_based = False
+        else:
+            is_semester_based = False
+
         credit_study_plan_obj = ''
         credit_course_recs = ''
         credit_course_list = []
@@ -3316,7 +3351,8 @@ def credit_course_registration(request):
                                                                   'credit_course_recs':credit_course_recs,
                                                                   'credit_study_plan_obj':credit_study_plan_obj,
                                                                   'registered_course_recs':registered_course_recs,
-                                                                  'credit_course_list':credit_course_list})
+                                                                  'credit_course_list':credit_course_list,
+                                                                  'is_semester_based':is_semester_based})
 
 
 def add_prerequisite_courses(request, course_id=None):

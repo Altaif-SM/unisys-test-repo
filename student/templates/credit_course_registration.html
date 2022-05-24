@@ -15,6 +15,14 @@
 
             $(document).ready(function () {
 
+                    $("#id_semester_based").removeClass("active");
+                     $("#tab_1_1_1").removeClass("active");
+
+                     $("#id_credit_based").addClass("active");
+                     $("#tab_1_1_2").addClass("active");
+
+                     $('#id_semester_based').css('pointer-events', 'none');
+
 
                 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
                     var target = $(e.target).attr("data-id")
@@ -105,11 +113,11 @@
 
     <div class="tabbable-custom nav-justified">
         <ul class="nav nav-tabs nav-justified">
-            <li>
+            <li id="id_semester_based">
                 <a data-id="1" href="#tab_1_1_1" data-toggle="tab">
                     COURSE REGISTRATION (Semester Based System) </a>
             </li>
-            <li class="active">
+            <li id="id_credit_based" class="active">
                 <a data-id="2" href="#tab_1_1_2" data-toggle="tab">
                     COURSE REGISTRATION (Credit Based System) </a>
             </li>
@@ -127,12 +135,12 @@
                 <div class="tabbable-custom nav-justified">
                     <ul class="nav nav-tabs nav-justified">
 
-                        <li class="active">
+                        <li  class="active">
                             <a data-id="11" href="#tab_1_1_1_1" data-toggle="tab">
                                 Available Courses </a>
                         </li>
 
-                        <li class="">
+                        <li  class="">
                             <a data-id="12" href="#tab_1_1_1_2" data-toggle="tab">
                                 Registered Courses </a>
                         </li>

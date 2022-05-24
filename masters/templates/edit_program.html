@@ -140,13 +140,76 @@
                     $(this).parents('.course_details').remove();
                 });
 
+                      var semester_based = "{{ program_obj.is_semester_based }}";
+                        if(semester_based === 'True'){
+                            $("#id_credit_based").removeClass("active");
+                            $("#tab_1_1_2").removeClass("active");
+
+                            $("#id_semester_based").addClass("active");
+                            $("#tab_1_1_1").addClass("active");
+
+                            $('#id_credit_based').css('pointer-events', 'none');
+                        }
+                        else{
+                             $("#id_semester_based").removeClass("active");
+                             $("#tab_1_1_1").removeClass("active");
+
+                             $("#id_credit_based").addClass("active");
+                             $("#tab_1_1_2").addClass("active");
+
+                             $('#id_semester_based').css('pointer-events', 'none');
+                        }
+
+                       $('input[type="radio"]').on('change', function(){
+                    var program_categorizetion = $('input[name="program_categorizetion"]:checked').val();
+                    if(program_categorizetion === 'Semester Based'){
+
+                        $("#id_credit_based").removeClass("active");
+                         $("#tab_1_1_2").removeClass("active");
+
+                         $("#id_semester_based").addClass("active");
+                         $("#tab_1_1_1").addClass("active");
+
+
+                         $('#id_semester_based').css('pointer-events', '');
+                         $('#id_credit_based').css('pointer-events', 'none');
+
+
+                    }
+                    else{
+
+                        $("#id_semester_based").removeClass("active");
+                        $("#tab_1_1_1").removeClass("active");
+
+                         $("#id_credit_based").addClass("active");
+                         $("#tab_1_1_2").addClass("active");
+
+                        $('#id_credit_based').css('pointer-events','');
+                        $('#id_semester_based').css('pointer-events', 'none');
+                    }
+                })
 
 
 
 
-                       $(document).on("click", "#edit_study_plan_form", function (e) {
+
+
+                       $("#edit_study_plan_form").submit(function(e)
+                       {
                            var rowCount = $(".course_details").length;
                              $('#course_count').val(rowCount);
+                             var myRadio = $("input[name=program_categorizetion]");
+                             var checkedValue = myRadio.filter(":checked").val();
+                             $('#semester_program_category').val(checkedValue);
+
+                             var  semester_visible = $('#semester_exists_error').is(":visible");
+                             if(semester_visible == true){
+                                 return false;
+                             }
+
+
+
+
 
                        });
 
@@ -171,8 +234,50 @@
                           $(document).on("click", "#credit_edit_study_plan_form", function (e) {
                            var rowCount = $(".credit_course_details").length;
                              $('#credit_course_count').val(rowCount);
+                             var myRadio = $("input[name=program_categorizetion]");
+                             var checkedValue = myRadio.filter(":checked").val();
+                             $('#credit_program_category').val(checkedValue);
+
 
                        });
+
+                          $(document).on("change", "#semester", function (e) {
+                    var semester = $(this).val();
+                    var year = $('#year').val();
+                    var program_id = $('#program_id').val();
+                    var url = '/masters/year_semester_already_exists/';
+                    year_semester_already_exists(url, semester, year,program_id)
+                })
+
+
+            function year_semester_already_exists(url, semester, year,program_id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            semester: semester,
+                            year: year,
+                            program_id: program_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+                            var semester_exists = data;
+                            if(semester_exists === true){
+                                $('#semester_exists_error').show();
+                            }
+                            else{
+                                $('#semester_exists_error').hide();
+                            }
+
+
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+
 
 
                     $(document).on("change", "#year", function (e) {
@@ -1010,14 +1115,30 @@
 
     </div>
 
-    <div class="tabbable-custom nav-justified">
+                        <span style="padding:inherit"><b>{% trans 'Program Categorizetion' %}:  </b></span>
+                        {% if program_obj.is_semester_based == True %}
+                         <span style="padding:inherit;margin-left:25px;">{% trans 'Semester Based' %}</span>
+                        <input class="current" type="radio" checked name="program_categorizetion" id="semester_based" value="Semester Based">
+                        <span style="padding:inherit;margin-left:25px;">{% trans 'Credit Based' %}</span>
+                        <input class="current" type="radio" name="program_categorizetion" value="Credit Based"
+                               id="credit_based">
+                        {% else %}
+                            <span style="padding:inherit;margin-left:25px;">{% trans 'Semester Based' %}</span>
+                        <input class="current" type="radio"  name="program_categorizetion" id="semester_based" value="Semester Based">
+                        <span style="padding:inherit;margin-left:25px;">{% trans 'Credit Based' %}</span>
+                        <input class="current" type="radio" checked name="program_categorizetion" value="Credit Based"
+                               id="credit_based">
+                        {% endif %}
+
+
+                        <div class="tabbable-custom nav-justified" style="margin-top:30px;">
                             <ul class="nav nav-tabs nav-justified">
-                                <li class="active">
-                                    <a data-id="1" href="#tab_1_1_1" data-toggle="tab" >
+                                <li id="id_semester_based" class="active">
+                                    <a  data-id="1" href="#tab_1_1_1" data-toggle="tab" >
                                         PROGRAM STUDY PLAN (Semester Based System) </a>
                                 </li>
-                                <li>
-                                    <a data-id="2" href="#tab_1_1_2" data-toggle="tab">
+                                <li id="id_credit_based">
+                                    <a  data-id="2" href="#tab_1_1_2" data-toggle="tab">
                                         PROGRAM STUDY PLAN (Credit Based System) </a>
                                 </li>
 
@@ -1030,6 +1151,7 @@
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
+                                    <input type="hidden" name="semester_program_category" id="semester_program_category" value="">
 
                     <input hidden type="text" id="course_count" name="course_count">
 
@@ -1038,7 +1160,7 @@
                             <div class="caption">
 
 
-                                <span style="margin-left: 78%;font-family: 'Times New Roman'"><a target="_blank" href="{% url 'masters:view_semester_subject_list' program_obj.id %}" id="add"
+                                <span style="margin-left: 78%;font-family: 'Times New Roman'"><a target="_blank" href="{% url 'masters:view_semester_subject_list' program_obj.id %}" id="add_semester_subject"
                                        >View Semester Based Subject List
 
                                     </a>
@@ -1092,7 +1214,12 @@
 
 
 
+
+
                             </div>
+
+
+
 {#                 <br>#}
 {#                 <div class="row">#}
 {##}
@@ -1120,6 +1247,8 @@
 {##}
 {#                                </div>#}
                  </div>
+
+                                    <span style="color: red;display: none;margin-left:60%;" id="semester_exists_error">Academic year and semester already exists.</span>
                             <div class="row course_details" style="margin-top: 30px" id="course_details_1">
                             <div class="row">
 
@@ -1217,6 +1346,7 @@
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
+                    <input type="hidden" name="credit_program_category" id="credit_program_category" value="">
 
                     <input hidden type="text" id="credit_course_count" name="credit_course_count">
 
