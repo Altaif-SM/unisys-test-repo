@@ -3405,8 +3405,6 @@ def applicant_research_details(request):
 
         if research_id:
             research_obj = ResearchDetails.objects.get(id=research_id)
-            research_obj.program = program
-            research_obj.specialisation = specialisation
             research_obj.supervisor_id = supervisor
             research_obj.university_id = university
             research_obj.university_type_id = university_type
@@ -3429,7 +3427,7 @@ def applicant_research_details(request):
                                            completion_date=completion_date, research_title=research_title, project_outline = project_outline,
                                            data_collection = data_collection, data_analysis = data_analysis, progress_date = progress_date,
                                            problems_encountered = problems_encountered,application_id=request.user.get_application,university_id = university,
-                                           university_type_id = university_type,faculty_id = faculty,program_research = program)
+                                           university_type_id = university_type,faculty_id = faculty,program_research_id = program)
         messages.success(request, "Record saved.")
         return redirect('/student/applicant_research_details/')
     else:
