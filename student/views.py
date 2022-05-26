@@ -3436,6 +3436,7 @@ def applicant_research_details(request):
     else:
         research_details = ''
         additional_info_obj = ''
+        faculty_recs = ''
         application_obj = ''
         try:
             application_obj = request.user.get_application
