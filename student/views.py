@@ -3372,7 +3372,6 @@ def add_prerequisite_courses(request, course_id=None):
 def applicant_research_details(request):
     if request.method == 'POST':
         research_id = request.POST.get('research_id', None)
-        program = request.POST.get('program', None)
         specialisation = request.POST.get('specialisation', None)
         supervisor = request.POST.get('supervisor', None)
         study_duration = request.POST.get('study_duration', None)
@@ -3424,7 +3423,7 @@ def applicant_research_details(request):
             research_obj.program_research_id = program
             research_obj.save()
         else:
-            ResearchDetails.objects.create(program=program, specialisation=specialisation,supervisor_id = supervisor,
+            ResearchDetails.objects.create(supervisor_id = supervisor,
                                            study_duration=study_duration,
                                            first_date_registration=first_date_registration,
                                            completion_date=completion_date, research_title=research_title, project_outline = project_outline,
