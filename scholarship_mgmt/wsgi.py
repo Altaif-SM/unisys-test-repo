@@ -13,8 +13,12 @@ import os
 import sys
 from django.core.wsgi import get_wsgi_application
 
-sys.path.append('/var/www/html/scholarship_mgmt')
-sys.path.append('/var/www/html/var/lib/python3.5/site-packages')
+
+sys.path.append('/home/irepeat_project/papyrus')
+sys.path.append('/var/www/moheye_online_admission_project/university_system/scholarship_mgmt')
+
+
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "scholarship_mgmt.settings_prod")
 
 try:
