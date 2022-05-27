@@ -127,10 +127,8 @@ DATABASES = {
           'ENGINE': 'django.db.backends.mysql',
           'NAME': 'uni_sys_production_db',
           # 'NAME': 'indonesia_university_system_test_v2',
-          'USER':'root',
-          # 'USER':'riyaz',
-          'PASSWORD':'root',
-          # 'PASSWORD':'Sayyed@123',
+          'USER':'riyaz',
+          'PASSWORD':'Sayyed@123',
           'HOST': '127.0.0.1',
           'PORT':'3306'
      }
