@@ -125,8 +125,8 @@ MESSAGE_TAGS = {message_constants.DEBUG: 'debug',
 DATABASES = {
      'default': {
           'ENGINE': 'django.db.backends.mysql',
-          'NAME': 'uni_sys_production_db',
-          # 'NAME': 'indonesia_university_system_test_v2',
+          # 'NAME': 'uni_sys_production_db',
+          'NAME': 'indonesia_university_system_test_v2',
           'USER':'riyaz',
           'PASSWORD':'Sayyed@123',
           'HOST': '127.0.0.1',
@@ -182,10 +182,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
-# STATICFILES_DIRS = (
-#     os.path.join(BASE_DIR,'static'),
-# )
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR,'static'),
+)
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
