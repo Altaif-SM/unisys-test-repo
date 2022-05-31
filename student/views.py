@@ -12,6 +12,12 @@ import datetime
 import uuid
 import binascii
 
+from io import BytesIO
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+import cgi, html
+cgi.escape = html.escape
+
 # Create your views here.
 @student_login_required
 def student_home(request):
@@ -3517,3 +3523,44 @@ def get_supervisor_from_university(request):
         raw_dict['id']=rec.id
         supervisor_list.append(raw_dict)
     return JsonResponse(supervisor_list, safe=False)
+
+
+def generate_pdf(request,app_id):
+    application_obj = ApplicationDetails.objects.get(id=app_id)
+    header_path = settings.MEDIA_ROOT + 'university_logo.png'
+    if application_obj.university:
+        if application_obj.university.university_logo:
+            header_path = application_obj.university.university_logo.path
+    qualification_obj = application_obj.academic_applicant_rel.all() if application_obj.academic_applicant_rel.all() else ''
+    arabic_recs = application_obj.arab_applicant_rel.all() if application_obj.arab_applicant_rel.all() else ''
+    english_obj = application_obj.english_applicant_rel.all() if application_obj.english_applicant_rel.all() else ''
+    employement_history_obj = application_obj.employement_history_rel.get() if application_obj.employement_history_rel else ''
+    applicant_addition_obj = application_obj.applicant_addition_info.get() if application_obj.applicant_addition_info else ''
+    attachement_obj = application_obj.applicant_attachement_rel.all() if application_obj.applicant_attachement_rel.all() else ''
+    profile_path = settings.MEDIA_ROOT + 'profile.jpg'
+    if attachement_obj[0]:
+        if attachement_obj[0].image:
+            profile_path = attachement_obj[0].image.path
+
+    context = {
+        'application_obj':application_obj,
+        'header_path':header_path,
+        'qualification_recs':qualification_obj,
+        'arabic_recs':arabic_recs,
+        'english_recs':english_obj,
+        'employement_history_obj':employement_history_obj,
+        'applicant_addition_obj':applicant_addition_obj,
+        'profile_path':profile_path
+
+    }
+    pdf = html_to_pdf('generate_pdf.html',context)
+    return HttpResponse(pdf, content_type='application/pdf')
+
+def html_to_pdf(template_src, context_dict={}):
+     template = get_template(template_src)
+     html  = template.render(context_dict)
+     result = BytesIO()
+     pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
+     if not pdf.err:
+         return HttpResponse(result.getvalue(), content_type='application/pdf')
+     return None

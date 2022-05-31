@@ -284,10 +284,13 @@
                 <div class="portlet light portlet-fit portlet-form ">
                     <i class="icon-settings font-red"></i>
                     <span class="caption-subject font-red sbold uppercase"> PERSONAL INFO (BIOGRAPHICAL INFORMATION)</span>
-                    <form action="{% url 'partner:application_all_details_pdf' application_obj.id %}" id="form_pdf_id"
+                    <form action="{% url 'student:generate_pdf' application_obj.id %}" id="form_pdf_id"
                           class="form-horizontal" target="_blank"
                           method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
+
+                        <button type="button" class="btn green" id="button_pdf_id" style="">PDF
+                                        </button>
                     </form>
                 </div>
                 <div class="row">

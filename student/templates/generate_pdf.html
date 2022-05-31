@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+</head>
+<body>
+<div class='header' id="header" style="text-align: center;">
+    <img src="{{ header_path }}" alt="logo"
+         style="width: 400px;height: 80px; text-align: center" class="logo-default"/><br>
+
+</div>
+<h1 style="text-align: center;font-size: 16px; color: #13084e;">APPLICATION DETAILS</h1>
+
+<div class="portlet light portlet-fit portlet-form ">
+
+
+    <div class="portlet-body">
+        <div class="form-body">
+            <img style="width: 80px;margin-top: 0px; padding: 0px;" src="{{ profile_path }}">
+
+            <h1 style="text-align: left;font-size: 16px; color: #e7505a;">PERSONAL INFO (BIOGRAPHICAL INFORMATION)</h1>
+
+
+            <table>
+                <tr>
+                    <th style="text-align: left;font-size: 15px;">First Name</th>
+                    <th style="text-align: left;font-size: 15px;">Middle Name</th>
+                    <th style="text-align: left;font-size: 15px;">Last Name</th>
+                </tr>
+                <tr>
+                    <td style="font-size: 14px;">{{ application_obj.first_name|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;">{{ application_obj.middle_name|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;">{{ application_obj.last_name|default_if_none:"" }}</td>
+                </tr>
+
+
+            </table>
+            <br>
+
+            <table>
+                <tr>
+                    <th style="text-align: left;font-size: 14px;">Surname</th>
+                    <th style="text-align: left;font-size: 14px;">Passport No</th>
+                    <th style="text-align: left;font-size: 14px;"></th>
+                </tr>
+                <tr>
+                    <td style="font-size: 14px;">{{ application_obj.surname|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;">{{ application_obj.passport_number|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;"></td>
+                </tr>
+
+
+            </table>
+
+
+            <h1 style="text-align: left;font-size: 16px; color: #e7505a;">CONTACT INFO</h1>
+             <table>
+                <tr>
+                    <th style="text-align: left;font-size: 15px;">E-mail</th>
+                    <th style="text-align: left;font-size: 15px;">Mobile</th>
+                    <th style="text-align: left;font-size: 15px;">WhatsApp</th>
+                </tr>
+                <tr>
+                    <td style="font-size: 14px;">{{ application_obj.email|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;">{{ application_obj.address.mobile|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;">{{ application_obj.address.whats_app|default_if_none:"" }}</td>
+                </tr>
+
+
+            </table>
+            <br>
+            <table>
+                <tr>
+                    <th style="text-align: left;font-size: 15px;">Country</th>
+                    <th style="text-align: left;font-size: 15px;">Postcode</th>
+                    <th style="text-align: left;font-size: 15px;">Address line 1</th>
+                </tr>
+                <tr>
+                    <td style="font-size: 14px;">{{ application_obj.address.country|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;">{{ application_obj.address.post_code|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;">{{ application_obj.address.residential_address|default_if_none:"" }}</td>
+                </tr>
+
+
+            </table>
+            <br>
+             <table>
+                <tr>
+                    <th style="text-align: left;font-size: 14px;">Address line 2</th>
+                    <th style="text-align: left;font-size: 14px;">City</th>
+                    <th style="text-align: left;font-size: 14px;"></th>
+                </tr>
+                <tr>
+                    <td style="font-size: 14px;">{{ application_obj.address.street|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;">{{ application_obj.address.district|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;"></td>
+                </tr>
+
+
+            </table>
+            <h1 style="text-align: left;font-size: 16px; color: #e7505a;">INTAKE INFO</h1>
+             <table>
+                <tr>
+                    <th style="text-align: left;font-size: 15px;">University Type</th>
+                    <th style="text-align: left;font-size: 15px;">University</th>
+                    <th style="text-align: left;font-size: 15px;">Academic Year</th>
+                </tr>
+                <tr>
+                    <td style="font-size: 14px;">
+                        {{ application_obj.university_type.university_type|default_if_none:"" }}
+
+                    </td>
+                    <td style="font-size: 14px;">{{ application_obj.university.university_name|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;">{{ application_obj.academic_year.year_name|default_if_none:"" }}</td>
+                </tr>
+
+
+            </table>
+            <br>
+             <table>
+                <tr>
+                    <th style="text-align: left;font-size: 15px;">Semester</th>
+                    <th style="text-align: left;font-size: 15px;">Level of Study</th>
+                    <th style="text-align: left;font-size: 15px;">Faculty</th>
+                </tr>
+                <tr>
+                    <td style="font-size: 14px;">{{ application_obj.semester.semester|default_if_none:"" }} {{ application_obj.semester.start_date|date:"Y-m-d" }} - {{ application_obj.semester.end_date|date:"Y-m-d" }}</td>
+                    <td style="font-size: 14px;">{% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.study_level.study_level|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.study_level_2.study_level|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.study_level_3.study_level|default_if_none:"" }} {% else %}{{ application_obj.study_level.study_level|default_if_none:"" }}{% endif %}</td>
+                    <td style="font-size: 14px;">{% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.faculty.faculty_name|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.faculty_2.faculty_name|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.faculty_3.faculty_name|default_if_none:"" }} {% else %}{{ application_obj.faculty.faculty_name|default_if_none:"" }}{% endif %}</td>
+                </tr>
+
+
+            </table>
+            <br>
+             <table>
+                <tr>
+                    <th style="text-align: left;font-size: 15px;">Program</th>
+                    <th style="text-align: left;font-size: 15px;">Mode</th>
+                    <th style="text-align: left;font-size: 15px;"></th>
+                </tr>
+                <tr>
+                    <td style="font-size: 14px;">{% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.program.program_name|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.program_2.program_name|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.program_3.program_name|default_if_none:"" }} {% else %}{{ application_obj.program.program_name|default_if_none:"" }}{% endif %}</td>
+                    <td style="font-size: 14px;">{% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.program_mode.study_type|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.program_mode_2.study_type|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.program_mode_3.study_type|default_if_none:"" }} {% else %}{{ application_obj.program_mode.study_type|default_if_none:"" }}{% endif %}</td>
+                    <td style="font-size: 14px;"></td>
+                </tr>
+
+
+            </table>
+
+         <h1 style="text-align: left;font-size: 16px; color: #e7505a;">LEARNING CENTRE INFO</h1>
+             <table>
+                <tr>
+                    <th style="text-align: left;font-size: 15px;">Country</th>
+                    <th style="text-align: left;font-size: 15px;">Learning Centre</th>
+                    <th style="text-align: left;font-size: 15px;"></th>
+                </tr>
+                <tr>
+                    <td style="font-size: 14px;">{{ application_obj.learning_country.country_name|title }}</td>
+                    <td style="font-size: 14px;">{{ application_obj.learning_centre.lc_name|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;"></td>
+                </tr>
+
+
+            </table>
+
+        <br><br><br><br><br>
+        <h1 style="text-align: left;font-size: 16px; color: #e7505a;">ACADEMIC QUALIFICATION DETAILS</h1>
+
+        <table>
+                <tr>
+                    <th style="text-align: left;font-size: 15px;">Qualification</th>
+                    <th style="text-align: left;font-size: 15px;">Major</th>
+                    <th style="text-align: left;font-size: 15px;">Institution</th>
+                    <th style="text-align: left;font-size: 15px;">Result</th>
+                    <th style="text-align: left;font-size: 15px;">Year</th>
+                    <th style="text-align: left;font-size: 15px;">Country</th>
+                </tr>
+            {% for qualification_obj in qualification_recs %}
+
+                <tr>
+                    <td style="font-size: 14px;">{{ qualification_obj.degree|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;">{{ qualification_obj.major|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;">{{ qualification_obj.level_institution|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;">{{ qualification_obj.level_result|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;">{{ qualification_obj.level_year|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;">{{ qualification_obj.country.country_name|default_if_none:"" }}</td>
+                </tr>
+            {% endfor %}
+
+            </table>
+
+        <h1 style="text-align: left;font-size: 16px; color: #e7505a;">ARABIC LANGUAGE PROFICIENCY</h1>
+
+        <table>
+                <tr>
+                    <th style="text-align: left;font-size: 15px;">Arab Competency Test</th>
+                    <th style="text-align: left;font-size: 15px;">Institution</th>
+                    <th style="text-align: left;font-size: 15px;">Grade/Level</th>
+                </tr>
+            {% for arabic_obj in arabic_recs %}
+
+                <tr>
+                    <td style="font-size: 14px;">{{ arabic_obj.arab_competency_test.arab_competency_test|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;">{{ arabic_obj.arab_test|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;">{{ arabic_obj.arab_test_result|default_if_none:"" }}</td>
+                </tr>
+            {% endfor %}
+
+            </table>
+
+
+        <h1 style="text-align: left;font-size: 16px; color: #e7505a;">ENGLISH LANGUAGE PROFICIENCY</h1>
+
+        <table>
+                <tr>
+                    <th style="text-align: left;font-size: 15px;">English Competency Test</th>
+                    <th style="text-align: left;font-size: 15px;">Institution</th>
+                    <th style="text-align: left;font-size: 15px;">Grade/Level</th>
+                </tr>
+             {% for english_competency_obj in english_recs %}
+
+                <tr>
+                    <td style="font-size: 14px;">{{ english_competency_obj.english_competency_test.english_competency_test|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;">{{ english_competency_obj.english_test|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;">{{ english_competency_obj.english_test_result|default_if_none:"" }}</td>
+                </tr>
+            {% endfor %}
+
+            </table>
+
+        <h1 style="text-align: left;font-size: 16px; color: #e7505a;">WORKING EXPERIENCE</h1>
+
+        <table>
+                <tr>
+                    <th style="text-align: left;font-size: 15px;">Position</th>
+                    <th style="text-align: left;font-size: 15px;">Employer</th>
+                    <th style="text-align: left;font-size: 15px;">Working Status</th>
+                </tr>
+
+                <tr>
+                    <td style="font-size: 14px;">{{ employement_history_obj.designation|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;">{{ employement_history_obj.employer_name|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;">{{ employement_history_obj.working_status|default_if_none:"" }}</td>
+                </tr>
+
+            </table>
+        <br>
+        <table>
+                <tr>
+                    <th style="text-align: left;font-size: 15px;">Start Service</th>
+                    <th style="text-align: left;font-size: 15px;">End Service</th>
+                    <th style="text-align: left;font-size: 15px;"></th>
+                </tr>
+
+                <tr>
+                    <td style="font-size: 14px;">{{ employement_history_obj.from_date|date:"Y-m-d"|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;">{{ employement_history_obj.to_date|date:"Y-m-d"|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;"></td>
+                </tr>
+
+            </table>
+
+         <h1 style="text-align: left;font-size: 16px; color: #e7505a;">NEXT OF KEN DETAILS</h1>
+
+        <table>
+                <tr>
+                    <th style="text-align: left;font-size: 15px;">Name</th>
+                    <th style="text-align: left;font-size: 15px;">ID</th>
+                    <th style="text-align: left;font-size: 15px;">Relationship</th>
+                </tr>
+
+                <tr>
+                    <td style="font-size: 14px;">{{ applicant_addition_obj.ken_name|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;">{{ applicant_addition_obj.ken_id|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;">{{ applicant_addition_obj.ken_relationship|default_if_none:"" }}</td>
+                </tr>
+
+            </table>
+        <br>
+        <table>
+                <tr>
+                    <th style="text-align: left;font-size: 15px;">Tel No</th>
+                    <th style="text-align: left;font-size: 15px;">Email</th>
+                    <th style="text-align: left;font-size: 15px;"></th>
+                </tr>
+
+                <tr>
+                    <td style="font-size: 14px;">{{ applicant_addition_obj.ken_tel_no|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;">{{ applicant_addition_obj.ken_email|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;"></td>
+                </tr>
+
+            </table>
+        <h1 style="text-align: left;font-size: 16px; color: #e7505a;">OTHER INFORMATION</h1>
+
+        <table>
+                <tr>
+                    <th style="text-align: left;font-size: 15px;">How did you know about us</th>
+                    <th style="text-align: left;font-size: 15px;">Branch/Campus</th>
+                    <th style="text-align: left;font-size: 15px;"></th>
+                </tr>
+
+                <tr>
+                    <td style="font-size: 14px;">{{ applicant_addition_obj.about_know|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;">{{ applicant_addition_obj.campus.campus_name|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;"></td>
+                </tr>
+
+            </table>
+
+        <h1 style="text-align: left;font-size: 16px; color: #e7505a;">SPONSORSHIP</h1>
+
+        <table>
+                <tr>
+                    <th style="text-align: left;font-size: 15px;">Name of the Organisation</th>
+                    <th style="text-align: left;font-size: 15px;">Address</th>
+                    <th style="text-align: left;font-size: 15px;">Email</th>
+                </tr>
+
+                <tr>
+                    <td style="font-size: 14px;">{{ applicant_addition_obj.sponsore_organisation|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;">{{ applicant_addition_obj.sponsore_address|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;">{{ applicant_addition_obj.sponsore_email|default_if_none:"" }}</td>
+                </tr>
+
+            </table>
+        <br>
+        <table>
+                <tr>
+                    <th style="text-align: left;font-size: 15px;">Contact dept/person</th>
+                    <th style="text-align: left;font-size: 15px;"></th>
+                    <th style="text-align: left;font-size: 15px;"></th>
+                </tr>
+
+                <tr>
+                    <td style="font-size: 14px;">{{ applicant_addition_obj.sponsore_contact|default_if_none:"" }}</td>
+                    <td style="font-size: 14px;"></td>
+                    <td style="font-size: 14px;"></td>
+                    <td style="font-size: 14px;"></td>
+                </tr>
+
+            </table>
+
+
+
+
+
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -91,8 +91,7 @@ urlpatterns = [
                   path('save_students_parent_linking/', views.save_students_parent_linking,
                        name='save_students_parent_linking'),
 
-                  path('application_all_details_pdf/<int:app_id>/', views.application_all_details_pdf,
-                       name='application_all_details_pdf'),
+                  path('application_all_details_pdf/<int:app_id>/', views.application_all_details_pdf, name='application_all_details_pdf'),
                   # path('generate_student_details_pdf/<int:app_id>/', views.generate_student_details_pdf,name='generate_student_details_pdf'),
 
 

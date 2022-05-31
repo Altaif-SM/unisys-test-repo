@@ -73,20 +73,21 @@
     <div class='wrapper'>
         <div class='header' id="header" style="text-align: center;">
             <img src="{{ header_path }}" alt="logo"
-                 style="width: 790px;height: 120px;margin-top: 25px; text-align: center" class="logo-default"/><br>
-            <span class='title' style="font-size: 16px; color: #13084e;"><b>Application Details </b></span>
+                 style="width: 500px;height: 100px;margin-top: 25px; text-align: center" class="logo-default"/><br>
+
+            <br><br>
+            <span class='title' style="font-size: 16px; color: #13084e;"><b>APPLICATION DETAILS </b></span>
         </div>
 
 
+
         <div style="padding: 5px">
-            <span style="margin-left: 550px;"><img style="width: 100px;margin-top: 100px; padding: 10px;"
-                                                   src="{{ report_path }}{{ application_obj.image }}"></span>
+            <span style="margin-left: 550px;"><img style="width: 100px;margin-top: 0px; padding: 0px;" src="{{ profile_path }}"></span>
             <table>
                 <td colspan="3" style="font-size: 16px;font-weight:bold">PERSONAL INFO:</td>
                 <tr>
 
-                    {% comment %}<span class="" style="margin-left: 105px">PERSONAL INFO :</span>{% endcomment %}
-                    <td style="text-align: left ;font-size: {{ x }}px;margin-top: 20px">
+                    <td style="text-align: left ;font-size: {{ x }}px">
                         <span class="">First Name: {{ application_obj.first_name|title }}</span>
                     </td>
 
@@ -461,28 +462,5 @@
         </div>
     </div>
 
-    <div id="footerContent">
 
-        <table>
-            {#                <td colspan="3" style="font-size: 16px;font-weight:bold">PERSONAL INFO:</td>#}
-{#            <tr>#}
-{#                <td style="font-size: 11px;">#}
-{#                        <span class="">Level 13.2, Menara Tokio Marine Life,#}
-{#            No. 189, Jalan Tun Razak,#}
-{#            Kuala Lumpur, Malaysia#}
-{#                        </span>#}
-{#                </td>#}
-
-{#                <td >#}
-                        <span class="" style="">
-                              <img src="{{ footer_path }}" style="width: 850px;height: 100px;" alt="logo" class="logo-default"/>
-                        </span>
-{#                </td>#}
-
-
-
-            </tr>
-        </table>
-        {#                        <pdf:pagenumber>#}
-    </div>
 {% endblock %}
