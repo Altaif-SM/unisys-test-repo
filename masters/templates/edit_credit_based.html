@@ -175,13 +175,92 @@
                     $(this).parents('.credit_course_details').remove();
                 });
 
+             $(document).on("change", "#credit_year", function (e) {
+                    var year = $(this).val();
+                    var university = $('#university').val();
+                    var program_level = $('#program_level').val();
+                    var url = '/masters/get_intake_semester_from_year/';
+                    get_credit_intake_semester_from_year(url, year, university,program_level)
+                })
+
+            function get_credit_intake_semester_from_year(url, year, university,program_level) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            year: year,
+                            program_level: program_level,
+                            university: university,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            $('#credit_semester').empty();
+                            $('#credit_semester').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#credit_semester').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['semester'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+                 $(document).on("change", "#credit_semester", function (e) {
+                    var semester = $(this).val();
+                    var year = $('#credit_year').val();
+                    var program_id = $('#program_id').val();
+                    var credit_study_id = $('#credit_study_id').val();
+                    var url = '/masters/credit_year_semester_already_exists/';
+                    credit_year_semester_already_exists(url, semester, year,program_id,credit_study_id)
+                })
+
+
+            function credit_year_semester_already_exists(url, semester, year,program_id,credit_study_id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            semester: semester,
+                            year: year,
+                            program_id: program_id,
+                            credit_study_id: credit_study_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+                            var semester_exists = data;
+                            if(semester_exists === true){
+                                $('#credit_semester_exists_error').show();
+                            }
+                            else{
+                                $('#credit_semester_exists_error').hide();
+                            }
+
+
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
 
 
 
 
-$(document).on("click", "#credit_edit_study_plan_form", function (e) {
+
+    $("#credit_edit_study_plan_form").submit(function(e){
                            var rowCount = $(".credit_course_details").length;
                              $('#credit_course_count').val(rowCount);
+
+
+                              var  semester_visible = $('#credit_semester_exists_error').is(":visible");
+                             if(semester_visible == true){
+                                 return false;
+                             }
 
                        });
 
@@ -252,30 +331,7 @@ $(document).on("click", "#credit_edit_study_plan_form", function (e) {
                 });
             }
 
-            /*function get_university_from_university_type(url, university_type) {
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: {
-                        university_type: university_type,
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                    },
-                    success: function (data) {
 
-                        $('#university').empty();
-                        $('#university').append(
-                            '<option value="" >Please select</option>');
-                        for (var i = 0; i < data.length; i++) {
-                            $('#university').append(
-                                '<option value="' + data[i]['id'] + '">'
-                                + data[i]['university_name'] + '</option>')
-                        }
-                    },
-                    error: function (xhr, msg, err) {
-                        alert(xhr.responseJSON.error);
-                    }
-                });
-            }*/
 
 
             window.setTimeout(function () {
@@ -349,6 +405,10 @@ $(document).on("click", "#credit_edit_study_plan_form", function (e) {
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
+                  <input type="hidden" value="{{ credit_study_plan_obj.program.id }}" name="program_id" id="program_id">
+                  <input type="hidden" value="{{ credit_study_plan_obj.program.university.id }}" name="university" id="university">
+                  <input type="hidden" value="{{ credit_study_plan_obj.id }}" name="credit_study_id" id="credit_study_id">
+
                     <input hidden type="text" id="credit_course_count" name="credit_course_count">
 
                     <div class="portlet-title" style="margin-left:-15px;font-size: 16px;">
@@ -365,6 +425,73 @@ $(document).on("click", "#credit_edit_study_plan_form", function (e) {
                             </div>
                         </div>
                         <hr>
+
+                 <div class="row credit_year_sem_details" style="margin-top: 30px" id="credit_year_sem_details_1">
+                 <div class="row">
+
+                                <div class="">
+                                    <label class="col-md-2 control-label"><b>Year:</b></label>
+                                    <div class="col-md-3">
+                                       <select id='credit_year' title="Select Year" required
+                                                        name="credit_year"
+                                                        class="form-control chk">
+
+                                                    {% if credit_study_plan_obj.academic_year %}
+                                                    <option style="display:none" selected="selected" id="" value="{{ credit_study_plan_obj.academic_year.id }}">
+                                                            {{ credit_study_plan_obj.academic_year.year_name|default_if_none:"" }}
+                                                        </option>
+                                                    {% else %}
+                                                        <option style="display:none" selected="selected" id="" value="">
+                                                            Please
+                                                            Select
+                                                        </option>
+                                                    {% endif %}
+
+
+
+
+                                         {% for rec in year_list %}
+                                                        <option value='{{ rec.id }}'>{{ rec.year|default_if_none:"" }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                    </div>
+                                </div>
+
+
+
+
+
+                 <div class="">
+                                    <label class="col-md-2 control-label"><b>Semester:</b></label>
+                                    <div class="col-md-3">
+                                       <select id='credit_semester' title="Enter Semester" required
+                                                        name="credit_semester"
+                                                        class="form-control chk">
+                                                    {% if credit_study_plan_obj.semester %}
+                                                    <option style="display:none" selected="selected" id="" value="{{ credit_study_plan_obj.semester.id }}">{{ credit_study_plan_obj.semester.semester|default_if_none:"" }} {{ credit_study_plan_obj.semester.start_date|date:"Y-m-d" }} - {{ credit_study_plan_obj.semester.end_date|date:"Y-m-d" }}</option>
+                                                    {% else %}
+                                                        <option style="display:none" selected="selected" id="" value="">
+                                                            Please
+                                                            Select
+                                                        </option>
+                                                    {% endif %}
+
+                                       {% for rec in semester_list %}
+                                                        <option value='{{ rec.id }}'>{{ rec.semester|default_if_none:"" }}</option>
+                                                    {% endfor %}
+
+
+                                                </select>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                 </div>
+
+                 <span style="color: red;display: none;margin-left:60%;" id="credit_semester_exists_error">Academic year and semester already exists.</span>
+
                  <div class="row credit_details" style="margin-top: 30px" id="credit_details_1">
                  <div class="row">
 

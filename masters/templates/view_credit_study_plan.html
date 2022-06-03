@@ -186,6 +186,8 @@
                         {#                        <th>Program ID</th>#}
 {#                        <th> {% trans 'Type of Program' %}</th>#}
                         <th> {% trans 'Program' %}</th>
+                         <th> {% trans 'Academic Year' %}</th>
+                        <th> {% trans 'Semester' %}</th>
                         <th> {% trans 'Min Credit' %}</th>
                         <th> {% trans 'Max Credit' %}</th>
 {#                        <th> {% trans 'Code' %}</th>#}
@@ -204,6 +206,9 @@
                         <tr id="item{{ forloop.counter }}" class="item">
                             <td style="display: none"><input id="credit_id" value="{{ rec.id }}"></td>
                             <td>{{ rec.program.program_name|default_if_none:"" }}</td>
+                             <td>{{ rec.academic_year.year_name|default_if_none:"" }}</td>
+
+                            <td>{{ rec.semester.semester|default_if_none:"" }} {{ rec.semester.start_date|date:"Y-m-d" }} - {{ rec.semester.end_date|date:"Y-m-d" }}</td>
                             <td>{{ rec.min_credit|default_if_none:"" }}</td>
                             <td>{{ rec.max_credit|default_if_none:"" }}</td>
 {#                            <td>{% for rec in rec.credit_course.all %}#}

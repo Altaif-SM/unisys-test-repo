@@ -309,4 +309,6 @@ urlpatterns = [
     path('edit_credit_based/<int:credit_id>/', views.edit_credit_based, name='edit_credit_based'),
     path('delete_credit_based/', views.delete_credit_based, name='delete_credit_based'),
     path('year_semester_already_exists/', views.year_semester_already_exists, name='year_semester_already_exists'),
+    path('credit_year_semester_already_exists/', views.credit_year_semester_already_exists, name='credit_year_semester_already_exists'),
+    path('change_program_categorization/', views.change_program_categorization, name='change_program_categorization'),
 ]

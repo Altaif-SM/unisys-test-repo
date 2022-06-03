@@ -159,9 +159,15 @@
 
                              $('#id_semester_based').css('pointer-events', 'none');
                         }
-
-                       $('input[type="radio"]').on('change', function(){
+                    $('input[type=radio][name=program_categorizetion]').on('change', function (){
+                       {#$('input[type="radio"]').on('change', function(){#}
                     var program_categorizetion = $('input[name="program_categorizetion"]:checked').val();
+
+                     var url = '/masters/change_program_categorization/';
+                    var program_id = $('#program_id').val();
+                    change_program_categorization(url, program_categorizetion,program_id)
+
+
                     if(program_categorizetion === 'Semester Based'){
 
                         $("#id_credit_based").removeClass("active");
@@ -187,6 +193,9 @@
                         $('#id_credit_based').css('pointer-events','');
                         $('#id_semester_based').css('pointer-events', 'none');
                     }
+
+
+
                 })
 
 
@@ -250,6 +259,27 @@
                 })
 
 
+
+            function change_program_categorization(url, program_categorizetion,program_id) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        program_categorizetion_type: program_categorizetion,
+                        program_id: program_id,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data) {
+
+                    },
+                    error: function (xhr, msg, err) {
+                        alert(xhr.responseJSON.error);
+                    }
+                });
+            }
+
+
+
             function year_semester_already_exists(url, semester, year,program_id) {
                     $.ajax({
                         type: 'POST',
@@ -308,6 +338,79 @@
                                     '<option value="' + data[i]['id'] + '">'
                                     + data[i]['semester'] + '</option>')
                             }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+
+                $(document).on("change", "#credit_year", function (e) {
+                    var year = $(this).val();
+                    var university = $('#university').val();
+                    var program_level = $('#program_level').val();
+                    var url = '/masters/get_intake_semester_from_year/';
+                    get_credit_intake_semester_from_year(url, year, university,program_level)
+                })
+
+            function get_credit_intake_semester_from_year(url, year, university,program_level) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            year: year,
+                            program_level: program_level,
+                            university: university,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            $('#credit_semester').empty();
+                            $('#credit_semester').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#credit_semester').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['semester'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+
+                          $(document).on("change", "#credit_semester", function (e) {
+                    var semester = $(this).val();
+                    var year = $('#credit_year').val();
+                    var program_id = $('#program_id').val();
+                    var url = '/masters/credit_year_semester_already_exists/';
+                    credit_year_semester_already_exists(url, semester, year,program_id)
+                })
+
+
+            function credit_year_semester_already_exists(url, semester, year,program_id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            semester: semester,
+                            year: year,
+                            program_id: program_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+                            var semester_exists = data;
+                            if(semester_exists === true){
+                                $('#credit_semester_exists_error').show();
+                            }
+                            else{
+                                $('#credit_semester_exists_error').hide();
+                            }
+
+
                         },
                         error: function (xhr, msg, err) {
                             alert(xhr.responseJSON.error);
@@ -1220,32 +1323,6 @@
 
 
 
-{#                 <br>#}
-{#                 <div class="row">#}
-{##}
-{##}
-{#                                     <div class="">#}
-{#                                    <label class="col-md-2 control-label">Start Date:</label>#}
-{#                                    <div class="col-md-3">#}
-{#                                        <input type="date" required title="Enter Start Date" id="start_date"#}
-{#                                               name="start_date"#}
-{#                                               value=""#}
-{#                                               class="form-control eng_emp">#}
-{#                                    </div>#}
-{#                                </div>#}
-{##}
-{#                                    <div class="">#}
-{#                                    <label class="col-md-2 control-label">End Date:</label>#}
-{#                                    <div class="col-md-3">#}
-{#                                        <input type="date" required title="Enter End Date" id="end_date"#}
-{#                                               name="end_date"#}
-{#                                               value=""#}
-{#                                               class="form-control eng_emp">#}
-{#                                    </div>#}
-{#                                </div>#}
-{##}
-{##}
-{#                                </div>#}
                  </div>
 
                                     <span style="color: red;display: none;margin-left:60%;" id="semester_exists_error">Academic year and semester already exists.</span>
@@ -1366,6 +1443,58 @@
                         </div>
 
                         <hr>
+                                    <div class="row credit_year_sem_details" style="margin-top: 30px" id="credit_year_sem_details_1">
+                 <div class="row">
+
+                                <div class="">
+                                    <label class="col-md-2 control-label"><b>Year:</b></label>
+                                    <div class="col-md-3">
+                                       <select id='credit_year' title="Select Year" required
+                                                        name="credit_year"
+                                                        class="form-control chk">
+                                                   <option style="display:none" selected="selected" id="" value="">
+                                                            Please
+                                                            Select
+                                                        </option>
+
+                                                    {% for rec in year_list %}
+                                                        <option value='{{ rec.id }}'>{{ rec.year|default_if_none:"" }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                    </div>
+                                </div>
+
+
+                 <div class="">
+                                    <label class="col-md-2 control-label"><b>Semester:</b></label>
+                                    <div class="col-md-3">
+                                       <select id='credit_semester' title="Enter Semester" required
+                                                        name="credit_semester"
+                                                        class="form-control chk">
+                                                   <option style="display:none" selected="selected" id="" value="">
+                                                            Please
+                                                            Select
+                                                        </option>
+
+
+                                                </select>
+                                    </div>
+                                </div>
+
+
+
+
+
+
+
+
+
+                            </div>
+
+
+
+                 </div>
+                                    <span style="color: red;display: none;margin-left:60%;" id="credit_semester_exists_error">Academic year and semester already exists.</span>
 
                                         <div class="row credit_details" style="margin-top: 30px" id="credit_details_1">
                  <div class="row">

@@ -50,6 +50,39 @@
                     });
                 })
 
+                  $(document).on("change", "#year", function (e) {
+                    var year_id = $(this).val();
+                    var program_id = $('#program_id').val();
+                    var url = '/student/get_credit_semester_from_year/';
+                    get_credit_semester_from_year(url, year_id, program_id)
+                })
+
+                function get_credit_semester_from_year(url, year_id, program_id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            year_id: year_id,
+                            program_id: program_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            $('#semester').empty();
+                            $('#semester').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#semester').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['semester'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
 
                 $('.credit_status_change').click(function () {
                     var min_credit = parseInt($('#min_credit').val());
@@ -111,6 +144,7 @@
 
 
 
+
     <div class="tabbable-custom nav-justified">
         <ul class="nav nav-tabs nav-justified">
             <li id="id_semester_based">
@@ -146,10 +180,96 @@
                         </li>
 
                     </ul>
+
                     <div class="tab-content">
+                     <br>
 
                         <div class="tab-pane active" id="tab_1_1_1_1">
-                            <form method="post" action="{% url 'student:credit_course_registration' %}"
+                <form action="{% url 'student:credit_course_registration' %}"
+                      id="edit_study_plan_form"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="program_id" id="program_id" value="{{ program_id }}">
+
+                    <div style="margin-left: 0px !important; margin-right: 0px !important;" class="row">
+
+
+                        <div class="">
+                            <label style="text-align:left" class="col-md-2 control-label">Select Year:</label>
+                            <div class="col-md-3">
+                                <select id='year' title="Select Year" required
+                                        name="year"
+                                        class="form-control chk">
+                                    {% if year_obj %}
+                                        <option style="display:none" selected="selected" id=""
+                                                value="{{ year_obj.id }}">
+                                            {{ year_obj.year_name|default_if_none:"" }}
+                                        </option>
+                                    {% else %}
+                                        <option style="display:none" selected="selected" id="" value="">
+                                            Please
+                                            Select
+                                        </option>
+                                    {% endif %}
+                                    {% for rec in year_list %}
+                                        <option value='{{ rec.id }}'>{{ rec.year_name|default_if_none:"" }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <br>
+                    <div style="margin-left: 0px !important; margin-right: 0px !important;" class="row">
+                        <div class="">
+                            <label style="text-align:left" class="col-md-2 control-label">Select Semester:</label>
+                            <div class="col-md-3">
+                                <select id='semester' title="Select Semester" required
+                                        name="semester"
+                                        class="form-control chk">
+
+                                    {% if credit_study_plan_obj %}
+                                        <option style="display:none" selected="selected" id=""
+                                                value="{{ credit_study_plan_obj.id }}">
+                                            {{ credit_study_plan_obj.semester.semester|default_if_none:"" }} {{ credit_study_plan_obj.semester.start_date|date:"Y-m-d" }} - {{ credit_study_plan_obj.semester.end_date|date:"Y-m-d" }}
+                                        </option>
+                                    {% else %}
+                                        <option style="display:none" selected="selected" id="" value="">
+                                            Please
+                                            Select
+                                        </option>
+                                    {% endif %}
+
+                                    {% for rec in semester_list %}
+                                        <option value='{{ rec.id }}'>{{ rec.semester|default_if_none:"" }}</option>
+                                    {% endfor %}
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="">
+                            <div class="col-md-3">
+                                <button type="submit" class="btn green" id="back"
+                                >
+                                    Filter
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </form>
+
+
+                    <hr>
+
+                        {% if credit_course_filter %}
+
+                            <form method="post" action="{% url 'student:submit_credit_course' %}"
                                   id="credit_form_submit">
 
 
@@ -277,7 +397,12 @@
                                 {% endif %}
 
                             </form>
-                        </div>
+                        {% endif %}
+
+                             </div>
+
+
+
 
 
                         <div class="tab-pane" id="tab_1_1_1_2">
@@ -350,6 +475,7 @@
                                 </tbody>
                             </table>
                         </div>
+
 
                     </div>
                 </div>

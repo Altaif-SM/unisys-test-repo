@@ -865,6 +865,10 @@ class CreditStudyPlanDetails(BaseModel):
     min_credit = models.CharField(max_length=50, blank=True, null=True)
     max_credit = models.CharField(max_length=50, blank=True, null=True)
     credit_course = models.ManyToManyField(CreditCourseDetails, blank=True)
+    academic_year = models.ForeignKey(YearDetails, null=True, related_name='study_credit_academic_year_rel',
+                                      on_delete=models.SET_NULL)
+    semester = models.ForeignKey(Semester, null=True, related_name='study_credit_semester_rel',
+                                       on_delete=models.SET_NULL)
 
 
 class StudentRegisteredCreditCourseDetails(BaseModel):

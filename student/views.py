@@ -3291,14 +3291,100 @@ def get_semester_from_year(request):
 
 def credit_course_registration(request):
     if request.method == 'POST':
-        check_ids = json.loads(request.POST.get('check_ids'))
-        program_id = request.POST.get('program_id', None)
-        for rec in check_ids:
-            try:
-                StudentRegisteredCreditCourseDetails.objects.create(application_id=request.user.get_application,program_id = program_id,course_id = rec)
-            except Exception as e:
-                pass
-        return redirect('/student/credit_course_registration/')
+        year = request.POST.get('year', None)
+        semester = request.POST.get('semester', None)
+        application_obj = request.user.get_application
+        study_plan_obj = ''
+        year_obj = ''
+        course_recs = ''
+        program_id = ''
+        if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False and application_obj.is_accepted == True:
+            program_id = application_obj.program.id
+        elif application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False and application_obj.is_accepted == True:
+            program_id = application_obj.program_2.id
+        else:
+            program_id = application_obj.program_3.id
+
+        if ProgramDetails.objects.filter(id = program_id).exists():
+            if ProgramDetails.objects.get(id = program_id).is_semester_based == True:
+                is_semester_based = True
+            else:
+                is_semester_based = False
+        else:
+            is_semester_based = False
+
+        if is_semester_based:
+            return redirect('/student/semester_course_registration/')
+
+        credit_course_filter = True
+
+        credit_study_plan_obj = ''
+        credit_course_recs = ''
+        credit_course_list = []
+        registered_course_ids = StudentRegisteredCreditCourseDetails.objects.filter(
+            application_id=request.user.get_application).values_list('course_id', flat=True)
+        if CreditStudyPlanDetails.objects.filter(id=semester).exists():
+            credit_study_plan_obj = CreditStudyPlanDetails.objects.get(id=semester)
+            credit_course_recs = credit_study_plan_obj.credit_course.filter().exclude(id__in = registered_course_ids)
+
+        for rec in credit_course_recs:
+            course_dict = {}
+            course_dict['id'] = rec.id
+            course_dict['code'] = rec.code
+            course_dict['title'] = rec.title
+            course_dict['type'] = rec.type
+            if rec.is_prerequisite:
+                course_dict['is_prerequisite'] = 'Yes'
+            else:
+                course_dict['is_prerequisite'] = 'No'
+
+            if RegisteredPrerequisiteCourses.objects.filter(course_id=rec.id).exists():
+                course_dict['course_registered'] = True
+            else:
+                course_dict['course_registered'] = False
+            course_dict['unit'] = rec.unit
+
+            credit_course_list.append(course_dict)
+
+        registered_course_recs = StudentRegisteredCreditCourseDetails.objects.filter(
+            application_id=request.user.get_application)
+
+        year_list = []
+        year_ids = []
+        credit_study_plan_recs = CreditStudyPlanDetails.objects.filter(program_id=program_id)
+        for rec in credit_study_plan_recs:
+            if rec.academic_year.id not in year_ids:
+                year_ids.append(rec.academic_year.id)
+                year_list.append(rec.academic_year)
+
+        if year:
+            year_obj = YearDetails.objects.get(id = year)
+
+
+
+        semester_list = []
+        semester_recs = CreditStudyPlanDetails.objects.filter(academic_year_id=year, program_id=program_id)
+        for rec in semester_recs:
+            raw_dict = {}
+            raw_dict['semester'] = str(rec.semester.semester + ' ' + (
+                        str(rec.semester.start_date) + ' - ' + str(rec.semester.end_date)))
+            raw_dict['id'] = rec.id
+            semester_list.append(raw_dict)
+
+        return render(request, 'credit_course_registration.html', {'application_obj': application_obj,
+                                                                   'course_recs': course_recs,
+                                                                   'program_id': program_id,
+                                                                   'year_obj': year_obj,
+                                                                   'credit_course_recs': credit_course_recs,
+                                                                   'credit_study_plan_obj': credit_study_plan_obj,
+                                                                   'registered_course_recs': registered_course_recs,
+                                                                   'credit_course_list': credit_course_list,
+                                                                   'year_list': year_list,
+                                                                   'credit_course_filter': credit_course_filter,
+                                                                   'program_id': program_id,
+                                                                   'semester_list': semester_list,
+                                                                   'credit_study_plan_obj': credit_study_plan_obj})
+
     else:
         application_obj = request.user.get_application
         matric_no = hex(binascii.crc32(str(application_obj.id).encode()))[2:]
@@ -3321,14 +3407,17 @@ def credit_course_registration(request):
         else:
             is_semester_based = False
 
+        if is_semester_based:
+            return redirect('/student/semester_course_registration/')
+
         credit_study_plan_obj = ''
         credit_course_recs = ''
         credit_course_list = []
         registered_course_ids = StudentRegisteredCreditCourseDetails.objects.filter(
             application_id=request.user.get_application).values_list('course_id', flat=True)
-        if CreditStudyPlanDetails.objects.filter(program_id=program_id).exists():
-            credit_study_plan_obj = CreditStudyPlanDetails.objects.get(program_id=program_id)
-            credit_course_recs = credit_study_plan_obj.credit_course.filter().exclude(id__in = registered_course_ids)
+        # if CreditStudyPlanDetails.objects.filter(program_id=program_id).exists():
+        #     credit_study_plan_obj = CreditStudyPlanDetails.objects.get(program_id=program_id)
+        #     credit_course_recs = credit_study_plan_obj.credit_course.filter().exclude(id__in = registered_course_ids)
         for rec in credit_course_recs:
             course_dict = {}
             course_dict['id'] = rec.id
@@ -3350,6 +3439,27 @@ def credit_course_registration(request):
 
         registered_course_recs = StudentRegisteredCreditCourseDetails.objects.filter(application_id=request.user.get_application)
 
+        year_list = []
+        year_ids = []
+        credit_study_plan_recs = CreditStudyPlanDetails.objects.filter(program_id=program_id)
+        for rec in credit_study_plan_recs:
+            if rec.academic_year.id not in year_ids:
+                year_ids.append(rec.academic_year.id)
+                year_list.append(rec.academic_year)
+
+        credit_course_filter = False
+
+
+        semester_list = []
+        # credit_study_plan_obj = ''
+        # semester_recs = CreditStudyPlanDetails.objects.filter(academic_year_id=year, program_id=study_plan_obj.program_id)
+        # for rec in semester_recs:
+        #     raw_dict = {}
+        #     raw_dict['semester'] = str(rec.study_semester.semester + ' ' + (
+        #                 str(rec.study_semester.start_date) + ' - ' + str(rec.study_semester.end_date)))
+        #     raw_dict['id'] = rec.id
+        #     semester_list.append(raw_dict)
+
         return render(request, 'credit_course_registration.html',{'application_obj':application_obj,
                                                        'matric_no':matric_no,'course_recs':course_recs,
                                                            'program_id':program_id,
@@ -3358,8 +3468,23 @@ def credit_course_registration(request):
                                                                   'credit_study_plan_obj':credit_study_plan_obj,
                                                                   'registered_course_recs':registered_course_recs,
                                                                   'credit_course_list':credit_course_list,
-                                                                  'is_semester_based':is_semester_based})
+                                                                  'is_semester_based':is_semester_based,
+                                                                  'year_list':year_list,
+                                                                  'credit_course_filter':credit_course_filter,
+                                                                  'program_id':program_id,
+                                                                  'semester_list':semester_list,
+                                                                  'credit_study_plan_obj':credit_study_plan_obj})
 
+def submit_credit_course(request):
+    check_ids = json.loads(request.POST.get('check_ids'))
+    program_id = request.POST.get('program_id', None)
+    for rec in check_ids:
+        try:
+            StudentRegisteredCreditCourseDetails.objects.create(application_id=request.user.get_application,
+                                                                program_id=program_id, course_id=rec)
+        except Exception as e:
+            pass
+    return redirect('/student/credit_course_registration/')
 
 def add_prerequisite_courses(request, course_id=None):
     if request.method == 'POST':
@@ -3564,3 +3689,15 @@ def html_to_pdf(template_src, context_dict={}):
      if not pdf.err:
          return HttpResponse(result.getvalue(), content_type='application/pdf')
      return None
+
+def get_credit_semester_from_year(request):
+    finalDict = []
+    year_id = request.POST.get('year_id', None)
+    program_id = request.POST.get('program_id', None)
+    credit_study_plan_recs = CreditStudyPlanDetails.objects.filter(academic_year_id = year_id,program_id = program_id)
+    for rec in credit_study_plan_recs:
+        raw_dict = {}
+        raw_dict['semester'] = str(rec.semester.semester + ' ' + (str(rec.semester.start_date) + ' - ' + str(rec.semester.end_date)))
+        raw_dict['id']=rec.id
+        finalDict.append(raw_dict)
+    return JsonResponse(finalDict, safe=False)

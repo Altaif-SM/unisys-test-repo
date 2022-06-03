@@ -137,6 +137,47 @@
                         }
                     });
                 }
+
+
+                 $(document).on("change", "#semester", function (e) {
+                    var semester = $(this).val();
+                    var year = $('#year').val();
+                    var program_id = $('#program_id').val();
+                    var study_plan_id = $('#study_plan_id').val();
+                    var url = '/masters/year_semester_already_exists/';
+                    year_semester_already_exists(url, semester, year,program_id,study_plan_id)
+                })
+
+
+            function year_semester_already_exists(url, semester, year,program_id,study_plan_id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            semester: semester,
+                            year: year,
+                            program_id: program_id,
+                            study_plan_id: study_plan_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+                            var semester_exists = data;
+                            if(semester_exists === true){
+                                $('#semester_exists_error').show();
+                            }
+                            else{
+                                $('#semester_exists_error').hide();
+                            }
+
+
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+
                 var values = "{{ selected_campus_list }}";
                 $('#campus').find('option').filter(function (idx, option) {
                     if ($.inArray(option.value, values) !== -1) {
@@ -350,6 +391,8 @@
 
                     <input hidden type="text" id="course_count" name="course_count">
                     <input hidden type="text" id="university" name="university" value="{{ study_plan_obj.program.university.id }}">
+                    <input hidden type="text" id="program_id" name="program_id" value="{{ study_plan_obj.program.id }}">
+                    <input hidden type="text" id="study_plan_id" name="study_plan_id" value="{{ study_plan_obj.id }}">
 
                     <div class="portlet-title" style="margin-left:-15px;font-size: 16px;">
                             <div class="caption">
@@ -428,6 +471,9 @@
                             </div>
 
                  </div>
+
+
+                 <span style="color: red;display: none;margin-left:60%;" id="semester_exists_error">Academic year and semester already exists.</span>
 
                  <div class="" style="margin-left: 86%;margin-bottom: -1%">
                                 <div class="" >

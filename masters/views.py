@@ -4526,6 +4526,8 @@ def credit_study_plan(request, program_id=None):
     if request.method == 'POST':
         min_credit = request.POST.get('min_credit')
         max_credit = request.POST.get('max_credit')
+        credit_year = request.POST.get('credit_year')
+        credit_semester = request.POST.get('credit_semester')
         credit_program_category = request.POST.get('credit_program_category')
         credit_course_count = request.POST.get('credit_course_count')
 
@@ -4535,7 +4537,7 @@ def credit_study_plan(request, program_id=None):
             ProgramDetails.objects.filter(id = program_id).update(is_semester_based = False)
 
         try:
-            credit_study_plan_obj = CreditStudyPlanDetails.objects.create(program_id = program_id,min_credit=min_credit,max_credit = max_credit)
+            credit_study_plan_obj = CreditStudyPlanDetails.objects.create(program_id = program_id,min_credit=min_credit,max_credit = max_credit,academic_year_id = credit_year,semester_id = credit_semester)
             for count in range(int(credit_course_count)):
                 try:
                     count = count + 1
@@ -4573,9 +4575,13 @@ def edit_credit_based(request, credit_id=None):
         min_credit = request.POST.get('min_credit')
         max_credit = request.POST.get('max_credit')
         credit_course_count = request.POST.get('credit_course_count')
+        credit_year = request.POST.get('credit_year')
+        credit_semester = request.POST.get('credit_semester')
         try:
             credit_study_plan_obj.min_credit = min_credit
             credit_study_plan_obj.max_credit = max_credit
+            credit_study_plan_obj.academic_year_id = credit_year
+            credit_study_plan_obj.semester_id = credit_semester
             credit_study_plan_obj.save()
             credit_study_plan_obj.credit_course.clear()
             for count in range(int(credit_course_count)):
@@ -4607,9 +4613,34 @@ def edit_credit_based(request, credit_id=None):
     else:
         prerequisite_course_recs = PrerequisiteCourseDetails.objects.all()
         credit_course_total_count = credit_study_plan_obj.credit_course.all().count()
+        year_list = []
+        semester_recs = SemesterDetails.objects.filter(university_id=credit_study_plan_obj.program.university.id)
+        if semester_recs:
+            for rec in semester_recs:
+                raw_dict = {}
+                raw_dict['id'] = rec.year.id
+                raw_dict['year'] = rec.year.year_name
+                year_list.append(raw_dict)
+
+        semester_list = []
+        semester_recs = SemesterDetails.objects.all()
+        if credit_study_plan_obj.academic_year:
+            semester_recs = semester_recs.filter(year_id=credit_study_plan_obj.academic_year.id)
+        if credit_study_plan_obj.program.university:
+            semester_recs = semester_recs.filter(university_id=credit_study_plan_obj.program.university.id)
+        if semester_recs:
+            for rec in semester_recs:
+                for sem in rec.semester.all():
+                    raw_dict = {}
+                    raw_dict['id'] = sem.id
+                    raw_dict['semester'] = str(sem.semester + ' ' + (str(sem.start_date) + ' - ' + str(sem.end_date)))
+                    semester_list.append(raw_dict)
+
         return render(request, "edit_credit_based.html",{'credit_study_plan_obj':credit_study_plan_obj,
                                                          'prerequisite_course_recs':prerequisite_course_recs,
-                                                         'credit_course_total_count':credit_course_total_count})
+                                                         'credit_course_total_count':credit_course_total_count,
+                                                         'year_list':year_list,
+                                                         'semester_list':semester_list})
 
 def delete_credit_based(request):
     if request.method == 'POST':
@@ -4629,9 +4660,50 @@ def year_semester_already_exists(request):
     semester = request.POST.get('semester', None)
     year = request.POST.get('year', None)
     program_id = request.POST.get('program_id', None)
+    study_plan_id = request.POST.get('study_plan_id', None)
     semester_exists = False
-    if StudyPlanDetails.objects.filter(program_id = program_id,academic_year_id=year,study_semester_id = semester).exists():
-        semester_exists = True
+    if study_plan_id:
+        if StudyPlanDetails.objects.filter(program_id=program_id, academic_year_id=year,
+                                           study_semester_id=semester).exclude(id = study_plan_id).exists():
+            semester_exists = True
+        else:
+            semester_exists = False
+        return JsonResponse(semester_exists, safe=False)
     else:
-        semester_exists = False
-    return JsonResponse(semester_exists, safe=False)
+        if StudyPlanDetails.objects.filter(program_id = program_id,academic_year_id=year,study_semester_id = semester).exists():
+            semester_exists = True
+        else:
+            semester_exists = False
+        return JsonResponse(semester_exists, safe=False)
+
+
+def credit_year_semester_already_exists(request):
+    semester = request.POST.get('semester', None)
+    year = request.POST.get('year', None)
+    program_id = request.POST.get('program_id', None)
+    credit_study_id = request.POST.get('credit_study_id', None)
+    semester_exists = False
+    if credit_study_id:
+        if CreditStudyPlanDetails.objects.filter(program_id=program_id, academic_year_id=year,
+                                                 semester_id=semester).exclude(id = credit_study_id).exists():
+            semester_exists = True
+        else:
+            semester_exists = False
+        return JsonResponse(semester_exists, safe=False)
+    else:
+        if CreditStudyPlanDetails.objects.filter(program_id = program_id,academic_year_id=year,semester_id = semester).exists():
+            semester_exists = True
+        else:
+            semester_exists = False
+        return JsonResponse(semester_exists, safe=False)
+
+
+def change_program_categorization(request):
+    program_categorizetion_type = request.POST.get('program_categorizetion_type', None)
+    program_id = request.POST.get('program_id', None)
+    if program_categorizetion_type == 'Semester Based':
+        is_semester_based = True
+    else:
+        is_semester_based = False
+    ProgramDetails.objects.filter(id = program_id).update(is_semester_based = is_semester_based)
+    return JsonResponse(True, safe=False)
