@@ -104,7 +104,7 @@ class CreateCheckoutSessionView(View):
                             'unit_amount': int(float(payement_obj.amount)*100),
                             'product_data': {
                                 'name': 'Online Admission',
-                                'images': ['http://34.83.191.75/static/images/university_logo.png'],
+                                'images': ['http://unisys.online/static/images/university_logo.png'],
                             },
                         },
                         'quantity': 1,
@@ -198,7 +198,7 @@ class CreateRegistrationCheckoutSessionView(View):
                             'unit_amount': int(float(payement_obj.total_amount)*100),
                             'product_data': {
                                 'name': 'Program Registration Payment',
-                                'images': ['http://34.83.191.75/static/images/university_logo.png'],
+                                'images': ['http://unisys.online/static/images/university_logo.png'],
                             },
                         },
                         'quantity': 1,
@@ -262,7 +262,7 @@ class CourseRegistrationCheckoutSessionView(View):
                         'unit_amount': int(float(total_amount)*100),
                         'product_data': {
                             'name': 'Course Registration Payment',
-                            'images': ['http://34.83.191.75/static/images/university_logo.png'],
+                            'images': ['http://unisys.online/static/images/university_logo.png'],
                         },
                     },
                     'quantity': 1,
