@@ -4707,3 +4707,18 @@ def change_program_categorization(request):
         is_semester_based = False
     ProgramDetails.objects.filter(id = program_id).update(is_semester_based = is_semester_based)
     return JsonResponse(True, safe=False)
+
+def credit_fee_details(request, credit_id=None):
+    credit_obj = CreditStudyPlanDetails.objects.get(id = credit_id)
+    if request.method == 'POST':
+        credit_fee = request.POST.get('credit_fee')
+        try:
+            credit_obj.credit_fee = credit_fee
+            credit_obj.save()
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/view_credit_study_plan/'+str(credit_obj.program.id))
+    return render(request, 'credit_fee_details.html',{
+        'credit_obj':credit_obj,
+    })

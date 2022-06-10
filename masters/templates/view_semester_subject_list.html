@@ -177,6 +177,7 @@
         <div class="portlet-body">
 
 
+
             <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
 
@@ -195,7 +196,7 @@
 {#                        <th> {% trans 'Subject Name' %}</th>#}
 {#                        <th> {% trans 'Unit' %}</th>#}
 {#                        <th> {% trans 'Subject Type' %}</th>#}
-                        <th width="15%"> {% trans 'Fee' %}</th>
+                        <th width="5%"> {% trans 'Semester Fee' %}</th>
                         <th width="15%">Action</th>
                     </tr>
                     </thead>
@@ -239,8 +240,11 @@
 
 
 
-                            <a href="{% url 'masters:semester_fee_details' rec.id %}">Fee Details
 
+                             <a href="{% url 'masters:semester_fee_details' rec.id %}">
+                                <span type="button" name="edit" id="edit{{ forloop.counter }}"
+                                      class=" edit_btn btn yellow glyphicon glyphicon-pencil">
+                                </span>
                                     </a>
 
 

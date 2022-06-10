@@ -196,7 +196,7 @@
 {#                        <th> {% trans 'Subject Type' %}</th>#}
 {#                        <th> {% trans 'Is Prerequisite' %}</th>#}
 {#                        <th> {% trans 'Course' %}</th>#}
-{#                        <th width="15%"> {% trans 'Fee' %}</th>#}
+                        <th width="5%"> {% trans 'Credit Fee' %}</th>
                         <th width="15%">Action</th>
                     </tr>
                     </thead>
@@ -252,16 +252,23 @@
 {#                            {% endfor %}#}
 {#                            </td>#}
 
-{#                            <td>#}
-{##}
-{##}
-{##}
-{#                            <a href="javascript:void(0)">Fee Details#}
-{##}
-{#                                    </a>#}
-{##}
-{##}
-{#                            </td>#}
+                            <td>
+
+
+
+
+                                <a href="{% url 'masters:credit_fee_details' rec.id %}">
+                                <span type="button" name="edit" id="edit{{ forloop.counter }}"
+                                      class=" edit_btn btn yellow glyphicon glyphicon-pencil">
+                                </span>
+                                    </a>
+
+
+
+
+                            </td>
+
+
 
 
 

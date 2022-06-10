@@ -869,6 +869,7 @@ class CreditStudyPlanDetails(BaseModel):
                                       on_delete=models.SET_NULL)
     semester = models.ForeignKey(Semester, null=True, related_name='study_credit_semester_rel',
                                        on_delete=models.SET_NULL)
+    credit_fee = models.CharField(null=True, blank=True, max_length=50,)
 
 
 class StudentRegisteredCreditCourseDetails(BaseModel):

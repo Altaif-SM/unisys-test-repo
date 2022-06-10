@@ -298,6 +298,7 @@ urlpatterns = [
 
 
     path('semester_fee_details/<int:semester_id>/', views.semester_fee_details, name='semester_fee_details'),
+    path('credit_fee_details/<int:credit_id>/', views.credit_fee_details, name='credit_fee_details'),
 
     path('course_master_settings/', views.course_master_settings, name='course_master_settings'),
     path('add_courses/', views.add_courses, name='add_courses'),
