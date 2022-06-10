@@ -270,7 +270,6 @@ class CourseRegistrationCheckoutSessionView(View):
             ],
             payment_method_types=['card'],
             mode='payment',
-            # success_url=YOUR_DOMAIN + 'payments/stripe_course_checkout_success/session_id={CHECKOUT_SESSION_ID}',
             success_url=YOUR_DOMAIN + 'payments/stripe_course_checkout_success/' + str(semester_id),
             cancel_url=YOUR_DOMAIN + 'payments/course_registration_checkout/'+str(semester_id),
 
@@ -285,3 +284,94 @@ class CourseRegistrationCheckoutSessionView(View):
 def stripe_course_checkout_success(request,semester_id):
     CourseFeeDetails.objects.create(study_plan_id = semester_id)
     return redirect('/payments/course_registration_checkout/'+str(semester_id))
+
+
+def credit_course_registration_checkout(request, credit_id=None):
+    try:
+        check_ids = json.loads(request.POST.get('check_ids'))
+        course_id_list = check_ids
+        course_ids = ",".join(course_id_list)
+        application_obj = request.user.get_application
+        credit_course_list = []
+        credit_fee_obj = CreditStudyPlanDetails.objects.get(id=credit_id)
+        if int(credit_fee_obj.credit_fee) == 0:
+            return render(request, 'no_credit_fee_updated.html', {'application_obj': application_obj})
+        total_amount = 0
+        total_credit = 0
+        credit_course_recs = CreditCourseDetails.objects.filter(id__in = check_ids)
+        for rec in credit_course_recs:
+            course_dict = {}
+            course_dict['id'] = rec.id
+            course_dict['code'] = rec.code
+            course_dict['title'] = rec.title
+            course_dict['unit'] = rec.unit
+            total_credit = int(total_credit) + int(rec.unit)
+            credit_course_list.append(course_dict)
+        total_amount = float(credit_fee_obj.credit_fee * total_credit)
+        checkout_page = False
+        if CreditFeeDetails.objects.filter(credit_id = credit_id).exists():
+            checkout_page = True
+        return render(request, 'credit_payment_checkout.html', {'application_obj': application_obj,
+                                                                     'credit_fee_obj':credit_fee_obj,
+                                                                     'total_amount':total_amount,
+                                                                     'credit_id':credit_id,
+                                                                     'checkout_page':checkout_page,
+                                                                'credit_course_list':credit_course_list,
+                                                                'total_credit':total_credit,
+                                                                'course_ids':course_ids,
+                                                                })
+    except Exception as e:
+        messages.warning(request, "Please Fill The Application Form First ... ")
+        return redirect('/student/credit_course_registration/')
+
+
+class CreditCheckoutSessionView(View):
+    def post(self, request, *args, **kwargs):
+        YOUR_DOMAIN = settings.SERVER_HOST_NAME
+        credit_id = json.loads(request.body)['credit_id']
+        course_ids = json.loads(request.body)['course_ids']
+        course_id_list = list(course_ids.split(","))
+        credit_obj = CreditStudyPlanDetails.objects.get(id = credit_id)
+        total_amount = 0
+        total_credit = 0
+        credit_course_recs = CreditCourseDetails.objects.filter(id__in=course_id_list)
+        for rec in credit_course_recs:
+            total_credit = int(total_credit) + int(rec.unit)
+        total_amount = float(credit_obj.credit_fee * total_credit)
+
+        checkout_session = stripe.checkout.Session.create(
+            line_items=[
+                {
+                    'price_data': {
+                        'currency': 'usd',
+                        'unit_amount': int(float(total_amount)*100),
+                        'product_data': {
+                            'name': 'Credit Registration Payment',
+                            'images': ['http://unisys.online/static/images/university_logo.png'],
+                        },
+                    },
+                    'quantity': 1,
+                },
+            ],
+            payment_method_types=['card'],
+            mode='payment',
+            success_url=YOUR_DOMAIN + 'payments/stripe_credit_checkout_success/' + str(credit_id) + '/' + course_ids,
+            cancel_url=YOUR_DOMAIN + 'payments/credit_course_registration_checkout/'+str(credit_id),
+
+        )
+        try:
+            return JsonResponse({'id': checkout_session.id})
+        except Exception as e:
+            return str(e)
+
+def stripe_credit_checkout_success(request,credit_id,course_ids):
+    course_id_list = list(course_ids.split(","))
+    credit_obj = CreditStudyPlanDetails.objects.get(id=credit_id)
+    for rec in course_id_list:
+        try:
+            StudentRegisteredCreditCourseDetails.objects.create(application_id=request.user.get_application,
+                                                                program_id=credit_obj.program_id, course_id=rec,credit_id = credit_id)
+        except Exception as e:
+            pass
+    CreditFeeDetails.objects.create(credit_id=credit_id)
+    return redirect('/payments/credit_course_registration_checkout/'+str(credit_id))

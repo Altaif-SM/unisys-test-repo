@@ -869,7 +869,7 @@ class CreditStudyPlanDetails(BaseModel):
                                       on_delete=models.SET_NULL)
     semester = models.ForeignKey(Semester, null=True, related_name='study_credit_semester_rel',
                                        on_delete=models.SET_NULL)
-    credit_fee = models.CharField(null=True, blank=True, max_length=50,)
+    credit_fee = models.FloatField(null=True, blank=True, default=0.0)
 
 
 class StudentRegisteredCreditCourseDetails(BaseModel):
@@ -879,9 +879,27 @@ class StudentRegisteredCreditCourseDetails(BaseModel):
                              on_delete=models.SET_NULL)
     course = models.ForeignKey(CreditCourseDetails, null=True, related_name='student_credit_credit_course',
                                 on_delete=models.SET_NULL)
+    credit = models.ForeignKey(CreditStudyPlanDetails, null=True, related_name='student_credit_study_plan',
+                               on_delete=models.SET_NULL)
 
 class RegisteredPrerequisiteCourses(BaseModel):
     application_id = models.ForeignKey(ApplicationDetails, null=True, related_name='student_prerequisite_application_id',
                                        on_delete=models.SET_NULL)
     course = models.ForeignKey(CreditCourseDetails, null=True, related_name='student_prerequisite_course',
                                 on_delete=models.SET_NULL)
+
+
+class CreditFeeDetails(BaseModel):
+    transaction_id = models.CharField(max_length=255, blank=True, null=True)
+    status = models.CharField(max_length=50, blank=True, null=True)
+    currency_code = models.CharField(max_length=100, blank=True, null=True)
+    amount = models.CharField(max_length=100, blank=True, null=True)
+    application_id = models.ForeignKey(ApplicationDetails, null=True, related_name='credit_application_id',
+                                       on_delete=models.SET_NULL)
+    university = models.ForeignKey(UniversityDetails, null=True, related_name='credit_university_rel',
+                                   on_delete=models.SET_NULL)
+    credit = models.ForeignKey(CreditStudyPlanDetails, null=True, related_name='credit_plan_rel',
+                                   on_delete=models.SET_NULL)
+
+    class Meta:
+        ordering = ('-id',)

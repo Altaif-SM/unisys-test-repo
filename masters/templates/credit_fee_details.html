@@ -224,7 +224,7 @@
                                     <label class="col-md-2 control-label">{% trans 'Credit Fee' %}:</label>
                                     <div class="col-md-3">
                                         <input type="text" title="Enter Credit Fee" id="credit_fee"
-                                               name="credit_fee" value="{{ credit_obj.credit_fee|floatformat:2 }}" onkeypress='validate(event)'
+                                               name="credit_fee" value="{{ credit_obj.credit_fee|default_if_none:"" }}" onkeypress='validate(event)'
                                                class="form-control eng_emp" required="">
 
                                     </div>
