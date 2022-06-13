@@ -700,12 +700,12 @@ def change_application_status(request):
                     if not request.user.is_super_admin():
                         university_name = application_obj.university.university_name
                         if application_obj.university.university_logo:
-                            logo_url = 'http://34.83.191.75' + application_obj.university.university_logo.url
+                            logo_url = 'http://unisys.online' + application_obj.university.university_logo.url
                         else:
                             logo_url = ''
                     else:
                         university_name = 'University Science & Technology'
-                        logo_url = 'http://34.83.191.75/static/images/university_logo.png'
+                        logo_url = 'http://unisys.online/static/images/university_logo.png'
                     message = 'Congratulations! We are pleased to inform you that the '+ university_name +' is offering a Conditional Offer Letter.'
                     send_email_to_applicant(application_obj.email, subject, message,
                                             application_obj.first_name,conditional_documents,logo_url,program_name)
@@ -755,12 +755,12 @@ def change_application_status(request):
                     if not request.user.is_super_admin():
                         university_name = application_obj.university.university_name
                         if application_obj.university.university_logo:
-                            logo_url = 'http://34.83.191.75' + application_obj.university.university_logo.url
+                            logo_url = 'http://unisys.online' + application_obj.university.university_logo.url
                         else:
                             logo_url = ''
                     else:
                         university_name = 'University Science & Technology'
-                        logo_url = 'http://34.83.191.75/static/images/university_logo.png'
+                        logo_url = 'http://unisys.online/static/images/university_logo.png'
                     message = 'Congratulations! We are pleased to inform you that the '+ university_name +' is offering a Full Offer Letter.'
                     send_email_to_full_offer_letter(application_obj.email, subject, message,
                                             application_obj.first_name,logo_url,program_name)
@@ -827,11 +827,11 @@ def change_application_status(request):
                         program_name = application_obj.program_3.program_name
                     if not request.user.is_super_admin():
                         if application_obj.university.university_logo:
-                            logo_url = 'http://34.83.191.75' + application_obj.university.university_logo.url
+                            logo_url = 'http://unisys.online' + application_obj.university.university_logo.url
                         else:
                             logo_url = ''
                     else:
-                        logo_url = 'http://34.83.191.75/static/images/university_logo.png'
+                        logo_url = 'http://unisys.online/static/images/university_logo.png'
                     message = 'You have Incomplete Application.'
                     send_email_to_incomplete_application(application_obj.email, subject, message,
                                             application_obj.first_name,description,logo_url,program_name)
@@ -1163,11 +1163,11 @@ def change_application_status(request):
                         program_name = application_obj.program_3.program_name
                     if not request.user.is_super_admin():
                         if application_obj.university.university_logo:
-                            logo_url = 'http://34.83.191.75' + application_obj.university.university_logo.url
+                            logo_url = 'http://unisys.online' + application_obj.university.university_logo.url
                         else:
                             logo_url = ''
                     else:
-                        logo_url = 'http://34.83.191.75/static/images/university_logo.png'
+                        logo_url = 'http://unisys.online/static/images/university_logo.png'
                     message = 'Your application has rejected.'
                     send_email_to_rejected_application(application_obj.email, subject, message,
                                             application_obj.first_name,logo_url,program_name)

@@ -124,7 +124,8 @@ def send_signup_email_to_applicant(from_email, to_mail, subject, message, first_
     to = [to_mail, from_email]
     host_name = settings.SERVER_HOST_NAME+'accounts/account_activate/'+str(user_id)
     #template = get_template('student_signup_mail_template.html')
-    logo_url = 'http://34.83.191.75/static/images/university_logo.png'
+    # logo_url = 'http://34.83.191.75/static/images/university_logo.png'
+    logo_url = 'http://unisys.online/static/images/university_logo.png'
     html_content = render_to_string('activate_email_template.html',{'first_name': first_name, 'message': message,'user_id':user_id,'host_name':host_name,'logo_url':logo_url})
 
     try:
