@@ -1,0 +1,240 @@
+{% extends "template_base_page.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+
+
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+            $(document).ready(function () {
+
+
+            });
+
+
+            $('#sample_1').dataTable().fnDestroy();
+            $('#sample_1').dataTable({
+                "aoColumnDefs": [
+                    {'bSortable': false}
+                ]
+            });
+        }
+
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'student:student_home' %}">{% trans 'Home' %}</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span>{% trans 'Applications Program Search' %}</span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-settings font-red"></i>
+            <span class="caption-subject font-red sbold uppercase">{% trans 'Applications Program Search' %}</span>
+        </div>
+    </div>
+
+    <div class="portlet-body">
+        <div class="form-body">
+
+        <form action="{% url 'student:applicant_program_search' %}"
+                      id="edit_study_plan_form"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="program_id" id="program_id" value="{{ program_id }}">
+
+                    <div style="margin-left: 0px !important; margin-right: 0px !important;" class="row">
+
+
+                        <div class="">
+                            <label style="text-align:left" class="col-md-1 control-label">Study Level:</label>
+                            <div class="col-md-3">
+                                <select id='study_level' title="Select Study Level"
+                                        name="study_level"
+                                        class="form-control chk">
+                                    {% if study_level_obj %}
+                                        <option style="display:none" selected="selected" id=""
+                                                value="{{ study_level_obj.id }}">
+                                            {{ study_level_obj.study_level|default_if_none:"" }}
+                                        </option>
+                                        <option  value="" >
+                                            All
+                                        </option>
+                                    {% else %}
+                                        <option style="display:none" selected="selected" id="" value="">
+                                            All
+                                        </option>
+                                    {% endif %}
+                                    {% for rec in study_level_recs %}
+                                        <option value='{{ rec.id }}'>{{ rec.study_level|default_if_none:"" }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                    <div class="">
+                            <label style="text-align:left" class="col-md-1 control-label">Mode of Study:</label>
+                            <div class="col-md-3">
+                                <select id='study_type' title="Select Mode of Study"
+                                        name="study_type"
+                                        class="form-control chk">
+
+                                    {% if study_type_obj %}
+                                        <option style="display:none" selected="selected" id=""
+                                                value="{{ study_type_obj.id }}">
+                                            {{ study_type_obj.study_type }}
+                                        </option>
+                                        <option  value="" >
+                                            All
+                                        </option>
+                                    {% else %}
+                                        <option style="display:none" selected="selected" id="" value="">
+                                            All
+                                        </option>
+                                    {% endif %}
+
+                                    {% for rec in study_mode_recs %}
+                                        <option value='{{ rec.id }}'>{{ rec.study_type|default_if_none:"" }}</option>
+                                    {% endfor %}
+
+                                </select>
+                            </div>
+                        </div>
+
+                    <div class="">
+                            <label style="text-align:left" class="col-md-1 control-label">Faculty:</label>
+                            <div class="col-md-3">
+                                <select id='faculty_name' title="Select Faculty"
+                                        name="faculty_name"
+                                        class="form-control chk">
+
+                                    {% if faculty_obj %}
+                                        <option style="display:none" selected="selected" id=""
+                                                value="{{ faculty_obj.id }}">
+                                            {{ faculty_obj.faculty_name|default_if_none:"" }}
+                                        </option>
+                                        <option  value="" >
+                                            All
+                                        </option>
+                                    {% else %}
+                                        <option style="display:none" selected="selected" id="" value="">
+                                            All
+                                        </option>
+                                    {% endif %}
+
+                                    {% for rec in faculty_recs %}
+                                        <option value='{{ rec.id }}'>{{ rec.faculty_name|default_if_none:"" }}</option>
+                                    {% endfor %}
+
+                                </select>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+        <br>
+
+        <div style="margin-left: 0px !important; margin-right: 0px !important;" class="row">
+            <div class="">
+                             <div class="col-md-offset-5 col-md-7">
+                                <button type="submit" class="btn blue" id="back"
+                                >
+                                    Search
+                                </button>
+                            </div>
+                        </div>
+        </div>
+
+
+
+                </form>
+            {% if is_search %}
+            <table class="table table-striped table-hover table-bordered" id="sample_1">
+                    <thead>
+                    <tr>
+                        <th style="display: none">Id</th>
+                        <th> {% trans 'Program Name' %}</th>
+                        <th> {% trans 'University' %}</th>
+                        <th> {% trans 'Type' %}</th>
+                        <th> {% trans 'Faculty' %}</th>
+                        <th> {% trans 'Study Level' %}</th>
+                        <th> {% trans 'Program Mode' %}</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="tbody">
+                    {% for rec in program_recs %}
+                        <tr id="item{{ forloop.counter }}" class="item">
+                            <td style="display: none"><input id="program_id" value="{{ rec.id }}"></td>
+                            <td>{{ rec.program_name|default_if_none:"" }}</td>
+                            <td>{{ rec.university.university_name|default_if_none:"" }}</td>
+                            <td>{{ rec.university_type.university_type|default_if_none:"" }}</td>
+                            <td>{{ rec.faculty.faculty_name|default_if_none:"" }}</td>
+                            <td>{{ rec.study_level.study_level|default_if_none:"" }}</td>
+                        <td>{{ rec.study_type.study_type|default_if_none:"" }}</td>
+
+
+
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+    </div>
+{% endblock %}

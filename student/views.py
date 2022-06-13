@@ -3701,3 +3701,47 @@ def get_credit_semester_from_year(request):
         raw_dict['id']=rec.id
         finalDict.append(raw_dict)
     return JsonResponse(finalDict, safe=False)
+
+
+def applicant_program_search(request):
+    study_level_recs = StudyLevelDetails.objects.filter().order_by('-id')
+    study_mode_recs = StudyTypeDetails.objects.all()
+    faculty_recs = FacultyDetails.objects.all()
+    if request.method == 'GET':
+        context = {
+            'is_search': False,
+            'study_level_recs':study_level_recs,
+            'study_mode_recs':study_mode_recs,
+            'faculty_recs':faculty_recs,
+        }
+        return render(request, 'applicant_program_search.html',context)
+    else:
+        study_level = request.POST.get('study_level', None)
+        study_type = request.POST.get('study_type', None)
+        faculty_name = request.POST.get('faculty_name', None)
+        study_level_obj = None
+        study_type_obj = None
+        faculty_obj = None
+
+        program_recs = ProgramDetails.objects.all()
+        if study_level:
+            study_level_obj = StudyLevelDetails.objects.get(id = study_level)
+            program_recs = program_recs.filter(study_level_id = study_level)
+        if study_type:
+            study_type_obj = StudyTypeDetails.objects.get(id=study_type)
+            program_recs = program_recs.filter(study_type_id = study_type)
+        if faculty_name:
+            faculty_obj = FacultyDetails.objects.get(id=faculty_name)
+            program_recs = program_recs.filter(faculty_id = faculty_name)
+        context = {
+            'is_search': True,
+            'study_level_recs': study_level_recs,
+            'study_mode_recs': study_mode_recs,
+            'faculty_recs': faculty_recs,
+            'program_recs': program_recs,
+            'study_level_obj': study_level_obj,
+            'study_type_obj': study_type_obj,
+            'faculty_obj': faculty_obj,
+        }
+        return render(request, 'applicant_program_search.html', context)
+

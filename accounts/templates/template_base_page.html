@@ -1330,6 +1330,28 @@ License: You must have a valid license purchased only from themeforest(the above
                         <!-- END SIDEBAR MENU -->
                     </div>  <!-- END tabpane -->
 
+                <div class="tab-pane " id="application_program_search">
+                        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
+                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+
+
+                            {% if 'student.can_view_student_application_progress_history' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'student:applicant_program_search' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-search"></i>
+                                        <span class="title">{% trans 'Program Search' %}</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+
+                        </ul>
+                        <!-- END SIDEBAR MENU -->
+                    </div>  <!-- END tabpane -->
+
+
                     <div class="tab-pane " id="application_progress">
                         <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
@@ -1517,6 +1539,10 @@ License: You must have a valid license purchased only from themeforest(the above
                             {% endif %}
                         {% endif %}
 
+                    {% if user.is_student %}
+                            <li id="program_search"><a href="{% url 'student:applicant_program_search' %}" >{% trans 'Program Search' %}</a></li>
+                        {% endif %}
+
                         {% if user.is_student %}
                             <li id="app_prog"><a href="{% url 'student:applicant_progress_history' %}" >{% trans 'Application Progress History' %}</a></li>
                         {% endif %}
@@ -1692,6 +1718,16 @@ License: You must have a valid license purchased only from themeforest(the above
             element.classList.add("active");
 
             var element = document.getElementById("app_prog");
+            element.classList.add("active");
+        }
+    {% endif %}
+
+    {% if request.resolver_match.url_name == 'applicant_program_search' %}
+        {
+            var element = document.getElementById("application_program_search");
+            element.classList.add("active");
+
+            var element = document.getElementById("program_search");
             element.classList.add("active");
         }
     {% endif %}

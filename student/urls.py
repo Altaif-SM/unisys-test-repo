@@ -88,6 +88,7 @@ urlpatterns = [
                   path('save_applicant_academic_progress/', views.save_applicant_academic_progress,
                        name='save_applicant_academic_progress'),
 
+                  path('applicant_program_search/', views.applicant_program_search,name='applicant_program_search'),
                   path('applicant_progress_history/', views.applicant_progress_history,name='applicant_progress_history'),
                   path('save_other_university/', views.save_other_university,name='save_other_university'),
 
