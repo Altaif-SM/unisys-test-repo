@@ -523,12 +523,6 @@ def user_signup(request):
                         user.save()
                         student_obj = StudentDetails.objects.create(user=user)
 
-                        # try:
-                        #     email_rec = EmailTemplates.objects.get(template_for='Student Signup', is_active=True)
-                        #     context = {'first_name': student_obj.user.first_name}
-                        #     send_email_with_template(student_obj, context, email_rec.subject, email_rec.email_body,
-                        #                              request, True)
-                        # except:
                         subject = 'Account Activation - Online Admission System'
                         message = 'Thank you for registering with us. In order to activate your account please click button below.'
                         send_signup_email_to_applicant(student_obj.user.email, student_obj.user.email, subject, message,student_obj.user.first_name, user.id)
