@@ -312,4 +312,6 @@ urlpatterns = [
     path('year_semester_already_exists/', views.year_semester_already_exists, name='year_semester_already_exists'),
     path('credit_year_semester_already_exists/', views.credit_year_semester_already_exists, name='credit_year_semester_already_exists'),
     path('change_program_categorization/', views.change_program_categorization, name='change_program_categorization'),
+
+    path('research_plan/<int:program_id>/', views.research_plan, name='research_plan'),
 ]

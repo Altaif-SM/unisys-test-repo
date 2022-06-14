@@ -222,6 +222,11 @@
                            var rowCount = $(".course_details").length;
                              $('#course_count').val(rowCount);
 
+                             var  semester_visible = $('#semester_exists_error').is(":visible");
+                             if(semester_visible == true){
+                                 return false;
+                             }
+
                        });
 
 

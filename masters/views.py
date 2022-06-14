@@ -4722,3 +4722,7 @@ def credit_fee_details(request, credit_id=None):
     return render(request, 'credit_fee_details.html',{
         'credit_obj':credit_obj,
     })
+
+def research_plan(request, program_id=None):
+    study_plan_recs = StudyPlanDetails.objects.filter(program_id = program_id)
+    return render(request, 'research_plan.html',{'study_plan_recs':study_plan_recs,'program_id':program_id})
