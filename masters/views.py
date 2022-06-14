@@ -4724,5 +4724,68 @@ def credit_fee_details(request, credit_id=None):
     })
 
 def research_plan(request, program_id=None):
-    study_plan_recs = StudyPlanDetails.objects.filter(program_id = program_id)
-    return render(request, 'research_plan.html',{'study_plan_recs':study_plan_recs,'program_id':program_id})
+    research_plan_recs = ResearchPlanDetails.objects.filter(program_id = program_id)
+    context = {
+        'research_plan_recs': research_plan_recs,
+        'program_id': program_id,
+    }
+    return render(request, 'research_plan.html',context)
+
+
+def add_research(request, program_id=None):
+    program_obj = ProgramDetails.objects.get(id=program_id)
+    if request.method == 'POST':
+        year = request.POST.get('year')
+        semester = request.POST.get('semester')
+        course_count = request.POST.get('course_count')
+        try:
+            research_obj = ResearchPlanDetails.objects.create(year_id = year, semester_id = semester, program_id = program_id)
+            research_obj.subject.clear()
+            for count in range(int(course_count)):
+                try:
+                    count = count + 1
+                    subject_obj = ResearchSubject.objects.create(code=request.POST['code_' + str(count)],
+                                                              subject_name=request.POST['title_' + str(count)] )
+                    research_obj.subject.add(subject_obj)
+                except Exception as e:
+                    pass
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/research_plan/'+str(program_id))
+    else:
+        year_list = []
+        semester_recs = SemesterDetails.objects.filter(university_id=program_obj.university.id)
+        if semester_recs:
+            for rec in semester_recs:
+                raw_dict = {}
+                raw_dict['id'] = rec.year.id
+                raw_dict['year'] = rec.year.year_name
+                year_list.append(raw_dict)
+        context = {
+            'program_obj':program_obj,
+            'year_list':year_list,
+            'program_id':program_id,
+        }
+        return render(request, "add_research.html",context)
+
+
+def research_year_semester_already_exists(request):
+    semester = request.POST.get('semester', None)
+    year = request.POST.get('year', None)
+    program_id = request.POST.get('program_id', None)
+    research_id = request.POST.get('research_id', None)
+    semester_exists = False
+    if research_id:
+        if ResearchPlanDetails.objects.filter(program_id=program_id, year_id=year,
+                                           semester_id=semester).exclude(id = research_id).exists():
+            semester_exists = True
+        else:
+            semester_exists = False
+        return JsonResponse(semester_exists, safe=False)
+    else:
+        if ResearchPlanDetails.objects.filter(program_id = program_id,year_id=year,semester_id = semester).exists():
+            semester_exists = True
+        else:
+            semester_exists = False
+        return JsonResponse(semester_exists, safe=False)

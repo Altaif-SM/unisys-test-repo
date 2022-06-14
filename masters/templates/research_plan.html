@@ -172,7 +172,7 @@
                 <i class="icon-settings font-red"></i>
                 <span class="caption-subject font-red sbold uppercase"> {% trans 'Research Plan Details' %}</span>
             </div>
-            <a href="{% url 'masters:add_program' %}">
+            <a href="{% url 'masters:add_research' program_id %}">
                 <button type="submit" class="btn green" id="save" style="margin-left:76%;background-color: #3598dc">Add
                 </button>
             </a>
@@ -192,17 +192,24 @@
                         <th> {% trans 'Program' %}</th>
                         <th> {% trans 'Academic Year' %}</th>
                         <th> {% trans 'Semester' %}</th>
+                        <th> {% trans 'Research Subject' %}</th>
                         <th width="15%">Action</th>
                     </tr>
                     </thead>
 
                     <tbody id="tbody">
-                    {% for rec in study_plan_recs %}
+                    {% for rec in research_plan_recs %}
                         <tr id="item{{ forloop.counter }}" class="item">
                             <td style="display: none"><input id="semester_id" value="{{ rec.id }}"></td>
                             <td>{{ rec.program.program_name|default_if_none:"" }}</td>
-                            <td>{{ rec.academic_year.year_name|default_if_none:"" }}</td>
-                            <td>{{ rec.study_semester.semester|default_if_none:"" }} {{ rec.study_semester.start_date|date:"Y-m-d" }} - {{ rec.study_semester.end_date|date:"Y-m-d" }}</td>
+                            <td>{{ rec.year.year_name|default_if_none:"" }}</td>
+                            <td>{{ rec.semester.semester|default_if_none:"" }} {{ rec.semester.start_date|date:"Y-m-d" }} - {{ rec.semester.end_date|date:"Y-m-d" }}</td>
+
+                             <td>{% for rec in rec.subject.all %}
+                                <span>{{ rec.code|default_if_none:"" }}</span> -
+                                <span>{{ rec.subject_name|default_if_none:"" }}</span><br>
+                            {% endfor %}
+                            </td>
 
                         <td>
 

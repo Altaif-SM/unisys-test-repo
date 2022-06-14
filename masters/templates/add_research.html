@@ -1,0 +1,537 @@
+{% extends "template_base_page.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css"
+          rel="stylesheet">
+
+
+    </head>
+    <style type="text/css">
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+
+        .s-switch input[type='checkbox'] {
+            display: none
+        }
+
+        .s-switch {
+            width: 62px;
+            height: 32px;
+            z-index: 0;
+            margin: 0;
+            padding: 0;
+            appearance: none;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            border-radius: 16px;
+            -moz-border-radius: 16px;
+            -webkit-border-radius: 16px;
+        }
+
+        .s-switch:before {
+            content: ' ';
+            background: #D9534F !important;
+            position: absolute;
+            left: 1px;
+            top: 1px;
+            width: 60px;
+            height: 30px;
+            background: #FFFFFF;
+            z-index: 1;
+            border-radius: 16px;
+            -moz-border-radius: 16px;
+            -webkit-border-radius: 16px;
+        }
+
+        .s-switch:after {
+            content: ' ';
+            height: 29px;
+            width: 29px;
+            border-radius: 28px;
+            z-index: 2;
+            background: #FFFFFF;
+            position: absolute;
+            -webkit-transition-duration: 300ms;
+            transition-duration: 300ms;
+            top: 1px;
+            left: 3px;
+            -webkit-box-shadow: 0 2px 5px #999999;
+            box-shadow: 0 2px 5px #999999;
+        }
+
+        .s-switch-on:before {
+            background: #4DAF48 !important;
+        }
+
+        .s-switch-on:after {
+            left: 31px !important;
+        }
+
+        .s-switch-readonly, .s-switch-disabled {
+            opacity: 0.8;
+        }
+
+
+    </style>
+    <!-- END HEAD -->
+{% endblock %}
+
+{% block ScriptBlock %}
+
+    <script>
+        window.onload = function () {
+
+            $(document).ready(function () {
+
+                 $(document).on("change", "#year", function (e) {
+                    var year = $(this).val();
+                    var university = $('#university').val();
+                    var program_level = $('#program_level').val();
+                    var url = '/masters/get_intake_semester_from_year/';
+                    get_intake_semester_from_year(url, year, university,program_level)
+                })
+
+            function get_intake_semester_from_year(url, year, university,program_level) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            year: year,
+                            program_level: program_level,
+                            university: university,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            $('#semester').empty();
+                            $('#semester').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#semester').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['semester'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+
+                 $(document).on("change", "#semester", function (e) {
+                    var semester = $(this).val();
+                    var year = $('#year').val();
+                    var program_id = $('#program_id').val();
+                    var research_id = $('#research_id').val();
+                    var url = '/masters/research_year_semester_already_exists/';
+                    year_semester_already_exists(url, semester, year,program_id,research_id)
+                })
+
+
+            function year_semester_already_exists(url, semester, year,program_id,research_id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            semester: semester,
+                            year: year,
+                            program_id: program_id,
+                            research_id: research_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+                            var semester_exists = data;
+                            if(semester_exists === true){
+                                $('#semester_exists_error').show();
+                            }
+                            else{
+                                $('#semester_exists_error').hide();
+                            }
+
+
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+
+                var values = "{{ selected_campus_list }}";
+                $('#campus').find('option').filter(function (idx, option) {
+                    if ($.inArray(option.value, values) !== -1) {
+                        return option;
+                    }
+                }).prop('selected', 'true');
+
+
+                $("#status").Sswitch({});
+
+
+                var course_counter = 1;
+
+            $(".add_course_details").click(function () {
+                    course_counter = parseInt(course_counter) + 1;
+                    var course_details = '<hr><div class="row course_details" style="margin-top: 30px" id="course_details_' + course_counter + '"><div class="row"><div class=""><label class="col-md-2 control-label">Code:</label><div class="col-md-3"><input required type="text" title="Enter Code" id="code_' + course_counter + '" name="code_' + course_counter + '" value="" class="form-control eng_emp"></div></div><div class=""><label class="col-md-2 control-label">Subject Name:</label><div class="col-md-3"><input required type="text" title="Enter Title" id="title_' + course_counter + '" name="title_' + course_counter + '" value="" class="form-control eng_emp"></div></div><div class=""><div class="col-md-1" style="margin-top: 0px;"><a href="javascript:;" class="delete_course btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div></div>';
+                    $(course_details).removeAttr().hide().insertAfter(".course_details:last").slideDown(300);
+                });
+
+                      $(document).on("click", ".delete_course", function () {
+                    $(this).parents('.course_details').next().closest('hr').remove();
+                    $(this).parents('.course_details').remove();
+                });
+
+                       $(document).on("click", "#edit_study_plan_form", function (e) {
+                           var rowCount = $(".course_details").length;
+                             $('#course_count').val(rowCount);
+
+                             var  semester_visible = $('#semester_exists_error').is(":visible");
+                             if(semester_visible == true){
+                                 return false;
+                             }
+
+                       });
+
+
+
+
+                 $(document).on("change", "#university_type", function (e) {
+                var university_type_id = $(this).val();
+                console.log("university_type_id"+university_type_id);
+                var url = '/student/get_university_from_type/';
+                get_university_from_university_type(url, university_type_id)
+            })
+
+                 $(document).on("change", "#faculty", function (e) {
+                var faculty_id = $(this).val();
+                var url = '/masters/get_departments_from_faculty/';
+                get_departments_from_faculty(url, faculty_id)
+            })
+
+            });
+
+            function get_departments_from_faculty(url, faculty_id) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        faculty_id: faculty_id,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data) {
+
+                        $('#department').empty();
+                        $('#department').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#department').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['department'] + '</option>')
+                        }
+                    },
+                    error: function (xhr, msg, err) {
+                        alert(xhr.responseJSON.error);
+                    }
+                });
+            }
+
+            function get_university_from_university_type(url, university_type_id) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        university_type_id: university_type_id,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data) {
+
+                        $('#university').empty();
+                        $('#university').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#university').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['university_name'] + '</option>')
+                        }
+                    },
+                    error: function (xhr, msg, err) {
+                        alert(xhr.responseJSON.error);
+                    }
+                });
+            }
+
+
+            window.setTimeout(function () {
+                $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                    $(this).remove();
+                });
+            }, 4000);
+        }
+
+        function validate(evt) {
+            var theEvent = evt || window.event;
+
+            // Handle paste
+            if (theEvent.type === 'paste') {
+                key = event.clipboardData.getData('text/plain');
+            } else {
+                // Handle key press
+                var key = theEvent.keyCode || theEvent.which;
+                key = String.fromCharCode(key);
+            }
+            var regex = /[0-9]|\./;
+            if (!regex.test(key)) {
+                theEvent.returnValue = false;
+                if (theEvent.preventDefault) theEvent.preventDefault();
+            }
+        }
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'accounts:home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> Master Settings </span>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> University Settings</span>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span> {% trans 'Add Research' %} </span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+
+
+        <div class="portlet-body">
+            <div class="form-body">
+
+
+                 <form action="{% url 'masters:add_research' program_id %}"
+                      id="edit_study_plan_form"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <input hidden type="text" id="course_count" name="course_count">
+                    <input hidden type="text" id="program_id" name="program_id" value="{{ program_id }}">
+                    <input hidden type="text" id="research_id" name="research_id" value="">
+
+                    <div class="portlet-title" style="margin-left:-15px;font-size: 16px;">
+                            <div class="caption">
+                                <span class="caption-subject font-red sbold uppercase"> <i
+                                        class="icon-settings font-red"></i>{% trans 'Add Research' %}</span>
+
+
+
+
+
+                            </div>
+                        </div>
+                        <hr>
+
+                 <div class="row " style="margin-top: 30px" >
+                 <div class="row">
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">University:</label>
+                                    <div class="col-md-3">
+                                       <input type="text" title="Enter University"
+                                                   id="university_dis"
+                                                   name="university_dis"
+                                                   value="{{ program_obj.university.university_name|default_if_none:"" }}"
+                                                   class="form-control eng_emp" disabled>
+                                    </div>
+                                </div>
+
+
+
+
+
+                 <div class="">
+                                    <label class="col-md-2 control-label">Program:</label>
+                                    <div class="col-md-3">
+                                       <input type="text" title="Enter Program"
+                                                   id="program_name_dis"
+                                                   name="program_name_dis"
+                                                   value="{{ program_obj.program_name|default_if_none:"" }}"
+                                                   class="form-control eng_emp" disabled>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                 </div>
+
+                 <div class="row year_sem_details" style="margin-top: 30px" id="year_sem_details_1">
+                 <div class="row">
+
+                                <div class="">
+                                    <label class="col-md-2 control-label"><b>Year:</b></label>
+                                    <div class="col-md-3">
+                                       <select id='year' title="Select Year" required
+                                                        name="year"
+                                                        class="form-control chk">
+
+                                                        <option style="display:none" selected="selected" id="" value="">
+                                                            Please
+                                                            Select
+                                                        </option>
+
+
+
+
+                                         {% for rec in year_list %}
+                                                        <option value='{{ rec.id }}'>{{ rec.year|default_if_none:"" }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                    </div>
+                                </div>
+
+
+
+
+
+                 <div class="">
+                                    <label class="col-md-2 control-label"><b>Semester:</b></label>
+                                    <div class="col-md-3">
+                                       <select id='semester' title="Enter Semester" required
+                                                        name="semester"
+                                                        class="form-control chk">
+ <option style="display:none" selected="selected" id="" value="">
+                                                            Please
+                                                            Select
+                                                        </option>
+
+
+                                                </select>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                 </div>
+
+
+                 <span style="color: red;display: none;margin-left:60%;" id="semester_exists_error">Academic year and semester already exists.</span>
+
+                 <div class="" style="margin-left: 86%;margin-bottom: -1%">
+                                <div class="" >
+                                    <a href="javascript:;" id="add" class="btn btn-icon-only green add_course_details"
+                                       >
+                                        <i class="fa fa-plus "></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                                <hr>
+                            <div class="row course_details" style="margin-top: 30px" id="course_details_1">
+                            <div class="row">
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Code:</label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter Code" required
+                                                   id="code_1"
+                                                   name="code_1"
+                                                   value=""
+                                                   class="form-control eng_emp">
+                                    </div>
+                                </div>
+
+
+
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Subject Name:</label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter Title" id="title_1" required
+                                               name="title_1" value=""
+                                               class="form-control eng_emp">
+                                    </div>
+                                </div>
+
+
+
+
+                            </div>
+
+
+                            </div>
+                <hr>
+                <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                                        onclick="window.location='{% url 'masters:research_plan' program_obj.id %}'">
+
+                                    Back
+                                </button>
+
+                                <button type="submit" class="btn green" id="study_plan_form" style="">Save
+                                </button>
+                            </div>
+                        </div>
+
+            </form>
+
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

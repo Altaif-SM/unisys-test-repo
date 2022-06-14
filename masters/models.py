@@ -903,3 +903,17 @@ class CreditFeeDetails(BaseModel):
 
     class Meta:
         ordering = ('-id',)
+
+class ResearchSubject(models.Model):
+    code = models.CharField(max_length=150, blank=True, null=True)
+    subject_name = models.CharField(max_length=150, blank=True, null=True)
+
+
+class ResearchPlanDetails(BaseModel):
+    program = models.ForeignKey(ProgramDetails, null=True, related_name='research_program_rel',
+                             on_delete=models.SET_NULL)
+    semester = models.ForeignKey(Semester, null=True, related_name='research_semester_rel',
+                                on_delete=models.SET_NULL)
+    subject = models.ManyToManyField(ResearchSubject, blank=True)
+    year = models.ForeignKey(YearDetails, null=True, related_name='research_year_rel',
+                             on_delete=models.SET_NULL)
