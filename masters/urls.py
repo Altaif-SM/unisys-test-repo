@@ -317,5 +317,6 @@ urlpatterns = [
     path('research_plan/<int:program_id>/', views.research_plan, name='research_plan'),
     path('add_research/<int:program_id>/', views.add_research, name='add_research'),
     path('edit_research/<int:research_id>/', views.edit_research, name='edit_research'),
+    path('delete_research_plan/', views.delete_research_plan, name='delete_research_plan'),
     path('research_year_semester_already_exists/', views.research_year_semester_already_exists, name='research_year_semester_already_exists'),
 ]

@@ -4848,3 +4848,16 @@ def edit_research(request, research_id=None):
 
         }
         return render(request, "edit_research.html",context)
+
+def delete_research_plan(request):
+    if request.method == 'POST':
+        research_delete_id = request.POST.get('research_delete_id')
+        program_id = request.POST.get('program_id')
+        try:
+            research_obj = ResearchPlanDetails.objects.get(id=research_delete_id)
+            research_obj.subject.clear()
+            ResearchPlanDetails.objects.filter(id=research_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/research_plan/'+str(program_id))
