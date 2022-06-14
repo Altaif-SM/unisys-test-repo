@@ -4789,3 +4789,62 @@ def research_year_semester_already_exists(request):
         else:
             semester_exists = False
         return JsonResponse(semester_exists, safe=False)
+
+
+def edit_research(request, research_id=None):
+    research_obj = ResearchPlanDetails.objects.get(id=research_id)
+    program_obj = ProgramDetails.objects.get(id = research_obj.program.id)
+    if request.method == 'POST':
+        year = request.POST.get('year')
+        semester = request.POST.get('semester')
+        course_count = request.POST.get('course_count')
+        try:
+            research_obj.year_id = year
+            research_obj.semester_id = semester
+            research_obj.save()
+
+            research_obj.subject.clear()
+            for count in range(int(course_count)):
+                try:
+                    count = count + 1
+                    subject_obj = ResearchSubject.objects.create(code=request.POST['code_' + str(count)],
+                                                              subject_name=request.POST['title_' + str(count)] )
+                    research_obj.subject.add(subject_obj)
+                except Exception as e:
+                    pass
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/research_plan/'+str(research_obj.program.id))
+    else:
+        year_list = []
+        semester_recs = SemesterDetails.objects.filter(university_id=research_obj.program.university.id)
+        if semester_recs:
+            for rec in semester_recs:
+                raw_dict = {}
+                raw_dict['id'] = rec.year.id
+                raw_dict['year'] = rec.year.year_name
+                year_list.append(raw_dict)
+
+        semester_list = []
+        semester_recs = SemesterDetails.objects.all()
+        if research_obj.year:
+            semester_recs = semester_recs.filter(year_id=research_obj.year.id)
+        if research_obj.program.university:
+            semester_recs = semester_recs.filter(university_id=research_obj.program.university.id)
+        if semester_recs:
+            for rec in semester_recs:
+                for sem in rec.semester.all():
+                    raw_dict = {}
+                    raw_dict['id'] = sem.id
+                    raw_dict['semester'] = str(sem.semester + ' ' + (str(sem.start_date) + ' - ' + str(sem.end_date)))
+                    semester_list.append(raw_dict)
+        context = {
+            'research_obj':research_obj,
+            'year_list':year_list,
+            'semester_list':semester_list,
+            'program_obj':program_obj,
+            'course_total_count':research_obj.subject.all().count(),
+
+        }
+        return render(request, "edit_research.html",context)

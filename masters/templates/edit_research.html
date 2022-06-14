@@ -143,13 +143,13 @@
                     var semester = $(this).val();
                     var year = $('#year').val();
                     var program_id = $('#program_id').val();
-                    var study_plan_id = $('#study_plan_id').val();
-                    var url = '/masters/year_semester_already_exists/';
-                    year_semester_already_exists(url, semester, year,program_id,study_plan_id)
+                    var research_id = $('#research_id').val();
+                    var url = '/masters/research_year_semester_already_exists/';
+                    year_semester_already_exists(url, semester, year,program_id,research_id)
                 })
 
 
-            function year_semester_already_exists(url, semester, year,program_id,study_plan_id) {
+            function year_semester_already_exists(url, semester, year,program_id,research_id) {
                     $.ajax({
                         type: 'POST',
                         url: url,
@@ -157,7 +157,7 @@
                             semester: semester,
                             year: year,
                             program_id: program_id,
-                            study_plan_id: study_plan_id,
+                            research_id: research_id,
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
@@ -187,17 +187,10 @@
 
 
                 $("#status").Sswitch({});
-            /*
-                $('input[type=radio][name=university_type]').on('change', function () {
-                    var university_type = $('input[name="university_type"]:checked').val();
-                    var url = '/student/get_university_from_type/';
-                    get_university_from_university_type(url, university_type)
 
 
-                })*/
 
-
-                var course_counter = 1;
+                 var course_counter = 1;
                 {% if course_total_count == 0 %}
                     var course_counter = 1;
                 {% else %}
@@ -206,8 +199,7 @@
 
             $(".add_course_details").click(function () {
                     course_counter = parseInt(course_counter) + 1;
-                    var course_details = '<hr><div class="row course_details" style="margin-top: 30px" id="course_details_' + course_counter + '"><div class="row"><div class=""><label class="col-md-2 control-label">Code:</label><div class="col-md-3"><input required type="text" title="Enter Code" id="code_' + course_counter + '" name="code_' + course_counter + '" value="" class="form-control eng_emp"></div></div><div class=""><label class="col-md-2 control-label">Subject Name:</label><div class="col-md-3"><input required type="text" title="Enter Title" id="title_' + course_counter + '" name="title_' + course_counter + '" value="" class="form-control eng_emp"></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Unit:</label><div class="col-md-3"><input required type="text" title="Enter Unit" id="unit_' + course_counter + '" name="unit_' + course_counter + '" value="" class="form-control eng_emp"></div></div><div class=""><label class="col-md-2 control-label">Subject Type:</label><div class="col-md-3"><select required id="type_' + course_counter + '" title="Select Type" name="type_' + course_counter + '" class="form-control select_data chk"><option value="">Please Select</option><option value="Core">Core</option><option value="Elective">Elective</option><option value="University Requirement">University Requirement</option><option value="Faculty Requirement">Faculty Requirement</option></select></div></div><div class=""><div class="col-md-1" style="margin-top: -55px;"><a href="javascript:;" class="delete_course btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div></div>';
-                    {#var course_details = '<hr><div class="row course_details" style="margin-top: 30px" id="course_details_' + course_counter + '"><div class="row"><div class=""><label class="col-md-2 control-label">Code:</label><div class="col-md-3"><input type="text" title="Enter Code" id="code_' + course_counter + '" name="code_' + course_counter + '" value="" class="form-control eng_emp"></div></div><div class=""><label class="col-md-2 control-label">Subject Name:</label><div class="col-md-3"><input type="text" title="Enter Title" id="title_' + course_counter + '" name="title_' + course_counter + '" value="" class="form-control eng_emp"></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Unit:</label><div class="col-md-3"><input type="text" title="Enter Unit" id="unit_' + course_counter + '" name="unit_' + course_counter + '" value="" class="form-control eng_emp"></div></div><div class=""><label class="col-md-2 control-label">Subject Type:</label><div class="col-md-3"><select id="type_' + course_counter + '" title="Select Type" name="type_' + course_counter + '" class="form-control select_data chk"><option value="">Please Select</option><option value="Core">Core</option><option value="Elective">Elective</option><option value="University Requirement">University Requirement</option><option value="Faculty Requirement">Faculty Requirement</option></select></div></div><div class=""><div class="col-md-1" style="margin-top: -55px;"><a href="javascript:;" class="delete_course btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Start Date:</label><div class="col-md-3"><input type="date" title="Enter Start Date" id="start_date_' + course_counter + '" name="start_date_' + course_counter + '" value="" class="form-control eng_emp"></div></div><div class=""><label class="col-md-2 control-label">End Date:</label><div class="col-md-3"><input type="date" title="Enter End Date" id="end_date_' + course_counter + '" name="end_date_' + course_counter + '" value="" class="form-control eng_emp"></div></div></div></div>';#}
+                    var course_details = '<hr><div class="row course_details" style="margin-top: 30px" id="course_details_' + course_counter + '"><div class="row"><div class=""><label class="col-md-2 control-label">Code:</label><div class="col-md-3"><input required type="text" title="Enter Code" id="code_' + course_counter + '" name="code_' + course_counter + '" value="" class="form-control eng_emp"></div></div><div class=""><label class="col-md-2 control-label">Subject Name:</label><div class="col-md-3"><input required type="text" title="Enter Title" id="title_' + course_counter + '" name="title_' + course_counter + '" value="" class="form-control eng_emp"></div></div><div class=""><div class="col-md-1" style="margin-top: 0px;"><a href="javascript:;" class="delete_course btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div></div>';
                     $(course_details).removeAttr().hide().insertAfter(".course_details:last").slideDown(300);
                 });
 
@@ -215,8 +207,6 @@
                     $(this).parents('.course_details').next().closest('hr').remove();
                     $(this).parents('.course_details').remove();
                 });
-
-
 
                        $(document).on("click", "#edit_study_plan_form", function (e) {
                            var rowCount = $(".course_details").length;
@@ -297,31 +287,6 @@
                 });
             }
 
-            /*function get_university_from_university_type(url, university_type) {
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: {
-                        university_type: university_type,
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                    },
-                    success: function (data) {
-
-                        $('#university').empty();
-                        $('#university').append(
-                            '<option value="" >Please select</option>');
-                        for (var i = 0; i < data.length; i++) {
-                            $('#university').append(
-                                '<option value="' + data[i]['id'] + '">'
-                                + data[i]['university_name'] + '</option>')
-                        }
-                    },
-                    error: function (xhr, msg, err) {
-                        alert(xhr.responseJSON.error);
-                    }
-                });
-            }*/
-
 
             window.setTimeout(function () {
                 $(".alert").fadeTo(500, 0).slideUp(500, function () {
@@ -369,7 +334,7 @@
             </li>
 
             <li>
-                <span> {% trans 'Edit Program Study Plan' %} </span>
+                <span> {% trans 'Edit Research' %} </span>
             </li>
         </ul>
     </div>
@@ -388,24 +353,22 @@
             <div class="form-body">
 
 
-                 <form action="{% url 'masters:edit_semester_based' study_plan_obj.id %}"
+                 <form action="{% url 'masters:edit_research' research_obj.id %}"
                       id="edit_study_plan_form"
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
                     <input hidden type="text" id="course_count" name="course_count">
-                    <input hidden type="text" id="university" name="university" value="{{ study_plan_obj.program.university.id }}">
-                    <input hidden type="text" id="program_id" name="program_id" value="{{ study_plan_obj.program.id }}">
-                    <input hidden type="text" id="study_plan_id" name="study_plan_id" value="{{ study_plan_obj.id }}">
+                    <input hidden type="text" id="program_id" name="program_id" value="{{ research_obj.program.id }}">
+                    <input hidden type="text" id="university" name="university" value="{{ research_obj.program.university.id }}">
+                    <input hidden type="text" id="research_id" name="research_id" value="{{ research_obj.id }}">
 
                     <div class="portlet-title" style="margin-left:-15px;font-size: 16px;">
                             <div class="caption">
                                 <span class="caption-subject font-red sbold uppercase"> <i
-                                        class="icon-settings font-red"></i>{% trans 'Edit Program Study Plan' %}</span>
+                                        class="icon-settings font-red"></i>{% trans 'Edit Research' %}</span>
 
-                                <br>
-                <span style="font-family: 'Times New Roman';font-size: 16px;"><b>({% trans 'Semester Based System' %})</b></span>
 
 
 
@@ -413,6 +376,41 @@
                             </div>
                         </div>
                         <hr>
+
+                 <div class="row " style="margin-top: 30px" >
+                 <div class="row">
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">University:</label>
+                                    <div class="col-md-3">
+                                       <input type="text" title="Enter University"
+                                                   id="university_dis"
+                                                   name="university_dis"
+                                                   value="{{ program_obj.university.university_name|default_if_none:"" }}"
+                                                   class="form-control eng_emp" disabled>
+                                    </div>
+                                </div>
+
+
+
+
+
+                 <div class="">
+                                    <label class="col-md-2 control-label">Program:</label>
+                                    <div class="col-md-3">
+                                       <input type="text" title="Enter Program"
+                                                   id="program_name_dis"
+                                                   name="program_name_dis"
+                                                   value="{{ program_obj.program_name|default_if_none:"" }}"
+                                                   class="form-control eng_emp" disabled>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                 </div>
+
                  <div class="row year_sem_details" style="margin-top: 30px" id="year_sem_details_1">
                  <div class="row">
 
@@ -423,9 +421,9 @@
                                                         name="year"
                                                         class="form-control chk">
 
-                                                    {% if study_plan_obj.academic_year %}
-                                                    <option style="display:none" selected="selected" id="" value="{{ study_plan_obj.academic_year.id }}">
-                                                            {{ study_plan_obj.academic_year.year_name|default_if_none:"" }}
+                                                         {% if research_obj.year %}
+                                                    <option style="display:none" selected="selected" id="" value="{{ research_obj.year.id }}">
+                                                            {{ research_obj.year.year_name|default_if_none:"" }}
                                                         </option>
                                                     {% else %}
                                                         <option style="display:none" selected="selected" id="" value="">
@@ -454,8 +452,10 @@
                                        <select id='semester' title="Enter Semester" required
                                                         name="semester"
                                                         class="form-control chk">
-                                                    {% if study_plan_obj.study_semester %}
-                                                    <option style="display:none" selected="selected" id="" value="{{ study_plan_obj.study_semester.id }}">{{ study_plan_obj.study_semester.semester|default_if_none:"" }} {{ study_plan_obj.study_semester.start_date|date:"Y-m-d" }} - {{ study_plan_obj.study_semester.end_date|date:"Y-m-d" }}</option>
+  {% if research_obj.semester %}
+                                                    <option style="display:none" selected="selected" id="" value="{{ research_obj.semester.id }}">
+                                                            {{ research_obj.semester.semester|default_if_none:"" }}
+                                                        </option>
                                                     {% else %}
                                                         <option style="display:none" selected="selected" id="" value="">
                                                             Please
@@ -463,7 +463,7 @@
                                                         </option>
                                                     {% endif %}
 
-                                       {% for rec in semester_list %}
+                                            {% for rec in semester_list %}
                                                         <option value='{{ rec.id }}'>{{ rec.semester|default_if_none:"" }}</option>
                                                     {% endfor %}
 
@@ -488,8 +488,7 @@
                                     </a>
                                 </div>
                             </div>
-
-                            {% for rec in study_plan_obj.course.all %}
+                            {% for rec in research_obj.subject.all %}
                                 <hr>
                             <div class="row course_details" style="margin-top: 30px" id="course_details_1">
                             <div class="row">
@@ -512,7 +511,7 @@
                                     <label class="col-md-2 control-label">Subject Name:</label>
                                     <div class="col-md-3">
                                         <input type="text" title="Enter Title" id="title_{{ forloop.counter }}" required
-                                               name="title_{{ forloop.counter }}" value="{{ rec.title|default_if_none:"" }}"
+                                               name="title_{{ forloop.counter }}" value="{{ rec.subject_name|default_if_none:"" }}"
                                                class="form-control eng_emp">
                                     </div>
                                 </div>
@@ -521,59 +520,15 @@
 
 
                             </div>
-                              <br>
-                            <div class="row">
-
-                                <div class="">
-                                    <label class="col-md-2 control-label">Unit:</label>
-                                    <div class="col-md-3">
-                                        <input type="text" title="Enter Unit" id="unit_{{ forloop.counter }}" required
-                                               name="unit_{{ forloop.counter }}"
-                                               value="{{ rec.unit|default_if_none:"" }}"
-                                               class="form-control eng_emp">
-                                    </div>
-                                </div>
-
-
-
-                                <div class="">
-                                            <label class="col-md-2 control-label">Subject Type:</label>
-                                            <div class="col-md-3">
-
-                                                <select id='type_{{ forloop.counter }}' title="Select Type" name="type_{{ forloop.counter }}" required
-                                                        class="form-control select_data chk">
-                                                        {% if rec.type %}
-                                                             <option style="display:none" selected="selected" id="" value="{{ rec.type|default_if_none:"" }}">
-                                                            {{ rec.type|default_if_none:"" }}
-                                                        </option>
-                                                            {% else %}
-                                                            <option value=''>{% trans 'Please Select' %}</option>
-                                                        {% endif %}
-
-                                                        <option value='Core'>Core</option>
-                                                        <option value='Elective'>Elective</option>
-                                                        <option value='University Requirement'>University Requirement</option>
-                                                        <option value='Faculty Requirement'>Faculty Requirement</option>
-                                                </select>
-
-
-
-
-                                            </div>
-
-                                        </div>
-
-                            </div>
-
 
 
                             </div>
-                            {% endfor %}
+                 {% endfor %}
                 <hr>
                 <div class="row">
                             <div class="col-md-offset-5 col-md-7">
                                 <button type="button" class="btn blue" id="back" style="margin-left: 70%"
-                                        onclick="window.location='{% url 'masters:view_semester_subject_list' study_plan_obj.program.id %}'">
+                                        onclick="window.location='{% url 'masters:research_plan' program_obj.id %}'">
 
                                     Back
                                 </button>
