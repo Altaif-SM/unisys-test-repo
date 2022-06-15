@@ -29,4 +29,5 @@ urlpatterns = [
     path('get_faculty_from_account_type/', views.get_faculty_from_account_type, name='get_faculty_from_account_type'),
     path('get_program_from_account_type/', views.get_program_from_account_type, name='get_program_from_account_type'),
     path('get_program_from_faculty/', views.get_program_from_faculty, name='get_program_from_faculty'),
+    path('agent_dashboard/', views.agent_dashboard, name='agent_dashboard'),
 ]

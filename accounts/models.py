@@ -45,12 +45,12 @@ class User(AbstractUser):
     VICE_CHANCELLOR = 'Vice Chancellor'
     DEPUTT_VICE_CHANCELLOR = 'Deputy Vice Chancellor'
     HR = 'HR'
-
     ADMINISTRATOR = 'Administrator'
     ADMISSION_UNIT = 'Administrator'
     FACULTY = 'Faculty'
     PROGRAM = 'Program'
     SUPERVISOR = 'Supervisor'
+    AGENT = 'Agent'
 
 
     first_name = models.CharField(max_length=256, blank=True, null=True)
@@ -170,6 +170,9 @@ class User(AbstractUser):
 
     def is_supervisor(self):
         return True if self.role.all().filter(name__in=[self.SUPERVISOR]).exists() else False
+
+    def is_agent(self):
+        return True if self.role.all().filter(name__in=[self.AGENT]).exists() else False
 
     @property
     def get_user_permissions(self):
@@ -315,6 +318,7 @@ class User(AbstractUser):
         return YearDetails.objects.all()
 
     ADMIN_DASHBOARD = '/accounts/home/'
+    AGENT_DASHBOARD = '/accounts/agent_dashboard/'
     STUDENT_DASHBOARD = '/student/student_home/'
     PARENT_DASHBOARD = '/accounts/home/'
     PARTNER_DASHBOARD = '/accounts/home/'
@@ -346,4 +350,6 @@ class User(AbstractUser):
             dashboard_path = User.ADMINISTRATOR_DASHBOARD
         elif self.role.get().name == User.SUPERVISOR:
             dashboard_path = User.ADMINISTRATOR_DASHBOARD
+        elif self.role.get().name == User.AGENT:
+            dashboard_path = User.AGENT_DASHBOARD
         return dashboard_path

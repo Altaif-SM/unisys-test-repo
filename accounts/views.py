@@ -518,11 +518,18 @@ def user_signup(request):
                         pass
 
                     if request.POST['role'] == "Student":
-                        # student_obj = StudentDetails.objects.create(user=user, address=address)
                         user.is_active = False
                         user.save()
                         student_obj = StudentDetails.objects.create(user=user)
+                        subject = 'Account Activation - Online Admission System'
+                        message = 'Thank you for registering with us. In order to activate your account please click button below.'
+                        send_signup_email_to_applicant(student_obj.user.email, student_obj.user.email, subject, message,student_obj.user.first_name, user.id)
+                        messages.info(request,"The activation link is sent to your email id. ")
 
+                    if request.POST['role'] == "Agent":
+                        user.is_active = False
+                        user.save()
+                        student_obj = StudentDetails.objects.create(user=user)
                         subject = 'Account Activation - Online Admission System'
                         message = 'Thank you for registering with us. In order to activate your account please click button below.'
                         send_signup_email_to_applicant(student_obj.user.email, student_obj.user.email, subject, message,student_obj.user.first_name, user.id)
@@ -542,18 +549,21 @@ def user_signup(request):
                 if user:
                     user.delete()
                 messages.success(request, str(e))
-            return redirect('/')
+            if request.POST['role'] == 'Agent':
+                return redirect('/agent/')
+            else:
+                return redirect('/')
         else:
             # print(signup_form.errors)
             for error_msg in signup_form.errors:
-                # form = signUpForm()
                 for msg in signup_form.errors[error_msg]:
                     messages.error(request, msg)
         if request.POST.get('admin_page'):
             return redirect('/accounts/template_manage_user/')
-        return redirect('/')
-        # return render(request, 'template_manage_user.html', {'form': signup_form})
-        # return render(request, 'template_login.html', {'form': signup})
+        if request.POST['role'] == 'Agent':
+            return redirect('/agent/')
+        else:
+            return redirect('/')
 
 
 # @csrf_exempt
@@ -612,8 +622,16 @@ def user_signin(request):
 
 @user_login_required
 def user_signout(request):
-    logout(request)
-    return redirect('/')
+    if request.user.role.all():
+        if request.user.role.all()[0].name == 'Agent':
+            logout(request)
+            return redirect('/agent/')
+        else:
+            logout(request)
+            return redirect('/')
+    else:
+        logout(request)
+        return redirect('/')
 
 
 @user_login_required
@@ -1371,3 +1389,21 @@ def get_program_from_faculty(request):
         return JsonResponse(program_list, safe=False)
     else:
         return JsonResponse(program_list, safe=False)
+
+def agent_login(request):
+    country_list = CountryDetails.objects.all()
+    is_agent = True
+    form = loginForm()
+    if request.user.is_authenticated:
+        dashboard_path = request.user.get_dashboard_path()
+        return redirect(dashboard_path)
+    context = {
+        'form':form,
+        'country_list':country_list,
+        'is_agent':is_agent,
+    }
+    return render(request, "template_login.html",context)
+
+
+def agent_dashboard(request):
+    return render(request, 'agent_dashboard.html')

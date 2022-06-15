@@ -152,6 +152,7 @@
         <!-- END FORGOT PASSWORD FORM -->
         <!-- BEGIN REGISTRATION FORM -->
         <form class="register-form" action="{% url 'accounts:user_signup' %}" method="post">{% csrf_token %}
+
             <h3 class="font" style="color: #0a001f;">Sign Up</h3>
             <p class="hint">{% trans 'Enter your personal details below:' %}</p>
             <div class="form-group">
@@ -180,7 +181,11 @@
                 </div>{% endcomment %}
             <p class="hint"> Enter your account details below: </p>
             <div class="form-group">
+                {% if not is_agent %}
                 <input type="hidden" name="role" value="Student" class="form-control"/>
+                {% else %}
+                    <input type="hidden" name="role" value="Agent" class="form-control"/>
+                {% endif %}
                 <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
                 <label class="control-label visible-ie8 visible-ie9">Email</label>
                 <input class="form-control placeholder-no-fix" type="text" placeholder="{% trans 'Email' %}" name="email"/></div>

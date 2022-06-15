@@ -23,6 +23,7 @@ from django.views.static import serve
 urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
     path('', views.template_signin, name='template_signin'),
+    path('agent/', views.agent_login, name='agent'),
     path('accounts/', include('accounts.urls', namespace='accounts')),
     path('masters/', include('masters.urls', namespace='masters')),
     path('student/', include('student.urls', namespace='student')),
