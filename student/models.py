@@ -761,6 +761,9 @@ class AdditionInformationDetails(BaseModel):
     about_know = models.CharField(max_length=255, blank=True, null=True)
     campus = models.ForeignKey('masters.CampusBranchesDetails', null=True, related_name='additional_campus_rel',
                                 on_delete=models.SET_NULL)
+    agent = models.ForeignKey(User, blank=True, null=True,
+                                     related_name='user_application_rel',
+                                     on_delete=models.SET_NULL)
 
 class ConditionalVerificationDocumentsDetails(BaseModel):
     required_document = models.CharField(max_length=255, blank=True, null=True)

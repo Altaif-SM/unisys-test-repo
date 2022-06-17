@@ -318,7 +318,6 @@ class User(AbstractUser):
         return YearDetails.objects.all()
 
     ADMIN_DASHBOARD = '/accounts/home/'
-    AGENT_DASHBOARD = '/accounts/agent_dashboard/'
     STUDENT_DASHBOARD = '/student/student_home/'
     PARENT_DASHBOARD = '/accounts/home/'
     PARTNER_DASHBOARD = '/accounts/home/'
@@ -351,5 +350,5 @@ class User(AbstractUser):
         elif self.role.get().name == User.SUPERVISOR:
             dashboard_path = User.ADMINISTRATOR_DASHBOARD
         elif self.role.get().name == User.AGENT:
-            dashboard_path = User.AGENT_DASHBOARD
+            dashboard_path = User.ADMINISTRATOR_DASHBOARD
         return dashboard_path

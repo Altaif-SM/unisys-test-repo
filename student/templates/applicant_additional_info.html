@@ -342,6 +342,30 @@
                         </div>
 
                         <br>
+                    <div class="row">
+                        <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Agent' %}:</label>
+                                <div class="col-md-3">
+                                    <select id='agent' title="Select Agent" name="agent"
+                                            class="form-control value_check" data-live-search="true">
+
+                                        {% if application_obj.agent %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.agent.id }}"
+                                                    value="">{{ application_obj.agent.email|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option  value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in agents %}
+                                            <option value='{{ rec.id }}'>{{ rec.email|default_if_none:"" }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                    </div>
 
 
 

@@ -2243,6 +2243,7 @@ def applicant_additional_information(request):
     country_recs = AllCountries.objects.all()
     student_recs = StudentDetails.objects.filter(user__is_active=True)
     agent_recs = AgentDetails.objects.filter()
+    agents = User.objects.filter(role__name = 'Agent')
     path = ''
     application_obj = ''
     sibling_obj = ''
@@ -2255,12 +2256,10 @@ def applicant_additional_information(request):
 
     if AdditionInformationDetails.objects.filter(application_id=request.user.get_application).exists():
         application_obj = AdditionInformationDetails.objects.get(application_id=request.user.get_application)
-        # path = base_path(application_obj)
-        # if SiblingDetails.objects.filter(applicant_id=application_obj).exists():
-        #     sibling_obj = SiblingDetails.objects.filter(applicant_id=application_obj)
 
 
-    return render(request, 'applicant_additional_info.html', {'country_recs': country_recs, 'application_obj': application_obj, 'path': path, 'sibling_obj_rec': sibling_obj, 'student_recs':student_recs, 'agent_recs':agent_recs,'campus_recs':campus_recs})
+    return render(request, 'applicant_additional_info.html', {'country_recs': country_recs, 'application_obj': application_obj, 'path': path, 'sibling_obj_rec': sibling_obj, 'student_recs':student_recs, 'agent_recs':agent_recs,'campus_recs':campus_recs,
+                                                              'agents':agents})
 
 def save_update_applicant_additional_info(request):
     redirect_flag = False
@@ -2277,6 +2276,7 @@ def save_update_applicant_additional_info(request):
                         ken_email=request.POST['ken_email'],
                         about_know=request.POST['about_know'] if request.POST['about_know'] else None,
                         campus_id=request.POST['campus'] if request.POST['campus'] else None,
+                        agent_id=request.POST['agent'] if request.POST['agent'] else None,
                         )
                     if request.POST['is_sponsored'] == 'Yes':
                         AdditionInformationDetails.objects.filter(application_id=request.user.get_application).update(
@@ -2308,7 +2308,10 @@ def save_update_applicant_additional_info(request):
                             ken_tel_no=request.POST['ken_tel_no'],
                             ken_email=request.POST['ken_email'],
                             about_know=request.POST['about_know'] if request.POST['about_know'] else None,
-                            campus_id=request.POST['campus'] if request.POST['campus'] else None)
+                            campus_id=request.POST['campus'] if request.POST['campus'] else None,
+                            agent_id=request.POST['agent'] if request.POST['agent'] else None,
+
+                                                                  )
                         if request.POST['is_sponsored'] == 'Yes':
                             AdditionInformationDetails.objects.filter(application_id=request.user.get_application).update(
                                 sponsore_organisation=request.POST['sponsore_organisation'],
