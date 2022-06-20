@@ -11,7 +11,7 @@ from accounts.service import *
 from accounts.models import UserRole
 from student.models import StudentDetails, ApplicationDetails, ScholarshipSelectionDetails
 from masters.models import AddressDetails, CountryDetails, ScholarshipDetails, GuardianDetails, EmailTemplates, \
-    YearDetails,FacultyDetails,ProgramDetails,UniversityTypeDetails
+    YearDetails,FacultyDetails,ProgramDetails,UniversityTypeDetails,AgentIDDetails
 from partner.models import PartnerDetails
 from donor.models import DonorDetails
 import json
@@ -529,6 +529,8 @@ def user_signup(request):
                     if request.POST['role'] == "Agent":
                         user.is_active = False
                         user.save()
+                        agent_id = 'AG000' + str(user.id)
+                        AgentIDDetails.objects.create(user=user,agent_id = agent_id)
                         student_obj = StudentDetails.objects.create(user=user)
                         subject = 'Account Activation - Online Admission System'
                         message = 'Thank you for registering with us. In order to activate your account please click button below.'
@@ -1419,3 +1421,26 @@ def agent_login(request):
 
 def agent_dashboard(request):
     return render(request, 'agent_dashboard.html')
+
+def edit_agent(request, agent_id=None):
+    user_obj = User.objects.get(id = agent_id)
+    agent_obj = ''
+    if AgentIDDetails.objects.filter(user_id = agent_id).exists():
+        agent_obj = AgentIDDetails.objects.get(user_id = agent_id)
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        user_obj.first_name = first_name
+        user_obj.last_name = last_name
+        user_obj.save()
+        return redirect('/accounts/edit_agent/'+str(agent_id))
+    else:
+        context = {}
+        if request.user.is_agent():
+            context['my_template'] = 'template_agent_base.html'
+        else:
+            context['my_template'] = 'template_base_page.html'
+        context['agent_id'] = agent_id
+        context['user_obj'] = user_obj
+        context['agent_obj'] = agent_obj
+        return render(request, "agent_details.html",context)

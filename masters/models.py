@@ -917,3 +917,7 @@ class ResearchPlanDetails(BaseModel):
     subject = models.ManyToManyField(ResearchSubject, blank=True)
     year = models.ForeignKey(YearDetails, null=True, related_name='research_year_rel',
                              on_delete=models.SET_NULL)
+
+class AgentIDDetails(BaseModel):
+    agent_id = models.CharField(max_length=150, blank=True, null=True)
+    user = models.ForeignKey(User, null=True, related_name='agent_user_rel', on_delete=models.SET_NULL)

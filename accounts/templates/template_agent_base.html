@@ -369,6 +369,12 @@ License: You must have a valid license purchased only from themeforest(the above
 
 
                         <ul class="dropdown-menu dropdown-menu-default">
+
+                            <li>
+                                <a href="{% url 'accounts:edit_agent' user.id %}">
+                                    <i class="icon-eye" aria-hidden="true"></i>{% trans 'Agent Details' %}</a>
+                            </li>
+
                             <li>
                                 <a href="/accounts/change_password/">
                                     <i class="icon-key" aria-hidden="true"></i>{% trans 'Change Password' %}</a>
@@ -738,7 +744,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <script type="text/javascript">
 
 
-    {% if request.resolver_match.url_name == 'agent_dashboard'  %}
+    {% if request.resolver_match.url_name == 'agent_dashboard'  or request.resolver_match.url_name == 'template_approving_application'  %}
         {
             var element = document.getElementById("c");
             element.classList.add("active");
