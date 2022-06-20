@@ -658,6 +658,10 @@ def change_password(request):
                 context = {}
                 context['form'] = form
                 context['message'] = "Invalid Current Password"
+                if request.user.is_agent():
+                    context['my_template'] = 'template_agent_base.html'
+                else:
+                    context['my_template'] = 'template_base_page.html'
                 return render(request, 'template_change_password.html', context)
 
         elif not request.POST:
@@ -697,12 +701,20 @@ def change_password(request):
             context['form'] = form
             context['message'] = "Please correct the following field:"
             ChangePasswordForm(data=request.GET)
+            if request.user.is_agent():
+                context['my_template'] = 'template_agent_base.html'
+            else:
+                context['my_template'] = 'template_base_page.html'
             return render(request, 'template_change_password.html', context)
     else:
         context = {}
         context.update(csrf(request))
         form = ChangePasswordForm()
         context['form'] = form
+        if request.user.is_agent():
+            context['my_template'] = 'template_agent_base.html'
+        else:
+            context['my_template'] = 'template_base_page.html'
         return render(request, 'template_change_password.html', context)
 
 
