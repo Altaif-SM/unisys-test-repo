@@ -529,7 +529,7 @@ def user_signup(request):
                     if request.POST['role'] == "Agent":
                         user.is_active = False
                         user.save()
-                        agent_id = 'AG000' + str(user.id)
+                        agent_id = 'AG0000' + str(user.id)
                         AgentIDDetails.objects.create(user=user,agent_id = agent_id)
                         student_obj = StudentDetails.objects.create(user=user)
                         subject = 'Account Activation - Online Admission System'
