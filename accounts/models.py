@@ -323,7 +323,7 @@ class User(AbstractUser):
     PARTNER_DASHBOARD = '/accounts/home/'
     DONOR_DASHBOARD = '/donor/template_donor_dashboard/'
     ACCOUNTANT_DASHBOARD = '/accounts/home/'
-    ADMINISTRATOR_DASHBOARD = '/partner/template_approving_application/'
+    ADMINISTRATOR_DASHBOARD = '/partner/approved_application/'
 
 
     def get_dashboard_path(self):

@@ -448,8 +448,8 @@ License: You must have a valid license purchased only from themeforest(the above
 
                             </li>
                         <li class="nav-item ">
-                                            <a href="{% url 'partner:template_approving_application' %}"
-                                               class="nav-link ">{% trans 'Approving Applicant Details' %}</a>
+                                            <a href="{% url 'partner:approved_application' %}"
+                                               class="nav-link ">{% trans 'Accepted Application' %}</a>
                                         </li>
                     </ul>
 
@@ -744,7 +744,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <script type="text/javascript">
 
 
-    {% if request.resolver_match.url_name == 'agent_dashboard'  or request.resolver_match.url_name == 'template_approving_application'  %}
+    {% if request.resolver_match.url_name == 'agent_dashboard'  or request.resolver_match.url_name == 'approved_application'  %}
         {
             var element = document.getElementById("c");
             element.classList.add("active");
