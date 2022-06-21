@@ -1444,3 +1444,5 @@ def edit_agent(request, agent_id=None):
         context['user_obj'] = user_obj
         context['agent_obj'] = agent_obj
         return render(request, "agent_details.html",context)
+
+

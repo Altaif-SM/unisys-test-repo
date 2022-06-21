@@ -70,9 +70,65 @@
                 {% endif %}
 
 
+            $('input[type="radio"]').on('change', function(){
+                    var registration_type = $('input[name="registration_type"]:checked').val();
+                    if(registration_type === 'Individual'){
+                         $('#agent_id').val('');
+                          $(".agent_registration_type").hide()
+                          $(".agent_registration_email").hide()
+
+                    }
+                    else{
+                        $(".agent_registration_type").show()
+
+                    }
+                })
+
+            $(document).on("click", ".btn_registration_type", function (e) {
+                    var agent_id = $('#agent_id').val();
+                    var url = '/student/get_agent_details_from_id/';
+                    get_agent_details_from_id(url, agent_id)
+                })
+
+                function get_agent_details_from_id(url, agent_id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            agent_id: agent_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                       success: function (data) {
+                    var agent_email = data;
+                    if(agent_email === ''){
+                        $('#agent_email').val(agent_email);
+                        $('.agent_registration_email').hide();
+                        alert('Agent ID not found.');
+                        return false;
+                    }
+                    else{
+                        $('.agent_registration_email').show()
+                        $('#agent_email').val(agent_email)
+                    }
+
+
+                },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+
+                 $("#personal_info_form").submit(function (e) {
+                     var agent_email = $('#agent_email').val();
+                     $('#registration_email').val(agent_email);
+            })
+
+
                  {#$("#address_country").chosen();#}
                  $("#student_id").chosen();
-                 $("#agent_id").chosen();
+                 {#$("#agent_id").chosen();#}
 
                 {% if user.get_application %}
                     {% if user.get_application.is_submitted %}
@@ -191,6 +247,109 @@
 
     <!-- BEGIN VALIDATION STATES-->
     <div class="portlet light portlet-fit portlet-form ">
+
+     <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-settings font-red"></i>
+                                <span class="caption-subject font-red sbold uppercase">{% trans 'Agent Information' %}</span>
+                                <br>
+                            </div>
+                        </div>
+
+    <span style="padding:inherit;margin-left: 60px;">{% trans 'Registration Type' %}:  </span>
+                        {% if agent_obj %}
+                         <span style="padding:inherit;margin-left:30px">{% trans 'Individual' %}</span>
+                        <input class="current" type="radio"  name="registration_type" id="" value="Individual">
+                        <span style="padding:inherit;margin-left:20px">{% trans 'Agent ID' %}</span>
+                        <input class="current" type="radio" checked name="registration_type{{ forloop.counter }}" value="Agent ID"
+                               id="">
+                        {% else %}
+                            <span style="padding:inherit;margin-left:30px">{% trans 'Individual' %}</span>
+                        <input class="current" type="radio"  checked name="registration_type" id="" value="Individual">
+                        <span style="padding:inherit;margin-left:20px">{% trans 'Agent ID' %}</span>
+                        <input class="current" type="radio"  name="registration_type" value="Agent ID"
+                               id="">
+                        {% endif %}
+
+    {% if agent_obj %}
+<br><br>
+    <div class="row agent_registration_type"  style="margin-left: 44px;margin-right: 280px;">
+
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Agent ID' %}:</label>
+                                <div class="col-md-4">
+                                    <input type="text" title="Enter Agent ID" id="agent_id" name="agent_id"
+                                           value="{{ agent_obj.agent_id|default_if_none:"" }}" class="form-control value_check">
+                                </div>
+                            </div>
+
+        <button type="button" class="btn blue btn_registration_type" id="back"
+                                >
+                                    <i class="fa fa-search" aria-hidden="true"></i>
+                                </button>
+
+
+                        </div>
+    <br>
+     <div class="row agent_registration_email" style="    margin-left: 44px;margin-right: 280px;">
+
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Agent Email' %}:</label>
+                                <div class="col-md-4">
+                                    <input type="text" title="Enter Agent Email" id="agent_email" name="agent_email"
+                                           value="{{ agent_obj.user.email|default_if_none:"" }}" class="form-control value_check" readonly>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+    {% else %}
+        <br><br>
+    <div class="row agent_registration_type"  style="margin-left: 44px;margin-right: 280px;display: none">
+
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Agent ID' %}:</label>
+                                <div class="col-md-4">
+                                    <input type="text" title="Enter Agent ID" id="agent_id" name="agent_id"
+                                           value="" class="form-control value_check">
+                                </div>
+                            </div>
+
+        <button type="button" class="btn blue btn_registration_type" id="back"
+                                >
+                                    <i class="fa fa-search" aria-hidden="true"></i>
+                                </button>
+
+
+                        </div>
+    <br>
+     <div class="row agent_registration_email" style="    margin-left: 44px;margin-right: 280px;display: none">
+
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Agent Email' %}:</label>
+                                <div class="col-md-4">
+                                    <input type="text" title="Enter Agent Email" id="agent_email" name="agent_email"
+                                           value="" class="form-control value_check" readonly>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+    {% endif %}
+
+    <hr>
+
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
@@ -201,10 +360,11 @@
         <div class="portlet-body">
             <div class="form-body">
                 <form action="{% url 'student:save_update_applicant_personal_info' %}"
-                      id="form_save"
+                      id="personal_info_form"
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
+                <input type="hidden" id="registration_email" name="registration_email">
 
                     <div class="form-body">
                         <div class="row">

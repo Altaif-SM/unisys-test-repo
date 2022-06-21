@@ -82,10 +82,13 @@ def applicant_personal_info(request):
     student_recs = StudentDetails.objects.filter(user__is_active = True)
     agent_recs = AgentDetails.objects.filter()
     application_obj = ''
+    agent_obj = ''
     if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
         application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
+        if application_obj.agent_id:
+            agent_obj = AgentIDDetails.objects.get(user_id=application_obj.agent_id)
     return render(request, 'applicant_personal_info.html',
-                  {'country_recs': country_recs, 'religion_recs': religion_recs, 'application_obj': application_obj,'student_recs':student_recs,'agent_recs':agent_recs})
+                  {'country_recs': country_recs, 'religion_recs': religion_recs, 'application_obj': application_obj,'student_recs':student_recs,'agent_recs':agent_recs,'agent_obj':agent_obj})
 
 
 def save_update_applicant_personal_info(request):
@@ -93,6 +96,10 @@ def save_update_applicant_personal_info(request):
     if request.POST:
         if StudentDetails.objects.filter(user=request.user):
             student = StudentDetails.objects.get(user=request.user)
+            agent_email = request.POST.get('registration_email',None)
+            user_id = None
+            if agent_email:
+                user_id = User.objects.get(email = agent_email).id
             if request.POST['first_name'] and request.POST['last_name'] and request.POST['email'] != '':
                 if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
                     ApplicationDetails.objects.filter(application_id=request.user.get_application_id).update(
@@ -101,7 +108,8 @@ def save_update_applicant_personal_info(request):
                         last_name=request.POST['last_name'],
                         surname=request.POST['surname'],
                         passport_number=request.POST.get('passport_number'),
-                        email=request.POST['email'])
+                        email=request.POST['email'],
+                    agent_id = user_id)
                     application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
                     if application_obj.address:
                         AddressDetails.objects.filter(id=application_obj.address.id).update(
@@ -138,7 +146,8 @@ def save_update_applicant_personal_info(request):
                                                                             passport_number=request.POST.get('passport_number'),
                                                                             email=request.POST['email'],
                                                                             student=student,
-                                                                            year=current_year)
+                                                                            year=current_year,
+                                                                            agent_id = user_id)
                         application_id = get_application_id(application_obj)
                         application_obj.application_id = application_id
                         application_obj.save()
@@ -3747,4 +3756,13 @@ def applicant_program_search(request):
             'faculty_obj': faculty_obj,
         }
         return render(request, 'applicant_program_search.html', context)
+
+
+def get_agent_details_from_id(request):
+    agent_id = request.POST.get('agent_id', None)
+    agent_email = ''
+    if AgentIDDetails.objects.filter(agent_id = agent_id).exists():
+        agent_email = AgentIDDetails.objects.get(agent_id = agent_id).user.email
+    return JsonResponse(agent_email, safe=False)
+
 

@@ -28,6 +28,7 @@
     </style>
 {% endblock %}
 
+
 {% block ScriptBlock %}
     <script>
         window.onload = function () {
@@ -378,7 +379,7 @@
                             </div>
                         </div>
                         <hr>
-
+ <div class="row">
                         <span style="padding:inherit"><b>{% trans 'Sponsored by Organisation' %}:  </b></span>
                         {% if application_obj.is_sponsored == True %}
                          <span style="padding:inherit">{% trans 'Yes' %}</span>
@@ -393,6 +394,7 @@
                         <input class="current" type="radio" checked name="is_sponsored" value="No"
                                id="sponsored_by_no">
                         {% endif %}
+ </div>
 
 
                         <br><br>

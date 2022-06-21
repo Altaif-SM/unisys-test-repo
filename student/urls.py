@@ -126,6 +126,7 @@ urlpatterns = [
 
                   path('applicant_intake_info/', views.applicant_intake_info, name='applicant_intake_info'),
                   path('get_learning_centre_from_country/', views.get_learning_centre_from_country, name='get_learning_centre_from_country'),
+                  path('get_agent_details_from_id/', views.get_agent_details_from_id, name='get_agent_details_from_id'),
                   path('get_university_from_type/', views.get_university_from_type, name='get_university_from_type'),
                   path('get_university_from_type_scope/', views.get_university_from_type_scope, name='get_university_from_type_scope'),
                   path('save_update_applicant_intake_info/', views.save_update_applicant_intake_info, name='save_update_applicant_intake_info'),

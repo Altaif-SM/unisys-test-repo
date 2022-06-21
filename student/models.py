@@ -233,6 +233,9 @@ class ApplicationDetails(BaseModel):
     is_paid_registration_fee = models.BooleanField(default=False)
     is_applied_matric_card = models.BooleanField(default=False)
     matric_card_status = models.CharField(max_length=50, default="REQUESTED", blank=True, null=True)
+    agent = models.ForeignKey(User, blank=True, null=True,
+                              related_name='application_student_rel',
+                              on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ('-created_on',)
