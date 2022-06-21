@@ -2285,7 +2285,6 @@ def save_update_applicant_additional_info(request):
                         ken_email=request.POST['ken_email'],
                         about_know=request.POST['about_know'] if request.POST['about_know'] else None,
                         campus_id=request.POST['campus'] if request.POST['campus'] else None,
-                        agent_id=request.POST['agent'] if request.POST['agent'] else None,
                         )
                     if request.POST['is_sponsored'] == 'Yes':
                         AdditionInformationDetails.objects.filter(application_id=request.user.get_application).update(
@@ -2318,7 +2317,6 @@ def save_update_applicant_additional_info(request):
                             ken_email=request.POST['ken_email'],
                             about_know=request.POST['about_know'] if request.POST['about_know'] else None,
                             campus_id=request.POST['campus'] if request.POST['campus'] else None,
-                            agent_id=request.POST['agent'] if request.POST['agent'] else None,
 
                                                                   )
                         if request.POST['is_sponsored'] == 'Yes':
