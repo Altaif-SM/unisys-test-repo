@@ -327,17 +327,17 @@ def template_approving_application(request):
             applicant_recs_1 = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
                                                                  year=get_current_year(request), choice_1=False,
                                                                  choice_2=False, choice_3=False, is_accepted=False,
-                                                                 faculty=request.user.faculty,admission_unit_status = 'Approved'
+                                                                 faculty=request.user.faculty
                                                                  )
             applicant_recs_2 = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
                                                                  year=get_current_year(request), choice_1=True,
                                                                  choice_2=False, choice_3=False, is_accepted=False,
-                                                                 faculty_2=request.user.faculty,admission_unit_status = 'Approved'
+                                                                 faculty_2=request.user.faculty
                                                                  )
             applicant_recs_3 = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
                                                                  year=get_current_year(request), choice_1=True,
                                                                  choice_2=True, choice_3=False, is_accepted=False,
-                                                                 faculty_3=request.user.faculty,admission_unit_status = 'Approved')
+                                                                 faculty_3=request.user.faculty)
 
 
             context['my_template'] = 'template_university_base_page.html'
@@ -352,17 +352,17 @@ def template_approving_application(request):
             applicant_recs_1 = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
                                                                  year=get_current_year(request), choice_1=False,
                                                                  choice_2=False, choice_3=False, is_accepted=False,
-                                                                 program=request.user.program,admission_unit_status = 'Approved'
+                                                                 program=request.user.program
                                                                  )
             applicant_recs_2 = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
                                                                  year=get_current_year(request), choice_1=True,
                                                                  choice_2=False, choice_3=False, is_accepted=False,
-                                                                 program_2=request.user.program,admission_unit_status = 'Approved'
+                                                                 program_2=request.user.program
                                                                  )
             applicant_recs_3 = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
                                                                  year=get_current_year(request), choice_1=True,
                                                                  choice_2=True, choice_3=False, is_accepted=False,
-                                                                 program_3=request.user.program,admission_unit_status = 'Approved')
+                                                                 program_3=request.user.program)
             context['my_template'] = 'template_university_base_page.html'
             return render(request, 'program_approve_reject_application.html',
                           {'applicant_recs': applicant_recs, 'documents_recs': documents_recs, 'context': context,
