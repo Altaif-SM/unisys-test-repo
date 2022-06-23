@@ -6,6 +6,7 @@ from django.views.static import serve
 
 app_name = 'student'
 
+
 urlpatterns = [
                   path('student_home/', views.student_home, name='student_home'),
                   path('delete_application/<int:app_id>/', views.delete_application,
@@ -147,6 +148,7 @@ urlpatterns = [
                   path('add_prerequisite_courses/<int:course_id>/', views.add_prerequisite_courses, name='add_prerequisite_courses'),
                   path('applicant_research_details/', views.applicant_research_details, name='applicant_research_details'),
                   path('get_supervisor_from_university/', views.get_supervisor_from_university, name='get_supervisor_from_university'),
+                  path('get_all_program_mode_exclude/', views.get_all_program_mode_exclude, name='get_all_program_mode_exclude'),
                   path('generate_pdf/<int:app_id>/', views.generate_pdf, name='generate_pdf'),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -2578,6 +2578,8 @@ def applicant_intake_info(request):
     duplicate_country_ids = []
 
     learning_centre_recs = []
+    research_details = ''
+    supervisor_list = ''
 
     country_recs = CountryDetails.objects.all()
 
@@ -2593,6 +2595,20 @@ def applicant_intake_info(request):
              department_3_recs = application_obj.faculty_3.department.all()
 
     if application_obj:
+
+        if ResearchDetails.objects.filter(application_id=request.user.get_application).exists():
+            research_details = ResearchDetails.objects.get(application_id=request.user.get_application)
+
+        if research_details:
+            role_name_list = ['Supervisor']
+            users_recs = User.objects.filter(role__name__in=role_name_list)
+            if application_obj.university:
+                supervisor_list = users_recs.filter(university_id=application_obj.university.id, role__name__in=role_name_list)
+            if application_obj.faculty:
+                supervisor_list = users_recs.filter(faculty_id=application_obj.faculty.id, role__name__in=role_name_list)
+            if application_obj.program:
+                supervisor_list = users_recs.filter(program_id=application_obj.program.id, role__name__in=role_name_list)
+
         # if application_obj.university:
         #     country_learning_recs = LearningCentersDetails.objects.filter(university_id=application_obj.university.id)
         #     for rec in country_learning_recs:
@@ -2799,7 +2815,9 @@ def applicant_intake_info(request):
                                                   'department_3_recs':department_3_recs,
                                                   'program_3_final_list':program_3_final_list,
                                                   'university_type_recs':university_type_recs,
-                                                  'type_recs':type_recs
+                                                  'type_recs':type_recs,
+                                                  'supervisor_list':supervisor_list,
+                                                  'research_details':research_details,
                                                   })
 
 
@@ -2876,6 +2894,38 @@ def save_update_applicant_intake_info(request):
             application_obj.type_id = request.POST.get('type',None)
             application_obj.intake_flag = True
             application_obj.save()
+
+            study_type_obj = StudyTypeDetails.objects.get(id = request.POST.get('study_level',None))
+            if study_type_obj.study_type == 'Research':
+                supervisor = request.POST.get('supervisor', None)
+                research_title = request.POST.get('research_title', None)
+                project_outline = request.POST.get('project_outline', None)
+                data_collection = request.POST.get('data_collection', None)
+                data_analysis = request.POST.get('data_analysis', None)
+                progress_date = request.POST.get('progress_date', None)
+                problems_encountered = request.POST.get('problems_encountered', None)
+
+                if ResearchDetails.objects.filter(application_id=request.user.get_application).exists():
+                    research_details = ResearchDetails.objects.get(application_id=request.user.get_application)
+                    research_details.supervisor_id = supervisor
+                    research_details.research_title = research_title
+                    research_details.project_outline = project_outline
+                    research_details.data_collection = data_collection
+                    research_details.data_analysis = data_analysis
+                    research_details.progress_date = progress_date
+                    research_details.problems_encountered = problems_encountered
+                    research_details.save()
+                else:
+                    ResearchDetails.objects.create(application_id=request.user.get_application,supervisor_id = supervisor,
+                                                   research_title = research_title,
+                                                   project_outline = project_outline,
+                                                   data_collection = data_collection,
+                                                   data_analysis = data_analysis,
+                                                   progress_date = progress_date,
+                                                   problems_encountered = problems_encountered,
+
+                                                   )
+
             redirect_flag = True
             if redirect_flag:
                 messages.success(request, "Record saved")
@@ -3764,3 +3814,12 @@ def get_agent_details_from_id(request):
     return JsonResponse(agent_email, safe=False)
 
 
+def get_all_program_mode_exclude(request):
+    study_type_list = []
+    study_type_recs = StudyTypeDetails.objects.filter().exclude(study_type = 'Research')
+    for rec in study_type_recs:
+        raw_dict = {}
+        raw_dict['id']=rec.id
+        raw_dict['study_type']=rec.study_type
+        study_type_list.append(raw_dict)
+    return JsonResponse(study_type_list, safe=False)
