@@ -4113,9 +4113,9 @@ def application_fee(request):
     return render(request, 'application_fee_settings.html', {'application_fee_recs': application_fee_recs})
 
 def add_application_fee(request):
-    university_recs = UniversityDetails.objects.filter(is_delete=False,is_active=True,is_partner_university = False).order_by('-id')
     if request.method == 'POST':
         university = request.POST.get('university')
+        university_type = request.POST.get('university_type')
         amount = request.POST.get('amount')
         currency = request.POST.get('currency')
         status = request.POST.get('status')
@@ -4125,7 +4125,7 @@ def add_application_fee(request):
             status = False
         try:
             if not PaymentDetails.objects.filter(university_id=university).exists():
-                PaymentDetails.objects.create(university_id=university,
+                PaymentDetails.objects.create(university_id=university,university_type_id = university_type,
                                              amount=amount, currency=currency,status = status)
                 messages.success(request, "Record saved.")
             else:
@@ -4134,12 +4134,16 @@ def add_application_fee(request):
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/application_fee/')
-    return render(request, 'add_application_fee.html',{'university_recs':university_recs})
+    university_type_recs = UniversityTypeDetails.objects.filter(status=True)
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
+                                                       is_partner_university=False).order_by('-id')
+    return render(request, 'add_application_fee.html',{'university_recs':university_recs,'university_type_recs':university_type_recs})
 
 def edit_application_fee(request, fee_id=None):
     application_fee_obj = PaymentDetails.objects.get(id=fee_id)
     if request.method == 'POST':
         university = request.POST.get('university')
+        university_type = request.POST.get('university_type')
         amount = request.POST.get('amount')
         currency = request.POST.get('currency')
         status = request.POST.get('status')
@@ -4150,6 +4154,7 @@ def edit_application_fee(request, fee_id=None):
         try:
             if not PaymentDetails.objects.filter(university_id=university).exclude(id = fee_id).exists():
                 application_fee_obj.university_id = university
+                application_fee_obj.university_type_id = university_type
                 application_fee_obj.amount = amount
                 application_fee_obj.status = status
                 application_fee_obj.currency = currency
@@ -4160,12 +4165,15 @@ def edit_application_fee(request, fee_id=None):
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/application_fee/')
-    if application_fee_obj.university.is_partner_university == False:
-        university_recs = UniversityDetails.objects.filter(is_delete = False,is_active = True,is_partner_university = False).order_by('-id')
-    else:
+    university_type_recs = UniversityTypeDetails.objects.filter(status=True)
+    if application_fee_obj.university_type:
         university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
-                                                           is_partner_university=True).order_by('-id')
-    return render(request, "edit_application_fee.html", {'university_recs':university_recs,'application_fee_obj':application_fee_obj})
+                                                           university_type_id=application_fee_obj.university_type.id).order_by(
+            '-id')
+    else:
+        university_recs = ''
+
+    return render(request, "edit_application_fee.html", {'university_recs':university_recs,'application_fee_obj':application_fee_obj,'university_type_recs':university_type_recs})
 
 def delete_application_fee(request):
     if request.method == 'POST':

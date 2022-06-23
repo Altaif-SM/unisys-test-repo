@@ -783,6 +783,9 @@ class PaymentDetails(BaseModel):
     amount = models.FloatField(null=True, blank=True, default=0.0)
     currency = models.CharField(max_length=50, blank=True, null=True)
     status = models.BooleanField(default=True)
+    university_type = models.ForeignKey(UniversityTypeDetails, null=True,
+                                        related_name='payment_fee_type_rel',
+                                        on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ('-id',)
