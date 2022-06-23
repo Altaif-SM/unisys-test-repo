@@ -204,28 +204,28 @@
 {#                        </div>#}
 {#                    <br>#}
                     <div class="row">
-                            <div class="">
-                                <label class="col-md-2 control-label">{% trans 'University Type' %}:</label>
-                                <div class="col-md-3">
-
-                                <select id='university_type' title="Select University"
-                                                name="university_type"
-                                                class="form-control" required>
-                                            {% if research_details.university_type %}
-                                                <option style="display:none;" selected="selected"
-                                                        value="{{ research_details.university_type.id|default_if_none:"" }}"> {{ research_details.university_type.university_type|default_if_none:"" }}</option>
-                                            {% else %}
-                                                <option selected="selected" value=""> Please Select</option>
-                                            {% endif %}
-
-                                            {% for rec in university_type_recs %}
-                                                <option value="{{ rec.id }}">{{ rec.university_type|default_if_none:"" }}</option>
-                                            {% endfor %}
-
-                                        </select>
-
-                                </div>
-                            </div>
+{#                            <div class="">#}
+{#                                <label class="col-md-2 control-label">{% trans 'University Type' %}:</label>#}
+{#                                <div class="col-md-3">#}
+{##}
+{#                                <select id='university_type' title="Select University"#}
+{#                                                name="university_type"#}
+{#                                                class="form-control" required>#}
+{#                                            {% if research_details.university_type %}#}
+{#                                                <option style="display:none;" selected="selected"#}
+{#                                                        value="{{ research_details.university_type.id|default_if_none:"" }}"> {{ research_details.university_type.university_type|default_if_none:"" }}</option>#}
+{#                                            {% else %}#}
+{#                                                <option selected="selected" value=""> Please Select</option>#}
+{#                                            {% endif %}#}
+{##}
+{#                                            {% for rec in university_type_recs %}#}
+{#                                                <option value="{{ rec.id }}">{{ rec.university_type|default_if_none:"" }}</option>#}
+{#                                            {% endfor %}#}
+{##}
+{#                                        </select>#}
+{##}
+{#                                </div>#}
+{#                            </div>#}
 
                            <div class="">
                                 <label class="col-md-2 control-label">{% trans 'University' %}:</label>
@@ -240,9 +240,24 @@
                                                 <option selected="selected" value=""> Please Select</option>
                                             {% endif %}
 
-                                            {% for rec in university_recs %}
-                                                <option value="{{ rec.id }}">{{ rec.university_name|default_if_none:"" }}</option>
-                                            {% endfor %}
+
+                                        </select>
+                                </div>
+                            </div>
+
+                    <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Faculty' %}:</label>
+                                <div class="col-md-3">
+                                   <select id='university' title="Select Faculty"
+                                                name="university"
+                                                class="form-control" required>
+                                            {% if research_details.faculty %}
+                                                <option style="display:none;" selected="selected"
+                                                        value="{{ research_details.faculty.id|default_if_none:"" }}"> {{ research_details.faculty.faculty_name|default_if_none:"" }}</option>
+                                            {% else %}
+                                                <option selected="selected" value=""> Please Select</option>
+                                            {% endif %}
+
 
                                         </select>
                                 </div>
@@ -255,6 +270,25 @@
 
 
                         <div class="row">
+
+                        <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Program' %}:</label>
+                                <div class="col-md-3">
+                                    <select id='supervisor' title="Select Program" name="supervisor" required
+                                            class="form-control">
+                                        {% if research_details.program_research %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ research_details.program_research.id }}"
+                                                    >{{ research_details.program_research.program_name|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+
+                                    </select>
+                                </div>
+                            </div>
+
                             <div class="">
                                 <label class="col-md-2 control-label">{% trans 'Supervisor' %}:</label>
                                 <div class="col-md-3">
@@ -268,49 +302,39 @@
                                             <option style="display:none" selected="selected" id="" value="">{% trans 'Please Select' %}
                                             </option>
                                         {% endif %}
-                                        {% for rec in supervisor_list %}
-                                            <option value='{{ rec.id }}'>{{ rec.email|default_if_none:"" }}</option>
-                                        {% endfor %}
 
                                     </select>
                                 </div>
                             </div>
 
-                           <div class="">
-                                <label class="col-md-2 control-label">{% trans 'Duration of Study' %}:</label>
-                                <div class="col-md-3">
-                                    <input required type="text" title="Enter Duration of Study" id="study_duration" name="study_duration"
-                                           value="{{ research_details.study_duration|default_if_none:"" }}" class="form-control">
-                                </div>
-                            </div>
 
 
                         </div>
-                        <br>
+{#                        <br>#}
 
 
-                         <div class="row">
-
-                                      <div class="">
-                                        <label class="col-md-2 control-label">{% trans 'First Date of Registration' %}:</label>
-                                        <div class="col-md-3">
-                                            <input required type="date" id="first_date_registration" name="first_date_registration" max="2999-12-31"
-                                                   value="{{ research_details.first_date_registration|date:"Y-m-d" }}" class="form-control">
-                                        </div>
-                                    </div>
-
-                                 <div class="">
-                                        <label class="col-md-2 control-label">{% trans 'Expected Date of Completion' %}:
-
-                                        </label>
-                                        <div class="col-md-3" id="EndDate">
-                                            <input required type="date" id="completion_date" name="completion_date" max="2999-12-31"
-                                                   value="{{ research_details.completion_date|date:"Y-m-d" }}"
-                                                   class="form-control end_date">
-                                        </div>
-                                    </div>
-
-                                 </div>
+{#                         <div class="row">#}
+{##}
+{#                                      <div class="">#}
+{#                                        <label class="col-md-2 control-label">{% trans 'First Date of Registration' %}:</label>#}
+{#                                        <div class="col-md-3">#}
+{#                                            <input required type="date" id="first_date_registration" name="first_date_registration" max="2999-12-31"#}
+{#                                                   value="{{ research_details.first_date_registration|date:"Y-m-d" }}" class="form-control">#}
+{#                                        </div>#}
+{#                                    </div>#}
+{##}
+{#                                 <div class="">#}
+{#                                        <label class="col-md-2 control-label">{% trans 'Expected Date of Completion' %}:#}
+{##}
+{#                                        </label>#}
+{#                                        <div class="col-md-3" id="EndDate">#}
+{#                                            <input required type="date" id="completion_date" name="completion_date" max="2999-12-31"#}
+{#                                                   value="{{ research_details.completion_date|date:"Y-m-d" }}"#}
+{#                                                   class="form-control end_date">#}
+{#                                        </div>#}
+{#                                    </div>#}
+{##}
+{#                                 </div>#}
 
 
                         <hr>

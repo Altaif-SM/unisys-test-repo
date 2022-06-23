@@ -2904,6 +2904,9 @@ def save_update_applicant_intake_info(request):
                 data_analysis = request.POST.get('data_analysis', None)
                 progress_date = request.POST.get('progress_date', None)
                 problems_encountered = request.POST.get('problems_encountered', None)
+                program_research = request.POST.get('program', None)
+                faculty = request.POST.get('faculty', None)
+                university = request.POST.get('university', None)
 
                 if ResearchDetails.objects.filter(application_id=request.user.get_application).exists():
                     research_details = ResearchDetails.objects.get(application_id=request.user.get_application)
@@ -2914,6 +2917,9 @@ def save_update_applicant_intake_info(request):
                     research_details.data_analysis = data_analysis
                     research_details.progress_date = progress_date
                     research_details.problems_encountered = problems_encountered
+                    research_details.program_research_id = program_research
+                    research_details.faculty_id = faculty
+                    research_details.university_id = university
                     research_details.save()
                 else:
                     ResearchDetails.objects.create(application_id=request.user.get_application,supervisor_id = supervisor,
@@ -2923,8 +2929,13 @@ def save_update_applicant_intake_info(request):
                                                    data_analysis = data_analysis,
                                                    progress_date = progress_date,
                                                    problems_encountered = problems_encountered,
+                                                   program_research_id = program_research,
+                                                   faculty_id = faculty,
+                                                   university_id = university,
 
                                                    )
+            else:
+                ResearchDetails.objects.filter(application_id=request.user.get_application).filter().delete()
 
             redirect_flag = True
             if redirect_flag:
