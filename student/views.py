@@ -3834,3 +3834,96 @@ def get_all_program_mode_exclude(request):
         raw_dict['study_type']=rec.study_type
         study_type_list.append(raw_dict)
     return JsonResponse(study_type_list, safe=False)
+
+
+def research_plan_registration(request):
+    if request.method == 'POST':
+        year = request.POST.get('year', None)
+        semester = request.POST.get('semester', None)
+        year_obj = ''
+        course_recs = ''
+
+        study_plan_obj = ResearchPlanDetails.objects.get(id=semester)
+        course_recs = study_plan_obj.subject.all()
+        application_obj = request.user.get_application
+        matric_no = hex(binascii.crc32(str(application_obj.id).encode()))[2:]
+        program_id = ''
+        if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False and application_obj.is_accepted == True:
+            program_id = application_obj.program.id
+        elif application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False and application_obj.is_accepted == True:
+            program_id = application_obj.program_2.id
+        else:
+            program_id = application_obj.program_3.id
+
+
+        year_list = []
+        year_ids = []
+        study_plan_recs = ResearchPlanDetails.objects.filter(program_id=program_id)
+        for rec in study_plan_recs:
+            if rec.year.id not in year_ids:
+                year_ids.append(rec.year.id)
+                year_list.append(rec.year)
+        if year:
+            year_obj = YearDetails.objects.get(id = year)
+
+        semester_list = []
+        semester_recs = ResearchPlanDetails.objects.filter(year_id=year, program_id=study_plan_obj.program_id)
+        for rec in semester_recs:
+            raw_dict = {}
+            raw_dict['semester'] = str(rec.semester.semester + ' ' + (str(rec.semester.start_date) + ' - ' + str(rec.semester.end_date)))
+            raw_dict['id'] = rec.id
+            semester_list.append(raw_dict)
+
+        course_filter = True
+        return render(request, 'research_plan_details.html', {'application_obj': application_obj,
+                                                            'matric_no': matric_no, 'course_recs': course_recs,
+                                                            'year_list': year_list, 'program_id': program_id,
+                                                            'year_obj':year_obj,'study_plan_obj':study_plan_obj,
+                                                            'course_filter':course_filter,
+                                                            'semester_list':semester_list,
+                                                            })
+
+    else:
+        semester_list = []
+        unit_count = 0
+        course_filter = False
+        application_obj = request.user.get_application
+        matric_no = hex(binascii.crc32(str(application_obj.id).encode()))[2:]
+        study_plan_obj = ''
+        year_obj = ''
+        course_recs = ''
+        program_id = ''
+        if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False and application_obj.is_accepted == True:
+            program_id = application_obj.program.id
+        elif application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False and application_obj.is_accepted == True:
+            program_id = application_obj.program_2.id
+        else:
+            program_id = application_obj.program_3.id
+
+        year_list = []
+        year_ids = []
+        study_plan_recs = ResearchPlanDetails.objects.filter(program_id=program_id)
+        for rec in study_plan_recs:
+            if rec.year.id not in year_ids:
+                year_ids.append(rec.year.id)
+                year_list.append(rec.year)
+        return render(request, 'research_plan_details.html',{'application_obj':application_obj,
+                                                       'matric_no':matric_no,'course_recs':course_recs,
+                                                           'year_list':year_list,'program_id':program_id,
+                                                           'year_obj':year_obj,'course_filter':course_filter,
+                                                           'unit_count':unit_count,
+                                                           'semester_list':semester_list,
+                                                           })
+
+
+def get_research_semester_from_year(request):
+    finalDict = []
+    year_id = request.POST.get('year_id', None)
+    program_id = request.POST.get('program_id', None)
+    study_plan_recs = ResearchPlanDetails.objects.filter(year_id = year_id,program_id = program_id)
+    for rec in study_plan_recs:
+        raw_dict = {}
+        raw_dict['semester'] = str(rec.semester.semester + ' ' + (str(rec.semester.start_date) + ' - ' + str(rec.semester.end_date)))
+        raw_dict['id']=rec.id
+        finalDict.append(raw_dict)
+    return JsonResponse(finalDict, safe=False)

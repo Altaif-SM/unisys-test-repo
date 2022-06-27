@@ -28,8 +28,13 @@ urlpatterns = [
     path('CreditCheckoutSessionView/', views.CreditCheckoutSessionView.as_view(),name='CreditCheckoutSessionView'),
     path('stripe_credit_checkout_success/<int:credit_id>/<str:course_ids>/', views.stripe_credit_checkout_success, name='stripe_credit_checkout_success'),
 
+    path('research_registration_checkout/<int:research_id>/', views.research_registration_checkout, name='research_registration_checkout'),
+    path('research_registration_checkout_session/', views.ResearchRegistrationCheckoutSessionView.as_view(),name='research_registration_checkout_session'),
+    path('stripe_research_checkout_success/<int:research_id>/', views.stripe_research_checkout_success, name='stripe_research_checkout_success'),
+
     path('course_registration_checkout/<int:semester_id>/', views.course_registration_checkout, name='course_registration_checkout'),
     path('course_registration_checkout_session/', views.CourseRegistrationCheckoutSessionView.as_view(),name='course_registration_checkout_session'),
     path('stripe_course_checkout_success/<int:semester_id>/', views.stripe_course_checkout_success, name='stripe_course_checkout_success'),
+
 
 ]

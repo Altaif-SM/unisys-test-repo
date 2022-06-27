@@ -297,6 +297,7 @@ urlpatterns = [
     path('edit_semester_based/<int:semester_id>/', views.edit_semester_based, name='edit_semester_based'),
 
 
+    path('research_fee_details/<int:research_id>/', views.research_fee_details, name='research_fee_details'),
     path('semester_fee_details/<int:semester_id>/', views.semester_fee_details, name='semester_fee_details'),
     path('credit_fee_details/<int:credit_id>/', views.credit_fee_details, name='credit_fee_details'),
 

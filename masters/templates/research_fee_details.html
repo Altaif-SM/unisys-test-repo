@@ -111,10 +111,10 @@
                 })
 
 
-                {% if semester_count == 0 %}
+                {% if research_count == 0 %}
                     var english_count = 1;
                 {% else %}
-                    var english_count = "{{ semester_count }}"
+                    var english_count = "{{ research_count }}"
                 {% endif %}
 
                  $(".add_english_row").click(function () {
@@ -211,7 +211,7 @@
             </li>
 
             <li>
-                <span> {% trans 'Semester Fee Details' %} </span>
+                <span> {% trans 'Research Fee Details' %} </span>
             </li>
         </ul>
     </div>
@@ -228,7 +228,7 @@
         <div class="portlet-body">
             <div class="form-body">
 
-                <form action="{% url 'masters:semester_fee_details' study_plan_obj.id %}"
+                <form action="{% url 'masters:research_fee_details' research_obj.id %}"
                       id="id_form"
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
@@ -241,7 +241,7 @@
 
                         <div class="portlet-title" style="margin-left:-15px;font-size: 14px;">
                             <div class="caption">
-                                <p style="color: red;text-transform: uppercase">{% trans 'Semester Fee Details' %}</p>
+                                <p style="color: red;text-transform: uppercase">{% trans 'Research Fee Details' %}</p>
                             </div>
                         </div>
                         <hr>
@@ -252,7 +252,7 @@
                                     <label class="col-md-2 control-label">{% trans 'Program' %}:</label>
                                     <div class="col-md-3">
                                         <input type="text" title="Enter Fee Type" id="program"
-                                               name="program" value="{{ study_plan_obj.program.program_name|default_if_none:"" }}"
+                                               name="program" value="{{ research_obj.program.program_name|default_if_none:"" }}"
                                                class="form-control eng_emp" disabled>
 
                                     </div>
@@ -262,7 +262,7 @@
                                     <div class="col-md-3">
                                         <input type="text" title="Enter result" id="semester"
                                                name="semester"
-                                               value="{{ study_plan_obj.study_semester.semester|default_if_none:"" }} {{ study_plan_obj.study_semester.start_date|date:"Y-m-d" }} - {{ study_plan_obj.study_semester.end_date|date:"Y-m-d" }}"
+                                               value="{{ research_obj.semester.semester|default_if_none:"" }} {{ research_obj.semester.start_date|date:"Y-m-d" }} - {{ research_obj.semester.end_date|date:"Y-m-d" }}"
 
                                                class="form-control eng_emp" disabled>
                                     </div>
@@ -282,9 +282,9 @@
                             </div>
                         </div>
 
-                    {% if semester_fee_obj %}
+                    {% if research_fee_obj %}
 
-                    {% for rec in semester_fee_obj.semester_fee.all %}
+                    {% for rec in research_fee_obj.research_fee.all %}
 
                         <div class="row english_item" id="english_check_1">
 
@@ -341,7 +341,7 @@
                         <div class="row">
                             <div class="col-md-offset-5 col-md-7">
                                 <button type="button" class="btn blue" id="back" style="margin-left: 70%"
-                                        onclick="window.location='{% url 'masters:view_semester_subject_list' study_plan_obj.program.id %}'">
+                                        onclick="window.location='{% url 'masters:research_plan' research_obj.program.id %}'">
                                     Back
                                 </button>
 

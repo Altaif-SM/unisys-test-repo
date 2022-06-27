@@ -375,3 +375,67 @@ def stripe_credit_checkout_success(request,credit_id,course_ids):
             pass
     CreditFeeDetails.objects.create(credit_id=credit_id)
     return redirect('/payments/credit_course_registration_checkout/'+str(credit_id))
+
+
+def research_registration_checkout(request, research_id=None):
+    try:
+        application_obj = request.user.get_application
+        research_fee_obj = ''
+        total_amount = 0
+        if not ResearchBasedFeeDetails.objects.filter(research_id = research_id).exists():
+            return render(request, 'no_research_fee_details.html',{'application_obj':application_obj})
+        else:
+            research_fee_obj = ResearchBasedFeeDetails.objects.get(research_id = research_id)
+            research_fee_recs = research_fee_obj.research_fee.all()
+            for rec in research_fee_recs:
+                total_amount = float(total_amount) + float(rec.amount)
+
+        checkout_page = False
+        if ResearchFeeDetails.objects.filter(research_id = research_id).exists():
+            checkout_page = True
+        return render(request, 'research_registration_checkout.html', {'application_obj': application_obj,
+                                                                     'research_fee_obj':research_fee_obj,
+                                                                     'total_amount':total_amount,
+                                                                     'research_id':research_id,
+                                                                     'checkout_page':checkout_page})
+    except Exception as e:
+        messages.warning(request, "Please Fill The Application Form First ... ")
+        return redirect("/")
+
+class ResearchRegistrationCheckoutSessionView(View):
+    def post(self, request, *args, **kwargs):
+        YOUR_DOMAIN = settings.SERVER_HOST_NAME
+        research_id = json.loads(request.body)['research_id']
+        total_amount = 0
+        research_fee_obj = ResearchBasedFeeDetails.objects.get(research_id=research_id)
+        research_fee_recs = research_fee_obj.research_fee.all()
+        for rec in research_fee_recs:
+            total_amount = float(total_amount) + float(rec.amount)
+        checkout_session = stripe.checkout.Session.create(
+            line_items=[
+                {
+                    'price_data': {
+                        'currency': 'usd',
+                        'unit_amount': int(float(total_amount)*100),
+                        'product_data': {
+                            'name': 'Research Registration Payment',
+                            'images': ['http://unisys.online/static/images/university_logo.png'],
+                        },
+                    },
+                    'quantity': 1,
+                },
+            ],
+            payment_method_types=['card'],
+            mode='payment',
+            success_url=YOUR_DOMAIN + 'payments/stripe_research_checkout_success/' + str(research_id),
+            cancel_url=YOUR_DOMAIN + 'payments/research_registration_checkout/'+str(research_id),
+
+        )
+        try:
+            return JsonResponse({'id': checkout_session.id})
+        except Exception as e:
+            return str(e)
+
+def stripe_research_checkout_success(request,research_id):
+    ResearchFeeDetails.objects.create(research_id = research_id)
+    return redirect('/payments/research_registration_checkout/'+str(research_id))

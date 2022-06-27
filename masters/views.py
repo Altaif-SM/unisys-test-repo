@@ -4869,3 +4869,40 @@ def delete_research_plan(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/research_plan/'+str(program_id))
+
+
+def research_fee_details(request, research_id=None):
+    research_obj = ResearchPlanDetails.objects.get(id = research_id)
+    research_fee_obj = ''
+    if ResearchBasedFeeDetails.objects.filter(research_id=research_id).exists():
+        research_fee_obj = ResearchBasedFeeDetails.objects.get(research_id=research_id)
+    research_count = 0
+    if research_fee_obj:
+        research_count = research_fee_obj.research_fee.all().count()
+    if request.method == 'POST':
+        program_fee_count = request.POST.get('program_fee_count')
+        try:
+            if ResearchBasedFeeDetails.objects.filter(research_id=research_id).exists():
+                research_fee_obj = ResearchBasedFeeDetails.objects.get(research_id=research_id)
+            else:
+                research_fee_obj = ResearchBasedFeeDetails.objects.create(research_id=research_id)
+            research_fee_obj.research_fee.clear()
+            for x in range(int(program_fee_count)):
+                try:
+                    x = x + 1
+                    research_fee_type_obj = ResearchFeeType.objects.create(
+                        fee_type=request.POST.get('fee_type_' + str(x)),
+                        amount=request.POST.get('amount_' + str(x))
+                        )
+                    research_fee_obj.research_fee.add(research_fee_type_obj)
+                except:
+                    pass
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/research_plan/'+str(research_obj.program.id))
+    return render(request, 'research_fee_details.html', {
+        'research_fee_obj': research_fee_obj,
+        'research_obj': research_obj,
+        'research_count': research_count,
+    })

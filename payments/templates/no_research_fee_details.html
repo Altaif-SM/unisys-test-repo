@@ -1,0 +1,66 @@
+{% extends "template_base_page.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+{% block styleBlock %}
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+{% endblock %}
+
+{% block content %}
+
+
+
+
+
+
+    <div class="portlet light">
+        <div class="portlet-body">
+            <div class="invoice">
+                <div class="row invoice-logo">
+                    <div class="col-xs-8">
+                        <p>
+                            #5652256 / {% now "j F Y " %}
+
+                            <span class="muted">-
+										RESEARCH REGISTRATION PAYMENT </span>
+                        </p>
+                    </div>
+
+
+                </div>
+
+                <div class="row invoice-logo">
+{#                    <div class="col-xs-4 invoice-logo-space">#}
+{#                    </div>#}
+
+                     <div class="col-xs-12">
+                        <p style="text-align: center">
+                            <span class="muted" style="color: red;font-size: 16px">
+                                            Research Subject Fee not updated yet. Please contact to Administrator.
+
+										 </span>
+                        </p>
+                    </div>
+                </div>
+                <hr/>
+
+
+            <br>
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+{% endblock %}

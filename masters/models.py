@@ -924,3 +924,28 @@ class ResearchPlanDetails(BaseModel):
 class AgentIDDetails(BaseModel):
     agent_id = models.CharField(max_length=150, blank=True, null=True)
     user = models.ForeignKey(User, null=True, related_name='agent_user_rel', on_delete=models.SET_NULL)
+
+
+class ResearchFeeType(models.Model):
+    fee_type = models.CharField(max_length=100, blank=True, null=True)
+    amount = models.FloatField(null=True, blank=True, default=0.0)
+
+class ResearchBasedFeeDetails(BaseModel):
+    research = models.ForeignKey(ResearchPlanDetails, null=True, related_name='research_fee_rel',on_delete=models.SET_NULL)
+    research_fee = models.ManyToManyField(ResearchFeeType, blank=True)
+
+
+class ResearchFeeDetails(BaseModel):
+    transaction_id = models.CharField(max_length=255, blank=True, null=True)
+    status = models.CharField(max_length=50, blank=True, null=True)
+    currency_code = models.CharField(max_length=100, blank=True, null=True)
+    amount = models.CharField(max_length=100, blank=True, null=True)
+    application_id = models.ForeignKey(ApplicationDetails, null=True, related_name='research_student_application_id',
+                                       on_delete=models.SET_NULL)
+    university = models.ForeignKey(UniversityDetails, null=True, related_name='research_student_university_rel',
+                                   on_delete=models.SET_NULL)
+    research = models.ForeignKey(ResearchPlanDetails, null=True, related_name='research_student_fee_rel',
+                                   on_delete=models.SET_NULL)
+
+    class Meta:
+        ordering = ('-id',)
