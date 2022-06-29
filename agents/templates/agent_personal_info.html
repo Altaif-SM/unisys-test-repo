@@ -215,7 +215,7 @@
                                 <label class="col-md-2 control-label">{% trans 'Postcode' %}:</label>
                                 <div class="col-md-3">
                                     <input type="text" title="Enter Postcode" id="post_code"
-                                           value="{{ agent_obj.post_code }}" name="post_code"
+                                           value="{{ agent_obj.post_code|default_if_none:"" }}" name="post_code"
                                            class="form-control value_check" >
                                 </div>
                             </div>
