@@ -3,45 +3,9 @@
 {% load staticfiles %}
 
 {% block styleBlock %}
-    <!-- BEGIN GLOBAL MANDATORY STYLES -->
-
-    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
-    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
-          rel="stylesheet" type="text/css"/>
-
-
-    </head>
-    <!-- END HEAD -->
-    <style type="text/css">
-
-
-
-    </style>
 {% endblock %}
 
 {% block ScriptBlock %}
-    <script>
-        window.onload = function () {
-            $(document).ready(function () {
-
-
-            });
-
-
-            $('#sample_1').dataTable().fnDestroy();
-            $('#sample_1').dataTable({
-                "aoColumnDefs": [
-                    {'bSortable': false}
-                ]
-            });
-        }
-
-        window.setTimeout(function () {
-            $(".alert").fadeTo(500, 0).slideUp(500, function () {
-                $(this).remove();
-            });
-        }, 4000);
-    </script>
 
 {% endblock %}
 
@@ -50,12 +14,12 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{% url 'student:student_home' %}">{% trans 'Home' %}</a>
+                <a href="{% url 'student:student_home' %}">{% trans 'HOME' %}</a>
                 <i class="fa fa-angle-right"></i>
             </li>
 
             <li>
-                <span>{% trans 'Dashboard' %}</span>
+                <span>{% trans 'DASHBOARD' %}</span>
             </li>
         </ul>
     </div>
@@ -77,8 +41,8 @@
 
         <div class="portlet-body">
             <div class="form-body">
-                <h3 style="color: darkred; text-align: center;font-size: 21px"><b>{% trans 'Welcome' %}<span
-                        style="color: #0c203a"> {{ user.first_name|default_if_none:"" }} {{ user.last_name|default_if_none:""}}</span> <br><br>
+                 <h3 style="color: darkred; text-align: center;font-size: 21px"><b>{% trans 'Welcome' %}<span
+                        style="color: #0c203a"> {{ request.user.first_name|title }} {{ request.user.last_name|title }}</span>. <br><br>
 
 
 

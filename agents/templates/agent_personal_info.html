@@ -1,0 +1,284 @@
+{% extends "template_agent_base.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+            $(document).ready(function () {
+                {% if user.get_application %}
+                    {% if user.get_application.is_submitted %}
+                        $('input').prop('disabled', 'true');
+                        $('select').prop('disabled', 'true');
+                        $('label').prop('readonly', 'true');
+                    {% endif %}
+                {% endif %}
+            });
+        }
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'student:student_home' %}">{% trans 'HOME' %}</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span>{% trans 'PERSONAL INFO' %}</span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+
+
+
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">{% trans 'Personal Info (Biographical Information)' %}</span>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form action="{% url 'agents:personal_info' %}"
+                      id="personal_info_form"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                <input type="hidden" value="{{ agent_obj.agent_id|default_if_none:"" }}" id="agent_id" name="agent_id">
+
+                    <div class="form-body">
+                        <div class="row">
+                            <input hidden id="value_check" name="value_check">
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'First Name' %}: <span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter First Name" id="first_name" name="first_name"
+                                           class="form-control value_check submitted" required value="{{ agent_obj.user.first_name|default_if_none:"" }}">
+                                </div>
+                            </div>
+
+                        <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Last Name' %}:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Last Name" id="last_name" name="last_name"
+                                          value="{{ agent_obj.user.last_name|default_if_none:"" }}"
+                                           class="form-control value_check" >
+                                </div>
+                            </div>
+
+
+
+
+
+                        </div>
+                    <br>
+                    <div class="row">
+
+
+                        <div class="">
+                                <label class="col-md-2 control-label">{% trans 'AGENT ID' %}:<span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Passport number" id="passport_number"
+                                           value="{{ agent_obj.agent_id|default_if_none:"" }}" name="passport_number"
+                                           class="form-control value_check " readonly>
+                                </div>
+                            </div>
+
+                    </div>
+
+
+                        <hr>
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-settings font-red"></i>
+                                <span class="caption-subject font-red sbold uppercase">{% trans 'CONTACT INFO' %}</span>
+                            </div>
+                        </div>
+                        <hr>
+                    <div class="row">
+                        <div class="">
+                                <label class="col-md-2 control-label">{% trans 'E-mail' %}:<span style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter E-mail ID" id="email" name="email"
+                                             value="{{ agent_obj.user.email|default_if_none:"" }}"
+                                           class="form-control value_check submitted" readonly>
+                                </div>
+                            </div>
+
+                    <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Mobile' %}:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Mobile" id="mobile"
+                                           value="{{ agent_obj.mobile|default_if_none:"" }}" name="mobile"
+                                           class="form-control value_check">
+                                </div>
+                            </div>
+
+                    </div>
+                    <br>
+                    <div class="row">
+
+
+
+
+                    <div class="">
+                                <label class="col-md-2 control-label">{% trans 'WhatsApp' %}:</label>
+                        <div class="col-md-1">
+                                    <input type="text" title="Enter Country Code" id="country_code" placeholder="Code"
+                                           value="{{ agent_obj.country_code|default_if_none:"" }}" name="country_code"
+                                           class="form-control value_check">
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="text" title="Enter WhatsApp" id="whats_app"
+                                           value="{{ agent_obj.whats_app|default_if_none:"" }}" name="whats_app"
+                                           class="form-control value_check">
+                                </div>
+                            </div>
+
+                        <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Country' %}: <span style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    <select id='address_country' title="Select Country" name="country"
+                                            class="form-control value_check" data-live-search="true" required>
+
+                                        {% if agent_obj.country %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ agent_obj.country.id }}"
+                                                    value="">{{ agent_obj.country.country_name|title }}</option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">Please
+                                                Select
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in country_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                    </div>
+                    <br>
+                    <div class="row">
+
+                         <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Nationality' %}: <span style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    <select id='nationality' title="Select Nationality" name="nationality"
+                                            class="form-control value_check" data-live-search="true" required>
+
+                                        {% if agent_obj.nationality %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ agent_obj.nationality.id }}"
+                                                    value="">{{ agent_obj.nationality.country_name|title }}</option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">Please
+                                                Select
+                                            </option>
+                                        {% endif %}
+
+
+                                        {% for rec in country_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                        <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Postcode' %}:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Postcode" id="post_code"
+                                           value="{{ agent_obj.post_code }}" name="post_code"
+                                           class="form-control value_check" >
+                                </div>
+                            </div>
+
+                    </div>
+                    <br>
+                    <div class="row">
+
+                        <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Address line 1' %}:<span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Address line 1"
+                                           id="address_line_1"
+                                           value="{{ agent_obj.address_line_1|default_if_none:"" }}"
+                                           name="address_line_1"
+                                           class="form-control value_check emp" required>
+                                </div>
+                            </div>
+
+                         <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Address line 2' %}:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Address line 2" id="address_line_2"
+                                           value="{{ agent_obj.address_line_2|default_if_none:"" }}"
+                                           name="address_line_2"
+                                           class="form-control value_check emp" >
+                                </div>
+                            </div>
+
+
+
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="">
+                                <label class="col-md-2 control-label">{% trans 'City' %}:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter City " id="city"
+                                           value="{{ agent_obj.city|default_if_none:"" }}" name="city"
+                                           class="form-control value_check">
+                                </div>
+                            </div>
+
+                    </div>
+                    <hr>
+
+                        <div class="row">
+                            <div class="col-md-offset-10 col-md12">
+
+
+                                    {% if not application_obj.is_submitted %}
+                                        <button type="submit" class="btn green" id="next" style="float: left">{% trans 'Save/Next' %}</button>
+                                    {% else %}
+                                      <button type="button" onClick="location.href='{% url 'student:applicant_intake_info' %}'" class="btn green" id="next" style="float: left">Next</button>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                   
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

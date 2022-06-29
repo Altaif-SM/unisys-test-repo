@@ -28,9 +28,14 @@ urlpatterns = [
     path('CreditCheckoutSessionView/', views.CreditCheckoutSessionView.as_view(),name='CreditCheckoutSessionView'),
     path('stripe_credit_checkout_success/<int:credit_id>/<str:course_ids>/', views.stripe_credit_checkout_success, name='stripe_credit_checkout_success'),
 
+    path('payment_details/<int:user_id>/', views.payment_details, name='payment_details'),
+    path('agent_registration_checkout_session/', views.AgentRegistrationCheckoutSessionView.as_view(),name='agent_registration_checkout_session'),
+    path('stripe_agent_checkout_success/<int:agent_id>/', views.stripe_agent_checkout_success, name='stripe_agent_checkout_success'),
+
     path('research_registration_checkout/<int:research_id>/', views.research_registration_checkout, name='research_registration_checkout'),
     path('research_registration_checkout_session/', views.ResearchRegistrationCheckoutSessionView.as_view(),name='research_registration_checkout_session'),
     path('stripe_research_checkout_success/<int:research_id>/', views.stripe_research_checkout_success, name='stripe_research_checkout_success'),
+
 
     path('course_registration_checkout/<int:semester_id>/', views.course_registration_checkout, name='course_registration_checkout'),
     path('course_registration_checkout_session/', views.CourseRegistrationCheckoutSessionView.as_view(),name='course_registration_checkout_session'),

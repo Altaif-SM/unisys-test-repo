@@ -924,6 +924,18 @@ class ResearchPlanDetails(BaseModel):
 class AgentIDDetails(BaseModel):
     agent_id = models.CharField(max_length=150, blank=True, null=True)
     user = models.ForeignKey(User, null=True, related_name='agent_user_rel', on_delete=models.SET_NULL)
+    mobile = models.CharField(max_length=15, blank=True, null=True)
+    country_code = models.CharField(max_length=10, blank=True, null=True)
+    whats_app = models.CharField(max_length=15, blank=True, null=True)
+    country = models.ForeignKey(CountryDetails, null=True, related_name='agent_country_rel',
+                                on_delete=models.SET_NULL)
+    nationality = models.ForeignKey(CountryDetails, null=True, related_name='agent_nationality_rel',
+                                    on_delete=models.SET_NULL)
+    post_code = models.CharField(max_length=10, blank=True, null=True)
+    address_line_1 = models.TextField(blank=True, null=True)
+    address_line_2 = models.TextField(blank=True, null=True)
+    city = models.CharField(max_length=150, blank=True, null=True)
+
 
 
 class ResearchFeeType(models.Model):

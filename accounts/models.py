@@ -267,6 +267,26 @@ class User(AbstractUser):
             return None
 
     @property
+    def get_agent_profile_details(self):
+        form_vals = {}
+        if self.role.all().filter(name__in=[self.AGENT]).exists():
+            agent_profile_details = self.agent_user_rel.get()
+            try:
+                form_vals['personal_info'] = True if agent_profile_details.nationality else False
+                form_vals['corporate_info'] = True if agent_profile_details.corporate_agent_rel.exists() else False
+                form_vals['payment'] = True if agent_profile_details.payment_agent_rel.exists() else False
+                form_vals['attachment'] = True if agent_profile_details.attachement_agent_rel.exists() else False
+                return form_vals
+            except:
+                form_vals['personal_info'] = False
+                form_vals['corporate_info'] = False
+                form_vals['payment'] = False
+                form_vals['attachment'] = False
+                return form_vals
+        else:
+            return None
+
+    @property
     def get_student_progress(self):
         form_vals = {}
         if self.role.all().filter(name__in=[self.STUDENT]).exists():
@@ -324,7 +344,7 @@ class User(AbstractUser):
     DONOR_DASHBOARD = '/donor/template_donor_dashboard/'
     ACCOUNTANT_DASHBOARD = '/accounts/home/'
     ADMINISTRATOR_DASHBOARD = '/partner/template_approving_application/'
-    AGENT_DASHBOARD = '/partner/approved_application/'
+    AGENT_DASHBOARD = '/agents/dashboard/'
 
 
     def get_dashboard_path(self):

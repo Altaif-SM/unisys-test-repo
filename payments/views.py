@@ -6,6 +6,7 @@ from django.conf import settings
 from django.views.generic.base import TemplateView
 from django.views import View
 import stripe
+from agents.models import *
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -439,3 +440,54 @@ class ResearchRegistrationCheckoutSessionView(View):
 def stripe_research_checkout_success(request,research_id):
     ResearchFeeDetails.objects.create(research_id = research_id)
     return redirect('/payments/research_registration_checkout/'+str(research_id))
+
+def payment_details(request, user_id=None):
+    try:
+        checkout_page = False
+        agent_obj = AgentIDDetails.objects.get(user_id = user_id)
+        if AgentPaymentDetails.objects.filter(agent_profile_id = agent_obj.id).exists():
+            checkout_page = True
+        context = {
+            "agent_id":agent_obj.id,
+            "checkout_page":checkout_page
+        }
+        return render(request,'payment_details.html',context)
+    except:
+        return redirect("/payments/payment_details/"+str(user_id))
+
+class AgentRegistrationCheckoutSessionView(View):
+    def post(self, request, *args, **kwargs):
+        YOUR_DOMAIN = settings.SERVER_HOST_NAME
+        agent_id = json.loads(request.body)['agent_id']
+        agent_obj = AgentIDDetails.objects.get(id = agent_id)
+        total_amount = 1000
+        checkout_session = stripe.checkout.Session.create(
+            line_items=[
+                {
+                    'price_data': {
+                        'currency': 'usd',
+                        'unit_amount': int(float(total_amount)*100),
+                        'product_data': {
+                            'name': 'AGENT REGISTRATION PAYMENT',
+                            'images': ['http://unisys.online/static/images/university_logo.png'],
+                        },
+                    },
+                    'quantity': 1,
+                },
+            ],
+            payment_method_types=['card'],
+            mode='payment',
+            success_url=YOUR_DOMAIN + 'payments/stripe_agent_checkout_success/' + str(agent_id),
+            cancel_url=YOUR_DOMAIN + 'payments/payment_details/'+str(agent_obj.user.id),
+
+        )
+        try:
+            return JsonResponse({'id': checkout_session.id})
+        except Exception as e:
+            return str(e)
+
+
+def stripe_agent_checkout_success(request,agent_id):
+    agent_obj = AgentIDDetails.objects.get(id=agent_id)
+    AgentPaymentDetails.objects.create(agent_profile_id = agent_id)
+    return redirect('/payments/payment_details/'+str(agent_obj.user.id))

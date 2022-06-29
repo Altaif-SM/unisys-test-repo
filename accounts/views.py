@@ -1419,8 +1419,7 @@ def agent_login(request):
     return render(request, "template_login.html",context)
 
 
-def agent_dashboard(request):
-    return render(request, 'agent_dashboard.html')
+
 
 def edit_agent(request, agent_id=None):
     user_obj = User.objects.get(id = agent_id)

@@ -1,0 +1,195 @@
+{% extends "template_agent_base.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+            $(document).ready(function () {
+                {% if user.get_application %}
+                    {% if user.get_application.is_submitted %}
+                        $('input').prop('disabled', 'true');
+                        $('select').prop('disabled', 'true');
+                        $('label').prop('readonly', 'true');
+                    {% endif %}
+                {% endif %}
+            });
+        }
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'student:student_home' %}">{% trans 'HOME' %}</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span>{% trans 'CORPORATE INFO' %}</span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+
+
+
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form action="{% url 'agents:corporate_info' %}"
+                      id="personal_info_form"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                <input type="hidden" value="{{ agent_obj.id|default_if_none:"" }}" id="agent_id" name="agent_id">
+
+                    <div class="form-body">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-settings font-red"></i>
+                                <span class="caption-subject font-red sbold uppercase">{% trans 'CORPORATE INFO' %}</span>
+                            </div>
+                        </div>
+                        <hr>
+                    <div class="row">
+                        <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Company Name' %}:<span style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Company Name" id="company_name" name="company_name"
+                                             value="{{ corporate_obj.company_name|default_if_none:"" }}"
+                                           class="form-control value_check submitted" required>
+                                </div>
+                            </div>
+
+                    <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Registration No' %}:<span style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Company Registration No" id="company_registration_no"
+                                           value="{{ corporate_obj.company_registration_no|default_if_none:"" }}" name="company_registration_no"
+                                           class="form-control value_check" required>
+                                </div>
+                            </div>
+
+                    </div>
+                    <br>
+                    <div class="row">
+
+                    <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Email' %}:<span style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Company Email" id="email"
+                                           value="{{ corporate_obj.email|default_if_none:"" }}" name="email"
+                                           class="form-control value_check" required>
+                                </div>
+                            </div>
+
+
+
+
+
+                        <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Country' %}: <span style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    <select id='country' title="Select Country" name="country"
+                                            class="form-control value_check" data-live-search="true" required>
+
+                                        {% if corporate_obj.country %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ corporate_obj.country.id }}"
+                                                    value="">{{ corporate_obj.country.country_name|title }}</option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">Please
+                                                Select
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in country_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                    </div>
+                    <br>
+                    <div class="row">
+
+
+                        <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Telephone' %}:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Telephone" id="telephone"
+                                           value="{{ corporate_obj.telephone|default_if_none:"" }}" name="telephone"
+                                           class="form-control value_check" >
+                                </div>
+                            </div>
+
+                        <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Website' %}:</label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Website" id="website_url"
+                                           value="{{ corporate_obj.website_url|default_if_none:"" }}" name="website_url"
+                                           class="form-control value_check" >
+                                </div>
+                            </div>
+
+
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Company Address' %}:</label>
+                                <div class="col-md-8">
+                                    <textarea class="form-control value_check" id="address" name="address">{{ corporate_obj.address|default_if_none:"" }}</textarea>
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+
+                    </div>
+                    <hr>
+
+                        <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                                        onclick="window.location='{% url "agents:personal_info" %}'">{% trans 'Back' %}
+                                </button>
+
+
+                                        <button type="submit" class="btn green"
+                                                id="save">{% trans 'Save/Next' %}</button>
+                            </div>
+                        </div>
+
+                   
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

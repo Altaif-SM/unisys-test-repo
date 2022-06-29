@@ -440,119 +440,103 @@ License: You must have a valid license purchased only from themeforest(the above
                         data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
 
                             <li class="nav-item " id="dashboard">
-                                <a href="/accounts/agent_dashboard/" class="nav-link nav-toggle">
+                                <a href="/agents/dashboard/" class="nav-link nav-toggle">
                                     <i class="glyphicon glyphicon-stats"></i>
-                                    <span class="title">{% trans 'Dashboard' %}</span>
+                                    <span class="title">{% trans 'DASHBOARD' %}</span>
                                     <span class="selected"></span>
                                 </a>
 
                             </li>
-                        <li class="nav-item ">
-                                            <a href="{% url 'partner:approved_application' %}"
-                                               class="nav-link ">{% trans 'Accepted Application' %}</a>
-                                        </li>
+
+
                     </ul>
 
-
-                    <div class="tab-pane " id="b"><!--Settings-->
+                 <div class="tab-pane " id="agent_application_tab"><!--Application Management-->
                         <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
 
 
+                            <li class="nav-item " id="personal_info">
+                                    <a href="{% url 'agents:personal_info' %}" class="nav-link nav-toggle">
+                                        <i class="fa fa-id-card"></i>
+                                        <span class="title">{% trans 'PERSONAL INFO' %}</span>
+                                        {% if user.get_agent_profile_details.personal_info %}
+                                            <span class="title glyphicon glyphicon-ok"
+                                                  style="color: #41bc2c;font-size: 16px"></span>
+                                        {% else %}
+                                            <span class="title glyphicon glyphicon-exclamation-sign"
+                                                  style="color: #dc302b; font-size: 16px"></span>{% endif %}
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
 
-                        </ul>
-                        <!-- END SIDEBAR MENU -->
-                    </div>  <!-- END tabpane -->
+                     <li class="nav-item " id="personal_info">
+                                    <a href="{% url 'agents:corporate_info' %}" class="nav-link nav-toggle">
+                                    <i class="fa fa-users" aria-hidden="true"></i>
+                                        <span class="title">{% trans 'CORPORATE INFO' %}</span>
+                                        {% if user.get_agent_profile_details.corporate_info %}
+                                            <span class="title glyphicon glyphicon-ok"
+                                                  style="color: #41bc2c;font-size: 16px"></span>
+                                        {% else %}
+                                            <span class="title glyphicon glyphicon-exclamation-sign"
+                                                  style="color: #dc302b; font-size: 16px"></span>{% endif %}
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
 
-                    <div class="tab-pane " id="c"><!--Application Management-->
-                        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
-                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'payments:payment_details' request.user.id %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-credit-card"></i>
+                                        <span class="title">{% trans 'PAYMENTS' %}</span>
+                                        {% if user.get_agent_profile_details.payment %}
+                                            <span class="title glyphicon glyphicon-ok"
+                                                  style="color: #41bc2c;font-size: 16px"></span>{% else %}
+                                            <span class="title glyphicon glyphicon-exclamation-sign"
+                                                  style="color: #dc302b; font-size: 16px"></span>{% endif %}
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
 
+                    <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'agents:attachment' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-copy"></i>
+                                        <span class="title">{% trans 'ATTACHEMENT' %}</span>
+                                        {% if user.get_agent_profile_details.attachment %}
+                                            <span class="title glyphicon glyphicon-ok"
+                                                  style="color: #41bc2c;font-size: 16px"></span>{% else %}
+                                            <span class="title glyphicon glyphicon-exclamation-sign"
+                                                  style="color: #dc302b; font-size: 16px"></span>{% endif %}
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
 
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'student:applicant_declaration' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-pencil"></i>
+                                        <span class="title">{% trans 'DECLARATION' %}</span>
+                                        {% if user.get_student_application.declaration %}
+                                            <span class="title glyphicon glyphicon-ok"
+                                                  style="color: #41bc2c;font-size: 16px"></span>{% else %}
+                                            <span class="title glyphicon glyphicon-exclamation-sign"
+                                                  style="color: #dc302b; font-size: 16px"></span>{% endif %}
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
 
+                    <li class="nav-item " id="acd_qli">
+                                    <a href=""
+                                       class="nav-link nav-toggle">
 
-                        </ul>
-                        <!-- END SIDEBAR MENU -->
-                    </div>  <!-- END tabpane -->
-                    <div class="tab-pane " id="d"><!--Academic-->
-                        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
-                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-
-
-
-                        </ul>
-                        <!-- END SIDEBAR MENU -->
-                    </div>  <!-- END tabpane -->
-
-
-                    <div class="tab-pane " id="e"><!--Accounting -->
-                        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
-                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-
-
-
-                        </ul>
-                        <!-- END SIDEBAR MENU -->
-                    </div>  <!-- END tabpane -->
-
-                    <div class="tab-pane " id="f"><!--Soft Skills Program-->
-                        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
-                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-
-
-
-
-                        </ul>
-                        <!-- END SIDEBAR MENU -->
-                    </div>  <!-- END tabpane -->
-
-                <div class="tab-pane " id="application_program_search">
-                        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
-                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-
-
-
-
-                        </ul>
-                        <!-- END SIDEBAR MENU -->
-                    </div>  <!-- END tabpane -->
-
-
-                    <div class="tab-pane " id="application_progress">
-                        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
-                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-
-
-
-
-                        </ul>
-                        <!-- END SIDEBAR MENU -->
-                    </div>  <!-- END tabpane -->
-
-
-                    <div class="tab-pane " id="offer_status">
-                        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
-                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-
-
-
+                                        <span class="title"></span>
 
 
-
-                        </ul>
-                        <!-- END SIDEBAR MENU -->
-                    </div>  <!-- END tabpane -->
-
-                <div class="tab-pane " id="program_registration">
-                        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
-                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-
-
-
-
-
-
-
+                                        </span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
 
 
                         </ul>
@@ -560,15 +544,21 @@ License: You must have a valid license purchased only from themeforest(the above
                     </div>  <!-- END tabpane -->
 
 
-                <div class="tab-pane " id="matric_card_list">
+
+
+                    <div class="tab-pane" id="application_management_tab">
                         <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
 
+                            <li class="nav-item ">
+                                            <a href="{% url 'partner:approved_application' %}"
+                                               class="nav-link ">{% trans 'AGENT APPLICATION' %}</a>
+                                        </li>
 
-
-
-
-
+                            <li class="nav-item ">
+                                            <a href="{% url 'partner:approved_application' %}"
+                                               class="nav-link ">{% trans 'STUDENT APPLICATION' %}</a>
+                                        </li>
 
 
 
@@ -577,27 +567,6 @@ License: You must have a valid license purchased only from themeforest(the above
                     </div>  <!-- END tabpane -->
 
 
-                 <div class="tab-pane " id="course_registration_list">
-                        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
-                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-
-
-
-                        </ul>
-                        <!-- END SIDEBAR MENU -->
-                    </div>  <!-- END tabpane -->
-
-
-                    <div class="tab-pane " id="payments">
-                        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
-                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-
-
-
-
-                        </ul>
-                        <!-- END SIDEBAR MENU -->
-                    </div>  <!-- END tabpane -->
 
 
                 </div> <!-- tab-content -->
@@ -612,9 +581,8 @@ License: You must have a valid license purchased only from themeforest(the above
             <div class="col-md-12" style="margin-left: 180px;">
                 <div class="tabs-left">
                     <ul class="nav nav-tabs menu" style="border-bottom: none">
-                            <li id="app_anch"><a href="{% url 'accounts:agent_dashboard' %}" >{% trans 'Application Management' %}</a></li>
-
-
+                            <li id="agent_application"><a href="{% url 'agents:personal_info' %}" >{% trans 'AGENT PROFILE' %}</a></li>
+                        <li id="application_management"><a href="{% url 'partner:approved_application' %}" >{% trans 'AGENT APPLICATION MANAGEMENT' %}</a></li>
 
                     </ul>
 
@@ -640,7 +608,7 @@ License: You must have a valid license purchased only from themeforest(the above
 {% endwith %}
 <!-- BEGIN FOOTER -->
 <div class="page-footer">
-    <div class="page-footer-inner"> &nbsp&nbsp&nbsp&nbsp 2018 &copy; NAMA.
+    <div class="page-footer-inner"> &nbsp&nbsp&nbsp&nbsp 2022 &copy; University of Science and Technology.
 
     </div>
     <div class="scroll-to-top">
@@ -744,12 +712,22 @@ License: You must have a valid license purchased only from themeforest(the above
 <script type="text/javascript">
 
 
-    {% if request.resolver_match.url_name == 'agent_dashboard'  or request.resolver_match.url_name == 'approved_application'  %}
+    {% if request.resolver_match.url_name == 'dashboard' or request.resolver_match.url_name == 'personal_info' or request.resolver_match.url_name == 'corporate_info' or request.resolver_match.url_name == 'payment_details' or request.resolver_match.url_name == 'attachment' %}
         {
-            var element = document.getElementById("c");
+            var element = document.getElementById("agent_application_tab");
             element.classList.add("active");
 
-            var element = document.getElementById("app_anch");
+            var element = document.getElementById("agent_application");
+            element.classList.add("active");
+        }
+    {% endif %}
+
+    {%  if request.resolver_match.url_name == 'approved_application'  %}
+        {
+            var element = document.getElementById("application_management_tab");
+            element.classList.add("active");
+
+            var element = document.getElementById("application_management");
             element.classList.add("active");
         }
     {% endif %}

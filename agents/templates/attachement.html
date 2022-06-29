@@ -1,0 +1,690 @@
+{% extends "template_agent_base.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+            $(document).ready(function () {
+
+                  {% if user.get_application %}
+                    {% if user.get_application.is_submitted %}
+                        $('input').prop('disabled', 'true');
+                        $('select').prop('disabled', 'true');
+                        $('label').prop('readonly', 'true');
+                    {% endif %}
+                {% endif %}
+
+
+
+                $("#form_sample_1").submit(function (e) {
+
+
+                    if ($('#photo_doc_required').val() == 'Yes') {
+                        $('#passport_photo_exists').hide();
+                        $('#level_result_document_exists').hide();
+                        $('#transcript_document_exists').hide();
+                        $('#english_test_result_document_exists').hide();
+                        $('#arab_test_result_document_exists').hide();
+                        $('#recommendation_letter_exists').hide();
+                        $('#research_proposal_exists').hide();
+
+                        if (document.getElementById("photo").files.length == 0 && !$('#photo_text').val()) {
+                            $('#photo_exists').show();
+                            return false;
+                        }
+
+                    }
+                    if($('#passport_id_doc_required').val() == 'Yes'){
+                        $('#photo_exists').hide();
+                        $('#level_result_document_exists').hide();
+                        $('#transcript_document_exists').hide();
+                        $('#english_test_result_document_exists').hide();
+                        $('#arab_test_result_document_exists').hide();
+                        $('#recommendation_letter_exists').hide();
+                        $('#research_proposal_exists').hide();
+                         if (document.getElementById("passport_photo").files.length == 0 && !$('#passport_photo_text').val()) {
+                            $('#passport_photo_exists').show();
+                            return false;
+                        }
+                    }
+                    if($('#academic_doc_required').val() == 'Yes'){
+                        $('#photo_exists').hide();
+                        $('#passport_photo_exists').hide();
+                        $('#transcript_document_exists').hide();
+                        $('#english_test_result_document_exists').hide();
+                        $('#arab_test_result_document_exists').hide();
+                        $('#recommendation_letter_exists').hide();
+                        $('#research_proposal_exists').hide();
+                         if (document.getElementById("level_result_document").files.length == 0 && !$('#level_result_document_text').val()) {
+                            $('#level_result_document_exists').show();
+                            return false;
+                        }
+                    }
+
+
+
+                    if($('#transcript_doc_required').val() == 'Yes'){
+                        $('#photo_exists').hide();
+                        $('#passport_photo_exists').hide();
+                        $('#level_result_document_exists').hide();
+                        $('#english_test_result_document_exists').hide();
+                        $('#arab_test_result_document_exists').hide();
+                        $('#recommendation_letter_exists').hide();
+                        $('#research_proposal_exists').hide();
+                         if (document.getElementById("transcript_document").files.length == 0 && !$('#transcript_document_text').val()) {
+                            $('#transcript_document_exists').show();
+                            return false;
+                        }
+                    }
+                    if($('#english_doc_required').val() == 'Yes'){
+                        $('#photo_exists').hide();
+                        $('#passport_photo_exists').hide();
+                        $('#level_result_document_exists').hide();
+                        $('#transcript_document_exists').hide();
+                        $('#arab_test_result_document_exists').hide();
+                        $('#recommendation_letter_exists').hide();
+                        $('#research_proposal_exists').hide();
+                         if (document.getElementById("english_test_result_document").files.length == 0 && !$('#english_test_result_document_text').val()) {
+                            $('#english_test_result_document_exists').show();
+                            return false;
+                        }
+                    }
+                    if($('#arab_doc_required').val() == 'Yes'){
+                        $('#photo_exists').hide();
+                        $('#passport_photo_exists').hide();
+                        $('#level_result_document_exists').hide();
+                        $('#transcript_document_exists').hide();
+                        $('#english_test_result_document_exists').hide();
+                        $('#recommendation_letter_exists').hide();
+                        $('#research_proposal_exists').hide();
+                         if (document.getElementById("arab_test_result_document").files.length == 0 && !$('#arab_test_result_document_text').val()) {
+                            $('#arab_test_result_document_exists').show();
+                            return false;
+                        }
+                    }
+                    if($('#recommendation_doc_required').val() == 'Yes'){
+                        $('#photo_exists').hide();
+                        $('#passport_photo_exists').hide();
+                        $('#level_result_document_exists').hide();
+                        $('#transcript_document_exists').hide();
+                        $('#english_test_result_document_exists').hide();
+                        $('#arab_test_result_document_exists').hide();
+                        $('#research_proposal_exists').hide();
+                         if (document.getElementById("recommendation_letter").files.length == 0 && !$('#recommendation_letter_text').val()) {
+                            $('#recommendation_letter_exists').show();
+                            return false;
+                        }
+                    }
+
+                    if($('#research_proposal_doc_required').val() == 'Yes'){
+                        $('#photo_exists').hide();
+                        $('#passport_photo_exists').hide();
+                        $('#level_result_document_exists').hide();
+                        $('#transcript_document_exists').hide();
+                        $('#english_test_result_document_exists').hide();
+                        $('#arab_test_result_document_exists').hide();
+                        $('#recommendation_letter_exists').hide();
+                         if (document.getElementById("research_proposal").files.length == 0 && !$('#research_proposal_text').val()) {
+                            $('#research_proposal_exists').show();
+                            return false;
+                        }
+                    }
+
+
+
+
+
+                })
+
+
+                $(document).on("click", ".remove_doc", function (e) {
+                    var parent_id = $(this).closest('div').attr('id');
+                    console.log('parent_id'+parent_id);
+                    $('#' + parent_id + ' .emp').val('');
+                });
+
+                $(document).on("click", ".file", function (e) {
+                    $(this).parent('.form-control').next('.file_type').trigger('click');
+                });
+                var _URL = window.URL || window.webkitURL;
+                $('.file_type').change(function (evt) {
+                    var extension = $(this).val().split('.').pop().toLowerCase();
+                    if ((extension == 'jpeg') || (extension == 'jpg')) {
+
+                        var files = !!this.files ? this.files : [];
+                        var maxSizeKB = 66; //Size in KB
+                        var maxSize = maxSizeKB * 1024; //File size is returned in Bytes
+                        if (files[0].size > maxSize) {
+                            alert('Maximum file size must be 66 KB');
+                            location.reload();
+                            return false;
+                        }
+                        var file, img;
+                        if ((file = files[0])) {
+                            img = new Image();
+                            var objectUrl = _URL.createObjectURL(file);
+                            img.onload = function () {
+                                var width = img.naturalWidth,
+                                    height = img.naturalHeight;
+                                _URL.revokeObjectURL(objectUrl);
+                                if (width <= 217 && height <= 280) {
+                                    var file_name = $(this).val().split('\\')[2];
+                                    $(this).prev().children().children('.file_value').val(file_name);
+                                } else {
+                                    alert('Maximum file height and width must be 280px*217px');
+                                    location.reload();
+                                    return false
+
+                                }
+
+                            };
+                            img.src = objectUrl;
+                            var file_name = $(this).val().split('\\')[2];
+                            $(this).prev().children().children('.file_value').val(file_name);
+                        }
+
+
+                    } else {
+                        var file_name = $(this).val().split('\\')[2];
+                        $(this).prev().children().children('.file_value').val(file_name);
+                    }
+
+
+                });
+
+
+                $('#sample_1').dataTable().fnDestroy();
+                $('#sample_1').dataTable({
+                    "aoColumnDefs": [
+                        {'bSortable': false}
+                    ]
+                });
+            });
+        }
+
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'student:student_home' %}">{% trans 'HOME' %}</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span>{% trans 'ATTACHEMENT' %}</span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">{% trans 'Attachment Submission' %}</span>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form action="{% url 'agents:attachment' %}"
+                      id="form_sample_1"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-body">
+                        <div class="row">
+                            <input type="hidden" value="{{ document_recs.0.doc_required|default_if_none:"" }}"
+                                   id="photo_doc_required" name="photo_doc_required">
+                            <div class="">
+                                <label class="col-md-4 control-label">Personal Photo:
+
+                                </label>
+                                <div class="col-md-3" id="parent1">
+                                    {% if attachment_obj.image %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a target="_blank"
+                                                                                      href="{{ attachment_obj.image.url }}"><input
+                                                type="text"
+                                                readonly name="photo_text" id="photo_text"
+                                                class="file_value emp"
+                                                style="cursor: pointer;border: none; width: 50%"
+                                                value="{{ attachment_obj.image }}"></a>
+                                        </label>
+                                    {% else %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" accept="image/png, image/gif, image/jpeg"
+                                                style="width: 50%"
+                                                type='button' value='Choose File:'><a><input type="text"
+                                                                                             readonly
+                                                                                             name="photo_text"
+                                                                                             class="file_value emp"
+                                                                                             style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
+                                    {% endif %}
+                                    <input type="file" style="display: none" class="file_type" accept="image/jpeg,"
+                                           title="Select Photo" id="photo"
+                                           name="photo">
+                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                                          class="remove_doc fa fa-close"></span>
+                                </div>
+
+                            </div>
+
+                            <div class="" style="font-size:20px;">
+
+                                <a data-target="#personal_photo_modal" data-toggle="modal" ><i
+                                        class="fa fa-info-circle" aria-hidden="true"></i></a>
+
+
+                            </div>
+                            <span style="color: red;font-size:13px;display: none;"
+                                  id="photo_exists">Please upload {{ document_recs.0.document_name|default_if_none:"" }}.</span>
+
+
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+                            <div class="">
+                                <input type="hidden" value="{{ document_recs.1.doc_required|default_if_none:"" }}"
+                                       id="passport_id_doc_required" name="passport_id_doc_required">
+                                <label class="col-md-4 control-label">Passport ID:
+
+
+                                </label>
+
+
+                                <div class="col-md-3" id="parent2">
+                                    {% if attachment_obj.passport_image %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a target="_blank"
+                                                                                      href="{{ attachment_obj.passport_image.url }}"><input
+                                                type="text"
+                                                readonly name="passport_photo_text" id="passport_photo_text"
+                                                class="file_value emp"
+                                                style="cursor: pointer;border: none; width: 50%"
+                                                value="{{ attachment_obj.passport_image }}"></a>
+                                        </label>
+                                    {% else %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a><input type="text"
+                                                                                             readonly
+                                                                                             name="passport_photo_text"
+                                                                                             class="file_value emp"
+                                                                                             style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
+                                    {% endif %}
+                                    <input type="file" style="display: none" class="file_type" accept="application/pdf,"
+                                           title="Select Passport ID" id="passport_photo"
+                                           name="passport_photo" class="doc form-control">
+                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                                          class="remove_doc fa fa-close"></span>
+                                </div>
+
+                                <div class="" style="font-size:20px;">
+
+                                    <a data-target="#passport_id_modal" data-toggle="modal"><i
+                                            class="fa fa-info-circle" aria-hidden="true"></i></a>
+
+
+                                </div>
+                            <span style="color: red;font-size:13px;display: none;"
+                                  id="passport_photo_exists">Please upload {{ document_recs.1.document_name|default_if_none:"" }}.</span>
+
+
+                            </div>
+                        </div>
+
+                        <br>
+
+
+                        <div class="row">
+                            <input type="hidden" value="{{ document_recs.2.doc_required|default_if_none:"" }}"
+                                   id="academic_doc_required" name="academic_doc_required">
+                            <div class="">
+                                <label class="col-md-4 control-label">Company Registration:
+
+
+                                </label>
+                                <div class="col-md-3" id="parent3">
+                                    {% if attachment_obj.company_registration %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a target="_blank"
+                                                                                      href="{{ attachment_obj.company_registration.url }}"><input
+                                                type="text"
+                                                readonly name="level_result_document_text" id="level_result_document_text"
+                                                class="file_value emp"
+                                                style="cursor: pointer;border: none; width: 50%"
+                                                value="{{ attachment_obj.company_registration }}"></a>
+                                        </label>
+                                    {% else %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a><input type="text"
+                                                                                             readonly
+                                                                                             name="level_result_document_text"
+                                                                                             class="file_value emp"
+                                                                                             style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
+                                    {% endif %}
+                                    <input type="file" style="display: none" class="file_type" accept="application/pdf,"
+                                           title="Select Academic Certificate" id="company_registration"
+                                           name="company_registration">
+                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                                          class="remove_doc fa fa-close"></span>
+                                </div>
+                                <div class="" style="font-size:20px;">
+
+
+                                    <a data-target="#academic_certificate_modal" data-toggle="modal"><i
+                                            class="fa fa-info-circle" aria-hidden="true"></i></a>
+
+
+                                </div>
+                            <span style="color: red;font-size:13px;display: none;"
+                                  id="level_result_document_exists">Please upload {{ document_recs.2.document_name|default_if_none:"" }}.</span>
+
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <input type="hidden" value="{{ document_recs.3.doc_required|default_if_none:"" }}"
+                                   id="transcript_doc_required" name="transcript_doc_required">
+                            <div class="">
+                                <label class="col-md-4 control-label">License Certificate :
+
+
+                                </label>
+                                <div class="col-md-3" id="parent4">
+                                    {% if attachment_obj.license_certificate %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a  target="_blank"
+                                                href="
+                                                        {{ attachment_obj.license_certificate.url }}"><input
+                                                type="text"
+                                                readonly name="transcript_document_text" id="transcript_document_text"
+                                                class="file_value emp"
+                                                style="cursor: pointer;border: none; width: 50%"
+                                                value="{{ attachment_obj.license_certificate }}"></a>
+                                        </label>
+                                    {% else %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a><input type="text"
+                                                                                             readonly
+                                                                                             name="transcript_document_text"
+                                                                                             class="file_value emp"
+                                                                                             style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
+                                    {% endif %}
+                                    <input type="file" style="display: none" class="file_type" accept="application/pdf,"
+                                           title="Select Transcript" id="license_certificate"
+                                           name="license_certificate">
+                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                                          class="remove_doc fa fa-close"></span>
+                                </div>
+
+                                <div class="" style="font-size:20px;">
+
+
+                                    <a data-target="#transcript_modal" data-toggle="modal"><i
+                                            class="fa fa-info-circle" aria-hidden="true"></i></a>
+
+
+                                </div>
+                            <span style="color: red;font-size:13px;display: none;"
+                                  id="transcript_document_exists">Please upload {{ document_recs.3.document_name|default_if_none:"" }}.</span>
+
+                            </div>
+                        </div>
+                        <hr>
+
+
+
+
+
+                        <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="save" style="margin-left: 70%"
+                                        onclick="window.location='{% url 'payments:payment_details' request.user.id %}'">
+                                    {% trans 'Back' %}
+                                </button>
+
+
+                                         <button type="submit" class="btn green" id="save" style="">{% trans 'Save/Next' %}
+
+                                    </button>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="personal_photo_modal" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                    <input type="hidden" id="year_delete_id" name="year_delete_id">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h5 class="modal-title" style="color: #2a015e; text-align: center"><b>File Upload Instructions</b></h5>
+                    </div>
+                    <div class="modal-body">
+                        {% for rec in document_recs.0.notes.all %}
+                        <p style="margin: 0px 0 !important;">{{ rec.note|default_if_none:"" }}</p>
+                        {% endfor %}
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancel_model" data-dismiss="modal" class="btn dark btn-outline">
+                            Cancel
+                        </button>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="passport_id_modal" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                    <input type="hidden" id="year_delete_id" name="year_delete_id">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h5 class="modal-title" style="color: #2a015e; text-align: center"><b>File Upload Instructions</b></h5>
+                    </div>
+                    <div class="modal-body">
+                        {% for rec in document_recs.1.notes.all %}
+                        <p style="margin: 0px 0 !important;">{{ rec.note|default_if_none:"" }}</p>
+                        {% endfor %}
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancel_model" data-dismiss="modal" class="btn dark btn-outline">
+                            Cancel
+                        </button>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="academic_certificate_modal" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                    <input type="hidden" id="year_delete_id" name="year_delete_id">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h5 class="modal-title" style="color: #2a015e; text-align: center"><b>File Upload Instructions</b></h5>
+                    </div>
+                    <div class="modal-body">
+                        {% for rec in document_recs.2.notes.all %}
+                        <p style="margin: 0px 0 !important;">{{ rec.note|default_if_none:"" }}</p>
+                        {% endfor %}
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancel_model" data-dismiss="modal" class="btn dark btn-outline">
+                            Cancel
+                        </button>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="transcript_modal" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                    <input type="hidden" id="year_delete_id" name="year_delete_id">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h5 class="modal-title" style="color: #2a015e; text-align: center"><b>File Upload Instructions</b></h5>
+                    </div>
+                    <div class="modal-body">
+                        {% for rec in document_recs.3.notes.all %}
+                        <p style="margin: 0px 0 !important;">{{ rec.note|default_if_none:"" }}</p>
+                        {% endfor %}
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancel_model" data-dismiss="modal" class="btn dark btn-outline">
+                            Cancel
+                        </button>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="english_language_proficiency_modal" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                    <input type="hidden" id="year_delete_id" name="year_delete_id">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h5 class="modal-title" style="color: #2a015e; text-align: center"><b>File Upload Instructions</b></h5>
+                    </div>
+                    <div class="modal-body">
+                        {% for rec in document_recs.4.notes.all %}
+                        <p style="margin: 0px 0 !important;">{{ rec.note|default_if_none:"" }}</p>
+                        {% endfor %}
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancel_model" data-dismiss="modal" class="btn dark btn-outline">
+                            Cancel
+                        </button>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="araba_language_proficiency_modal" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                    <input type="hidden" id="year_delete_id" name="year_delete_id">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h5 class="modal-title" style="color: #2a015e; text-align: center"><b>File Upload Instructions</b></h5>
+                    </div>
+                    <div class="modal-body">
+                        {% for rec in document_recs.5.notes.all %}
+                        <p style="margin: 0px 0 !important;">{{ rec.note|default_if_none:"" }}</p>
+                        {% endfor %}
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancel_model" data-dismiss="modal" class="btn dark btn-outline">
+                            Cancel
+                        </button>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="recommendation_letter_modal" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                    <input type="hidden" id="year_delete_id" name="year_delete_id">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h5 class="modal-title" style="color: #2a015e; text-align: center"><b>File Upload Instructions</b></h5>
+                    </div>
+                    <div class="modal-body">
+                        {% for rec in document_recs.6.notes.all %}
+                        <p style="margin: 0px 0 !important;">{{ rec.note|default_if_none:"" }}</p>
+                        {% endfor %}
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancel_model" data-dismiss="modal" class="btn dark btn-outline">
+                            Cancel
+                        </button>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="research_proposal_modal" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                    <input type="hidden" id="year_delete_id" name="year_delete_id">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h5 class="modal-title" style="color: #2a015e; text-align: center"><b>File Upload Instructions</b></h5>
+                    </div>
+                    <div class="modal-body">
+                        {% for rec in document_recs.7.notes.all %}
+                        <p style="margin: 0px 0 !important;">{{ rec.note|default_if_none:"" }}</p>
+                        {% endfor %}
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancel_model" data-dismiss="modal" class="btn dark btn-outline">
+                            Cancel
+                        </button>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}

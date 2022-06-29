@@ -55,6 +55,8 @@ INSTALLED_APPS = [
     'payments.apps.PaymentsConfig',
     'rest_api',
     'rest_framework',
+    'agents.apps.AgentsConfig',
+
 ]
 
 MIDDLEWARE = [
