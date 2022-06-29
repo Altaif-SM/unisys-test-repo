@@ -276,12 +276,14 @@ class User(AbstractUser):
                 form_vals['corporate_info'] = True if agent_profile_details.corporate_agent_rel.exists() else False
                 form_vals['payment'] = True if agent_profile_details.payment_agent_rel.exists() else False
                 form_vals['attachment'] = True if agent_profile_details.attachement_agent_rel.exists() else False
+                form_vals['is_submitted'] = True if agent_profile_details.is_submitted else False
                 return form_vals
             except:
                 form_vals['personal_info'] = False
                 form_vals['corporate_info'] = False
                 form_vals['payment'] = False
                 form_vals['attachment'] = False
+                form_vals['is_submitted'] = False
                 return form_vals
         else:
             return None

@@ -513,11 +513,11 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </li>
 
                                 <li class="nav-item " id="acd_qli">
-                                    <a href="{% url 'student:applicant_declaration' %}"
+                                    <a href="{% url 'agents:declaration' %}"
                                        class="nav-link nav-toggle">
                                         <i class="glyphicon glyphicon-pencil"></i>
                                         <span class="title">{% trans 'DECLARATION' %}</span>
-                                        {% if user.get_student_application.declaration %}
+                                        {% if user.get_agent_profile_details.is_submitted %}
                                             <span class="title glyphicon glyphicon-ok"
                                                   style="color: #41bc2c;font-size: 16px"></span>{% else %}
                                             <span class="title glyphicon glyphicon-exclamation-sign"
@@ -712,7 +712,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <script type="text/javascript">
 
 
-    {% if request.resolver_match.url_name == 'dashboard' or request.resolver_match.url_name == 'personal_info' or request.resolver_match.url_name == 'corporate_info' or request.resolver_match.url_name == 'payment_details' or request.resolver_match.url_name == 'attachment' %}
+    {% if request.resolver_match.url_name == 'dashboard' or request.resolver_match.url_name == 'personal_info' or request.resolver_match.url_name == 'corporate_info' or request.resolver_match.url_name == 'payment_details' or request.resolver_match.url_name == 'attachment' or request.resolver_match.url_name == 'declaration' %}
         {
             var element = document.getElementById("agent_application_tab");
             element.classList.add("active");

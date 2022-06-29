@@ -149,10 +149,11 @@ def attachment(request):
                 attachment_obj.save()
 
             messages.success(request, "Attachment submitted successfully.")
-
+            return redirect('/agents/declaration/')
         except Exception as e:
             messages.warning(request, "Form have some error" + str(e))
         return redirect('/agents/attachment/')
+
     else:
         attachment_obj = None
         if AgentAttachementDetails.objects.filter(agent_profile_id = agent_obj.id).exists():
@@ -162,5 +163,20 @@ def attachment(request):
             'agent_obj':agent_obj
         }
         return render(request,'attachement.html',context)
+
+def declaration(request):
+    agent_obj = AgentIDDetails.objects.get(user=request.user)
+    if request.method == 'POST':
+        try:
+            AgentIDDetails.objects.filter(id = agent_obj.id).update(is_submitted = True)
+            messages.success(request, "Record saved")
+            return redirect('/agents/declaration/')
+        except:
+            return redirect('/agents/declaration/')
+    else:
+        context = {
+            'agent_obj':agent_obj
+        }
+        return render(request,'declaration.html',context)
 
 

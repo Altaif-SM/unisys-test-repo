@@ -935,6 +935,7 @@ class AgentIDDetails(BaseModel):
     address_line_1 = models.TextField(blank=True, null=True)
     address_line_2 = models.TextField(blank=True, null=True)
     city = models.CharField(max_length=150, blank=True, null=True)
+    is_submitted = models.BooleanField(default=False)
 
 
 
