@@ -155,8 +155,6 @@
 
 
                 $('#btn_recruiter').click(function () {
-                    var incomplete_description = $('#incomplete_description').val();
-                    console.log("incomplete_description"+incomplete_description);
                     var favorite = []
                     var checked = $('#example').find('input[name="check"]:checked').length;
                     if (!checked)
@@ -167,15 +165,6 @@
                             favorite.push($(this).val());
                         });
 
-                        if( !$('#incomplete_description').val() ) {
-
-                             $('#incomplete_description').css("border", "red solid 1px");
-                             return false;
-
-                        }
-                        else{
-                            $('#incomplete_description').css("border", "#c2cad8 solid 1px");
-                        }
                         $("#check_ids").val(JSON.stringify(favorite));
                         $("#recruiter_type").val('REJECTED');
                         $("#reject_comment").val($('#incomplete_description').val());

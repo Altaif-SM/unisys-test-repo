@@ -207,11 +207,18 @@ def recruiter_approved_application(request):
                     if recruiter_type == 'APPROVED':
                         agent_obj.application_status = 'APPROVED'
                         agent_obj.save()
+                        AgentProfileHistoryDetails.objects.create(agent_id=agent_obj.id,
+                                                                  status='Application Submitted',
+                                                                  remark='Hi, ' + agent_obj.user.first_name + ' ' + agent_obj.user.last_name + ' your application is APPROVED by AGENT RECRUITER.')
+
                         messages.success(request,agent_obj.user.first_name.title() + " application status changed.")
                     elif recruiter_type == 'REJECTED':
                         agent_obj.application_status = 'REJECTED'
                         agent_obj.reject_comment = reject_comment
                         agent_obj.save()
+                        AgentProfileHistoryDetails.objects.create(agent_id=agent_obj.id,
+                                                                  status='Application Submitted',
+                                                                  remark='Hi, ' + agent_obj.user.first_name + ' ' + agent_obj.user.last_name + ' your application is REJECTED by AGENT RECRUITER.')
                         messages.success(request, agent_obj.user.first_name.title() + " application status changed.")
         except Exception as e:
             messages.warning(request, "Form have some error" + str(e))
