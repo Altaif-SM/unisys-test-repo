@@ -10,12 +10,10 @@
         window.onload = function () {
             $(document).ready(function () {
 
-                  {% if user.get_application %}
-                    {% if user.get_application.is_submitted %}
+                    {% if agent_obj.is_submitted %}
                         $('input').prop('disabled', 'true');
                         $('select').prop('disabled', 'true');
                         $('label').prop('readonly', 'true');
-                    {% endif %}
                 {% endif %}
 
 
@@ -472,23 +470,24 @@
                         <hr>
 
 
-
-
-
-                        <div class="row">
+                    <div class="row">
                             <div class="col-md-offset-5 col-md-7">
-                                <button type="button" class="btn blue" id="save" style="margin-left: 70%"
-                                        onclick="window.location='{% url 'payments:payment_details' request.user.id %}'">
-                                    {% trans 'Back' %}
+                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                                        onclick="window.location='{% url 'payments:payment_details' request.user.id %}'">{% trans 'Back' %}
                                 </button>
 
 
-                                         <button type="submit" class="btn green" id="save" style="">{% trans 'Save/Next' %}
-
-                                    </button>
-
+                                    {% if not agent_obj.is_submitted %}
+                                        <button type="submit" class="btn green"
+                                                id="save">{% trans 'Save/Next' %}</button>
+                                    {% else %}
+                                        <button type="button"
+                                                onclick="window.location='{% url "agents:declaration" %}'"
+                                                class="btn green" id="save">{% trans 'Next' %}</button>
+                                    {% endif %}
                             </div>
                         </div>
+
 
 
                     </div>

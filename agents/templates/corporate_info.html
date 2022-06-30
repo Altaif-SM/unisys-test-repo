@@ -9,13 +9,12 @@
     <script>
         window.onload = function () {
             $(document).ready(function () {
-                {% if user.get_application %}
-                    {% if user.get_application.is_submitted %}
+                    {% if agent_obj.is_submitted %}
                         $('input').prop('disabled', 'true');
                         $('select').prop('disabled', 'true');
+                        $('textarea').prop('disabled', 'true');
                         $('label').prop('readonly', 'true');
                     {% endif %}
-                {% endif %}
             });
         }
         window.setTimeout(function () {
@@ -174,17 +173,25 @@
                     </div>
                     <hr>
 
-                        <div class="row">
+
+                    <div class="row">
                             <div class="col-md-offset-5 col-md-7">
                                 <button type="button" class="btn blue" id="back" style="margin-left: 70%"
                                         onclick="window.location='{% url "agents:personal_info" %}'">{% trans 'Back' %}
                                 </button>
 
 
+                                    {% if not agent_obj.is_submitted %}
                                         <button type="submit" class="btn green"
                                                 id="save">{% trans 'Save/Next' %}</button>
+                                    {% else %}
+                                        <button type="button"
+                                                onclick="window.location='{% url 'payments:payment_details' request.user.id %}'"
+                                                class="btn green" id="save">{% trans 'Next' %}</button>
+                                    {% endif %}
                             </div>
                         </div>
+
 
                    
                     </div>

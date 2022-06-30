@@ -9,12 +9,10 @@
     <script>
         window.onload = function () {
             $(document).ready(function () {
-                {% if user.get_application %}
-                    {% if user.get_application.is_submitted %}
+                {% if agent_obj.is_submitted %}
                         $('input').prop('disabled', 'true');
                         $('select').prop('disabled', 'true');
                         $('label').prop('readonly', 'true');
-                    {% endif %}
                 {% endif %}
             });
         }
@@ -267,10 +265,11 @@
                             <div class="col-md-offset-10 col-md12">
 
 
-                                    {% if not application_obj.is_submitted %}
+                                    {% if not agent_obj.is_submitted %}
                                         <button type="submit" class="btn green" id="next" style="float: left">{% trans 'Save/Next' %}</button>
                                     {% else %}
-                                      <button type="button" onClick="location.href='{% url 'student:applicant_intake_info' %}'" class="btn green" id="next" style="float: left">Next</button>
+
+                                      <button type="button" onClick="location.href='{% url 'agents:corporate_info' %}'" class="btn green" id="next" style="float: left">Next</button>
                                 {% endif %}
                             </div>
                         </div>
