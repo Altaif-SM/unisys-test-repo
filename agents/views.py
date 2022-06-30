@@ -19,7 +19,12 @@ import cgi, html
 cgi.escape = html.escape
 
 def dashboard(request):
-    return render(request, 'agent_dashboard.html')
+    agent_obj = AgentIDDetails.objects.get(user=request.user)
+    history_recs = AgentProfileHistoryDetails.objects.filter(agent_id=agent_obj.id)
+    context = {
+        'history_recs':history_recs
+    }
+    return render(request, 'agent_dashboard.html',context)
 
 # Create your views here.
 def personal_info(request):
@@ -169,8 +174,12 @@ def declaration(request):
     if request.method == 'POST':
         try:
             AgentIDDetails.objects.filter(id = agent_obj.id).update(is_submitted = True)
+            AgentProfileHistoryDetails.objects.create(agent_id=agent_obj.id,
+                                                     status='Application Submitted',
+                                                     remark='Your application is submitted and Agent Recruiter  will be notified on further updates regarding your applications.')
+
             messages.success(request, "Record saved")
-            return redirect('/agents/declaration/')
+            return redirect('/agents/dashboard/')
         except:
             return redirect('/agents/declaration/')
     else:

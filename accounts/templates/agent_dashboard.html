@@ -34,23 +34,64 @@
     <div class="portlet light portlet-fit portlet-form ">
         <div class="portlet-title">
             <div class="caption">
-                <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase">Dashboard</span>
+                <i class="icon-settings font-blue-steel"></i>
+                <span class="caption-subject font-blue-steel bold uppercase">Recent Activities</span>
             </div>
         </div>
+        <div class="row">
+				<div class="col-md-12 col-sm-12">
+					<div class="portlet light ">
+						<div class="portlet-body">
+							<div class="scroller" style="height: 400px;" data-always-visible="1" data-rail-visible="0">
+								<ul class="feeds">
+                                    {% for rec in history_recs %}
+									<li>
+										<div class="col1">
+											<div class="cont">
+												<div class="cont-col1">
+													<div class="label label-sm label-info">
+														<i class="fa fa-check"></i>
+													</div>
+												</div>
+												<div class="cont-col2">
+													<div class="desc">
+														 {{ rec.remark|default_if_none:"" }}
 
-        <div class="portlet-body">
-            <div class="form-body">
-                 <h3 style="color: darkred; text-align: center;font-size: 21px"><b>{% trans 'Welcome' %}<span
-                        style="color: #0c203a"> {{ request.user.first_name|title }} {{ request.user.last_name|title }}</span>. <br><br>
+														</span>
+													</div>
+												</div>
+											</div>
+										</div>
+                                        <div class="col2">
+											<div class="date">
+												 {{ rec.last_updated|date:"d-m-y" }}
+											</div>
+										</div>
+									</li>
+                                    {% endfor %}
 
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 
-
-
-                </b></h3>
-            </div>
-        </div>
-        <br><br>
+{#        <div class="portlet-body">#}
+{#            <div class="form-body">#}
+{#                 <h3 style="color: darkred; text-align: center;font-size: 21px"><b>{% trans 'Welcome' %}<span#}
+{#                        style="color: #0c203a"> {{ request.user.first_name|title }} {{ request.user.last_name|title }}</span>. <br><br>#}
+{##}
+{##}
+{##}
+{##}
+{#                </b></h3>#}
+{##}
+{##}
+{##}
+{#            </div>#}
+{#        </div>#}
+{#        <br><br>#}
 
     </div>
 {% endblock %}

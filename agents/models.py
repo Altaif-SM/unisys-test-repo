@@ -26,3 +26,13 @@ class AgentAttachementDetails(BaseModel):
     agent_profile = models.ForeignKey('masters.AgentIDDetails', null=True, related_name='attachement_agent_rel',
                                       on_delete=models.SET_NULL)
 
+
+
+class AgentProfileHistoryDetails(BaseModel):
+    status = models.CharField(max_length=150, blank=True, null=True)
+    remark = models.TextField(blank=True, null=True)
+    agent = models.ForeignKey('masters.AgentIDDetails', null=True, related_name='agent_history_rel',
+                                     on_delete=models.SET_NULL)
+
+    class Meta:
+        ordering = ('-id',)
