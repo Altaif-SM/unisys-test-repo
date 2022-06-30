@@ -51,6 +51,7 @@ class User(AbstractUser):
     PROGRAM = 'Program'
     SUPERVISOR = 'Supervisor'
     AGENT = 'Agent'
+    AGENT_RECRUITER = 'Agent Recruiter'
 
 
     first_name = models.CharField(max_length=256, blank=True, null=True)
@@ -173,6 +174,9 @@ class User(AbstractUser):
 
     def is_agent(self):
         return True if self.role.all().filter(name__in=[self.AGENT]).exists() else False
+
+    def is_agent_recruiter(self):
+        return True if self.role.all().filter(name__in=[self.AGENT_RECRUITER]).exists() else False
 
     @property
     def get_user_permissions(self):

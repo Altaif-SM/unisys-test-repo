@@ -1445,3 +1445,83 @@ def edit_agent(request, agent_id=None):
         return render(request, "agent_details.html",context)
 
 
+def agent_recruiter_settings(request):
+    context = {
+        'agent_recruiter_recs': User.objects.filter(role__name = 'Agent Recruiter')
+    }
+    return render(request, 'agent_recruiter_settings.html',context)
+
+
+def add_agent_recruiter(request):
+    if request.method == 'POST':
+        try:
+            email = request.POST.get('email', None)
+            country = request.POST.get('country', None)
+            role = request.POST.get('role', None)
+            password = request.POST.get('password', None)
+            address = request.POST.get('address', None)
+            status = request.POST.get('status')
+            if status == 'on':
+                status = True
+            else:
+                status = False
+            if User.objects.filter(email=email).exists():
+                messages.warning(request, "Email already exists.")
+                return redirect('/accounts/agent_recruiter_settings/')
+
+            user_obj = User.objects.create(email=email, username=email, password=make_password(password), is_active=status)
+            user_obj.role.add(UserRole.objects.get(name=role))
+            country = CountryDetails.objects.get(id=country)
+            address = AddressDetails.objects.create(country=country, residential_address=address)
+            user_obj.address = address
+            user_obj.save()
+            messages.success(request, "Record saved.")
+            return redirect('/accounts/agent_recruiter_settings/')
+        except Exception as e:
+            messages.warning(request, str(e.args[0]))
+            return redirect('/accounts/agent_recruiter_settings/')
+    else:
+        context = {
+            'country_list': CountryDetails.objects.all(),
+        }
+        return render(request, 'add_agent_recruiter.html',context)
+
+
+def edit_agent_recruiter(request, recruiter_id=None):
+    user_obj = User.objects.get(id=recruiter_id)
+    if request.method == 'POST':
+        try:
+            email = request.POST.get('email', None)
+            country = request.POST.get('country', None)
+            role = request.POST.get('role', None)
+            password = request.POST.get('password', None)
+            address = request.POST.get('address', None)
+            status = request.POST.get('status')
+            if status == 'on':
+                status = True
+            else:
+                status = False
+            if User.objects.filter(email=email).exclude(id = user_obj.id).exists():
+                messages.warning(request, "Email already exists.")
+                return redirect('/accounts/agent_recruiter_settings/')
+            user_obj.email = email
+            user_obj.username = email
+            user_obj.is_active = status
+            user_obj.email = email
+            if password:
+                user_obj.set_password(password)
+            country = CountryDetails.objects.get(id=country)
+            address = AddressDetails.objects.create(country=country, residential_address=address)
+            user_obj.address = address
+            user_obj.save()
+            messages.success(request, "Record saved.")
+            return redirect('/accounts/agent_recruiter_settings/')
+        except Exception as e:
+            messages.warning(request, str(e.args[0]))
+            return redirect('/accounts/agent_recruiter_settings/')
+    else:
+        context = {
+            'country_list': CountryDetails.objects.all(),
+            'user_obj': user_obj,
+        }
+        return render(request, 'edit_agent_recruiter.html', context)
