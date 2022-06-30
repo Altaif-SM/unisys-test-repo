@@ -43,6 +43,8 @@
                     <a href="{% url 'donor:template_donor_dashboard' %}">Home</a>
                 {% elif user.is_partner %}
                     <a href="{% url 'accounts:home' %}">Home</a>
+                  {% elif user.is_agent %}
+                    <a href="{% url 'agents:dashboard' %}">HOME</a>
                 {% else %}
                     <a href="{% url 'accounts:home' %}">Home</a>
                 {% endif %}
@@ -63,17 +65,27 @@
                     <a href="{% url 'partner:template_approving_application' %}">{% trans 'Approving Applications' %}</a>
                     <i class="fa fa-angle-right"></i>
                 </li>
+             {% elif user.is_agent %}
+
+
             {% else %}
                 <li>
                     <a href="{% url 'partner:template_approving_application' %}">{% trans 'Applicant Details' %}</a>
                     <i class="fa fa-angle-right"></i>
                 </li>
             {% endif %}
+         {% if user.is_agent %}
 
             <li>
+                <span> {% trans 'APPLICATIONS DETAILS' %}</span>
+
+            </li>
+        {% else %}
+             <li>
                 <span> {% trans 'Applications Details' %}</span>
 
             </li>
+        {% endif %}
         </ul>
     </div>
 

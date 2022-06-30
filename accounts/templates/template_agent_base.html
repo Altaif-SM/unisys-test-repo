@@ -551,14 +551,33 @@ License: You must have a valid license purchased only from themeforest(the above
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
 
                             <li class="nav-item ">
-                                            <a href="{% url 'partner:approved_application' %}"
-                                               class="nav-link ">{% trans 'AGENT APPLICATION' %}</a>
+
+
+                                <a href="{% url 'partner:approved_application' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="fa fa-tasks"></i>
+                                        <span class="title">{% trans 'AGENT APPLICATION' %}</span>
+                                    </a>
+
+
                                         </li>
 
-                            <li class="nav-item ">
-                                            <a href="{% url 'partner:approved_application' %}"
-                                               class="nav-link ">{% trans 'STUDENT APPLICATION' %}</a>
-                                        </li>
+                            <li class="nav-item " id="acd_qli">
+                                    <a href=""
+                                       class="nav-link nav-toggle">
+
+                                        <span class="title"></span>
+
+
+                                        </span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+
+{#                            <li class="nav-item ">#}
+{#                                            <a href="{% url 'partner:approved_application' %}"#}
+{#                                               class="nav-link ">{% trans 'STUDENT APPLICATION' %}</a>#}
+{#                                        </li>#}
 
 
 
@@ -722,7 +741,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-    {%  if request.resolver_match.url_name == 'approved_application'  %}
+    {%  if request.resolver_match.url_name == 'approved_application'  or request.resolver_match.url_name == 'template_applicant_all_details' %}
         {
             var element = document.getElementById("application_management_tab");
             element.classList.add("active");
