@@ -171,12 +171,14 @@ def attachment(request):
 
 def declaration(request):
     agent_obj = AgentIDDetails.objects.get(user=request.user)
+    first_name = agent_obj.user.first_name
+    last_name = agent_obj.user.last_name
     if request.method == 'POST':
         try:
             AgentIDDetails.objects.filter(id = agent_obj.id).update(is_submitted = True)
             AgentProfileHistoryDetails.objects.create(agent_id=agent_obj.id,
                                                      status='Application Submitted',
-                                                     remark='Your application is submitted and Agent Recruiter  will be notified on further updates regarding your applications.')
+                                                     remark='Hi, ' + first_name + ' ' + last_name + ' your application is submitted and AGENT RECRUITER  will be notified on further updates regarding your applications.')
 
             messages.success(request, "Record saved")
             return redirect('/agents/dashboard/')
@@ -189,3 +191,33 @@ def declaration(request):
         return render(request,'declaration.html',context)
 
 
+def recruiter_dashboard(request):
+    return render(request, 'recruiter_dashboard.html')
+
+
+def recruiter_approved_application(request):
+    if request.method == 'POST':
+        try:
+            check_ids = json.loads(request.POST.get('check_ids'))
+            recruiter_type = request.POST.get('recruiter_type',None)
+            reject_comment = request.POST.get('reject_comment',None)
+            for agent_id in check_ids:
+                if request.user.is_agent_recruiter():
+                    agent_obj = AgentIDDetails.objects.get(id=agent_id)
+                    if recruiter_type == 'APPROVED':
+                        agent_obj.application_status = 'APPROVED'
+                        agent_obj.save()
+                        messages.success(request,agent_obj.user.first_name.title() + " application status changed.")
+                    elif recruiter_type == 'REJECTED':
+                        agent_obj.application_status = 'REJECTED'
+                        agent_obj.reject_comment = reject_comment
+                        agent_obj.save()
+                        messages.success(request, agent_obj.user.first_name.title() + " application status changed.")
+        except Exception as e:
+            messages.warning(request, "Form have some error" + str(e))
+        return redirect('/agents/recruiter_approved_application/')
+    else:
+        context = {
+            'agent_recs':AgentIDDetails.objects.filter(is_submitted= True)
+        }
+        return render(request, 'recruiter_approved_application.html', context)

@@ -1,0 +1,83 @@
+{% extends "template_recruiter_base.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+{% endblock %}
+
+{% block ScriptBlock %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'student:student_home' %}">{% trans 'HOME' %}</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span>{% trans 'DASHBOARD' %}</span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-blue-steel"></i>
+                <span class="caption-subject font-blue-steel bold uppercase">Recent Activities</span>
+            </div>
+        </div>
+        <div class="row">
+				<div class="col-md-12 col-sm-12">
+					<div class="portlet light ">
+						<div class="portlet-body">
+							<div class="scroller" style="height: 400px;" data-always-visible="1" data-rail-visible="0">
+								<ul class="feeds">
+                                    {% for rec in history_recs %}
+									<li>
+										<div class="col1">
+											<div class="cont">
+												<div class="cont-col1">
+													<div class="label label-sm label-info">
+														<i class="fa fa-bell-o"></i>
+													</div>
+												</div>
+												<div class="cont-col2">
+													<div class="desc">
+														 {{ rec.remark|default_if_none:"" }}
+
+														</span>
+													</div>
+												</div>
+											</div>
+										</div>
+                                        <div class="col2">
+											<div class="date">
+												 {{ rec.last_updated|date:"d-m-y" }}
+											</div>
+										</div>
+									</li>
+                                    {% endfor %}
+
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+{#        <br><br>#}
+
+    </div>
+{% endblock %}

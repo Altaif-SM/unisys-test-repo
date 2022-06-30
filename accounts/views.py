@@ -662,6 +662,8 @@ def change_password(request):
                 context['message'] = "Invalid Current Password"
                 if request.user.is_agent():
                     context['my_template'] = 'template_agent_base.html'
+                elif request.user.is_agent_recruiter():
+                    context['my_template'] = 'template_recruiter_base.html'
                 else:
                     context['my_template'] = 'template_base_page.html'
                 return render(request, 'template_change_password.html', context)
@@ -705,6 +707,8 @@ def change_password(request):
             ChangePasswordForm(data=request.GET)
             if request.user.is_agent():
                 context['my_template'] = 'template_agent_base.html'
+            elif request.user.is_agent_recruiter():
+                context['my_template'] = 'template_recruiter_base.html'
             else:
                 context['my_template'] = 'template_base_page.html'
             return render(request, 'template_change_password.html', context)
@@ -715,6 +719,8 @@ def change_password(request):
         context['form'] = form
         if request.user.is_agent():
             context['my_template'] = 'template_agent_base.html'
+        elif request.user.is_agent_recruiter():
+            context['my_template'] = 'template_recruiter_base.html'
         else:
             context['my_template'] = 'template_base_page.html'
         return render(request, 'template_change_password.html', context)

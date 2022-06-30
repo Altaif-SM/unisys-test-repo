@@ -351,6 +351,7 @@ class User(AbstractUser):
     ACCOUNTANT_DASHBOARD = '/accounts/home/'
     ADMINISTRATOR_DASHBOARD = '/partner/template_approving_application/'
     AGENT_DASHBOARD = '/agents/dashboard/'
+    AGENT_RECRUITER_DASHBOARD = '/agents/recruiter_dashboard/'
 
 
     def get_dashboard_path(self):
@@ -378,4 +379,6 @@ class User(AbstractUser):
             dashboard_path = User.ADMINISTRATOR_DASHBOARD
         elif self.role.get().name == User.AGENT:
             dashboard_path = User.AGENT_DASHBOARD
+        elif self.role.get().name == User.AGENT_RECRUITER:
+            dashboard_path = User.AGENT_RECRUITER_DASHBOARD
         return dashboard_path
