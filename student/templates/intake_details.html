@@ -62,6 +62,16 @@
 
             $(document).ready(function () {
 
+                {% if application_obj.program_mode.study_type == 'Research' %}
+                    $('#study_level_2').prop('required',false);
+                    $('#faculty_2').prop('required',false);
+                    $('#program_2').prop('required',false);
+                    $('#study_level_3').prop('required',false);
+                    $('#faculty_3').prop('required',false);
+                    $('#program_3').prop('required',false);
+
+                {% endif %}
+
 
 
 
@@ -1358,7 +1368,7 @@
                 }
                  var study_mode_value = $('#study_level :selected').text();
                  if(study_mode_value == 'Research'){
-                     $('#supervisor').prop('required',true);
+                     $('#supervisor').prop('required',false);
 
                  }else{
                      $('#supervisor').prop('required',false);
@@ -1379,7 +1389,7 @@
                         $('.second_third_choice').hide();
                         $('.research_details').show();
 
-                        $('#supervisor').prop('required',true);
+                        $('#supervisor').prop('required',false);
 
                         $('#study_level_2').prop('required',false);
                         $('#faculty_2').prop('required',false);
@@ -2769,10 +2779,9 @@
                         <br>
                         <div class="row research_mode">
                             <div class="">
-                                <label class="col-md-2 control-label">{% trans 'Supervisor' %}:<span
-                                        style="color: red">*</span></label>
+                                <label class="col-md-2 control-label">{% trans 'Supervisor' %}:</label>
                                 <div class="col-md-4">
-                                    <select id='supervisor' title="Select Supervisor" name="supervisor" required
+                                    <select id='supervisor' title="Select Supervisor" name="supervisor"
                                             class="form-control">
                                         {% if research_details.supervisor %}
                                             <option style="display:none" selected="selected"
@@ -2889,10 +2898,9 @@
 
                         <div class="row research_mode">
                             <div class="">
-                                <label class="col-md-2 control-label">{% trans 'Supervisor' %}:<span
-                                        style="color: red">*</span></label>
+                                <label class="col-md-2 control-label">{% trans 'Supervisor' %}:</label>
                                 <div class="col-md-4">
-                                    <select id='supervisor' title="Select Supervisor" name="supervisor" required
+                                    <select id='supervisor' title="Select Supervisor" name="supervisor"
                                             class="form-control">
                                         {% if research_details.supervisor %}
                                             <option style="display:none" selected="selected"
