@@ -33,6 +33,8 @@ class AgentProfileHistoryDetails(BaseModel):
     remark = models.TextField(blank=True, null=True)
     agent = models.ForeignKey('masters.AgentIDDetails', null=True, related_name='agent_history_rel',
                                      on_delete=models.SET_NULL)
+    agent_recruiter = models.ForeignKey('accounts.User', null=True, related_name='agent_recruiter_user_rel',
+                              on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ('-id',)

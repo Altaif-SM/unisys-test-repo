@@ -192,7 +192,11 @@ def declaration(request):
 
 
 def recruiter_dashboard(request):
-    return render(request, 'recruiter_dashboard.html')
+    history_recs = AgentProfileHistoryDetails.objects.filter(agent_recruiter_id = request.user.id)
+    context = {
+        'history_recs': history_recs
+    }
+    return render(request, 'recruiter_dashboard.html',context)
 
 
 def recruiter_approved_application(request):
@@ -208,8 +212,13 @@ def recruiter_approved_application(request):
                         agent_obj.application_status = 'APPROVED'
                         agent_obj.save()
                         AgentProfileHistoryDetails.objects.create(agent_id=agent_obj.id,
-                                                                  status='Application Submitted',
-                                                                  remark='Hi, ' + agent_obj.user.first_name + ' ' + agent_obj.user.last_name + ' your application is APPROVED by AGENT RECRUITER.')
+                                                                  status=recruiter_type,
+                                                                  remark='Hi, ' + agent_obj.user.first_name + ' ' + agent_obj.user.last_name + ' your application has been APPROVED by AGENT RECRUITER.')
+
+                        AgentProfileHistoryDetails.objects.create(agent_recruiter_id=request.user.id,
+                                                                  status=recruiter_type,
+                                                                  remark=agent_obj.user.first_name + ' ' + agent_obj.user.last_name + ' application has been ' + recruiter_type + ' .')
+                        messages.success(request, agent_obj.user.first_name.title() + " application status changed.")
 
                         messages.success(request,agent_obj.user.first_name.title() + " application status changed.")
                     elif recruiter_type == 'REJECTED':
@@ -217,8 +226,12 @@ def recruiter_approved_application(request):
                         agent_obj.reject_comment = reject_comment
                         agent_obj.save()
                         AgentProfileHistoryDetails.objects.create(agent_id=agent_obj.id,
-                                                                  status='Application Submitted',
-                                                                  remark='Hi, ' + agent_obj.user.first_name + ' ' + agent_obj.user.last_name + ' your application is REJECTED by AGENT RECRUITER.')
+                                                                  status=recruiter_type,
+                                                                  remark='Hi, ' + agent_obj.user.first_name + ' ' + agent_obj.user.last_name + ' your application has been REJECTED by AGENT RECRUITER.')
+
+                        AgentProfileHistoryDetails.objects.create(agent_recruiter_id=request.user.id,
+                                                                  status=recruiter_type,
+                                                                  remark= agent_obj.user.first_name + ' ' + agent_obj.user.last_name + ' application has been ' + recruiter_type + ' .')
                         messages.success(request, agent_obj.user.first_name.title() + " application status changed.")
         except Exception as e:
             messages.warning(request, "Form have some error" + str(e))
