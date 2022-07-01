@@ -13,4 +13,5 @@ urlpatterns = [
     path('declaration/', views.declaration, name='declaration'),
     path('recruiter_dashboard/', views.recruiter_dashboard, name='recruiter_dashboard'),
     path('recruiter_approved_application/', views.recruiter_approved_application, name='recruiter_approved_application'),
+    path('agent_application_details/<int:agent_id>/', views.agent_application_details,name='agent_application_details'),
 ]

@@ -1,0 +1,408 @@
+{% extends "template_recruiter_base.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+{% load custom_tags %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+            $(document).ready(function () {
+
+
+
+
+            });
+        }
+
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'agents:recruiter_dashboard' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span>{% trans 'AGENT APPLICATION DETAILS' %}</span>
+            </li>
+        </ul>
+    </div>
+
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+
+
+        <div class="portlet-body">
+            <div class="form-body">
+
+
+
+
+                <div class="portlet light portlet-fit portlet-form ">
+                    <i class="icon-settings font-red"></i>
+                    <span class="caption-subject font-red sbold uppercase"> PERSONAL INFO (BIOGRAPHICAL INFORMATION)</span>
+                </div>
+            <button type="button" class="btn blue" id="back" style="margin-left:95%"
+                                    onclick="window.location='{% url "agents:recruiter_approved_application" %}'">{% trans 'Back' %}
+                            </button>
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-1 control-label">Profile Pic:</label>
+                        <div class="col-md-3">
+                            <a href="{{ attachement_details.image.url }}" download>
+                                <img src="{{ attachement_details.image.url }}" alt="image"
+                                     width="104" height="142">
+                            </a>
+                        </div>
+                    </div>
+
+
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-2 control-label">First Name:</label>
+                        <div class="col-md-3">
+                            <span class="">{{ agent_obj.user.first_name|default_if_none:"" }}</span>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="">
+                        <label class="col-md-2 control-label">Last Name:</label>
+                        <div class="col-md-3">
+                            <span class="">{{ agent_obj.user.last_name|default_if_none:"" }}</span>
+                        </div>
+                    </div>
+
+
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-2 control-label">AGENT ID:</label>
+                        <div class="col-md-3">
+                            <span class="">{{ agent_obj.agent_id|default_if_none:"" }}</span>
+                        </div>
+                    </div>
+
+                </div>
+                <hr>
+                <div class="portlet light portlet-fit portlet-form ">
+                    <i class="icon-settings font-red"></i>
+                    <span class="caption-subject font-red sbold uppercase"> CONTACT INFO</span>
+                </div>
+
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-1 control-label">E-mail:</label>
+                        <div class="col-md-3">
+                            <span class="">{{ agent_obj.user.email|default_if_none:"" }}</span>
+
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Mobile:</label>
+                        <div class="col-md-3">
+                            <span class="">{{ agent_obj.mobile|default_if_none:"" }}</span>
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">WhatsApp:</label>
+                        <div class="col-md-3">
+                            <span class="">{{ agent_obj.country_code|default_if_none:"" }} {{ agent_obj.whats_app|default_if_none:"" }}</span>
+                        </div>
+                    </div>
+
+
+                </div>
+                <br>
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-1 control-label">Country:</label>
+                        <div class="col-md-3">
+                            <span class="">{{ agent_obj.country.country_name|title }}</span>
+
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Nationality:</label>
+                        <div class="col-md-3">
+                            <span class="">{{ agent_obj.nationality.country_name|title }}</span>
+
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Postcode:</label>
+                        <div class="col-md-3">
+                            <span class="">{{ agent_obj.post_code|default_if_none:"" }}</span>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+                <br>
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-1 control-label">Address line 1:</label>
+                        <div class="col-md-3">
+                            <span class="">{{ agent_obj.address_line_1|default_if_none:"" }}</span>
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Address line 2:</label>
+                        <div class="col-md-3">
+                            <span class="">{{ agent_obj.address_line_2|title|default_if_none:"" }}</span>
+
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">City:</label>
+                        <div class="col-md-3">
+                            <span class="">{{ agent_obj.city|default_if_none:"" }}</span>
+                        </div>
+                    </div>
+
+
+                </div>
+                <hr>
+                <div class="portlet light portlet-fit portlet-form ">
+                    <i class="icon-settings font-red"></i>
+                    <span class="caption-subject font-red sbold uppercase"> CORPORATE INFO</span>
+                </div>
+
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-1 control-label">Company Name:</label>
+                        <div class="col-md-3">
+                                <span class="">{{ corporate_details.company_name|default_if_none:"" }}</span>
+
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Registration No:</label>
+                        <div class="col-md-3">
+                            <span class="">{{ corporate_details.company_registration_no|default_if_none:"" }}</span>
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Email:</label>
+                        <div class="col-md-3">
+                            <span class="">{{ corporate_details.email|default_if_none:"" }}</span>
+                        </div>
+                    </div>
+
+
+                </div>
+                <br>
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-1 control-label">Country:</label>
+                        <div class="col-md-3">
+                            <span class="">{{ corporate_details.country.country_name|default_if_none:"" }}</span>
+
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Telephone:</label>
+                        <div class="col-md-3">
+                            <span class="">
+                                 {{ corporate_details.telephone|default_if_none:"" }}
+                            </span>
+
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-1 control-label">Company Address:</label>
+                        <div class="col-md-3">
+                            <span class="">{{ corporate_details.address|default_if_none:"" }}</span>
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+
+                <hr>
+                <div class="portlet light portlet-fit portlet-form ">
+                    <i class="icon-settings font-red"></i>
+                    <span class="caption-subject font-red sbold uppercase"> AGENT REGISTRATION PAYMENT</span>
+                </div>
+
+                 <div class="row">
+
+
+                    <div class="">
+                        <label class="col-md-2 control-label">PAYMENT STATUS:</label>
+                        <div class="col-md-2">
+                            {% if not payment_agent_details %}
+                            <span style="color: red">PENDING</span>
+                            {% else %}
+                                <span style="color: green">COMPLETED</span>
+                            {% endif %}
+
+                        </div>
+                    </div>
+
+
+                </div>
+           <hr>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                            <tr>
+                                <th>
+                                    #
+                                </th>
+                                <th class="hidden-480">
+                                    Description
+                                </th>
+                                <th class="hidden-480">
+                                    Unit Cost
+                                </th>
+
+
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr>
+                                <td>
+                                   1
+                                </td>
+                                <td class="hidden-480">
+                                    Registration
+                                </td>
+                                <td class="hidden-480">
+                                    1000 USD
+                                </td>
+
+
+                            </tr>
+                            <tr>
+                                <td>
+                                   #
+                                </td>
+                                <td class="hidden-480">
+                                   <b>Total</b>
+                                </td>
+                                <td class="hidden-480">
+                                    <b> 1000 USD</b>
+                                </td>
+
+
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+<hr>
+
+
+                <div class="portlet light portlet-fit portlet-form ">
+                    <i class="icon-settings font-red"></i>
+                    <span class="caption-subject font-red sbold uppercase">Attachment</span>
+                </div>
+
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-2 control-label">Passport ID:</label>
+
+                        <div class="col-md-4">
+                            {% if attachement_details.passport_image %}
+                                <a href="{{ attachement_details.passport_image.url }}" target="_blank" download>Preview Passport
+                                    ID</a>
+                            {% else %}
+                                ----
+                            {% endif %}
+                        </div>
+
+                    </div>
+
+                    <div class="">
+                        <label class="col-md-2 control-label">Company Registration:</label>
+
+                        <div class="col-md-4">
+                            {% if attachement_details.company_registration %}
+                                <a href="{{ attachement_details.company_registration.url }}" target="_blank" download>Preview
+                                    Academic Certificate</a>
+                            {% else %}
+                                ----
+                            {% endif %}
+                        </div>
+
+                    </div>
+
+
+                </div>
+                <br>
+                <div class="row">
+
+
+                    <div class="">
+                        <label class="col-md-2 control-label">License Certificate:</label>
+
+                        <div class="col-md-4">
+                            {% if attachement_details.license_certificate %}
+                                <a href="{{ attachement_details.license_certificate.url }}" target="_blank" download>Preview
+                                    Transcript</a>
+                            {% else %}
+                                ----
+                            {% endif %}
+                        </div>
+
+                    </div>
+
+
+
+
+                </div>
+
+                <hr>
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}

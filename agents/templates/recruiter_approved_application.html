@@ -289,7 +289,7 @@
                                                 <input name="check" type="checkbox" class="checkboxes" value="{{ rec.id }}">
                                             </td>
                                             <td>
-                                                <text><a href="{% url 'partner:research_details' rec.id %}">{{ rec.agent_id|default_if_none:"" }}</a>
+                                                <text><a href="{% url 'agents:agent_application_details' rec.id %}">{{ rec.agent_id|default_if_none:"" }}</a>
                                                 </text>
                                             </td>
                                             <td>
@@ -328,7 +328,7 @@
 
 
                                          <td>
-                                                <a href="{% url 'partner:research_details' rec.id %}">
+                                                <a href="{% url 'agents:agent_application_details' rec.id %}">
                                 <span type="button" name="edit" id="edit{{ forloop.counter }}"
                                       class=" edit_btn btn blue glyphicon glyphicon-edit">
                                 </span>

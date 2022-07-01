@@ -641,7 +641,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-    {%  if request.resolver_match.url_name == 'recruiter_approved_application' or request.resolver_match.url_name == 'change_password' or request.resolver_match.url_name == 'recruiter_dashboard' %}
+    {%  if request.resolver_match.url_name == 'recruiter_approved_application' or request.resolver_match.url_name == 'change_password' or request.resolver_match.url_name == 'recruiter_dashboard' or request.resolver_match.url_name == 'agent_application_details'  %}
         {
             var element = document.getElementById("application_management_tab");
             element.classList.add("active");

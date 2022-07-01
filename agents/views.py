@@ -241,3 +241,16 @@ def recruiter_approved_application(request):
             'agent_recs':AgentIDDetails.objects.filter(is_submitted= True)
         }
         return render(request, 'recruiter_approved_application.html', context)
+
+def agent_application_details(request, agent_id):
+    agent_obj = AgentIDDetails.objects.get(id=agent_id)
+    attachement_details = agent_obj.attachement_agent_rel.get() if agent_obj.attachement_agent_rel.all() else None
+    corporate_details = agent_obj.corporate_agent_rel.get() if agent_obj.corporate_agent_rel.all() else None
+    payment_agent_details = True if agent_obj.payment_agent_rel.all() else False
+    context = {
+        'agent_obj': agent_obj,
+        'attachement_details': attachement_details,
+        'corporate_details': corporate_details,
+        'payment_agent_details': payment_agent_details,
+    }
+    return render(request, 'agent_application_details.html', context)
