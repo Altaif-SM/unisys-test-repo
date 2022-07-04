@@ -14,8 +14,8 @@ import sys
 from django.core.wsgi import get_wsgi_application
 
 
-sys.path.append('/var/www/moheye_online_admission_project/university_system')
-sys.path.append('/var/www/moheye_online_admission_project/university_system/scholarship_mgmt')
+sys.path.append('/var/www/university_system_project/university_system')
+sys.path.append('/var/www/university_system_project/university_system/scholarship_mgmt')
 
 
 
