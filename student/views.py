@@ -2473,7 +2473,7 @@ def application_offer_letter_pdf(request, app_id):
             template = get_template('application_offer_letter_pdf.html')
             Context = ({ 'application_obj': application_obj, 'header_path':header_path,'current_date':current_date,'student_id':student_id,'created_on':created_on,'registration_number':registration_number})
             html = template.render(Context)
-            file = open('test.pdf', "w+b")
+            file = open(settings.MEDIA_ROOT + 'offer_letter.pdf', "w+b")
             pisa.CreatePDF(html.encode('utf-8'), dest=file,encoding='utf-8')
             file.seek(0)
             pdf = file.read()
@@ -2492,7 +2492,8 @@ def application_offer_letter_pdf(request, app_id):
             Context = ({'application_obj': application_obj, 'header_path': header_path, 'current_date': current_date,
                         'student_id': student_id, 'created_on': created_on, 'registration_number': registration_number})
             html = template.render(Context)
-            file = open('test.pdf', "w+b")
+            # file = open('test.pdf', "w+b")
+            file = open(settings.MEDIA_ROOT + 'offer_letter.pdf', "w+b")
             pisa.CreatePDF(html.encode('utf-8'), dest=file, encoding='utf-8')
             file.seek(0)
             pdf = file.read()
