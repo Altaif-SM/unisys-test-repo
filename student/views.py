@@ -21,6 +21,7 @@ cgi.escape = html.escape
 # Create your views here.
 @student_login_required
 def student_home(request):
+    print("student home view-------------------------------------")
     username = ''
     application_history_obj = ''
     application_id = ''
