@@ -21,7 +21,6 @@ cgi.escape = html.escape
 # Create your views here.
 @student_login_required
 def student_home(request):
-    print("student home view-------------------------------------")
     username = ''
     application_history_obj = ''
     application_id = ''
@@ -2499,7 +2498,9 @@ def application_offer_letter_pdf(request, app_id):
             pdf = file.read()
             file.close()
             return HttpResponse(pdf, 'application/pdf')
-    except:
+    except Exception as e:
+        print(str(e))
+        # messages.warning(request, "Form have some error" + str(e))
         return redirect('/student/application_offer_letter/')
 
 
