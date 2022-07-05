@@ -698,7 +698,6 @@ def change_application_status(request):
         conditional_documents = json.loads(request.POST.get('conditional_documents'))
         interview_type = request.POST.get('interview_type')
         priorities = request.POST.get('priorities',None)
-
         for application in check_ids:
             application_obj = ApplicationDetails.objects.get(id=application)
             if application_obj.application_rejection:
@@ -709,10 +708,8 @@ def change_application_status(request):
                     application_obj.application_rejection = False
                     application_obj.save()
             if interview_type == 'First Interview':
-
                 try:
                     subject = 'Conditional Offer Letter'
-                    program_name = ''
                     if application_obj.choice_1 == False and application_obj.choice_2 == False and application_obj.choice_3 == False and application_obj.is_accepted == False:
                         program_name = application_obj.program.program_name
                     elif application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False and application_obj.is_accepted == False:
@@ -733,11 +730,9 @@ def change_application_status(request):
                                             application_obj.first_name,conditional_documents,logo_url,program_name)
                 except:
                     pass
-
                 application_obj.incomplete = False
                 application_obj.first_interview_attend = False
                 application_obj.first_interview = True
-
                 application_obj.is_accepted = True
                 if priorities == '1':
                     application_obj.choice_1 = True
@@ -745,29 +740,18 @@ def change_application_status(request):
                     application_obj.choice_2 = True
                 if priorities == '3':
                     application_obj.choice_3 = True
-
                 application_obj.save()
-
-
                 if conditional_documents:
                     ConditionalVerificationDocumentsDetails.objects.filter(application_id=application_obj).delete()
                     for document in conditional_documents:
                         ConditionalVerificationDocumentsDetails.objects.create(required_document = document,application_id=application_obj)
                 ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
                                                              status='Conditional Offer Letter',
-                                                             remark='Congratulations! We are pleased to inform you that the University ####### is making you a Conditional Offer.')
-
-
-
-
-
+                                                             remark='Congratulations! We are pleased to inform you that the University is making you a Conditional Offer.')
                 messages.success(request, application_obj.first_name.title() + " application status changed.")
-
             elif interview_type == 'First Interview attended':
-
                 try:
                     subject = 'Full Offer Letter'
-                    program_name = ''
                     if application_obj.choice_1 == False and application_obj.choice_2 == False and application_obj.choice_3 == False and application_obj.is_accepted == False:
                         program_name = application_obj.program.program_name
                     elif application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False and application_obj.is_accepted == False:
@@ -788,12 +772,9 @@ def change_application_status(request):
                                             application_obj.first_name,logo_url,program_name)
                 except:
                     pass
-
-
                 application_obj.first_interview = False
                 application_obj.incomplete = False
                 application_obj.first_interview_attend = True
-
                 application_obj.is_accepted = True
                 if priorities == '1':
                     application_obj.choice_1 = True
@@ -801,46 +782,24 @@ def change_application_status(request):
                     application_obj.choice_2 = True
                 if priorities == '3':
                     application_obj.choice_3 = True
-
                 application_obj.save()
-
-
-
-
                 application_notification(application_obj.id, 'You have got Full Offer Letter')
                 ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
                                                              status='Full Offer Letter',
-                                                             remark='Congratulations! We are pleased to inform you that the University ####### is making you a Full Offer Letter.')
-
-
-
+                                                             remark='Congratulations! We are pleased to inform you that the University is making you a Full Offer Letter.')
                 messages.success(request, application_obj.first_name.title() + " application status changed.")
             elif interview_type == 'Incomplete':
                 description = request.POST.get('description')
                 application_obj.first_interview = False
                 application_obj.first_interview_attend = False
                 application_obj.incomplete = True
-
-                # application_obj.is_accepted = True
-                # if priorities == '1':
-                #     application_obj.choice_1 = True
-                # if priorities == '2':
-                #     application_obj.choice_2 = True
-                # if priorities == '3':
-                #     application_obj.choice_3 = True
-
-
                 application_obj.save()
-
-
                 application_notification(application_obj.id, 'You have Incomplete Application')
                 ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
                                                          status='Incomplete Application',
                                                          remark=description)
-
                 try:
                     subject = 'Incomplete Application'
-                    program_name = ''
                     if application_obj.choice_1 == False and application_obj.choice_2 == False and application_obj.choice_3 == False and application_obj.is_accepted == False:
                         program_name = application_obj.program.program_name
                     elif application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False and application_obj.is_accepted == False:
@@ -859,13 +818,7 @@ def change_application_status(request):
                                             application_obj.first_name,description,logo_url,program_name)
                 except:
                     pass
-
-
                 messages.success(request, application_obj.first_name.title() + " application status changed.")
-
-
-
-
             elif interview_type == 'Supervisor Approved':
                 if request.user.is_supervisor():
                     if not application_obj.supervisor_status == 'Approved':
@@ -892,8 +845,6 @@ def change_application_status(request):
                                                              status='Supervisor Application Rejected',
                                                              remark='Your application has rejected from Supervisor.')
                     messages.success(request, application_obj.first_name.title() + " application rejected.")
-
-
             elif interview_type == 'Approved':
                 if request.user.is_faculty():
                     if not application_obj.faculty_status == 'Approved':
@@ -920,7 +871,6 @@ def change_application_status(request):
                     else:
                         messages.warning(request, "Applicant " + application_obj.first_name.title() + " is already approved.")
                         continue
-
                 if request.user.is_administrator():
                     if not application_obj.admission_unit_status == 'Approved':
                         application_obj.admission_unit_status = 'Approved'
@@ -933,7 +883,6 @@ def change_application_status(request):
                     else:
                         messages.warning(request, "Applicant " + application_obj.first_name.title() + " is already approved.")
                         continue
-
             elif interview_type == 'Rejected':
                 if request.user.is_faculty():
                     if not application_obj.faculty_status == 'Rejected':
@@ -960,10 +909,8 @@ def change_application_status(request):
                         messages.warning(request,"Applicant " + application_obj.first_name.title() + " is already rejected.")
                         continue
             elif interview_type == 'Reject':
-
                 try:
                     subject = 'Application Rejected'
-                    program_name = ''
                     if application_obj.choice_1 == False and application_obj.choice_2 == False and application_obj.choice_3 == False and application_obj.is_accepted == False:
                         program_name = application_obj.program.program_name
                     elif application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False and application_obj.is_accepted == False:
@@ -982,51 +929,39 @@ def change_application_status(request):
                                             application_obj.first_name,logo_url,program_name)
                 except:
                     pass
-
                 if request.user.is_administrator():
                     application_obj.admission_unit_status = 'Pending'
                     application_obj.faculty_status = 'Pending'
                     application_obj.program_status = 'Pending'
-
                 if priorities == '1':
                     application_obj.choice_1 = True
                     application_obj.first_interview = False
                     application_obj.first_interview_attend = False
                     application_obj.incomplete = False
                     application_obj.is_accepted = False
-
                 if priorities == '2':
                     application_obj.choice_2 = True
                     application_obj.first_interview = False
                     application_obj.first_interview_attend = False
                     application_obj.incomplete = False
                     application_obj.is_accepted = False
-
                 if priorities == '3':
                     application_obj.choice_3 = True
                     application_obj.first_interview = False
                     application_obj.first_interview_attend = False
                     application_obj.incomplete = False
                     application_obj.is_accepted = False
-
                 application_obj.save()
-
-
-
                 if not application_obj.application_rejection:
-
                     if application_obj.admin_approval:
                         if not request.user.is_super_admin():
                             continue
-
                     application_obj.first_interview = False
                     application_obj.first_interview_attend = False
                     application_obj.incomplete = False
-
                     application_obj.application_rejection = True
                     application_obj.save()
                     application_notification(application_obj.id, 'Application Rejected')
-
                     ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
                                                              status='Application Rejected',
                                                              remark='Your application has rejected.')
@@ -2495,7 +2430,7 @@ def approve_matric_card(request):
                 application_notification(application_obj.id, 'You have Approved Matric Card Successfully.')
                 ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
                                                              status='Matric Card',
-                                                             remark='Congratulations! We are pleased to inform you that the University ####### approved Matric Card Successfully.')
+                                                             remark='Congratulations! We are pleased to inform you that the University approved Matric Card Successfully.')
                 messages.success(request, application_obj.first_name.title() + " Matric Card approved Successfully.")
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
@@ -2535,37 +2470,65 @@ def change_research_status(request):
         for application in check_ids:
             if request.user.is_supervisor():
                 research_obj = ResearchDetails.objects.get(id=application)
+                application_obj = ApplicationDetails.objects.get(id=research_obj.application_id.id)
                 if research_type == 'Supervisor Approved':
                     research_obj.research_status = 'Approved'
                     research_obj.save()
+                    application_notification(application_obj.id, 'Supervisor Application Approved')
+                    ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
+                                                             status='Supervisor Application Approved',
+                                                             remark='Your application has been Approved by Supervisor.')
+
                     messages.success(request, research_obj.application_id.first_name.title() + " application status changed.")
                 elif research_type == 'Supervisor Rejected':
                     research_obj.research_status = 'Rejected'
                     research_obj.research_rejection = reject_description
                     research_obj.save()
+                    application_notification(application_obj.id, 'Supervisor Application Rejected')
+                    ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
+                                                             status='Supervisor Application Rejected',
+                                                             remark='Your application has been Rejected by Supervisor.')
                     messages.success(request, research_obj.application_id.first_name.title() + " application rejected.")
             elif request.user.is_faculty():
                 research_obj = ResearchDetails.objects.get(id=application)
                 if research_type == 'Faculty Approved':
                     research_obj.faculty_status = 'Approved'
                     research_obj.save()
+                    application_notification(application_obj.id, 'Faculty Application Approved')
+                    ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
+                                                             status='Faculty Application Approved',
+                                                             remark='Your application has been Approved by Faculty.')
+
                     messages.success(request, research_obj.application_id.first_name.title() + " application status changed.")
                 elif research_type == 'Faculty Rejected':
                     research_obj.faculty_status = 'Rejected'
                     research_obj.faculty_rejection = reject_description
                     research_obj.save()
+                    application_notification(application_obj.id, 'Faculty Application Rejected')
+                    ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
+                                                             status='Faculty Application Rejected',
+                                                             remark='Your application has been Rejected by Faculty.')
+
                     messages.success(request, research_obj.application_id.first_name.title() + " application rejected.")
             elif request.user.is_program():
                 research_obj = ResearchDetails.objects.get(id=application)
                 if research_type == 'Program Approved':
                     research_obj.program_status = 'Approved'
                     research_obj.save()
+                    application_notification(application_obj.id, 'Program Application Approved')
+                    ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
+                                                             status='Program Application Approved',
+                                                             remark='Your application has been Approved by Program.')
                     messages.success(request,
                                      research_obj.application_id.first_name.title() + " application status changed.")
                 elif research_type == 'Program Rejected':
                     research_obj.program_status = 'Rejected'
                     research_obj.program_rejection = reject_description
                     research_obj.save()
+                    application_notification(application_obj.id, 'Program Application Rejected')
+                    ApplicationHistoryDetails.objects.create(applicant_id=application_obj,
+                                                             status='Program Application Rejected',
+                                                             remark='Your application has been Rejected by Program.')
                     messages.success(request, research_obj.application_id.first_name.title() + " application rejected.")
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))

@@ -1561,9 +1561,9 @@ License: You must have a valid license purchased only from themeforest(the above
                             <li id="program_search"><a href="{% url 'student:applicant_program_search' %}" >{% trans 'Program Search' %}</a></li>
                         {% endif %}
 
-                        {% if user.is_student %}
-                            <li id="app_prog"><a href="{% url 'student:applicant_progress_history' %}" >{% trans 'Application Progress History' %}</a></li>
-                        {% endif %}
+{#                        {% if user.is_student %}#}
+{#                            <li id="app_prog"><a href="{% url 'student:applicant_progress_history' %}" >{% trans 'Application Progress History' %}</a></li>#}
+{#                        {% endif %}#}
 
                         {% if user.is_student %}
                             <li id="app_offer_status"><a href="{% url 'student:application_offer_letter' %}" >{% trans 'Offer Status' %}</a></li>

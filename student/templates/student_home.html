@@ -106,28 +106,118 @@
             </div>
         </div>
 
-        <div class="portlet-body">
-            <div class="form-body">
-                <h3 style="color: darkred; text-align: center;font-size: 21px"><b>{% trans 'Welcome' %}<span
-                        style="color: #0c203a">{{ username|title }}</span>. <br><br>
-                    {% if application %}
-                        {% if not application.is_submitted %}
-                            {% trans 'To proceed with the application, please complete the sections on the left side of the screen. Good luck!' %}
-                        {% else %}
-                            {% trans 'Your application is submitted and your University will be notified on further updates regarding your applications. it can no longer be edited.' %}
+    <div class="row">
+				<div class="col-md-12 col-sm-12">
+					<div class="portlet light ">
+						<div class="portlet-body">
+							<div class="scroller" style="height: 600px;" data-always-visible="1" data-rail-visible="0">
+								<ul class="feeds">
+                                {% if application %}
+                                    {% if not application.is_submitted %}
 
-                        {% endif %}
-                    {% else %}
-                         {% trans 'To proceed with the application, please complete the sections on the left side of the screen. Good luck!' %}
-                    {% endif %}
+                                        <li>
+										<div class="col1">
+											<div class="cont">
+												<div class="cont-col1">
+													<div class="label label-sm label-info">
+														<i class="fa fa-bell-o"></i>
+													</div>
+												</div>
+												<div class="cont-col2">
+													<div class="desc">
+														 To proceed with the application, please complete the sections on the left side of the screen. Good luck!
+
+														</span>
+													</div>
+												</div>
+											</div>
+										</div>
+
+									</li>
 
 
 
 
-                </b></h3>
-            </div>
-        </div>
-        <br><br>
+                                        {% else %}
+                                     {% for rec in application_history_obj %}
+                                         <li>
+										<div class="col1">
+											<div class="cont">
+												<div class="cont-col1">
+													<div class="label label-sm label-info">
+														<i class="fa fa-bell-o"></i>
+													</div>
+												</div>
+												<div class="cont-col2">
+													<div class="desc">
+														 {{ rec.remark|default_if_none:"" }}
+
+														</span>
+													</div>
+												</div>
+											</div>
+										</div>
+                                        <div class="col2">
+											<div class="date">
+												 {{ rec.last_updated|date:"d-m-y" }}
+											</div>
+										</div>
+									</li>
+                                    {% endfor %}
+
+                                        {% endif %}
+                                {% else %}
+                                    <li>
+										<div class="col1">
+											<div class="cont">
+												<div class="cont-col1">
+													<div class="label label-sm label-info">
+														<i class="fa fa-bell-o"></i>
+													</div>
+												</div>
+												<div class="cont-col2">
+													<div class="desc">
+														 To proceed with the application, please complete the sections on the left side of the screen. Good luck!
+
+														</span>
+													</div>
+												</div>
+											</div>
+										</div>
+
+									</li>
+
+                                {% endif %}
+
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+{#        <div class="portlet-body">#}
+{#            <div class="form-body">#}
+{#                <h3 style="color: darkred; text-align: center;font-size: 21px"><b>{% trans 'Welcome' %}<span#}
+{#                        style="color: #0c203a">{{ username|title }}</span>. <br><br>#}
+{#                    {% if application %}#}
+{#                        {% if not application.is_submitted %}#}
+{#                            {% trans 'To proceed with the application, please complete the sections on the left side of the screen. Good luck!' %}#}
+{#                        {% else %}#}
+{#                            {% trans 'Your application is submitted and your University will be notified on further updates regarding your applications. it can no longer be edited.' %}#}
+{##}
+{#                        {% endif %}#}
+{#                    {% else %}#}
+{#                         {% trans 'To proceed with the application, please complete the sections on the left side of the screen. Good luck!' %}#}
+{#                    {% endif %}#}
+{##}
+{##}
+{##}
+{##}
+{#                </b></h3>#}
+{#            </div>#}
+{#        </div>#}
+{#        <br><br>#}
 
         {#        {% if application %}#}
         {#            <div class="portlet-body">#}
