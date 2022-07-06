@@ -372,17 +372,17 @@ License: You must have a valid license purchased only from themeforest(the above
 
                             <li>
                                 <a href="{% url 'accounts:edit_agent' user.id %}">
-                                    <i class="icon-eye" aria-hidden="true"></i>{% trans 'Agent Details' %}</a>
+                                    <i class="icon-eye" aria-hidden="true"></i>{% trans 'UPDATE PROFILE' %}</a>
                             </li>
 
                             <li>
                                 <a href="/accounts/change_password/">
-                                    <i class="icon-key" aria-hidden="true"></i>{% trans 'Change Password' %}</a>
+                                    <i class="icon-key" aria-hidden="true"></i>{% trans 'CHANGE PASSWORD' %}</a>
                             </li>
 
                             <li>
                                 <a href="/accounts/user_signout/">
-                                    <i class="fa fa-sign-out"></i>{% trans 'Log Out' %}</a>
+                                    <i class="fa fa-sign-out"></i>{% trans 'LOGOUT' %}</a>
                             </li>
 
 
@@ -731,7 +731,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <script type="text/javascript">
 
 
-    {% if request.resolver_match.url_name == 'dashboard' or request.resolver_match.url_name == 'personal_info' or request.resolver_match.url_name == 'corporate_info' or request.resolver_match.url_name == 'payment_details' or request.resolver_match.url_name == 'attachment' or request.resolver_match.url_name == 'declaration' %}
+    {% if request.resolver_match.url_name == 'dashboard' or request.resolver_match.url_name == 'personal_info' or request.resolver_match.url_name == 'corporate_info' or request.resolver_match.url_name == 'payment_details' or request.resolver_match.url_name == 'attachment' or request.resolver_match.url_name == 'declaration' or request.resolver_match.url_name == 'edit_agent' or request.resolver_match.url_name == 'change_password' %}
         {
             var element = document.getElementById("agent_application_tab");
             element.classList.add("active");

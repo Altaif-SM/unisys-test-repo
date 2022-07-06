@@ -12,6 +12,7 @@ from accounts.models import UserRole
 from student.models import StudentDetails, ApplicationDetails, ScholarshipSelectionDetails
 from masters.models import AddressDetails, CountryDetails, ScholarshipDetails, GuardianDetails, EmailTemplates, \
     YearDetails,FacultyDetails,ProgramDetails,UniversityTypeDetails,AgentIDDetails
+from agents.models import *
 from partner.models import PartnerDetails
 from donor.models import DonorDetails
 import json
@@ -1433,11 +1434,28 @@ def edit_agent(request, agent_id=None):
     if AgentIDDetails.objects.filter(user_id = agent_id).exists():
         agent_obj = AgentIDDetails.objects.get(user_id = agent_id)
     if request.method == 'POST':
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
+        photo = request.FILES.get('photo',None)
+        first_name = request.POST.get('first_name',None)
+        last_name = request.POST.get('last_name',None)
+        agent_email = request.POST.get('agent_email',None)
+
+        if User.objects.filter(email = agent_email).exclude(id = user_obj.id).exists():
+            messages.warning(request, "Email already exists.")
+            return redirect('/accounts/edit_agent/'+str(agent_id))
+        if AgentAttachementDetails.objects.filter(agent_profile_id=agent_obj.id).exists():
+            attachment_obj = AgentAttachementDetails.objects.get(agent_profile_id=agent_obj.id)
+        else:
+            if (photo is not None):
+                attachment_obj = AgentAttachementDetails.objects.create(agent_profile_id=agent_obj.id)
+        if photo:
+            attachment_obj.image = photo
+            attachment_obj.save()
         user_obj.first_name = first_name
         user_obj.last_name = last_name
+        user_obj.username = agent_email
+        user_obj.email = agent_email
         user_obj.save()
+        messages.success(request, "Record saved.")
         return redirect('/accounts/edit_agent/'+str(agent_id))
     else:
         context = {}
@@ -1445,9 +1463,13 @@ def edit_agent(request, agent_id=None):
             context['my_template'] = 'template_agent_base.html'
         else:
             context['my_template'] = 'template_base_page.html'
+        attachment_obj = None
+        if AgentAttachementDetails.objects.filter(agent_profile_id=agent_obj.id).exists():
+            attachment_obj = AgentAttachementDetails.objects.get(agent_profile_id=agent_obj.id)
         context['agent_id'] = agent_id
         context['user_obj'] = user_obj
         context['agent_obj'] = agent_obj
+        context['attachment_obj'] = attachment_obj
         return render(request, "agent_details.html",context)
 
 

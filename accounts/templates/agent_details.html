@@ -100,365 +100,29 @@
     <script>
         window.onload = function () {
             $(document).ready(function () {
-                $("#status").Sswitch({});
-
-                  $(document).on("change", "#university_type", function (e) {
-                var university_type_id = $(this).val();
-                console.log("university_type_id"+university_type_id);
-                var url = '/student/get_university_from_type/';
-                get_university_from_university_type(url, university_type_id)
-            })
-
-                   $(document).on("change", "#email", function (e) {
-                var email = $(this).val();
-                 var user_id = $('#user_id').val()
-                var url = '/accounts/get_email_exists/';
-                get_email_exists_fun(url, email,user_id)
-            })
-
-                $(document).on("change", "#university", function (e) {
-
-                        $('#faculty').empty();
-                        $('#facculty_div').hide();
-
-                        $('#program').empty();
-                        $('#program_div').hide();
-
-                          $('#supervisor_faculty').empty();
-                         $('#supervisor_program').empty();
-                        $('#supervisor_facculty_program_div').hide();
-
-                        $('#id_account_type').empty();
-                        $('#id_account_type').append(
-                            '<option value="" >Please select</option>');
-                        $('#id_account_type').append(
-                            '<option value="Administrator" >Admission Unit</option>');
-                        $('#id_account_type').append(
-                            '<option value="Faculty" >Faculty</option>');
-                        $('#id_account_type').append(
-                            '<option value="Program" >Program</option>');
-                        $('#id_account_type').append(
-                            '<option value="Supervisor" >Supervisor</option>');
 
 
-                    /*
-                var university = $(this).val();
-                 var user_id = $('#user_id').val()
-                var url = '/accounts/get_university_exists/';
-                get_university_exists(url, university,user_id)
-                */
-            })
-
-                 $(document).on("change", "#supervisor_faculty", function (e) {
-                    var faculty_id = $(this).val();
-                    var account_type = $('#id_account_type').val();
-                    var university = $('#university').val();
-                    $("#supervisor_faculty").prop('required',true);
-                    var url = '/accounts/get_program_from_faculty/';
-                    get_program_from_faculty(url, account_type,faculty_id,university)
-            })
-                function get_program_from_faculty(url, account_type,faculty_id,university) {
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: {
-                    account_type: account_type,
-                    faculty_id: faculty_id,
-                    university: university,
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                },
-                success: function (data) {
-
-                        $('#supervisor_program').empty();
-
-                        $('#faculty').empty();
-                        $('#facculty_div').hide();
-
-                        $('#program').empty();
-                        $('#program_div').hide();
-
-                        $('#supervisor_program').append(
-                            '<option value="" >Please select</option>');
-                        for (var i = 0; i < data.length; i++) {
-                            $('#supervisor_program').append(
-                                '<option value="' + data[i]['id'] + '">'
-                                + data[i]['program'] + '</option>')
-                        }
-                    },
-                error: function (xhr, msg, err) {
-                    alert(xhr.responseJSON.error);
-                }
-            });
-        }
-
-                 $(document).on("change", "#id_account_type", function (e) {
-                var account_type = $(this).val();
-                var university = $('#university').val();
-
-                 $("#faculty").prop('required',false);
-                 $("#program").prop('required',false);
-                 $("#supervisor_faculty").prop('required',false);
-                 $("#supervisor_program").prop('required',false);
-
-
-                if(account_type == 'Faculty'){
-                    $("#faculty").prop('required',true);
-                    var url = '/accounts/get_faculty_from_account_type/';
-                    get_faculty_from_account_type(url, account_type,university)
-                }
-                else if(account_type == 'Program'){
-                    $("#program").prop('required',true);
-                    var url = '/accounts/get_program_from_account_type/';
-                    get_program_from_account_type(url, account_type,university)
-
-                    }
-                 else if(account_type == 'Supervisor'){
-                    $("#supervisor_faculty").prop('required',true);
-                    $("#supervisor_program").prop('required',true);
-                    var url = '/accounts/get_faculty_from_account_type/';
-                    get_faculty_from_supervisor(url, account_type,university)
-
-                    }
-                else{
-                     $("#faculty").prop('required',false);
-                     $('#faculty').empty();
-                     $('#facculty_div').hide();
-
-                     $("#program").prop('required',false);
-                     $('#program').empty();
-                     $('#program_div').hide();
-
-                     $("#supervisor_faculty").prop('required',false);
-                     $('#supervisor_faculty').empty();
-
-                     $("#supervisor_program").prop('required',false);
-                     $('#supervisor_program').empty();
-
-
-
-                     $('#supervisor_facculty_program_div').hide();
-                }
-
-            })
-
-                 function get_faculty_from_supervisor(url, account_type,university) {
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: {
-                    account_type: account_type,
-                    university: university,
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                },
-                success: function (data) {
-
-                        $('#program').empty();
-                        $('#program_div').hide();
-
-                        $('#faculty').empty();
-                        $('#facculty_div').hide();
-
-
-                        $('#supervisor_faculty').empty();
-                        $('#supervisor_facculty_program_div').show();
-
-
-                        $('#supervisor_program').empty();
-                        $('#supervisor_program').append(
-                            '<option value="" >Please select</option>');
-
-
-                        $('#supervisor_faculty').append(
-                            '<option value="" >Please select</option>');
-                        for (var i = 0; i < data.length; i++) {
-                            $('#supervisor_faculty').append(
-                                '<option value="' + data[i]['id'] + '">'
-                                + data[i]['faculty'] + '</option>')
-                        }
-                    },
-                error: function (xhr, msg, err) {
-                    alert(xhr.responseJSON.error);
-                }
-            });
-        }
-
-
-                $("#staff_form").submit(function (e) {
-
-                if ($('#university_exists').is(":visible")) {
-                    return false;
-                }
-
-                var rowCount = $(".district").length;
-                $('#acceptance_count').val(rowCount);
-
-            })
-
-                 function get_faculty_from_account_type(url, account_type,university) {
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: {
-                    account_type: account_type,
-                    university: university,
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                },
-                success: function (data) {
-                     $('#supervisor_faculty').empty();
-                        $('#supervisor_program').empty();
-                        $('#supervisor_facculty_program_div').hide();
-
-
-                       $('#program').empty();
-                        $('#program_div').hide();
-
-                        $('#faculty').empty();
-                        $('#facculty_div').show();
-                        $('#faculty').append(
-                            '<option value="" >Please select</option>');
-                        for (var i = 0; i < data.length; i++) {
-                            $('#faculty').append(
-                                '<option value="' + data[i]['id'] + '">'
-                                + data[i]['faculty'] + '</option>')
-                        }
-                    },
-                error: function (xhr, msg, err) {
-                    alert(xhr.responseJSON.error);
-                }
-            });
-        }
-
-        function get_program_from_account_type(url, account_type,university) {
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: {
-                    account_type: account_type,
-                    university: university,
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                },
-                success: function (data) {
-
-
-                        $('#supervisor_faculty').empty();
-                        $('#supervisor_program').empty();
-                        $('#supervisor_facculty_program_div').hide();
-
-                        $('#faculty').empty();
-                        $('#facculty_div').hide();
-
-                        $('#program').empty();
-                        $('#program_div').show();
-                        $('#program').append(
-                            '<option value="" >Please select</option>');
-                        for (var i = 0; i < data.length; i++) {
-                            $('#program').append(
-                                '<option value="' + data[i]['id'] + '">'
-                                + data[i]['program'] + '</option>')
-                        }
-                    },
-                error: function (xhr, msg, err) {
-                    alert(xhr.responseJSON.error);
-                }
-            });
-        }
-
-
-                var password = document.getElementById("password")
-                var confirm_password = document.getElementById("confirm_password");
-                password.onchange = validatePassword;
-                confirm_password.onkeyup = validatePassword;
-
-
-            });
-
-            function validatePassword() {
-                if (password.value != confirm_password.value) {
-                    confirm_password.setCustomValidity("Passwords Don't Match");
-                } else {
-                    confirm_password.setCustomValidity('');
-                }
-            }
-
-            function get_university_exists(url, university,user_id) {
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: {
-                    user_id: user_id,
-                    university: university,
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                },
-                success: function (data) {
-                    var university_exists = data;
-                    if(university_exists === true){
-                        $('#university_exists').show();
-                    }
-                    else{
-                        $('#university_exists').hide();
-                    }
-
-
-                },
-                error: function (xhr, msg, err) {
-                    alert(xhr.responseJSON.error);
-                }
-            });
-        }
-
-             function get_email_exists_fun(url, email,user_id) {
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: {
-                    user_id: user_id,
-                    email: email,
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                },
-                success: function (data) {
-                    var email_exists = data;
-                    if(email_exists === true){
-                        $('#email').val('');
-                        $('#email_exists').show();
-                    }
-                    else{
-                        $('#email_exists').hide();
-                    }
-
-
-                },
-                error: function (xhr, msg, err) {
-                    alert(xhr.responseJSON.error);
-                }
-            });
-        }
-
-           function get_university_from_university_type(url, university_type_id) {
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: {
-                        university_type_id: university_type_id,
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                    },
-                    success: function (data) {
-
-                        $('#university').empty();
-                        $('#university').append(
-                            '<option value="" >Please select</option>');
-                        for (var i = 0; i < data.length; i++) {
-                            $('#university').append(
-                                '<option value="' + data[i]['id'] + '">'
-                                + data[i]['university_name'] + '</option>')
-                        }
-                    },
-                    error: function (xhr, msg, err) {
-                        alert(xhr.responseJSON.error);
-                    }
+                $(document).on("change", ".file-upload", function (e) {
+                    readURL(this);
                 });
+
+
+            });
+
+
+        }
+
+        var readURL = function (input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('.profile-pic').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
             }
-
-
         }
 
 
@@ -477,12 +141,12 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{% url 'accounts:home' %}">Home</a>
+                <a href="{% url 'agents:dashboard' %}">HOME</a>
                 <i class="fa fa-angle-right"></i>
             </li>
 
             <li>
-                <span> {% trans 'Agent Details' %} </span>
+                <span> {% trans 'UPDATE PROFILE' %} </span>
             </li>
         </ul>
     </div>
@@ -498,7 +162,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase">{% trans 'Agent Details' %} </span>
+                <span class="caption-subject font-red sbold uppercase">{% trans 'UPDATE PROFILE' %} </span>
             </div>
         </div>
 
@@ -509,107 +173,98 @@
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-                 <input type="hidden" id="user_id" name="user_id" value="{{ user_obj.id }}">
+                    <input type="hidden" id="user_id" name="user_id" value="{{ user_obj.id }}">
 
                     <div class="form-body">
+                        <div class="row" style="margin-left: 15%">
+                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail" style="width: 150px; height: 120px;">
+                                     {% if attachment_obj.passport_image %}
+                                          <img class="profile-pic" style="width: 150px; height: 110px;"
+                                         src="{{ attachment_obj.image.url }}" alt=""/>
+                                     {% else %}
 
-                        <div class="row item_experience" id="item_experience_1">
-                            <div class="row">
-                                <div class="">
-                                    <label class="col-md-2 control-label">Agent ID:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <input type="text" title="Enter Agent ID" id="agent_id"
-                                               value="{{ agent_obj.agent_id|default_if_none:"" }}"
-                                               name="agent_id"
-                                               class="form-control" disabled>
+                                    <img class="profile-pic" style="width: 150px; height: 110px;"
+                                         src="{% static 'images/no_image.jpg' %}" alt=""/>
+                                    {% endif %}
 
 
-
-                                    </div>
                                 </div>
 
-                                 <div class="">
-                                    <label class="col-md-2 control-label">Agent Email:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <input type="text" title="Enter Email" id="agent_email"
-                                               value="{{ user_obj.email|default_if_none:"" }}"
-                                               name="agent_email"
-                                               class="form-control"  disabled>
+                                <div>
+                                    <input class="file-upload" type="file" name="photo" accept="image/jpeg,">
 
-
-
-                                    </div>
                                 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
                             </div>
-                            <br>
+
+                        </div>
 
 
-                                <div class="row">
+                    </div>
+
+                    <div class="row item_experience" id="item_experience_1">
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">AGENT ID:<span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Agent ID" id="agent_id"
+                                           style="font-weight: bold"
+                                           value="{{ agent_obj.agent_id|default_if_none:"" }}"
+                                           name="agent_id"
+                                           class="form-control" disabled>
 
 
-                                <div class="">
-                                    <label class="col-md-2 control-label">First Name:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <input type="text" title="Enter First Name" id="first_name"
-                                               value="{{ user_obj.first_name|default_if_none:"" }} "
-                                               name="first_name"
-                                               class="form-control" required>
-
-
-
-                                    </div>
                                 </div>
+                            </div>
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Email:<span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Email" id="agent_email"
+                                           value="{{ user_obj.email|default_if_none:"" }}"
+                                           name="agent_email"
+                                           class="form-control" required>
 
 
-                                     <div class="">
-                                    <label class="col-md-2 control-label">Last Name:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <input type="text" title="Enter Last Name" id="last_name"
-                                               value="{{ user_obj.last_name|default_if_none:"" }} "
-                                               name="last_name"
-                                               class="form-control" required>
-
-
-
-                                    </div>
                                 </div>
-
-
-
-
-
-
-
-
                             </div>
 
 
+                        </div>
+                        <br>
 
 
+                        <div class="row">
 
 
+                            <div class="">
+                                <label class="col-md-2 control-label">First Name:<span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter First Name" id="first_name"
+                                           value="{{ user_obj.first_name|default_if_none:"" }}"
+                                           name="first_name"
+                                           class="form-control" required>
 
 
+                                </div>
+                            </div>
 
 
+                            <div class="">
+                                <label class="col-md-2 control-label">Last Name:<span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    <input type="text" title="Enter Last Name" id="last_name"
+                                           value="{{ user_obj.last_name|default_if_none:"" }}"
+                                           name="last_name"
+                                           class="form-control" required>
 
+
+                                </div>
+                            </div>
 
 
                         </div>
@@ -617,16 +272,26 @@
 
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-offset-5 col-md-7">
 
-                            <button type="submit" class="btn green" id="save_form" style="">Save
-                            </button>
-                        </div>
-                    </div>
             </div>
-            </form>
+            <hr>
+
+            <div class="row">
+                <div class="col-md-offset-5 col-md-7">
+                    <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                            onclick="window.location='{% url "agents:dashboard" %}'">{% trans 'Cancel' %}
+                    </button>
+
+
+                    <button type="submit" class="btn green"
+                            id="save">{% trans 'Save' %}</button>
+                </div>
+            </div>
+        <br><br>
+
         </div>
+        </form>
+    </div>
     </div>
     </div>
 {% endblock %}
