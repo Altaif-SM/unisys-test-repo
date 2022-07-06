@@ -484,19 +484,19 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </a>
                                 </li>
 
-                                <li class="nav-item " id="acd_qli">
-                                    <a href="{% url 'payments:payment_details' request.user.id %}"
-                                       class="nav-link nav-toggle">
-                                        <i class="glyphicon glyphicon-credit-card"></i>
-                                        <span class="title">{% trans 'PAYMENTS' %}</span>
-                                        {% if user.get_agent_profile_details.payment %}
-                                            <span class="title glyphicon glyphicon-ok"
-                                                  style="color: #41bc2c;font-size: 16px"></span>{% else %}
-                                            <span class="title glyphicon glyphicon-exclamation-sign"
-                                                  style="color: #dc302b; font-size: 16px"></span>{% endif %}
-                                        <span class="selected"></span>
-                                    </a>
-                                </li>
+{#                                <li class="nav-item " id="acd_qli">#}
+{#                                    <a href="{% url 'payments:payment_details' request.user.id %}"#}
+{#                                       class="nav-link nav-toggle">#}
+{#                                        <i class="glyphicon glyphicon-credit-card"></i>#}
+{#                                        <span class="title">{% trans 'PAYMENTS' %}</span>#}
+{#                                        {% if user.get_agent_profile_details.payment %}#}
+{#                                            <span class="title glyphicon glyphicon-ok"#}
+{#                                                  style="color: #41bc2c;font-size: 16px"></span>{% else %}#}
+{#                                            <span class="title glyphicon glyphicon-exclamation-sign"#}
+{#                                                  style="color: #dc302b; font-size: 16px"></span>{% endif %}#}
+{#                                        <span class="selected"></span>#}
+{#                                    </a>#}
+{#                                </li>#}
 
                     <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'agents:attachment' %}"

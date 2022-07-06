@@ -100,9 +100,11 @@ def corporate_info(request):
                                                 address = address,
                                                 )
             messages.success(request, "Record saved")
-            return redirect('/payments/payment_details/'+str(agent_obj.user.id))
+            # return redirect('/payments/payment_details/'+str(agent_obj.user.id))
+            return redirect('/agents/attachment/')
         except:
             return redirect('/agents/corporate_info/')
+
     else:
         corporate_obj = None
         if CorporateDetails.objects.filter(agent_profile_id = agent_obj.id).exists():
