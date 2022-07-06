@@ -1,5 +1,6 @@
 from django import template
 from masters.views import RegisteredPrerequisiteCourses
+from payments.models import ProgramRegistrationFeeDetails
 register = template.Library()
 
 
@@ -25,4 +26,11 @@ def get_file_name(path):
         return file_name[1]
     except:
         return ''
+
+@register.filter
+def is_paid_program_registration_payment(application_obj):
+    if ProgramRegistrationFeeDetails.objects.filter(application_id=application_obj.id).exists():
+        return True
+    else:
+        return False
 

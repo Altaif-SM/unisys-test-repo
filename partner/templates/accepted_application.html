@@ -1,5 +1,7 @@
 {#{% extends "template_base_page.html" %}#}
+
 {% extends context.my_template %}
+{% load custom_tags %}
 {#{% extends request.user.is_administrator|yesno:"template_university_base_page.html,template_base_page.html" %}#}
 
 {% load  i18n %}
@@ -322,7 +324,7 @@
             </li>
 
             <li>
-                <span> {% trans 'AGENT APPLICATION' %} </span>
+                <span> {% trans 'STUDENT APPLICATION' %} </span>
             </li>
         </ul>
     </div>
@@ -338,7 +340,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> {% trans 'AGENT APPLICATION' %}</span>
+                <span class="caption-subject font-red sbold uppercase"> {% trans 'STUDENT APPLICATION' %}</span>
             </div>
         </div>
 
@@ -361,23 +363,6 @@
                         {% csrf_token %}
 
                         <div class="row">
-                            {#                            <div class="actions" style="text-align: right;margin-top: -40px;">#}
-                            {#                                <div class="btn-group">#}
-                            {#                                    <a class="btn green-haze btn-outline btn-circle btn-sm" data-toggle="dropdown"#}
-                            {#                                       data-hover="dropdown" data-close-others="true"> Actions#}
-                            {#                                        <i class="fa fa-angle-down"></i>#}
-                            {#                                    </a>#}
-                            {#                                    <ul class="dropdown-menu pull-right" id="action">#}
-                            {##}
-                            {#                                        <li><a class="status_change"#}
-                            {#                                               id="First Interview">{% trans 'Conditional Offer Letter' %}</a></li>#}
-                            {#                                        <li><a class="status_change"#}
-                            {#                                               id="First Interview attended"> {% trans 'Full Offer Letter' %}</a></li>#}
-                            {#                                        <li><a class="status_change" id="Incomplete"> {% trans 'Incomplete' %}</a></li>#}
-                            {#                                        <li><a class="status_change" id="Reject">{% trans 'Reject' %}</a></li>#}
-                            {#                                    </ul>#}
-                            {#                                </div>#}
-                            {#                            </div>#}
                             <input hidden id="data_value" name="data_value">
                             <div class="">
                                 <table name="data"
@@ -392,10 +377,10 @@
                                         {#                                        </th>#}
                                         <th>{% trans 'Student Name' %}</th>
                                         <th>{% trans 'University' %}</th>
-                                        <th>{% trans 'University Type' %}</th>
+                                        <th>{% trans 'Type' %}</th>
                                         <th>{% trans 'Faculty' %}</th>
                                         <th>{% trans 'Program' %}</th>
-                                        <th>{% trans 'Offer Status' %}</th>
+                                        <th>{% trans 'Status' %}</th>
                                         <th>{% trans 'Action' %}</th>
                                     </tr>
                                     </thead>
@@ -421,11 +406,7 @@
                                             <td>
                                                 {{ rec.university.university_name|default_if_none:"" }}
                                             </td>
-                                            {% if rec.university.is_partner_university == True %}
-                                                <td>International</td>
-                                            {% else %}
-                                                <td>Main</td>
-                                            {% endif %}
+                                            <td>{{ rec.university_type.university_type|default_if_none:"" }}</td>
 
 
 
@@ -466,19 +447,26 @@
                                                     {{ rec.program.program_name|default_if_none:"" }}
                                                 </td>
                                             {% endif %}
+                                        <td>
+                                            {% if rec|is_paid_program_registration_payment %}
+                                                <span style="color: green">PAID</span>
+                                            {% else %}
+                                                <span style="color: red">NOT PAID</span>
+                                            {% endif %}
+                                        </td>
 
 
-                                            <td>
-                                                {% if rec.first_interview == True and rec.first_interview_attend == False and rec.incomplete == False %}
-                                                    <span style="color: #bfb53c">Conditional</span>
-                                                {% elif  rec.first_interview == False and rec.first_interview_attend == True and rec.incomplete == False %}
-                                                    <span style="color: green">Full</span>
-                                                {% elif  rec.first_interview == False and rec.first_interview_attend == False and rec.incomplete == True %}
-                                                    <span style="color: darkred">Incomplete</span>
-                                                {% else %}
-                                                    <span style="color: red">Rejected</span>
-                                                {% endif %}
-                                            </td>
+{#                                            <td>#}
+{#                                                {% if rec.first_interview == True and rec.first_interview_attend == False and rec.incomplete == False %}#}
+{#                                                    <span style="color: #bfb53c">Conditional</span>#}
+{#                                                {% elif  rec.first_interview == False and rec.first_interview_attend == True and rec.incomplete == False %}#}
+{#                                                    <span style="color: green">Full</span>#}
+{#                                                {% elif  rec.first_interview == False and rec.first_interview_attend == False and rec.incomplete == True %}#}
+{#                                                    <span style="color: darkred">Incomplete</span>#}
+{#                                                {% else %}#}
+{#                                                    <span style="color: red">Rejected</span>#}
+{#                                                {% endif %}#}
+{#                                            </td>#}
 
                                             <td>
                                                 <a href="{% url 'partner:template_applicant_all_details' rec.id %}">

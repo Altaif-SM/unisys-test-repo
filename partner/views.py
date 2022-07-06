@@ -2382,7 +2382,7 @@ def approved_application(request):
     try:
         if request.user.is_agent():
             accepted_applicants = ApplicationDetails.objects.filter(is_submitted=True, agent_id = request.user.id,
-                                                                    year=get_current_year(request), is_accepted=True,
+                                                                    year=get_current_year(request),
                                                                     )
             context['my_template'] = 'template_agent_base.html'
         else:
