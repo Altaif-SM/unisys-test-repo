@@ -4906,3 +4906,101 @@ def research_fee_details(request, research_id=None):
         'research_obj': research_obj,
         'research_count': research_count,
     })
+
+
+def referral_fee(request):
+    context = {
+        'referral_fee_recs':ReferralFeeDetails.objects.all()
+    }
+    return render(request, 'referral_fee.html', context)
+
+def add_referral_fee(request):
+    if request.method == 'POST':
+        referral_amount = request.POST.get('referral_amount')
+        university = request.POST.get('university')
+        program = request.POST.get('program')
+        try:
+            ReferralFeeDetails.objects.create(university_id = university,program_id = program,amount = referral_amount)
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/referral_fee/')
+    else:
+        university_type_recs = UniversityTypeDetails.objects.filter(status=True)
+        university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
+                                                           is_partner_university=False).order_by('-id')
+        context = {
+            'university_recs':university_recs,
+            'university_type_recs':university_type_recs
+        }
+        return render(request, 'add_referral_fee.html',context)
+
+def get_university_program_already_exists(request):
+    referral_id = request.POST.get('referral_id', None)
+    university = request.POST.get('university', None)
+    program = request.POST.get('program', None)
+    program_exists = False
+    if referral_id:
+        if ReferralFeeDetails.objects.filter(university_id=university, program_id=program).exclude(
+                id=referral_id).exists():
+            program_exists = True
+        else:
+            program_exists = False
+        return JsonResponse(program_exists, safe=False)
+    else:
+        if ReferralFeeDetails.objects.filter(university_id=university, program_id=program).exists():
+            program_exists = True
+        else:
+            program_exists = False
+        return JsonResponse(program_exists, safe=False)
+
+def get_program_from_university(request):
+    program_list = []
+    university = request.POST.get('university', None)
+    program_recs = ProgramDetails.objects.filter(university_id=university)
+    for rec in program_recs:
+        raw_dict = {}
+        raw_dict['program_name']=rec.program_name
+        raw_dict['id']=rec.id
+        program_list.append(raw_dict)
+    return JsonResponse(program_list, safe=False)
+
+
+def edit_referral_fee(request, referral_id=None):
+    referral_obj = ReferralFeeDetails.objects.get(id=referral_id)
+    if request.method == 'POST':
+        university = request.POST.get('university')
+        program = request.POST.get('program')
+        amount = request.POST.get('referral_amount')
+        try:
+            referral_obj.amount = amount
+            referral_obj.university_id = university
+            referral_obj.program_id = program
+            referral_obj.save()
+            messages.success(request, "Record saved.")
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect('/masters/referral_fee/')
+    else:
+        university_type_recs = UniversityTypeDetails.objects.filter(status=True)
+        university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
+                                                           university_type_id=referral_obj.university.university_type.id)
+        program_recs = ProgramDetails.objects.filter(university_id=referral_obj.university.id)
+        context = {
+            'university_recs': university_recs,
+            'university_type_recs': university_type_recs,
+            'referral_obj': referral_obj,
+            'program_recs': program_recs,
+        }
+        return render(request, 'edit_referral_fee.html', context)
+
+
+def delete_referral_fee(request):
+    if request.method == 'POST':
+        referral_delete_id = request.POST.get('referral_delete_id')
+        try:
+            ReferralFeeDetails.objects.filter(id=referral_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/masters/referral_fee/')

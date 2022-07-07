@@ -176,6 +176,13 @@ urlpatterns = [
     path('edit_study_plan/<int:program_id>/', views.edit_study_plan, name='edit_study_plan'),
     path('delete_program/', views.delete_program, name='delete_program'),
 
+    path('referral_fee/', views.referral_fee, name='referral_fee'),
+    path('add_referral_fee/', views.add_referral_fee, name='add_referral_fee'),
+    path('get_program_from_university/', views.get_program_from_university, name='get_program_from_university'),
+    path('get_university_program_already_exists/', views.get_university_program_already_exists, name='get_university_program_already_exists'),
+    path('delete_referral_fee/', views.delete_referral_fee, name='delete_referral_fee'),
+    path('edit_referral_fee/<int:referral_id>/', views.edit_referral_fee, name='edit_referral_fee'),
+
     path('year_settings/', views.year_settings, name='year_settings'),
     path('add_year/', views.add_year, name='add_year'),
     path('delete_year/', views.delete_year, name='delete_year'),

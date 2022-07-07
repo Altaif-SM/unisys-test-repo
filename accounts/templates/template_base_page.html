@@ -818,7 +818,24 @@ License: You must have a valid license purchased only from themeforest(the above
                             </li>
 
 
-                            {#                            {% endif %}#}
+                        <li class="nav-item finance_nav">
+                                    <a href="javascript:;" class="nav-link nav-toggle">
+
+                                        <i class="glyphicon glyphicon-credit-card" aria-hidden="true"></i>
+                                        <span class="title">{% trans 'Finance Settings' %}</span>
+                                        <span class="arrow finance_arrow"></span>
+                                    </a>
+                                <ul class="sub-menu finance_sub_menu">
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:referral_fee' %}"
+                                               class="nav-link ">{% trans 'Manage Referral Fee' %}</a>
+                                        </li>
+
+
+                                </ul>
+                            </li>
+
+
 
 
                         </ul>
@@ -1862,6 +1879,21 @@ License: You must have a valid license purchased only from themeforest(the above
             $(".program_settings_nav_item").addClass("open");
             $(".program_settings_arrow").addClass("open");
             $('.program_settings_sub_menu').css('display', 'block');
+
+        }
+    {% endif %}
+
+    {% if request.resolver_match.url_name == 'referral_fee' or request.resolver_match.url_name == 'add_referral_fee' or request.resolver_match.url_name == 'edit_referral_fee' %}
+        {
+            var element = document.getElementById("b");
+            element.classList.add("active");
+
+            var element = document.getElementById("setting_anch");
+            element.classList.add("active");
+
+            $(".finance_nav").addClass("open");
+            $(".finance_arrow").addClass("open");
+            $('.finance_sub_menu').css('display', 'block');
 
         }
     {% endif %}

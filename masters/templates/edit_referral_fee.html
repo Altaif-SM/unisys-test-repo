@@ -1,0 +1,366 @@
+{% extends "template_base_page.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+{% endblock %}
+
+{% block ScriptBlock %}
+
+    <script>
+        window.onload = function () {
+            $(document).ready(function () {
+
+                 {#$("#university_type").chosen();#}
+                 {#$("#university").chosen();#}
+                 {#$("#program").chosen();#}
+
+
+
+
+                 $(document).on("change", "#university", function (e) {
+                var university = $(this).val();
+                var url = '/masters/get_program_from_university/';
+                get_program_from_university(url, university)
+            })
+
+                $(document).on("change", "#program", function (e) {
+                var referral_id = $('#referral_id').val();
+                var university = $('#university').val();
+                var program = $(this).val();
+                var url = '/masters/get_university_program_already_exists/';
+                get_university_program_already_exists(url, referral_id,program, university)
+            })
+
+                  function get_university_program_already_exists(url, referral_id,program, university) {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {
+                    referral_id: referral_id,
+                    university: university,
+                    program: program,
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+                success: function (data) {
+                    var program_exists = data;
+                    if (program_exists === true) {
+
+                        $('#program_exists').show();
+                    } else {
+                        $('#program_exists').hide();
+                    }
+
+
+                },
+                error: function (xhr, msg, err) {
+                     $('#program_exists').hide();
+                    alert(xhr.responseJSON.error);
+                }
+            });
+        }
+
+
+
+
+                  $("#referral_fee_form").submit(function (e) {
+
+
+                      if ($('#program_exists').is(":visible")) {
+                    return false;
+                }
+
+
+
+
+
+                })
+
+
+            $(document).on("change", "#university_type", function (e) {
+                    var university_type_id = $(this).val();
+                    var url = '/student/get_university_from_type/';
+                    get_university_from_university_type(url, university_type_id)
+                })
+
+
+            });
+
+
+             function get_program_from_university(url, university) {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {
+                    university: university,
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+                success: function (data) {
+
+                        $('#program').empty();
+
+                        $('#program').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+
+
+                            $('#program').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['program_name'] + '</option>')
+                        }
+
+
+
+
+                    },
+                    error: function (xhr, msg, err) {
+                        alert(xhr.responseJSON.error);
+                    }
+            });
+        }
+
+
+function get_university_from_university_type(url, university_type_id) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        university_type_id: university_type_id,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data) {
+
+                        $('#university').empty();
+                        $('#university').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#university').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['university_name'] + '</option>')
+                        }
+                    },
+                    error: function (xhr, msg, err) {
+                        alert(xhr.responseJSON.error);
+                    }
+                });
+            }
+
+            window.setTimeout(function () {
+                $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                    $(this).remove();
+                });
+            }, 4000);
+        }
+
+        function validate(evt) {
+            var theEvent = evt || window.event;
+
+            // Handle paste
+            if (theEvent.type === 'paste') {
+                key = event.clipboardData.getData('text/plain');
+            } else {
+                // Handle key press
+                var key = theEvent.keyCode || theEvent.which;
+                key = String.fromCharCode(key);
+            }
+            var regex = /[0-9]|\./;
+            if (!regex.test(key)) {
+                theEvent.returnValue = false;
+                if (theEvent.preventDefault) theEvent.preventDefault();
+            }
+        }
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'accounts:home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> Master Settings </span>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span>Finance Settings</span>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span> {% trans 'Edit Referral Fee' %} </span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">{% trans 'Edit Referral Fee' %} </span>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form action="{% url 'masters:edit_referral_fee' referral_obj.id %}"
+                      id="referral_fee_form"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                 <input type="hidden" id="referral_id" name="referral_id" value="{{ referral_obj.id }}">
+
+                    <div class="form-body">
+
+                        <div class="row item_experience" id="item_experience_1">
+
+                            <div class="row">
+                                <div class="">
+    <label class="col-md-2 control-label">{% trans 'University Type' %}:<span
+            style="color: red">*</span></label>
+    <div class="col-md-3">
+        <select id='university_type' title="Select University"
+                name="university_type"
+                class="form-control" required>
+        {% if referral_obj.university.university_type %}
+            <option selected="selected"  style="display: none" value="{{ referral_obj.university.university_type.id }}">{{ referral_obj.university.university_type.university_type|default_if_none:"" }}</option>
+        {% else %}
+            <option selected="selected"  value=""> Please Select</option>
+        {% endif %}
+
+            {% for rec in university_type_recs %}
+                <option value="{{ rec.id }}">{{ rec.university_type|default_if_none:"" }}</option>
+            {% endfor %}
+
+        </select>
+    </div>
+</div>
+
+
+                            </div>
+
+                            <br>
+                            <div class="row">
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'University' %}:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select id='university' title="Select University"
+                                                name="university"
+                                                class="form-control" required>
+                                         {% if referral_obj.university %}
+            <option selected="selected"  style="display: none" value="{{ referral_obj.university.id }}">{{ referral_obj.university.university_name|default_if_none:"" }}</option>
+        {% else %}
+            <option selected="selected"  value=""> Please Select</option>
+        {% endif %}
+                                            {% for rec in university_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.university_name|default_if_none:"" }}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+
+                            <br>
+                        <div class="row">
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Program' %}:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select id='program' title="Select Program"
+                                                name="program"
+                                                class="form-control" required>
+                                             {% if referral_obj.program %}
+            <option selected="selected"  style="display: none" value="{{ referral_obj.program.id }}">{{ referral_obj.program.program_name|default_if_none:"" }}</option>
+        {% else %}
+            <option selected="selected"  value=""> Please Select</option>
+        {% endif %}
+                                        {% for rec in program_recs %}
+                                                <option value="{{ rec.id }}">{{ rec.program_name|default_if_none:"" }}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                </div>
+
+                            <span style="color: red;display: none;" id="program_exists">Selected University and Program already exists.</span>
+
+
+
+                            </div>
+
+                        <br>
+
+
+
+                        <div class="row">
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Referral Fee' %}:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter Referral Fee" id="referral_amount"
+                                               value="{{ referral_obj.amount|floatformat:2 }}" onkeypress='validate(event)'
+                                               name="referral_amount"
+                                               class="form-control" required>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+
+
+
+
+
+
+                            <hr>
+
+
+
+                        <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                                        onclick="window.location='{% url "masters:referral_fee" %}'">
+                                    Back
+                                </button>
+
+                                <button type="submit" class="btn green" id="save_form" style="">Save
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
