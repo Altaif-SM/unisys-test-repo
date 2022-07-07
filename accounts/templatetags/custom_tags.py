@@ -1,6 +1,8 @@
 from django import template
-from masters.views import RegisteredPrerequisiteCourses
+from masters.views import RegisteredPrerequisiteCourses,ProgramFeeDetails
 from payments.models import ProgramRegistrationFeeDetails
+from datetime import datetime
+
 register = template.Library()
 
 
@@ -34,3 +36,19 @@ def is_paid_program_registration_payment(application_obj):
     else:
         return False
 
+
+@register.filter
+def get_payment_student_date(application_obj):
+    if ProgramRegistrationFeeDetails.objects.filter(application_id=application_obj.id).exists():
+        payment_obj = ProgramRegistrationFeeDetails.objects.get(application_id=application_obj.id)
+        return str(payment_obj.created_on.date())
+    else:
+        return '-'
+
+@register.filter
+def get_student_amount(application_obj):
+    if ProgramFeeDetails.objects.filter(university_id=application_obj.university.id, program_id=application_obj.program.id).exists():
+        payment_obj = ProgramFeeDetails.objects.get(university_id=application_obj.university.id, program_id=application_obj.program.id)
+        return str(payment_obj.total_amount)
+    else:
+        return '-'

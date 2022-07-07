@@ -256,3 +256,23 @@ def agent_application_details(request, agent_id):
         'payment_agent_details': payment_agent_details,
     }
     return render(request, 'agent_application_details.html', context)
+
+
+def referral_fee_topup(request):
+    accepted_applicants = ''
+    context = {}
+    try:
+        if request.user.is_agent():
+            accepted_applicants = ApplicationDetails.objects.filter(is_submitted=True, agent_id = request.user.id,
+                                                                    year=get_current_year(request),
+                                                                    )
+            context['my_template'] = 'template_agent_base.html'
+        else:
+            accepted_applicants = ApplicationDetails.objects.filter(is_submitted=True,
+                                                                 year=get_current_year(request), is_accepted=True,
+                                                                 ).exclude(is_offer_accepted = True)
+            context['my_template'] = 'template_base_page.html'
+
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+    return render(request, 'referral_fee_topup.html',{'accepted_applicants': accepted_applicants,'context':context})

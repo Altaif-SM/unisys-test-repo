@@ -587,6 +587,48 @@ License: You must have a valid license purchased only from themeforest(the above
 
 
 
+                <div class="tab-pane" id="finance_management_tab">
+                        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
+                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+
+                            <li class="nav-item ">
+
+
+                                <a href="{% url 'agents:referral_fee_topup' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="fa fa-tasks"></i>
+                                        <span class="title">{% trans 'REFERRAL FEE TOPUP' %}</span>
+                                    </a>
+
+
+                                        </li>
+
+                            <li class="nav-item " id="acd_qli">
+                                    <a href=""
+                                       class="nav-link nav-toggle">
+
+                                        <span class="title"></span>
+
+
+                                        </span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+
+{#                            <li class="nav-item ">#}
+{#                                            <a href="{% url 'partner:approved_application' %}"#}
+{#                                               class="nav-link ">{% trans 'STUDENT APPLICATION' %}</a>#}
+{#                                        </li>#}
+
+
+
+                        </ul>
+                        <!-- END SIDEBAR MENU -->
+                    </div>  <!-- END tabpane -->
+
+
+
+
 
                 </div> <!-- tab-content -->
             </div>
@@ -602,6 +644,7 @@ License: You must have a valid license purchased only from themeforest(the above
                     <ul class="nav nav-tabs menu" style="border-bottom: none">
                             <li id="agent_application"><a href="{% url 'agents:personal_info' %}" >{% trans 'AGENT APPLICATION' %}</a></li>
                         <li id="application_management"><a href="{% url 'partner:approved_application' %}" >{% trans 'STUDENT APPLICATION MANAGEMENT' %}</a></li>
+                        <li id="finance_management"><a href="{% url 'agents:referral_fee_topup' %}" >{% trans 'FINANCE MANAGEMENT' %}</a></li>
 
                     </ul>
 
@@ -747,6 +790,16 @@ License: You must have a valid license purchased only from themeforest(the above
             element.classList.add("active");
 
             var element = document.getElementById("application_management");
+            element.classList.add("active");
+        }
+    {% endif %}
+
+    {%  if request.resolver_match.url_name == 'referral_fee_topup' %}
+        {
+            var element = document.getElementById("finance_management_tab");
+            element.classList.add("active");
+
+            var element = document.getElementById("finance_management");
             element.classList.add("active");
         }
     {% endif %}
