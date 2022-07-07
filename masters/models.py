@@ -967,11 +967,11 @@ class ResearchFeeDetails(BaseModel):
 
 
 
-# class ReferralFeeDetails(BaseModel):
-#     amount = models.CharField(max_length=50, blank=True, null=True)
-#     university = models.ForeignKey(UniversityDetails, null=True, related_name='referral_fee_university_rel',
-#                              on_delete=models.SET_NULL)
-#     program = models.ForeignKey(ProgramDetails, null=True, related_name='referral_fee_program_rel',
-#                                 on_delete=models.SET_NULL)
+class ReferralFeeDetails(BaseModel):
+    amount = models.CharField(max_length=50, blank=True, null=True)
+    university = models.ForeignKey(UniversityDetails, null=True, related_name='referral_fee_university_rel',
+                             on_delete=models.SET_NULL)
+    program = models.ForeignKey(ProgramDetails, null=True, related_name='referral_fee_program_rel',
+                                on_delete=models.SET_NULL)
 
 
