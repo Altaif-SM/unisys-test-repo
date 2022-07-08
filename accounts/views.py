@@ -301,7 +301,7 @@ def user_signup(request):
                     messages.error(request, msg)
         if request.POST.get('admin_page'):
             return redirect('/accounts/template_manage_user/')
-        return redirect('/accounts/template_manage_user/')
+        return redirect('/')
         # return render(request, 'template_manage_user.html', {'form': signup_form})
         # return render(request, 'template_login.html', {'form': signup})
 
