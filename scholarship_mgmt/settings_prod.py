@@ -111,8 +111,8 @@ DATABASES = {
      'default': {
           'ENGINE': 'django.db.backends.mysql',
           'NAME': 'scholarship_system',
-          'USER':'riyaz',
-          'PASSWORD':'Sayyed@123',
+          'USER':'root',
+          'PASSWORD':'altaifSGn@edx*21',
           'HOST': '127.0.0.1',
           'PORT':'3306'
      }
