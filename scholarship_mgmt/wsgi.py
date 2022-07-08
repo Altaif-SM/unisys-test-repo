@@ -13,8 +13,12 @@ import os
 import sys
 from django.core.wsgi import get_wsgi_application
 
-sys.path.append('/var/www/html/scholarship_mgmt')
-sys.path.append('/var/www/html/var/lib/python3.5/site-packages')
+
+sys.path.append('/var/www/scholarship_system_project/namafund')
+sys.path.append('/var/www/scholarship_system_project/namafund/scholarship_mgmt')
+
+
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "scholarship_mgmt.settings_prod")
 
 try:
