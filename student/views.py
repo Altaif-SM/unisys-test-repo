@@ -3932,3 +3932,18 @@ def get_research_semester_from_year(request):
         raw_dict['id']=rec.id
         finalDict.append(raw_dict)
     return JsonResponse(finalDict, safe=False)
+
+def student_notifications(request):
+    application_history_obj = None
+    try:
+        if ApplicationDetails.objects.filter(application_id=request.user.get_application_id,
+                                             is_submitted=True).exists():
+            application_history_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id,
+                                                                     is_submitted=True).applicant_history_rel.all()
+            ApplicationHistoryDetails.objects.filter(applicant_id=request.user.get_application.id).update(is_read = True)
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+    context = {
+        'application_history_obj':application_history_obj
+    }
+    return render(request, 'all_notifications.html', context)

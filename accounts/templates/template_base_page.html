@@ -378,32 +378,32 @@ License: You must have a valid license purchased only from themeforest(the above
                         </li>
                     {% endif %}
 
+                {% if user.is_student %}
 
                     <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
-                        {% if user.notifications.flag %}
-                            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
+                        {% if user.get_progress_history.flag %}
+                            <a href="/student/student_notifications/" class="dropdown-toggle" data-toggle="dropdown1" data-hover="dropdown1"
                                data-close-others="true">
                                 <i class="icon-bell"></i>
-                                {% if user.notifications.active_count != 0 %}
-                                    <span class="badge badge-default">
-
-                                    {{ user.notifications.active_count }}
-                                        </span>
+                                {% if user.get_progress_history.active_count != 0 %}
+                                    <span class="badge badge-default" style="color: white;background:#eb5151;font-weight: bold">{{ user.get_progress_history.active_count }}</span>
                                 {% endif %}
                             </a>
 
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a>{% trans 'View all notifications' %}</a>
-                                    {% for notification in user.notifications.notifications %}
-                                        {% if not notification.is_read %}
-                                            <a style=""><b>{{ notification.last_updated|date:'d/m' }} {{ notification.message|truncatechars:30 }}</b></a>
-                                        {% else %}
-                                            <a>{{ notification.message|truncatechars:30 }}</a>
-                                        {% endif %}
+                            <ul  class="dropdown-menu">
+                                <li >
+                                    <a href="/student/student_notifications/">{% trans 'See All' %}</a>
+                                    {% for notification in user.get_progress_history.notifications %}
+                                         <a>{{ notification.remark|truncatechars:30 }}</a>
+{#                                        {% if not notification.is_read %}#}
+{#                                            <a style=""><b>{{ notification.last_updated|date:'d/m' }} {{ notification.message|truncatechars:30 }}</b></a>#}
+{#                                        {% else %}#}
+{#                                            <a>{{ notification.remark|truncatechars:30 }}</a>#}
+{#                                        {% endif %}#}
                                     {% endfor %}
                                 </li>
                             </ul>
+
                         {% else %}
                             <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
                                data-close-others="true">
@@ -412,7 +412,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             </a>
                         {% endif %}
                     </li>
-
+                    {% endif %}
 
                     <!-- BEGIN NOTIFICATION DROPDOWN -->
                     <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
@@ -1735,7 +1735,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <script type="text/javascript">
 
 
-    {% if request.resolver_match.url_name == 'student_home' or request.resolver_match.url_name == 'applicant_personal_info' or request.resolver_match.url_name == 'applicant_academic_english_qualification' or request.resolver_match.url_name == 'applicant_curriculum_experience_info' or request.resolver_match.url_name == 'applicant_additional_information' or request.resolver_match.url_name == 'applicant_attachment_submission'  or request.resolver_match.url_name == 'applicant_declaration' or request.resolver_match.url_name == 'my_application'  or request.resolver_match.url_name == 'applicant_employement_history_info'  or request.resolver_match.url_name == 'applicant_intake_info'  or request.resolver_match.url_name == 'applicant_credit_transfer'  or request.resolver_match.url_name == 'checkout' or request.resolver_match.url_name == 'applicant_credit_transfer_attachement' or request.resolver_match.url_name == 'applicant_research_details' %}
+    {% if request.resolver_match.url_name == 'student_home' or request.resolver_match.url_name == 'applicant_personal_info' or request.resolver_match.url_name == 'applicant_academic_english_qualification' or request.resolver_match.url_name == 'applicant_curriculum_experience_info' or request.resolver_match.url_name == 'applicant_additional_information' or request.resolver_match.url_name == 'applicant_attachment_submission'  or request.resolver_match.url_name == 'applicant_declaration' or request.resolver_match.url_name == 'my_application'  or request.resolver_match.url_name == 'applicant_employement_history_info'  or request.resolver_match.url_name == 'applicant_intake_info'  or request.resolver_match.url_name == 'applicant_credit_transfer'  or request.resolver_match.url_name == 'checkout' or request.resolver_match.url_name == 'applicant_credit_transfer_attachement' or request.resolver_match.url_name == 'applicant_research_details' or request.resolver_match.url_name == 'student_notifications' %}
         {
             var element = document.getElementById("c");
             element.classList.add("active");

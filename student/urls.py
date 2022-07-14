@@ -9,6 +9,7 @@ app_name = 'student'
 
 urlpatterns = [
                   path('student_home/', views.student_home, name='student_home'),
+                  path('student_notifications/', views.student_notifications, name='student_notifications'),
                   path('delete_application/<int:app_id>/', views.delete_application,
                        name='delete_application'),
 

@@ -339,6 +339,31 @@ class User(AbstractUser):
         except:
             return payload
 
+    @property
+    def get_progress_history(self):
+        payload = {'flag': False}
+        try:
+            if self.role.all().filter(name__in=[self.STUDENT]).exists():
+                payload['notifications'] = self.student_user_rel.get().student_applicant_rel.get(
+                    year__active_year=True,
+                    is_submitted=True).applicant_history_rel.all()
+                payload['flag'] = True
+                payload['active_count'] = self.student_user_rel.get().student_applicant_rel.get(
+                    year__active_year=True,
+                    is_submitted=True,).applicant_history_rel.filter(is_read = False).count()
+                return payload
+            elif self.role.all().filter(name__in=[self.SUPER_ADMIN, self.ADMIN]).exists():
+                from common.utils import get_admin_notification
+                payload['notifications'] = get_admin_notification()
+                payload['flag'] = True
+                payload['active_count'] = get_admin_notification().count()
+                return payload
+            else:
+                return payload
+
+        except:
+            return payload
+
     def year_list(self):
         from masters.models import YearDetails
         return YearDetails.objects.all()

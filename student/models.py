@@ -471,6 +471,7 @@ class ApplicationHistoryDetails(BaseModel):
     remark = models.CharField(max_length=1000, blank=True, null=True)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_history_rel',
                                      on_delete=models.SET_NULL)
+    is_read = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('-id',)
