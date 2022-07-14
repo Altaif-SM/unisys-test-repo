@@ -2440,6 +2440,7 @@ def save_attachement_submission(request):
         messages.success(request, "Attachment submitted successfully.")
 
     except Exception as e:
+        print(str(e))
         messages.warning(request, "Form have some error" + str(e))
     return redirect('/student/applicant_declaration/')
 
