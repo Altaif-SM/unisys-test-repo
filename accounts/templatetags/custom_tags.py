@@ -1,5 +1,5 @@
 from django import template
-from masters.views import RegisteredPrerequisiteCourses,ProgramFeeDetails
+from masters.views import RegisteredPrerequisiteCourses,ProgramFeeDetails,ReferralFeeDetails
 from payments.models import ProgramRegistrationFeeDetails
 from datetime import datetime
 
@@ -46,9 +46,18 @@ def get_payment_student_date(application_obj):
         return '-'
 
 @register.filter
-def get_student_amount(application_obj):
+def get_paid_program_amount(application_obj):
     if ProgramFeeDetails.objects.filter(university_id=application_obj.university.id, program_id=application_obj.program.id).exists():
         payment_obj = ProgramFeeDetails.objects.get(university_id=application_obj.university.id, program_id=application_obj.program.id)
         return str(payment_obj.total_amount)
+    else:
+        return '-'
+
+
+@register.filter
+def get_referral_Fee(application_obj):
+    if ReferralFeeDetails.objects.filter(university_id=application_obj.university.id, program_id=application_obj.program.id).exists():
+        referral_fee_obj = ReferralFeeDetails.objects.get(university_id=application_obj.university.id, program_id=application_obj.program.id)
+        return str(referral_fee_obj.amount)
     else:
         return '-'

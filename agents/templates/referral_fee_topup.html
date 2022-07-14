@@ -405,7 +405,7 @@
                                            {{ rec|get_payment_student_date }}
                                         </td>
                                         <td>
-                                           {{ rec|get_student_amount }}
+                                           {{ rec|get_paid_program_amount }}
                                         </td>
                                             <td>
                                                 <text><a href="/partner/template_applicant_all_details/{{ rec.id }}"
@@ -441,7 +441,7 @@
                                                 </td>
                                             {% endif %}
                                         <td>
-
+                                    {{ rec|get_referral_Fee }}
                                         </td>
 
 

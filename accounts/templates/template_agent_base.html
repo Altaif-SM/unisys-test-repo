@@ -784,7 +784,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-    {%  if request.resolver_match.url_name == 'approved_application'  or request.resolver_match.url_name == 'template_applicant_all_details' %}
+    {%  if request.resolver_match.url_name == 'approved_application' %}
         {
             var element = document.getElementById("application_management_tab");
             element.classList.add("active");
@@ -794,7 +794,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-    {%  if request.resolver_match.url_name == 'referral_fee_topup' %}
+    {%  if request.resolver_match.url_name == 'referral_fee_topup' or request.resolver_match.url_name == 'template_applicant_all_details'  %}
         {
             var element = document.getElementById("finance_management_tab");
             element.classList.add("active");
