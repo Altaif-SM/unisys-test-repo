@@ -2278,6 +2278,7 @@ def save_update_applicant_additional_info(request):
             if StudentDetails.objects.filter(user=request.user):
                 if AdditionInformationDetails.objects.filter(application_id = request.user.get_application).exists():
                     AdditionInformationDetails.objects.filter(application_id = request.user.get_application).update(
+                        recruitment_agents=request.POST['recruitment_agents'],
                         ken_name=request.POST['ken_name'],
                         ken_id=request.POST['ken_id'],
                         ken_relationship=request.POST['ken_relationship'],
@@ -2310,7 +2311,7 @@ def save_update_applicant_additional_info(request):
                         application_obj.progress_counter = progress_counter
                         application_obj.save()
 
-                        AdditionInformationDetails.objects.create(application_id=request.user.get_application,ken_name=request.POST['ken_name'],
+                        AdditionInformationDetails.objects.create(application_id=request.user.get_application,ken_name=request.POST['ken_name'],recruitment_agents = request.POST['recruitment_agents'],
                             ken_id=request.POST['ken_id'],
                             ken_relationship=request.POST['ken_relationship'],
                             ken_tel_no=request.POST['ken_tel_no'],

@@ -743,6 +743,7 @@ class ApplicantAttachementDetails(BaseModel):
 
 
 class AdditionInformationDetails(BaseModel):
+    recruitment_agents = models.CharField(max_length=150, blank=True, null=True)
     ken_name = models.CharField(max_length=255, blank=True, null=True)
     ken_id = models.CharField(max_length=255, blank=True, null=True)
     ken_relationship = models.CharField(max_length=255, blank=True, null=True)

@@ -46,6 +46,34 @@
             align-self: center;
         }
 
+        .progress {
+            margin: 20px auto;
+            padding: 0;
+            width: 90%;
+            height: 30px;
+            overflow: hidden;
+            background: #e5e5e5;
+            border-radius: 6px;
+        }
+
+        .bar {
+            position: relative;
+            float: left;
+            min-width: 1%;
+            height: 100%;
+            background: cornflowerblue;
+        }
+
+        .percent {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            margin: 0;
+            font-family: tahoma, arial, helvetica;
+            font-size: 12px;
+            color: white;
+        }
 
     </style>
 {% endblock %}
@@ -106,95 +134,96 @@
             </div>
         </div>
 
-{#    <div class="row">#}
-{#				<div class="col-md-12 col-sm-12">#}
-{#					<div class="portlet light ">#}
-{#						<div class="portlet-body">#}
-{#							<div class="scroller" style="height: 600px;" data-always-visible="1" data-rail-visible="0">#}
-{#								<ul class="feeds">#}
-{#                                {% if application %}#}
-{#                                    {% if not application.is_submitted %}#}
-{##}
-{#                                        <li>#}
-{#										<div class="col1">#}
-{#											<div class="cont">#}
-{#												<div class="cont-col1">#}
-{#													<div class="label label-sm label-info">#}
-{#														<i class="fa fa-bell-o"></i>#}
-{#													</div>#}
-{#												</div>#}
-{#												<div class="cont-col2">#}
-{#													<div class="desc">#}
-{#														 To proceed with the application, please complete the sections on the left side of the screen. Good luck!#}
-{##}
-{#														</span>#}
-{#													</div>#}
-{#												</div>#}
-{#											</div>#}
-{#										</div>#}
-{##}
-{#									</li>#}
-{##}
-{##}
-{##}
-{##}
-{#                                        {% else %}#}
-{#                                     {% for rec in application_history_obj %}#}
-{#                                         <li>#}
-{#										<div class="col1">#}
-{#											<div class="cont">#}
-{#												<div class="cont-col1">#}
-{#													<div class="label label-sm label-info">#}
-{#														<i class="fa fa-bell-o"></i>#}
-{#													</div>#}
-{#												</div>#}
-{#												<div class="cont-col2">#}
-{#													<div class="desc">#}
-{#														 {{ rec.remark|default_if_none:"" }}#}
-{##}
-{#														</span>#}
-{#													</div>#}
-{#												</div>#}
-{#											</div>#}
-{#										</div>#}
-{#                                        <div class="col2">#}
-{#											<div class="date">#}
-{#												 {{ rec.last_updated|date:"d-m-y" }}#}
-{#											</div>#}
-{#										</div>#}
-{#									</li>#}
-{#                                    {% endfor %}#}
-{##}
-{#                                        {% endif %}#}
-{#                                {% else %}#}
-{#                                    <li>#}
-{#										<div class="col1">#}
-{#											<div class="cont">#}
-{#												<div class="cont-col1">#}
-{#													<div class="label label-sm label-info">#}
-{#														<i class="fa fa-bell-o"></i>#}
-{#													</div>#}
-{#												</div>#}
-{#												<div class="cont-col2">#}
-{#													<div class="desc">#}
-{#														 To proceed with the application, please complete the sections on the left side of the screen. Good luck!#}
-{##}
-{#														</span>#}
-{#													</div>#}
-{#												</div>#}
-{#											</div>#}
-{#										</div>#}
-{##}
-{#									</li>#}
-{##}
-{#                                {% endif %}#}
-{##}
-{#								</ul>#}
-{#							</div>#}
-{#						</div>#}
-{#					</div>#}
-{#				</div>#}
-{#			</div>#}
+
+        {#    <div class="row">#}
+        {#				<div class="col-md-12 col-sm-12">#}
+        {#					<div class="portlet light ">#}
+        {#						<div class="portlet-body">#}
+        {#							<div class="scroller" style="height: 600px;" data-always-visible="1" data-rail-visible="0">#}
+        {#								<ul class="feeds">#}
+        {#                                {% if application %}#}
+        {#                                    {% if not application.is_submitted %}#}
+        {##}
+        {#                                        <li>#}
+        {#										<div class="col1">#}
+        {#											<div class="cont">#}
+        {#												<div class="cont-col1">#}
+        {#													<div class="label label-sm label-info">#}
+        {#														<i class="fa fa-bell-o"></i>#}
+        {#													</div>#}
+        {#												</div>#}
+        {#												<div class="cont-col2">#}
+        {#													<div class="desc">#}
+        {#														 To proceed with the application, please complete the sections on the left side of the screen. Good luck!#}
+        {##}
+        {#														</span>#}
+        {#													</div>#}
+        {#												</div>#}
+        {#											</div>#}
+        {#										</div>#}
+        {##}
+        {#									</li>#}
+        {##}
+        {##}
+        {##}
+        {##}
+        {#                                        {% else %}#}
+        {#                                     {% for rec in application_history_obj %}#}
+        {#                                         <li>#}
+        {#										<div class="col1">#}
+        {#											<div class="cont">#}
+        {#												<div class="cont-col1">#}
+        {#													<div class="label label-sm label-info">#}
+        {#														<i class="fa fa-bell-o"></i>#}
+        {#													</div>#}
+        {#												</div>#}
+        {#												<div class="cont-col2">#}
+        {#													<div class="desc">#}
+        {#														 {{ rec.remark|default_if_none:"" }}#}
+        {##}
+        {#														</span>#}
+        {#													</div>#}
+        {#												</div>#}
+        {#											</div>#}
+        {#										</div>#}
+        {#                                        <div class="col2">#}
+        {#											<div class="date">#}
+        {#												 {{ rec.last_updated|date:"d-m-y" }}#}
+        {#											</div>#}
+        {#										</div>#}
+        {#									</li>#}
+        {#                                    {% endfor %}#}
+        {##}
+        {#                                        {% endif %}#}
+        {#                                {% else %}#}
+        {#                                    <li>#}
+        {#										<div class="col1">#}
+        {#											<div class="cont">#}
+        {#												<div class="cont-col1">#}
+        {#													<div class="label label-sm label-info">#}
+        {#														<i class="fa fa-bell-o"></i>#}
+        {#													</div>#}
+        {#												</div>#}
+        {#												<div class="cont-col2">#}
+        {#													<div class="desc">#}
+        {#														 To proceed with the application, please complete the sections on the left side of the screen. Good luck!#}
+        {##}
+        {#														</span>#}
+        {#													</div>#}
+        {#												</div>#}
+        {#											</div>#}
+        {#										</div>#}
+        {##}
+        {#									</li>#}
+        {##}
+        {#                                {% endif %}#}
+        {##}
+        {#								</ul>#}
+        {#							</div>#}
+        {#						</div>#}
+        {#					</div>#}
+        {#				</div>#}
+        {#			</div>#}
 
         <div class="portlet-body">
             <div class="form-body">
@@ -208,16 +237,53 @@
 
                         {% endif %}
                     {% else %}
-                         {% trans 'To proceed with the application, please complete the sections on the left side of the screen. Good luck!' %}
+                        {% trans 'To proceed with the application, please complete the sections on the left side of the screen. Good luck!' %}
                     {% endif %}
-
-
 
 
                 </b></h3>
             </div>
+
         </div>
         <br><br>
+{#        <div>#}
+{##}
+{#            <a href="javascript:;">#}
+{#                                                    <span class="task" style="margin: 65px">#}
+{#                                                    <span class="desc">Application Submitted</span>#}
+{##}
+{##}
+{#                                                    </span>#}
+{#                <span class="task" style="margin: 65px">#}
+{#                                                    <span class="desc">Admission Unit</span>#}
+{##}
+{##}
+{#                                                    </span>#}
+{#                <span class="task" style="margin: 65px">#}
+{#                                                    <span class="desc">Faculty</span>#}
+{##}
+{##}
+{#                                                    </span>#}
+{#                <span class="task" style="margin: 65px">#}
+{#                                                    <span class="desc">Completed</span>#}
+{##}
+{##}
+{#                                                    </span>#}
+{##}
+{#            </a>#}
+{##}
+{#        </div>#}
+
+
+
+{#        <div class="progress">#}
+{#            <div class="bar" style="width:30%">#}
+{#                <p class="percent">30%</p>#}
+{#            </div>#}
+{#        </div>#}
+{##}
+{#        <br><br> <br><br> <br><br> <br><br> <br><br><br><br> <br><br> <br><br> <br><br>#}
+
 
         {#        {% if application %}#}
         {#            <div class="portlet-body">#}
@@ -320,5 +386,7 @@
         {#                </div>#}
         {#            </form>#}
         {#        </div>#}
+
+
     </div>
 {% endblock %}

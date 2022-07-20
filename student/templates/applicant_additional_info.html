@@ -68,10 +68,19 @@
                     $("#agent_id").find('option[value=""]').remove();
                     $("#agent_id").append('<option value="" selected="selected">Please Select</option>');
 
+                    $('.recruitment_agents_div').hide();
                     $('.campus_div').show();
+                }
+                else if(about_know == 'Recruitment Agents'){
+                     $("#recruitment_agents").val('');
+
+                      $('.campus_div').hide();
+                     $('.recruitment_agents_div').show();
+
                 }
                 else{
                     $('.campus_div').hide();
+                    $('.recruitment_agents_div').hide();
                 }
 
             })
@@ -308,6 +317,7 @@
                                             </option>
                                         {% endif %}
 
+                                    <option  value="Recruitment Agents">{% trans 'Recruitment Agents' %}
                                     <option  value="Students or Graduates">{% trans 'Students or Graduates' %}
                                     <option  value="Social Media">{% trans 'Social Media' %}
                                     <option  value="Exam Center">{% trans 'Exam Center' %}
@@ -340,6 +350,17 @@
                                     </select>
                                 </div>
                             </div>
+
+
+                        <div class="recruitment_agents_div" {% if application_obj.about_know == 'Recruitment Agents' %} style="display: block" {% else %} style="display: none" {% endif %}>
+                                <label class="col-md-2 control-label">Recruitment Agents:</label>
+                                <div class="col-md-3">
+                                     <input type="text" title="Enter Recruitment Agents" id="recruitment_agents" name="recruitment_agents"
+                                           value="{{ application_obj.recruitment_agents|default:"" }}" class="form-control">
+                                </div>
+                            </div>
+
+
                         </div>
 
                         <br>
