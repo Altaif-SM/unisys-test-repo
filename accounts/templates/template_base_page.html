@@ -1404,16 +1404,16 @@ License: You must have a valid license purchased only from themeforest(the above
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
 
 
-                            {% if 'student.can_view_student_application_progress_history' in perms %}
-                                <li class="nav-item " id="acd_qli">
-                                    <a href="{% url 'student:application_offer_letter' %}"
-                                       class="nav-link nav-toggle">
-                                        <i class="fa fa-gift"></i>
-                                        <span class="title">{% trans 'Offer Status' %}</span>
-                                        <span class="selected"></span>
-                                    </a>
-                                </li>
-                            {% endif %}
+{#                            {% if 'student.can_view_student_application_progress_history' in perms %}#}
+{#                                <li class="nav-item " id="acd_qli">#}
+{#                                    <a href="{% url 'student:application_offer_letter' %}"#}
+{#                                       class="nav-link nav-toggle">#}
+{#                                        <i class="fa fa-gift"></i>#}
+{#                                        <span class="title">{% trans 'Application Status' %}</span>#}
+{#                                        <span class="selected"></span>#}
+{#                                    </a>#}
+{#                                </li>#}
+{#                            {% endif %}#}
 
                          {% if 'student.can_view_student_application_progress_history' in perms %}
                                 <li class="nav-item " id="acd_qli">
@@ -1583,7 +1583,7 @@ License: You must have a valid license purchased only from themeforest(the above
 {#                        {% endif %}#}
 
                         {% if user.is_student %}
-                            <li id="app_offer_status"><a href="{% url 'student:application_offer_letter' %}" >{% trans 'Offer Status' %}</a></li>
+                            <li id="app_offer_status"><a href="{% url 'student:acceptance_declaration' %}" >{% trans 'Application Status' %}</a></li>
                         {% endif %}
 
                      {% if user.is_student %}

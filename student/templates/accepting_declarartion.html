@@ -177,6 +177,13 @@
 
                                 </div>
                             </div>
+                        <br>
+                        <div class="">
+                                <div class="col-md-8" style="margin-left: 10%;font-size:15px">
+                                   Offer Letter: <a href="{% url 'student:application_offer_letter_pdf' application_obj.id %}" target="_blank">{% if application_obj.first_interview_attend %}Download Full Offer{% else %}Download Conditional Offer{% endif %}</a>
+
+                                </div>
+                            </div>
 
                         {% if application_obj.is_offer_accepted %}
                         <br><br><div class="">

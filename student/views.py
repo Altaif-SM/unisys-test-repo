@@ -2505,7 +2505,7 @@ def application_offer_letter_pdf(request, app_id):
     except Exception as e:
         print(str(e))
         # messages.warning(request, "Form have some error" + str(e))
-        return redirect('/student/application_offer_letter/')
+        return redirect('/student/acceptance_declaration/')
 
 
 def application_offer_letter(request):
