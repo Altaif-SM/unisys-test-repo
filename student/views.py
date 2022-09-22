@@ -2703,11 +2703,11 @@ def applicant_intake_info(request):
         # if program_list:
         for rec in program_recs:
             try:
-                if int(application_obj.acceptance_avg) >= int(rec.acceptance_avg):
-                    raw_dict = {}
-                    raw_dict['id'] = rec.id
-                    raw_dict['program'] = rec.program_name
-                    program_final_list.append(raw_dict)
+                # if int(application_obj.acceptance_avg) >= int(rec.acceptance_avg):
+                raw_dict = {}
+                raw_dict['id'] = rec.id
+                raw_dict['program'] = rec.program_name
+                program_final_list.append(raw_dict)
             except:
                 pass
 
@@ -2732,11 +2732,11 @@ def applicant_intake_info(request):
         # if program_2_list:
         for rec in program_2_recs:
             try:
-                if int(application_obj.acceptance_avg) >= int(rec.acceptance_avg):
-                    raw_dict = {}
-                    raw_dict['id'] = rec.id
-                    raw_dict['program'] = rec.program_name
-                    program_2_final_list.append(raw_dict)
+                # if int(application_obj.acceptance_avg) >= int(rec.acceptance_avg):
+                raw_dict = {}
+                raw_dict['id'] = rec.id
+                raw_dict['program'] = rec.program_name
+                program_2_final_list.append(raw_dict)
             except:
                 pass
 
@@ -2761,11 +2761,11 @@ def applicant_intake_info(request):
         # if program_3_list:
         for rec in program_3_recs:
             try:
-                if int(application_obj.acceptance_avg) >= int(rec.acceptance_avg):
-                    raw_dict = {}
-                    raw_dict['id'] = rec.id
-                    raw_dict['program'] = rec.program_name
-                    program_3_final_list.append(raw_dict)
+                # if int(application_obj.acceptance_avg) >= int(rec.acceptance_avg):
+                raw_dict = {}
+                raw_dict['id'] = rec.id
+                raw_dict['program'] = rec.program_name
+                program_3_final_list.append(raw_dict)
             except:
                 pass
 
