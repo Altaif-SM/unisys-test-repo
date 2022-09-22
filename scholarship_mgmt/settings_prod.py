@@ -191,9 +191,16 @@ MAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'riyaz@altaif.com.sg'
-# EMAIL_HOST_PASSWORD = 'newm<GnE2ub'
 EMAIL_HOST_PASSWORD = 'riyaz.altaifsg@2022'
 EMAIL_USE_TLS = True
+
+
+# SENDGRID_API_KEY = os.getenv('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')
+# EMAIL_HOST = 'smtp.sendgrid.net'
+# EMAIL_HOST_USER = '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' # this is exactly the value 'apikey'
+# EMAIL_HOST_PASSWORD = 'altaifsg@2022.de'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
 
 
 # EMAIL_USE_TLS = True
@@ -206,7 +213,7 @@ EMAIL_USE_TLS = True
 # EMAIL_PORT = 587
 SERVER_HOST_NAME = "http://unisys.online/"
 # SERVER_HOST_NAME = "http://34.83.191.75/"
-
+MEDIA_HOST_NAME = "http://unisys.online"
 
 
 stripe.api_key = 'sk_test_51JcmDhSIeVZrpBOQmSMJtfkhTDY8JkkrbnjdEw2wurzt9nQdK74CGYCX90l5q0VfEUuq4oLzQHMA1mgpeUqsKK6G00fUXuYOIG'

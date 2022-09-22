@@ -3741,9 +3741,31 @@ def generate_pdf(request,app_id):
     applicant_addition_obj = application_obj.applicant_addition_info.get() if application_obj.applicant_addition_info else ''
     attachement_obj = application_obj.applicant_attachement_rel.all() if application_obj.applicant_attachement_rel.all() else ''
     profile_path = settings.MEDIA_ROOT + 'profile.jpg'
+    passport_image = '-'
+    level_result_document = '-'
+    transcript_document = '-'
+    english_test_result_document = '-'
+    arab_test_result_document = '-'
+    recommendation_letter = '-'
+    research_proposal = '-'
+
     if attachement_obj[0]:
         if attachement_obj[0].image:
             profile_path = attachement_obj[0].image.path
+        if attachement_obj[0].passport_image:
+            passport_image = settings.MEDIA_HOST_NAME + attachement_obj[0].passport_image.url
+        if attachement_obj[0].level_result_document:
+            level_result_document = settings.MEDIA_HOST_NAME + attachement_obj[0].level_result_document.url
+        if attachement_obj[0].transcript_document:
+            transcript_document = settings.MEDIA_HOST_NAME + attachement_obj[0].transcript_document.url
+        if attachement_obj[0].english_test_result_document:
+            english_test_result_document = settings.MEDIA_HOST_NAME + attachement_obj[0].english_test_result_document.url
+        if attachement_obj[0].arab_test_result_document:
+            arab_test_result_document = settings.MEDIA_HOST_NAME + attachement_obj[0].arab_test_result_document.url
+        if attachement_obj[0].recommendation_letter:
+            recommendation_letter = settings.MEDIA_HOST_NAME + attachement_obj[0].recommendation_letter.url
+        if attachement_obj[0].research_proposal:
+            research_proposal = settings.MEDIA_HOST_NAME + attachement_obj[0].research_proposal.url
 
     context = {
         'application_obj':application_obj,
@@ -3753,7 +3775,14 @@ def generate_pdf(request,app_id):
         'english_recs':english_obj,
         'employement_history_obj':employement_history_obj,
         'applicant_addition_obj':applicant_addition_obj,
-        'profile_path':profile_path
+        'profile_path':profile_path,
+        'passport_image':passport_image,
+        'level_result_document':level_result_document,
+        'transcript_document':transcript_document,
+        'english_test_result_document':english_test_result_document,
+        'arab_test_result_document':arab_test_result_document,
+        'recommendation_letter':recommendation_letter,
+        'research_proposal':research_proposal,
 
     }
     pdf = html_to_pdf('generate_pdf.html',context)
