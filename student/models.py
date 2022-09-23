@@ -725,8 +725,9 @@ class EmployementHistoryDetails(BaseModel):
     employed_years = models.CharField(max_length=255, blank=True, null=True)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='employement_history_rel',
                                      on_delete=models.SET_NULL)
-    working_criteria = models.BooleanField(default=False)
+    working_criteria = models.CharField(max_length=255, blank=True, null=True)
     no_experience = models.BooleanField(default=False)
+    working_experience = models.FileField(upload_to='document/', null=True, blank=True)
 
 
 class ApplicantAttachementDetails(BaseModel):

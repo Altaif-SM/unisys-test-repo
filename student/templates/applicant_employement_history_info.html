@@ -51,7 +51,8 @@
 
                 $(document).on("click", ".add_experience_row", function (e) {
                     curriculum_count = parseInt(curriculum_count) + 1;
-                    var row = '<div class="row item_experience" id="item_experience_' + curriculum_count + '"><div class="row"><div class=""><label class="col-md-2 control-label">Name of Employer:</label><div class="col-md-3"><input type="text" title="Enter Name of Employer" id="employer_name_' + curriculum_count + '" value="" name="employer_name_' + curriculum_count + '" class="form-control"><input hidden type="text" name="employement_history_obj_' + curriculum_count + '" id="employement_history_obj_' + curriculum_count + '"></div></div><div class=""><label class="col-md-2 control-label">Job Designation:</label><div class="col-md-3"><input type="text" title="Enter Job Designation" id="designation_' + curriculum_count + '" value="" name="designation_' + curriculum_count + '" class="form-control"></div></div><div class="col-md-1"><a href="javascript:;" class="delete_experience btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">From Date:</label><div class="col-md-3"><input type="date" id="from_date_' + curriculum_count + '" name="from_date_' + curriculum_count + '" max="2999-12-31" value="" class="form-control"></div></div><div class=""><label class="col-md-2 control-label">To Date:</label><div class="col-md-3" id="EndDate"><input type="date" id="to_date_' + curriculum_count + '" name="to_date_' + curriculum_count + '" max="2999-12-31" value="" class="form-control end_date"></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Country:</label><div class="col-md-3"><select id="country_' + curriculum_count + '" title="Select Country" name="country_' + curriculum_count + '" class="form-control chk"><option style="display:none" selected="selected" id="" value="">Please Select</option>{% for rec in country_recs %}<option value="{{ rec.id }}">{{ rec.country_name|title }}</option>{% endfor %}</select></div></div><div class=""><label class="col-md-2 control-label">Type of Industry:</label><div class="col-md-3"><input type="text" title="Enter Type of Industry" id="industry_type_' + curriculum_count + '" value="" name="industry_type_' + curriculum_count + '" class="form-control"></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Number of Years Employed:</label><div class="col-md-3"><input type="text" title="Enter Number of Years Employed" id="employed_years_' + curriculum_count + '" value="" name="employed_years_' + curriculum_count + '" class="form-control"></div></div></div><br><hr></div>';
+                    var row = '<hr><div class="row item_experience" id="item_experience_' + curriculum_count + '"><div class="row"><div class=""><label class="col-md-2 control-label">Working Criteria:</label><div class="col-md-3"><select id="working_criteria_' + curriculum_count + '" title="Select Working Criteria" name="working_criteria_' + curriculum_count + '" class="form-control chk"><option style="display:none" selected="selected" id="" value="">Please Select</option><option style="display:none" selected="selected" id="" value="">Please Select </option><option value="Previous">Previous</option><option value="Current">Current</option></select></div></div><div class=""><label class="col-md-2 control-label">Position:</label><div class="col-md-3"><input type="text" title="Enter Job Designation" id="designation_' + curriculum_count + '" value="" name="designation_' + curriculum_count + '" class="form-control"></div></div><div class="col-md-1"><a href="javascript:;" class="delete_experience btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Employer:</label><div class="col-md-3"><input type="text" title="Enter Name of Employer" id="employer_name_' + curriculum_count + '" value="" name="employer_name_' + curriculum_count + '" class="form-control"><input hidden type="text" name="employement_history_obj_' + curriculum_count + '" id="employement_history_obj_' + curriculum_count + '"></div></div><div class=""><label class="col-md-2 control-label">Working Status:</label><div class="col-md-3"><select id="working_status_' + curriculum_count + '" title="Select Working Status" name="working_status_' + curriculum_count + '" class="form-control chk"><option style="display:none" selected="selected" id="" value="">Please Select </option><option value="Employed">Employed</option><option value="Self-employed">Self-employed</option><option value="Out of work">Out of work</option><option value="Homemaker">Homemaker</option><option value="Student">Student</option><option value="Retired">Retired</option><option value="Unable to work">Unable to work</option></select></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Start Service:</label><div class="col-md-3"><input type="date" id="from_date_' + curriculum_count + '" name="from_date_' + curriculum_count + '" max="2999-12-31" value="" class="form-control"></div></div><div class=""><label class="col-md-2 control-label">End Service:</label><div class="col-md-3" id="EndDate"><input type="date" id="to_date_' + curriculum_count + '" name="to_date_' + curriculum_count + '" max="2999-12-31"value="" class="form-control end_date"></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Working Experience:</label><div class="col-md-3"><input type="file" class="form-control" accept="application/pdf," title="Select Working Experience" id="working_experience_' + curriculum_count + '" name="working_experience_' + curriculum_count + '" class="doc form-control"></div></div></div></div>';
+                    {#var row = '<div class="row item_experience" id="item_experience_' + curriculum_count + '"><div class="row"><div class=""><label class="col-md-2 control-label">Name of Employer:</label><div class="col-md-3"><input type="text" title="Enter Name of Employer" id="employer_name_' + curriculum_count + '" value="" name="employer_name_' + curriculum_count + '" class="form-control"><input hidden type="text" name="employement_history_obj_' + curriculum_count + '" id="employement_history_obj_' + curriculum_count + '"></div></div><div class=""><label class="col-md-2 control-label">Job Designation:</label><div class="col-md-3"><input type="text" title="Enter Job Designation" id="designation_' + curriculum_count + '" value="" name="designation_' + curriculum_count + '" class="form-control"></div></div><div class="col-md-1"><a href="javascript:;" class="delete_experience btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">From Date:</label><div class="col-md-3"><input type="date" id="from_date_' + curriculum_count + '" name="from_date_' + curriculum_count + '" max="2999-12-31" value="" class="form-control"></div></div><div class=""><label class="col-md-2 control-label">To Date:</label><div class="col-md-3" id="EndDate"><input type="date" id="to_date_' + curriculum_count + '" name="to_date_' + curriculum_count + '" max="2999-12-31" value="" class="form-control end_date"></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Country:</label><div class="col-md-3"><select id="country_' + curriculum_count + '" title="Select Country" name="country_' + curriculum_count + '" class="form-control chk"><option style="display:none" selected="selected" id="" value="">Please Select</option>{% for rec in country_recs %}<option value="{{ rec.id }}">{{ rec.country_name|title }}</option>{% endfor %}</select></div></div><div class=""><label class="col-md-2 control-label">Type of Industry:</label><div class="col-md-3"><input type="text" title="Enter Type of Industry" id="industry_type_' + curriculum_count + '" value="" name="industry_type_' + curriculum_count + '" class="form-control"></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Number of Years Employed:</label><div class="col-md-3"><input type="text" title="Enter Number of Years Employed" id="employed_years_' + curriculum_count + '" value="" name="employed_years_' + curriculum_count + '" class="form-control"></div></div></div><br><hr></div>';#}
                     $(row).removeAttr().hide().insertAfter(".item_experience:last").slideDown(300);
                 });
 
@@ -176,14 +177,27 @@
 
                         <input id="experience_count" name="experience_count" hidden>
 
-{#                        <div class="" style="float: right; padding-right: 98px">#}
-{#                            <div class="">#}
-{#                                <a href="javascript:;" id="add" class="btn btn-icon-only green add_experience_row"#}
-{#                                   style="">#}
-{#                                    <i class="fa fa-plus "></i>#}
-{#                                </a>#}
-{#                            </div>#}
-{#                        </div>#}
+                        <div class="" style="float: right; padding-right: 98px">
+                            <div class="">
+                                <a href="javascript:;" id="add" class="btn btn-icon-only green add_experience_row"
+                                   style="">
+                                    <i class="fa fa-plus "></i>
+                                </a>
+                            </div>
+                        </div>
+                    {% if employement_history_obj %}
+
+                    <span>Tick here if you have no experience
+                                    <input  type="checkbox" {% if employement_history_obj.0.no_experience == True %}checked{% endif %} name="no_experience" id="no_experience"  style="margin-left:18px" >
+                                 </span>
+
+                    <br><br>
+                        {% else %}
+                        <span>Tick here if you have no experience
+                                    <input  type="checkbox" name="no_experience" id="no_experience"  style="margin-left:18px" >
+                                 </span>
+                         <br><br>
+                    {% endif %}
 
 
 
@@ -191,34 +205,56 @@
 
                              {% for emp_obj in employement_history_obj %}
 
-                                 <span>Tick here if you have no experience
-                                    <input  type="checkbox" {% if emp_obj.no_experience == True %}checked{% endif %} name="no_experience" id="no_experience"  style="margin-left:18px" >
-                                 </span>
-                    <br><br>
+
 
 
                                <div class="row item_experience" id="item_experience_{{ forloop.counter }}">
 
 
 
-                               <span style="padding:inherit;margin-left: 60px;">{% trans 'Working Criteria' %}:  </span>
-                        {% if emp_obj.working_criteria == False %}
-                         <span style="padding:inherit;margin-left:30px">{% trans 'Previous' %}</span>
-                        <input class="current" type="radio" checked name="working_criteria_{{ forloop.counter }}" id="" value="Previous">
-                        <span style="padding:inherit;margin-left:20px">{% trans 'Current' %}</span>
-                        <input class="current" type="radio" name="working_criteria_{{ forloop.counter }}" value="Current"
-                               id="">
-                        {% else %}
-                            <span style="padding:inherit;margin-left:30px">{% trans 'Previous' %}</span>
-                        <input class="current" type="radio"  name="working_criteria_{{ forloop.counter }}" id="" value="Previous">
-                        <span style="padding:inherit;margin-left:20px">{% trans 'Current' %}</span>
-                        <input class="current" type="radio" checked name="working_criteria_{{ forloop.counter }}" value="Current"
-                               id="">
-                        {% endif %}
-                               <br><br>
+{#                               <span style="padding:inherit;margin-left: 60px;">{% trans 'Working Criteria' %}:  </span>#}
+{#                        {% if emp_obj.working_criteria == False %}#}
+{#                         <span style="padding:inherit;margin-left:30px">{% trans 'Previous' %}</span>#}
+{#                        <input class="current" type="radio" checked name="working_criteria_{{ forloop.counter }}" id="" value="Previous">#}
+{#                        <span style="padding:inherit;margin-left:20px">{% trans 'Current' %}</span>#}
+{#                        <input class="current" type="radio" name="working_criteria_{{ forloop.counter }}" value="Current"#}
+{#                               id="">#}
+{#                        {% else %}#}
+{#                            <span style="padding:inherit;margin-left:30px">{% trans 'Previous' %}</span>#}
+{#                        <input class="current" type="radio"  name="working_criteria_{{ forloop.counter }}" id="" value="Previous">#}
+{#                        <span style="padding:inherit;margin-left:20px">{% trans 'Current' %}</span>#}
+{#                        <input class="current" type="radio" checked name="working_criteria_{{ forloop.counter }}" value="Current"#}
+{#                               id="">#}
+{#                        {% endif %}#}
 
-                                <div class="row">
+                               <div class="row">
+
                                     <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'Working Criteria' %}:</label>
+                                        <div class="col-md-3">
+                                            <select id='working_criteria_{{ forloop.counter }}' title="Select Working Criteria" name="working_criteria_{{ forloop.counter }}"
+                                                    class="form-control chk">
+
+                                                {% if emp_obj.working_criteria %}
+
+                                                        <option style="display:none" selected="selected"
+                                                                value="{{ emp_obj.working_criteria }}"
+                                                                >{{ emp_obj.working_criteria }}</option>
+
+                                                {% else %}
+                                                        <option style="display:none" selected="selected" id="" value="">
+                                                            {% trans 'Please Select' %}
+                                                        </option>
+                                                {% endif %}
+
+
+    <option value="Previous">Previous</option>
+    <option value="Current">Current</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                               <div class="">
                                         <label class="col-md-2 control-label">{% trans 'Position' %}:</label>
                                         <div class="col-md-3">
                                             <input type="text" title="Enter Job Designation" id="designation_{{ forloop.counter }}"
@@ -227,6 +263,18 @@
 
                                         </div>
                                     </div>
+
+
+
+
+
+
+                                </div>
+                               <br>
+
+
+                                <div class="row">
+
 
                                     <div class="">
                                         <label class="col-md-2 control-label">{% trans 'Employer' %}:</label>
@@ -237,6 +285,38 @@
 
                                         <input hidden type="text" name="employement_history_obj_{{ forloop.counter }}" value="{{ emp_obj.id }}"
                                                        id="employement_history_obj_{{ forloop.counter }}">
+
+                                        </div>
+                                    </div>
+
+                                    <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'Working Status' %}:</label>
+                                        <div class="col-md-3">
+                                            <select id='working_status_{{ forloop.counter }}' title="Select Working Status" name="working_status_{{ forloop.counter }}"
+                                                    class="form-control chk">
+
+                                             {% if emp_obj.working_status %}
+
+                                                        <option style="display:none" selected="selected"
+                                                                value="{{ emp_obj.working_status }}"
+                                                                >{{ emp_obj.working_status|default_if_none:"" }}</option>
+                                                {% else %}
+                                                        <option style="display:none" selected="selected" id="" value="">
+                                                            {% trans 'Please Select' %}
+                                                        </option>
+                                                {% endif %}
+
+
+                                                <option value="Employed">Employed</option>
+    <option value="Self-employed">Self-employed</option>
+    <option value="Out of work">Out of work</option>
+    <option value="Homemaker">Homemaker</option>
+    <option value="Student">Student</option>
+    <option value="Retired">Retired</option>
+    <option value="Unable to work">Unable to work</option>
+                                            </select>
+
+
 
                                         </div>
                                     </div>
@@ -275,85 +355,77 @@
 
                                 <div class="row">
 
+
+
                                     <div class="">
-                                        <label class="col-md-2 control-label">{% trans 'Working Status' %}:</label>
+                                        <label class="col-md-2 control-label">{% trans 'Working Experience' %}:</label>
                                         <div class="col-md-3">
-                                            <select id='working_status_{{ forloop.counter }}' title="Select Working Status" name="working_status_{{ forloop.counter }}"
-                                                    class="form-control chk">
-
-                                             {% if emp_obj.working_status %}
-
-                                                        <option style="display:none" selected="selected"
-                                                                value="{{ emp_obj.working_status }}"
-                                                                >{{ emp_obj.working_status|default_if_none:"" }}</option>
-                                                {% else %}
-                                                        <option style="display:none" selected="selected" id="" value="">
-                                                            {% trans 'Please Select' %}
-                                                        </option>
-                                                {% endif %}
 
 
-                                                <option value="Employed">Employed</option>
-    <option value="Self-employed">Self-employed</option>
-    <option value="Out of work">Out of work</option>
-    <option value="Homemaker">Homemaker</option>
-    <option value="Student">Student</option>
-    <option value="Retired">Retired</option>
-    <option value="Unable to work">Unable to work</option>
-                                            </select>
 
 
+                                            <input type="file"  class="form-control" accept="application/pdf,"
+                                           title="Select Working Experience" id="working_experience_{{ forloop.counter }}"
+                                           name="working_experience_{{ forloop.counter }}" class="doc form-control">
 
                                         </div>
+
+
+
+
                                     </div>
 
-{#                                    <div class="">#}
-{#                                        <label class="col-md-2 control-label">{% trans 'Type of Industry' %}:</label>#}
-{#                                        <div class="col-md-3">#}
-{#                                            <input type="text" title="Enter Type of Industry" id="industry_type_{{ forloop.counter }}"#}
-{#                                                   value="{{ emp_obj.industry_type|default_if_none:"" }}" name="industry_type_{{ forloop.counter }}"#}
-{#                                                   class="form-control">#}
-{##}
-{#                                        </div>#}
-{#                                    </div>#}
+
+                                         {% if emp_obj.working_experience %}
+                                        <a target="_blank"href="{{ emp_obj.working_experience.url }}"><i style="    font-size: 25px;
+    margin-top: 13px;" class="fa fa-cloud-download" aria-hidden="true"></i>
+</a>
+                                        {% endif %}
+
+
+
+
 
 
 
 
                                 </div>
-{#                            <br>#}
-{#                            <div class="row">#}
-{#                                <div class="">#}
-{#                                        <label class="col-md-2 control-label">{% trans 'Number of Years Employed' %}:</label>#}
-{#                                        <div class="col-md-3">#}
-{#                                            <input type="text" title="Enter Number of Years Employed" id="employed_years_{{ forloop.counter }}"#}
-{#                                                   value="{{ emp_obj.employed_years|default_if_none:"" }}" name="employed_years_{{ forloop.counter }}"#}
-{#                                                   class="form-control">#}
-{##}
-{#                                        </div>#}
-{#                                    </div>#}
-{#                            </div>#}
                                 <hr>
                             </div>
                             {% endfor %}
                         {% else %}
 
-                            <span>Tick here if you have no experience
-                                    <input  type="checkbox" name="no_experience" id="no_experience"  style="margin-left:18px" >
-                                 </span>
-                            <br><br>
+{#                            <span>Tick here if you have no experience#}
+{#                                    <input  type="checkbox" name="no_experience" id="no_experience"  style="margin-left:18px" >#}
+{#                                 </span>#}
+{#                            <br><br>#}
 
                             <div class="row item_experience" id="item_experience_1">
 
-                            <span style="padding:inherit;margin-left: 60px;">{% trans 'Working Criteria' %}:  </span>
-                         <span style="padding:inherit;margin-left:30px">{% trans 'Previous' %}</span>
-                        <input class="current" type="radio" checked name="working_criteria_1" id="" value="Previous">
-                        <span style="padding:inherit;margin-left:20px">{% trans 'Current' %}</span>
-                        <input class="current" type="radio" name="working_criteria_1" value="Current" id="">
-                               <br><br>
-
+{#                            <span style="padding:inherit;margin-left: 60px;">{% trans 'Working Criteria' %}:  </span>#}
+{#                         <span style="padding:inherit;margin-left:30px">{% trans 'Previous' %}</span>#}
+{#                        <input class="current" type="radio" checked name="working_criteria_1" id="" value="Previous">#}
+{#                        <span style="padding:inherit;margin-left:20px">{% trans 'Current' %}</span>#}
+{#                        <input class="current" type="radio" name="working_criteria_1" value="Current" id="">#}
+{#                               <br><br>#}
                                 <div class="row">
-                                    <div class="">
+                                <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'Working Criteria' %}:</label>
+                                        <div class="col-md-3">
+                                            <select id='working_criteria_1' title="Select Working Criteria" name="working_criteria_1"
+                                                    class="form-control chk">
+
+
+                                                <option style="display:none" selected="selected" id="" value="">
+                                                    {% trans 'Please Select' %}
+                                                </option>
+    <option value="Previous">Previous</option>
+    <option value="Current">Current</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                 <div class="">
                                         <label class="col-md-2 control-label">{% trans 'Position' %}:</label>
                                         <div class="col-md-3">
                                             <input type="text" title="Enter Job Designation" id="designation_1"
@@ -362,6 +434,14 @@
 
                                         </div>
                                     </div>
+                                </div>
+
+
+
+                                <br>
+
+                                <div class="row">
+
 
                                     <div class="">
                                         <label class="col-md-2 control-label">{% trans 'Employer' %}:</label>
@@ -373,6 +453,25 @@
                                             <input hidden type="text" name="employement_history_obj_1"
                                                        id="employement_history_obj_1">
 
+                                        </div>
+                                    </div>
+
+                                     <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'Working Status' %}:</label>
+                                        <div class="col-md-3">
+                                            <select id='working_status_1' title="Select Working Status" name="working_status_1"
+                                                    class="form-control chk">
+                                                <option style="display:none" selected="selected" id="" value="">
+                                                    {% trans 'Please Select' %}
+                                                </option>
+                                                <option value="Employed">Employed</option>
+    <option value="Self-employed">Self-employed</option>
+    <option value="Out of work">Out of work</option>
+    <option value="Homemaker">Homemaker</option>
+    <option value="Student">Student</option>
+    <option value="Retired">Retired</option>
+    <option value="Unable to work">Unable to work</option>
+                                            </select>
                                         </div>
                                     </div>
 
@@ -410,26 +509,17 @@
 
                                 <div class="row">
 
+
+
                                     <div class="">
-                                        <label class="col-md-2 control-label">{% trans 'Working Status' %}:</label>
+                                        <label class="col-md-2 control-label">{% trans 'Working Experience' %}:</label>
                                         <div class="col-md-3">
-                                            <select id='working_status_1' title="Select Working Status" name="working_status_1"
-                                                    class="form-control chk">
-                                                <option style="display:none" selected="selected" id="" value="">
-                                                    {% trans 'Please Select' %}
-                                                </option>
-                                                <option value="Employed">Employed</option>
-    <option value="Self-employed">Self-employed</option>
-    <option value="Out of work">Out of work</option>
-    <option value="Homemaker">Homemaker</option>
-    <option value="Student">Student</option>
-    <option value="Retired">Retired</option>
-    <option value="Unable to work">Unable to work</option>
-                                            </select>
+                                            <input type="file"  class="form-control" accept="application/pdf,"
+                                           title="Select Working Experience" id="working_experience_1"
+                                           name="working_experience_1" class="doc form-control">
+
                                         </div>
                                     </div>
-
-
 
 
 

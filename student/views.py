@@ -2212,28 +2212,56 @@ def save_update_applicant_employement_history_info(request):
         experience_count = request.POST.get('experience_count')
         try:
             if StudentDetails.objects.filter(user=request.user):
-                EmployementHistoryDetails.objects.filter(applicant_id=request.user.get_application).delete()
+                # EmployementHistoryDetails.objects.filter(applicant_id=request.user.get_application).delete()
                 for count in range(int(experience_count)):
                     try:
                         count = count + 1
-                        working_criteria = False
+
+                        working_criteria = None
                         if request.POST['working_criteria_' + str(count)] == 'Previous':
-                            working_criteria = False
+                            working_criteria = 'Previous'
                         else:
-                            working_criteria = True
+                            working_criteria = 'Current'
+
                         if request.POST.get('no_experience') == 'on':
                             no_experience = True
                         else:
                             no_experience = False
-                        EmployementHistoryDetails.objects.create(
-                            no_experience=no_experience,
-                            working_criteria=working_criteria,
-                            employer_name=request.POST['employer_name_' + str(count)],
-                            working_status=request.POST['working_status_' + str(count)],
-                            designation=request.POST['designation_' + str(count)],
-                            from_date=request.POST['from_date_' + str(count)] if request.POST['from_date_' + str(count)] else None,
-                            to_date=request.POST['to_date_' + str(count)] if request.POST['to_date_' + str(count)] else None,
-                            applicant_id=request.user.get_application)
+
+                        if request.POST['employement_history_obj_' + str(count)]:
+                            employee_history_obj = EmployementHistoryDetails.objects.get(id = request.POST['employement_history_obj_' + str(count)])
+                            EmployementHistoryDetails.objects.filter(id = request.POST['employement_history_obj_' + str(count)]).update(no_experience=no_experience,
+                                working_criteria=working_criteria,
+                                employer_name=request.POST['employer_name_' + str(count)],
+                                working_status=request.POST['working_status_' + str(count)],
+                                designation=request.POST['designation_' + str(count)],
+                                from_date=request.POST['from_date_' + str(count)] if request.POST[
+                                    'from_date_' + str(count)] else None,
+                                to_date=request.POST['to_date_' + str(count)] if request.POST[
+                                    'to_date_' + str(count)] else None,
+                                )
+                            working_experience = request.FILES.get('working_experience_' + str(count))
+                            if working_experience:
+                                employee_history_obj.working_experience = working_experience
+                                employee_history_obj.save()
+                        else:
+                            employee_history_obj = EmployementHistoryDetails.objects.create(
+                                no_experience=no_experience,
+                                working_criteria=working_criteria,
+                                employer_name=request.POST['employer_name_' + str(count)],
+                                working_status=request.POST['working_status_' + str(count)],
+                                designation=request.POST['designation_' + str(count)],
+                                from_date=request.POST['from_date_' + str(count)] if request.POST['from_date_' + str(count)] else None,
+                                to_date=request.POST['to_date_' + str(count)] if request.POST['to_date_' + str(count)] else None,
+                                applicant_id=request.user.get_application)
+
+                            working_experience = request.FILES.get('working_experience_' + str(count))
+                            if working_experience:
+                                employee_history_obj.working_experience = working_experience
+                                employee_history_obj.save()
+
+
+
                     except Exception as e:
                         pass
                 redirect_flag = True
