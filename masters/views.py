@@ -13,8 +13,8 @@ from datetime import date
 import datetime
 from django.http import HttpResponse, JsonResponse
 from datetime import datetime
-
-
+from django.contrib.auth.models import Permission
+from django.contrib.auth.decorators import user_passes_test, permission_required
 
 
 # *********------------ Year Master ----------***************
@@ -166,12 +166,13 @@ def delete_scholarship(request):
 
 
 # *********------------ Country Master ----------***************
-
+@permission_required('masters.can_view_country_details', raise_exception=True)
 def country_settings(request):
     country_recs = CountryDetails.objects.all()
     return render(request, 'template_country_master.html', {'country_recs': country_recs})
 
 
+@permission_required('masters.add_countrydetails', raise_exception=True)
 def save_country(request):
     country_name = request.POST.get('country_name')
     try:
@@ -185,6 +186,7 @@ def save_country(request):
     return redirect('/masters/country_settings/')
 
 
+@permission_required('masters.change_countrydetails', raise_exception=True)
 def update_country(request):
     country_id = request.POST.get('country_id')
     country_name = request.POST.get('country_name')
@@ -202,6 +204,7 @@ def update_country(request):
     return HttpResponse(json.dumps({'error': 'Record not updated.'}), content_type="application/json")
 
 
+@permission_required('masters.delete_countrydetails', raise_exception=True)
 def delete_country(request):
     country_delete_id = request.POST.get('country_delete_id')
     try:
@@ -1618,10 +1621,13 @@ def save_university_details(request):
     return redirect('/masters/university_details/')
 
 
+@permission_required('masters.can_read_language_details', raise_exception=True)
 def language_settings(request):
     language_recs = LanguageDetails.objects.all()
     return render(request, 'template_language_settings.html', {'language_recs': language_recs})
 
+
+@permission_required('masters.add_languagedetails', raise_exception=True)
 def add_language(request):
     if request.method == 'POST':
         short_code = request.POST.get('short_code')
@@ -1660,6 +1666,7 @@ def add_language(request):
     return render(request, 'add_language.html',{'language_dict':language_dict})
 
 
+@permission_required('masters.change_languagedetails', raise_exception=True)
 def edit_language(request, language_id=None):
     language_obj = LanguageDetails.objects.get(id=language_id)
     if request.method == 'POST':
@@ -1700,6 +1707,7 @@ def edit_language(request, language_id=None):
     return render(request, "edit_language.html", {'language_obj': language_obj})
 
 
+@permission_required('masters.delete_languagedetails', raise_exception=True)
 def delete_language(request):
     if request.method == 'POST':
         language_delete_id = request.POST.get('language_delete_id')
@@ -1711,10 +1719,13 @@ def delete_language(request):
         return redirect('/masters/language_settings/')
 
 
+@permission_required('masters.can_read_currency_details', raise_exception=True)
 def currency_settings(request):
     currency_recs = CurrencyDetails.objects.all()
     return render(request, 'template_currency_settings.html', {'currency_recs': currency_recs})
 
+
+@permission_required('masters.add_currencydetails', raise_exception=True)
 def add_currency(request):
     if request.method == 'POST':
         currency_number = request.POST.get('currency_number')
@@ -1764,6 +1775,7 @@ def add_currency(request):
     return render(request, 'add_currency.html',{'currency_dict':currency_dict})
 
 
+@permission_required('masters.change_currencydetails', raise_exception=True)
 def edit_currency(request, currency_id=None):
     currency_obj = CurrencyDetails.objects.get(id=currency_id)
     if request.method == 'POST':
@@ -1813,6 +1825,8 @@ def edit_currency(request, currency_id=None):
     }
     return render(request, "edit_currency.html", {'currency_obj': currency_obj})
 
+
+@permission_required('masters.delete_currencydetails', raise_exception=True)
 def delete_currency(request):
     if request.method == 'POST':
         currency_delete_id = request.POST.get('currency_delete_id')
@@ -1824,11 +1838,13 @@ def delete_currency(request):
         return redirect('/masters/currency_settings/')
 
 
+@permission_required('masters.can_view_university_details', raise_exception=True)
 def university_settings(request):
     university_recs = UniversityDetails.objects.filter(is_delete = False)
     return render(request, 'university_settings.html', {'university_recs': university_recs})
 
 
+@permission_required('masters.add_universitydetails', raise_exception=True)
 def add_university(request):
     if request.method == 'POST':
         university_logo = request.FILES.get('university_logo', None)
@@ -1859,6 +1875,8 @@ def add_university(request):
     type_recs = TypeDetails.objects.filter(status = True)
     return render(request, 'add_university.html',{'university_type_recs':university_type_recs,'type_recs':type_recs})
 
+
+@permission_required('masters.change_universitydetails', raise_exception=True)
 def edit_university(request, university_id=None):
     university_obj = UniversityDetails.objects.get(id=university_id)
     if request.method == 'POST':
@@ -1895,6 +1913,8 @@ def edit_university(request, university_id=None):
     type_recs = TypeDetails.objects.filter(status=True)
     return render(request, "edit_university.html", {'university_obj': university_obj,'type_recs':type_recs,'university_type_recs':university_type_recs})
 
+
+@permission_required('masters.delete_universitydetails', raise_exception=True)
 def delete_university(request):
     if request.method == 'POST':
         university_delete_id = request.POST.get('university_delete_id')
@@ -1905,10 +1925,14 @@ def delete_university(request):
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/university_settings/')
 
+
+@permission_required('masters.can_view_faculty_details', raise_exception=True)
 def faculty_settings(request):
     faculty_recs = FacultyDetails.objects.filter()
     return render(request, 'faculty_settings.html', {'faculty_recs': faculty_recs})
 
+
+@permission_required('masters.add_facultydetails', raise_exception=True)
 def add_faculty(request):
     university_recs = UniversityDetails.objects.filter(is_delete=False,is_active=True,is_partner_university = False).order_by('-id')
     if request.method == 'POST':
@@ -1950,6 +1974,8 @@ def add_faculty(request):
     university_type_recs = UniversityTypeDetails.objects.filter(status=True)
     return render(request, 'add_faculty.html',{'university_recs':university_recs,'university_type_recs':university_type_recs})
 
+
+@permission_required('masters.change_facultydetails', raise_exception=True)
 def edit_faculty(request, faculty_id=None):
     faculty_obj = FacultyDetails.objects.get(id=faculty_id)
     department_total_count = faculty_obj.department.all().count()
@@ -2005,6 +2031,8 @@ def edit_faculty(request, faculty_id=None):
     university_type_recs = UniversityTypeDetails.objects.filter(status=True)
     return render(request, "edit_faculty.html", {'faculty_obj': faculty_obj,'university_recs':university_recs,'department_total_count':department_total_count,'university_type_recs':university_type_recs})
 
+
+@permission_required('masters.delete_facultydetails', raise_exception=True)
 def delete_faculty(request):
     if request.method == 'POST':
         faculty_delete_id = request.POST.get('faculty_delete_id')
@@ -2016,11 +2044,11 @@ def delete_faculty(request):
         return redirect('/masters/faculty_settings/')
 
 
-
 def study_mode_settings(request):
     study_mode_recs = StudyModeDetails.objects.filter().order_by('-id')
     return render(request, 'study_mode.html',
                   {'study_mode_recs': study_mode_recs})
+
 
 def add_study_mode(request):
     study_mode = request.POST.get('study_mode')
@@ -2033,6 +2061,7 @@ def add_study_mode(request):
     except:
         messages.warning(request, "Record not saved.")
     return redirect('/masters/study_mode_settings/')
+
 
 def edit_study_mode(request):
     study_mode_id = request.POST.get('study_mode_id')
@@ -2063,11 +2092,14 @@ def delete_study_mode(request):
         return redirect('/masters/study_mode_settings/')
 
 
+@permission_required('masters.can_view_studyleveldetails', raise_exception=True)
 def study_level_settings(request):
     study_level_recs = StudyLevelDetails.objects.filter().order_by('-id')
     return render(request, 'study_level.html',
                   {'study_level_recs': study_level_recs})
 
+
+@permission_required('masters.add_studyleveldetails', raise_exception=True)
 def add_study_level(request):
     study_level = request.POST.get('study_level')
     try:
@@ -2080,6 +2112,8 @@ def add_study_level(request):
         messages.warning(request, "Record not saved.")
     return redirect('/masters/study_level_settings/')
 
+
+@permission_required('masters.change_studyleveldetails', raise_exception=True)
 def edit_study_level(request):
     study_level_id = request.POST.get('study_level_id')
     study_level = request.POST.get('study_level')
@@ -2097,6 +2131,8 @@ def edit_study_level(request):
         messages.warning(request, "Record not updated.")
         return HttpResponse(json.dumps({'error': 'Record not updated.'}), content_type="application/json")
 
+
+@permission_required('masters.delete_studyleveldetails', raise_exception=True)
 def delete_study_level(request):
     if request.method == 'POST':
         study_level_delete_id = request.POST.get('study_level_delete_id')
@@ -2108,12 +2144,14 @@ def delete_study_level(request):
         return redirect('/masters/study_level_settings/')
 
 
-
+@permission_required('masters.can_view_studytypedetails', raise_exception=True)
 def study_type_settings(request):
     study_type_recs = StudyTypeDetails.objects.all()
     return render(request, 'study_type.html',
                   {'study_type_recs': study_type_recs})
 
+
+@permission_required('masters.add_studytypedetails', raise_exception=True)
 def add_study_type(request):
     study_type = request.POST.get('study_type')
     try:
@@ -2126,6 +2164,8 @@ def add_study_type(request):
         messages.warning(request, "Record not saved.")
     return redirect('/masters/study_type_settings/')
 
+
+@permission_required('masters.change_studytypedetails', raise_exception=True)
 def edit_study_type(request):
     study_type_id = request.POST.get('study_type_id')
     study_type = request.POST.get('study_type')
@@ -2143,6 +2183,8 @@ def edit_study_type(request):
         messages.warning(request, "Record not updated.")
         return HttpResponse(json.dumps({'error': 'Record not updated.'}), content_type="application/json")
 
+
+@permission_required('masters.delete_studytypedetails', raise_exception=True)
 def delete_study_type(request):
     if request.method == 'POST':
         study_type_delete_id = request.POST.get('study_type_delete_id')
@@ -2153,10 +2195,14 @@ def delete_study_type(request):
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/study_type_settings/')
 
+
+@permission_required('masters.can_view_program_fee_details', raise_exception=True)
 def program_fee_settings(request):
     program_fee_recs = ProgramFeeDetails.objects.filter().order_by('-id')
     return render(request, 'program_fee_settings.html', {'program_fee_recs': program_fee_recs})
 
+
+@permission_required('masters.add_programfeedetails', raise_exception=True)
 def add_program_fee(request):
     if request.method == 'POST':
         university = request.POST.get('university')
@@ -2201,6 +2247,8 @@ def add_program_fee(request):
         'university_type_recs':university_type_recs,
                                                    })
 
+
+@permission_required('masters.change_programfeedetails', raise_exception=True)
 def edit_program_fee(request, program_id=None):
     program_fee_obj = ProgramFeeDetails.objects.get(id=program_id)
     if request.method == 'POST':
@@ -2256,10 +2304,14 @@ def edit_program_fee(request, program_id=None):
         'university_type_recs': university_type_recs,
     })
 
+
+@permission_required('masters.can_view_program_details', raise_exception=True)
 def program_settings(request):
     program_recs = ProgramDetails.objects.filter(is_delete=False).order_by('-id')
     return render(request, 'program_settings.html', {'program_recs': program_recs})
 
+
+@permission_required('masters.add_programdetails', raise_exception=True)
 def add_program(request):
     if request.method == 'POST':
         university = request.POST.get('university')
@@ -2310,6 +2362,8 @@ def add_program(request):
 
     return render(request, 'add_program.html',{'university_recs':university_recs,'faculty_recs':faculty_recs,'study_level_recs':study_level_recs,'study_mode_recs':study_mode_recs,'study_type_recs':study_type_recs,'campus_recs':campus_recs,'study_mode_list':study_mode_list})
 
+
+@permission_required('masters.add_programdetails', raise_exception=True)
 def add_program(request):
     if request.method == 'POST':
         university_type = request.POST.get('university_type')
@@ -2370,6 +2424,7 @@ def add_program(request):
     return render(request, 'add_program.html',{'university_recs':university_recs,'faculty_recs':faculty_recs,'study_level_recs':study_level_recs,'study_mode_recs':study_mode_recs,'study_type_recs':study_type_recs,'campus_recs':campus_recs,'study_mode_list':study_mode_list,'university_type_recs':university_type_recs,'passing_year_recs':passing_year_recs})
 
 
+@permission_required('masters.change_programdetails', raise_exception=True)
 def edit_program(request, program_id=None,type = None):
     program_obj = ProgramDetails.objects.get(id=program_id)
     if request.method == 'POST':
@@ -2487,6 +2542,7 @@ def edit_program(request, program_id=None,type = None):
                                                  'prerequisite_course_recs':prerequisite_course_recs})
 
 
+@permission_required('masters.delete_programdetails', raise_exception=True)
 def delete_program(request):
     if request.method == 'POST':
         program_delete_id = request.POST.get('program_delete_id')
@@ -2498,10 +2554,13 @@ def delete_program(request):
         return redirect('/masters/program_settings/')
 
 
+@permission_required('masters.can_view_year_details', raise_exception=True)
 def year_settings(request):
     year_recs = YearDetails.objects.all()
     return render(request, 'year_settings.html', {'year_recs': year_recs})
 
+
+@permission_required(('masters.add_yeardetails', 'masters.change_yeardetails',), raise_exception=True)
 def add_year(request):
     year_name = request.POST.get('year_name')
     start_date = request.POST.get('start_date')
@@ -2536,6 +2595,7 @@ def add_year(request):
     return redirect('/masters/year_settings/')
 
 
+@permission_required('masters.delete_yeardetails', raise_exception=True)
 def delete_year(request):
     if request.method == 'POST':
         year_delete_id = request.POST.get('year_delete_id')
@@ -2546,11 +2606,14 @@ def delete_year(request):
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/year_settings/')
 
+
+@permission_required('masters.can_view_semester_details', raise_exception=True)
 def semester_settings(request):
     semester_recs = SemesterDetails.objects.all()
     return render(request, 'semester_settings.html', {'semester_recs': semester_recs})
 
 
+@permission_required('masters.add_semesterdetails', raise_exception=True)
 def add_semester(request):
     if request.method == 'POST':
         university_type = request.POST.get('university_type')
@@ -2591,6 +2654,7 @@ def add_semester(request):
         return render(request, 'add_semester.html',context)
 
 
+@permission_required('masters.change_semesterdetails', raise_exception=True)
 def edit_semester(request, semester_id=None):
     semester_obj = SemesterDetails.objects.get(id=semester_id)
     semester_total_count = semester_obj.semester.all().count()
@@ -2646,6 +2710,8 @@ def edit_semester(request, semester_id=None):
     }
     return render(request, "edit_semester.html",context)
 
+
+@permission_required('masters.delete_semesterdetails', raise_exception=True)
 def delete_semester(request):
     if request.method == 'POST':
         semester_delete_id = request.POST.get('semester_delete_id')
@@ -2656,10 +2722,14 @@ def delete_semester(request):
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/semester_settings/')
 
+
+@permission_required('masters.can_view_activity_details', raise_exception=True)
 def activity_settings(request):
     activity_recs = ActivityDetails.objects.all()
     return render(request, 'activity_settings.html', {'activity_recs': activity_recs})
 
+
+@permission_required('masters.add_activitydetails', raise_exception=True)
 def add_activity(request):
     activity_name = request.POST.get('activity_name')
     description = request.POST.get('description')
@@ -2674,6 +2744,7 @@ def add_activity(request):
     return redirect('/masters/activity_settings/')
 
 
+@permission_required('masters.change_activitydetails', raise_exception=True)
 def update_activity(request):
     activity_id = request.POST.get('activity_id')
     activity_name = request.POST.get('activity_name')
@@ -2692,6 +2763,7 @@ def update_activity(request):
     return redirect('/masters/activity_settings/')
 
 
+@permission_required('masters.delete_activitydetails', raise_exception=True)
 def delete_activity(request):
     if request.method == 'POST':
         activity_delete_id = request.POST.get('activity_delete_id')
@@ -2703,10 +2775,13 @@ def delete_activity(request):
         return redirect('/masters/activity_settings/')
 
 
+@permission_required('masters.can_view_student_mode_details', raise_exception=True)
 def student_mode_settings(request):
     student_mode_recs = StudentModeDetails.objects.all()
     return render(request, 'student_mode.html', {'student_mode_recs': student_mode_recs})
 
+
+@permission_required('masters.add_studentmodedetails', raise_exception=True)
 def add_student_mode(request):
     student_mode = request.POST.get('student_mode')
     description = request.POST.get('description')
@@ -2721,6 +2796,7 @@ def add_student_mode(request):
     return redirect('/masters/student_mode_settings/')
 
 
+@permission_required('masters.change_studentmodedetails', raise_exception=True)
 def update_student_mode(request):
     student_mode_id = request.POST.get('student_mode_id')
     student_mode = request.POST.get('student_mode')
@@ -2739,6 +2815,7 @@ def update_student_mode(request):
     return redirect('/masters/student_mode_settings/')
 
 
+@permission_required('masters.delete_studentmodedetails', raise_exception=True)
 def delete_student_mode(request):
     if request.method == 'POST':
         student_mode_delete_id = request.POST.get('student_mode_delete_id')
@@ -2749,10 +2826,14 @@ def delete_student_mode(request):
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/student_mode_settings/')
 
+
+@permission_required('masters.can_view_learning_centers_details', raise_exception=True)
 def learning_centers_settings(request):
     learning_centers_recs = LearningCentersDetails.objects.all()
     return render(request, 'learning_centers_settings.html', {'learning_centers_recs': learning_centers_recs})
 
+
+@permission_required('masters.add_learningcentersdetails', raise_exception=True)
 def add_learning_centers(request):
     if request.method == 'POST':
         university_type = request.POST.get('university_type')
@@ -2780,6 +2861,8 @@ def add_learning_centers(request):
     university_type_recs = UniversityTypeDetails.objects.filter(status=True)
     return render(request, 'add_learning_centers.html',{'country_recs':country_recs,'university_recs':university_recs,'university_type_recs':university_type_recs})
 
+
+@permission_required('masters.change_learningcentersdetails', raise_exception=True)
 def edit_learning_centers(request, learning_center_id=None):
     learning_center_obj = LearningCentersDetails.objects.get(id=learning_center_id)
     if request.method == 'POST':
@@ -2824,6 +2907,8 @@ def edit_learning_centers(request, learning_center_id=None):
     university_type_recs = UniversityTypeDetails.objects.filter(status=True)
     return render(request, "edit_learning_centers.html", {'learning_center_obj': learning_center_obj,'country_recs':country_recs,'university_recs':university_recs,'university_type_recs':university_type_recs})
 
+
+@permission_required('masters.delete_learningcentersdetails', raise_exception=True)
 def delete_learning_centers(request):
     if request.method == 'POST':
         learning_centers_delete_id = request.POST.get('learning_centers_delete_id')
@@ -2905,11 +2990,14 @@ def delete_university_partner(request):
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/university_partner_settings/')
 
+
+@permission_required('masters.can_view_campus_branches_details', raise_exception=True)
 def campus_settings(request):
     campus_recs = CampusBranchesDetails.objects.all()
     return render(request, 'campus_settings.html', {'campus_recs': campus_recs})
 
 
+@permission_required('masters.add_campusbranchesdetails', raise_exception=True)
 def add_campus(request):
     if request.method == 'POST':
         country = request.POST.get('country')
@@ -2939,6 +3027,7 @@ def add_campus(request):
     return render(request, 'add_campus.html',{'university_recs':university_recs,'country_recs':country_recs,'university_type_recs':university_type_recs})
 
 
+@permission_required('masters.change_campusbranchesdetails', raise_exception=True)
 def edit_campus(request, campus_id=None):
     campus_obj = CampusBranchesDetails.objects.get(id=campus_id)
     if request.method == 'POST':
@@ -2979,6 +3068,8 @@ def edit_campus(request, campus_id=None):
     country_recs = CountryDetails.objects.all()
     return render(request, "edit_campus.html", {'campus_obj': campus_obj,'university_recs':university_recs,'country_recs':country_recs,'university_type_recs':university_type_recs})
 
+
+@permission_required('masters.delete_campusbranchesdetails', raise_exception=True)
 def delete_campus(request):
     if request.method == 'POST':
         campus_delete_id = request.POST.get('campus_delete_id')
@@ -2990,11 +3081,13 @@ def delete_campus(request):
         return redirect('/masters/campus_settings/')
 
 
+@permission_required('masters.can_view_calender_details', raise_exception=True)
 def calendar_settings(request):
     calender_recs = CalenderDetails.objects.all()
     return render(request, 'calendar_settings.html', {'calender_recs': calender_recs})
 
 
+@permission_required('masters.add_calenderdetails', raise_exception=True)
 def add_calendar(request):
     if request.method == 'POST':
         university = request.POST.get('university')
@@ -3028,6 +3121,7 @@ def add_calendar(request):
     return render(request, 'add_calender.html',{'university_recs':university_recs,'year_recs':year_recs,'branch_recs':branch_recs,'semester_recs':semester_recs,'activity_recs':activity_recs,'university_type_recs':university_type_recs})
 
 
+@permission_required('masters.change_calenderdetails', raise_exception=True)
 def edit_calender(request, calender_id=None):
     calender_obj = CalenderDetails.objects.get(id=calender_id)
     if request.method == 'POST':
@@ -3071,6 +3165,8 @@ def edit_calender(request, calender_id=None):
                   {'university_recs': university_recs, 'year_recs': year_recs, 'branch_recs': branch_recs,
                    'semester_recs': semester_recs, 'activity_recs': activity_recs,'calender_obj':calender_obj,'university_type_recs':university_type_recs})
 
+
+@permission_required('masters.delete_calenderdetails', raise_exception=True)
 def delete_calender(request):
     if request.method == 'POST':
         calender_delete_id = request.POST.get('calender_delete_id')
@@ -3085,6 +3181,7 @@ def delete_calender(request):
 def department_settings(request):
     department_recs = DepartmentDetails.objects.all()
     return render(request, 'department_settings.html', {'department_recs': department_recs})
+
 
 def add_department(request):
     if request.method == 'POST':
@@ -3154,6 +3251,7 @@ def edit_department(request, department_id=None):
     faculty_recs = FacultyDetails.objects.filter(status=True).order_by('-id')
     return render(request, "edit_department.html", {'university_recs': university_recs,'faculty_recs':faculty_recs,'department_obj':department_obj})
 
+
 def delete_department(request):
     if request.method == 'POST':
         department_delete_id = request.POST.get('department_delete_id')
@@ -3182,7 +3280,6 @@ def link_department_staff(request):
     return render(request, 'link_department_to_staff.html', {'department_staff_recs': department_staff_recs,'user_recs':user_recs,'department_recs':department_recs})
 
 
-
 def delete_department_staff(request):
     if request.method == 'POST':
         mapping_delete_id = request.POST.get('mapping_delete_id')
@@ -3193,9 +3290,11 @@ def delete_department_staff(request):
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/link_department_staff/')
 
+
 def document_settings(request):
     documents_recs = DocumentDetails.objects.filter().exclude(document_name='Research Proposal')
     return render(request, 'document_settings.html', {'documents_recs': documents_recs})
+
 
 def add_document(request):
     document_name = request.POST.get('document_name')
@@ -3236,6 +3335,7 @@ def delete_document(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/document_settings/')
+
 
 def link_campus_staff(request):
     if request.method == 'POST':
@@ -3648,12 +3748,15 @@ def edit_document(request, doc_id=None):
         return redirect('/masters/document_settings/')
     return render(request, "edit_document.html", {'doc_obj': doc_obj,'notes_total_count':notes_total_count})
 
+
+@permission_required('masters.can_view_arab_competency_test_details', raise_exception=True)
 def arabic_lang_proficiency_settings(request):
     arabic_recs = ArabCompetencyTestDetails.objects.all()
     return render(request, 'arabic_lang_proficiency.html',
                   {'arabic_recs': arabic_recs})
 
 
+@permission_required('masters.add_arabcompetencytestdetails', raise_exception=True)
 def add_arabic_lang_proficiency(request):
     arab_competency_test = request.POST.get('arab_competency_test')
     try:
@@ -3666,6 +3769,8 @@ def add_arabic_lang_proficiency(request):
         messages.warning(request, "Record not saved.")
     return redirect('/masters/arabic_lang_proficiency_settings/')
 
+
+@permission_required('masters.change_arabcompetencytestdetails', raise_exception=True)
 def edit_arabic_lang_proficiency(request):
     arab_competency_test_id = request.POST.get('arab_competency_test_id')
     arab_competency_test = request.POST.get('arab_competency_test')
@@ -3683,6 +3788,8 @@ def edit_arabic_lang_proficiency(request):
         messages.warning(request, "Record not updated.")
         return HttpResponse(json.dumps({'error': 'Record not updated.'}), content_type="application/json")
 
+
+@permission_required('masters.delete_arabcompetencytestdetails', raise_exception=True)
 def delete_arabic_lang_proficiency(request):
     if request.method == 'POST':
         arab_competency_test_delete__id = request.POST.get('arab_competency_test_delete_id')
@@ -3694,11 +3801,14 @@ def delete_arabic_lang_proficiency(request):
         return redirect('/masters/arabic_lang_proficiency_settings/')
 
 
+@permission_required('masters.can_view_english_competency_test_details', raise_exception=True)
 def english_lang_proficiency_settings(request):
     english_recs = EnglishCompetencyTestDetails.objects.all()
     return render(request, 'english_lang_proficiency.html',
                   {'english_recs': english_recs})
 
+
+@permission_required('masters.add_englishcompetencytestdetails', raise_exception=True)
 def add_english_lang_proficiency(request):
     english_competency_test = request.POST.get('english_competency_test')
     try:
@@ -3711,6 +3821,8 @@ def add_english_lang_proficiency(request):
         messages.warning(request, "Record not saved.")
     return redirect('/masters/english_lang_proficiency_settings/')
 
+
+@permission_required('masters.change_englishcompetencytestdetails', raise_exception=True)
 def edit_english_lang_proficiency(request):
     english_competency_test_id = request.POST.get('english_competency_test_id')
     english_competency_test = request.POST.get('english_competency_test')
@@ -3728,6 +3840,8 @@ def edit_english_lang_proficiency(request):
         messages.warning(request, "Record not updated.")
         return HttpResponse(json.dumps({'error': 'Record not updated.'}), content_type="application/json")
 
+
+@permission_required('masters.delete_englishcompetencytestdetails', raise_exception=True)
 def delete_english_lang_proficiency(request):
     if request.method == 'POST':
         english_competency_test_delete_id = request.POST.get('english_competency_test_delete_id')
@@ -4195,6 +4309,7 @@ def load_country(request):
             count = count + 1
 
 
+@permission_required('masters.delete_programfeedetails', raise_exception=True)
 def delete_program_fee(request):
     if request.method == 'POST':
         program_delete_id = request.POST.get('program_delete_id')
@@ -4224,11 +4339,13 @@ def get_year_from_study_level(request):
     return JsonResponse(year_list, safe=False)
 
 
+@permission_required('masters.can_view_university_type_details', raise_exception=True)
 def university_type_settings(request):
     university_type_recs = UniversityTypeDetails.objects.filter()
     return render(request, 'university_type_settings.html', {'university_type_recs': university_type_recs})
 
 
+@permission_required('masters.add_universitytypedetails', raise_exception=True)
 def add_university_type(request):
     if request.method == 'POST':
         university_type = request.POST.get('university_type')
@@ -4247,6 +4364,8 @@ def add_university_type(request):
         return redirect('/masters/university_type_settings/')
     return render(request, 'add_university_type.html')
 
+
+@permission_required('masters.change_universitytypedetails', raise_exception=True)
 def edit_university_type(request, university_type_id=None):
     university_type_obj = UniversityTypeDetails.objects.get(id=university_type_id)
     if request.method == 'POST':
@@ -4269,6 +4388,8 @@ def edit_university_type(request, university_type_id=None):
         return redirect('/masters/university_type_settings/')
     return render(request, "edit_university_type.html", {'university_type_obj': university_type_obj})
 
+
+@permission_required('masters.delete_universitytypedetails', raise_exception=True)
 def delete_university_type(request):
     if request.method == 'POST':
         university_type_delete_id = request.POST.get('university_type_delete_id')
@@ -4280,12 +4401,13 @@ def delete_university_type(request):
         return redirect('/masters/university_type_settings/')
 
 
-
+@permission_required('masters.can_view_type_details', raise_exception=True)
 def type_settings(request):
     type_recs = TypeDetails.objects.filter()
     return render(request, 'type_settings.html', {'type_recs': type_recs})
 
 
+@permission_required('masters.add_typedetails', raise_exception=True)
 def add_type(request):
     if request.method == 'POST':
         type = request.POST.get('type')
@@ -4304,6 +4426,8 @@ def add_type(request):
         return redirect('/masters/type_settings/')
     return render(request, 'add_type.html')
 
+
+@permission_required('masters.change_typedetails', raise_exception=True)
 def edit_type(request, type_id=None):
     type_obj = TypeDetails.objects.get(id=type_id)
     if request.method == 'POST':
@@ -4326,6 +4450,8 @@ def edit_type(request, type_id=None):
         return redirect('/masters/type_settings/')
     return render(request, "edit_type.html", {'type_obj': type_obj})
 
+
+@permission_required('masters.delete_typedetails', raise_exception=True)
 def delete_type(request):
     if request.method == 'POST':
         type_delete_id = request.POST.get('type_delete_id')
@@ -4340,6 +4466,7 @@ def delete_type(request):
 def view_semester_subject_list(request, program_id=None):
     study_plan_recs = StudyPlanDetails.objects.filter(program_id = program_id)
     return render(request, 'view_semester_subject_list.html',{'study_plan_recs':study_plan_recs,'program_id':program_id})
+
 
 def edit_study_plan(request, program_id=None):
     if request.method == 'POST':
@@ -4384,6 +4511,7 @@ def delete_semester_based(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/view_semester_subject_list/'+str(program_id))
+
 
 def edit_semester_based(request, semester_id=None):
     study_plan_obj = StudyPlanDetails.objects.get(id=semester_id)
@@ -4484,10 +4612,12 @@ def semester_fee_details(request, semester_id=None):
     })
 
 
+@permission_required('masters.can_view_prerequisite_course_details', raise_exception=True)
 def course_master_settings(request):
     prerequisite_course_details = PrerequisiteCourseDetails.objects.all()
     return render(request, 'prerequisite_course_details.html', {'prerequisite_course_details': prerequisite_course_details})
 
+@permission_required('masters.add_prerequisitecoursedetails', raise_exception=True)
 def add_courses(request):
     code = request.POST.get('code')
     course = request.POST.get('course')
@@ -4502,6 +4632,7 @@ def add_courses(request):
     return redirect('/masters/course_master_settings/')
 
 
+@permission_required('masters.change_prerequisitecoursedetails', raise_exception=True)
 def update_course(request):
     course_id = request.POST.get('course_id')
     code = request.POST.get('code')
@@ -4520,6 +4651,7 @@ def update_course(request):
     return redirect('/masters/course_master_settings/')
 
 
+@permission_required('masters.delete_prerequisitecoursedetails', raise_exception=True)
 def delete_course(request):
     if request.method == 'POST':
         course_mode_delete_id = request.POST.get('course_mode_delete_id')
@@ -4529,6 +4661,7 @@ def delete_course(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/course_master_settings/')
+
 
 def credit_study_plan(request, program_id=None):
     if request.method == 'POST':
@@ -4572,6 +4705,7 @@ def credit_study_plan(request, program_id=None):
         except:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/view_credit_study_plan/'+str(program_id))
+
 
 def view_credit_study_plan(request, program_id=None):
     credit_study_plan_recs = CreditStudyPlanDetails.objects.filter(program_id = program_id)
@@ -4908,12 +5042,15 @@ def research_fee_details(request, research_id=None):
     })
 
 
+@permission_required('masters.can_view_referral_fee_details', raise_exception=True)
 def referral_fee(request):
     context = {
         'referral_fee_recs':ReferralFeeDetails.objects.all()
     }
     return render(request, 'referral_fee.html', context)
 
+
+@permission_required('masters.add_referralfeedetails', raise_exception=True)
 def add_referral_fee(request):
     if request.method == 'POST':
         referral_amount = request.POST.get('referral_amount')
@@ -4935,37 +5072,8 @@ def add_referral_fee(request):
         }
         return render(request, 'add_referral_fee.html',context)
 
-def get_university_program_already_exists(request):
-    referral_id = request.POST.get('referral_id', None)
-    university = request.POST.get('university', None)
-    program = request.POST.get('program', None)
-    program_exists = False
-    if referral_id:
-        if ReferralFeeDetails.objects.filter(university_id=university, program_id=program).exclude(
-                id=referral_id).exists():
-            program_exists = True
-        else:
-            program_exists = False
-        return JsonResponse(program_exists, safe=False)
-    else:
-        if ReferralFeeDetails.objects.filter(university_id=university, program_id=program).exists():
-            program_exists = True
-        else:
-            program_exists = False
-        return JsonResponse(program_exists, safe=False)
 
-def get_program_from_university(request):
-    program_list = []
-    university = request.POST.get('university', None)
-    program_recs = ProgramDetails.objects.filter(university_id=university)
-    for rec in program_recs:
-        raw_dict = {}
-        raw_dict['program_name']=rec.program_name
-        raw_dict['id']=rec.id
-        program_list.append(raw_dict)
-    return JsonResponse(program_list, safe=False)
-
-
+@permission_required('masters.change_referralfeedetails', raise_exception=True)
 def edit_referral_fee(request, referral_id=None):
     referral_obj = ReferralFeeDetails.objects.get(id=referral_id)
     if request.method == 'POST':
@@ -4995,6 +5103,7 @@ def edit_referral_fee(request, referral_id=None):
         return render(request, 'edit_referral_fee.html', context)
 
 
+@permission_required('masters.delete_referralfeedetails', raise_exception=True)
 def delete_referral_fee(request):
     if request.method == 'POST':
         referral_delete_id = request.POST.get('referral_delete_id')
@@ -5004,3 +5113,76 @@ def delete_referral_fee(request):
         except:
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/referral_fee/')
+
+
+def get_university_program_already_exists(request):
+    referral_id = request.POST.get('referral_id', None)
+    university = request.POST.get('university', None)
+    program = request.POST.get('program', None)
+    program_exists = False
+    if referral_id:
+        if ReferralFeeDetails.objects.filter(university_id=university, program_id=program).exclude(
+                id=referral_id).exists():
+            program_exists = True
+        else:
+            program_exists = False
+        return JsonResponse(program_exists, safe=False)
+    else:
+        if ReferralFeeDetails.objects.filter(university_id=university, program_id=program).exists():
+            program_exists = True
+        else:
+            program_exists = False
+        return JsonResponse(program_exists, safe=False)
+
+
+def get_program_from_university(request):
+    program_list = []
+    university = request.POST.get('university', None)
+    program_recs = ProgramDetails.objects.filter(university_id=university)
+    for rec in program_recs:
+        raw_dict = {}
+        raw_dict['program_name']=rec.program_name
+        raw_dict['id']=rec.id
+        program_list.append(raw_dict)
+    return JsonResponse(program_list, safe=False)
+
+
+@user_passes_test(lambda user: user.is_superuser, login_url='/login')
+def list_permissions(request):
+    role_permission_models = [
+        # system settings
+        'languagedetails', #done
+        'currencydetails', #done
+        'countrydetails', #done
+        'arabcompetencytestdetails', #done
+        'englishcompetencytestdetails', #done
+        'studyleveldetails',  # done
+        'studytypedetails',  # done
+        'studentmodedetails',  # done
+        'universitytypedetails',  # done
+        'typedetails',  # done
+        'learningcentersdetails',  # done
+        'facultydetails',  # done
+        'prerequisitecoursedetails',  # done
+        # manage users
+        'user', # pending view permission
+        # university settings
+        'UniversityDetails',  # done
+        'ProgramDetails',  # done
+        'ProgramFeeDetails',  # done
+        'CampusBranchesDetails',  # done
+        # Academic settings
+        'YearDetails',  # done
+        'SemesterDetails',  # done
+        'ActivityDetails',  # done
+        'CalenderDetails',  # done
+        'ReferralFeeDetails',  # done
+    ]
+    print(len(role_permission_models))
+    permissions = Permission.objects.filter(
+        content_type__model__in=role_permission_models
+    ).values()
+    user = User.objects.get(id=61)
+    user.user_permissions.set(['47','48'])
+
+    return JsonResponse(list(permissions), safe=False)

@@ -1,5 +1,5 @@
 from django.urls import path
-
+from accounts.decoratars import user_login_required
 from . import views
 
 app_name = 'accounts'
@@ -20,14 +20,14 @@ urlpatterns = [
     path('update_switch/', views.update_switch,name='update_switch'),
     path('delete_user/<int:user_id>/', views.delete_user,name='delete_user'),
     path('check_active_year/', views.CheckActiveYear, name='check_active_year'),
-    path('staff_settings/', views.staff_settings,name='staff_settings'),
-    path('agent_recruiter_settings/', views.agent_recruiter_settings,name='agent_recruiter_settings'),
-    path('add_agent_recruiter/', views.add_agent_recruiter,name='add_agent_recruiter'),
-    path('add_staff/', views.add_staff, name='add_staff'),
-    path('delete_staff/', views.delete_staff, name='delete_staff'),
-    path('edit_agent_recruiter/<int:recruiter_id>/', views.edit_agent_recruiter, name='edit_agent_recruiter'),
-    path('edit_staff/<int:staff_id>/', views.edit_staff, name='edit_staff'),
-    path('edit_agent/<int:agent_id>/', views.edit_agent, name='edit_agent'),
+    path('staff_settings/', user_login_required(views.staff_settings),name='staff_settings'),
+    path('agent_recruiter_settings/', user_login_required(views.agent_recruiter_settings), name='agent_recruiter_settings'),
+    path('add_agent_recruiter/', user_login_required(views.add_agent_recruiter),name='add_agent_recruiter'),
+    path('add_staff/', user_login_required(views.add_staff), name='add_staff'),
+    path('delete_staff/', user_login_required(views.delete_staff), name='delete_staff'),
+    path('edit_agent_recruiter/<int:recruiter_id>/', user_login_required(views.edit_agent_recruiter), name='edit_agent_recruiter'),
+    path('edit_staff/<int:staff_id>/', user_login_required(views.edit_staff), name='edit_staff'),
+    path('edit_agent/<int:agent_id>/', user_login_required(views.edit_agent), name='edit_agent'),
     path('get_email_exists/', views.get_email_exists, name='get_email_exists'),
     path('get_university_exists/', views.get_university_exists, name='get_university_exists'),
     path('get_faculty_from_account_type/', views.get_faculty_from_account_type, name='get_faculty_from_account_type'),
