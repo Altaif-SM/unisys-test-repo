@@ -117,6 +117,10 @@ class StudentDetails(BaseModel):
         return self.user.get_full_name() if self.user else ''
 
 
+
+
+
+
 class ApplicationDetails(BaseModel):
     first_name = models.CharField(max_length=150, blank=True, null=True)
     middle_name = models.CharField(max_length=150, blank=True, null=True)
@@ -482,6 +486,16 @@ class SiblingDetails(BaseModel):
     sibling_age = models.CharField(max_length=5, blank=True, null=True)
     sibling_status = models.CharField(max_length=255, blank=True, null=True)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='sibling_applicant_rel',
+                                     on_delete=models.SET_NULL)
+
+class DefermentDetails(BaseModel):
+    is_deferment_study   = models.BooleanField(default=False)
+    deferment_reasons = models.CharField(max_length=50,blank=True, null=True)
+    justifications = models.TextField(blank=True, null=True)
+    medical_certificate = models.FileField(upload_to='document/', null=True, blank=True)
+    sponsorship_letter = models.FileField(upload_to='document/', null=True, blank=True)
+    other_document = models.FileField(upload_to='document/', null=True, blank=True)
+    applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_deferment_rel',
                                      on_delete=models.SET_NULL)
 
 
