@@ -6,6 +6,7 @@ from accounts.models import User
 from student.models import *
 from student.models import StudentDetails, ApplicationDetails
 from donor.models import DonorDetails
+from masters.helpers import document_upload_path
 
 
 def content_file_name_partner(instance, filename):
@@ -151,6 +152,10 @@ class YearDetails(BaseModel):
 
     def __str__(self):
         return self.year_name
+
+    @classmethod
+    def active_records(cls):
+        return cls.objects.filter(active_year=True)
 
     def to_dict(self):
         res = {
@@ -303,16 +308,18 @@ class UniversityDetails(BaseModel):
     is_partner_university = models.BooleanField(default=False)
     university_type = models.ForeignKey(UniversityTypeDetails, null=True, related_name='university_type_rel',
                                 on_delete=models.SET_NULL)
-
-    type = models.ForeignKey(TypeDetails, null=True, related_name='type_rel',
-                                        on_delete=models.SET_NULL)
-
+    type = models.ForeignKey(TypeDetails, null=True, related_name='type_rel', on_delete=models.SET_NULL)
+    file = models.FileField(upload_to=document_upload_path, max_length=256, blank=True, null=True)
 
     class Meta:
         ordering = ('-id',)
 
     def __str__(self):
         return self.university_name
+
+    @classmethod
+    def active_records(cls):
+        return cls.objects.filter(is_active=True, is_delete=False)
 
     def to_dict(self):
         res = {

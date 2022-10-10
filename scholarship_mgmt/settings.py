@@ -55,7 +55,8 @@ INSTALLED_APPS = [
     'password_reset.apps.PasswordResetConfig',
     'rest_api',
     'rest_framework',
-
+    'agents.apps.AgentsConfig',
+    'tanseeq_app',
 ]
 
 MIDDLEWARE = [

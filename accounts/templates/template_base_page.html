@@ -264,35 +264,15 @@ License: You must have a valid license purchased only from themeforest(the above
 
 
                 <ul class="nav navbar-nav pull-right">
-{#                <li class="nav-item active" style="margin-top: 20px">#}
-{#                    <form action="{% url 'set_language' %}" method="post">{% csrf_token %}#}
-{#                        <input name="next" type="hidden" value="{{ redirect_to }}">#}
-{#                        <select name="language" class="form-control" id="exampleFormControlSelect1"#}
-{#                                onchange="this.form.submit()">#}
-{#                            {% get_current_language as LANGUAGE_CODE %}#}
-{#                            {% get_available_languages as LANGUAGES %}#}
-{#                            {% get_language_info_list for LANGUAGES as languages %}#}
-{#                            {% for language in languages %}#}
-{#                                <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %}selected{% endif %}>#}
-{#                                    {{ language.name_local }}#}
-{#                                    {{ language.name_local }} {{ language.code }}#}
-{#                                </option>#}
-{#                            {% endfor %}#}
-{#                        </select>#}
-{#                    </form>#}
-{#                </li>#}
                     {% if user.is_student %}
                         <li class="dropdown dropdown-extended dropdown-tasks" id="header_task_bar">
                             <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
                                data-close-others="true">
                                 <i class="icon-calendar"></i>
-                                {#					<span class="badge badge-default">#}
-                                {#					3%</span>#}
                             </a>
                             <ul class="dropdown-menu extended tasks">
                                 <li class="external">
                                     <h3><span class="bold">{% trans 'Application Completed' %}</span></h3>
-                                    {#							<a href="page_todo.html">view all</a>#}
                                 </li>
                                 <li>
                                     <ul class="dropdown-menu-list scroller" style="height: 100px;"
@@ -302,7 +282,6 @@ License: You must have a valid license purchased only from themeforest(the above
                                                 <a href="javascript:;">
                                                     <span class="task">
                                                     <span class="desc">{% trans 'Application Progress (Good)' %}</span>
-
                                                     <span class="percent">{{ user.get_student_progress.progress_counter }}%</span>
                                                     </span>
                                                     <span class="progress">
@@ -315,9 +294,6 @@ License: You must have a valid license purchased only from themeforest(the above
                                                 </a>
                                             </li>
                                         {% elif  user.get_student_progress.progress_counter >= 51 and user.get_student_progress.progress_counter <= 75 %}
-
-
-
                                             <li>
                                                 <a href="javascript:;">
                                                     <span class="task">
@@ -395,11 +371,6 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <a href="/student/student_notifications/">{% trans 'See All' %}</a>
                                     {% for notification in user.get_progress_history.notifications %}
                                          <a>{{ notification.remark|truncatechars:30 }}</a>
-{#                                        {% if not notification.is_read %}#}
-{#                                            <a style=""><b>{{ notification.last_updated|date:'d/m' }} {{ notification.message|truncatechars:30 }}</b></a>#}
-{#                                        {% else %}#}
-{#                                            <a>{{ notification.remark|truncatechars:30 }}</a>#}
-{#                                        {% endif %}#}
                                     {% endfor %}
                                 </li>
                             </ul>
@@ -432,22 +403,8 @@ License: You must have a valid license purchased only from themeforest(the above
                     <li class="dropdown dropdown-user">
                         <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
                            data-close-others="true">
-                            {#                            <img alt="" class="img-circle" src="../../media/{{ user.get_application.image }}"/>#}
-                            {#                            {% if user.staff_relation.all  and user.staff_relation.all.0.photo %}#}
-                            {#                                <img alt="" class="img-circle"#}
-                            {#                                     src="{{ MEDIA_URL }}{{ user.staff_relation.all.0.photo.url }}"/>#}
-                            {#                            {% elif user.parent_relation.all and user.parent_relation.all.0.photo %}#}
-                            {#                                <img alt="" class="img-circle"#}
-                            {#                                     src="{{ MEDIA_URL }}{{ user.parent_relation.all.0.photo.url }}"/>#}
-                            {#                            {% else %}#}
-                            {#                                <img alt="" class="img-circle" src="{% static 'images/user.png' %}"/>#}
-                            {#                            {% endif %}#}
                             {% comment %}<span class="username username-hide-on-mobile"> {{ user.get_application.first_name }} {{ user.get_application.last_name }} </span>
                             <br><span class="username username-hide-on-mobile"> {{ user.get_application_id }}</span>{% endcomment %}
-                            {#                    <li>#}
-                            {#                        <a href="/accounts/user_signout/">#}
-                            {#                            <i class="fa fa-sign-out"></i> Log Out</a>#}
-                            {#                    </li>#}
                             <i class="fa fa-angle-down"></i>
                         </a>
 
@@ -520,324 +477,26 @@ License: You must have a valid license purchased only from themeforest(the above
 
                     <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                         data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+                        <li class="nav-item " id="dashboard">
+                            <a href="/" class="nav-link nav-toggle">
+                                <i class="glyphicon glyphicon-stats"></i>
+                                <span class="title">{% trans 'Dashboard' %}</span>
+                                <span class="selected"></span>
+                            </a>
 
-                        {% if user.is_super_admin %}
-                            <li class="nav-item " id="dashboard">
-                                <a href="/accounts/home/" class="nav-link nav-toggle">
-                                    <i class="glyphicon glyphicon-stats"></i>
-                                    <span class="title">{% trans 'Dashboard' %}</span>
-                                    <span class="selected"></span>
-                                </a>
-
-                            </li>
-                        {% elif not user.is_student %}
-                            <li class="nav-item " id="dashboard">
-                                <a href="/accounts/home/" class="nav-link nav-toggle">
-                                    <i class="glyphicon glyphicon-stats"></i>
-                                    <span class="title">{% trans 'Dashboard' %}</span>
-                                    <span class="selected"></span>
-                                </a>
-
-                            </li>
-                        {% endif %}
-
-                        {% if user.is_student %}
-                            <li class="nav-item " id="dashboard">
-                                <a href="/student/student_home/" class="nav-link nav-toggle">
-                                    <i class="glyphicon glyphicon-stats"></i>
-                                    <span class="title">{% trans 'Dashboard' %}</span>
-                                    <span class="selected"></span>
-                                </a>
-
-                            </li>
-                        {% endif %}
+                        </li>
                     </ul>
 
-
-                    <div class="tab-pane " id="b"><!--Settings-->
+                    <div class="tab-pane active" id="b"><!--Settings-->
                         <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-
-                            {#                            {% if user.is_super_admin %}#}
-
-                            <li class="nav-item master_settings_nav_item">
-                                {% if 'System Settings' in access_list %}
-                                    <a href="javascript:;" class="nav-link nav-toggle">
-                                        <i class="fa fa-cog" aria-hidden="true"></i>
-
-                                        <span class="title">{% trans 'System Settings' %}</span>
-                                        <span class="arrow master_settings_arrow"></span>
-                                    </a>
-                                {% endif %}
-                                <ul class="sub-menu master_settings_sub_menu">
-                                    {% if 'Manage Language' in access_list %}
-                                        <li class="nav-item ">
-                                            <a href="{% url 'masters:language_settings' %}"
-                                               class="nav-link ">{% trans 'Manage Language' %}</a>
-                                        </li>
-                                    {% endif %}
-                                    {% if 'Manage Currency' in access_list %}
-                                        <li class="nav-item ">
-                                            <a href="{% url 'masters:currency_settings' %}"
-                                               class="nav-link ">{% trans 'Manage Currency' %}</a>
-                                        </li>
-                                    {% endif %}
-                                    {% if 'Manage Country' in access_list %}
-                                        <li class="nav-item ">
-                                            <a href="{% url 'masters:country_settings' %}"
-                                               class="nav-link ">{% trans 'Manage Country' %}</a>
-                                        </li>
-                                    {% endif %}
-                                    <li class="nav-item ">
-                                            <a href="{% url 'masters:arabic_lang_proficiency_settings' %}"
-                                               class="nav-link ">{% trans 'Manage Arabic Lang Proficiency' %}</a>
-                                        </li>
-
-                                <li class="nav-item ">
-                                            <a href="{% url 'masters:english_lang_proficiency_settings' %}"
-                                               class="nav-link ">{% trans 'Manage English Lang Proficiency' %}</a>
-                                        </li>
-{#                                    {% if 'Manage Study Mode' in access_list %}#}
-{#                                        <li class="nav-item ">#}
-{#                                            <a href="{% url 'masters:study_mode_settings' %}"#}
-{#                                               class="nav-link ">{% trans 'Manage Study Mode' %}</a>#}
-{#                                        </li>#}
-{#                                    {% endif %}#}
-                                    {% if 'Manage Study Level' in access_list %}
-                                        <li class="nav-item ">
-                                            <a href="{% url 'masters:study_level_settings' %}"
-                                               class="nav-link ">{% trans 'Manage Study Level' %}</a>
-                                        </li>
-                                    {% endif %}
-                                    {% if 'Manage Study Type' in access_list %}
-                                        <li class="nav-item ">
-                                            <a href="{% url 'masters:study_type_settings' %}"
-                                               class="nav-link ">{% trans 'Manage Program Mode' %}</a>
-                                        </li>
-                                    {% endif %}
-                                    {% if 'Manage Student Mode' in access_list %}
-                                        <li class="nav-item ">
-                                            <a href="{% url 'masters:student_mode_settings' %}"
-                                               class="nav-link ">{% trans 'Manage Student Mode' %}</a>
-                                        </li>
-                                    {% endif %}
-                                        <li class="nav-item ">
-                                            <a href="{% url 'masters:university_type_settings' %}"
-                                               class="nav-link ">{% trans 'Manage University Type' %}</a>
-                                        </li>
-
-
-                                <li class="nav-item ">
-                                            <a href="{% url 'masters:type_settings' %}"
-                                               class="nav-link ">{% trans 'Manage Type' %}</a>
-                                        </li>
-                                    {% if 'Manage Learning Centers' in access_list %}
-                                        <li class="nav-item ">
-                                            <a href="{% url 'masters:learning_centers_settings' %}"
-                                               class="nav-link ">{% trans 'Manage Learning Centers' %}</a>
-                                        </li>
-                                    {% endif %}
-                                    {% if 'Manage Faculties' in access_list %}
-                                        <li class="nav-item  ">
-                                            <a href="/masters/faculty_settings/" class="nav-link ">
-                                                {#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
-                                                <span class="title">{% trans 'Manage Faculties' %}</span>
-                                            </a>
-                                        </li>
-                                    {% endif %}
-
-                                 <li class="nav-item  ">
-                                            <a href="/masters/course_master_settings/" class="nav-link ">
-                                                {#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
-                                                <span class="title">{% trans 'Manage Courses' %}</span>
-                                            </a>
-                                        </li>
-
-{#                                    {% if 'Link Faculty to User' in access_list %}#}
-{#                                        <li class="nav-item  ">#}
-{#                                            <a href="/masters/link_faculty_staff/" class="nav-link ">#}
-                                                {#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
-{#                                                <span class="title">{% trans 'Link Faculty to User' %}</span>#}
-{#                                            </a>#}
-{#                                        </li>#}
-{#                                    {% endif %}#}
-
-                                </ul>
-                            </li>
-
-                            <li class="nav-item staff_settings_nav_item">
-                                {% if 'User Settings' in access_list %}
-                                    <a href="javascript:;" class="nav-link nav-toggle">
-                                        <i class="fa fa-users" aria-hidden="true"></i>
-
-
-                                        <span class="title">{% trans 'User Settings' %}</span>
-                                        <span class="arrow staff_settings_arrow"></span>
-                                    </a>
-                                {% endif %}
-                                <ul class="sub-menu staff_settings_sub_menu">
-{#                                    {% if 'Manage Group' in access_list %}#}
-{#                                        <li class="nav-item ">#}
-{#                                            <a href="{% url 'masters:group_settings' %}"#}
-{#                                               class="nav-link ">{% trans 'Manage Group' %}</a>#}
-{#                                        </li>#}
-{#                                    {% endif %}#}
-                                    {% if 'Manage Users' in access_list %}
-                                        <li class="nav-item  ">
-                                            <a href="/accounts/staff_settings/" class="nav-link ">
-                                                {#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
-                                                <span class="title">{% trans 'Manage Users' %}</span>
-                                            </a>
-                                        </li>
-                                    {% endif %}
-
-                                <li class="nav-item  ">
-                                            <a href="/accounts/agent_recruiter_settings/" class="nav-link ">
-                                                {#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
-                                                <span class="title">{% trans 'Manage Agent Recruiter' %}</span>
-                                            </a>
-                                        </li>
-
-
-                                </ul>
-                            </li>
-
-                            <li class="nav-item organization_settings_nav_item">
-                                {% if 'University Settings' in access_list %}
-                                    <a href="javascript:;" class="nav-link nav-toggle">
-                                        <i class="fa fa-university" aria-hidden="true"></i>
-
-
-                                        <span class="title">{% trans 'University Settings' %}</span>
-                                        <span class="arrow organization_settings_arrow"></span>
-                                    </a>
-                                {% endif %}
-                                <ul class="sub-menu organization_settings_sub_menu">
-                                    {% if 'Manage Universities' in access_list %}
-                                        <li class="nav-item  ">
-                                            <a href="/masters/university_settings/" class="nav-link ">
-                                                <span class="title">{% trans 'Manage Universities' %}</span>
-                                            </a>
-                                        </li>
-                                    {% endif %}
-{#                                    {% if 'Manage University Partner' in access_list %}#}
-{#                                        <li class="nav-item  ">#}
-{#                                            <a href="/masters/university_partner_settings/" class="nav-link ">#}
-{#                                                <span class="title">{% trans 'Manage International University' %}</span>#}
-{#                                            </a>#}
-{#                                        </li>#}
-{#                                    {% endif %}#}
-{#                                    {% if 'Link University to User' in access_list %}#}
-{#                                        <li class="nav-item  ">#}
-{#                                            <a href="/masters/link_university_staff/" class="nav-link ">#}
-{#                                                <span class="title">{% trans 'Link University to User' %}</span>#}
-{#                                            </a>#}
-{#                                        </li>#}
-{#                                    {% endif %}#}
-                                    {% if 'Manage Program' in access_list %}
-                                        <li class="nav-item ">
-                                            <a href="{% url 'masters:program_settings' %}"
-                                               class="nav-link ">{% trans 'Manage Program' %}</a>
-                                        </li>
-                                    {% endif %}
-                                {% if 'Manage Program Fee' in access_list %}
-                                        <li class="nav-item ">
-                                            <a href="{% url 'masters:program_fee_settings' %}"
-                                               class="nav-link ">{% trans 'Manage Registration Fee' %}</a>
-                                        </li>
-                                    {% endif %}
-                                    {% if 'Manage Campus' in access_list %}
-                                        <li class="nav-item  ">
-                                            <a href="/masters/campus_settings/" class="nav-link ">
-                                                {#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
-                                                <span class="title">{% trans 'Manage Branch/Campus' %}</span>
-                                            </a>
-                                        </li>
-                                    {% endif %}
-{#                                    {% if 'Link Campus to User' in access_list %}#}
-{#                                        <li class="nav-item ">#}
-{#                                            <a href="{% url 'masters:link_campus_staff' %}"#}
-{#                                               class="nav-link ">{% trans 'Link Branch/Campus to User' %}</a>#}
-{#                                        </li>#}
-{#                                    {% endif %}#}
-{#                                    {% if 'Manage Department' in access_list %}#}
-{#                                        <li class="nav-item  ">#}
-{#                                            <a href="/masters/department_settings/" class="nav-link ">#}
-{#                                                <span class="title">{% trans 'Manage Department' %}</span>#}
-{#                                            </a>#}
-{#                                        </li>#}
-{#                                    {% endif %}#}
-{#                                    {% if 'Link Department to User' in access_list %}#}
-{#                                        <li class="nav-item  ">#}
-{#                                            <a href="/masters/link_department_staff/" class="nav-link ">#}
-{#                                                <span class="title">{% trans 'Link Department to User' %}</span>#}
-{#                                            </a>#}
-{#                                        </li>#}
-{#                                    {% endif %}#}
-
-
-                                </ul>
-                            </li>
-                            <li class="nav-item program_settings_nav_item">
-                                {% if 'Academic Settings' in access_list %}
-                                    <a href="javascript:;" class="nav-link nav-toggle">
-
-                                        <i class="glyphicon glyphicon-education" aria-hidden="true"></i>
-                                        <span class="title">{% trans 'Academic Settings' %}</span>
-                                        <span class="arrow program_settings_arrow"></span>
-                                    </a>
-                                {% endif %}
-                                <ul class="sub-menu program_settings_sub_menu">
-                                    {% if 'Manage Year' in access_list %}
-                                        <li class="nav-item ">
-                                            <a href="{% url 'masters:year_settings' %}"
-                                               class="nav-link ">{% trans 'Manage Year' %}</a>
-                                        </li>
-                                    {% endif %}
-                                    {% if 'Manage Semester' in access_list %}
-                                        <li class="nav-item ">
-                                            <a href="{% url 'masters:semester_settings' %}"
-                                               class="nav-link ">{% trans 'Manage Semester' %}</a>
-                                        </li>
-                                    {% endif %}
-                                    {% if 'Manage Activity' in access_list %}
-                                        <li class="nav-item ">
-                                            <a href="{% url 'masters:activity_settings' %}"
-                                               class="nav-link ">{% trans 'Manage Activity' %}</a>
-                                        </li>
-                                    {% endif %}
-                                    {% if 'Manage Calendar' in access_list %}
-                                        <li class="nav-item ">
-                                            <a href="{% url 'masters:calendar_settings' %}"
-                                               class="nav-link ">{% trans 'Manage Calendar' %}</a>
-                                        </li>
-                                    {% endif %}
-
-
-                                </ul>
-                            </li>
-
-
-                        <li class="nav-item finance_nav">
-                                    <a href="javascript:;" class="nav-link nav-toggle">
-
-                                        <i class="glyphicon glyphicon-credit-card" aria-hidden="true"></i>
-                                        <span class="title">{% trans 'Finance Settings' %}</span>
-                                        <span class="arrow finance_arrow"></span>
-                                    </a>
-                                <ul class="sub-menu finance_sub_menu">
-                                        <li class="nav-item ">
-                                            <a href="{% url 'masters:referral_fee' %}"
-                                               class="nav-link ">{% trans 'Manage Referral Fee' %}</a>
-                                        </li>
-
-
-                                </ul>
-                            </li>
-
-
-
-
+                            {% if request.user.is_superuser %}
+                                {% include 'super_admin_side_bar.html' %}
+                            {% elif request.user.is_tanseeq_admin  %}
+                                {% include 'tanseeq_admin/admin_side_bar.html' %}
+                            {%else%}
+                                {% include 'role_user_side_bar.html' %}
+                            {% endif %}
                         </ul>
                         <!-- END SIDEBAR MENU -->
                     </div>  <!-- END tabpane -->
@@ -1061,13 +720,6 @@ License: You must have a valid license purchased only from themeforest(the above
                                                class="nav-link ">{% trans 'Application Fee' %}</a>
                                         </li>
                                     {% endif %}
-
-{#                                    <li class="nav-item ">#}
-{#                                        <a href="{% url 'accounting:get_payment_report' %}"#}
-{#                                           class="nav-link ">{% trans 'Payment Report' %}</a>#}
-{#                                    </li>#}
-
-
                                 </ul>
                             </li>
                         {% endif %}
@@ -1398,23 +1050,9 @@ License: You must have a valid license purchased only from themeforest(the above
                         <!-- END SIDEBAR MENU -->
                     </div>  <!-- END tabpane -->
 
-
                     <div class="tab-pane " id="offer_status">
                         <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-
-
-{#                            {% if 'student.can_view_student_application_progress_history' in perms %}#}
-{#                                <li class="nav-item " id="acd_qli">#}
-{#                                    <a href="{% url 'student:application_offer_letter' %}"#}
-{#                                       class="nav-link nav-toggle">#}
-{#                                        <i class="fa fa-gift"></i>#}
-{#                                        <span class="title">{% trans 'Application Status' %}</span>#}
-{#                                        <span class="selected"></span>#}
-{#                                    </a>#}
-{#                                </li>#}
-{#                            {% endif %}#}
-
                          {% if 'student.can_view_student_application_progress_history' in perms %}
                                 <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'student:acceptance_declaration' %}"
@@ -1425,10 +1063,6 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </a>
                                 </li>
                             {% endif %}
-
-
-
-
                         </ul>
                         <!-- END SIDEBAR MENU -->
                     </div>  <!-- END tabpane -->
@@ -1436,12 +1070,6 @@ License: You must have a valid license purchased only from themeforest(the above
                 <div class="tab-pane " id="program_registration">
                         <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-
-
-
-
-
-
 
                         {% if 'student.can_view_student_application_progress_history' in perms %}
                                 <li class="nav-item " id="acd_qli">
@@ -1454,7 +1082,6 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </li>
                             {% endif %}
 
-
                         </ul>
                         <!-- END SIDEBAR MENU -->
                     </div>  <!-- END tabpane -->
@@ -1463,13 +1090,6 @@ License: You must have a valid license purchased only from themeforest(the above
                 <div class="tab-pane " id="matric_card_list">
                         <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-
-
-
-
-
-
-
                         {% if 'student.can_view_student_application_progress_history' in perms %}
                                 <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'student:application_matric_card' %}"
@@ -1480,17 +1100,12 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </a>
                                 </li>
                             {% endif %}
-
-
                         </ul>
                         <!-- END SIDEBAR MENU -->
                     </div>  <!-- END tabpane -->
-
-
                  <div class="tab-pane " id="course_registration_list">
                         <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-
                         {% if 'student.can_view_student_application_progress_history' in perms %}
                                 <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'student:semester_course_registration' %}"
@@ -1501,7 +1116,6 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </a>
                                 </li>
 
-
                             <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'student:research_plan_registration' %}"
                                        class="nav-link nav-toggle">
@@ -1511,23 +1125,17 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </a>
                                 </li>
                             {% endif %}
-
-
                         </ul>
                         <!-- END SIDEBAR MENU -->
                     </div>  <!-- END tabpane -->
 
-
                     <div class="tab-pane " id="payments">
                         <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-
-
                             {% if 'student.can_view_student_application_progress_history' in perms %}
                                 <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'payments:checkout' %}"
                                        class="nav-link nav-toggle">
-                                        {#                                        <i class="glyphicon-credit-card"></i>#}
                                         <span class="glyphicon glyphicon-credit-card" style="font-size: 28px"></span>
                                         <span class="title">{% trans 'Payments' %}</span>
                                         <span class="selected"></span>
@@ -1617,6 +1225,26 @@ License: You must have a valid license purchased only from themeforest(the above
                     <div id="loading-img"></div>
                 </div>
                 <div class="clearfix">
+                    	<!-- Error messaging -->
+                {% if form.errors %}
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-8 col-sm-12 m-auto p-auto">
+                                <div id="errors" class="mt-2 text-center" >
+                                    <div class="inner font-weight-bold" style="background-color: #d9534f; padding: 10px; border-radius:20px; color:white">
+                                        <p>There were some errors in the information you entered. Please correct the following:</p>
+                                        {{ form.non_field_errors }}
+                                        <ul class="text-capitalize">
+                                            {% for field in form %}
+                                            {% if field.errors %}<li>{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
                     {% block content %}
                     {% endblock %}
 
@@ -1979,6 +1607,7 @@ License: You must have a valid license purchased only from themeforest(the above
         });
     }
 
-
 </script>
+{% block ajax %}
+{% endblock %}
 </html>

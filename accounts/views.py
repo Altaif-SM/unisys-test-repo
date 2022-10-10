@@ -1032,7 +1032,8 @@ def add_staff(request):
                 permission_obj = PersmissionDetails.objects.create(permission=rec)
                 staff_obj.permission.add(permission_obj)
             messages.success(request, "Record saved.")
-        except:
+        except Exception as e:
+            print(e)
             messages.warning(request, "Record not saved.")
         return redirect('/accounts/staff_settings/')
     university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
@@ -1056,7 +1057,7 @@ def add_staff(request):
         'university_type_recs':university_type_recs
 
     }
-    return render(request, 'add_staff.html',{'country_list':country_list,'staff_dict':staff_dict})
+    return render(request, 'add_staff.html', {'country_list':country_list,'staff_dict':staff_dict})
 
 def delete_staff(request):
     if request.method == 'POST':
