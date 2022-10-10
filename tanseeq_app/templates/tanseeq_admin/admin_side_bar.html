@@ -1,5 +1,10 @@
 {% load  i18n %}
-
+<li class="nav-item ">
+    <a href="{% url 'masters:university_settings' %}" class="nav-link ">
+        <i class="fa fa-university"></i>
+        <span class="title">{% trans 'University' %}</span>
+    </a>
+</li>
 <li class="nav-item ">
     <a href="{% url 'tanseeq_app:list_tanseeq_period' %}" class="nav-link ">
         {% trans 'Tanseeq Period' %}

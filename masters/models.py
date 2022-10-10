@@ -6,7 +6,7 @@ from accounts.models import User
 from student.models import *
 from student.models import StudentDetails, ApplicationDetails
 from donor.models import DonorDetails
-from masters.helpers import document_upload_path
+from masters.helpers import document_upload_path,university_logo_upload_path,tanseeq_guide_upload_path,registration_guide_upload_path
 
 
 def content_file_name_partner(instance, filename):
@@ -295,15 +295,19 @@ class StudentDonorMapping(BaseModel):
 
 
 class UniversityDetails(BaseModel):
-    country = models.ForeignKey(CountryDetails, null=True, related_name='university_country_rel',
-                                on_delete=models.SET_NULL)
-    university_name = models.CharField(max_length=100, blank=True, null=True)
+    university_name = models.CharField(max_length=150, blank=True, null=True)
+    university_code = models.CharField(max_length=30, blank=True, null=True)
     email = models.CharField(max_length=50, blank=True, null=True)
     telephone = models.CharField(max_length=30, blank=True, null=True)
     website = models.CharField(max_length=50, blank=True, null=True)
-    university_logo = models.ImageField(upload_to='university_logo/', null=True, blank=True)
+    university_logo = models.ImageField(upload_to=university_logo_upload_path, max_length=256, blank=True, null=True)
+    tanseeq_guide = models.FileField(upload_to=tanseeq_guide_upload_path, max_length=256, blank=True, null=True)
+    registration_guide = models.FileField(upload_to=registration_guide_upload_path, max_length=256, blank=True, null=True)
     address = models.TextField(blank=True, null=True)
+    contact_details = models.TextField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
+    is_registration = models.BooleanField(default=True)
+    is_singup = models.BooleanField(default=True)
     is_delete = models.BooleanField(default=False)
     is_partner_university = models.BooleanField(default=False)
     university_type = models.ForeignKey(UniversityTypeDetails, null=True, related_name='university_type_rel',

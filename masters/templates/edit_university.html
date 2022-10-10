@@ -1,111 +1,16 @@
 {% extends "template_base_page.html" %}
 {% load  i18n %}
 {% load staticfiles %}
-
 {% block styleBlock %}
-    <!-- BEGIN GLOBAL MANDATORY STYLES -->
-
-    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
-    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
-          rel="stylesheet" type="text/css"/>
-
-    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css"
-          rel="stylesheet">
-
-
-    </head>
-    <!-- END HEAD -->
-    <style type="text/css">
-
-        div.dataTables_wrapper div.dataTables_filter label {
-            font-weight: normal;
-            white-space: nowrap;
-            text-align: left;
-            padding-top: 10px;
-            padding-left: 30px;
-        }
-
-        div.dataTables_wrapper div.dataTables_length {
-            padding-right: 40px;
-            padding-top: 10px;
-        }
-
-        .s-switch input[type='checkbox'] {
-            display: none
-        }
-
-        .s-switch {
-            width: 62px;
-            height: 32px;
-            z-index: 0;
-            margin: 0;
-            padding: 0;
-            appearance: none;
-            border: none;
-            cursor: pointer;
-            position: relative;
-            border-radius: 16px;
-            -moz-border-radius: 16px;
-            -webkit-border-radius: 16px;
-        }
-
-        .s-switch:before {
-            content: ' ';
-            background: #D9534F !important;
-            position: absolute;
-            left: 1px;
-            top: 1px;
-            width: 60px;
-            height: 30px;
-            background: #FFFFFF;
-            z-index: 1;
-            border-radius: 16px;
-            -moz-border-radius: 16px;
-            -webkit-border-radius: 16px;
-        }
-
-        .s-switch:after {
-            content: ' ';
-            height: 29px;
-            width: 29px;
-            border-radius: 28px;
-            z-index: 2;
-            background: #FFFFFF;
-            position: absolute;
-            -webkit-transition-duration: 300ms;
-            transition-duration: 300ms;
-            top: 1px;
-            left: 3px;
-            -webkit-box-shadow: 0 2px 5px #999999;
-            box-shadow: 0 2px 5px #999999;
-        }
-
-        .s-switch-on:before {
-            background: #4DAF48 !important;
-        }
-
-        .s-switch-on:after {
-            left: 31px !important;
-        }
-
-        .s-switch-readonly, .s-switch-disabled {
-            opacity: 0.8;
-        }
-
-
-    </style>
 {% endblock %}
-
 {% block ScriptBlock %}
-
     <script>
         window.onload = function () {
             $(document).ready(function () {
-                $("#status").Sswitch({});
-
+                $("#id_is_active").Sswitch({});
+                $("#id_is_singup").Sswitch({});
+                $("#id_is_registration").Sswitch({});
             });
-
-
             window.setTimeout(function () {
                 $(".alert").fadeTo(500, 0).slideUp(500, function () {
                     $(this).remove();
@@ -113,9 +18,7 @@
             }, 4000);
         }
     </script>
-
 {% endblock %}
-
 {% block content %}
     <div class="page-bar" style="margin-bottom: 1px;">
         <ul class="page-breadcrumb">
@@ -138,13 +41,11 @@
             </li>
         </ul>
     </div>
-
     {% for message in messages %}
         <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
         </div>
     {% endfor %}
-
     <!-- BEGIN VALIDATION STATES-->
     <div class="portlet light portlet-fit portlet-form ">
         <div class="portlet-title">
@@ -153,10 +54,9 @@
                 <span class="caption-subject font-red sbold uppercase">Edit University </span>
             </div>
         </div>
-
         <div class="portlet-body">
             <div class="form-body">
-                <form action="{% url 'masters:edit_university' university_obj.id %}"
+               <form action="{% url 'masters:edit_university' university_obj.id %}"
                       id="id_form"
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
@@ -166,36 +66,15 @@
 
                         <div class="row item_experience" id="item_experience_1">
 
-{#                            <div class="row">#}
-{##}
-{##}
-{##}
-{#                                <div class="">#}
-{#                                    <label class="col-md-2 control-label">University ID:<span#}
-{#                                            style="color: red">*</span></label>#}
-{#                                    <div class="col-md-3">#}
-{#                                        <input type="text" title="Enter University ID" id="university_id"#}
-{#                                               value="{{ university_obj.university_id|default_if_none:"" }}"#}
-{#                                               name="university_id"#}
-{#                                               class="form-control" required>#}
-{##}
-{##}
-{#                                    </div>#}
-{#                                </div>#}
-{##}
-{##}
-{#                            </div>#}
-{##}
-{#                            <br>#}
                             <div class="row">
                                 <div class="">
                                     <label class="col-md-2 control-label">{% trans 'University Type' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
-                                        <select id='university_type' title="Select University Type"
+                                        <select id='id_university_type' title="Select University Type"
                                                 name="university_type"
                                                 class="form-control" required>
-                                           {% if university_obj.university_type %}
+                                            {% if university_obj.university_type %}
                                                 <option style="display:none;" selected="selected"
                                                         value="{{ university_obj.university_type.id|default_if_none:"" }}"> {{ university_obj.university_type.university_type|default_if_none:"" }}</option>
                                             {% else %}
@@ -209,19 +88,22 @@
                                     </div>
                                 </div>
 
-                            <div class="">
+
+                                <div class="">
                                     <label class="col-md-2 control-label">{% trans 'Type' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
-                                        <select id='type' title="Select Type"
+                                        <select id='id_type' title="Select Type"
                                                 name="type"
                                                 class="form-control" required>
-                                           {% if university_obj.type %}
+
+                                            {% if university_obj.type %}
                                                 <option style="display:none;" selected="selected"
                                                         value="{{ university_obj.type.id|default_if_none:"" }}"> {{ university_obj.type.type|default_if_none:"" }}</option>
                                             {% else %}
                                                 <option selected="selected" value=""> Please Select</option>
                                             {% endif %}
+
                                             {% for rec in type_recs %}
                                                 <option value="{{ rec.id }}">{{ rec.type|default_if_none:"" }}</option>
                                             {% endfor %}
@@ -231,160 +113,251 @@
                                 </div>
 
 
-
-
-
-
                             </div>
                             <br>
 
 
                             <div class="row">
-                                 <div class="">
-                                    <label class="col-md-2 control-label">University Name:<span
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'University Code' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
-                                        <input type="text" title="Enter University Namee" id="university_name"
+                                        <input type="text" title="Enter University Code" id="id_university_code"
+                                               value="{{ university_obj.university_code|default_if_none:"" }}"
+                                               name="university_code"
+                                               class="form-control" required>
+
+
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'University Name' %}:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter University Name" id="id_university_name"
                                                value="{{ university_obj.university_name|default_if_none:"" }}"
                                                name="university_name"
                                                class="form-control" required>
 
                                     </div>
+
+
                                 </div>
-
-                                 <div class="">
-                                    <label class="col-md-2 control-label">Email:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <input type="text" title="Enter Email" id="email"
-                                               value="{{ university_obj.email|default_if_none:"" }}"
-                                               name="email"
-                                               class="form-control" required>
-
-                                    </div>
-                                </div>
-
-
-
-
-
 
 
                             </div>
                             <br>
 
                             <div class="row">
+
                                 <div class="">
-                                    <label class="col-md-2 control-label">Telephone:<span
-                                            style="color: red">*</span></label>
+                                    <label class="col-md-2 control-label">{% trans 'Email' %}:</label>
                                     <div class="col-md-3">
-                                        <input type="text" title="Enter Telephone" id="telephone"
+                                        <input type="text" title="Enter Email" id="id_email"
+                                               value="{{ university_obj.email|default_if_none:"" }}"
+                                               name="email"
+                                               class="form-control">
+
+                                    </div>
+                                </div>
+
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Telephone' %}:</label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter Telephone" id="id_telephone"
                                                value="{{ university_obj.telephone|default_if_none:"" }}"
                                                name="telephone"
-                                               class="form-control" required>
+                                               class="form-control">
 
                                     </div>
                                 </div>
 
-                            <div class="">
-                                    <label class="col-md-2 control-label">Website:<span
-                                            style="color: red">*</span></label>
+
+                            </div>
+                            <br>
+                            <div class="row">
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Website' %}:</label>
                                     <div class="col-md-3">
-                                        <input type="text" title="Enter Website" id="website"
+                                        <input type="text" title="Enter Website" id="id_website"
                                                value="{{ university_obj.website|default_if_none:"" }}"
                                                name="website"
-                                               class="form-control" required>
+                                               class="form-control">
 
                                     </div>
                                 </div>
 
 
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Address' %}:
+
+                                    </label>
+                                    <div class="col-md-8">
+                                        <textarea rows="2" class="form-control " required id="id_address"
+                                                  name="address">{{ university_obj.address|default_if_none:"" }}</textarea>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Contact Details' %}:
+
+                                    </label>
+                                    <div class="col-md-8">
+                                        <textarea rows="2" class="form-control " required id="id_contact_details"
+                                                  name="contact_details">{{ university_obj.contact_details|default_if_none:"" }}</textarea>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br>
+
+                            <div class="row">
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Active' %}:</label>
+                                    <div class="col-md-2">
+                                        {% if university_obj.is_active == True %}
+                                            <input type="checkbox" id="id_is_active" name="is_active" checked>
+                                        {% else %}
+                                            <input type="checkbox" id="id_is_active" name="is_active">
+                                        {% endif %}
 
 
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Registration' %}:</label>
+                                    <div class="col-md-2">
+
+                                        {% if university_obj.is_registration == True %}
+                                            <input type="checkbox" id="id_is_registration" name="is_registration"
+                                                   checked>
+                                        {% else %}
+                                            <input type="checkbox" id="id_is_registration" name="is_registration">
+                                        {% endif %}
+
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <label class="col-md-1 control-label">{% trans 'Singup' %}:</label>
+                                    <div class="col-md-2">
+
+                                        {% if university_obj.is_singup == True %}
+                                            <input type="checkbox" id="id_is_singup" name="is_singup" checked>
+                                        {% else %}
+                                            <input type="checkbox" id="id_is_singup" name="is_singup">
+                                        {% endif %}
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <br>
+                            <div class="row">
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Logo' %}:
+
+                                    </label>
+                                    <div class="col-md-2">
+
+                                        <input name="university_logo" type="file" title="Select University Logo"
+                                               accept="image/gif, image/jpeg, image/png"
+                                               id="id_university_logo"
+                                        >
 
 
+                                    </div>
+                                    {% if university_obj.university_logo %}
+                                        <div class="col-md-1" style="margin-top: 5px;
+    font-size: 20px;">
 
+                                            <a href="{{ university_obj.university_logo.url }}" download>
+                                                <i class="fa fa-cloud-download" aria-hidden="true"></i>
+
+                                            </a>
+                                        </div>
+                                    {% endif %}
+
+
+                                </div>
+
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Tanseeq Guide' %}:
+
+                                    </label>
+                                    <div class="col-md-2">
+
+                                        <input name="tanseeq_guide" type="file" title="Select Tanseeq Guide"
+                                               accept="application/pdf"
+                                               id="id_tanseeq_guide"
+                                        >
+
+
+                                    </div>
+                                    {% if university_obj.tanseeq_guide %}
+                                        <div class="col-md-1" style="margin-top: 5px;
+    font-size: 20px;">
+                                            <a href="{{ university_obj.tanseeq_guide.url }}" download>
+                                                <i class="fa fa-cloud-download" aria-hidden="true"></i>
+
+                                            </a></div>
+                                    {% endif %}
+
+                                </div>
+
+
+                            </div>
+                            <br>
+
+
+                            <div class="row">
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Registration Guide' %}:
+
+                                    </label>
+                                    <div class="col-md-2">
+
+                                        <input name="registration_guide" type="file" title="Select University Logo"
+                                               accept="application/pdf"
+                                               id="id_registration_guide"
+                                        >
+
+
+                                    </div>
+                                    {% if university_obj.registration_guide %}
+                                        <div class="col-md-1" style="margin-top: 5px;
+    font-size: 20px;">
+
+                                            <a href="{{ university_obj.registration_guide.url }}" download>
+                                                <i class="fa fa-cloud-download" aria-hidden="true"></i>
+
+                                            </a>
+                                        </div>
+                                    {% endif %}
+
+                                </div>
 
 
                             </div>
 
-                        <br>
-                        <div class="row">
-                         <div class="">
-                                    <label class="col-md-2 control-label">Address:<span
-                                            style="color: red">*</span>
-
-                                    </label>
-                                    <div class="col-md-3">
-                                        <textarea rows="2" class="form-control " required id="university_address"
-                                                  name="university_address">{{ university_obj.address|default_if_none:"" }}</textarea>
-
-                                    </div>
-                                </div>
-
-                          {% if university_obj.university_logo %}
-                                    <div class="">
-                                        <label class="col-md-2 control-label">Logo:
-
-                                        </label>
-                                        <div class="col-md-3">
-
-                                            <input name="university_logo" type="file" title="Select University Logo"
-                                                   accept="image/gif, image/jpeg, image/png"
-                                                   id="university_logo"
-                                                   class="form-control ">
-
-
-                                        </div>
-                                        {% if university_obj.university_logo %}
-                                            <div class="col-md-1" style="margin-top: 5px;
-    font-size: 20px;">
-                                                <a href="{{ university_obj.university_logo.url }}" download>
-                                                    <i class="fa fa-cloud-download" aria-hidden="true"></i>
-
-                                                </a>
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                {% else %}
-                                    <div class="">
-                                        <label class="col-md-2 control-label">Logo:
-
-                                        </label>
-                                        <div class="col-md-3">
-
-                                            <input name="university_logo" type="file" title="Select University Logo"
-                                                   accept="image/gif, image/jpeg, image/png"
-                                                   id="university_logo"
-                                                   class="form-control ">
-
-
-                                        </div>
-
-                                    </div>
-                                {% endif %}
-
 
                         </div>
-                        <br>
-                        <div class="row">
-                             <div class="">
-                                    <label class="col-md-2 control-label">Status:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        {% if university_obj.is_active == True %}
-                                            <input type="checkbox" id="status" name="status" checked>
-                                        {% else %}
-                                            <input type="checkbox" id="status" name="status">
-                                        {% endif %}
-
-                                    </div>
-                                </div>
-                        </div>
-
-
-                        </div>
-
+                        <hr>
 
                         <div class="row">
                             <div class="col-md-offset-5 col-md-7">

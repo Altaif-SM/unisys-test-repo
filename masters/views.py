@@ -13,6 +13,7 @@ from datetime import date
 import datetime
 from django.http import HttpResponse, JsonResponse
 from datetime import datetime
+from django.shortcuts import get_object_or_404
 
 
 
@@ -1826,30 +1827,55 @@ def delete_currency(request):
 
 def university_settings(request):
     university_recs = UniversityDetails.objects.filter(is_delete = False)
-    return render(request, 'university_settings.html', {'university_recs': university_recs})
+    context = {
+        'university_recs':university_recs,
+    }
+    return render(request, 'university_settings.html', context)
 
 
 def add_university(request):
     if request.method == 'POST':
         university_logo = request.FILES.get('university_logo', None)
+        tanseeq_guide = request.FILES.get('tanseeq_guide', None)
+        registration_guide = request.FILES.get('registration_guide', None)
         university_type = request.POST.get('university_type')
         type = request.POST.get('type')
         university_name = request.POST.get('university_name')
         email = request.POST.get('email')
         telephone = request.POST.get('telephone')
         website = request.POST.get('website')
-        university_address = request.POST.get('university_address')
-        status = request.POST.get('status')
-        if status == 'on':
-            status = True
+        address = request.POST.get('address')
+        university_code = request.POST.get('university_code')
+        contact_details = request.POST.get('contact_details')
+        is_active = request.POST.get('is_active')
+        is_registration = request.POST.get('is_registration')
+        is_singup = request.POST.get('is_singup')
+        if is_active == 'on':
+            is_active = True
         else:
-            status = False
+            is_active = False
+
+        if is_registration == 'on':
+            is_registration = True
+        else:
+            is_registration = False
+
+        if is_singup == 'on':
+            is_singup = True
+        else:
+            is_singup = False
         try:
-            university_obj = UniversityDetails.objects.create(
+            university_obj = UniversityDetails.objects.create(university_code = university_code,contact_details = contact_details,
                                              university_name=university_name, email=email,telephone = telephone,website = website,
-                                             address = university_address,is_active = status,university_type_id = university_type,type_id = type)
+                                             address = address,is_active = is_active,university_type_id = university_type,type_id = type,is_registration = is_registration,is_singup = is_singup)
             if university_logo:
                 university_obj.university_logo = university_logo
+                university_obj.save()
+            if tanseeq_guide:
+                university_obj.tanseeq_guide = tanseeq_guide
+                university_obj.save()
+            if registration_guide:
+                university_obj.registration_guide = registration_guide
                 university_obj.save()
             messages.success(request, "Record saved.")
         except:
@@ -1857,35 +1883,63 @@ def add_university(request):
         return redirect('/masters/university_settings/')
     university_type_recs = UniversityTypeDetails.objects.filter(status = True)
     type_recs = TypeDetails.objects.filter(status = True)
-    return render(request, 'add_university.html',{'university_type_recs':university_type_recs,'type_recs':type_recs})
+    context = {
+        'university_type_recs':university_type_recs,
+        'type_recs':type_recs,
+    }
+    return render(request, 'add_university.html',context)
 
 def edit_university(request, university_id=None):
     university_obj = UniversityDetails.objects.get(id=university_id)
     if request.method == 'POST':
         university_logo = request.FILES.get('university_logo', None)
+        tanseeq_guide = request.FILES.get('tanseeq_guide', None)
+        registration_guide = request.FILES.get('registration_guide', None)
         university_type = request.POST.get('university_type')
         type = request.POST.get('type')
         university_name = request.POST.get('university_name')
         email = request.POST.get('email')
         telephone = request.POST.get('telephone')
         website = request.POST.get('website')
-        university_address = request.POST.get('university_address')
-        status = request.POST.get('status')
-        if status == 'on':
-            status = True
+        address = request.POST.get('address')
+        university_code = request.POST.get('university_code')
+        contact_details = request.POST.get('contact_details')
+        is_active = request.POST.get('is_active')
+        is_registration = request.POST.get('is_registration')
+        is_singup = request.POST.get('is_singup')
+        if is_active == 'on':
+            is_active = True
         else:
-            status = False
+            is_active = False
+
+        if is_registration == 'on':
+            is_registration = True
+        else:
+            is_registration = False
+
+        if is_singup == 'on':
+            is_singup = True
+        else:
+            is_singup = False
         try:
             university_obj.university_type_id = university_type
             university_obj.type_id = type
             university_obj.university_name = university_name
+            university_obj.university_code = university_code
             university_obj.email = email
             university_obj.telephone = telephone
             university_obj.website = website
-            university_obj.address = university_address
-            university_obj.is_active = status
+            university_obj.address = address
+            university_obj.contact_details = contact_details
+            university_obj.is_active = is_active
+            university_obj.is_registration = is_registration
+            university_obj.is_singup = is_singup
             if university_logo:
                 university_obj.university_logo = university_logo
+            if tanseeq_guide:
+                university_obj.tanseeq_guide = tanseeq_guide
+            if registration_guide:
+                university_obj.registration_guide = registration_guide
             university_obj.save()
             messages.success(request, "Record saved.")
         except:
@@ -1893,17 +1947,24 @@ def edit_university(request, university_id=None):
         return redirect('/masters/university_settings/')
     university_type_recs = UniversityTypeDetails.objects.filter(status=True)
     type_recs = TypeDetails.objects.filter(status=True)
-    return render(request, "edit_university.html", {'university_obj': university_obj,'type_recs':type_recs,'university_type_recs':university_type_recs})
+    context = {
+        'university_obj':university_obj,
+        'type_recs':type_recs,
+        'university_type_recs':university_type_recs,
+    }
+    return render(request, "edit_university.html", context)
 
-def delete_university(request):
-    if request.method == 'POST':
-        university_delete_id = request.POST.get('university_delete_id')
-        try:
-            UniversityDetails.objects.filter(id=university_delete_id).delete()
-            messages.success(request, "Record deleted.")
-        except:
-            messages.warning(request, "Record not deleted.")
-        return redirect('/masters/university_settings/')
+def delete_university(request,pk):
+    try:
+        instance = get_object_or_404(UniversityDetails, pk=pk)
+        instance.university_logo.delete()
+        instance.tanseeq_guide.delete()
+        instance.registration_guide.delete()
+        instance.delete()
+        messages.success(request, "Record deleted.")
+    except:
+        messages.warning(request, "Record not deleted.")
+    return redirect('/masters/university_settings/')
 
 def faculty_settings(request):
     faculty_recs = FacultyDetails.objects.filter()
