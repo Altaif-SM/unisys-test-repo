@@ -36,5 +36,6 @@ urlpatterns = [
     path('password_reset/', include('password_reset.urls', namespace='password_reset')),
     path('api/', include('rest_api.urls')),
     path('agents/', include('agents.urls')),
+    path('tanseeq/', include('tanseeq.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
