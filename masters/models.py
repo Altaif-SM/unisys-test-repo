@@ -22,9 +22,27 @@ def content_file_name_donor(instance, filename):
     filename = "%s_%s.%s" % (instance.user.first_name, dirname, ext)
     return os.path.join('reports', filename)
 
+class CitiDetails(BaseModel):
+    city = models.CharField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        ordering = ('id',)
+
+    def __str__(self):
+        return self.city
+
+    def to_dict(self):
+        res = {
+            'id': self.id if self.id else '',
+            'city': self.city if self.city else '',
+        }
+
+        return res
+
 
 class CountryDetails(BaseModel):
     country_name = models.CharField(max_length=100, blank=True, null=True)
+    city = models.ManyToManyField(CitiDetails, related_name='country_city', null=True,blank=True,)
 
     class Meta:
         ordering = ('id',)

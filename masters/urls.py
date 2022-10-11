@@ -35,7 +35,13 @@ urlpatterns = [
     path('country_settings/', views.country_settings, name='country_settings'),
     path('save_country/', views.save_country, name='save_country'),
     path('update_country/', views.update_country, name='update_country'),
-    path('delete_country/', views.delete_country, name='delete_country'),
+    path('delete_country/<int:pk>/', views.delete_country, name='delete_country'),
+
+    # ********------ City Master --------****************************
+    path('city_settings/<int:pk>/', views.city_settings, name='city_settings'),
+    path('save_city/', views.save_city, name='save_city'),
+    path('update_city/', views.update_city, name='update_city'),
+    path('delete_city/<int:pk>/', views.delete_city, name='delete_city'),
 
     # ********------ university Master --------****************************
     path('template_university_master/', views.template_university_master, name='template_university_master'),

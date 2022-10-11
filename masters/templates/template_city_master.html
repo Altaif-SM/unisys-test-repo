@@ -11,24 +11,24 @@
             $(document).ready(function () {
                 $(document).on("click", ".update", function (e) {
                     var parent_id = $(this).closest('tr').attr('id');
-                    var country_id = $('#' + parent_id + ' #country_id').val();
-                    var country_name = $('#' + parent_id + ' .country_name').val();
-                    if (country_name == '') {
-                        $('#' + parent_id + ' .country_name').focus();
-                        $('#' + parent_id + ' .country_name').css('border-color', 'red');
+                    var city_id = $('#' + parent_id + ' #city_id').val();
+                    var city = $('#' + parent_id + ' .city').val();
+                    if (city == '') {
+                        $('#' + parent_id + ' .city').focus();
+                        $('#' + parent_id + ' .city').css('border-color', 'red');
                         return false;
                     }
-                    var url = '/masters/update_country/';
-                    update_country_info(url, country_id, country_name)
+                    var url = '/masters/update_city/';
+                    update_city_info(url, city_id, city)
                 })
 
-                function update_country_info(url, country_id, country_name) {
+                function update_city_info(url, city_id, city) {
                     $.ajax({
                         type: 'POST',
                         url: url,
                         data: {
-                            country_id: country_id,
-                            country_name: country_name,
+                            city_id: city_id,
+                            city: city,
                             csrfmiddlewaretoken: '{{ csrf_token }}',
                         },
                         success: function (data) {
@@ -52,7 +52,7 @@
 
                     $("#update" + i).show();
                     $("#edit" + i).hide();
-                    $("#country_name" + i).prop("disabled", false);
+                    $("#city" + i).prop("disabled", false);
                 });
             });
 
@@ -92,7 +92,7 @@
             </li>
 
             <li>
-                <span>{% trans 'Manage Country' %}</span>
+                <span>{% trans 'Manage City' %}</span>
             </li>
         </ul>
     </div>
@@ -108,8 +108,12 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase">{% trans 'Manage Country' %}</span>
+                <span class="caption-subject font-red sbold uppercase">{% trans 'Manage City' %}</span>
             </div>
+            <a href="{% url 'masters:country_settings' %}">
+                <button type="submit" class="btn green" id="save" style="margin-left:82%;background-color: #3598dc">Back
+                </button>
+            </a>
         </div>
 
         <div class="portlet-body">
@@ -117,19 +121,19 @@
             <!-- BEGIN FORM-->
             <div class="form-body">
 
-                <form action="{% url 'masters:save_country' %}" id="form_sample_1" class="form-horizontal"
+                <form action="{% url 'masters:save_city' %}" id="form_sample_1" class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-
+                    <input type="hidden" id="county_id" name="county_id" value="{{ county_id }}">
                     <div class="form-body">
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">{% trans 'Country' %}:
+                                <label class="col-md-2 control-label">{% trans 'City' %}:
 
                                 </label>
                                 <div class="col-md-3">
-                                    <input type="text" name="country_name" class="form-control" required>
+                                    <input type="text" id="id_city" name="city" class="form-control" required>
                                 </div>
                             </div>
                             <div class="">
@@ -137,6 +141,7 @@
                                     <button  type="submit" class="btn green"
                                             id="save">{% trans 'Add' %}</button>
                                 </div>
+
                             </div>
 
                         </div>
@@ -154,40 +159,22 @@
                     <thead>
                     <tr>
                         <th style="display: none">Id</th>
-                        <th>{% trans 'Country' %}</th>
-                        <th width="15%">{% trans 'Cities' %}</th>
-                        <th width="5%">City</th>
+                        <th>{% trans 'City' %}</th>
                         <th width="10%">Action</th>
                     </tr>
                     </thead>
 
                     <tbody id="tbody">
-                    {% for rec in country_recs %}
+                    {% for rec in city_recs %}
                         <tr id="item{{ forloop.counter }}" class="item">
-                            <td style="display: none"><input id="country_id" value="{{ rec.id }}"></td>
+                            <td style="display: none"><input id="city_id" value="{{ rec.id }}"></td>
                             <td>
-                                <text hidden>{{ rec.country_name|title }}</text>
-                                <input class="form-control data country_name" name="country_name_saved" type="text"
-                                       id="country_name{{ forloop.counter }}" value="{{ rec.country_name|title }}"
+                                <text hidden>{{ rec.city|title }}</text>
+                                <input class="form-control data city" name="city_saved" type="text"
+                                       id="city{{ forloop.counter }}" value="{{ rec.city|title }}"
                                        required="True" pattern='[A-Za-z+-]+'
-                                       title='Please enter country name' disabled></td>
+                                       title='Please enter city name' disabled></td>
                             <td>
-
-                                {% for city in rec.city.all %}
-                                    {{ city.city|title }},
-                                {% endfor %}
-
-
-                            </td>
-                        <td>
-                            <a href="{% url 'masters:city_settings' rec.id %}">
-                                <span type="button" name="city_{{ forloop.counter }}" id="id_city_{{ forloop.counter }}"
-                                      class=" city btn green glyphicon glyphicon-check">
-                                </span>
-                                </a>
-                        </td>
-                            <td>
-
                                 <span type="button" name="updt" id="update{{ forloop.counter }}"
                                       class=" update btn green glyphicon glyphicon-ok" style="display:none;">
                                 </span>
@@ -195,7 +182,7 @@
                                       class=" edit btn blue glyphicon glyphicon-pencil">
                                 </span>
 
-                                <button type="button" delete-url="{% url 'masters:delete_country' rec.id %}"
+                                <button type="button" delete-url="{% url 'masters:delete_city' rec.id %}"
                                         class="delete btn red glyphicon glyphicon-trash" name="delete"
                                 >
                                 </button>

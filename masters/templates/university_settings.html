@@ -89,7 +89,7 @@
                                 {% endif %}
                             </td>
                             <td>
-                                {% if rec.is_active == True %}
+                                {% if rec.is_registration == True %}
                                     <i class="fa fa-power-off" aria-hidden="true"
                                        style="margin-left: 30px;margin-top:8px;font-size:18px;color:green"></i>
                                 {% else %}
@@ -98,7 +98,7 @@
                                 {% endif %}
                             </td>
                             <td>
-                                {% if rec.is_active == True %}
+                                {% if rec.is_singup == True %}
                                     <i class="fa fa-power-off" aria-hidden="true"
                                        style="margin-left: 30px;margin-top:8px;font-size:18px;color:green"></i>
                                 {% else %}
@@ -143,7 +143,6 @@
         $("#id_confirm_delete").on("click", (e) => {
             var delete_url = $(e.target).attr("delete-url")
             window.location.href = delete_url;
-            $("#id_delete_model").modal('hide')
         })
 
 

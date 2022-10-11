@@ -203,15 +203,60 @@ def update_country(request):
     return HttpResponse(json.dumps({'error': 'Record not updated.'}), content_type="application/json")
 
 
-def delete_country(request):
-    country_delete_id = request.POST.get('country_delete_id')
+def delete_country(request,pk):
     try:
-        CountryDetails.objects.filter(id=country_delete_id).delete()
+        instance = get_object_or_404(CountryDetails, pk=pk)
+        instance.delete()
         messages.success(request, "Record deleted.")
     except:
         messages.warning(request, "Record not deleted.")
     return redirect('/masters/country_settings/')
 
+
+# *********------------ City Master ----------***************
+
+def city_settings(request,pk):
+    city_recs = CountryDetails.objects.get(id = pk).city.all()
+    context = {
+        'city_recs':city_recs,
+        'county_id':pk,
+    }
+    return render(request, 'template_city_master.html', context)
+
+def save_city(request):
+    county_id = request.POST.get('county_id')
+    city = request.POST.get('city')
+    try:
+        country_obj = CountryDetails.objects.get(id = county_id)
+        city_obj = CitiDetails.objects.create(city = city)
+        country_obj.city.add(city_obj)
+        messages.success(request, "Record saved.")
+    except:
+        messages.warning(request, "Record not saved.")
+    return redirect('/masters/city_settings/'+str(county_id))
+
+
+def update_city(request):
+    city_id = request.POST.get('city_id')
+    city = request.POST.get('city')
+    try:
+        CitiDetails.objects.filter(id=city_id).update(city=city)
+        messages.success(request, "Record saved.")
+        return HttpResponse(json.dumps({'success': 'Record saved.'}), content_type="application/json")
+    except:
+        messages.warning(request, "Record not saved.")
+    return HttpResponse(json.dumps({'error': 'Record not updated.'}), content_type="application/json")
+
+
+def delete_city(request,pk):
+    try:
+        country_id = CitiDetails.objects.get(id = pk).country_city.all()[0].id
+        instance = get_object_or_404(CitiDetails, pk=pk)
+        instance.delete()
+        messages.success(request, "Record deleted.")
+    except:
+        messages.warning(request, "Record not deleted.")
+    return redirect('/masters/city_settings/'+str(country_id))
 
 # *********------------ University Master ----------***************
 
