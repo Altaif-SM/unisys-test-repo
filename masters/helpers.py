@@ -18,7 +18,7 @@ def university_logo_upload_path(instance, filename):
     folder_name = "University Log"
     if instance.university_name:
         folder_name = "{}/{}".format("University Logo", instance.university_name.strip())
-    return '{}/{}--{}'.format(folder_name, str(uuid.uuid4()), instance.file.name)
+    return '{}/{}--{}'.format(folder_name, str(uuid.uuid4()), instance.university_logo.name)
 
 def tanseeq_guide_upload_path(instance, filename):
     """
@@ -27,7 +27,7 @@ def tanseeq_guide_upload_path(instance, filename):
     folder_name = "University Tanseeq Guide"
     if instance.university_name:
         folder_name = "{}/{}".format("University Tanseeq Guide", instance.university_name.strip())
-    return '{}/{}--{}'.format(folder_name, str(uuid.uuid4()), instance.file.name)
+    return '{}/{}--{}'.format(folder_name, str(uuid.uuid4()), instance.tanseeq_guide.name)
 
 
 def registration_guide_upload_path(instance, filename):
@@ -37,4 +37,4 @@ def registration_guide_upload_path(instance, filename):
     folder_name = "University Registration Guide"
     if instance.university_name:
         folder_name = "{}/{}".format("University Registration Guide", instance.university_name.strip())
-    return '{}/{}--{}'.format(folder_name, str(uuid.uuid4()), instance.file.name)
+    return '{}/{}--{}'.format(folder_name, str(uuid.uuid4()), instance.registration_guide.name)
