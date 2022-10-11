@@ -1,6 +1,6 @@
 from datetime import datetime
 from django import forms
-from tanseeq_app.models import TanseeqPeriod
+from tanseeq_app.models import TanseeqPeriod,SecondarySchoolCetificate
 from masters.models import UniversityDetails
 
 
@@ -25,3 +25,9 @@ class UniversityDetailsForm(forms.ModelForm):
     class Meta:
         model = UniversityDetails
         fields = ('file',)
+
+class SecondarySchoolCertificateForm(forms.ModelForm):
+
+    class Meta:
+        model = SecondarySchoolCetificate
+        fields = ('school_certificate',)

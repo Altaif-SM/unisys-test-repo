@@ -19,3 +19,6 @@ class TanseeqPeriod(BaseModel):
     is_active = models.BooleanField(default=True)
 
 
+class SecondarySchoolCetificate(BaseModel):
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT)
+    school_certificate = models.CharField(max_length=150, blank=True, null=True)

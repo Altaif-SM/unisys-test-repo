@@ -1,11 +1,11 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, View, ListView, UpdateView, DeleteView
-from tanseeq_app.models import TanseeqPeriod
+from tanseeq_app.models import TanseeqPeriod, SecondarySchoolCetificate
 from masters.models import UniversityDetails, YearDetails
-from tanseeq_app.forms import TanseeqPeriodForm, UniversityDetailsForm
+from tanseeq_app.forms import TanseeqPeriodForm, UniversityDetailsForm, SecondarySchoolCertificateForm
 from django.shortcuts import get_object_or_404
-
+from django.contrib import messages
 # Create your views here.
 
 class TanseeqAdminHome(TemplateView):
@@ -92,4 +92,43 @@ class UniversityGuideDeleteView(DeleteView):
         print("running")
         instance = get_object_or_404(self.model, pk=pk)
         instance.file.delete()
+        return JsonResponse({"status": 200})
+
+class SecondarySchoolCertificateListView(ListView):
+    model = SecondarySchoolCetificate
+    template_name = 'tanseeq_admin/secondary_certificate_view.html'
+
+    def get_queryset(self):
+        queryset = self.model.objects.filter(created_by=self.request.user)
+        return queryset
+
+    def post(self, request,pk=None):
+        form = SecondarySchoolCertificateForm(request.POST)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.created_by = request.user
+            obj.save()
+            messages.success(request, "Record saved.")
+            return redirect('tanseeq_app:list_secondary_certificate')
+        else:
+            messages.warning(request, "Record not saved.")
+            return redirect('tanseeq_app:list_secondary_certificate')
+
+    def delete(self, request, pk):
+        instance = get_object_or_404(self.model, pk=pk, created_by=request.user)
+        instance.delete()
+        return JsonResponse({"status": 200})
+
+
+class SecondarySchoolCertificateUpdateView(UpdateView):
+    model = SecondarySchoolCetificate
+    template_name = "tanseeq_admin/secondary_certificate_view.html"
+    form_class = SecondarySchoolCertificateForm
+
+    def post(self, request, *args, **kwargs):
+        school_certificate_id = request.POST.get("school_certificate_id")
+        instance = get_object_or_404(self.model, pk=school_certificate_id)
+        form = self.form_class(request.POST, instance=instance)
+        if form.is_valid():
+            form.save()
         return JsonResponse({"status": 200})

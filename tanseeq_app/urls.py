@@ -19,4 +19,7 @@ urlpatterns = [
         login_required(UniversityGuideDeleteView.as_view()),
         name='delete_university_guide'
     ),
+    path('secondary_certificate/', login_required(SecondarySchoolCertificateListView.as_view()), name='list_secondary_certificate'),
+    path('secondary_certificate/<int:pk>', login_required(SecondarySchoolCertificateListView.as_view()), name='secondary_certificate'),
+    path('update_secondary_certificate/', login_required(SecondarySchoolCertificateUpdateView.as_view()), name='update_secondary_certificate'),
 ]
