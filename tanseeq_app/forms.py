@@ -1,7 +1,11 @@
 from datetime import datetime
 from django import forms
-from tanseeq_app.models import TanseeqPeriod,SecondarySchoolCetificate
 from masters.models import UniversityDetails
+from tanseeq_app.models import (
+    TanseeqPeriod,
+    SecondarySchoolCetificate,
+    UniversityAttachment,
+)
 
 
 class TanseeqPeriodForm(forms.ModelForm):
@@ -26,8 +30,27 @@ class UniversityDetailsForm(forms.ModelForm):
         model = UniversityDetails
         fields = ('file',)
 
+
 class SecondarySchoolCertificateForm(forms.ModelForm):
 
     class Meta:
         model = SecondarySchoolCetificate
         fields = ('school_certificate',)
+
+
+class UniversityAttachmentForm(forms.ModelForm):
+    class Meta:
+        model = UniversityAttachment
+        fields = ("universities", "attachment_name", "type_of_attachment", "is_required",)
+
+    def __init__(self, *args, **kwargs):
+        super(UniversityAttachmentForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            if field != "is_required":
+                self.fields[field].widget.attrs.update({
+                    "class": "form-control",
+                    "required": "true",
+                })
+
+
+    # def save(self, *args, **kwargs):

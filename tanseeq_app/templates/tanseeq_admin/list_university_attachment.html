@@ -70,7 +70,7 @@
             <i class="icon-settings font-red"></i>
             <span class="caption-subject font-red sbold uppercase"> {% trans 'Manage Tanseeq Period' %}</span>
         </div>
-        <a href="{% url 'tanseeq_app:add_tanseeq_period' %}">
+        <a href="{% url 'tanseeq_app:add_university_attachment' %}">
             <button type="submit" class="btn green" id="save" style="margin-left:78%;background-color: #3598dc">Add
             </button>
         </a>
@@ -82,11 +82,10 @@
                 <thead>
                 <tr>
                     <th style="display: none">Id</th>
-                    <th> {% trans 'University Name' %}</th>
-                    <th> {% trans 'Academic year' %}</th>
-                    <th> {% trans 'From Date' %}</th>
-                    <th> {% trans 'To Date' %}</th>
-                    <th> {% trans 'Status' %}</th>
+                    <th> {% trans 'Universities' %}</th>
+                    <th> {% trans 'Attachment Name' %}</th>
+                    <th> {% trans 'Type of Attachment' %}</th>
+                    <th> {% trans 'Required' %}</th>
                     <th width="10%">{% trans 'Action' %}</th>
                 </tr>
                 </thead>
@@ -94,26 +93,21 @@
                 {% for rec in object_list %}
                     <tr id="item{{ rec.id }}" class="item">
                         <td style="display: none"><input id="university_id" value="{{ rec.id }}"></td>
-                        <td>{{ rec.university.university_name|default_if_none:"" }}</td>
-                        <td>{{ rec.academic_year|default_if_none:"" }}</td>
-                        <td>{{ rec.from_date|default_if_none:"" }}</td>
-                        <td>{{ rec.to_date|default_if_none:"" }}</td>
                         <td>
-                            {% if rec.is_active == True %}
-                                <i class="fa fa-power-off" aria-hidden="true"
-                                   style="margin-left: 30px;margin-top:8px;font-size:18px;color:green"></i>
-                            {% else %}
-                                <i class="fa fa-power-off" aria-hidden="true"
-                                   style="margin-left: 30px;margin-top:8px;font-size:18px;color:red"></i>
-                            {% endif %}
+                            {% for university in rec.universities.all%}
+                                {{university.university_name}}{% if forloop.last %} ... {%else %}, {% endif %}
+                            {% endfor %}
                         </td>
+                        <td>{{ rec.attachment_name|default_if_none:"" }}</td>
+                        <td>{{ rec.type_of_attachment|default_if_none:"" }}</td>
+                        <td>{{ rec.is_required|default_if_none:"" }}</td>
                         <td>
-                            <a href="{% url 'tanseeq_app:tanseeq_period' rec.id %}">
+                            <a href="{% url 'tanseeq_app:update_university_attachment' rec.id %}">
                             <span type="button" name="edit" id="edit{{ forloop.counter }}"
                                   class=" edit_btn btn blue glyphicon glyphicon-pencil">
                             </span>
                                 </a>
-                            <button type="button" delete-url="{% url 'tanseeq_app:tanseeq_period' rec.id %}"
+                            <button type="button" delete-url="{% url 'tanseeq_app:delete_university_attachment' rec.id %}"
                                   class="delete btn red glyphicon glyphicon-trash" name="delete"
                             >
                             </button>
@@ -141,6 +135,7 @@
     })
 
     function deleteTanseeqPeriod(url) {
+        console.log(url)
         $.ajax({
             type: 'DELETE',
             url: url,
