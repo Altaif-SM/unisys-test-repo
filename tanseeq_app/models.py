@@ -3,7 +3,31 @@ from django.db import models
 from common.models import BaseModel
 from masters.models import UniversityDetails, YearDetails
 from accounts.models import User
+from masters.helpers import university_logo_upload_path, tanseeq_guide_upload_path, registration_guide_upload_path
 # Create your models here.
+
+class TanseeqUniversityDetails(BaseModel):
+    university_name = models.CharField(max_length=255, blank=True, null=True)
+    university_code = models.CharField(max_length=50, blank=True, null=True)
+    email = models.CharField(max_length=50, blank=True, null=True)
+    telephone = models.CharField(max_length=30, blank=True, null=True)
+    website = models.CharField(max_length=50, blank=True, null=True)
+    university_logo = models.ImageField(upload_to=university_logo_upload_path, max_length=255, blank=True, null=True)
+    tanseeq_guide = models.FileField(upload_to=tanseeq_guide_upload_path, max_length=255, blank=True, null=True)
+    registration_guide = models.FileField(upload_to=registration_guide_upload_path, max_length=255, blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
+    contact_details = models.TextField(blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    is_registration = models.BooleanField(default=True)
+    is_singup = models.BooleanField(default=True)
+    university_type = models.CharField(max_length=50, blank=True, null=True)
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT)
+
+    class Meta:
+        ordering = ('id',)
+
+    def __str__(self):
+        return self.university_name
 
 
 class TanseeqPeriod(BaseModel):

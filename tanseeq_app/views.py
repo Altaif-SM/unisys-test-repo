@@ -5,6 +5,7 @@ from tanseeq_app.models import (
     TanseeqPeriod,
     SecondarySchoolCetificate,
     UniversityAttachment,
+    TanseeqUniversityDetails,
 )
 from masters.models import UniversityDetails, YearDetails
 from tanseeq_app.forms import (
@@ -12,6 +13,7 @@ from tanseeq_app.forms import (
     UniversityDetailsForm,
     SecondarySchoolCertificateForm,
     UniversityAttachmentForm,
+    UniversityForm,
 )
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
@@ -20,6 +22,92 @@ from django.contrib import messages
 
 class TanseeqAdminHome(TemplateView):
     template_name = 'tanseeq_admin/admin_home.html'
+
+
+class UniversityList(ListView):
+    model = TanseeqUniversityDetails
+    template_name = "tanseeq_admin/list_university.html"
+
+
+class UniversityView(View):
+    model = TanseeqUniversityDetails
+    form_class = UniversityForm
+
+    def get(self, request, pk=None):
+        context = {
+            "form": self.form_class(),
+        }
+        if pk:
+            instance = get_object_or_404(self.model, pk=pk)
+            context["instance"] = instance
+            context["form"] = self.form_class(instance=get_object_or_404(self.model, pk=pk))
+
+        return render(request, "tanseeq_admin/add_university.html", context)
+
+    def post(self, request, pk=None):
+        if pk:
+            instance = get_object_or_404(self.model, pk=pk)
+            form = self.form_class(request.POST, request.FILES, instance=instance)
+        else:
+            form = self.form_class(request.POST,request.FILES)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.created_by = request.user
+            obj.save()
+            if pk:
+                messages.success(request, "Record Updated.")
+            else:
+                messages.success(request, "Record saved.")
+        else:
+            context = {
+                "form": form,
+            }
+            return render(request, 'tanseeq_admin/add_university.html', context)
+        return redirect('tanseeq_app:list_university')
+
+    def delete(self, request, pk):
+        instance = get_object_or_404(self.model, pk=pk)
+        instance.delete()
+        messages.success(request, "Record removed.")
+        return JsonResponse({"status": 200})
+
+
+class UniversityDetailView(View):
+    model = TanseeqUniversityDetails
+
+    def get(self, request, pk=None):
+        context = {}
+        if pk:
+            instance = get_object_or_404(self.model, pk=pk)
+            context["instance"] = instance
+        return render(request, 'tanseeq_admin/add_university.html', context)
+
+    def post(self, request, pk=None):
+        if pk:
+            instance = get_object_or_404(self.model, pk=pk)
+            form = UniversityForm(request.POST, request.FILES, instance=instance)
+        else:
+            form = self.form_class(request.POST,request.FILES)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            if not pk:
+                obj.created_by = request.user
+            obj.save()
+            if pk:
+                messages.success(request, "Record Updated.")
+            else:
+                messages.success(request, "Record saved.")
+        else:
+            context = {
+                "form": form,
+            }
+            return render(request, 'tanseeq_admin/add_university.html', context)
+        return redirect('tanseeq_app:list_university')
+
+    def delete(self, request, pk):
+        instance = get_object_or_404(self.model, pk=pk, created_by=request.user)
+        instance.delete()
+        return JsonResponse({"status": 200})
 
 
 class TanseeqPeriodListView(ListView):

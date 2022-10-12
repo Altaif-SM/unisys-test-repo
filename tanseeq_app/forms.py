@@ -5,6 +5,7 @@ from tanseeq_app.models import (
     TanseeqPeriod,
     SecondarySchoolCetificate,
     UniversityAttachment,
+    TanseeqUniversityDetails,
 )
 
 
@@ -52,5 +53,9 @@ class UniversityAttachmentForm(forms.ModelForm):
                     "required": "true",
                 })
 
+class UniversityForm(forms.ModelForm):
+    class Meta:
+        model = TanseeqUniversityDetails
+        fields = ("university_name", "university_code", "email", "telephone", "website", "university_logo", "tanseeq_guide", "registration_guide", "address", "contact_details", "is_active", "is_registration", "is_singup", "university_type",)
 
-    # def save(self, *args, **kwargs):
+
