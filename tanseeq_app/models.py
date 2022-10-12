@@ -59,3 +59,11 @@ class UniversityAttachment(BaseModel):
     attachment_name = models.CharField(max_length=255)
     type_of_attachment = models.CharField(choices=ATTACHMENT_TYPES, max_length=50)
     is_required = models.BooleanField(default=True)
+
+class TansseqCity(BaseModel):
+    city = models.CharField(max_length=100, blank=True, null=True)
+
+class TanseeqCountry(BaseModel):
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT)
+    country_name = models.CharField(max_length=100, blank=True, null=True)
+    cities = models.ManyToManyField(TansseqCity, related_name='tansseq_country_city' )

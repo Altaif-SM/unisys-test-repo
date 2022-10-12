@@ -6,6 +6,8 @@ from tanseeq_app.models import (
     SecondarySchoolCetificate,
     UniversityAttachment,
     TanseeqUniversityDetails,
+    TanseeqCountry,
+    TansseqCity,
 )
 
 
@@ -59,3 +61,14 @@ class UniversityForm(forms.ModelForm):
         fields = ("university_name", "university_code", "email", "telephone", "website", "university_logo", "tanseeq_guide", "registration_guide", "address", "contact_details", "is_active", "is_registration", "is_singup", "university_type",)
 
 
+
+class CountryForm(forms.ModelForm):
+
+    class Meta:
+        model = TanseeqCountry
+        fields = ('country_name',)
+
+class CityForm(forms.ModelForm):
+    class Meta:
+        model = TansseqCity
+        fields = ('city',)

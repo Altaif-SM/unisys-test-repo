@@ -65,4 +65,29 @@ urlpatterns = [
         login_required(UniversityAttachmentView.as_view()),
         name='delete_university_attachment'
     ),
+    path(
+        'country/',
+        login_required(CountryListView.as_view()),
+        name='list_country'
+    ),
+    path(
+        'update_country/',
+        login_required(CountryUpdateView.as_view()),
+        name='update_country'
+    ),
+    path(
+        'country/<int:pk>',
+        login_required(CountryListView.as_view()),
+        name='country'
+    ),
+    path(
+        'city/<int:pk>',
+        login_required(CityListView.as_view()),
+        name='list_city'
+    ),
+    path(
+        'update_city/',
+        login_required(CityUpdateView.as_view()),
+        name='update_city'
+    ),
 ]

@@ -6,6 +6,8 @@ from tanseeq_app.models import (
     SecondarySchoolCetificate,
     UniversityAttachment,
     TanseeqUniversityDetails,
+    TanseeqCountry,
+    TansseqCity,
 )
 from masters.models import UniversityDetails, YearDetails
 from tanseeq_app.forms import (
@@ -14,6 +16,8 @@ from tanseeq_app.forms import (
     SecondarySchoolCertificateForm,
     UniversityAttachmentForm,
     UniversityForm,
+    CountryForm,
+    CityForm,
 )
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
@@ -284,3 +288,93 @@ class UniversityAttachmentView(View):
         instance.delete()
         messages.success(request, "Record removed.")
         return JsonResponse({"status": 200})
+
+
+class CountryListView(ListView):
+    model = TanseeqCountry
+    template_name = 'tanseeq_admin/list_country.html'
+
+    def get_queryset(self):
+        queryset = self.model.objects.filter(created_by=self.request.user)
+        return queryset
+
+    def post(self, request, pk=None):
+        form = CountryForm(request.POST)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.created_by = request.user
+            obj.save()
+            messages.success(request, "Record saved.")
+            return redirect('tanseeq_app:list_country')
+        else:
+            context = {
+                "form": form,
+            }
+            return render(request, 'tanseeq_admin/list_country.html', context)
+
+    def delete(self, request, pk):
+        instance = get_object_or_404(self.model, pk=pk, created_by=request.user)
+        instance.delete()
+        return JsonResponse({"status": 200})
+
+class CountryUpdateView(UpdateView):
+    model = TanseeqCountry
+    template_name = "tanseeq_admin/list_country.html"
+    form_class = CountryForm
+
+    def post(self, request, *args, **kwargs):
+        country_id = request.POST.get("country_id")
+        instance = get_object_or_404(self.model, pk=country_id)
+        form = self.form_class(request.POST, instance=instance)
+        if form.is_valid():
+            form.save()
+        return JsonResponse({"status": 200})
+
+
+class CityListView(View):
+    model = TansseqCity
+    form_class = CityForm
+    def get(self, request, pk=None):
+        city_objs = TanseeqCountry.objects.get(id = pk).cities.all()
+        context = {
+            "city_objs": city_objs,
+            "form": self.form_class(),
+            "country_id": pk,
+        }
+        return render(request, "tanseeq_admin/list_city.html", context)
+
+    def post(self, request, pk=None):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            country_obj = TanseeqCountry.objects.get(id=pk)
+            city_obj = TansseqCity.objects.create(city=form.data['city'])
+            country_obj.cities.add(city_obj)
+            messages.success(request, "Record saved.")
+        else:
+            city_objs = TanseeqCountry.objects.get(id=pk).cities.all()
+            context = {
+                "city_objs": city_objs,
+                "form": form,
+            }
+            return render(request, 'tanseeq_admin/list_city.html', context)
+        return redirect('tanseeq_app:list_country')
+
+    def delete(self, request, pk):
+        instance = get_object_or_404(self.model, pk=pk)
+        instance.delete()
+        return JsonResponse({"status": 200})
+
+
+class CityUpdateView(UpdateView):
+    model = TansseqCity
+    template_name = "tanseeq_admin/list_city.html"
+    form_class = CityForm
+
+    def post(self, request, *args, **kwargs):
+        city_id = request.POST.get("city_id")
+        instance = get_object_or_404(self.model, pk=city_id)
+        form = self.form_class(request.POST, instance=instance)
+        if form.is_valid():
+            form.save()
+        return JsonResponse({"status": 200})
+

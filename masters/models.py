@@ -42,7 +42,7 @@ class CitiDetails(BaseModel):
 
 class CountryDetails(BaseModel):
     country_name = models.CharField(max_length=100, blank=True, null=True)
-    city = models.ManyToManyField(CitiDetails, related_name='country_city', null=True,blank=True,)
+    city = models.ManyToManyField(CitiDetails, related_name='country_city')
 
     class Meta:
         ordering = ('id',)
