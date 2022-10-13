@@ -1909,10 +1909,14 @@ def add_university(request):
             is_singup = True
         else:
             is_singup = False
+
+        is_tanseeq_university = False
+        if request.user.role.filter(name = 'Tanseeq Admin').exists():
+            is_tanseeq_university = True
         try:
             university_obj = UniversityDetails.objects.create(university_code = university_code,contact_details = contact_details,
                                              university_name=university_name, email=email,telephone = telephone,website = website,
-                                             address = address,is_active = is_active,university_type_id = university_type,type_id = type,is_registration = is_registration,is_singup = is_singup)
+                                             address = address,is_active = is_active,university_type_id = university_type,type_id = type,is_registration = is_registration,is_singup = is_singup,is_tanseeq_university = is_tanseeq_university)
             if university_logo:
                 university_obj.university_logo = university_logo
                 university_obj.save()
@@ -1935,6 +1939,7 @@ def add_university(request):
     return render(request, 'add_university.html',context)
 
 def edit_university(request, university_id=None):
+    request.user.role.all()
     university_obj = UniversityDetails.objects.get(id=university_id)
     if request.method == 'POST':
         university_logo = request.FILES.get('university_logo', None)

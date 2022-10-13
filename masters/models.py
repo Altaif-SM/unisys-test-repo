@@ -332,6 +332,7 @@ class UniversityDetails(BaseModel):
                                 on_delete=models.SET_NULL)
     type = models.ForeignKey(TypeDetails, null=True, related_name='type_rel', on_delete=models.SET_NULL)
     file = models.FileField(upload_to=document_upload_path, max_length=256, blank=True, null=True)
+    is_tanseeq_university = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('-id',)

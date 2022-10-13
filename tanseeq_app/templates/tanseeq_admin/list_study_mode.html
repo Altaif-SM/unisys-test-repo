@@ -54,7 +54,7 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <span> {% trans 'University' %} </span>
+            <span> {% trans 'Study Mode' %} </span>
         </li>
     </ul>
 </div>
@@ -67,9 +67,9 @@
     <div class="portlet-title">
         <div class="caption">
             <i class="icon-settings font-red"></i>
-            <span class="caption-subject font-red sbold uppercase"> {% trans 'Manage Universities' %}</span>
+            <span class="caption-subject font-red sbold uppercase"> {% trans 'Manage Study Mode' %}</span>
         </div>
-        <a href="{% url 'tanseeq_app:add_university' %}">
+        <a href="{% url 'tanseeq_app:add_study_mode' %}">
             <button type="submit" class="btn green" id="save" style="margin-left:78%;background-color: #3598dc">Add
             </button>
         </a>
@@ -81,13 +81,10 @@
                 <thead>
                 <tr>
                     <th style="display: none">Id</th>
-                    <th> {% trans 'University Type' %}</th>
-                    <th> {% trans 'University Code' %}</th>
-                    <th> {% trans 'University' %}</th>
-                    <th> {% trans 'Email' %}</th>
+                    <th> {% trans 'Universities' %}</th>
+                    <th> {% trans 'Code' %}</th>
+                    <th> {% trans 'Study Mode' %}</th>
                     <th> {% trans 'Active' %}</th>
-                    <th> {% trans 'Registration' %}</th>
-                    <th> {% trans 'Singup' %}</th>
                     <th width="10%">{% trans 'Action' %}</th>
                 </tr>
                 </thead>
@@ -96,45 +93,29 @@
                     <tr id="item{{ rec.id }}" class="item">
                         <td style="display: none"><input id="university_id" value="{{ rec.id }}"></td>
                         <td>
-                            {{ rec.university_type|default_if_none:"" }}
+                            {% for university in rec.universities.all%}
+                                {{university.university_name}}{% if forloop.last %} ... {%else %}, {% endif %}
+                            {% endfor %}
                         </td>
-                        <td>{{ rec.university_code|default_if_none:"" }}</td>
-                        <td>{{ rec.university_name|default_if_none:"" }}</td>
-                        <td>{{ rec.email|default_if_none:"" }}</td>
-                         <td>
-                                {% if rec.is_active == True %}
-                                    <i class="fa fa-power-off" aria-hidden="true"
-                                       style="margin-left: 30px;margin-top:8px;font-size:18px;color:green"></i>
-                                {% else %}
-                                    <i class="fa fa-power-off" aria-hidden="true"
-                                       style="margin-left: 30px;margin-top:8px;font-size:18px;color:red"></i>
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if rec.is_registration == True %}
-                                    <i class="fa fa-power-off" aria-hidden="true"
-                                       style="margin-left: 30px;margin-top:8px;font-size:18px;color:green"></i>
-                                {% else %}
-                                    <i class="fa fa-power-off" aria-hidden="true"
-                                       style="margin-left: 30px;margin-top:8px;font-size:18px;color:red"></i>
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if rec.is_singup == True %}
-                                    <i class="fa fa-power-off" aria-hidden="true"
-                                       style="margin-left: 30px;margin-top:8px;font-size:18px;color:green"></i>
-                                {% else %}
-                                    <i class="fa fa-power-off" aria-hidden="true"
-                                       style="margin-left: 30px;margin-top:8px;font-size:18px;color:red"></i>
-                                {% endif %}
-                            </td>
+                        <td>{{ rec.code|default_if_none:"" }}</td>
+                        <td>{{ rec.study_mode|default_if_none:"" }}</td>
+
+                    <td>
+                            {% if rec.is_active == True %}
+                                <i class="fa fa-power-off" aria-hidden="true"
+                                   style="margin-left: 30px;margin-top:8px;font-size:18px;color:green"></i>
+                            {% else %}
+                                <i class="fa fa-power-off" aria-hidden="true"
+                                   style="margin-left: 30px;margin-top:8px;font-size:18px;color:red"></i>
+                            {% endif %}
+                        </td>
                         <td>
-                            <a href="{% url 'tanseeq_app:university' rec.id %}">
+                            <a href="{% url 'tanseeq_app:update_university_attachment' rec.id %}">
                             <span type="button" name="edit" id="edit{{ forloop.counter }}"
                                   class=" edit_btn btn blue glyphicon glyphicon-pencil">
                             </span>
                                 </a>
-                            <button type="button" delete-url="{% url 'tanseeq_app:university' rec.id %}"
+                            <button type="button" delete-url="{% url 'tanseeq_app:delete_university_attachment' rec.id %}"
                                   class="delete btn red glyphicon glyphicon-trash" name="delete"
                             >
                             </button>
@@ -157,11 +138,11 @@
     });
     $("#id_confirm_delete").on("click", (e)=>{
         $(e.target).attr('disabled', true)
-        deleteUniversity($(e.target).attr("delete-url"))
+        deleteTanseeqPeriod($(e.target).attr("delete-url"))
         $("#id_delete_model").modal('hide')
     })
 
-    function deleteUniversity(url) {
+    function deleteTanseeqPeriod(url) {
         console.log(url)
         $.ajax({
             type: 'DELETE',

@@ -7,17 +7,6 @@ app_name = 'tanseeq_app'
 
 urlpatterns = [
     path('admin/', login_required(TanseeqAdminHome.as_view()), name='tanseeq_admin'),
-
-    path(
-        'university/', login_required(UniversityList.as_view()), name='list_university'
-    ),
-    path(
-        'add/university/',
-        login_required(UniversityView.as_view()),
-        name='add_university'
-    ),
-    path('university/<int:pk>', UniversityDetailView.as_view(), name='university'),
-
     path('tanseeq_period/', login_required(TanseeqPeriodListView.as_view()), name='list_tanseeq_period'),
     path('add/tanseeq_period', TanseeqPeriodView.as_view(), name='add_tanseeq_period'),
     path('tanseeq_period/<int:pk>', TanseeqPeriodView.as_view(), name='tanseeq_period'),
@@ -66,28 +55,11 @@ urlpatterns = [
         name='delete_university_attachment'
     ),
     path(
-        'country/',
-        login_required(CountryListView.as_view()),
-        name='list_country'
+        'study_mode/', login_required(StudyModeList.as_view()), name='list_study_mode'
     ),
     path(
-        'update_country/',
-        login_required(CountryUpdateView.as_view()),
-        name='update_country'
-    ),
-    path(
-        'country/<int:pk>',
-        login_required(CountryListView.as_view()),
-        name='country'
-    ),
-    path(
-        'city/<int:pk>',
-        login_required(CityListView.as_view()),
-        name='list_city'
-    ),
-    path(
-        'update_city/',
-        login_required(CityUpdateView.as_view()),
-        name='update_city'
+        'add/study_mode/',
+        login_required(StudyModeView.as_view()),
+        name='add_study_mode'
     ),
 ]

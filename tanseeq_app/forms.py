@@ -5,9 +5,7 @@ from tanseeq_app.models import (
     TanseeqPeriod,
     SecondarySchoolCetificate,
     UniversityAttachment,
-    TanseeqUniversityDetails,
-    TanseeqCountry,
-    TansseqCity,
+    StudyMode,
 )
 
 
@@ -55,20 +53,17 @@ class UniversityAttachmentForm(forms.ModelForm):
                     "required": "true",
                 })
 
-class UniversityForm(forms.ModelForm):
+
+class StudyModeForm(forms.ModelForm):
     class Meta:
-        model = TanseeqUniversityDetails
-        fields = ("university_name", "university_code", "email", "telephone", "website", "university_logo", "tanseeq_guide", "registration_guide", "address", "contact_details", "is_active", "is_registration", "is_singup", "university_type",)
+        model = StudyMode
+        fields = ("universities", "study_mode", "code", "is_active",)
 
-
-
-class CountryForm(forms.ModelForm):
-
-    class Meta:
-        model = TanseeqCountry
-        fields = ('country_name',)
-
-class CityForm(forms.ModelForm):
-    class Meta:
-        model = TansseqCity
-        fields = ('city',)
+        def __init__(self, *args, **kwargs):
+            super(StudyModeForm, self).__init__(*args, **kwargs)
+            for field in self.fields:
+                if field != "is_active":
+                    self.fields[field].widget.attrs.update({
+                        "class": "form-control",
+                        "required": "true",
+                    })
