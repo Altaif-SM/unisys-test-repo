@@ -15,7 +15,7 @@ class TanseeqPeriodForm(forms.ModelForm):
 
     class Meta:
         model = TanseeqPeriod
-        fields = ('university', 'academic_year', 'from_date', 'to_date', 'is_active',)
+        fields = ('universities', 'academic_year', 'from_date', 'to_date', 'is_active',)
 
     def clean(self):
         from_date = self.cleaned_data.get("from_date")

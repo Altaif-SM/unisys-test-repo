@@ -131,12 +131,14 @@ class TanseeqPeriodView(View):
         context["is_edit"] = pk
         if pk:
             instance = get_object_or_404(self.model, pk=pk)
+            selected_universities = list(instance.universities.values_list('id',flat=True))
             context["instance"] = instance
+            context["selected_universities"] = selected_universities
         return render(request, 'tanseeq_admin/add_tanseeq_period.html', context)
 
     @staticmethod
     def get_context():
-        university_objs = UniversityDetails.active_records()
+        university_objs = TanseeqUniversityDetails.objects.all()
         academic_year_objs = YearDetails.active_records()
         return {
             "university_objs": university_objs,
@@ -157,6 +159,7 @@ class TanseeqPeriodView(View):
             else:
                 messages.success(request, "Record Updated.")
             obj.save()
+            form.save_m2m()
         else:
             context = self.get_context()
             context['form'] = form

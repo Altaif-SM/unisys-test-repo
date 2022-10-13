@@ -97,6 +97,15 @@
         window.onload = function () {
             $(document).ready(function () {
                 $("#status").Sswitch({});
+
+                var values = "{{ selected_universities }}";
+                $('#universities').find('option').filter(function (idx, option) {
+                    if ($.inArray(option.value, values) !== -1) {
+                        return option;
+                    }
+                }).prop('selected', 'true');
+
+
             });
 
             window.setTimeout(function () {
@@ -171,21 +180,23 @@
                                     <span style="color: red">*</span>
                                 </label>
                                 <div class="col-md-3">
-                                    <select id='university' title="Select University"
-                                            name="university"
+                                    <select id='universities' title="Select University" multiple
+                                            name="universities"
                                             class="form-control" required>
                                         <option hidden value="">Please Select</option>
                                         {% for rec in university_objs %}
                                             <option value="{{ rec.id }}"
-                                                {% if form.university.value|add:"0" == rec.id or instance.university.id == rec.id %}
-                                                        selected
-                                                {% endif %}
+
                                             >
                                                 {{ rec.university_name|default_if_none:"" }}
                                             </option>
                                         {% endfor %}
                                     </select>
                                 </div>
+
+
+
+
                                 <label class="col-md-2 control-label">{% trans 'Academic Year' %}:
                                     <span style="color: red">*</span>
                                 </label>

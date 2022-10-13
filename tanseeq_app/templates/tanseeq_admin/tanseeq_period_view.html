@@ -93,7 +93,13 @@
                 {% for rec in object_list %}
                     <tr id="item{{ rec.id }}" class="item">
                         <td style="display: none"><input id="university_id" value="{{ rec.id }}"></td>
-                        <td>{{ rec.university.university_name|default_if_none:"" }}</td>
+
+                        <td>
+                            {% for university in rec.universities.all%}
+                                {{university.university_name}}{% if forloop.last %} ... {%else %}, {% endif %}
+                            {% endfor %}
+                        </td>
+
                         <td>{{ rec.academic_year|default_if_none:"" }}</td>
                         <td>{{ rec.from_date|default_if_none:"" }}</td>
                         <td>{{ rec.to_date|default_if_none:"" }}</td>

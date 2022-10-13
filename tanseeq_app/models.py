@@ -32,9 +32,7 @@ class TanseeqUniversityDetails(BaseModel):
 
 class TanseeqPeriod(BaseModel):
     created_by = models.ForeignKey(User, on_delete=models.PROTECT)
-    university = models.ForeignKey(
-        UniversityDetails, related_name="tanseeq_periord_university", on_delete=models.PROTECT
-    )
+    universities = models.ManyToManyField(TanseeqUniversityDetails, related_name="tansseq_period_univeristy")
     academic_year = models.ForeignKey(
         YearDetails, related_name="tanseeq_periord_academic_year", on_delete=models.PROTECT
     )
