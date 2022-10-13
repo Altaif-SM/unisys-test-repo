@@ -121,8 +121,12 @@
                 <span> {% trans 'University Attachment' %} </span>
                 <i class="fa fa-angle-right"></i>
             </li>
-            <li>
-                <span> {% trans 'Add' %} </span>
+            <li>{% if instance %}
+                <span> {% trans 'Edit University Attachment' %} </span>
+                {% else %}
+                <span> {% trans 'Add University Attachment' %} </span>
+                {% endif %}
+
             </li>
         </ul>
     </div>
@@ -138,7 +142,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase">Add University Attachment </span>
+                <span class="caption-subject font-red sbold uppercase">{% if instance %}Edit University Attachment {% else %} Add University Attachment }{% endif %} </span>
             </div>
         </div>
 
@@ -224,7 +228,7 @@
                         <div class="row">
                             <div class="col-md-offset-5 col-md-7">
                                 <button type="button" class="btn blue" id="back" style="margin-left: 70%"
-                                        onclick="window.location='{% url "tanseeq_app:list_tanseeq_period" %}'"
+                                        onclick="window.location='{% url "tanseeq_app:list_university_attachment" %}'"
                                 >
                                     Back
                                 </button>

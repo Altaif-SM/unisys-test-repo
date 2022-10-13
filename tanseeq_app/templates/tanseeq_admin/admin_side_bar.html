@@ -20,17 +20,15 @@
 </li>
 <li class="nav-item ">
     <a href="{% url 'tanseeq_app:list_tanseeq_period' %}" class="nav-link ">
-        {% trans 'Tanseeq Period' %}
-    </a>
-</li>
-<li class="nav-item ">
-    <a href="{% url 'tanseeq_app:list_university_guide' %}" class="nav-link ">
-        {% trans 'University Guide' %}
+        <i class="glyphicon glyphicon-time"></i>
+        <span class="title">{% trans 'Tanseeq Period' %}</span>
     </a>
 </li>
 <li class="nav-item ">
     <a href="{% url 'tanseeq_app:list_university_attachment' %}" class="nav-link ">
-        {% trans 'University Attachement' %}
+         <i class="glyphicon glyphicon-copy"></i>
+        <span class="title">{% trans 'University Attachement' %}</span>
+
     </a>
 </li>
 <li class="nav-item ">
@@ -46,11 +44,6 @@
 <li class="nav-item ">
     <a href="{% url 'masters:referral_fee' %}" class="nav-link ">
         {% trans 'Program' %}
-    </a>
-</li>
-<li class="nav-item ">
-    <a href="{% url 'masters:referral_fee' %}" class="nav-link ">
-        {% trans 'Country' %}
     </a>
 </li>
 
