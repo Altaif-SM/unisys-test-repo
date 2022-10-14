@@ -62,4 +62,14 @@ urlpatterns = [
         login_required(StudyModeView.as_view()),
         name='add_study_mode'
     ),
+    path(
+        'update/<int:pk>/study_mode/',
+        login_required(StudyModeView.as_view()),
+        name='update_study_mode'
+    ),
+    path(
+        'delete/<int:pk>/study_mode/',
+        login_required(StudyModeView.as_view()),
+        name='delete_study_mode'
+    ),
 ]

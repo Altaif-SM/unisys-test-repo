@@ -5,9 +5,8 @@ from tanseeq_app.models import (
     TanseeqPeriod,
     SecondarySchoolCetificate,
     UniversityAttachment,
-    StudyMode,
 )
-from masters.models import UniversityDetails, YearDetails
+from masters.models import UniversityDetails, YearDetails, StudyModeDetails
 from tanseeq_app.forms import (
     TanseeqPeriodForm,
     UniversityDetailsForm,
@@ -202,18 +201,17 @@ class UniversityAttachmentView(View):
 
 
 class StudyModeList(ListView):
-    model = StudyMode
+    model = StudyModeDetails
     template_name = "tanseeq_admin/list_study_mode.html"
 
 
 class StudyModeView(View):
-    model = StudyMode
+    model = StudyModeDetails
     form_class = StudyModeForm
 
     def get(self, request, pk=None):
-        university_objs = UniversityDetails.objects.all()
         context = {
-            "university_objs": university_objs,
+            "university_objs": UniversityDetails.active_records(),
             "form": self.form_class(),
         }
         if pk:
@@ -239,7 +237,51 @@ class StudyModeView(View):
                 messages.success(request, "Record saved.")
         else:
             context = {
-                "university_objs": UniversityDetails.objects.all(),
+                "university_objs": UniversityDetails.active_records(),
+                "form": form,
+            }
+            return render(request, 'tanseeq_admin/add_study_mode.html', context)
+        return redirect('tanseeq_app:list_study_mode')
+
+    def delete(self, request, pk):
+        instance = get_object_or_404(self.model, pk=pk)
+        instance.delete()
+        messages.success(request, "Record removed.")
+        return JsonResponse({"status": 200})
+
+class StudyModeView(View):
+    model = StudyModeDetails
+    form_class = StudyModeForm
+
+    def get(self, request, pk=None):
+        context = {
+            "university_objs": UniversityDetails.active_records(),
+            "form": self.form_class(),
+        }
+        if pk:
+            instance = get_object_or_404(self.model, pk=pk)
+            context["instance"] = instance
+            context["form"] = self.form_class(instance=get_object_or_404(self.model, pk=pk))
+
+        return render(request, "tanseeq_admin/add_study_mode.html", context)
+
+    def post(self, request, pk=None):
+        if pk:
+            instance = get_object_or_404(self.model, pk=pk)
+            form = self.form_class(request.POST, instance=instance)
+        else:
+            form = self.form_class(request.POST)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+            form.save_m2m()
+            if pk:
+                messages.success(request, "Record Updated.")
+            else:
+                messages.success(request, "Record saved.")
+        else:
+            context = {
+                "university_objs": UniversityDetails.active_records(),
                 "form": form,
             }
             return render(request, 'tanseeq_admin/add_study_mode.html', context)
