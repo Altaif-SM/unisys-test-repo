@@ -1,12 +1,9 @@
-from dataclasses import fields
-from datetime import datetime
 from django import forms
-from masters.models import UniversityDetails
+from masters.models import UniversityDetails, StudyModeDetails
 from tanseeq_app.models import (
     TanseeqPeriod,
     SecondarySchoolCetificate,
     UniversityAttachment,
-    StudyMode,
     TanseeqFaculty,
     TanseeqProgram,
 )
@@ -59,17 +56,9 @@ class UniversityAttachmentForm(forms.ModelForm):
 
 class StudyModeForm(forms.ModelForm):
     class Meta:
-        model = StudyMode
+        model = StudyModeDetails
         fields = ("universities", "study_mode", "code", "is_active",)
 
-        def __init__(self, *args, **kwargs):
-            super(StudyModeForm, self).__init__(*args, **kwargs)
-            for field in self.fields:
-                if field != "is_active":
-                    self.fields[field].widget.attrs.update({
-                        "class": "form-control",
-                        "required": "true",
-                    })
 
 
 class TanseeqFacultyForm(forms.ModelForm):
