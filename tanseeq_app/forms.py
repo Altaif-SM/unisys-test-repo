@@ -40,12 +40,15 @@ class SecondarySchoolCertificateForm(forms.ModelForm):
 
 
 class UniversityAttachmentForm(forms.ModelForm):
+
     class Meta:
         model = UniversityAttachment
         fields = ("universities", "attachment_name", "type_of_attachment", "is_required",)
 
     def __init__(self, *args, **kwargs):
         super(UniversityAttachmentForm, self).__init__(*args, **kwargs)
+        self.fields['universities'].queryset = UniversityDetails.objects.filter(is_tanseeq_university=True,
+                                                                                is_active=True, is_delete=False)
         for field in self.fields:
             if field != "is_required":
                 self.fields[field].widget.attrs.update({
@@ -55,6 +58,11 @@ class UniversityAttachmentForm(forms.ModelForm):
 
 
 class StudyModeForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(StudyModeForm, self).__init__(*args, **kwargs)
+        self.fields['universities'].queryset = UniversityDetails.objects.filter(is_tanseeq_university=True,is_active=True, is_delete=False)
+
     class Meta:
         model = StudyModeDetails
         fields = ("universities", "study_mode", "code", "is_active",)
@@ -62,12 +70,15 @@ class StudyModeForm(forms.ModelForm):
 
 
 class TanseeqFacultyForm(forms.ModelForm):
+
     class Meta:
         model = TanseeqFaculty
         fields = ("universities", "code", "name", "notes", "is_active",)
 
     def __init__(self, *args, **kwargs):
         super(TanseeqFacultyForm, self).__init__(*args, **kwargs)
+        self.fields['universities'].queryset = UniversityDetails.objects.filter(is_tanseeq_university=True,
+                                                                                is_active=True, is_delete=False)
         for field in self.fields:
             if field != "is_active":
                 self.fields[field].widget.attrs.update({
@@ -77,6 +88,11 @@ class TanseeqFacultyForm(forms.ModelForm):
 
 
 class TanseeqProgramForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(TanseeqProgramForm, self).__init__(*args, **kwargs)
+        self.fields['universities'].queryset = UniversityDetails.objects.filter(is_tanseeq_university=True,is_active=True, is_delete=False)
+
     class Meta:
         model = TanseeqProgram
         fields = ("faculty", "name", "code", "is_active",)

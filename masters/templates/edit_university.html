@@ -22,11 +22,24 @@
 {% block content %}
     <div class="page-bar" style="margin-bottom: 1px;">
         <ul class="page-breadcrumb">
-            <li>
+           <li>
                 <i class="icon-home"></i>
-                <a href="{% url 'accounts:home' %}">Home</a>
+                <a {% if request.user.is_tanseeq_admin %} href="{% url 'tanseeq_app:tanseeq_admin' %}" {% else %} href="{% url 'accounts:home' %}" {% endif %}>Home</a>
                 <i class="fa fa-angle-right"></i>
             </li>
+        {% if request.user.is_tanseeq_admin %}
+
+            <li>
+                <span> Tanseeq University </span>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> Edit University</span>
+            </li>
+
+
+            {% else %}
+
             <li>
                 <span> Master Settings </span>
                 <i class="fa fa-angle-right"></i>
@@ -39,6 +52,7 @@
             <li>
                 <span> {% trans 'Edit University' %} </span>
             </li>
+        {% endif %}
         </ul>
     </div>
     {% for message in messages %}

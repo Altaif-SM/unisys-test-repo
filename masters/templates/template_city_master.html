@@ -79,9 +79,16 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{% url 'accounts:home' %}">{% trans 'Home' %}</a>
+                <a {% if request.user.is_tanseeq_admin %} href="{% url 'tanseeq_app:tanseeq_admin' %}" {% else %} href="{% url 'accounts:home' %}" {% endif %}>Home</a>
                 <i class="fa fa-angle-right"></i>
             </li>
+
+        {% if request.user.is_tanseeq_admin %}
+            <li>
+                <span>{% trans 'City' %}</span>
+            </li>
+
+            {% else %}
             <li>
                 <span>{% trans 'Master Settings' %}</span>
                 <i class="fa fa-angle-right"></i>
@@ -94,6 +101,8 @@
             <li>
                 <span>{% trans 'Manage City' %}</span>
             </li>
+        {% endif %}
+
         </ul>
     </div>
 

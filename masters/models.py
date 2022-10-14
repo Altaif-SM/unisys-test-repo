@@ -340,9 +340,11 @@ class UniversityDetails(BaseModel):
     def __str__(self):
         return self.university_name
 
+
+
     @classmethod
-    def active_records(cls):
-        return cls.objects.filter(is_active=True, is_delete=False)
+    def active_records(cls,):
+        return cls.objects.filter(is_active=True, is_delete=False, is_tanseeq_university = True)
 
     def to_dict(self):
         res = {

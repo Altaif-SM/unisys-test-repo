@@ -1871,7 +1871,10 @@ def delete_currency(request):
 
 
 def university_settings(request):
-    university_recs = UniversityDetails.objects.filter(is_delete = False)
+    if request.user.is_tanseeq_admin():
+        university_recs = UniversityDetails.objects.filter(is_delete = False,is_tanseeq_university = True)
+    else:
+        university_recs = UniversityDetails.objects.filter(is_delete=False, is_tanseeq_university=False)
     context = {
         'university_recs':university_recs,
     }
