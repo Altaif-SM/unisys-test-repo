@@ -56,7 +56,7 @@ INSTALLED_APPS = [
     'rest_api',
     'rest_framework',
     'agents.apps.AgentsConfig',
-    'tanseeq.apps.TanseeqConfig',
+    'tanseeq_app',
 
 ]
 
