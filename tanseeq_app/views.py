@@ -6,6 +6,8 @@ from tanseeq_app.models import (
     SecondarySchoolCetificate,
     UniversityAttachment,
     StudyMode,
+    TanseeqFaculty,
+    TanseeqProgram,
 )
 from masters.models import UniversityDetails, YearDetails
 from tanseeq_app.forms import (
@@ -14,6 +16,8 @@ from tanseeq_app.forms import (
     SecondarySchoolCertificateForm,
     UniversityAttachmentForm,
     StudyModeForm,
+    TanseeqFacultyForm,
+    TanseeqProgramForm,
 )
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
@@ -77,7 +81,6 @@ class TanseeqPeriodView(View):
     def delete(self, request, pk):
         instance = get_object_or_404(self.model, pk=pk, created_by=request.user)
         instance.delete()
-        messages.success(request, "Record removed.")
         return JsonResponse({"status": 200})
 
 
@@ -158,7 +161,7 @@ class UniversityAttachmentList(ListView):
 class UniversityAttachmentView(View):
     model = UniversityAttachment
     form_class = UniversityAttachmentForm
-
+    template_name = "tanseeq_admin/add_university_attachment.html"
     def get(self, request, pk=None):
         university_objs = UniversityDetails.active_records()
         context = {
@@ -170,7 +173,7 @@ class UniversityAttachmentView(View):
             context["instance"] = instance
             context["form"] = self.form_class(instance=get_object_or_404(self.model, pk=pk))
 
-        return render(request, "tanseeq_admin/add_university_attachment.html", context)
+        return render(request, self.template_name, context)
 
     def post(self, request, pk=None):
         if pk:
@@ -191,13 +194,12 @@ class UniversityAttachmentView(View):
                 "university_objs": UniversityDetails.active_records(),
                 "form": form,
             }
-            return render(request, 'tanseeq_admin/add_university_attachment.html', context)
+            return render(request, self.template_name, context)
         return redirect('tanseeq_app:list_university_attachment')
 
     def delete(self, request, pk):
         instance = get_object_or_404(self.model, pk=pk)
         instance.delete()
-        messages.success(request, "Record removed.")
         return JsonResponse({"status": 200})
 
 
@@ -248,5 +250,104 @@ class StudyModeView(View):
     def delete(self, request, pk):
         instance = get_object_or_404(self.model, pk=pk)
         instance.delete()
-        messages.success(request, "Record removed.")
+        return JsonResponse({"status": 200})
+
+
+class TanseeqFacultyList(ListView):
+    model = TanseeqFaculty
+    template_name = "tanseeq_admin/list_tanseeq_faculty.html"
+
+
+class TanseeqFacultyView(View):
+    model = TanseeqFaculty
+    form_class = TanseeqFacultyForm
+    template_name = "tanseeq_admin/add_tanseeq_faculty.html"
+
+    def get(self, request, pk=None):
+        university_objs = UniversityDetails.active_records()
+        context = {
+            "university_objs": university_objs,
+            "form": self.form_class(),
+        }
+        if pk:
+            instance = get_object_or_404(self.model, pk=pk)
+            context["instance"] = instance
+            context["form"] = self.form_class(instance=get_object_or_404(self.model, pk=pk))
+        return render(request, self.template_name, context)
+
+    def post(self, request, pk=None):
+        if pk:
+            instance = get_object_or_404(self.model, pk=pk)
+            form = self.form_class(request.POST, instance=instance)
+        else:
+            form = self.form_class(request.POST)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+            form.save_m2m()
+            if pk:
+                messages.success(request, "Record Updated.")
+            else:
+                messages.success(request, "Record saved.")
+        else:
+            context = {
+                "university_objs": UniversityDetails.active_records(),
+                "form": form,
+            }
+            return render(request, self.template_name, context)
+        return redirect('tanseeq_app:list_tanseeq_faculty')
+
+    def delete(self, request, pk):
+        instance = get_object_or_404(self.model, pk=pk)
+        instance.delete()
+        return JsonResponse({"status": 200})
+
+
+class TanseeqProgramList(ListView):
+    model = TanseeqProgram
+    template_name = "tanseeq_admin/list_tanseeq_program.html"
+
+
+class TanseeqProgramView(View):
+    model = TanseeqProgram
+    form_class = TanseeqProgramForm
+    template_name = "tanseeq_admin/add_tanseeq_program.html"
+
+    def get(self, request, pk=None):
+        university_objs = UniversityDetails.active_records()
+        context = {
+            "university_objs": university_objs,
+            "form": self.form_class(),
+        }
+        if pk:
+            instance = get_object_or_404(self.model, pk=pk)
+            context["instance"] = instance
+            context["form"] = self.form_class(instance=get_object_or_404(self.model, pk=pk))
+        return render(request, self.template_name, context)
+
+    def post(self, request, pk=None):
+        if pk:
+            instance = get_object_or_404(self.model, pk=pk)
+            form = self.form_class(request.POST, instance=instance)
+        else:
+            form = self.form_class(request.POST)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+            form.save_m2m()
+            if pk:
+                messages.success(request, "Record Updated.")
+            else:
+                messages.success(request, "Record saved.")
+        else:
+            context = {
+                "university_objs": UniversityDetails.active_records(),
+                "form": form,
+            }
+            return render(request, self.template_name, context)
+        return redirect('tanseeq_app:list_tanseeq_program')
+
+    def delete(self, request, pk):
+        instance = get_object_or_404(self.model, pk=pk)
+        instance.delete()
         return JsonResponse({"status": 200})

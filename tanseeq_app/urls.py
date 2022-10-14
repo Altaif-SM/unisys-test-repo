@@ -62,4 +62,47 @@ urlpatterns = [
         login_required(StudyModeView.as_view()),
         name='add_study_mode'
     ),
+
+    path(
+        'tanseeq_faculty/',
+        login_required(TanseeqFacultyList.as_view()),
+        name='list_tanseeq_faculty'
+    ),
+    path(
+        'add/tanseeq_faculty/',
+        login_required(TanseeqFacultyView.as_view()),
+        name='add_tanseeq_faculty'
+    ),
+    path(
+        'edit/<int:pk>/tanseeq_faculty/',
+        login_required(TanseeqFacultyView.as_view()),
+        name='edit_tanseeq_faculty'
+    ),
+    path(
+        'delete/<int:pk>/tanseeq_faculty/',
+        login_required(TanseeqFacultyView.as_view()),
+        name='delete_tanseeq_faculty'
+    ),
+
+    path(
+        'tanseeq_program/',
+        login_required(TanseeqProgramList.as_view()),
+        name='list_tanseeq_program'
+    ),
+    path(
+        'add/tanseeq_program/',
+        login_required(TanseeqProgramView.as_view()),
+        name='add_tanseeq_program'
+    ),
+    path(
+        'edit/<int:pk>/tanseeq_program/',
+        login_required(TanseeqProgramView.as_view()),
+        name='edit_tanseeq_program'
+    ),
+    path(
+        'delete/<int:pk>/tanseeq_program/',
+        login_required(TanseeqProgramView.as_view()),
+        name='delete_tanseeq_program'
+    ),
 ]
+TanseeqProgramList
