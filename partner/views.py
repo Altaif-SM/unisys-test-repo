@@ -296,6 +296,10 @@ def template_approving_matric_cards(request):
         messages.warning(request, "Form have some error" + str(e))
 
 def template_approving_application(request):
+    # for a in request.user.user_permissions.all():
+    #     print(a)
+    # request.user.get_user_permissions()
+
     applicant_recs = ''
     documents_recs = DocumentDetails.objects.all()
     try:
@@ -413,6 +417,7 @@ def template_approving_application(request):
                            'applicant_recs_3':applicant_recs_3,
                            })
     except Exception as e:
+        print("e",e)
         messages.warning(request, "Form have some error" + str(e))
         return redirect('/partner/template_approving_application/')
 
