@@ -1,0 +1,217 @@
+{% load  i18n %}
+<li class="nav-item master_settings_nav_item open">
+    <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="fa fa-cog" aria-hidden="true"></i>
+    
+    <span class="title">{% trans 'System Settings' %}</span>
+        <span class="arrow master_settings_arrow"></span>
+    </a>
+    <ul class="sub-menu master_settings_sub_menu" style="display: block;">
+        {% if 'masters.can_read_language_details' in perms or request.user.is_superuser %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:language_settings' %}"
+                class="nav-link ">{% trans 'Manage Language' %}</a>
+            </li>
+        {% endif %}
+        
+        {% if 'masters.can_read_currency_details' in perms or request.user.is_superuser %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:currency_settings' %}"
+                class="nav-link ">{% trans 'Manage Currency' %}</a>
+            </li>
+        {% endif %}
+        
+        {% if 'masters.can_read_country_details' in perms or request.user.is_superuser %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:country_settings' %}"
+                class="nav-link ">{% trans 'Manage Country' %}</a>
+            </li>
+        {% endif %}
+        
+        {% if 'masters.can_view_arab_competency_test_details' in perms or request.user.is_superuser %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:arabic_lang_proficiency_settings' %}"
+                    class="nav-link ">{% trans 'Manage Arabic Lang Proficiency' %}</a>
+            </li>
+        {% endif %}
+        
+        {% if 'masters.can_view_english_competency_test_details' in perms or request.user.is_superuser %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:english_lang_proficiency_settings' %}"
+                    class="nav-link ">{% trans 'Manage English Lang Proficiency' %}</a>
+            </li>
+        {% endif %}
+
+        {% if 'masters.can_view_studyleveldetails' in perms or request.user.is_superuser %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:study_level_settings' %}"
+                class="nav-link ">{% trans 'Manage Study Level' %}</a>
+            </li>
+        {% endif %}
+        {% if 'masters.can_view_studytypedetails' in perms or request.user.is_superuser %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:study_type_settings' %}"
+                class="nav-link ">{% trans 'Manage Program Mode' %}</a>
+            </li>
+        {% endif %}
+        {% if 'masters.can_view_student_mode_details' in perms or request.user.is_superuser %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:student_mode_settings' %}"
+                class="nav-link ">{% trans 'Manage Student Mode' %}</a>
+            </li>
+        {% endif %}
+        {% if 'masters.can_view_university_type_details' in perms or request.user.is_superuser %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:university_type_settings' %}"
+                class="nav-link ">{% trans 'Manage University Type' %}</a>
+            </li>
+        {% endif %}
+        {% if 'masters.can_view_type_details' in perms or request.user.is_superuser %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:type_settings' %}"
+                    class="nav-link ">{% trans 'Manage Type' %}</a>
+            </li>
+        {% endif %}
+
+        {% if 'masters.can_view_learning_centers_details' in perms or request.user.is_superuser %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:learning_centers_settings' %}"
+                class="nav-link ">{% trans 'Manage Learning Centers' %}</a>
+            </li>
+        {% endif %}
+        {% if 'masters.can_view_faculty_details' in perms or request.user.is_superuser %}
+            <li class="nav-item  ">
+                <a href="{% url 'masters:faculty_settings' %}" class="nav-link ">
+                    <span class="title">{% trans 'Manage Faculties' %}</span>
+                </a>
+            </li>
+        {% endif %}
+        {% if 'masters.can_view_prerequisite_course_details' in perms or request.user.is_superuser %}
+            <li class="nav-item  ">
+                <a href="{% url 'masters:course_master_settings' %}" class="nav-link ">
+                    <span class="title">{% trans 'Manage Courses' %}</span>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</li>
+
+<li class="nav-item staff_settings_nav_item">
+    <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="fa fa-users" aria-hidden="true"></i>
+        <span class="title">{% trans 'User Settings' %}</span>
+        <span class="arrow staff_settings_arrow"></span>
+    </a>
+    <ul class="sub-menu staff_settings_sub_menu">
+        {% if 'accounts.can_view_users' in perms or request.user.is_superuser %}
+            <li class="nav-item  ">
+                <a href="{% url 'accounts:staff_settings' %}" class="nav-link ">
+                    {#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
+                    <span class="title">{% trans 'Manage Users' %}</span>
+                </a>
+            </li>
+        {% endif %}
+        
+        {% if 'accounts.can_view_agentrecruiter' in perms or request.user.is_superuser %}
+            <li class="nav-item  ">
+                <a href="{% url 'accounts:agent_recruiter_settings' %}" class="nav-link ">
+                    {#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
+                    <span class="title">{% trans 'Manage Agent Recruiter' %}</span>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</li>
+
+<li class="nav-item organization_settings_nav_item">
+    <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="fa fa-university" aria-hidden="true"></i>
+        <span class="title">{% trans 'University Settings' %}</span>
+        <span class="arrow organization_settings_arrow"></span>
+    </a>
+    <ul class="sub-menu organization_settings_sub_menu">
+        {% if 'masters.can_view_university_details' in perms or request.user.is_superuser %}
+            <li class="nav-item  ">
+                <a href="{url 'masters:university_settings' }" class="nav-link ">
+                    <span class="title">{% trans 'Manage Universities' %}</span>
+                </a>
+            </li>
+        {% endif %}
+
+        {% if 'masters.can_view_program_details' in perms or request.user.is_superuser %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:program_settings' %}"
+                class="nav-link ">{% trans 'Manage Program' %}</a>
+            </li>
+        {% endif %}
+
+        {% if 'masters.can_view_program_fee_details' in perms or request.user.is_superuser %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:program_fee_settings' %}"
+                class="nav-link ">{% trans 'Manage Registration Fee' %}</a>
+            </li>
+        {% endif %}
+
+        {% if 'masters.can_view_campus_branches_details' in perms or request.user.is_superuser %}
+            <li class="nav-item  ">
+                <a href="{% url 'masters:campus_settings' %}" class="nav-link ">
+                    <span class="title">{% trans 'Manage Branch/Campus' %}</span>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</li>
+
+<li class="nav-item program_settings_nav_item">
+    <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="glyphicon glyphicon-education" aria-hidden="true"></i>
+        <span class="title">{% trans 'Academic Settings' %}</span>
+        <span class="arrow program_settings_arrow"></span>
+    </a>
+    <ul class="sub-menu program_settings_sub_menu">
+        {% if 'masters.can_view_year_details' in perms or request.user.is_superuser %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:year_settings' %}"
+                class="nav-link ">{% trans 'Manage Year' %}</a>
+            </li>
+        {% endif %}
+
+        {% if 'masters.can_view_semester_details' in perms or request.user.is_superuser %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:semester_settings' %}"
+                class="nav-link ">{% trans 'Manage Semester' %}</a>
+            </li>
+        {% endif %}
+
+        {% if 'masters.can_view_activity_details' in perms or request.user.is_superuser %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:activity_settings' %}"
+                class="nav-link ">{% trans 'Manage Activity' %}</a>
+            </li>
+        {% endif %}
+
+        {% if 'masters.can_view_calender_details' in perms or request.user.is_superuser %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:calendar_settings' %}"
+                class="nav-link ">{% trans 'Manage Calendar' %}</a>
+            </li>
+        {% endif %}
+    </ul>
+</li>
+
+<li class="nav-item finance_nav">
+    <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="glyphicon glyphicon-credit-card" aria-hidden="true"></i>
+        <span class="title">{% trans 'Finance Settings' %}</span>
+        <span class="arrow finance_arrow"></span>
+    </a>
+    <ul class="sub-menu finance_sub_menu">
+        {% if 'masters.can_view_referral_fee_details' in perms or request.user.is_superuser %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:referral_fee' %}" class="nav-link ">
+                    {% trans 'Manage Referral Fee' %}
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</li>

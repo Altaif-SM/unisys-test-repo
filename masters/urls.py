@@ -2,6 +2,8 @@ from django.urls import path
 
 from . import views
 from accounts import views as account_view
+from accounts.decoratars import user_login_required
+
 app_name = 'masters'
 
 
@@ -131,7 +133,7 @@ urlpatterns = [
     path('university_details/', views.university_details, name='university_details'),
     path('save_university_details/', views.save_university_details, name='save_university_details'),
 
-    path('language_settings/', views.language_settings, name='language_settings'),
+    path('language_settings/', user_login_required(views.language_settings), name='language_settings'),
     path('add_language/', views.add_language, name='add_language'),
     path('edit_language/<int:language_id>/', views.edit_language, name='edit_language'),
     path('delete_language/', views.delete_language, name='delete_language'),
@@ -327,4 +329,7 @@ urlpatterns = [
     path('edit_research/<int:research_id>/', views.edit_research, name='edit_research'),
     path('delete_research_plan/', views.delete_research_plan, name='delete_research_plan'),
     path('research_year_semester_already_exists/', views.research_year_semester_already_exists, name='research_year_semester_already_exists'),
+    
+	path('list_permissions/', user_login_required(views.list_permissions), name='list_permissions'),
+
 ]

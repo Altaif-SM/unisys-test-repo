@@ -1,0 +1,266 @@
+{% load  i18n %}
+<li class="nav-item master_settings_nav_item">
+    {% if 'System Settings' in access_list %}
+        <a href="javascript:;" class="nav-link nav-toggle">
+            <i class="fa fa-cog" aria-hidden="true"></i>
+
+            <span class="title">{% trans 'System Settings' %}</span>
+            <span class="arrow master_settings_arrow"></span>
+        </a>
+    {% endif %}
+    <ul class="sub-menu master_settings_sub_menu">
+        {% if 'Manage Language' in access_list %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:language_settings' %}"
+                   class="nav-link ">{% trans 'Manage Language' %}</a>
+            </li>
+        {% endif %}
+        {% if 'Manage Currency' in access_list %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:currency_settings' %}"
+                   class="nav-link ">{% trans 'Manage Currency' %}</a>
+            </li>
+        {% endif %}
+        {% if 'Manage Country' in access_list %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:country_settings' %}"
+                   class="nav-link ">{% trans 'Manage Country' %}</a>
+            </li>
+        {% endif %}
+        <li class="nav-item ">
+                <a href="{% url 'masters:arabic_lang_proficiency_settings' %}"
+                   class="nav-link ">{% trans 'Manage Arabic Lang Proficiency' %}</a>
+            </li>
+
+        <li class="nav-item ">
+                <a href="{% url 'masters:english_lang_proficiency_settings' %}"
+                   class="nav-link ">{% trans 'Manage English Lang Proficiency' %}</a>
+        </li>
+        {% if 'Manage Study Level' in access_list %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:study_level_settings' %}"
+                   class="nav-link ">{% trans 'Manage Study Level' %}</a>
+            </li>
+        {% endif %}
+        {% if 'Manage Study Type' in access_list %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:study_type_settings' %}"
+                   class="nav-link ">{% trans 'Manage Program Mode' %}</a>
+            </li>
+        {% endif %}
+        {% if 'Manage Student Mode' in access_list %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:student_mode_settings' %}"
+                   class="nav-link ">{% trans 'Manage Student Mode' %}</a>
+            </li>
+        {% endif %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:university_type_settings' %}"
+                   class="nav-link ">{% trans 'Manage University Type' %}</a>
+            </li>
+
+
+    <li class="nav-item ">
+                <a href="{% url 'masters:type_settings' %}"
+                   class="nav-link ">{% trans 'Manage Type' %}</a>
+            </li>
+        {% if 'Manage Learning Centers' in access_list %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:learning_centers_settings' %}"
+                   class="nav-link ">{% trans 'Manage Learning Centers' %}</a>
+            </li>
+        {% endif %}
+        {% if 'Manage Faculties' in access_list %}
+            <li class="nav-item  ">
+                <a href="/masters/faculty_settings/" class="nav-link ">
+                    {#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
+                    <span class="title">{% trans 'Manage Faculties' %}</span>
+                </a>
+            </li>
+        {% endif %}
+
+     <li class="nav-item  ">
+                <a href="/masters/course_master_settings/" class="nav-link ">
+                    {#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
+                    <span class="title">{% trans 'Manage Courses' %}</span>
+                </a>
+            </li>
+
+{#                                    {% if 'Link Faculty to User' in access_list %}#}
+{#                                        <li class="nav-item  ">#}
+{#                                            <a href="/masters/link_faculty_staff/" class="nav-link ">#}
+                    {#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
+{#                                                <span class="title">{% trans 'Link Faculty to User' %}</span>#}
+{#                                            </a>#}
+{#                                        </li>#}
+{#                                    {% endif %}#}
+
+    </ul>
+</li>
+
+<li class="nav-item staff_settings_nav_item">
+    {% if 'User Settings' in access_list %}
+        <a href="javascript:;" class="nav-link nav-toggle">
+            <i class="fa fa-users" aria-hidden="true"></i>
+
+
+            <span class="title">{% trans 'User Settings' %}</span>
+            <span class="arrow staff_settings_arrow"></span>
+        </a>
+    {% endif %}
+    <ul class="sub-menu staff_settings_sub_menu">
+{#                                    {% if 'Manage Group' in access_list %}#}
+{#                                        <li class="nav-item ">#}
+{#                                            <a href="{% url 'masters:group_settings' %}"#}
+{#                                               class="nav-link ">{% trans 'Manage Group' %}</a>#}
+{#                                        </li>#}
+{#                                    {% endif %}#}
+        {% if 'Manage Users' in access_list %}
+            <li class="nav-item  ">
+                <a href="/accounts/staff_settings/" class="nav-link ">
+                    {#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
+                    <span class="title">{% trans 'Manage Users' %}</span>
+                </a>
+            </li>
+        {% endif %}
+
+    <li class="nav-item  ">
+                <a href="/accounts/agent_recruiter_settings/" class="nav-link ">
+                    {#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
+                    <span class="title">{% trans 'Manage Agent Recruiter' %}</span>
+                </a>
+            </li>
+
+
+    </ul>
+</li>
+
+<li class="nav-item organization_settings_nav_item">
+    {% if 'University Settings' in access_list %}
+        <a href="javascript:;" class="nav-link nav-toggle">
+            <i class="fa fa-university" aria-hidden="true"></i>
+
+
+            <span class="title">{% trans 'University Settings' %}</span>
+            <span class="arrow organization_settings_arrow"></span>
+        </a>
+    {% endif %}
+    <ul class="sub-menu organization_settings_sub_menu">
+        {% if 'Manage Universities' in access_list %}
+            <li class="nav-item  ">
+                <a href="/masters/university_settings/" class="nav-link ">
+                    <span class="title">{% trans 'Manage Universities' %}</span>
+                </a>
+            </li>
+        {% endif %}
+{#                                    {% if 'Manage University Partner' in access_list %}#}
+{#                                        <li class="nav-item  ">#}
+{#                                            <a href="/masters/university_partner_settings/" class="nav-link ">#}
+{#                                                <span class="title">{% trans 'Manage International University' %}</span>#}
+{#                                            </a>#}
+{#                                        </li>#}
+{#                                    {% endif %}#}
+{#                                    {% if 'Link University to User' in access_list %}#}
+{#                                        <li class="nav-item  ">#}
+{#                                            <a href="/masters/link_university_staff/" class="nav-link ">#}
+{#                                                <span class="title">{% trans 'Link University to User' %}</span>#}
+{#                                            </a>#}
+{#                                        </li>#}
+{#                                    {% endif %}#}
+        {% if 'Manage Program' in access_list %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:program_settings' %}"
+                   class="nav-link ">{% trans 'Manage Program' %}</a>
+            </li>
+        {% endif %}
+    {% if 'Manage Program Fee' in access_list %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:program_fee_settings' %}"
+                   class="nav-link ">{% trans 'Manage Registration Fee' %}</a>
+            </li>
+        {% endif %}
+        {% if 'Manage Campus' in access_list %}
+            <li class="nav-item  ">
+                <a href="/masters/campus_settings/" class="nav-link ">
+                    {#                                            <i class="fa fa-university" aria-hidden="true"></i>#}
+                    <span class="title">{% trans 'Manage Branch/Campus' %}</span>
+                </a>
+            </li>
+        {% endif %}
+{#                                    {% if 'Link Campus to User' in access_list %}#}
+{#                                        <li class="nav-item ">#}
+{#                                            <a href="{% url 'masters:link_campus_staff' %}"#}
+{#                                               class="nav-link ">{% trans 'Link Branch/Campus to User' %}</a>#}
+{#                                        </li>#}
+{#                                    {% endif %}#}
+{#                                    {% if 'Manage Department' in access_list %}#}
+{#                                        <li class="nav-item  ">#}
+{#                                            <a href="/masters/department_settings/" class="nav-link ">#}
+{#                                                <span class="title">{% trans 'Manage Department' %}</span>#}
+{#                                            </a>#}
+{#                                        </li>#}
+{#                                    {% endif %}#}
+{#                                    {% if 'Link Department to User' in access_list %}#}
+{#                                        <li class="nav-item  ">#}
+{#                                            <a href="/masters/link_department_staff/" class="nav-link ">#}
+{#                                                <span class="title">{% trans 'Link Department to User' %}</span>#}
+{#                                            </a>#}
+{#                                        </li>#}
+{#                                    {% endif %}#}
+    </ul>
+</li>
+
+<li class="nav-item program_settings_nav_item">
+    {% if 'Academic Settings' in access_list %}
+        <a href="javascript:;" class="nav-link nav-toggle">
+
+            <i class="glyphicon glyphicon-education" aria-hidden="true"></i>
+            <span class="title">{% trans 'Academic Settings' %}</span>
+            <span class="arrow program_settings_arrow"></span>
+        </a>
+    {% endif %}
+    <ul class="sub-menu program_settings_sub_menu">
+        {% if 'Manage Year' in access_list %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:year_settings' %}"
+                   class="nav-link ">{% trans 'Manage Year' %}</a>
+            </li>
+        {% endif %}
+        {% if 'Manage Semester' in access_list %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:semester_settings' %}"
+                   class="nav-link ">{% trans 'Manage Semester' %}</a>
+            </li>
+        {% endif %}
+        {% if 'Manage Activity' in access_list %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:activity_settings' %}"
+                   class="nav-link ">{% trans 'Manage Activity' %}</a>
+            </li>
+        {% endif %}
+        {% if 'Manage Calendar' in access_list %}
+            <li class="nav-item ">
+                <a href="{% url 'masters:calendar_settings' %}"
+                   class="nav-link ">{% trans 'Manage Calendar' %}</a>
+            </li>
+        {% endif %}
+
+
+    </ul>
+</li>
+
+<li class="nav-item finance_nav">
+    <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="glyphicon glyphicon-credit-card" aria-hidden="true"></i>
+        <span class="title">{% trans 'Finance Settings' %}</span>
+        <span class="arrow finance_arrow"></span>
+    </a>
+    <ul class="sub-menu finance_sub_menu">
+            <li class="nav-item ">
+                <a href="{% url 'masters:referral_fee' %}"
+                class="nav-link ">{% trans 'Manage Referral Fee' %}</a>
+            </li>
+
+
+    </ul>
+</li>
