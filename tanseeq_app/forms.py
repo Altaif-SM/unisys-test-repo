@@ -6,6 +6,7 @@ from tanseeq_app.models import (
     UniversityAttachment,
     TanseeqFaculty,
     TanseeqProgram,
+    TanseeqFee,
 )
 
 
@@ -99,6 +100,23 @@ class TanseeqProgramForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(TanseeqProgramForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            if field != "is_active":
+                self.fields[field].widget.attrs.update({
+                    "class": "form-control",
+                    "required": "true",
+                })
+
+class TanseeqFeeForm(forms.ModelForm):
+
+    class Meta:
+        model = TanseeqFee
+        fields = ("universities", "faculty", "fee", "is_active",)
+
+    def __init__(self, *args, **kwargs):
+        super(TanseeqFeeForm, self).__init__(*args, **kwargs)
+        self.fields['universities'].queryset = UniversityDetails.objects.filter(is_tanseeq_university=True,
+                                                                                is_active=True, is_delete=False)
         for field in self.fields:
             if field != "is_active":
                 self.fields[field].widget.attrs.update({

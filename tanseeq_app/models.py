@@ -68,3 +68,10 @@ class TanseeqProgram(BaseModel):
 
     def __str__(self):
         return self.name
+
+class TanseeqFee(BaseModel):
+    universities = models.ManyToManyField(UniversityDetails, related_name="tanseeq_fee_university_details")
+    faculty = models.ForeignKey(TanseeqFaculty, related_name="tanseeq_fee_faculty",
+                                on_delete=models.PROTECT)
+    fee = models.FloatField(max_length=50, null=True)
+    is_active = models.BooleanField(default=True)

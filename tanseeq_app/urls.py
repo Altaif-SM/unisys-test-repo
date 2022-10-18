@@ -114,5 +114,24 @@ urlpatterns = [
         login_required(TanseeqProgramView.as_view()),
         name='delete_tanseeq_program'
     ),
+    path(
+        'tanseeq_fees/', login_required(TanseeqFeeList.as_view()), name='list_tanseeq_fees'
+    ),
+    path(
+        'add/tanseeq_fees/',
+        login_required(TansseqFeeView.as_view()),
+        name='add_tanseeq_fees'
+    ),
+    path(
+        'update/<int:pk>/tanseeq_fee/',
+        login_required(TansseqFeeView.as_view()),
+        name='update_tanseeq_fee'
+    ),
+    path(
+        'delete/<int:pk>/tanseeq_fee/',
+        login_required(TansseqFeeView.as_view()),
+        name='delete_tanseeq_fees'
+    ),
+
 ]
 TanseeqProgramList
