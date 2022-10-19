@@ -7,6 +7,8 @@ from tanseeq_app.models import (
     TanseeqFaculty,
     TanseeqProgram,
     TanseeqFee,
+    TanseeqCourses,
+    Course,
 )
 
 
@@ -123,3 +125,16 @@ class TanseeqFeeForm(forms.ModelForm):
                     "class": "form-control",
                     "required": "true",
                 })
+
+class TanseeqCourseForm(forms.ModelForm):
+
+    class Meta:
+        model = TanseeqCourses
+        fields = ('course_name',)
+
+
+class CourseForm(forms.ModelForm):
+
+    class Meta:
+        model = Course
+        fields = ('course','mark',)

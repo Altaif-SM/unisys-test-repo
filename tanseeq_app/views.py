@@ -8,6 +8,8 @@ from tanseeq_app.models import (
     TanseeqFaculty,
     TanseeqProgram,
     TanseeqFee,
+    TanseeqCourses,
+    Course,
 )
 from masters.models import UniversityDetails, YearDetails, StudyModeDetails
 from tanseeq_app.forms import (
@@ -19,6 +21,8 @@ from tanseeq_app.forms import (
     TanseeqFacultyForm,
     TanseeqProgramForm,
     TanseeqFeeForm,
+    TanseeqCourseForm,
+    CourseForm,
 )
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
@@ -443,4 +447,92 @@ class TansseqFeeView(View):
     def delete(self, request, pk):
         instance = get_object_or_404(self.model, pk=pk)
         instance.delete()
+        return JsonResponse({"status": 200})
+
+
+class TanseeqCourseListView(ListView):
+    model = TanseeqCourses
+    template_name = 'tanseeq_admin/list_tanseeq_courses.html'
+
+    def get_queryset(self):
+        queryset = self.model.objects.filter(created_by=self.request.user)
+        return queryset
+
+    def post(self, request, pk=None):
+        form = TanseeqCourseForm(request.POST)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.created_by = request.user
+            obj.save()
+            messages.success(request, "Record saved.")
+            return redirect('tanseeq_app:list_tanseeq_courses')
+        else:
+            context = {
+                "form": form,
+            }
+            return render(request, 'tanseeq_admin/list_tanseeq_courses.html', context)
+
+    def delete(self, request, pk):
+        instance = get_object_or_404(self.model, pk=pk, created_by=request.user)
+        instance.delete()
+        return JsonResponse({"status": 200})
+
+
+class TanseeqCourseUpdateView(UpdateView):
+    model = TanseeqCourses
+    template_name = "tanseeq_admin/list_tanseeq_courses.html"
+    form_class = TanseeqCourseForm
+
+    def post(self, request, *args, **kwargs):
+        tanseeq_course_id = request.POST.get("tanseeq_course_id")
+        instance = get_object_or_404(self.model, pk=tanseeq_course_id)
+        form = self.form_class(request.POST, instance=instance)
+        if form.is_valid():
+            form.save()
+        return JsonResponse({"status": 200})
+
+class CourseListView(View):
+    model = Course
+    form_class = CourseForm
+    def get(self, request, pk=None):
+        courses_obj = TanseeqCourses.objects.get(id = pk).courses.all()
+        context = {
+            "courses_obj": courses_obj,
+            "form": self.form_class(),
+            "tanseeq_course_id": pk,
+        }
+        return render(request, "tanseeq_admin/list_courses.html", context)
+
+    def post(self, request, pk=None):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            tanseeq_course_obj = TanseeqCourses.objects.get(id=pk)
+            course_obj = Course.objects.create(course=form.data['course'], mark=form.data['mark'])
+            tanseeq_course_obj.courses.add(course_obj)
+            messages.success(request, "Record saved.")
+            return redirect('/tanseeq/course/' + str(pk))
+        else:
+            courses_obj = TanseeqCourses.objects.get(id=pk).courses.all()
+            context = {
+                "courses_obj": courses_obj,
+                "form": form,
+            }
+            return render(request, 'tanseeq_admin/list_courses.html', context)
+
+    def delete(self, request, pk):
+        instance = get_object_or_404(self.model, pk=pk)
+        instance.delete()
+        return JsonResponse({"status": 200})
+
+class CourseUpdateView(UpdateView):
+    model = Course
+    template_name = "tanseeq_admin/list_courses.html"
+    form_class = CourseForm
+
+    def post(self, request, *args, **kwargs):
+        course_id = request.POST.get("course_id")
+        instance = get_object_or_404(self.model, pk=course_id)
+        form = self.form_class(request.POST, instance=instance)
+        if form.is_valid():
+            form.save()
         return JsonResponse({"status": 200})

@@ -75,3 +75,12 @@ class TanseeqFee(BaseModel):
                                 on_delete=models.PROTECT)
     fee = models.FloatField(max_length=50, null=True)
     is_active = models.BooleanField(default=True)
+
+class Course(BaseModel):
+    course = models.CharField(max_length=100, blank=True, null=True)
+    mark = models.FloatField(max_length=50, null=True)
+
+class TanseeqCourses(BaseModel):
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT)
+    course_name = models.CharField(max_length=100, blank=True, null=True)
+    courses = models.ManyToManyField(Course, related_name='tansseq_course_details' )
