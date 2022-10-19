@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from django.core import serializers
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, View, ListView, UpdateView, DeleteView
 from tanseeq_app.models import (
@@ -7,6 +8,7 @@ from tanseeq_app.models import (
     UniversityAttachment,
     TanseeqFaculty,
     TanseeqProgram,
+    ConditionFilters,
 )
 from masters.models import UniversityDetails, YearDetails, StudyModeDetails
 from tanseeq_app.forms import (
@@ -17,6 +19,7 @@ from tanseeq_app.forms import (
     StudyModeForm,
     TanseeqFacultyForm,
     TanseeqProgramForm,
+    ConditionFiltersForm,
 )
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
@@ -206,6 +209,19 @@ class StudyModeList(ListView):
     model = StudyModeDetails
     template_name = "tanseeq_admin/list_study_mode.html"
 
+    def get(self, request, *args, **kwargs):
+        if request.GET.get("type") == "JSON":
+            queryset = self.get_queryset()
+            data = serializers.serialize("json", queryset)
+            return JsonResponse(data, status=200, safe=False)
+        return super().get(args, kwargs)
+
+    def get_queryset(self):
+        university_id = self.request.GET.get("university")
+        if university_id:
+            return self.model.objects.filter(universities=university_id)
+        return super().get_queryset()
+
 
 class StudyModeView(View):
     model = StudyModeDetails
@@ -298,6 +314,19 @@ class StudyModeView(View):
 class TanseeqFacultyList(ListView):
     model = TanseeqFaculty
     template_name = "tanseeq_admin/list_tanseeq_faculty.html"
+
+    def get(self, request, *args, **kwargs):
+        if request.GET.get("type") == "JSON":
+            queryset = self.get_queryset()
+            data = serializers.serialize("json", queryset)
+            return JsonResponse(data, status=200, safe=False)
+        return super().get(args, kwargs)
+
+    def get_queryset(self):
+        university_id = self.request.GET.get("university")
+        if university_id:
+            return self.model.objects.filter(universities__id=university_id)
+        return super().get_queryset()
 
 
 class TanseeqFacultyView(View):
@@ -393,3 +422,72 @@ class TanseeqProgramView(View):
         instance = get_object_or_404(self.model, pk=pk)
         instance.delete()
         return JsonResponse({"status": 200})
+
+
+class ConditionFiltersList(ListView):
+    model = ConditionFilters
+    template_name = "tanseeq_admin/list_condition_filters.html"
+    
+    def get_queryset(self):
+        filters = {
+            "faculty_id": self.request.GET.get("faculty"),
+            "study_mode_id": self.request.GET.get("study_mode")
+        }
+        query_set = self.model.objects.filter(**{k: v for k, v in filters.items() if v })
+        return query_set
+
+class ConditionsView(View):
+    model = ConditionFilters
+    form_class = ConditionFiltersForm
+    template_name = "tanseeq_admin/add_condition_filters.html"
+    redirect_url = 'tanseeq_app:list_tanseeq_filters'
+
+    def get(self, request, pk=None):
+        university_objs = UniversityDetails.active_records()
+        context = {
+            "university_objs": university_objs,
+            "form": self.form_class(),
+        }
+        if pk:
+            instance = get_object_or_404(self.model, pk=pk)
+            context["instance"] = instance
+            context["form"] = self.form_class(instance=get_object_or_404(self.model, pk=pk))
+        return render(request, self.template_name, context)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+    
+    def post(self, request, pk=None):
+        if pk:
+            instance = get_object_or_404(self.model, pk=pk)
+            form = self.form_class(request.POST, instance=instance)
+        else:
+            form = self.form_class(request.POST)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+            form.save_m2m()
+            if pk:
+                messages.success(request, "Record Updated.")
+            else:
+                messages.success(request, "Record saved.")
+        else:
+            context = {
+                "university_objs": UniversityDetails.active_records(),
+                "form": form,
+            }
+            return render(request, self.template_name, context)
+        return redirect(self.redirect_url)
+
+    def delete(self, request, pk):
+        instance = get_object_or_404(self.model, pk=pk)
+        instance.delete()
+        return JsonResponse({"status": 200})
+
+
+
+def get_universities(request):
+    university_objs = UniversityDetails.active_records()
+    data = serializers.serialize("json", university_objs)
+    return JsonResponse(data, status=200, safe=False)

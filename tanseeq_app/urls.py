@@ -114,5 +114,31 @@ urlpatterns = [
         login_required(TanseeqProgramView.as_view()),
         name='delete_tanseeq_program'
     ),
+    
+    path(
+        'tanseeq_filters/',
+        login_required(ConditionFiltersList.as_view()),
+        name='list_tanseeq_filters'
+    ),
+    path(
+        'add/tanseeq_filter/',
+        login_required(ConditionsView.as_view()),
+        name='add_tanseeq_filter'
+    ),
+    path(
+        'edit/<int:pk>/tanseeq_filter/',
+        login_required(ConditionsView.as_view()),
+        name='edit_tanseeq_filter'
+    ),
+    path(
+        'delete/<int:pk>/tanseeq_filter/',
+        login_required(ConditionsView.as_view()),
+        name='delete_tanseeq_filter'
+    ),
+    path(
+        'get_universities/',
+        login_required(get_universities),
+        name='get_universities'
+    ),
 ]
 TanseeqProgramList

@@ -6,6 +6,7 @@ from tanseeq_app.models import (
     UniversityAttachment,
     TanseeqFaculty,
     TanseeqProgram,
+    ConditionFilters,
 )
 
 
@@ -93,6 +94,7 @@ class TanseeqProgramForm(forms.ModelForm):
         super(TanseeqProgramForm, self).__init__(*args, **kwargs)
         self.fields['universities'].queryset = UniversityDetails.objects.filter(is_tanseeq_university=True,is_active=True, is_delete=False)
 
+
     class Meta:
         model = TanseeqProgram
         fields = ("faculty", "name", "code", "is_active",)
@@ -105,3 +107,36 @@ class TanseeqProgramForm(forms.ModelForm):
                     "class": "form-control",
                     "required": "true",
                 })
+
+
+class ConditionFiltersForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(ConditionFiltersForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            if field != "is_exam":
+                self.fields[field].widget.attrs.update({
+                    "class": "form-control",
+                    "required": "true",
+                })
+
+
+    class Meta:
+        model = ConditionFilters
+        fields = ("study_mode", "faculty", "program", "type_of_secondary", "year",
+            "start_date", "end_date", "average", "capacity", "fee", "is_exam"
+        )
+
+        widgets = {
+            'start_date': forms.DateInput(attrs={'placeholder':'Select a date', 'type':'date'}),
+            'end_date': forms.DateInput(attrs={'placeholder':'Select a date', 'type':'date'}),
+        }
+
+    def clean(self):
+        from_date = self.cleaned_data.get("start_date")
+        to_date = self.cleaned_data.get("end_date")
+        if from_date >= to_date:
+            raise forms.ValidationError(
+                'End Date must be greater than Start Date.',
+                code='incorrect_values',
+            )

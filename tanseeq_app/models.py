@@ -1,9 +1,17 @@
 import uuid
+import datetime
 from django.db import models
+from django.core.validators import MaxValueValidator, MinValueValidator
+from django.utils.translation import ugettext_lazy as _
 from common.models import BaseModel
-from masters.models import UniversityDetails, YearDetails
 from accounts.models import User
+from masters.models import (
+    UniversityDetails,
+    YearDetails,
+    StudyModeDetails
+)
 # Create your models here.
+
 
 class TanseeqPeriod(BaseModel):
     created_by = models.ForeignKey(User, on_delete=models.PROTECT)
@@ -45,7 +53,7 @@ class UniversityAttachment(BaseModel):
 
 class TanseeqFaculty(BaseModel):
     universities = models.ManyToManyField(UniversityDetails, related_name="tanseeq_faculty_university_details")
-    code = models.CharField(max_length=255)
+    code = models.CharField(max_length=255) # auto generated
     name = models.CharField(max_length=100)
     is_active = models.BooleanField(default=True)
     notes = models.TextField(null=True, blank=True)
@@ -68,3 +76,38 @@ class TanseeqProgram(BaseModel):
 
     def __str__(self):
         return self.name
+
+
+
+def current_year():
+    return datetime.date.today().year
+
+
+def max_value_current_year(value):
+    return MaxValueValidator(current_year())(value)
+
+
+class ConditionFilters(BaseModel):
+    YEAR_CHOICES = [(r,r) for r in range(1984, datetime.date.today().year+1)]
+
+    study_mode = models.ForeignKey(StudyModeDetails, on_delete=models.PROTECT)
+    faculty = models.ForeignKey(TanseeqFaculty, on_delete=models.PROTECT)
+    program = models.ForeignKey(TanseeqProgram, on_delete=models.PROTECT)
+    type_of_secondary = models.ForeignKey(SecondarySchoolCetificate, on_delete=models.PROTECT)
+    year = models.IntegerField(
+        _('year'), choices=YEAR_CHOICES, validators=[MinValueValidator(1984), max_value_current_year]
+    )
+    start_date = models.DateField()
+    end_date = models.DateField()
+    average = models.FloatField(max_length=50)
+    capacity = models.IntegerField(max_length=50)
+    fee = models.FloatField(max_length=50)
+    is_exam = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = "Condition Filters"
+        verbose_name_plural = "Condition Filters"
+
+
+    # def __str__(self):
+    #     return self.name

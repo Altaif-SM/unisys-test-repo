@@ -5,10 +5,6 @@
 {% block styleBlock %}
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
 
-    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
-    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
-          rel="stylesheet" type="text/css"/>
-
     </head>
     <!-- END HEAD -->
     <style>
@@ -30,12 +26,12 @@
 {% block ScriptBlock %}
     <script>
         window.onload = function () {
-            // $('#sample_1').dataTable().fnDestroy();
-            // $('#sample_1').dataTable({
-            //     "aoColumnDefs": [
-            //         {'bSortable': false}
-            //     ]
-            // });
+            $('#sample_1').dataTable().fnDestroy();
+            $('#sample_1').dataTable({
+                "aoColumnDefs": [
+                    {'bSortable': false}
+                ]
+            });
         }
         window.setTimeout(function () {
             $(".alert").fadeTo(500, 0).slideUp(500, function () {

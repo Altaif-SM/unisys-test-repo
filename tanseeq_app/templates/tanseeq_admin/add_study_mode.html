@@ -5,22 +5,6 @@
 {% block styleBlock %}
 {% endblock %}
 
-{% block ScriptBlock %}
-    <script>
-        window.onload = function () {
-            $(document).ready(function () {
-                $("#status").Sswitch({});
-            });
-
-            window.setTimeout(function () {
-                $(".alert").fadeTo(500, 0).slideUp(500, function () {
-                    $(this).remove();
-                });
-            }, 4000);
-        }
-    </script>
-{% endblock %}
-
 
 {% block content %}
     <div class="page-bar" style="margin-bottom: 1px;">
@@ -84,20 +68,6 @@
                                 </label>
                                 <div class="col-md-3">
                                     {{form.universities}}
-<!--                                    <select id='universities' title="Select University"-->
-<!--                                            name="universities" multiple-->
-<!--                                            class="form-control" required>-->
-<!--                                        <option hidden value="">Please Select</option>-->
-<!--                                        {% for rec in university_objs %}-->
-<!--                                            <option value="{{ rec.id }}"-->
-<!--                                                {% if form.universities.value|add:"0" == rec.id or rec.id in instance.universities %}-->
-<!--                                                        selected-->
-<!--                                                {% endif %}-->
-<!--                                            >-->
-<!--                                                {{ rec.university_name|default_if_none:"" }}-->
-<!--                                            </option>-->
-<!--                                        {% endfor %}-->
-<!--                                    </select>-->
                                 </div>
                                 <label class="col-md-2 control-label">{% trans 'Code' %}:
                                     <span style="color: red">*</span>

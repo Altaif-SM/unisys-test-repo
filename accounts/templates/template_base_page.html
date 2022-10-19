@@ -1209,9 +1209,9 @@ License: You must have a valid license purchased only from themeforest(the above
 <![endif]-->
 <!-- BEGIN CORE PLUGINS -->
 
-{#    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js" type="text/javascript"></script>#}
 <script src="{% static 'assets/global/plugins/jquery.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'assets/global/plugins/bootstrap/js/bootstrap.min.js' %}" type="text/javascript"></script>
+
 <script src="{% static 'assets/global/plugins/js.cookie.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js' %}"
         type="text/javascript"></script>
@@ -1405,16 +1405,6 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-{#    {% if request.resolver_match.url_name == 'checkout' %}#}
-{#        {#}
-{#            var element = document.getElementById("payments");#}
-{#            element.classList.add("active");#}
-{##}
-{#            var element = document.getElementById("app_payments");#}
-{#            element.classList.add("active");#}
-{#        }#}
-{#    {% endif %}#}
-
 
     {% if request.resolver_match.url_name == 'language_settings' or request.resolver_match.url_name == 'add_language' or request.resolver_match.url_name == 'edit_language' or request.resolver_match.url_name == 'currency_settings' or request.resolver_match.url_name == 'add_currency' or request.resolver_match.url_name == 'edit_currency'   or request.resolver_match.url_name == 'study_mode_settings'  or request.resolver_match.url_name == 'study_level_settings' or request.resolver_match.url_name == 'study_type_settings'  or request.resolver_match.url_name == 'country_settings'  or request.resolver_match.url_name == 'learning_centers_settings' or request.resolver_match.url_name == 'add_learning_centers' or request.resolver_match.url_name == 'edit_learning_centers' or request.resolver_match.url_name == 'student_mode_settings'  or request.resolver_match.url_name == 'faculty_settings' or request.resolver_match.url_name == 'add_faculty'  or request.resolver_match.url_name == 'edit_faculty' or request.resolver_match.url_name == 'link_faculty_staff' or request.resolver_match.url_name == 'arabic_lang_proficiency_settings' or request.resolver_match.url_name == 'english_lang_proficiency_settings' or request.resolver_match.url_name == 'university_type_settings' or request.resolver_match.url_name == 'add_university_type' or request.resolver_match.url_name == 'edit_university_type'  or request.resolver_match.url_name == 'type_settings' or request.resolver_match.url_name == 'add_type' or request.resolver_match.url_name == 'edit_type' or request.resolver_match.url_name == 'course_master_settings'%}
         {
@@ -1505,8 +1495,6 @@ License: You must have a valid license purchased only from themeforest(the above
     {% endif %}
 
 
-
-
     $(document).on("click", "#id_toggle", function (e) {
         if ($('body').attr("class") == "page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid") {
             $("#right").hide();
@@ -1515,7 +1503,6 @@ License: You must have a valid license purchased only from themeforest(the above
             $("#right").show();
             $("#left").hide();
         }
-
     });
 
     $(document).on("click", ".action", function (e) {

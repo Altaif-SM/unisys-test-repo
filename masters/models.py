@@ -344,7 +344,7 @@ class UniversityDetails(BaseModel):
 
     @classmethod
     def active_records(cls,):
-        return cls.objects.filter(is_active=True, is_delete=False, is_tanseeq_university = True)
+        return cls.objects.filter(is_active=True, is_delete=False)
 
     def to_dict(self):
         res = {
@@ -427,6 +427,7 @@ class StudyTypeDetails(BaseModel):
 
 class Department(models.Model):
     department = models.CharField(max_length=100, blank=True, null=True)
+
 
 class FacultyDetails(BaseModel):
     university = models.ForeignKey(UniversityDetails, null=True, related_name='university_faculty_rel',
