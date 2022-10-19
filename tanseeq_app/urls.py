@@ -140,5 +140,47 @@ urlpatterns = [
         login_required(get_universities),
         name='get_universities'
     ),
+    path(
+        'tanseeq_fees/', login_required(TanseeqFeeList.as_view()), name='list_tanseeq_fees'
+    ),
+    path(
+        'add/tanseeq_fees/',
+        login_required(TansseqFeeView.as_view()),
+        name='add_tanseeq_fees'
+    ),
+    path(
+        'update/<int:pk>/tanseeq_fee/',
+        login_required(TansseqFeeView.as_view()),
+        name='update_tanseeq_fee'
+    ),
+    path(
+        'delete/<int:pk>/tanseeq_fee/',
+        login_required(TansseqFeeView.as_view()),
+        name='delete_tanseeq_fees'
+    ),
+    path(
+        'tanseeq_courses/', login_required(TanseeqCourseListView.as_view()), name='list_tanseeq_courses'
+    ),
+    path(
+        'update_tanseeq_course/',
+        login_required(TanseeqCourseUpdateView.as_view()),
+        name='update_tanseeq_course'
+    ),
+    path(
+        'course/<int:pk>',
+        login_required(CourseListView.as_view()),
+        name='list_course'
+    ),
+    path(
+        'tanseeq_courses/<int:pk>',
+        login_required(TanseeqCourseListView.as_view()),
+        name='tanseeq_courses'
+    ),
+    path(
+        'update_course/',
+        login_required(CourseUpdateView.as_view()),
+        name='update_course'
+    ),
+
 ]
 TanseeqProgramList

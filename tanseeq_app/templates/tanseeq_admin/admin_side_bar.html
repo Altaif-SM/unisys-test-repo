@@ -26,7 +26,7 @@
 </li>
 <li class="nav-item ">
     <a href="{% url 'tanseeq_app:list_university_attachment' %}" class="nav-link ">
-         <i class="glyphicon glyphicon-cloud-upload"></i>
+        <i class="glyphicon glyphicon-cloud-upload"></i>
         <span class="title">{% trans 'University Attachement' %}</span>
 
     </a>
@@ -51,7 +51,22 @@
 </li>
 
 <li class="nav-item ">
-    <a href="{% url 'tanseeq_app:list_tanseeq_filters' %}" class="nav-link ">
+    <a href="{% url 'tanseeq_app:list_tanseeq_fees' %}" class="nav-link ">
+        <i class="fa fa-money"></i>
+        <span class="title">{% trans 'Tansseq Fees' %}</span>
+    </a>
+</li>
+
+<li class="nav-item ">
+    <a href="javascript: void(0)" class="nav-link ">
         {% trans 'Condition/Filter' %}
+    </a>
+</li>
+
+
+<li class="nav-item ">
+    <a href="{% url 'tanseeq_app:list_tanseeq_courses' %}" class="nav-link ">
+        <i class="fa fa-cog"></i>
+        <span class="title">{% trans 'Courses' %}</span>
     </a>
 </li>

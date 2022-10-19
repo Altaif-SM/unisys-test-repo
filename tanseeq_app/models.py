@@ -78,7 +78,6 @@ class TanseeqProgram(BaseModel):
         return self.name
 
 
-
 def current_year():
     return datetime.date.today().year
 
@@ -111,3 +110,22 @@ class ConditionFilters(BaseModel):
 
     # def __str__(self):
     #     return self.name
+
+
+class TanseeqFee(BaseModel):
+    universities = models.ManyToManyField(UniversityDetails, related_name="tanseeq_fee_university_details")
+    faculty = models.ForeignKey(TanseeqFaculty, related_name="tanseeq_fee_faculty",
+                                on_delete=models.PROTECT)
+    fee = models.FloatField(max_length=50, null=True)
+    is_active = models.BooleanField(default=True)
+
+
+class Course(BaseModel):
+    course = models.CharField(max_length=100, blank=True, null=True)
+    mark = models.FloatField(max_length=50, null=True)
+
+
+class TanseeqCourses(BaseModel):
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT)
+    course_name = models.CharField(max_length=100, blank=True, null=True)
+    courses = models.ManyToManyField(Course, related_name='tansseq_course_details' )

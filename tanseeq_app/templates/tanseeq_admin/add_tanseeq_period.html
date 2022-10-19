@@ -3,27 +3,6 @@
 {% load staticfiles %}
 
 {% block ScriptBlock %}
-    <script>
-        window.onload = function () {
-            $(document).ready(function () {
-                $("#status").Sswitch({});
-
-                var values = "{{ selected_universities }}";
-                $('#universities').find('option').filter(function (idx, option) {
-                    if ($.inArray(option.value, values) !== -1) {
-                        return option;
-                    }
-                }).prop('selected', 'true');
-
-            });
-
-            window.setTimeout(function () {
-                $(".alert").fadeTo(500, 0).slideUp(500, function () {
-                    $(this).remove();
-                });
-            }, 4000);
-        }
-    </script>
 {% endblock %}
 
 
@@ -41,7 +20,7 @@
             </li>
             <li>
                 {% if instance %}
-                <span> {% trans 'Edit Tanseeq Period' %} </span>
+                    <span> {% trans 'Edit Tanseeq Period' %} </span>
                 {% else %}
                     <span> {% trans 'Add Tanseeq Period' %} </span>
                 {% endif %}
@@ -61,22 +40,23 @@
             <div class="caption">
                 <i class="icon-settings font-red"></i>
 
-                <span class="caption-subject font-red sbold uppercase">{% if instance %}Edit Tanseeq Period {% else %}Add Tanseeq Period{% endif %} </span>
+                <span class="caption-subject font-red sbold uppercase">{% if instance %}Edit Tanseeq Period {% else %}
+                    Add Tanseeq Period{% endif %} </span>
             </div>
         </div>
 
         <div class="portlet-body">
             <div class="form-body">
                 <form
-                    {% if instance %}
-                        action="{% url 'tanseeq_app:tanseeq_period' instance.pk%}"
-                    {%else%}
-                        action="{% url 'tanseeq_app:add_tanseeq_period' %}"
-                    {% endif %}
-                    method="POST"
-                    enctype="multipart/form-data"
-                    id="id_form"
-                    class="form-horizontal"
+                        {% if instance %}
+                            action="{% url 'tanseeq_app:tanseeq_period' instance.pk %}"
+                        {% else %}
+                            action="{% url 'tanseeq_app:add_tanseeq_period' %}"
+                        {% endif %}
+                            method="POST"
+                            enctype="multipart/form-data"
+                            id="id_form"
+                            class="form-horizontal"
                 >
                     {% csrf_token %}
                     {% if instance %}
@@ -93,6 +73,9 @@
                                             name="universities"
                                             class="form-control" required>
                                         <option hidden value="">Please Select</option>
+
+
+
                                         {% for rec in university_objs %}
                                             <option value="{{ rec.id }}">{{ rec.university_name|default_if_none:"" }}
                                             </option>
@@ -101,21 +84,19 @@
                                 </div>
 
 
-
-
                                 <label class="col-md-2 control-label">{% trans 'Academic Year' %}:
                                     <span style="color: red">*</span>
                                 </label>
                                 <div class="col-md-3">
                                     <select id='academic_year' title="Select Type"
                                             name="academic_year"
-                                            class="form-control" >
+                                            class="form-control">
                                         <option hidden value=""> Please Select</option>
                                         {% for rec in academic_year_objs %}
                                             <option value="{{ rec.id }}"
-                                                {% if form.academic_year.value|add:"0" == rec.id or instance.academic_year.id == rec.id %}
+                                                    {% if form.academic_year.value|add:"0" == rec.id or instance.academic_year.id == rec.id %}
                                                     selected
-                                                {% endif %}
+                                                    {% endif %}
                                             >
                                                 {{ rec.year_name|default_if_none:"" }}
                                             </option>
@@ -130,15 +111,15 @@
                                         <span style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <input type="date" title="From Date" id="from_date"
-                                            {% if form.from_date.value %}
-                                                value="{{form.from_date.value}}"
-                                            {% elif instance.from_date %}
-                                               value="{{instance.from_date|date:"Y-m-d"}}"
-                                            {%else%}
+                                                {% if form.from_date.value %}
+                                               value="{{ form.from_date.value }}"
+                                                {% elif instance.from_date %}
+                                               value="{{ instance.from_date|date:"Y-m-d" }}"
+                                                {% else %}
                                                value=""
-                                            {% endif %}
-                                            name="from_date"
-                                            class="form-control" required
+                                                {% endif %}
+                                               name="from_date"
+                                               class="form-control" required
                                         >
                                     </div>
                                 </div>
@@ -148,42 +129,42 @@
                                     </label>
                                     <div class="col-md-3">
                                         <input type="date" title="Enter To Date" id="to_date"
-                                           {% if form.to_date.value %}
-                                            value="{{form.to_date.value}}"
-                                           {% elif instance.to_date %}
-                                               value="{{instance.to_date|date:"Y-m-d"}}"
-                                           {%else%}
+                                                {% if form.to_date.value %}
+                                               value="{{ form.to_date.value }}"
+                                                {% elif instance.to_date %}
+                                               value="{{ instance.to_date|date:"Y-m-d" }}"
+                                                {% else %}
                                                value=""
-                                           {% endif %}
-                                           name="to_date"
-                                           class="form-control" required
+                                                {% endif %}
+                                               name="to_date"
+                                               class="form-control" required
                                         >
                                     </div>
                                 </div>
                             </div>
-                        <br>
-                        <div class="row">
-                             <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'Status' %}:{{form.is_active.value }}
+                            <br>
+                            <div class="row">
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Status' %}:{{ form.is_active.value }}
                                         <span style="color: red">*</span>
                                     </label>
                                     <div class="col-md-3">
                                         <input
-                                            type="checkbox"
-                                            id="is_active"
-                                            name="is_active"
+                                                type="checkbox"
+                                                id="is_active"
+                                                name="is_active"
 
-                                            {% if form.is_active.value == True or instance.is_active %}
+                                                {% if form.is_active.value == True or instance.is_active %}
                                                 checked
-                                            {% elif form.is_active.value == False or instance.is_active == False%}
-                                                ''
-                                            {%else%}
-                                               checked=true
-                                            {% endif %}
+                                                {% elif form.is_active.value == False or instance.is_active == False %}
+                                                    ''
+                                                {% else %}
+                                                    checked=true
+                                                {% endif %}
                                         >
                                     </div>
+                                </div>
                             </div>
-                        </div>
                         </div>
                         <div class="row">
                             <div class="col-md-offset-5 col-md-7">
@@ -200,4 +181,23 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block ajax %}
+    <script>
+        const selectValues = "{{ selected_universities }}";
+        /* Iterate options of select element */
+        for (const option of document.querySelectorAll('#universities option')) {
+            /* Parse value to integer */
+            const value = Number.parseInt(option.value);
+            /* If option value contained in values, set selected attribute */
+            if (selectValues.indexOf(value) !== -1) {
+                option.setAttribute('selected', 'selected');
+            }
+            /* Otherwise ensure no selected attribute on option */
+            else {
+                option.removeAttribute('selected');
+            }
+        }
+    </script>
 {% endblock %}

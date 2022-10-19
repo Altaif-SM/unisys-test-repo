@@ -7,6 +7,9 @@ from tanseeq_app.models import (
     TanseeqFaculty,
     TanseeqProgram,
     ConditionFilters,
+    TanseeqFee,
+    TanseeqCourses,
+    Course,
 )
 
 
@@ -120,7 +123,6 @@ class ConditionFiltersForm(forms.ModelForm):
                     "required": "true",
                 })
 
-
     class Meta:
         model = ConditionFilters
         fields = ("study_mode", "faculty", "program", "type_of_secondary", "year",
@@ -140,3 +142,35 @@ class ConditionFiltersForm(forms.ModelForm):
                 'End Date must be greater than Start Date.',
                 code='incorrect_values',
             )
+
+
+class TanseeqFeeForm(forms.ModelForm):
+
+    class Meta:
+        model = TanseeqFee
+        fields = ("universities", "faculty", "fee", "is_active",)
+
+    def __init__(self, *args, **kwargs):
+        super(TanseeqFeeForm, self).__init__(*args, **kwargs)
+        self.fields['universities'].queryset = UniversityDetails.objects.filter(is_tanseeq_university=True,
+                                                                                is_active=True, is_delete=False)
+        for field in self.fields:
+            if field != "is_active":
+                self.fields[field].widget.attrs.update({
+                    "class": "form-control",
+                    "required": "true",
+                })
+
+
+class TanseeqCourseForm(forms.ModelForm):
+
+    class Meta:
+        model = TanseeqCourses
+        fields = ('course_name',)
+
+
+class CourseForm(forms.ModelForm):
+
+    class Meta:
+        model = Course
+        fields = ('course','mark',)
