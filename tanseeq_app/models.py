@@ -102,6 +102,7 @@ class ConditionFilters(BaseModel):
     capacity = models.IntegerField(max_length=50)
     fee = models.FloatField(max_length=50)
     is_exam = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = "Condition Filters"

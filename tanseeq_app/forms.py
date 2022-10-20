@@ -65,7 +65,7 @@ class StudyModeForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(StudyModeForm, self).__init__(*args, **kwargs)
-        self.fields['universities'].queryset = UniversityDetails.objects.filter(is_tanseeq_university=True,is_active=True, is_delete=False)
+        self.fields['universities'].queryset = UniversityDetails.active_records()
 
     class Meta:
         model = StudyModeDetails
@@ -81,8 +81,7 @@ class TanseeqFacultyForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(TanseeqFacultyForm, self).__init__(*args, **kwargs)
-        self.fields['universities'].queryset = UniversityDetails.objects.filter(is_tanseeq_university=True,
-                                                                                is_active=True, is_delete=False)
+        self.fields['universities'].queryset = UniversityDetails.active_records()
         for field in self.fields:
             if field != "is_active":
                 self.fields[field].widget.attrs.update({
@@ -117,7 +116,7 @@ class ConditionFiltersForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ConditionFiltersForm, self).__init__(*args, **kwargs)
         for field in self.fields:
-            if field != "is_exam":
+            if field not in ["is_exam", "is_active"]:
                 self.fields[field].widget.attrs.update({
                     "class": "form-control",
                     "required": "true",
@@ -126,7 +125,7 @@ class ConditionFiltersForm(forms.ModelForm):
     class Meta:
         model = ConditionFilters
         fields = ("study_mode", "faculty", "program", "type_of_secondary", "year",
-            "start_date", "end_date", "average", "capacity", "fee", "is_exam"
+            "start_date", "end_date", "average", "capacity", "fee", "is_exam", "is_active"
         )
 
         widgets = {

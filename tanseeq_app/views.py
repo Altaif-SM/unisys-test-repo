@@ -341,9 +341,7 @@ class TanseeqFacultyView(View):
     template_name = "tanseeq_admin/add_tanseeq_faculty.html"
 
     def get(self, request, pk=None):
-        university_objs = UniversityDetails.active_records()
         context = {
-            "university_objs": university_objs,
             "form": self.form_class(),
         }
         if pk:
@@ -383,6 +381,19 @@ class TanseeqFacultyView(View):
 class TanseeqProgramList(ListView):
     model = TanseeqProgram
     template_name = "tanseeq_admin/list_tanseeq_program.html"
+
+    def get(self, request, *args, **kwargs):
+        if request.GET.get("type") == "JSON":
+            queryset = self.get_queryset()
+            data = serializers.serialize("json", queryset)
+            return JsonResponse(data, status=200, safe=False)
+        return super().get(args, kwargs)
+
+    def get_queryset(self):
+        faculty_id = self.request.GET.get("faculty")
+        if faculty_id:
+            return self.model.objects.filter(faculty_id=faculty_id)
+        return super().get_queryset()
 
 
 class TanseeqProgramView(View):
@@ -590,6 +601,7 @@ class TanseeqCourseUpdateView(UpdateView):
             form.save()
         return JsonResponse({"status": 200})
 
+
 class CourseListView(View):
     model = Course
     form_class = CourseForm
@@ -622,6 +634,7 @@ class CourseListView(View):
         instance = get_object_or_404(self.model, pk=pk)
         instance.delete()
         return JsonResponse({"status": 200})
+
 
 class CourseUpdateView(UpdateView):
     model = Course

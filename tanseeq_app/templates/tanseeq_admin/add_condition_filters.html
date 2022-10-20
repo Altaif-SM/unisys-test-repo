@@ -59,11 +59,13 @@
                     <div class="form-body">
                         <div class="row item_experience" id="item_experience_1">
                             <div class="row">
-                                <label class="col-md-2 control-label">{% trans form.study_mode.label %}:
+                                <label class="col-md-2 control-label">Select University:
                                     <span style="color: red">*</span>
                                 </label>
                                 <div class="col-md-3">
-                                    {{form.study_mode}}
+                                    <select class="form-control" name="university" id="university">
+                                        <option selected value="">Select University</option>
+                                    </select>
                                 </div>
                                 <label class="col-md-2 control-label">{% trans form.faculty.label %}:
                                     <span style="color: red">*</span>
@@ -74,70 +76,85 @@
                             </div>
                             <br>
                             <div class="row">
+                                <label class="col-md-2 control-label">{% trans form.study_mode.label %}:
+                                    <span style="color: red">*</span>
+                                </label>
+                                <div class="col-md-3">
+                                    {{form.study_mode}}
+                                </div>
                                 <label class="col-md-2 control-label">{% trans form.program.label %}:
                                     <span style="color: red">*</span></label>
                                 <div class="col-md-3">
                                     {{form.program}}
                                 </div>
+                            </div>
+                            <br>
+                            <div class="row">
                                 <label class="col-md-2 control-label">{% trans form.type_of_secondary.label %}:
                                     <span style="color: red">*</span>
                                 </label>
                                 <div class="col-md-3">
                                     {{form.type_of_secondary}}
                                 </div>
-                            </div>
-                            <br>
-                            <div class="row">
                                 <label class="col-md-2 control-label">{% trans form.year.label %}:
                                     <span style="color: red">*</span>
                                 </label>
                                 <div class="col-md-3">
                                     {{form.year}}
                                 </div>
+                            </div>
+                            <br>
+                            <div class="row">
                                 <label class="col-md-2 control-label">{% trans form.start_date.label %}:
                                     <span style="color: red">*</span>
                                 </label>
                                 <div class="col-md-3">
                                     {{form.start_date}}
                                 </div>
-                            </div>
-                            <br>
-                            <div class="row">
                                 <label class="col-md-2 control-label">{% trans form.end_date.label %}:
                                     <span style="color: red">*</span>
                                 </label>
                                 <div class="col-md-3">
                                     {{form.end_date}}
                                 </div>
+                            </div>
+                            <br>
+                            <div class="row">
                                 <label class="col-md-2 control-label">{% trans form.average.label %}:
                                     <span style="color: red">*</span>
                                 </label>
                                 <div class="col-md-3">
                                     {{form.average}}
                                 </div>
-                            </div>
-                            <br>
-                            <div class="row">
                                 <label class="col-md-2 control-label">{% trans form.capacity.label %}:
                                     <span style="color: red">*</span>
                                 </label>
                                 <div class="col-md-3">
                                     {{form.capacity}}
                                 </div>
+                            </div>
+                            <br>
+                            <div class="row">
                                 <label class="col-md-2 control-label">{% trans form.fee.label %}:
                                     <span style="color: red">*</span>
                                 </label>
                                 <div class="col-md-3">
                                     {{form.fee}}
                                 </div>
-                            </div>
-                            <br>
-                            <div class="row">
                                 <label class="col-md-2 control-label">{% trans form.is_exam.label %}:
                                     <span style="color: red">*</span>
                                 </label>
                                 <div class="col-md-3">
                                     {{form.is_exam}}
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <label class="col-md-2 control-label">{% trans form.is_active.label %}:
+                                    <span style="color: red">*</span>
+                                </label>
+                                <div class="col-md-3">
+                                    {{form.is_active}}
                                 </div>
                             </div>
                         </div>
@@ -156,4 +173,25 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block ajax %}
+<script>
+    const getUniversitiesUrl = "{% url 'tanseeq_app:get_universities' %}"
+    const getStudyModeDataUrl = "{% url 'tanseeq_app:list_study_mode' %}"
+    const getFacultyDataUrl = "{% url 'tanseeq_app:list_tanseeq_faculty' %}"
+    const getProgramDataUrl = "{% url 'tanseeq_app:list_tanseeq_program' %}"
+
+    $(document).ready(function() {
+        getUniversityData(getUniversitiesUrl)
+        $("#university").on("change", function(){
+            getFacultyData(getFacultyDataUrl)
+            getStudyModeData(getStudyModeDataUrl)
+        })
+        $("#id_faculty").on("change", function(){
+            getProgramData(getProgramDataUrl)
+        })
+    });
+</script>
+<script src="{% static 'tanseeq\admin\conditionFilters.js' %}" type="text/javascript"></script>
 {% endblock %}

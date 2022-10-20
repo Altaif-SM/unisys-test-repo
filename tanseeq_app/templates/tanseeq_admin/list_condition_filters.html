@@ -74,11 +74,11 @@
                 </select>
             </div>
             <div class="col-md-2">
-                <select class="form-control" name="faculty" id="faculty">
+                <select class="form-control" name="faculty" id="id_faculty">
                 </select>
             </div>
             <div class="col-md-2">
-                <select class="form-control" name="study_mode" id="study_mode">
+                <select class="form-control" name="study_mode" id="id_study_mode">
                 </select>
             </div>
             <div class="col-md-2">
@@ -104,6 +104,7 @@
                     <th width="10%">{% trans 'capacity' %}</th>
                     <th width="10%">{% trans 'Fee' %}</th>
                     <th width="10%">{% trans 'Exam' %}</th>
+                    <th width="10%">{% trans 'Status' %}</th>
                     <th width="10%">{% trans 'Actions' %}</th>
                 </tr>
                 </thead>
@@ -121,6 +122,15 @@
                         <td>{{ rec.average|default_if_none:"" }}</td>
                         <td>{{ rec.capacity|default_if_none:"" }}</td>
                         <td>{{ rec.fee|default_if_none:"" }}</td>
+                        <td>
+                            {% if rec.is_active == True %}
+                            <i class="fa fa-power-off" aria-hidden="true"
+                            style="margin-left: 30px;margin-top:8px;font-size:18px;color:green"></i>
+                            {% else %}
+                            <i class="fa fa-power-off" aria-hidden="true"
+                            style="margin-left: 30px;margin-top:8px;font-size:18px;color:red"></i>
+                            {% endif %}
+                        </td>
                         <td>
                             {% if rec.is_exam == True %}
                             <i class="fa fa-power-off" aria-hidden="true"
@@ -163,7 +173,6 @@
     })
 
     function deleteTanseeqPeriod(url) {
-        console.log(url)
         $.ajax({
             type: 'DELETE',
             url: url,
@@ -185,106 +194,18 @@
         });
     }
 
-    function getFacultyData(){
-        const facultyOptions = $("#faculty")
-
-        $.ajax({
-            type: 'GET',
-            url: `{% url 'tanseeq_app:list_tanseeq_faculty' %}`,
-            data: {
-                "type": "JSON",
-                "university": $("#university").val(),
-            },
-            success: function (response) {
-                const jsonRes = JSON.parse(response)
-
-                facultyOptions.empty()
-                facultyOptions.prepend($('<option>',{
-                    value: '',
-                    text: "Select Faculty",
-                    "selected": true,
-                }))
-                $.map(jsonRes, function(data){
-                    console.log( "facultyOptions",data)
-                    facultyOptions.append($('<option>', { 
-                        value: data.pk,
-                        text : data.fields.name 
-                    }));
-                })
-            },
-            complete: function (){
-            },
-            error: function (xhr, msg, err) {
-            }
-        });
-    }
-
-    function getStudyModeData(){
-        const studyModeOptions = $("#study_mode")
-
-        $.ajax({
-            type: 'GET',
-            url: `{% url 'tanseeq_app:list_study_mode' %}`,
-            data: {
-                "type": "JSON",
-                "university": $("#university").val(),
-            },
-            success: function (response) {
-                const jsonRes = JSON.parse(response)
-
-                studyModeOptions.empty()
-                studyModeOptions.prepend($('<option>',{
-                    value: '',
-                    text: "Select Study Mode",
-                    "selected": true,
-                }))
-                $.map(jsonRes, function(data, index){
-                    studyModeOptions.append($('<option>', { 
-                        value: data.pk,
-                        text : data.fields.study_mode 
-                    }));
-                })
-            },
-            complete: function (){
-            },
-            error: function (xhr, msg, err) {
-            }
-        });
-    }
-
-    function getUniversityData(){
-        $.ajax({
-            type: 'GET',
-            url: `{% url 'tanseeq_app:get_universities' %}`,
-            data: {
-                "type": "JSON",
-            },
-            success: function (response) {
-                const jsonRes = JSON.parse(response)
-
-                const universityOptions = $("#university")
-                $.map(jsonRes, function(data){
-                    universityOptions.append($('<option>', { 
-                        value: data.pk,
-                        text : data.fields.university_name
-                    }));
-                })
-            },
-            complete: function (){
-            },
-            error: function (xhr, msg, err) {
-            }
-        });
-    }
-
+    const getUniversitiesUrl = "{% url 'tanseeq_app:get_universities' %}"
+    const getStudyModeDataUrl = "{% url 'tanseeq_app:list_study_mode' %}"
+    const getFacultyDataUrl = "{% url 'tanseeq_app:list_tanseeq_faculty' %}"
     $(document).ready(function() {
-        getUniversityData()
-        getFacultyData()
-        getStudyModeData()
+        getUniversityData(getUniversitiesUrl)
+        getStudyModeData(getStudyModeDataUrl)
+        getFacultyData(getFacultyDataUrl)
         $("#university").on("change", function(){
-            getFacultyData()
-            getStudyModeData()
+            getFacultyData(getFacultyDataUrl)
+            getStudyModeData(getStudyModeDataUrl)
         })
     });
 </script>
+<script src="{% static 'tanseeq\admin\conditionFilters.js' %}" type="text/javascript"></script>
 {% endblock %}
