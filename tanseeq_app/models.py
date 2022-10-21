@@ -132,11 +132,13 @@ class TanseeqCourses(BaseModel):
     courses = models.ManyToManyField(Course, related_name='tansseq_course_details' )
 
 
-class PersonalDetails(BaseModel):
+class ApplicationDetails(BaseModel):
     GENDER_TYPE = (
         ("male", "MALE"),
         ("female", "FEMALE"),
     )
+    first_name = models.CharField(max_length=150, blank=True, null=True)
+    last_name = models.CharField(max_length=150, blank=True, null=True)
     gender_type = models.CharField(choices=GENDER_TYPE, max_length=50)
     birth_date = models.DateField()
     nationality = models.ForeignKey('masters.CountryDetails', null=True, related_name='student_nationality_details', on_delete=models.PROTECT)
@@ -146,4 +148,5 @@ class PersonalDetails(BaseModel):
     user = models.ForeignKey(User, null=True, related_name='student_user_details', on_delete=models.PROTECT)
     address = models.TextField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
+    tanseeq_id = models.CharField(max_length=50, blank=True, null=True)
     created_by = models.ForeignKey(User, on_delete=models.PROTECT,null=True,)

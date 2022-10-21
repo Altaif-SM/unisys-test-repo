@@ -10,7 +10,7 @@ from tanseeq_app.models import (
     TanseeqFee,
     TanseeqCourses,
     Course,
-    PersonalDetails,
+    ApplicationDetails,
 )
 
 
@@ -175,10 +175,10 @@ class CourseForm(forms.ModelForm):
         model = Course
         fields = ('course','mark',)
 
-class PersonalInfoForm(forms.ModelForm):
+class ApplicationInfoForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
-        super(PersonalInfoForm, self).__init__(*args, **kwargs)
+        super(ApplicationInfoForm, self).__init__(*args, **kwargs)
         for field in self.fields:
             if field != "is_active":
                 self.fields[field].widget.attrs.update({
@@ -187,8 +187,8 @@ class PersonalInfoForm(forms.ModelForm):
                 })
 
     class Meta:
-        model = PersonalDetails
-        fields = ("gender_type", "birth_date", "nationality", "country", "city",
+        model = ApplicationDetails
+        fields = ("first_name","last_name","gender_type", "birth_date", "nationality", "country", "city",
             "contact_number", "address", "is_active",
         )
 

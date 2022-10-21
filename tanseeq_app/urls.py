@@ -185,7 +185,12 @@ urlpatterns = [
     path(
         'personal_info/',
         login_required(PersonalInfoView.as_view()),
-        name='add_personal_info'
+        name='personal_info'
+    ),
+    path(
+        'secondary_certificate/',
+        login_required(SecondaryCertificateView.as_view()),
+        name='secondary_certificate'
     ),
 
 ]

@@ -33,7 +33,7 @@
 
         <div class="portlet-body">
             <div class="form-body">
-                <form action="{% url 'tanseeq_app:add_personal_info' %}"
+                <form action="{% url 'tanseeq_app:personal_info' %}"
                     method="POST"
                     enctype="multipart/form-data"
                     id="id_form"
@@ -47,32 +47,18 @@
                         <div class="row item_experience" id="item_experience_1">
 
                             <div class="row">
-                                <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'First Name' %}:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <input type="text" title="Enter First Name" id="id_first_name"
-                                               value="{{ request.user.first_name|title }}"
-                                               name="first_name"
-                                               class="form-control" required>
 
-                                    </div>
+                                <label class="col-md-2 control-label">{% trans form.first_name.label %}:
+                                    <span style="color: red">*</span>
+                                </label>
+                                <div class="col-md-3">
+                                    {{form.first_name}}
                                 </div>
-
-                                <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'Last Name' %}:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <input type="text" title="Enter Last Name" id="id_last_name"
-                                               value="{{ request.user.last_name|title }}"
-                                               name="last_name"
-                                               class="form-control" required>
-
-                                    </div>
+                                <label class="col-md-2 control-label">{% trans form.last_name.label %}:
+                                    <span style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    {{form.last_name}}
                                 </div>
-
-
-
                             </div>
                             <br>
                             <div class="row">
