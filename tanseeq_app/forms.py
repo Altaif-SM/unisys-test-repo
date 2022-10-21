@@ -10,6 +10,7 @@ from tanseeq_app.models import (
     TanseeqFee,
     TanseeqCourses,
     Course,
+    PersonalDetails,
 )
 
 
@@ -173,3 +174,25 @@ class CourseForm(forms.ModelForm):
     class Meta:
         model = Course
         fields = ('course','mark',)
+
+class PersonalInfoForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(PersonalInfoForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            if field != "is_active":
+                self.fields[field].widget.attrs.update({
+                    "class": "form-control",
+                    "required": "true",
+                })
+
+    class Meta:
+        model = PersonalDetails
+        fields = ("gender_type", "birth_date", "nationality", "country", "city",
+            "contact_number", "address", "is_active",
+        )
+
+        widgets = {
+            'birth_date': forms.DateInput(attrs={'placeholder':'Select a date', 'type':'date'}),
+            'address': forms.Textarea(attrs={'rows':'2'}),
+        }

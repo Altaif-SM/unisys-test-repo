@@ -53,6 +53,7 @@ class User(AbstractUser):
     AGENT = 'Agent'
     AGENT_RECRUITER = 'Agent Recruiter'
     TANSEEQ_ADMIN = 'Tanseeq Admin'
+    TANSEEQ_STUDENT = 'Tanseeq Student'
 
 
     first_name = models.CharField(max_length=256, blank=True, null=True)
@@ -181,6 +182,9 @@ class User(AbstractUser):
 
     def is_tanseeq_admin(self):
         return True if self.role.all().filter(name__in=[self.TANSEEQ_ADMIN]).exists() else False
+
+    def is_tanseeq_student(self):
+        return True if self.role.all().filter(name__in=[self.TANSEEQ_STUDENT]).exists() else False
 
     @property
     def get_user_permissions(self):
@@ -382,6 +386,7 @@ class User(AbstractUser):
     AGENT_DASHBOARD = '/agents/dashboard/'
     AGENT_RECRUITER_DASHBOARD = '/agents/recruiter_dashboard/'
     TANSEEQ_ADMIN_DASHBOARD = '/tanseeq/admin/'
+    TANSEEQ_STUDENT_DASHBOARD = '/tanseeq/student/'
 
 
     def get_dashboard_path(self):
@@ -413,4 +418,6 @@ class User(AbstractUser):
             dashboard_path = User.AGENT_RECRUITER_DASHBOARD
         elif self.role.get().name == User.TANSEEQ_ADMIN:
             dashboard_path = User.TANSEEQ_ADMIN_DASHBOARD
+        elif self.role.get().name == User.TANSEEQ_STUDENT:
+            dashboard_path = User.TANSEEQ_STUDENT_DASHBOARD
         return dashboard_path

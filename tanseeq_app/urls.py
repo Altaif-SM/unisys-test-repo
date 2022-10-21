@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.urls import path
 from tanseeq_app.views import *
-
+from tanseeq_app.student_views import *
 
 app_name = 'tanseeq_app'
 
@@ -180,6 +180,12 @@ urlpatterns = [
         'update_course/',
         login_required(CourseUpdateView.as_view()),
         name='update_course'
+    ),
+    path('student/', login_required(TanseeqStudentHome.as_view()), name='tanseeq_student'),
+    path(
+        'personal_info/',
+        login_required(PersonalInfoView.as_view()),
+        name='add_personal_info'
     ),
 
 ]

@@ -161,8 +161,17 @@ License: You must have a valid license purchased only from themeforest(the above
                                 {% endif %}
                             {% else %}
                                 {#                                <img alt="" class="img-circle" src="../../media/{{ user.get_application.image }}"/>#}
-                                <b><span
-                                        class="username username-hide-on-mobile">{{ user.role.all.0.name }} {% if user.first_name or  user.last_name %}({{ user.first_name|default_if_none:"" }}{{ user.last_name|default_if_none:""}}){% else %}{% endif %} </span></b>
+                                <b><span class="username username-hide-on-mobile">
+                            {% if user.is_tanseeq_student or request.user.is_tanseeq_admin %}
+                                {{ user.role.all.0.name }}
+                            {%else%}
+                                {{ user.role.all.0.name }} ({{ user.first_name|default_if_none:"" }}{{ user.last_name|default_if_none:""}})
+                            {% endif %}
+
+
+
+
+                                </span></b>
                                 {#                                <br>#}
                                 {#                                <span class="username username-hide-on-mobile"> {{ user.get_application_id }}#}
                                 </span>
@@ -430,6 +439,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                 {% include 'super_admin_side_bar.html' %}
                             {% elif request.user.is_tanseeq_admin  %}
                                 {% include 'tanseeq_admin/admin_side_bar.html' %}
+                            {% elif request.user.is_tanseeq_student  %}
+                                {% include 'tanseeq_student/student_side_bar.html' %}
                             {%else%}
                                 {% include 'role_user_side_bar.html' %}
                             {% endif %}

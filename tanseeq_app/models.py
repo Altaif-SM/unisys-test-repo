@@ -130,3 +130,20 @@ class TanseeqCourses(BaseModel):
     created_by = models.ForeignKey(User, on_delete=models.PROTECT)
     course_name = models.CharField(max_length=100, blank=True, null=True)
     courses = models.ManyToManyField(Course, related_name='tansseq_course_details' )
+
+
+class PersonalDetails(BaseModel):
+    GENDER_TYPE = (
+        ("male", "MALE"),
+        ("female", "FEMALE"),
+    )
+    gender_type = models.CharField(choices=GENDER_TYPE, max_length=50)
+    birth_date = models.DateField()
+    nationality = models.ForeignKey('masters.CountryDetails', null=True, related_name='student_nationality_details', on_delete=models.PROTECT)
+    country = models.ForeignKey('masters.CountryDetails', null=True, related_name='student_country_details', on_delete=models.PROTECT)
+    city = models.ForeignKey('masters.CitiDetails', null=True, related_name='student_city_details', on_delete=models.PROTECT)
+    contact_number = models.CharField(max_length=12, blank=True, null=True)
+    user = models.ForeignKey(User, null=True, related_name='student_user_details', on_delete=models.PROTECT)
+    address = models.TextField(null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT,null=True,)
