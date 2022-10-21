@@ -185,12 +185,12 @@ urlpatterns = [
     path(
         'personal_info/',
         login_required(PersonalInfoView.as_view()),
-        name='personal_info'
+        name='add_personal_info'
     ),
     path(
-        'secondary_certificate/',
-        login_required(SecondaryCertificateView.as_view()),
-        name='secondary_certificate'
+        'secondary_certificate_info/',
+        login_required(SecondaryCertificateInfoView.as_view()),
+        name='add_secondary_certificate_info'
     ),
 
 ]

@@ -11,6 +11,7 @@ from tanseeq_app.models import (
     TanseeqCourses,
     Course,
     ApplicationDetails,
+    SecondaryCertificateInfo,
 )
 
 
@@ -196,3 +197,20 @@ class ApplicationInfoForm(forms.ModelForm):
             'birth_date': forms.DateInput(attrs={'placeholder':'Select a date', 'type':'date'}),
             'address': forms.Textarea(attrs={'rows':'2'}),
         }
+
+class SecondaryCertificationForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(SecondaryCertificationForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            if field != "is_active":
+                self.fields[field].widget.attrs.update({
+                    "class": "form-control",
+                    "required": "true",
+                })
+
+    class Meta:
+        model = SecondaryCertificateInfo
+        fields = ("year","secondary_certificate","seat_number", "average", "school_name", "country", "city","is_active",
+        )
+

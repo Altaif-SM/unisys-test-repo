@@ -150,3 +150,21 @@ class ApplicationDetails(BaseModel):
     is_active = models.BooleanField(default=True)
     tanseeq_id = models.CharField(max_length=50, blank=True, null=True)
     created_by = models.ForeignKey(User, on_delete=models.PROTECT,null=True,)
+
+class SecondaryCertificateInfo(BaseModel):
+    YEAR_CHOICES = [(r, r) for r in range(1984, datetime.date.today().year + 1)]
+    year = models.IntegerField(
+        _('year'), choices=YEAR_CHOICES, validators=[MinValueValidator(1984), max_value_current_year]
+    )
+    secondary_certificate = models.ForeignKey(SecondarySchoolCetificate, null=True, related_name='student_secondary_certificate_details', on_delete=models.PROTECT)
+    seat_number = models.CharField(max_length=50, blank=True, null=True)
+    average = models.FloatField(max_length=50)
+    school_name = models.CharField(max_length=150, blank=True, null=True)
+    country = models.ForeignKey('masters.CountryDetails', null=True, related_name='student_secondary_country_details',
+                                on_delete=models.PROTECT)
+    city = models.ForeignKey('masters.CitiDetails', null=True, related_name='student_secondary_city_details',
+                             on_delete=models.PROTECT)
+    application = models.ForeignKey(ApplicationDetails, null=True, related_name='student_secondary_application_details',
+                             on_delete=models.PROTECT)
+    is_active = models.BooleanField(default=True)
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT,null=True,)
