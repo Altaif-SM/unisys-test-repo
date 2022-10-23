@@ -110,7 +110,7 @@ DATABASES = {
           'NAME': 'university_system',
           # 'NAME': 'indonesia_university_system_test_17_03_2022',
           'USER':'root',
-          'PASSWORD':'Sayyed@123',
+          'PASSWORD':'',
           'HOST': '127.0.0.1',
           'PORT':'3306'
      }

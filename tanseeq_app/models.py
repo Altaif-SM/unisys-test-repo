@@ -151,6 +151,7 @@ class ApplicationDetails(BaseModel):
     tanseeq_id = models.CharField(max_length=50, blank=True, null=True)
     created_by = models.ForeignKey(User, on_delete=models.PROTECT,null=True,)
 
+
 class SecondaryCertificateInfo(BaseModel):
     YEAR_CHOICES = [(r, r) for r in range(1984, datetime.date.today().year + 1)]
     year = models.IntegerField(
@@ -168,3 +169,5 @@ class SecondaryCertificateInfo(BaseModel):
                              on_delete=models.PROTECT)
     is_active = models.BooleanField(default=True)
     created_by = models.ForeignKey(User, on_delete=models.PROTECT,null=True,)
+    study_mode = models.ForeignKey(StudyModeDetails, on_delete=models.PROTECT, blank=True, null=True,)
+

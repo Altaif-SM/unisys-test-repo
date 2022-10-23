@@ -1,4 +1,5 @@
-from django.views.generic import TemplateView, View
+import random
+from django.views.generic import TemplateView, View, ListView
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
@@ -6,16 +7,17 @@ from django.contrib import messages
 from tanseeq_app.models import (
     ApplicationDetails,
     SecondaryCertificateInfo,
+    ConditionFilters,
+    TanseeqProgram
 )
-from tanseeq_app.forms import (
+from tanseeq_app.forms.student_forms import (
     ApplicationInfoForm,
     SecondaryCertificationForm,
+    StudentStudyModeForm
 )
-import random
+
 
 # Create your views here.
-
-
 class TanseeqStudentHome(TemplateView):
     template_name = 'tanseeq_student/student_home.html'
 
@@ -100,3 +102,55 @@ class SecondaryCertificateInfoView(View):
             }
             return render(request, self.template_name, context)
         return redirect(self.redirect_url)
+
+
+class StudentStudyModeView(View):
+    model = SecondaryCertificateInfo
+    template_name = "tanseeq_student/study_mode.html"
+    form_class = StudentStudyModeForm
+    redirect_url = "tanseeq_app:student_study_mode"
+
+    def get_context_data(self, **kwargs):
+        user = self.request.user
+        instance = self.model.objects.filter(created_by=user).first()
+        context = {
+            "form" : self.form_class(instance=instance) if instance else self.form_class()
+        }
+        return context
+
+    def get(self, request):
+        return render(request, self.template_name, context=self.get_context_data())
+
+    def post(self, request):
+        user = request.user
+        instance = self.model.objects.filter(created_by=user).first()
+        if instance:
+            form = self.form_class(request.POST, instance=instance)
+        else:
+            messages.error(request, "Please add the Secondary certificate first.")
+            return redirect("tanseeq_app:add_personal_info")
+        if form.is_valid():
+            form.save()
+        else:
+            context = {
+                "form": form,
+            }
+            return render(request, self.template_name, context)
+        return redirect(self.redirect_url)
+
+
+class ListStudentPrograms(ListView):
+    model = ConditionFilters
+    template_name = "tanseeq_admin/list_tanseeq_program.html"
+
+    def get_queryset(self):
+        user = self.request.user
+        cert_obj = SecondaryCertificateInfo.objects.filter(created_by=user ).first()
+        condition_objs = ConditionFilters.objects.filter(
+            type_of_secondary = cert_obj.secondary_certificate,
+            study_mode = cert_obj.study_mode,
+            average__lte = cert_obj.average,
+            year = cert_obj.year,
+        ).only("program")
+        queryset = TanseeqProgram.objects.filter(id__in=condition_objs.values_list("program", flat=True))
+        return queryset

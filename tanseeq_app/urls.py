@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.urls import path
-from tanseeq_app.views import *
-from tanseeq_app.student_views import *
+from tanseeq_app.views.admin_views import *
+from tanseeq_app.views.student_views import *
 
 app_name = 'tanseeq_app'
 
@@ -193,5 +193,16 @@ urlpatterns = [
         name='add_secondary_certificate_info'
     ),
 
+    path(
+        'student_study_mode/',
+        login_required(StudentStudyModeView.as_view()),
+        name='student_study_mode'
+    ),
+
+    path(
+        'student_programs/',
+        login_required(ListStudentPrograms.as_view()),
+        name='list_student_programs'
+    ),
+
 ]
-TanseeqProgramList

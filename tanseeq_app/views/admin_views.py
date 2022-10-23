@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.core import serializers
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, View, ListView, UpdateView, DeleteView
+from student.models import ApplicantAboutDetails
 from tanseeq_app.models import (
     TanseeqPeriod,
     SecondarySchoolCetificate,
@@ -14,7 +15,7 @@ from tanseeq_app.models import (
     Course,
 )
 from masters.models import UniversityDetails, YearDetails, StudyModeDetails
-from tanseeq_app.forms import (
+from tanseeq_app.forms.admin_forms import (
     TanseeqPeriodForm,
     UniversityDetailsForm,
     SecondarySchoolCertificateForm,
@@ -473,6 +474,7 @@ class ConditionsView(View):
         return render(request, self.template_name, context)
 
     def get_context_data(self, **kwargs):
+        print("running context")
         context = super().get_context_data(**kwargs)
         return context
     
