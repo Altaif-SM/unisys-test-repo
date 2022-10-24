@@ -8,7 +8,6 @@ from tanseeq_app.models import (
     ApplicationDetails,
     SecondaryCertificateInfo,
     ConditionFilters,
-    TanseeqProgram
 )
 from tanseeq_app.forms.student_forms import (
     ApplicationInfoForm,
@@ -141,16 +140,27 @@ class StudentStudyModeView(View):
 
 class ListStudentPrograms(ListView):
     model = ConditionFilters
-    template_name = "tanseeq_admin/list_tanseeq_program.html"
+    template_name = "tanseeq_student/list_student_programs.html"
 
     def get_queryset(self):
         user = self.request.user
-        cert_obj = SecondaryCertificateInfo.objects.filter(created_by=user ).first()
-        condition_objs = ConditionFilters.objects.filter(
+        faculty_id = self.request.GET.get("faculty")
+        extra_filters = {}
+        if faculty_id:
+            extra_filters["faculty_id"] = faculty_id
+        cert_obj = SecondaryCertificateInfo.objects.filter(created_by=user).first()
+        queryset = ConditionFilters.objects.filter(
             type_of_secondary = cert_obj.secondary_certificate,
             study_mode = cert_obj.study_mode,
             average__lte = cert_obj.average,
             year = cert_obj.year,
-        ).only("program")
-        queryset = TanseeqProgram.objects.filter(id__in=condition_objs.values_list("program", flat=True))
+            **extra_filters
+        ).select_related("program")
         return queryset
+
+    def get(self, request, *args, **kwargs):
+        cert_obj = SecondaryCertificateInfo.objects.filter(created_by=request.user).exists()
+        if not cert_obj:
+            messages.info(self.request, "Please add secondary certificate first.")
+            return redirect("tanseeq_app:add_secondary_certificate_info")
+        return super().get(args, kwargs)
