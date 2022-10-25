@@ -67,7 +67,7 @@ class SecondaryCertificateInfoView(View):
     model = SecondaryCertificateInfo
     form_class = SecondaryCertificationForm
     template_name = "tanseeq_student/secondary_certificate_info.html"
-    redirect_url = 'tanseeq_app:add_secondary_certificate_info'
+    redirect_url = 'tanseeq_app:student_study_mode'
 
     def get(self, request, pk=None):
         context = {
@@ -107,7 +107,7 @@ class StudentStudyModeView(View):
     model = SecondaryCertificateInfo
     template_name = "tanseeq_student/study_mode.html"
     form_class = StudentStudyModeForm
-    redirect_url = "tanseeq_app:student_study_mode"
+    redirect_url = "tanseeq_app:list_student_programs"
 
     def get_context_data(self, **kwargs):
         user = self.request.user

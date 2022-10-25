@@ -1,41 +1,72 @@
 {% extends "template_base_page.html" %}
 {% load  i18n %}
+{% load staticfiles %}
 
 {% block content %}
-<div class="page-bar" style="margin-bottom: 1px;">
-    <ul class="page-breadcrumb">
-        <li>
-            <i class="icon-home"></i>
-            <a href="{% url 'tanseeq_app:tanseeq_student' %}">Home</a>
-            <i class="fa fa-angle-right"></i>
-        </li>
-        <li>
-            <span> {% trans 'Secondary Certificate Info' %} </span>
-        </li>
-    </ul>
-</div>
-
-{% for message in messages %}
-    <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'tanseeq_app:tanseeq_student' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> {% trans 'Study Mode' %} </span>
+            </li>
+        </ul>
     </div>
-{% endfor %}
-<div class="container">
-    <div class="row">
-        <form method="POST">
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">Study Mode </span>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="form-body">
+               <form method="POST">
             {% csrf_token %}
-            <div class="col-md-6 text-right">
-                <label>{{form.study_mode.label}}</label>
-            </div>
-            <div class="col-md-3">
-                {{form.study_mode}}
-            </div>
-            <br>
-            <div class="col-md-12 text-center">
-                <br>
-                <button type="submit" class="btn btn-primary">Save</button>
-            </div>
+
+                    <div class="row">
+
+                                <label class="col-md-2 control-label">{% trans form.study_mode.label %}:
+                                    <span style="color: red">*</span>
+                                </label>
+                                <div class="col-md-4">
+                                    {{form.study_mode}}
+                                </div>
+
+
+
+                            </div>
+
+
+
+                   <div class="row">
+
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                                        onclick="window.location='{% url "tanseeq_app:add_secondary_certificate_info" %}'"
+                                >
+                                    Back
+                                </button>
+                                <button type="submit" class="btn green" id="save_form" style="">Save Next</button>
+                            </div>
+
+                        </div>
+
+
         </form>
-    </div> 
-</div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

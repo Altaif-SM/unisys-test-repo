@@ -69,12 +69,12 @@
     </div>
     <div class="row" style="padding-left: 30px;">
         <form method="GET">
-            <div class="col-md-2">
-                <select class="form-control" name="university" id="university">
+            <div class="col-md-3">
+                <select class="form-control" name="university" id="id_university" required>
                     <option selected value="">Select University</option>
                 </select>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <select class="form-control" name="faculty" required id="id_faculty">
                 </select>
             </div>
@@ -83,13 +83,15 @@
             </div>
         </form>
     </div>
+    <br>
     <div class="portlet-body">
         <table class="table table-striped table-hover table-bordered" id="sample_1">
             <thead>
             <tr>
                 <th style="display: none">Id</th>
+                <th> {% trans 'University' %}</th>
                 <th> {% trans 'Faculty' %}</th>
-                <th> {% trans 'Name' %}</th>
+                <th> {% trans 'Program' %}</th>
                 <th> {% trans 'Code' %}</th>
                 <th> {% trans 'Average' %}</th>
                 <th> {% trans 'Year' %}</th>
@@ -99,6 +101,9 @@
             {% for rec in object_list %}
                 <tr id="item{{ rec.id }}" class="item">
                     <td style="display: none"><input id="university_id" value="{{ rec.id }}"></td>
+                    <td>
+                        {{ rec.university.university_name|default_if_none:"" }}
+                    </td>
                     <td>
                         {{ rec.faculty.name|default_if_none:"" }}
                     </td>
@@ -121,7 +126,7 @@
     $(document).ready(function() {
         getUniversityData(getUniversitiesUrl)
         getFacultyData(getFacultyDataUrl)
-        $("#university").on("change", function(){
+        $("#id_university").on("change", function(){
             getFacultyData(getFacultyDataUrl)
         })
     });

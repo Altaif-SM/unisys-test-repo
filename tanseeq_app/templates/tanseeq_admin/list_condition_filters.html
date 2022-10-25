@@ -68,16 +68,16 @@
     </div>
     <div class="row" style="padding-left: 30px;">
         <form method="GET">
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <select class="form-control" name="university" id="id_university">
                     <option selected value="">Select University</option>
                 </select>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <select class="form-control" name="faculty" id="id_faculty">
                 </select>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <select class="form-control" name="study_mode" id="id_study_mode">
                 </select>
             </div>
@@ -86,6 +86,7 @@
             </div>
         </form>
     </div>
+<br>
     <div class="portlet-body">
         <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
