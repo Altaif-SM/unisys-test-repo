@@ -93,6 +93,7 @@
                 <thead>
                 <tr>
                     <th style="display: none">Id</th>
+                    <th> {% trans 'University' %}</th>
                     <th> {% trans 'Study Mode' %}</th>
                     <th> {% trans 'Faculty Name' %}</th>
                     <th> {% trans 'Program' %}</th>
@@ -112,6 +113,7 @@
                 {% for rec in object_list %}
                     <tr id="item{{ rec.id }}" class="item">
                         <td style="display: none"><input id="university_id" value="{{ rec.id }}"></td>
+                        <td>{{rec.university.university_name|default_if_none:""}}</td>
                         <td>{{rec.study_mode}}</td>
                         <td>{{ rec.faculty.name|default_if_none:"" }}</td>
                         <td>{{ rec.program.name|default_if_none:"" }}</td>

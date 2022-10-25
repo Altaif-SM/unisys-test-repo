@@ -448,6 +448,7 @@ class ConditionFiltersList(ListView):
     
     def get_queryset(self):
         filters = {
+            "university_id": self.request.GET.get("university"),
             "faculty_id": self.request.GET.get("faculty"),
             "study_mode_id": self.request.GET.get("study_mode")
         }
