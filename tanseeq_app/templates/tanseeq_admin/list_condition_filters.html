@@ -69,7 +69,7 @@
     <div class="row" style="padding-left: 30px;">
         <form method="GET">
             <div class="col-md-2">
-                <select class="form-control" name="university" id="university">
+                <select class="form-control" name="university" id="id_university">
                     <option selected value="">Select University</option>
                 </select>
             </div>
@@ -201,7 +201,7 @@
         getUniversityData(getUniversitiesUrl)
         getStudyModeData(getStudyModeDataUrl)
         getFacultyData(getFacultyDataUrl)
-        $("#university").on("change", function(){
+        $("#id_university").on("change", function(){
             getFacultyData(getFacultyDataUrl)
             getStudyModeData(getStudyModeDataUrl)
         })

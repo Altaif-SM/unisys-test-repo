@@ -103,6 +103,7 @@ class ConditionFilters(BaseModel):
     fee = models.FloatField(max_length=50)
     is_exam = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True)
+    university = models.ForeignKey(UniversityDetails, on_delete=models.PROTECT, null=True)
 
     class Meta:
         verbose_name = "Condition Filters"

@@ -117,6 +117,8 @@ class ConditionFiltersForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ConditionFiltersForm, self).__init__(*args, **kwargs)
+        self.fields['university'].queryset = UniversityDetails.objects.filter(is_tanseeq_university=True,
+                                                                                is_active=True, is_delete=False)
         for field in self.fields:
             if field not in ["is_exam", "is_active"]:
                 self.fields[field].widget.attrs.update({
@@ -127,7 +129,7 @@ class ConditionFiltersForm(forms.ModelForm):
     class Meta:
         model = ConditionFilters
         fields = ("study_mode", "faculty", "program", "type_of_secondary", "year",
-            "start_date", "end_date", "average", "capacity", "fee", "is_exam", "is_active"
+            "start_date", "end_date", "average", "capacity", "fee", "is_exam", "is_active","university",
         )
 
         widgets = {

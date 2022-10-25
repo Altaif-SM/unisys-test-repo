@@ -8,7 +8,7 @@ function getUniversityData(getUniversitiesUrl){
         success: function (response) {
             const jsonRes = JSON.parse(response)
 
-            const universityOptions = $("#university")
+            const universityOptions = $("#id_university")
             $.map(jsonRes, function(data){
                 universityOptions.append($('<option>', { 
                     value: data.pk,
@@ -31,7 +31,7 @@ function getFacultyData(getFacultyDataUrl){
         url: getFacultyDataUrl,
         data: {
             "type": "JSON",
-            "university": $("#university").val(),
+            "university": $("#id_university").val(),
         },
         success: function (response) {
             const jsonRes = JSON.parse(response)
@@ -65,7 +65,7 @@ function getStudyModeData(getStudyModeDataUrl){
         url: getStudyModeDataUrl,
         data: {
             "type": "JSON",
-            "university": $("#university").val(),
+            "university": $("#id_university").val(),
         },
         success: function (response) {
             const jsonRes = JSON.parse(response)
