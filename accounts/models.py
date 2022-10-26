@@ -390,7 +390,7 @@ class User(AbstractUser):
 
 
     def get_dashboard_path(self):
-        print("==", self.role.get().name)
+        print("==", self.username)
         dashboard_path = User.ADMIN_DASHBOARD
         if self.role.get().name == User.ADMIN:
             dashboard_path = User.ADMIN_DASHBOARD

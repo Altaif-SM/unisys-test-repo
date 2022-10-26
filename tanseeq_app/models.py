@@ -98,8 +98,8 @@ class ConditionFilters(BaseModel):
     )
     start_date = models.DateField()
     end_date = models.DateField()
-    average = models.FloatField(max_length=50)
-    capacity = models.IntegerField(max_length=50)
+    average = models.FloatField(max_length=50, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    capacity = models.IntegerField()
     fee = models.FloatField(max_length=50)
     is_exam = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True)
@@ -172,3 +172,14 @@ class SecondaryCertificateInfo(BaseModel):
     created_by = models.ForeignKey(User, on_delete=models.PROTECT,null=True,)
     study_mode = models.ForeignKey(StudyModeDetails, on_delete=models.PROTECT, blank=True, null=True,)
 
+
+class AppliedPrograms(BaseModel):
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    program_details = models.ForeignKey(ConditionFilters, on_delete=models.PROTECT)
+
+    class Meta:
+        verbose_name = "Applied Program"
+        verbose_name_plural = "Applied Programs"
+
+    def __str__(self):
+        return "{} - {}".format(self.user.username, self.program_details.program.name)

@@ -146,7 +146,7 @@
             url: url,
             beforeSend: function(xhr, settings) {
                 xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
-             } ,
+            },
             success: function (data) {
                 if(data.status == 200){
                     const table = $('#sample_1').DataTable();

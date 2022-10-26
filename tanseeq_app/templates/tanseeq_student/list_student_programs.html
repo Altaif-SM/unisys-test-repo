@@ -45,7 +45,7 @@
     <ul class="page-breadcrumb">
         <li>
             <i class="icon-home"></i>
-            <a href="{% url 'tanseeq_app:tanseeq_admin' %}">Home</a>
+            <a href="{% url 'tanseeq_app:tanseeq_student' %}">Home</a>
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
@@ -70,12 +70,16 @@
     <div class="row" style="padding-left: 30px;">
         <form method="GET">
             <div class="col-md-3">
-                <select class="form-control" name="university" id="id_university" required>
+                <select class="form-control" name="university" id="id_university">
                     <option selected value="">Select University</option>
                 </select>
             </div>
             <div class="col-md-3">
-                <select class="form-control" name="faculty" required id="id_faculty">
+                <select class="form-control" name="faculty" id="id_faculty">
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-control" name="study_mode" id="id_study_mode">
                 </select>
             </div>
             <div class="col-md-2">
@@ -95,6 +99,7 @@
                 <th> {% trans 'Code' %}</th>
                 <th> {% trans 'Average' %}</th>
                 <th> {% trans 'Year' %}</th>
+                <th></th>
             </tr>
             </thead>
             <tbody id="tbody">
@@ -111,6 +116,15 @@
                     <td>{{ rec.program.code|default_if_none:"" }}</td>
                     <td>{{ rec.average|default_if_none:"" }}</td>
                     <td>{{ rec.year|default_if_none:"" }}</td>
+                    <td>
+                        {% if rec.is_applied%}
+                            <p class="btn btn-success disabled">Applied</p>
+                        {%else%}
+                            <button type="button" condition_filter="{{rec.id}}" class="btn btn-primary apply_program">
+                                Apply
+                            </button>
+                        {%endif%}
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -121,13 +135,43 @@
 
 {% block ajax %}
 <script>
+
+    $(".apply_program").on("click", function(e){
+        $(e.target).attr("disabled", true)
+        $(e.target).text("Applying")
+        $.ajax({
+            type: 'post',
+            url: `{% url 'tanseeq_app:applied_program' %}`,
+            data: {
+                "type": "JSON",
+                "condition_filter_id": $(this).attr("condition_filter"),
+            },
+            beforeSend: function(xhr, settings) {
+                xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+            },
+            success: function (response) {
+                $(e.target).removeClass("btn-primary")
+                $(e.target).addClass("btn-success")
+                $(e.target).text("Applied")
+                location.href = "{% url 'tanseeq_app:list_applied_programs' %}"
+            },
+            error: function (xhr, msg, err) {
+                $(e.target).removeAttr("disabled")
+            }
+        });
+    })
+
     const getUniversitiesUrl = "{% url 'tanseeq_app:get_universities' %}"
     const getFacultyDataUrl = "{% url 'tanseeq_app:list_tanseeq_faculty' %}"
+    const getStudyModeDataUrl = "{% url 'tanseeq_app:list_study_mode' %}"
+
     $(document).ready(function() {
         getUniversityData(getUniversitiesUrl)
         getFacultyData(getFacultyDataUrl)
+        getStudyModeData(getStudyModeDataUrl)
         $("#id_university").on("change", function(){
             getFacultyData(getFacultyDataUrl)
+            getStudyModeData(getStudyModeDataUrl)
         })
     });
 </script>

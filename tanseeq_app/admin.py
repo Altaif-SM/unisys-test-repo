@@ -8,6 +8,7 @@ from tanseeq_app.models import (
     SecondarySchoolCetificate,
     ApplicationDetails,
     SecondaryCertificateInfo,
+    AppliedPrograms,
 )
 
 # Register your models here.
@@ -19,3 +20,4 @@ admin.site.register(ConditionFilters)
 admin.site.register(SecondarySchoolCetificate)
 admin.site.register(ApplicationDetails)
 admin.site.register(SecondaryCertificateInfo)
+admin.site.register(AppliedPrograms)

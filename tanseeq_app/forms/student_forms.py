@@ -2,6 +2,7 @@ from django import forms
 from tanseeq_app.models import (
     ApplicationDetails,
     SecondaryCertificateInfo,
+    AppliedPrograms,
 )
 
 
@@ -58,3 +59,10 @@ class StudentStudyModeForm(forms.ModelForm):
                 "class": "form-control",
                 "required": "true",
             })
+
+
+class ApplyProgramForm(forms.ModelForm):
+
+    class Meta:
+        model = AppliedPrograms
+        fields = ("user", "program_details",)

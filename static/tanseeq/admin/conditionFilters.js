@@ -43,7 +43,6 @@ function getFacultyData(getFacultyDataUrl){
                 "selected": true,
             }))
             $.map(jsonRes, function(data){
-                console.log( "facultyOptions",data)
                 facultyOptions.append($('<option>', { 
                     value: data.pk,
                     text : data.fields.name 

@@ -205,4 +205,22 @@ urlpatterns = [
         name='list_student_programs'
     ),
 
+    path(
+        'all/applied_programs/',
+        login_required(ListAppliedPrograms.as_view()),
+        name='list_applied_programs'
+    ),
+
+    path(
+        'applied_program/',
+        login_required(ApplyProgramView.as_view()),
+        name='applied_program'
+    ),
+
+    path(
+        'applied_program/<int:pk>',
+        login_required(ApplyProgramView.as_view()),
+        name='delete_applied_program'
+    ),
+
 ]
