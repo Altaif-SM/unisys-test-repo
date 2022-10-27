@@ -73,6 +73,14 @@ class SecondaryCertificateInfoView(View):
     redirect_url = 'tanseeq_app:student_study_mode'
 
     def get(self, request, pk=None):
+
+        cert_obj = ApplicationDetails.objects.filter(
+            created_by=request.user).exists()
+        if not cert_obj:
+            messages.info(
+                self.request, "Please add personal info first.")
+            return redirect("tanseeq_app:add_personal_info")
+
         context = {
             "form": self.form_class(),
         }
@@ -95,8 +103,10 @@ class SecondaryCertificateInfoView(View):
             form = self.form_class(request.POST)
         if form.is_valid():
             obj = form.save(commit=False)
+            application_obj = ApplicationDetails.objects.filter(created_by=request.user).first()
             if not SecondaryCertificateInfo.objects.filter(created_by=request.user).exists():
                 obj.created_by = request.user
+                obj.application = application_obj
             obj.save()
             messages.success(request, "Record saved.")
         else:
@@ -179,6 +189,13 @@ class ListStudentPrograms(ListView):
         return queryset
 
     def get(self, request, *args, **kwargs):
+        cert_obj = ApplicationDetails.objects.filter(
+            created_by=request.user).exists()
+        if not cert_obj:
+            messages.info(
+                self.request, "Please add personal info first.")
+            return redirect("tanseeq_app:add_personal_info")
+
         cert_obj = SecondaryCertificateInfo.objects.filter(
             created_by=request.user).exists()
         if not cert_obj:

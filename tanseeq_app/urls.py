@@ -222,5 +222,10 @@ urlpatterns = [
         login_required(ApplyProgramView.as_view()),
         name='delete_applied_program'
     ),
+    path(
+        'all/applicants_list/',
+        login_required(ListAppliedApplicants.as_view()),
+        name='list_applicants'
+    ),
 
 ]

@@ -2,7 +2,6 @@ from django.http import JsonResponse
 from django.core import serializers
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, View, ListView, UpdateView, DeleteView
-from student.models import ApplicantAboutDetails
 from tanseeq_app.models import (
     TanseeqPeriod,
     SecondarySchoolCetificate,
@@ -13,6 +12,7 @@ from tanseeq_app.models import (
     TanseeqFee,
     TanseeqCourses,
     Course,
+    ApplicationDetails,
 )
 from masters.models import UniversityDetails, YearDetails, StudyModeDetails
 from tanseeq_app.forms.admin_forms import (
@@ -651,3 +651,8 @@ class CourseUpdateView(UpdateView):
         if form.is_valid():
             form.save()
         return JsonResponse({"status": 200})
+
+
+class ListAppliedApplicants(ListView):
+    model = ApplicationDetails
+    template_name = "tanseeq_admin/list_applied_applicants.html"
