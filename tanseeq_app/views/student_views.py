@@ -9,12 +9,14 @@ from tanseeq_app.models import (
     SecondaryCertificateInfo,
     ConditionFilters,
     AppliedPrograms,
+    ApplicantAttachment,
 )
 from tanseeq_app.forms.student_forms import (
     ApplicationInfoForm,
     SecondaryCertificationForm,
     StudentStudyModeForm,
-    ApplyProgramForm
+    ApplyProgramForm,
+    ApplicantAttachementsForm,
 )
 
 
@@ -70,7 +72,7 @@ class SecondaryCertificateInfoView(View):
     model = SecondaryCertificateInfo
     form_class = SecondaryCertificationForm
     template_name = "tanseeq_student/secondary_certificate_info.html"
-    redirect_url = 'tanseeq_app:student_study_mode'
+    redirect_url = 'tanseeq_app:applicant_attachments'
 
     def get(self, request, pk=None):
 
@@ -277,3 +279,43 @@ class ApplyProgramView(View):
         else:
             data["msg"] = "No Such Program Found"
             return JsonResponse(data, status=404, safe=False)
+
+
+class ApplicantAttachmentsView(View):
+    model = ApplicantAttachment
+    form_class = ApplicantAttachementsForm
+    template_name = "tanseeq_student/applicant_attachment_view.html"
+    redirect_url = 'tanseeq_app:student_study_mode'
+
+    def get(self, request, pk=None):
+
+        cert_obj = ApplicationDetails.objects.filter(
+            created_by=request.user).exists()
+        if not cert_obj:
+            messages.info(
+                self.request, "Please add personal info first.")
+            return redirect("tanseeq_app:add_personal_info")
+
+        context = {}
+        if ApplicantAttachment.objects.filter(created_by=request.user).exists():
+            instance = get_object_or_404(self.model, created_by=request.user)
+            context["instance"] = instance
+        return render(request, self.template_name, context)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+    def post(self, request, pk=None):
+        application_obj = ApplicationDetails.objects.filter(created_by=request.user).first()
+        instance, created = ApplicantAttachment.objects.get_or_create(created_by=request.user, application = application_obj)
+        form = self.form_class(request.POST, request.FILES, instance=instance)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Record saved.")
+            return redirect(self.redirect_url)
+        else:
+            context = {
+                "form": form,
+            }
+            return render(request, self.template_name, context)

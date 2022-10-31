@@ -10,6 +10,7 @@ from masters.models import (
     YearDetails,
     StudyModeDetails
 )
+from tanseeq_app.helpers import profile_picture_upload_path, school_certificate_upload_path
 # Create your models here.
 
 
@@ -171,6 +172,12 @@ class SecondaryCertificateInfo(BaseModel):
     is_active = models.BooleanField(default=True)
     created_by = models.ForeignKey(User, on_delete=models.PROTECT,null=True,)
     study_mode = models.ForeignKey(StudyModeDetails, on_delete=models.PROTECT, blank=True, null=True,)
+
+class ApplicantAttachment(BaseModel):
+    application = models.ForeignKey(ApplicationDetails, null=True, related_name='student_attachement_application',on_delete=models.PROTECT)
+    photo = models.ImageField(upload_to=profile_picture_upload_path, max_length=256, blank=True, null=True)
+    school_certificate = models.ImageField(upload_to=school_certificate_upload_path, max_length=256, blank=True, null=True)
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT,null=True,)
 
 
 class AppliedPrograms(BaseModel):

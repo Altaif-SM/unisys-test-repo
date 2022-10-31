@@ -3,6 +3,7 @@ from tanseeq_app.models import (
     ApplicationDetails,
     SecondaryCertificateInfo,
     AppliedPrograms,
+    ApplicantAttachment,
 )
 
 
@@ -66,3 +67,9 @@ class ApplyProgramForm(forms.ModelForm):
     class Meta:
         model = AppliedPrograms
         fields = ("user", "program_details",)
+
+class ApplicantAttachementsForm(forms.ModelForm):
+
+    class Meta:
+        model = ApplicantAttachment
+        fields = ('photo','school_certificate',)

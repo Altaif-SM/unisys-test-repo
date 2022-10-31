@@ -227,5 +227,10 @@ urlpatterns = [
         login_required(ListAppliedApplicants.as_view()),
         name='list_applicants'
     ),
+    path(
+        'attachments/',
+        login_required(ApplicantAttachmentsView.as_view()),
+        name='applicant_attachments'
+    ),
 
 ]
