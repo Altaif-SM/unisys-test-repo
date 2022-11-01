@@ -289,7 +289,7 @@ class ApplicantAttachmentsView(View):
     model = ApplicantAttachment
     form_class = ApplicantAttachementsForm
     template_name = "tanseeq_student/applicant_attachment_view.html"
-    redirect_url = 'tanseeq_app:student_study_mode'
+    redirect_url = 'tanseeq_app:list_student_programs'
 
     def get(self, request, pk=None):
 
