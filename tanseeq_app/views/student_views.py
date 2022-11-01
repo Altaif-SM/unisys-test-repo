@@ -167,6 +167,10 @@ class ListStudentPrograms(ListView):
         faculty_id = self.request.GET.get("faculty")
         university_id = self.request.GET.get("university")
         study_mode_id = self.request.GET.get("study_mode")
+
+        if (faculty_id is None) or (university_id is None) or (study_mode_id is None):
+            return SecondaryCertificateInfo.objects.none()
+
         extra_filters = {}
         if faculty_id:
             extra_filters["faculty_id"] = faculty_id

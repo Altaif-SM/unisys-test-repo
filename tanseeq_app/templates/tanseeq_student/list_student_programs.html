@@ -70,16 +70,16 @@
     <div class="row" style="padding-left: 30px;">
         <form method="GET">
             <div class="col-md-3">
-                <select class="form-control" name="university" id="id_university">
+                <select class="form-control" name="university" id="id_university" required>
                     <option selected value="">Select University</option>
                 </select>
             </div>
             <div class="col-md-3">
-                <select class="form-control" name="faculty" id="id_faculty">
+                <select class="form-control" name="faculty" id="id_faculty" required>
                 </select>
             </div>
             <div class="col-md-3">
-                <select class="form-control" name="study_mode" id="id_study_mode">
+                <select class="form-control" name="study_mode" id="id_study_mode" required>
                 </select>
             </div>
             <div class="col-md-2">
@@ -94,6 +94,7 @@
             <tr>
                 <th style="display: none">Id</th>
                 <th> {% trans 'University' %}</th>
+                <th> {% trans 'Study Mode' %}</th>
                 <th> {% trans 'Faculty' %}</th>
                 <th> {% trans 'Program' %}</th>
                 <th> {% trans 'Code' %}</th>
@@ -108,6 +109,9 @@
                     <td style="display: none"><input id="university_id" value="{{ rec.id }}"></td>
                     <td>
                         {{ rec.university.university_name|default_if_none:"" }}
+                    </td>
+                <td>
+                        {{ rec.study_mode.study_mode|default_if_none:"" }}
                     </td>
                     <td>
                         {{ rec.faculty.name|default_if_none:"" }}
