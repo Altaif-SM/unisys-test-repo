@@ -232,5 +232,10 @@ urlpatterns = [
         login_required(ApplicantAttachmentsView.as_view()),
         name='applicant_attachments'
     ),
+    path(
+        'declaration/',
+        login_required(DeclarationSubmissionView.as_view()),
+        name='applicant_declaration'
+    ),
 
 ]

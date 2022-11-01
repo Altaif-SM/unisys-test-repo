@@ -139,9 +139,14 @@ class ApplicationDetails(BaseModel):
         ("male", "MALE"),
         ("female", "FEMALE"),
     )
+    APPLICATION_STATUS = (
+        ("Submitted", "SUBMITTED"),
+        ("Not Submitted", "NOT SUBMITTED"),
+    )
     first_name = models.CharField(max_length=150, blank=True, null=True)
     last_name = models.CharField(max_length=150, blank=True, null=True)
     gender_type = models.CharField(choices=GENDER_TYPE, max_length=50)
+    application_status = models.CharField(choices=APPLICATION_STATUS, default='Not Submitted', max_length=50)
     birth_date = models.DateField()
     nationality = models.ForeignKey('masters.CountryDetails', null=True, related_name='student_nationality_details', on_delete=models.PROTECT)
     country = models.ForeignKey('masters.CountryDetails', null=True, related_name='student_country_details', on_delete=models.PROTECT)

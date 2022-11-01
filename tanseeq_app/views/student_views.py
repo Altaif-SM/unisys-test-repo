@@ -167,10 +167,6 @@ class ListStudentPrograms(ListView):
         faculty_id = self.request.GET.get("faculty")
         university_id = self.request.GET.get("university")
         study_mode_id = self.request.GET.get("study_mode")
-
-        # if (faculty_id is None) or (university_id is None) or (study_mode_id is None):
-        #     return SecondaryCertificateInfo.objects.none()
-
         extra_filters = {}
         if faculty_id:
             extra_filters["faculty_id"] = faculty_id
@@ -323,3 +319,29 @@ class ApplicantAttachmentsView(View):
                 "form": form,
             }
             return render(request, self.template_name, context)
+
+
+class DeclarationSubmissionView(View):
+    model = ApplicationDetails
+    template_name = "tanseeq_student/applicant_declaration.html"
+    form_class = ApplicationInfoForm
+    redirect_url = "tanseeq_app:applicant_declaration"
+
+    def get_context_data(self, **kwargs):
+        user = self.request.user
+        instance = self.model.objects.filter(created_by=user).first()
+        context = {
+            "instance":instance,
+        }
+        return context
+
+    def get(self, request):
+        return render(request, self.template_name, context=self.get_context_data())
+
+    def post(self, request):
+        user = request.user
+        obj = self.model.objects.filter(created_by=user).first()
+        obj.application_status = 'Submitted'
+        obj.save()
+        data = {"msg": "Application Subnitted"}
+        return JsonResponse(data, status=202, safe=False)
