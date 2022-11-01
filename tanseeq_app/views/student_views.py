@@ -168,8 +168,8 @@ class ListStudentPrograms(ListView):
         university_id = self.request.GET.get("university")
         study_mode_id = self.request.GET.get("study_mode")
 
-        if (faculty_id is None) or (university_id is None) or (study_mode_id is None):
-            return SecondaryCertificateInfo.objects.none()
+        # if (faculty_id is None) or (university_id is None) or (study_mode_id is None):
+        #     return SecondaryCertificateInfo.objects.none()
 
         extra_filters = {}
         if faculty_id:
@@ -289,7 +289,7 @@ class ApplicantAttachmentsView(View):
     model = ApplicantAttachment
     form_class = ApplicantAttachementsForm
     template_name = "tanseeq_student/applicant_attachment_view.html"
-    redirect_url = 'tanseeq_app:list_student_programs'
+    redirect_url = 'tanseeq_app:student_study_mode'
 
     def get(self, request, pk=None):
 
