@@ -59,7 +59,16 @@
                                 >
                                     Back
                                 </button>
-                                <button type="submit" class="btn green" id="save_form" style="">Save Next</button>
+
+                                 {% if  tanseeq_application.application_status == 'Not Submitted' %}
+                                    <button type="submit" class="btn green" id="save_form" style="">Save Next</button>
+                                 {% else %}
+                                    <button type="button"
+                                            onClick="location.href='{% url 'tanseeq_app:list_student_programs' %}'"
+                                            class="btn green" id="next" >Next
+                                    </button>
+                                {% endif %}
+
                             </div>
 
                         </div>
@@ -69,4 +78,14 @@
             </div>
         </div>
     </div>
+{% endblock %}
+{% block ajax %}
+    <script>
+        {% if tanseeq_application.application_status == 'Submitted' %}
+            $('input').prop('disabled', 'true');
+            $('textarea').prop('disabled', 'true');
+            $('select').prop('disabled', 'true');
+            $('label').prop('readonly', 'true');
+        {% endif %}
+    </script>
 {% endblock %}

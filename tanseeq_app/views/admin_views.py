@@ -510,7 +510,7 @@ class ConditionsView(View):
 def get_universities(request):
     university_objs = UniversityDetails.active_records()
     data = serializers.serialize("json", university_objs)
-    return JsonResponse(data, status=200, safe=False)
+    return JsonResponse(data,status=200, safe=False)
 
 
 class TanseeqFeeList(ListView):
