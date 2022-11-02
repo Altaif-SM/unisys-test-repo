@@ -35,10 +35,10 @@
             <div class="form-body">
                 <form
                         action="{% url 'tanseeq_app:add_personal_info' %}"
-                    method="POST"
-                    enctype="multipart/form-data"
-                    id="id_form"
-                    class="form-horizontal"
+                        method="POST"
+                        enctype="multipart/form-data"
+                        id="id_form"
+                        class="form-horizontal"
                 >
                     {% csrf_token %}
                     {% if instance %}
@@ -53,12 +53,12 @@
                                     <span style="color: red">*</span>
                                 </label>
                                 <div class="col-md-3">
-                                    {{form.first_name}}
+                                    {{ form.first_name }}
                                 </div>
                                 <label class="col-md-2 control-label">{% trans form.last_name.label %}:
                                     <span style="color: red">*</span></label>
                                 <div class="col-md-3">
-                                    {{form.last_name}}
+                                    {{ form.last_name }}
                                 </div>
                             </div>
                             <br>
@@ -78,7 +78,7 @@
                                     <span style="color: red">*</span>
                                 </label>
                                 <div class="col-md-3">
-                                    {{form.gender_type}}
+                                    {{ form.gender_type }}
                                 </div>
                             </div>
                             <br>
@@ -88,12 +88,12 @@
                                     <span style="color: red">*</span>
                                 </label>
                                 <div class="col-md-3">
-                                    {{form.nationality}}
+                                    {{ form.nationality }}
                                 </div>
                                 <label class="col-md-2 control-label">{% trans form.birth_date.label %}:
                                     <span style="color: red">*</span></label>
                                 <div class="col-md-3">
-                                    {{form.birth_date}}
+                                    {{ form.birth_date }}
                                 </div>
                             </div>
                             <br>
@@ -102,13 +102,13 @@
                                     <span style="color: red">*</span>
                                 </label>
                                 <div class="col-md-3">
-                                    {{form.country}}
+                                    {{ form.country }}
                                 </div>
                                 <label class="col-md-2 control-label">{% trans form.city.label %}:
                                     <span style="color: red">*</span>
                                 </label>
                                 <div class="col-md-3">
-                                    {{form.city}}
+                                    {{ form.city }}
                                 </div>
                             </div>
                             <br>
@@ -117,7 +117,7 @@
                                     <span style="color: red">*</span>
                                 </label>
                                 <div class="col-md-3">
-                                    {{form.contact_number}}
+                                    {{ form.contact_number }}
                                 </div>
                             </div>
                             <br>
@@ -126,14 +126,29 @@
                                     <span style="color: red">*</span>
                                 </label>
                                 <div class="col-md-8">
-                                    {{form.address}}
+                                    {{ form.address }}
                                 </div>
                             </div>
                             <br>
                         </div>
                         <div class="row">
                             <div class="col-md-offset-10 col-md-7">
-                                <button type="submit" class="btn green" id="save_form">Save Next</button>
+
+                                {% if instance == None %}
+                                    <button type="submit" class="btn green" id="save_form">Save Next</button>
+                                {% else %}
+                                    {% if  instance.application_status == 'Not Submitted' %}
+                                        <button type="submit" class="btn green" id="save_form">Save Next</button>
+
+                                    {% else %}
+                                        <button type="button"
+                                                onClick="location.href='{% url 'tanseeq_app:add_secondary_certificate_info' %}'"
+                                                class="btn green" id="next" style="float: left">Next
+                                        </button>
+                                    {% endif %}
+                                {% endif %}
+
+
                             </div>
                         </div>
                     </div>
@@ -141,4 +156,14 @@
             </div>
         </div>
     </div>
+{% endblock %}
+{% block ajax %}
+    <script>
+        {% if tanseeq_application.application_status == 'Submitted' %}
+            $('input').prop('disabled', 'true');
+            $('textarea').prop('disabled', 'true');
+            $('select').prop('disabled', 'true');
+            $('label').prop('readonly', 'true');
+        {% endif %}
+    </script>
 {% endblock %}

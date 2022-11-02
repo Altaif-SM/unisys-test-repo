@@ -31,8 +31,10 @@ class PersonalInfoView(View):
     redirect_url = 'tanseeq_app:add_secondary_certificate_info'
 
     def get(self, request, pk=None):
+        tanseeq_application = get_tanseeq_application(request.user)
         context = {
             "form": self.form_class(),
+            "tanseeq_application":tanseeq_application,
         }
         if ApplicationDetails.objects.filter(created_by=request.user).exists():
             instance = get_object_or_404(self.model, created_by=request.user)
@@ -74,7 +76,7 @@ class SecondaryCertificateInfoView(View):
     redirect_url = 'tanseeq_app:applicant_attachments'
 
     def get(self, request, pk=None):
-
+        tanseeq_application = get_tanseeq_application(request.user)
         cert_obj = ApplicationDetails.objects.filter(
             created_by=request.user).exists()
         if not cert_obj:
@@ -84,6 +86,7 @@ class SecondaryCertificateInfoView(View):
 
         context = {
             "form": self.form_class(),
+            "tanseeq_application": tanseeq_application,
         }
         if SecondaryCertificateInfo.objects.filter(created_by=request.user).exists():
             instance = get_object_or_404(self.model, created_by=request.user)
@@ -129,9 +132,11 @@ class StudentStudyModeView(View):
 
     def get_context_data(self, **kwargs):
         user = self.request.user
+        tanseeq_application = get_tanseeq_application(user)
         instance = self.model.objects.filter(created_by=user).first()
         context = {
-            "form": self.form_class(instance=instance) if instance else self.form_class()
+            "form": self.form_class(instance=instance) if instance else self.form_class(),
+            "tanseeq_application": tanseeq_application
         }
         return context
 
@@ -287,6 +292,7 @@ class ApplicantAttachmentsView(View):
     redirect_url = 'tanseeq_app:student_study_mode'
 
     def get(self, request, pk=None):
+        tanseeq_application = get_tanseeq_application(request.user)
 
         cert_obj = ApplicationDetails.objects.filter(
             created_by=request.user).exists()
@@ -295,7 +301,9 @@ class ApplicantAttachmentsView(View):
                 self.request, "Please add personal info first.")
             return redirect("tanseeq_app:add_personal_info")
 
-        context = {}
+        context = {
+            "tanseeq_application":tanseeq_application,
+        }
         if ApplicantAttachment.objects.filter(created_by=request.user).exists():
             instance = get_object_or_404(self.model, created_by=request.user)
             context["instance"] = instance
@@ -344,3 +352,7 @@ class DeclarationSubmissionView(View):
         obj.save()
         data = {"msg": "Application Subnitted"}
         return JsonResponse(data, status=202, safe=False)
+
+
+def get_tanseeq_application(user):
+    return ApplicationDetails.objects.filter(created_by=user).first()

@@ -115,7 +115,7 @@
                             {{ rec.created_by.first_name|default_if_none:"" }} {{ rec.created_by.last_name|default_if_none:"" }}
                         </td>
                         <td>
-                            Not Submitted
+                            {{ rec.application_status|default_if_none:"" }}
                         </td>
                         <td>
 

@@ -139,7 +139,12 @@
 
 {% block ajax %}
 <script>
-
+{% if tanseeq_application.application_status == 'Submitted' %}
+            $('input').prop('disabled', 'true');
+            $('textarea').prop('disabled', 'true');
+            $('select').prop('disabled', 'true');
+            $('label').prop('readonly', 'true');
+        {% endif %}
     $(".apply_program").on("click", function(e){
         $(e.target).attr("disabled", true)
         $(e.target).text("Applying")
