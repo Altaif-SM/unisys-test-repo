@@ -158,6 +158,12 @@ class ApplicationDetails(BaseModel):
     tanseeq_id = models.CharField(max_length=50, blank=True, null=True)
     created_by = models.ForeignKey(User, on_delete=models.PROTECT,null=True,)
 
+    def save(self, *args, **kwargs):
+        User.objects.filter(id=self.user_id).update(
+        first_name = self.first_name,
+        last_name = self.last_name
+        )
+        super(ApplicationDetails, self).save(args, kwargs)
 
 class SecondaryCertificateInfo(BaseModel):
     YEAR_CHOICES = [(r, r) for r in range(1984, datetime.date.today().year + 1)]
@@ -178,16 +184,26 @@ class SecondaryCertificateInfo(BaseModel):
     created_by = models.ForeignKey(User, on_delete=models.PROTECT,null=True,)
     study_mode = models.ForeignKey(StudyModeDetails, on_delete=models.PROTECT, blank=True, null=True,)
 
+
 class ApplicantAttachment(BaseModel):
     application = models.ForeignKey(ApplicationDetails, null=True, related_name='student_attachement_application',on_delete=models.PROTECT)
     photo = models.ImageField(upload_to=profile_picture_upload_path, max_length=256, blank=True, null=True)
     school_certificate = models.ImageField(upload_to=school_certificate_upload_path, max_length=256, blank=True, null=True)
-    created_by = models.ForeignKey(User, on_delete=models.PROTECT,null=True,)
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True,)
 
 
 class AppliedPrograms(BaseModel):
+    REVIEW_STATUS = (
+        (0, "Not Acceptable"),
+        (1, "Accepted")
+    )
+
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     program_details = models.ForeignKey(ConditionFilters, on_delete=models.PROTECT)
+    bond_no = models.CharField(max_length=255, blank=True, null=True)
+    is_denied = models.BooleanField(default=False)
+    review_status = models.IntegerField(choices=REVIEW_STATUS, max_length=50, blank=True, null=True)
+    review_note = models.TextField(blank=True, null=True)
 
     class Meta:
         verbose_name = "Applied Program"

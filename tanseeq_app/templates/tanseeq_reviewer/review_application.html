@@ -1,0 +1,275 @@
+{% extends "template_base_page.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    </head>
+    <!-- END HEAD -->
+    <style>
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+            $('#sample_1').dataTable().fnDestroy();
+            $('#sample_1').dataTable({
+                "aoColumnDefs": [
+                    {'bSortable': false}
+                ]
+            });
+        }
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+    </script>
+{% endblock %}
+
+{% block content %}
+<div class="page-bar" style="margin-bottom: 1px;">
+    <ul class="page-breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            <a href="{% url 'tanseeq_app:tanseeq_student' %}">Home</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="{% url 'tanseeq_app:reviewer_list_application' %}">Review Orders</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <span> {% trans 'Review order' %} </span>
+        </li>
+    </ul>
+</div>
+{% for message in messages %}
+    <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    </div>
+{% endfor %}
+<div class="portlet light portlet-fit portlet-form ">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-settings font-red"></i>
+            <span class="caption-subject font-red sbold uppercase">
+                {% trans 'Review order' %}
+            </span>
+        </div>
+    </div>
+
+    <div class="portlet-body container">
+        <div class="row">
+            <div class="col-md-12" style="margin-bottom: 15px;">
+                <h4 class="bold">Personal data of the Applicant - {{app_details_obj.first_name}} {{app_details_obj.last_name}}:</h4>
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <img src="{{attachments.photo.url}}">
+                    </div>
+                </div>
+            </div>
+            {% for field in app_details_form %}
+                <div class="col-md-6">
+                    <p><span class="bold">{{field.label}}</span>: {{field.value}}</p>
+                </div>
+            {% endfor %}
+            <div class="col-md-12 text-center">
+                <button class="btn btn-primary" id="modity_app_details">Modify</button>
+            </div>
+        </div>
+        <hr>
+        <div class="row" style="margin-top: 35px;">
+            <div class="col-md-12" style="margin-bottom: 15px;">
+                <h4 class="bold">Secondary Certificate Info:</h4>
+            </div>
+            <hr/>
+            {% for field in secondary_cert_form %}
+                <div class="col-md-6">
+                    <p><span class="bold">{{field.label}}</span>: {{field.value}}</p>
+                </div>
+            {% endfor %}
+            <div class="col-md-12 text-center" style="margin-top: 35px;">
+                <button class="btn btn-primary" id="modity_secondary_cert">Modify</button>
+            </div>
+        </div>
+        <hr>
+        <div class="row" style="margin-top: 35px;">
+            <div class="col-md-12">
+                <h4 class="bold">Secondary school Certificate:</h4>
+            </div>
+            <hr/>
+            <div class="col-md-12">
+                <img class="" src="{{attachments.school_certificate.url}}">
+            </div>
+        </div>
+        <div class="row" style="margin-top: 35px; margin-bottom: 35px;">
+            <div class="col-md-12">
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="row" style="margin-top: 15px;">
+                            <label class="col-md-4 control-label text-right">{% trans field.label %}:
+                                <span style="color: red">*</span>
+                            </label>
+                            <div class="col-md-4">
+                                {{field}}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div class="row">
+                        <br/>
+                        <div class="col-md-12 text-center">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Application Details model -->
+<div id="id_app_details_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <form id="id_app_details_form">
+            {% csrf_token %}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title" style="color: #2a015e; text-align: center"><b>Modify Personal Details.</b></h4>
+                </div>
+                <div class="modal-body">
+                    {% for field in app_details_form %}
+                        <div class="row" style="margin-top: 15px;">
+                            <label class="col-md-4 control-label">{% trans field.label %}:
+                                <span style="color: red">*</span>
+                            </label>
+                            <div class="col-md-8">
+                                {{field}}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="id_cancel_app_details" data-dismiss="modal" class="btn dark btn-outline">
+                        Cancel
+                    </button>
+                    <button type="submit" id="id_confirm_app_details" class="btn btn-primary">Update</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Secondary Certificate model -->
+<div id="id_secondary_cert_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <form id="id_secondary_cert_form">
+            {% csrf_token %}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title" style="color: #2a015e; text-align: center"><b>Modify Secondary Certificate Info.</b></h4>
+                </div>
+                <d  iv class="modal-body">
+                    {% for field in secondary_cert_form %}
+                        <div class="row" style="margin-top: 15px;">
+                            <label class="col-md-4 control-label">{% trans field.label %}:
+                                <span style="color: red">*</span>
+                            </label>
+                            <div class="col-md-8">
+                                {{field}}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="id_cancel_secondary_cert" data-dismiss="modal" class="btn dark btn-outline">
+                        Cancel
+                    </button>
+                    <button type="submit" id="id_confirm_secondary_cert" class="btn btn-primary">Update</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block ajax %}
+<script>
+    $("#modity_app_details").on("click", (e)=>{
+        $("#id_app_details_model").modal()
+        $("#id_confirm_fee").attr("fee-url", $(e.target).attr("fee-url"))
+    });
+
+    $("#modity_secondary_cert").on("click", (e)=>{
+        $("#id_secondary_cert_model").modal()
+    });
+
+    $("#id_app_details_form").on("submit", (e)=>{
+        e.preventDefault()
+        const btn = $("#id_confirm_app_details")
+        const url = "{% url 'tanseeq_app:reviewer_review_application' applied_program.id %}";
+        btn.attr('disabled', true)
+        btn.text("Updating")
+        const formData = new FormData(e.target);
+        formData.append("form", "application_details")
+        updateDetails(url, formData, btn)
+    })
+
+    $("#id_secondary_cert_form").on("submit", (e)=>{
+        e.preventDefault()
+        const btn = $("#id_confirm_secondary_cert")
+        const url = "{% url 'tanseeq_app:reviewer_review_application' applied_program.id %}";
+        btn.attr('disabled', true)
+        btn.text("Updating")
+        const formData = new FormData(e.target);
+        formData.append("form", "secondary_cert")
+        updateDetails(url, formData, btn)
+    })
+
+    function updateDetails(url, formData, btn) {
+        $.ajax({
+            type: 'post',
+            url: url,
+            data : formData,
+            processData: false,
+            contentType: false,
+            beforeSend: function(xhr, settings) {
+                xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+            },
+            success: function (data, textStatus, xhr) {
+                if(xhr.status == 200){
+                    if (formData.get("form") == "application_details"){
+                        $("#id_app_details_model").modal("hide")
+                    }else{
+                        $("#id_secondary_cert_model").modal("hide")
+                    }
+                }
+            },
+            complete: function (){
+                btn.attr('disabled', false)
+                btn.text("Update")
+            },
+            error: function (xhr, msg, err) {
+            }
+        });
+    }  
+</script>
+{% endblock %}

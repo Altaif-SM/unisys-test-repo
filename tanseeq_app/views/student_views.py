@@ -1,7 +1,6 @@
 import random
 from django.views.generic import TemplateView, View, ListView
-from django.shortcuts import get_object_or_404
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.contrib import messages
 from tanseeq_app.models import (
@@ -54,7 +53,7 @@ class PersonalInfoView(View):
             form = self.form_class(request.POST)
         if form.is_valid():
             obj = form.save(commit=False)
-            if not ApplicationDetails.objects.filter(created_by=request.user).exists():
+            if not obj.created_by or not obj.user:
                 obj.created_by = request.user
                 obj.user = request.user
                 obj.tanseeq_id = random.SystemRandom().randint(100000, 999999)

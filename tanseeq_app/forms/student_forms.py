@@ -21,7 +21,7 @@ class ApplicationInfoForm(forms.ModelForm):
     class Meta:
         model = ApplicationDetails
         fields = ("first_name","last_name","gender_type", "birth_date", "nationality", "country", "city",
-            "contact_number", "address", "is_active",
+            "contact_number", "address",
         )
 
         widgets = {
@@ -43,8 +43,7 @@ class SecondaryCertificationForm(forms.ModelForm):
 
     class Meta:
         model = SecondaryCertificateInfo
-        fields = ("year", "secondary_certificate", "seat_number", "average", "school_name", "country", "city", "is_active",
-        )
+        fields = ("year", "secondary_certificate", "seat_number", "average", "school_name", "country", "city",)
 
 
 class StudentStudyModeForm(forms.ModelForm):
@@ -67,6 +66,7 @@ class ApplyProgramForm(forms.ModelForm):
     class Meta:
         model = AppliedPrograms
         fields = ("user", "program_details",)
+
 
 class ApplicantAttachementsForm(forms.ModelForm):
 

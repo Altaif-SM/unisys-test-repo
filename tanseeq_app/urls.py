@@ -2,6 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.urls import path
 from tanseeq_app.views.admin_views import *
 from tanseeq_app.views.student_views import *
+from tanseeq_app.views.finance_views import *
+from tanseeq_app.views.reviewer_views import *
 
 app_name = 'tanseeq_app'
 
@@ -237,5 +239,34 @@ urlpatterns = [
         login_required(DeclarationSubmissionView.as_view()),
         name='applicant_declaration'
     ),
+
+    # Finance
+    path(
+        'requestlist/',
+        login_required(AdvanceOrders.as_view()),
+        name='finance_requestlist'
+    ),
+
+    path(
+        'update_fee/<int:pk>',
+        login_required(ManageAdvanceOrders.as_view()),
+        name='finance_update_fee'
+    ),
+
+    # Reviewer
+    path(
+        'list_application/',
+        login_required(ListReviewApplications.as_view()),
+        name='reviewer_list_application'
+    ),
+    
+    path(
+        'review_application/<int:pk>',
+        login_required(ReviewApplication.as_view()),
+        name='reviewer_review_application'
+    ),
+
+    
+    
 
 ]

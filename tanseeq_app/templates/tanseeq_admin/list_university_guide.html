@@ -163,7 +163,7 @@
             contentType: false,  // tell jQuery not to set contentType
             beforeSend: function(xhr, settings) {
                 xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
-             } ,
+            },
             success : function(data) {
                 $(e.target)[0].reset()
                 location.reload()
