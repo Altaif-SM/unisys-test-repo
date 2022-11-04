@@ -239,6 +239,11 @@ urlpatterns = [
         login_required(DeclarationSubmissionView.as_view()),
         name='applicant_declaration'
     ),
+    path(
+        'voucher/<int:pk>',
+        login_required(print_voucher),
+        name='print_voucher'
+    ),
 
     # Finance
     path(

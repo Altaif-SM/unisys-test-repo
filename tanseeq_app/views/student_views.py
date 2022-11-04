@@ -1,7 +1,7 @@
 import random
 from django.views.generic import TemplateView, View, ListView
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.contrib import messages
 from tanseeq_app.models import (
     ApplicationDetails,
@@ -17,7 +17,9 @@ from tanseeq_app.forms.student_forms import (
     ApplyProgramForm,
     ApplicantAttachementsForm,
 )
-
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from django.conf import settings
 
 # Create your views here.
 class TanseeqStudentHome(TemplateView):
@@ -356,3 +358,31 @@ class DeclarationSubmissionView(View):
 
 def get_tanseeq_application(user):
     return ApplicationDetails.objects.filter(created_by=user).first()
+
+
+def print_voucher(request, pk):
+    try:
+        redirect_url = "tanseeq_app:list_applied_programs"
+        template = get_template("tanseeq_student/print_voucher.html")
+        applied_program_obj = get_object_or_404(AppliedPrograms, pk=pk)
+        attachments = get_object_or_404(ApplicantAttachment, created_by_id=applied_program_obj.user_id),
+        secondary_cert_obj = get_object_or_404(SecondaryCertificateInfo, created_by_id=applied_program_obj.user_id)
+        photo = attachments[0].photo.path
+        context = {
+            "applied_program_obj": applied_program_obj,
+            "secondary_cert_obj": secondary_cert_obj,
+            "photo": photo,
+            "ttcc_logo": settings.MEDIA_ROOT + 'Voucher/ttcc_logo.png',
+            "bar_code": settings.MEDIA_ROOT + 'Voucher/bar_code.png',
+        }
+        context = (context)
+        html = template.render(context)
+        file = open('test.pdf', "w+b")
+        pisa.CreatePDF(html.encode('utf-8'), dest=file, encoding='utf-8')
+        file.seek(0)
+        pdf = file.read()
+        file.close()
+        return HttpResponse(pdf, 'application/pdf')
+    except Exception as e:
+        messages.warning(request, "An error occurred " + str(e))
+        return redirect(redirect_url)

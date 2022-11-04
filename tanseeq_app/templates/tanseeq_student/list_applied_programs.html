@@ -95,12 +95,20 @@
                     <td>{{ rec.program_details.study_mode.study_mode|default_if_none:"" }}</td>
                     <td>{{ rec.program_details.program.name|default_if_none:"" }}</td>
                     <td>{{ rec.program_details.fee|default_if_none:"" }}</td>
-                    <td><a href="" class="btn glyphicon glyphicon-file"></a></td>
+
+                    <td>
+                        <a target="_blank" href="{% url 'tanseeq_app:print_voucher' rec.id %}"
+                        class="btn glyphicon glyphicon-file">
+                        </a>
+                    </td>
+
+
                     <td>
                         <button type="button" delete-url="{% url 'tanseeq_app:delete_applied_program' rec.id %}"
                             class="delete btn-danger glyphicon glyphicon-remove" name="delete">
                         </button>
                     </td>
+
                 </tr>
             {% endfor %}
             </tbody>
