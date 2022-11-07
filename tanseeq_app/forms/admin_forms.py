@@ -1,4 +1,5 @@
 from django import forms
+from django.db.models import Q
 from masters.models import UniversityDetails, StudyModeDetails
 from tanseeq_app.models import (
     TanseeqPeriod,
@@ -10,9 +11,9 @@ from tanseeq_app.models import (
     TanseeqFee,
     TanseeqCourses,
     Course,
-    ApplicationDetails,
-    SecondaryCertificateInfo,
 )
+from accounts.models import User
+from django.contrib.auth import password_validation
 
 
 class TanseeqPeriodForm(forms.ModelForm):
@@ -177,3 +178,62 @@ class CourseForm(forms.ModelForm):
     class Meta:
         model = Course
         fields = ('course','mark',)
+
+
+class TanseeqUserForm(forms.ModelForm):
+    password1 = forms.CharField(
+        label="Password",
+        strip=False,
+        widget=forms.PasswordInput(render_value=True,),
+        help_text=password_validation.password_validators_help_text_html(),
+    )
+    password2 = forms.CharField(
+        label="Password confirmation",
+        widget=forms.PasswordInput(render_value=True,),
+        strip=False,
+        help_text="Enter the same password as before, for verification.",
+    )
+
+    class Meta:
+        model = User
+        fields = ("first_name", "last_name", "email", "role", "university", "faculty", "program", "is_active", "password1", "password2",)
+                             
+    def clean_password2(self):
+        password1 = self.cleaned_data.get("password1")
+        password2 = self.cleaned_data.get("password2")
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError(
+                'Password Mismatch',
+                code='password_mismatch',
+            )
+        return password2
+
+    def __init__(self, *args, **kwargs):
+        super(TanseeqUserForm, self).__init__(*args, **kwargs)
+        self.fields['role'].queryset = self.fields['role'].queryset.filter(is_tanseeq=True)
+        for field in self.fields:
+            if field != "is_active":
+                self.fields[field].widget.attrs.update({
+                    "class": "form-control",
+                    "required": "true",
+                })
+        if self.instance.id:
+            self.fields["password1"].required = False
+            self.fields["password2"].required = False
+    
+    def clean_email(self):
+        email=self.cleaned_data['email']
+        if User.objects.filter(~Q(id=self.instance.id), email=email).exists():
+            raise forms.ValidationError(("A user with that email already exists."))
+        return email
+
+    def _post_clean(self):
+        super(TanseeqUserForm, self)._post_clean()
+        # Validate the password after self.instance is updated with form data
+        # by super().
+        password = self.cleaned_data.get('password2')
+        if password:
+            try:
+                password_validation.validate_password(password, self.instance)
+            except forms.ValidationError as error:
+                self.add_error('password2', error)

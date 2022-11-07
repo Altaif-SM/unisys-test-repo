@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.core import serializers
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, View, ListView, UpdateView, DeleteView
+from accounts.models import User
 from tanseeq_app.models import (
     TanseeqPeriod,
     SecondarySchoolCetificate,
@@ -27,6 +28,7 @@ from tanseeq_app.forms.admin_forms import (
     TanseeqFeeForm,
     TanseeqCourseForm,
     CourseForm,
+    TanseeqUserForm,
 )
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
@@ -35,6 +37,7 @@ from django.contrib import messages
 
 class TanseeqAdminHome(TemplateView):
     template_name = 'tanseeq_admin/admin_home.html'
+
 
 class TanseeqPeriodListView(ListView):
     model = TanseeqPeriod
@@ -273,6 +276,7 @@ class StudyModeView(View):
         instance.delete()
         messages.success(request, "Record removed.")
         return JsonResponse({"status": 200})
+
 
 class StudyModeView(View):
     model = StudyModeDetails
@@ -656,3 +660,71 @@ class CourseUpdateView(UpdateView):
 class ListAppliedApplicants(ListView):
     model = ApplicationDetails
     template_name = "tanseeq_admin/list_applied_applicants.html"
+
+
+class ListUsers(ListView):
+    model = User
+    template_name = "tanseeq_admin/list_users.html"
+    context_object_name = "user_recs"
+    crumbs = [
+        {"title": "Home", "url": "/"},
+        {"title": "Users", "url": "tanseeq_app:list_tanseeq_users"},
+    ]
+
+    def get_queryset(self):
+        return User.objects.filter(created_by=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["crumbs"] = self.crumbs
+        return context
+
+class ManageUsers(View):
+    model = User
+    template_name = "tanseeq_admin/add_user.html"
+    form_class = TanseeqUserForm
+    redirect_url = "tanseeq_app:list_tanseeq_users"
+    crumbs = [
+        {"title": "Home", "url": "/"},
+        {"title": "Users", "url": redirect_url},
+        {"title": "Manage User"},
+    ]
+    def get_context_data(self, pk):
+        if pk:
+            user = self.model.objects.filter(id=pk, created_by=self.request.user).first()
+            form = self.form_class(instance=user)
+        else:
+            form = self.form_class()
+        return {"form": form, "crumbs": self.crumbs}
+
+    def get(self, request, pk=None):
+        context = self.get_context_data(pk)
+        return render(request, self.template_name, context)
+    
+    def post(self, request, pk=None):
+        if pk:
+            instance = get_object_or_404(self.model, pk=pk, created_by=request.user)
+            form = self.form_class(request.POST, instance=instance)
+        else:
+            form = self.form_class(request.POST)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            if form.cleaned_data["password1"]:
+                obj.set_password(form.cleaned_data["password1"])
+
+
+            if pk:
+                messages.success(request, "Record Updated.")
+            else:
+                obj.created_by = request.user
+                obj.username = obj.email
+                messages.success(request, "Record saved.")
+            obj.save()
+            form.save_m2m()
+        else:
+            context = {
+                "form": form,
+                "crumbs": self.crumbs,
+            }
+            return render(request, self.template_name, context)
+        return redirect(self.redirect_url)

@@ -423,8 +423,6 @@ class StudyTypeDetails(BaseModel):
         ordering = ('-id',)
 
 
-
-
 class Department(models.Model):
     department = models.CharField(max_length=100, blank=True, null=True)
 
@@ -445,6 +443,9 @@ class FacultyDetails(BaseModel):
 
     class Meta:
         ordering = ('-id',)
+    
+    def __str__(self):
+        return self.faculty_name
 
 class CampusBranchesDetails(BaseModel):
     campus_name = models.CharField(max_length=150, blank=True, null=True)

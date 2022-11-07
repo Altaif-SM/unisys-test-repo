@@ -8,6 +8,10 @@ from tanseeq_app.views.reviewer_views import *
 app_name = 'tanseeq_app'
 
 urlpatterns = [
+    
+    path('users/', login_required(ListUsers.as_view()), name='list_tanseeq_users'),
+    path('add/user/', login_required(ManageUsers.as_view()), name='add_user'),
+    path('update/user/<int:pk>/', login_required(ManageUsers.as_view()), name='manage_user'),
     path('admin/', login_required(TanseeqAdminHome.as_view()), name='tanseeq_admin'),
     path('tanseeq_period/', login_required(TanseeqPeriodListView.as_view()), name='list_tanseeq_period'),
     path('add/tanseeq_period', TanseeqPeriodView.as_view(), name='add_tanseeq_period'),

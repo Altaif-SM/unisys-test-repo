@@ -8,6 +8,7 @@ from django.db.models import Q
 class UserRole(BaseModel):
     name = models.CharField(max_length=50)
     role_permission = models.ManyToManyField(Permission)
+    is_tanseeq = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -78,6 +79,8 @@ class User(AbstractUser):
     program = models.ForeignKey('masters.ProgramDetails', blank=True, null=True,
                                 related_name='user_program_rel',
                                 on_delete=models.SET_NULL)
+    created_by = models.ForeignKey("self", on_delete=models.SET_NULL, blank=True, null=True)    
+
     class Meta:
         permissions = (
             ('can_view_year_master', 'can view year master'),
@@ -184,7 +187,7 @@ class User(AbstractUser):
         return True if self.role.all().filter(name__in=[self.TANSEEQ_ADMIN]).exists() else False
 
     def is_tanseeq_student(self):
-        return True if self.role.all().filter(name__in=[self.TANSEEQ_STUDENT]).exists() else False
+        return True if self.role.all().filter(name__in=[self.TANSEEQ_STUDENT]).exists() else False  
 
     @property
     def get_user_permissions(self):
@@ -390,7 +393,6 @@ class User(AbstractUser):
 
 
     def get_dashboard_path(self):
-        print("==", self.username)
         dashboard_path = User.ADMIN_DASHBOARD
         if self.role.get().name == User.ADMIN:
             dashboard_path = User.ADMIN_DASHBOARD
