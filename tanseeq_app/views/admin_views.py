@@ -32,6 +32,7 @@ from tanseeq_app.forms.admin_forms import (
 )
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
+from django.http.request import QueryDict
 # Create your views here.
 
 
@@ -728,3 +729,17 @@ class ManageUsers(View):
             }
             return render(request, self.template_name, context)
         return redirect(self.redirect_url)
+
+class ManageApplicationStatus(View):
+    model = ApplicationDetails
+
+    def patch(self, request, pk):
+        data = QueryDict(request.body)
+        status = data.get("status")
+        if not status:
+            return JsonResponse({"msg": "Application status is required."}, status=304)
+        obj = self.model.objects.filter(pk=pk)
+        if not obj:
+            return JsonResponse({}, status=404)
+        obj.update(application_status=status)
+        return JsonResponse({}, status=200)

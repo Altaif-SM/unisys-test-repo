@@ -80,13 +80,15 @@
                     <th> {% trans 'Study mode' %}</th>
                     <th> {% trans 'Created by' %}</th>
                     <th> {% trans 'Status' %}</th>
+                    <th> {% trans 'Action' %}</th>
                     <th> {% trans 'Attachements' %}</th>
+
 
                 </tr>
                 </thead>
                 <tbody id="tbody">
                 {% for rec in object_list %}
-                    <tr id="item{{ rec.id }}" class="item">
+                    <tr id="item{{ forloop.counter }}" class="item">
                         <td style="display: none"><input id="university_id" value="{{ rec.id }}"></td>
                         <td>
                             {{ rec.created_on|date:"d/m/Y" }}
@@ -114,9 +116,19 @@
                         <td>
                             {{ rec.created_by.first_name|default_if_none:"" }} {{ rec.created_by.last_name|default_if_none:"" }}
                         </td>
-                        <td>
+                        <td class="application_status">
                             {{ rec.application_status|default_if_none:"" }}
+
+
                         </td>
+                        <td>
+                            <button type="button" status-url="{% url 'tanseeq_app:application_update_status' rec.id %}"
+                                    class="change_status btn-primary btn-xs">
+                                Change Status
+                            </button>
+                        </td>
+
+
                         <td>
 
                             {% if rec.student_attachement_application.all %}
@@ -147,10 +159,51 @@
 
                         </td>
 
+
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
+        </div>
+    </div>
+    <!-- pop up modal -->
+    <div id="id_status_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title" style="color: #2a015e; text-align: center"><b>Change Application Status</b>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <form id="id_update_fee_form">
+                        <div class="row">
+                            <div class="col-md-3 text-right control-label">
+                                <label class="text-center">Status</label>
+                            </div>
+                            <div class="col-md-6">
+
+                                <select id='id_status' title="Select Status"
+                                        name="status"
+                                        class="form-control" required>
+                                    <option selected="selected" value="">{% trans 'Please Select' %}</option>
+
+                                    <option value="Submitted">Submitted</option>
+                                    <option value="Not Submitted">Not Submitted</option>
+
+                                </select>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="id_status_cancel_model" data-dismiss="modal" class="btn dark btn-outline">
+                        Cancel
+                    </button>
+                    <button type="button" id="id_confirm_status" class="btn btn-primary">Confirm</button>
+                </div>
+            </div>
         </div>
     </div>
     {% include 'delete_modal.html' %}
@@ -158,6 +211,35 @@
 
 {% block ajax %}
     <script>
+
+        $(document).on("click", ".change_status", function (e) {
+            var application_status = $(this).closest('tr').find('.application_status').text().trim();
+            $('#id_status').empty();
+            $('#id_status').append(
+                '<option value="' + application_status + '">'
+                + application_status + '</option>');
+            if (application_status == 'Not Submitted') {
+                $('#id_status').append(
+                    '<option value="Submitted">Submitted</option>');
+            } else {
+                $('#id_status').append(
+                    '<option value="Not Submitted">Not Submitted</option>');
+            }
+
+
+            $("#id_status_model").modal()
+            $("#id_confirm_status").attr("status-url", $(e.target).attr("status-url"))
+
+        })
+
+
+        $("#id_confirm_status").on("click", (e) => {
+            $(e.target).attr('disabled', true)
+            updateStaus($(e.target).attr("status-url"))
+            $("#id_status_model").modal('hide')
+        })
+
+
         $(".delete").on("click", (e) => {
             $("#id_delete_model").modal()
             $("#id_confirm_delete").attr("delete-url", $(e.target).attr("delete-url"))
@@ -184,6 +266,31 @@
                 },
                 complete: function () {
                     $("#id_confirm_delete").attr('disabled', false)
+                },
+                error: function (xhr, msg, err) {
+                }
+            });
+        }
+
+        function updateStaus(url) {
+            const formData = new FormData($("#id_update_fee_form")[0])
+            formData.set("status", formData.get("status").trim())
+            $.ajax({
+                type: 'PATCH',
+                url: url,
+                data: {
+                    "status": formData.get("status")
+                },
+                beforeSend: function (xhr, settings) {
+                    xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                },
+                success: function (data, textStatus, xhr) {
+                    if (xhr.status == 200) {
+                        location.reload()
+                    }
+                },
+                complete: function () {
+                    $("#id_confirm_status").attr('disabled', false)
                 },
                 error: function (xhr, msg, err) {
                 }

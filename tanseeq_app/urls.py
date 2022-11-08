@@ -187,6 +187,12 @@ urlpatterns = [
         login_required(CourseUpdateView.as_view()),
         name='update_course'
     ),
+    path(
+        'update_status/<int:pk>',
+        login_required(ManageApplicationStatus.as_view()),
+        name='application_update_status'
+    ),
+
     path('student/', login_required(TanseeqStudentHome.as_view()), name='tanseeq_student'),
     path(
         'personal_info/',
