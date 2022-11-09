@@ -55,6 +55,8 @@ class User(AbstractUser):
     AGENT_RECRUITER = 'Agent Recruiter'
     TANSEEQ_ADMIN = 'Tanseeq Admin'
     TANSEEQ_STUDENT = 'Tanseeq Student'
+    TANSEEQ_FINANCE = 'Tanseeq Finance'
+    TANSEEQ_REVIEWER = 'Tanseeq Reviewer'
 
 
     first_name = models.CharField(max_length=256, blank=True, null=True)
@@ -187,7 +189,13 @@ class User(AbstractUser):
         return True if self.role.all().filter(name__in=[self.TANSEEQ_ADMIN]).exists() else False
 
     def is_tanseeq_student(self):
-        return True if self.role.all().filter(name__in=[self.TANSEEQ_STUDENT]).exists() else False  
+        return True if self.role.all().filter(name__in=[self.TANSEEQ_STUDENT]).exists() else False
+
+    def is_tanseeq_finance(self):
+        return True if self.role.all().filter(name__in=[self.TANSEEQ_FINANCE]).exists() else False
+
+    def is_tanseeq_reviewer(self):
+        return True if self.role.all().filter(name__in=[self.TANSEEQ_REVIEWER]).exists() else False
 
     @property
     def get_user_permissions(self):
@@ -390,6 +398,8 @@ class User(AbstractUser):
     AGENT_RECRUITER_DASHBOARD = '/agents/recruiter_dashboard/'
     TANSEEQ_ADMIN_DASHBOARD = '/tanseeq/admin/'
     TANSEEQ_STUDENT_DASHBOARD = '/tanseeq/student/'
+    TANSEEQ_FINANCE_DASHBOARD = '/tanseeq/requestlist/'
+    TANSEEQ_REVIEWER_DASHBOARD = '/tanseeq/list_application/'
 
 
     def get_dashboard_path(self):
@@ -422,4 +432,8 @@ class User(AbstractUser):
             dashboard_path = User.TANSEEQ_ADMIN_DASHBOARD
         elif self.role.get().name == User.TANSEEQ_STUDENT:
             dashboard_path = User.TANSEEQ_STUDENT_DASHBOARD
+        elif self.role.get().name == User.TANSEEQ_FINANCE:
+            dashboard_path = User.TANSEEQ_FINANCE_DASHBOARD
+        elif self.role.get().name == User.TANSEEQ_REVIEWER:
+            dashboard_path = User.TANSEEQ_REVIEWER_DASHBOARD
         return dashboard_path

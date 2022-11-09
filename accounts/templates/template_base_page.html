@@ -162,7 +162,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             {% else %}
                                 {#                                <img alt="" class="img-circle" src="../../media/{{ user.get_application.image }}"/>#}
                                 <b><span class="username username-hide-on-mobile">
-                            {% if user.is_tanseeq_student or request.user.is_tanseeq_admin %}
+                            {% if user.is_tanseeq_student or request.user.is_tanseeq_admin or request.user.is_tanseeq_finance or  request.user.is_tanseeq_reviewer %}
                                 {{ user.role.all.0.name }}
                             {%else%}
                                 {{ user.role.all.0.name }} ({{ user.first_name|default_if_none:"" }}{{ user.last_name|default_if_none:""}})
@@ -441,6 +441,10 @@ License: You must have a valid license purchased only from themeforest(the above
                                 {% include 'tanseeq_admin/admin_side_bar.html' %}
                             {% elif request.user.is_tanseeq_student  %}
                                 {% include 'tanseeq_student/student_side_bar.html' %}
+                            {% elif request.user.is_tanseeq_finance  %}
+                                {% include 'tanseeq_finance/finance_side_bar.html' %}
+                            {% elif request.user.is_tanseeq_reviewer  %}
+                                {% include 'tanseeq_reviewer/reviewer_side_bar.html' %}
                             {%else%}
                                 {% include 'role_user_side_bar.html' %}
                             {% endif %}
