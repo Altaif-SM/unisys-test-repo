@@ -132,12 +132,22 @@
 {% block content %}
     <div class="page-bar" style="margin-bottom: 1px;">
         <ul class="page-breadcrumb">
+
             <li>
                 <i class="icon-home"></i>
-                <a href="{% url 'accounts:home' %}">Home</a>
+                <a {% if request.user.is_tanseeq_admin %} href="{% url 'tanseeq_app:tanseeq_admin' %}" {% else %} href="{% url 'accounts:home' %}" {% endif %}>Home</a>
                 <i class="fa fa-angle-right"></i>
             </li>
+
+         {% if request.user.is_tanseeq_admin %}
+
             <li>
+                <span>{% trans 'Academic Year' %}</span>
+            </li>
+
+
+            {% else %}
+              <li>
                 <span> Master Settings </span>
                 <i class="fa fa-angle-right"></i>
             </li>
@@ -148,9 +158,14 @@
             <li>
                 <span> {% trans 'Manage Year' %}</span>
             </li>
+        {% endif %}
+
+
+
 
         </ul>
     </div>
+
 
     {% for message in messages %}
         <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}

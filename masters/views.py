@@ -64,13 +64,24 @@ def update_year(request):
     end_date = request.POST.get('end_date')
     end_dt = datetime.datetime.strptime(str(end_date), "%Y-%m-%d").date()
     start_dt = datetime.datetime.strptime(str(start_date), "%Y-%m-%d").date()
-    try:
-        if YearDetails.objects.filter(~Q(id=year_id), year_name=year_name.lower()).exists():
-            messages.success(request, "Year name already exists. Record not updated..")
 
-        # elif YearDetails.objects.filter(~Q(id=year_id)).filter((Q(start_date__lte=start_date) & Q(end_date__gte=end_date)) | Q(start_date__range=(start_date, end_date)) | Q(end_date__range=(start_date, end_date))):
-        #     messages.success(request, "Academic year already Exists")
+    try:
+        if request.user.is_tanseeq_admin():
+            if YearDetails.objects.filter(~Q(id=year_id), year_name=year_name.lower(),is_tanseeq_year=True).exists():
+                messages.warning(request, "Year name already exists. Record not updated.")
+
+                return HttpResponse(json.dumps({'success': 'Year name already exists. Record not saved.'}),
+                                    content_type="application/json")
         else:
+            if YearDetails.objects.filter(~Q(id=year_id), year_name=year_name.lower(),is_tanseeq_year=False).exists():
+                messages.warning(request, "Year name already exists. Record not updated.")
+
+                return HttpResponse(json.dumps({'success': 'Year name already exists. Record not saved.'}),
+                                    content_type="application/json")
+
+
+            # elif YearDetails.objects.filter(~Q(id=year_id)).filter((Q(start_date__lte=start_date) & Q(end_date__gte=end_date)) | Q(start_date__range=(start_date, end_date)) | Q(end_date__range=(start_date, end_date))):
+            #     messages.success(request, "Academic year already Exists")
             # today = date.today()
             # if (start_dt <= today) and (end_dt > today):
             #     YearDetails.objects.filter().update(active_year=False)
@@ -79,12 +90,10 @@ def update_year(request):
             # else:
             #     YearDetails.objects.filter(id=year_id).update(year_name=year_name.lower(), start_date=start_date,
             #                                                   end_date=end_date,active_year = False)
-            YearDetails.objects.filter(id=year_id).update(year_name=year_name.lower(), start_date=start_date,
-                                                              end_date=end_date)
-            messages.success(request, "Record saved.")
-            return HttpResponse(json.dumps({'success': 'Record saved.'}), content_type="application/json")
-        return HttpResponse(json.dumps({'success': 'Year name already exists. Record not saved.'}),
-                            content_type="application/json")
+        YearDetails.objects.filter(id=year_id).update(year_name=year_name.lower(), start_date=start_date,
+                                                          end_date=end_date)
+        messages.success(request, "Record saved.")
+        return HttpResponse(json.dumps({'success': 'Record saved.'}), content_type="application/json")
 
     except:
         messages.warning(request, "Record not saved.")
@@ -2624,6 +2633,8 @@ def delete_program(request):
 
 def year_settings(request):
     year_recs = YearDetails.objects.all()
+    if request.user.is_tanseeq_admin():
+        year_recs = YearDetails.objects.filter(is_tanseeq_year=True)
     return render(request, 'year_settings.html', {'year_recs': year_recs})
 
 def add_year(request):
@@ -2633,16 +2644,27 @@ def add_year(request):
     end_dt = datetime.datetime.strptime(str(end_date), "%Y-%m-%d").date()
     start_dt = datetime.datetime.strptime(str(start_date), "%Y-%m-%d").date()
 
+    is_tanseeq_year = False
+    if request.user.role.filter(name='Tanseeq Admin').exists():
+        is_tanseeq_year = True
+
     try:
-        if YearDetails.objects.filter(year_name=year_name).exists():
-            messages.warning(request, "Year name already exists.")
+        if request.user.is_tanseeq_admin():
+            if YearDetails.objects.filter(year_name=year_name, is_tanseeq_year=True).exists():
+                messages.warning(request, "Year name already exists.")
+                return redirect('/masters/year_settings/')
+        else:
+            if YearDetails.objects.filter(year_name=year_name, is_tanseeq_year=False).exists():
+                messages.warning(request, "Year name already exists.")
+                return redirect('/masters/year_settings/')
+
 
         # elif YearDetails.objects.all().filter(
         #         (Q(start_date__lte=start_dt) & Q(end_date__gte=end_dt)) | Q(start_date__range=(start_dt, end_dt)) | Q(
         #                 end_date__range=(start_dt, end_dt))):
         #     messages.success(request, "Academic year already Exists")
 
-        else:
+        # else:
 
             # today = date.today()
             #
@@ -2653,8 +2675,8 @@ def add_year(request):
             # else:
             #     YearDetails.objects.create(year_name=year_name.lower(), start_date=start_date, end_date=end_date)
 
-            YearDetails.objects.create(year_name=year_name, start_date=start_date, end_date=end_date)
-            messages.success(request, "Record saved.")
+        YearDetails.objects.create(year_name=year_name, start_date=start_date, end_date=end_date, is_tanseeq_year = is_tanseeq_year)
+        messages.success(request, "Record saved.")
     except:
         messages.warning(request, "Record not saved.")
     return redirect('/masters/year_settings/')

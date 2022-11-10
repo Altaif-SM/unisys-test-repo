@@ -164,6 +164,7 @@ class YearDetails(BaseModel):
     start_date = models.DateField()
     end_date = models.DateField()
     active_year = models.BooleanField(default=False)
+    is_tanseeq_year = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('year_name',)
