@@ -174,7 +174,7 @@ class YearDetails(BaseModel):
 
     @classmethod
     def active_records(cls):
-        return cls.objects.filter(active_year=True)
+        return cls.objects.filter(is_tanseeq_year=True)
 
     def to_dict(self):
         res = {

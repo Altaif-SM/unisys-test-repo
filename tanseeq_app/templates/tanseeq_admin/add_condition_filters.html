@@ -94,18 +94,19 @@
                             </div>
                             <br>
                             <div class="row">
+                                <label class="col-md-2 control-label">{% trans form.academic_year.label %}:
+                                    <span style="color: red">*</span>
+                                </label>
+                                <div class="col-md-3">
+                                    {{form.academic_year}}
+                                </div>
                                 <label class="col-md-2 control-label">{% trans form.type_of_secondary.label %}:
                                     <span style="color: red">*</span>
                                 </label>
                                 <div class="col-md-3">
                                     {{form.type_of_secondary}}
                                 </div>
-                                <label class="col-md-2 control-label">{% trans form.year.label %}:
-                                    <span style="color: red">*</span>
-                                </label>
-                                <div class="col-md-3">
-                                    {{form.year}}
-                                </div>
+
                             </div>
                             <br>
                             <div class="row">

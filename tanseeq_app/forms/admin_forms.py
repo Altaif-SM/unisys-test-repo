@@ -1,6 +1,6 @@
 from django import forms
 from django.db.models import Q
-from masters.models import UniversityDetails, StudyModeDetails
+from masters.models import UniversityDetails, StudyModeDetails, YearDetails
 from tanseeq_app.models import (
     TanseeqPeriod,
     SecondarySchoolCetificate,
@@ -120,6 +120,7 @@ class ConditionFiltersForm(forms.ModelForm):
         super(ConditionFiltersForm, self).__init__(*args, **kwargs)
         self.fields['university'].queryset = UniversityDetails.objects.filter(is_tanseeq_university=True,
                                                                                 is_active=True, is_delete=False)
+        self.fields['academic_year'].queryset = YearDetails.objects.filter(is_tanseeq_year=True,)
         for field in self.fields:
             if field not in ["is_exam", "is_active"]:
                 self.fields[field].widget.attrs.update({
@@ -129,7 +130,7 @@ class ConditionFiltersForm(forms.ModelForm):
 
     class Meta:
         model = ConditionFilters
-        fields = ("study_mode", "faculty", "program", "type_of_secondary", "year",
+        fields = ("study_mode", "faculty", "program", "type_of_secondary", "academic_year",
             "start_date", "end_date", "average", "capacity", "fee", "is_exam", "is_active","university",
         )
 

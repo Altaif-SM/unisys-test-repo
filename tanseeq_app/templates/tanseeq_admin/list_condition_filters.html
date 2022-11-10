@@ -98,8 +98,8 @@
                     <th> {% trans 'Study Mode' %}</th>
                     <th> {% trans 'Faculty Name' %}</th>
                     <th> {% trans 'Program' %}</th>
+                    <th width="10%">{% trans 'Academic Year' %}</th>
                     <th> {% trans 'Type of Secondary' %}</th>
-                    <th width="10%">{% trans 'Year' %}</th>
                     <th width="10%">{% trans 'Start Date' %}</th>
                     <th width="10%">{% trans 'End Date' %}</th>
                     <th width="10%">{% trans 'Average' %}</th>
@@ -118,8 +118,8 @@
                         <td>{{rec.study_mode}}</td>
                         <td>{{ rec.faculty.name|default_if_none:"" }}</td>
                         <td>{{ rec.program.name|default_if_none:"" }}</td>
+                        <td>{{ rec.academic_year.year_name|default_if_none:"" }}</td>
                         <td>{{ rec.type_of_secondary|default_if_none:"" }}</td>
-                        <td>{{ rec.year|default_if_none:"" }}</td>
                         <td>{{ rec.start_date|default_if_none:"" }}</td>
                         <td>{{ rec.end_date|default_if_none:"" }}</td>
                         <td>{{ rec.average|default_if_none:"" }}</td>
