@@ -409,12 +409,16 @@ class TanseeqProgramView(View):
 
     def get(self, request, pk=None):
         university_objs = UniversityDetails.active_records()
+        faculties = []
         context = {
             "university_objs": university_objs,
             "form": self.form_class(),
         }
         if pk:
             instance = get_object_or_404(self.model, pk=pk)
+            if instance.university:
+                faculties = TanseeqFaculty.objects.filter(universities__id=instance.university.id)
+            context["faculties"] = faculties
             context["instance"] = instance
             context["form"] = self.form_class(instance=get_object_or_404(self.model, pk=pk))
         return render(request, self.template_name, context)
@@ -427,6 +431,7 @@ class TanseeqProgramView(View):
             form = self.form_class(request.POST)
         if form.is_valid():
             obj = form.save(commit=False)
+            # obj.faculty_id = form.data['faculty']
             obj.save()
             form.save_m2m()
             if pk:

@@ -67,6 +67,7 @@ class TanseeqFaculty(BaseModel):
 
 
 class TanseeqProgram(BaseModel):
+    university = models.ForeignKey(UniversityDetails, related_name="tanseeq_program_tanseeq_program", null=True, on_delete=models.PROTECT)
     faculty = models.ForeignKey(TanseeqFaculty, related_name="tanseeq_program_tanseeq_faculty", on_delete=models.PROTECT)
     name = models.CharField(max_length=100)
     code = models.CharField(max_length=255)

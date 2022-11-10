@@ -95,17 +95,14 @@ class TanseeqFacultyForm(forms.ModelForm):
 
 class TanseeqProgramForm(forms.ModelForm):
 
-    def __init__(self, *args, **kwargs):
-        super(TanseeqProgramForm, self).__init__(*args, **kwargs)
-        self.fields['universities'].queryset = UniversityDetails.objects.filter(is_tanseeq_university=True,is_active=True, is_delete=False)
-
-
     class Meta:
         model = TanseeqProgram
-        fields = ("faculty", "name", "code", "is_active",)
+        fields = ("university","faculty", "name", "code", "is_active",)
 
     def __init__(self, *args, **kwargs):
         super(TanseeqProgramForm, self).__init__(*args, **kwargs)
+        self.fields['university'].queryset = UniversityDetails.objects.filter(is_tanseeq_university=True,
+                                                                              is_active=True, is_delete=False)
         for field in self.fields:
             if field != "is_active":
                 self.fields[field].widget.attrs.update({
