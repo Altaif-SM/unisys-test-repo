@@ -105,12 +105,21 @@
         <!-- BEGIN LOGIN FORM -->
         <form class="login-form" method="post" action="{% url 'accounts:user_signin' %}">
             {% csrf_token %}
+
+                {% if is_agent %}
+                    <input type="hidden" name="role" value="Agent" class="form-control"/>
+                {% elif is_tanseeq_student %}
+                    <input type="hidden" name="role" value="Tanseeq Student" class="form-control"/>
+                {% else %}
+                    <input type="hidden" name="role" value="Student" class="form-control"/>
+                {% endif %}
+
             <h3 class="form-title font" style="color: #0a001f;">{% trans 'Sign In' %}</h3>
             <div class="alert alert-danger display-hide">
                 <button class="close" data-close="alert"></button>
 
 
-                <span>{% trans 'Enter Valid User Name and Password.' %} </span>
+                <span>{% trans 'Enter valid Email and Password.' %} </span>
             </div>
             {% if context1 %}
                 <div class="alert alert-danger" role="alert">{{ context1 }}
@@ -153,6 +162,7 @@
         <!-- BEGIN REGISTRATION FORM -->
         <form class="register-form" action="{% url 'accounts:user_signup' %}" method="post">{% csrf_token %}
 
+
             <h3 class="font" style="color: #0a001f;">Sign Up</h3>
             <p class="hint">{% trans 'Enter your personal details below:' %}</p>
             <div class="form-group">
@@ -181,10 +191,12 @@
                 </div>{% endcomment %}
             <p class="hint"> Enter your account details below: </p>
             <div class="form-group">
-                {% if not is_agent %}
-                <input type="hidden" name="role" value="Student" class="form-control"/>
-                {% else %}
+                {% if is_agent %}
                     <input type="hidden" name="role" value="Agent" class="form-control"/>
+                {% elif is_tanseeq_student %}
+                    <input type="hidden" name="role" value="Tanseeq Student" class="form-control"/>
+                {% else %}
+                    <input type="hidden" name="role" value="Student" class="form-control"/>
                 {% endif %}
                 <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
                 <label class="control-label visible-ie8 visible-ie9">Email</label>

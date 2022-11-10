@@ -1,0 +1,158 @@
+{% extends "template_base_page.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    </head>
+    <!-- END HEAD -->
+    <style>
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+            $('#sample_1').dataTable().fnDestroy();
+            $('#sample_1').dataTable({
+                "aoColumnDefs": [
+                    {'bSortable': false}
+                ]
+            });
+        }
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'tanseeq_app:tanseeq_student' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> {% trans 'Attachment' %} </span>
+            </li>
+        </ul>
+    </div>
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase"> {% trans 'Manage Attachment' %}</span>
+            </div>
+
+        </div>
+        <div class="container">
+            <form
+                    action="{% url 'tanseeq_app:applicant_attachments' %}"
+                    method="POST"
+                    enctype="multipart/form-data"
+                    id="id_form"
+                    class="form-horizontal"
+            >
+                {% csrf_token %}
+                <br>
+                <div class="row">
+                    <div class="col-md-2  text-right">
+                        <label class="control-label">
+                            Personal Picture
+
+                        </label>
+                    </div>
+                    <div class="col-md-3">
+                        <input class="form-control" type="file" name="photo" accept="image/jpeg, image/jpg, image/png">
+                    </div>
+                    {% if instance.photo %}
+                        <div class="col-md-1" style="top:8px;">
+                            <a href="{{ instance.photo.url }}" download>
+                                <i style="font-size:22px;color: #3695bc;" class="fa fa-cloud-download"
+                                   aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-2  text-right">
+                        <label class="control-label">
+                            A Copy of the High School Certificate
+
+                        </label>
+                    </div>
+                    <div class="col-md-3">
+                        <input class="form-control" type="file" name="school_certificate"
+                               accept="image/jpeg, image/jpg, image/png">
+                    </div>
+                    {% if instance.school_certificate %}
+                        <div class="col-md-1" style="top:8px;">
+                            <a href="{{ instance.school_certificate.url }}" download>
+                                <i style="font-size:22px;color: #3695bc;" class="fa fa-cloud-download"
+                                   aria-hidden="true"></i>
+                            </a>
+
+                        </div>
+                    {% endif %}
+                </div>
+
+
+                <div class="row">
+
+                    <div class="col-md-offset-5 col-md-7">
+                        <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                                onclick="window.location='{% url "tanseeq_app:add_secondary_certificate_info" %}'"
+                        >
+                            Back
+                        </button>
+
+                         {% if  tanseeq_application.application_status == 'Not Submitted' %}
+                                    <button type="submit" class="btn green" id="save_form" style="">Save Next</button>
+                                {% else %}
+                                    <button type="button"
+                                            onClick="location.href='{% url 'tanseeq_app:student_study_mode' %}'"
+                                            class="btn green" id="next" >Next
+                                    </button>
+                                {% endif %}
+
+                    </div>
+
+                </div>
+                <br>
+
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block ajax %}
+    <script>
+        {% if tanseeq_application.application_status == 'Submitted' %}
+            $('input').prop('disabled', 'true');
+            $('textarea').prop('disabled', 'true');
+            $('select').prop('disabled', 'true');
+            $('label').prop('readonly', 'true');
+        {% endif %}
+    </script>
+{% endblock %}

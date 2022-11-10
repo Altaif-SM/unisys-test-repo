@@ -3115,7 +3115,8 @@ def save_credit_transfer(request):
 
 
 def acceptance_declaration(request):
-    application_obj = ''
+    application_obj = None
+    deferment_obj = None
     try:
         application_obj = request.user.get_application
     except Exception as e :
@@ -3126,10 +3127,58 @@ def acceptance_declaration(request):
             application_obj = request.user.get_application
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
-    return render(request, 'accepting_declarartion.html', {'application_obj':application_obj})
+
+    if DefermentDetails.objects.filter(applicant_id=application_obj.id).exists():
+        deferment_obj = DefermentDetails.objects.get(applicant_id=application_obj.id)
+    context = {
+        'application_obj': application_obj,
+        'deferment_obj': deferment_obj,
+    }
+    return render(request, 'accepting_declarartion.html', context)
 
 def submit_acceptance(request):
     try:
+        is_deferment_study = request.POST.get('is_deferment_study')
+        if is_deferment_study == 'Yes':
+            is_deferment_study = True
+        else:
+            is_deferment_study = False
+        deferment_reasons = request.POST.get('deferment_reasons')
+        justifications = request.POST.get('justifications')
+        medical_certificate = request.FILES.get('medical_certificate')
+        sponsorship_letter = request.FILES.get('sponsorship_letter')
+        other_document = request.FILES.get('other_document')
+
+        if is_deferment_study == False:
+            DefermentDetails.objects.filter(applicant_id=request.user.get_application.id).delete()
+        else:
+            if DefermentDetails.objects.filter(applicant_id=request.user.get_application).exists():
+                deferment_obj = DefermentDetails.objects.get(applicant_id=request.user.get_application)
+                deferment_obj.is_deferment_study = is_deferment_study
+                deferment_obj.deferment_reasons = deferment_reasons
+                deferment_obj.justifications = justifications
+                if medical_certificate:
+                    deferment_obj.medical_certificate = medical_certificate
+                if sponsorship_letter:
+                    deferment_obj.sponsorship_letter = sponsorship_letter
+                if other_document:
+                    deferment_obj.other_document = other_document
+                deferment_obj.save()
+
+            else:
+                deferment_obj = DefermentDetails.objects.create(applicant_id=request.user.get_application)
+                deferment_obj.is_deferment_study = is_deferment_study
+                deferment_obj.deferment_reasons = deferment_reasons
+                deferment_obj.justifications = justifications
+                if medical_certificate:
+                    deferment_obj.medical_certificate = medical_certificate
+                if sponsorship_letter:
+                    deferment_obj.sponsorship_letter = sponsorship_letter
+                if other_document:
+                    deferment_obj.other_document = other_document
+                deferment_obj.save()
+        return redirect('/student/acceptance_declaration/')
+
         ApplicationDetails.objects.filter(application_id=request.user.get_application_id).update(is_offer_accepted=True,is_online_admission = True)
         ApplicationHistoryDetails.objects.create(applicant_id=request.user.get_application,
                                                  status='Offer Accepted',

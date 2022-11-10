@@ -8,6 +8,7 @@ from django.db.models.functions import Concat
 class UserRole(BaseModel):
     name = models.CharField(max_length=50)
     role_permission = models.ManyToManyField(Permission)
+    is_tanseeq = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -52,6 +53,10 @@ class User(AbstractUser):
     SUPERVISOR = 'Supervisor'
     AGENT = 'Agent'
     AGENT_RECRUITER = 'Agent Recruiter'
+    TANSEEQ_ADMIN = 'Tanseeq Admin'
+    TANSEEQ_STUDENT = 'Tanseeq Student'
+    TANSEEQ_FINANCE = 'Tanseeq Finance'
+    TANSEEQ_REVIEWER = 'Tanseeq Reviewer'
 
 
     first_name = models.CharField(max_length=256, blank=True, null=True)
@@ -76,6 +81,8 @@ class User(AbstractUser):
     program = models.ForeignKey('masters.ProgramDetails', blank=True, null=True,
                                 related_name='user_program_rel',
                                 on_delete=models.SET_NULL)
+    created_by = models.ForeignKey("self", on_delete=models.SET_NULL, blank=True, null=True)    
+
     class Meta:
         permissions = (
             ('can_view_year_master', 'can view year master'),
@@ -184,6 +191,18 @@ class User(AbstractUser):
 
     def is_agent_recruiter(self):
         return True if self.role.all().filter(name__in=[self.AGENT_RECRUITER]).exists() else False
+
+    def is_tanseeq_admin(self):
+        return True if self.role.all().filter(name__in=[self.TANSEEQ_ADMIN]).exists() else False
+
+    def is_tanseeq_student(self):
+        return True if self.role.all().filter(name__in=[self.TANSEEQ_STUDENT]).exists() else False
+
+    def is_tanseeq_finance(self):
+        return True if self.role.all().filter(name__in=[self.TANSEEQ_FINANCE]).exists() else False
+
+    def is_tanseeq_reviewer(self):
+        return True if self.role.all().filter(name__in=[self.TANSEEQ_REVIEWER]).exists() else False
 
     @property
     def get_user_permissions(self):
@@ -387,10 +406,13 @@ class User(AbstractUser):
     ADMINISTRATOR_DASHBOARD = '/partner/template_approving_application/'
     AGENT_DASHBOARD = '/agents/dashboard/'
     AGENT_RECRUITER_DASHBOARD = '/agents/recruiter_dashboard/'
+    TANSEEQ_ADMIN_DASHBOARD = '/tanseeq/admin/'
+    TANSEEQ_STUDENT_DASHBOARD = '/tanseeq/student/'
+    TANSEEQ_FINANCE_DASHBOARD = '/tanseeq/requestlist/'
+    TANSEEQ_REVIEWER_DASHBOARD = '/tanseeq/list_application/'
 
 
     def get_dashboard_path(self):
-
         dashboard_path = User.ADMIN_DASHBOARD
         if self.role.get().name == User.ADMIN:
             dashboard_path = User.ADMIN_DASHBOARD
@@ -416,4 +438,12 @@ class User(AbstractUser):
             dashboard_path = User.AGENT_DASHBOARD
         elif self.role.get().name == User.AGENT_RECRUITER:
             dashboard_path = User.AGENT_RECRUITER_DASHBOARD
+        elif self.role.get().name == User.TANSEEQ_ADMIN:
+            dashboard_path = User.TANSEEQ_ADMIN_DASHBOARD
+        elif self.role.get().name == User.TANSEEQ_STUDENT:
+            dashboard_path = User.TANSEEQ_STUDENT_DASHBOARD
+        elif self.role.get().name == User.TANSEEQ_FINANCE:
+            dashboard_path = User.TANSEEQ_FINANCE_DASHBOARD
+        elif self.role.get().name == User.TANSEEQ_REVIEWER:
+            dashboard_path = User.TANSEEQ_REVIEWER_DASHBOARD
         return dashboard_path

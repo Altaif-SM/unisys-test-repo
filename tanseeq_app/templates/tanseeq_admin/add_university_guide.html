@@ -1,0 +1,113 @@
+{% extends "template_base_page.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'accounts:home' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> {% trans 'University Guide' %} </span>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> {% trans 'Add University Guide' %} </span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">Add University Guide</span>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form
+                    {% if instance %}
+                        action="{% url 'tanseeq_app:tanseeq_period' instance.pk%}"
+                    {%else%}
+                        action="{% url 'tanseeq_app:add_tanseeq_period' %}"
+                    {% endif %}
+                    method="POST"
+                    enctype="multipart/form-data"
+                    id="id_form"
+                    class="form-horizontal"
+                >
+                    {% csrf_token %}
+                    {% if instance %}
+                        <input type="hidden" name="_method" value="PATCH">
+                    {% endif %}
+                    <div class="form-body">
+                        <div class="row item_experience" id="item_experience_1">
+                            <div class="row">
+                                <label class="col-md-2 control-label">{% trans 'University' %}:
+                                    <span style="color: red">*</span>
+                                </label>
+                                <div class="col-md-3">
+                                    <select id='university' title="Select University"
+                                            name="university"
+                                            class="form-control" required>
+                                        <option hidden value="">Please Select</option>
+                                        {% for rec in university_objs %}
+                                            <option value="{{ rec.id }}"
+                                                {% if form.university.value|add:"0" == rec.id or instance.university.id == rec.id %}
+                                                        selected
+                                                {% endif %}
+                                            >
+                                                {{ rec.university_name|default_if_none:"" }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <label class="col-md-2 control-label">{% trans 'Academic Year' %}:
+                                    <span style="color: red">*</span>
+                                </label>
+                                <div class="col-md-3">
+                                    <select id='academic_year' title="Select Type"
+                                            name="academic_year"
+                                            class="form-control" >
+                                        <option hidden value=""> Please Select</option>
+                                        {% for rec in academic_year_objs %}
+                                            <option value="{{ rec.id }}"
+                                                {% if form.academic_year.value|add:"0" == rec.id or instance.academic_year.id == rec.id %}
+                                                    selected
+                                                {% endif %}
+                                            >
+                                                {{ rec.year_name|default_if_none:"" }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                                        onclick="window.location='{% url "tanseeq_app:list_tanseeq_period" %}'"
+                                >
+                                    Back
+                                </button>
+                                <button type="submit" class="btn green" id="save_form" style="">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

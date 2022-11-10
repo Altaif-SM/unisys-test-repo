@@ -13,6 +13,7 @@ from datetime import date
 import datetime
 from django.http import HttpResponse, JsonResponse
 from datetime import datetime
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import Permission
 from django.contrib.auth.decorators import user_passes_test, permission_required
 
@@ -63,13 +64,24 @@ def update_year(request):
     end_date = request.POST.get('end_date')
     end_dt = datetime.datetime.strptime(str(end_date), "%Y-%m-%d").date()
     start_dt = datetime.datetime.strptime(str(start_date), "%Y-%m-%d").date()
-    try:
-        if YearDetails.objects.filter(~Q(id=year_id), year_name=year_name.lower()).exists():
-            messages.success(request, "Year name already exists. Record not updated..")
 
-        # elif YearDetails.objects.filter(~Q(id=year_id)).filter((Q(start_date__lte=start_date) & Q(end_date__gte=end_date)) | Q(start_date__range=(start_date, end_date)) | Q(end_date__range=(start_date, end_date))):
-        #     messages.success(request, "Academic year already Exists")
+    try:
+        if request.user.is_tanseeq_admin():
+            if YearDetails.objects.filter(~Q(id=year_id), year_name=year_name.lower(),is_tanseeq_year=True).exists():
+                messages.warning(request, "Year name already exists. Record not updated.")
+
+                return HttpResponse(json.dumps({'success': 'Year name already exists. Record not saved.'}),
+                                    content_type="application/json")
         else:
+            if YearDetails.objects.filter(~Q(id=year_id), year_name=year_name.lower(),is_tanseeq_year=False).exists():
+                messages.warning(request, "Year name already exists. Record not updated.")
+
+                return HttpResponse(json.dumps({'success': 'Year name already exists. Record not saved.'}),
+                                    content_type="application/json")
+
+
+            # elif YearDetails.objects.filter(~Q(id=year_id)).filter((Q(start_date__lte=start_date) & Q(end_date__gte=end_date)) | Q(start_date__range=(start_date, end_date)) | Q(end_date__range=(start_date, end_date))):
+            #     messages.success(request, "Academic year already Exists")
             # today = date.today()
             # if (start_dt <= today) and (end_dt > today):
             #     YearDetails.objects.filter().update(active_year=False)
@@ -78,12 +90,10 @@ def update_year(request):
             # else:
             #     YearDetails.objects.filter(id=year_id).update(year_name=year_name.lower(), start_date=start_date,
             #                                                   end_date=end_date,active_year = False)
-            YearDetails.objects.filter(id=year_id).update(year_name=year_name.lower(), start_date=start_date,
-                                                              end_date=end_date)
-            messages.success(request, "Record saved.")
-            return HttpResponse(json.dumps({'success': 'Record saved.'}), content_type="application/json")
-        return HttpResponse(json.dumps({'success': 'Year name already exists. Record not saved.'}),
-                            content_type="application/json")
+        YearDetails.objects.filter(id=year_id).update(year_name=year_name.lower(), start_date=start_date,
+                                                          end_date=end_date)
+        messages.success(request, "Record saved.")
+        return HttpResponse(json.dumps({'success': 'Record saved.'}), content_type="application/json")
 
     except:
         messages.warning(request, "Record not saved.")
@@ -205,15 +215,60 @@ def update_country(request):
 
 
 @permission_required('masters.delete_countrydetails', raise_exception=True)
-def delete_country(request):
-    country_delete_id = request.POST.get('country_delete_id')
+def delete_country(request,pk):
     try:
-        CountryDetails.objects.filter(id=country_delete_id).delete()
+        instance = get_object_or_404(CountryDetails, pk=pk)
+        instance.delete()
         messages.success(request, "Record deleted.")
     except:
         messages.warning(request, "Record not deleted.")
     return redirect('/masters/country_settings/')
 
+
+# *********------------ City Master ----------***************
+
+def city_settings(request,pk):
+    city_recs = CountryDetails.objects.get(id = pk).city.all()
+    context = {
+        'city_recs':city_recs,
+        'county_id':pk,
+    }
+    return render(request, 'template_city_master.html', context)
+
+def save_city(request):
+    county_id = request.POST.get('county_id')
+    city = request.POST.get('city')
+    try:
+        country_obj = CountryDetails.objects.get(id = county_id)
+        city_obj = CitiDetails.objects.create(city = city)
+        country_obj.city.add(city_obj)
+        messages.success(request, "Record saved.")
+    except:
+        messages.warning(request, "Record not saved.")
+    return redirect('/masters/city_settings/'+str(county_id))
+
+
+def update_city(request):
+    city_id = request.POST.get('city_id')
+    city = request.POST.get('city')
+    try:
+        CitiDetails.objects.filter(id=city_id).update(city=city)
+        messages.success(request, "Record saved.")
+        return HttpResponse(json.dumps({'success': 'Record saved.'}), content_type="application/json")
+    except:
+        messages.warning(request, "Record not saved.")
+    return HttpResponse(json.dumps({'error': 'Record not updated.'}), content_type="application/json")
+
+
+def delete_city(request,pk):
+    try:
+        country_id = CitiDetails.objects.get(id = pk).country_city.all()[0].id
+        instance = get_object_or_404(CitiDetails, pk=pk)
+        instance.delete()
+        messages.success(request, "Record deleted.")
+    except:
+        messages.warning(request, "Record not deleted.")
+    return redirect('/masters/city_settings/'+str(country_id))
 
 # *********------------ University Master ----------***************
 
@@ -1840,32 +1895,68 @@ def delete_currency(request):
 
 @permission_required('masters.can_view_university_details', raise_exception=True)
 def university_settings(request):
-    university_recs = UniversityDetails.objects.filter(is_delete = False)
-    return render(request, 'university_settings.html', {'university_recs': university_recs})
+    if request.user.is_tanseeq_admin():
+        university_recs = UniversityDetails.objects.filter(is_delete = False,is_tanseeq_university = True)
+    else:
+        university_recs = UniversityDetails.objects.filter(is_delete=False, is_tanseeq_university=False)
+    context = {
+        'university_recs':university_recs,
+    }
+    return render(request, 'university_settings.html', context)
 
 
 @permission_required('masters.add_universitydetails', raise_exception=True)
 def add_university(request):
     if request.method == 'POST':
         university_logo = request.FILES.get('university_logo', None)
+        tanseeq_guide = request.FILES.get('tanseeq_guide', None)
+        registration_guide = request.FILES.get('registration_guide', None)
+        university_stamp = request.FILES.get('university_stamp', None)
         university_type = request.POST.get('university_type')
         type = request.POST.get('type')
         university_name = request.POST.get('university_name')
         email = request.POST.get('email')
         telephone = request.POST.get('telephone')
         website = request.POST.get('website')
-        university_address = request.POST.get('university_address')
-        status = request.POST.get('status')
-        if status == 'on':
-            status = True
+        address = request.POST.get('address')
+        university_code = request.POST.get('university_code')
+        contact_details = request.POST.get('contact_details')
+        is_active = request.POST.get('is_active')
+        is_registration = request.POST.get('is_registration')
+        is_singup = request.POST.get('is_singup')
+        if is_active == 'on':
+            is_active = True
         else:
-            status = False
+            is_active = False
+
+        if is_registration == 'on':
+            is_registration = True
+        else:
+            is_registration = False
+
+        if is_singup == 'on':
+            is_singup = True
+        else:
+            is_singup = False
+
+        is_tanseeq_university = False
+        if request.user.role.filter(name = 'Tanseeq Admin').exists():
+            is_tanseeq_university = True
         try:
-            university_obj = UniversityDetails.objects.create(
+            university_obj = UniversityDetails.objects.create(university_code = university_code,contact_details = contact_details,
                                              university_name=university_name, email=email,telephone = telephone,website = website,
-                                             address = university_address,is_active = status,university_type_id = university_type,type_id = type)
+                                             address = address,is_active = is_active,university_type_id = university_type,type_id = type,is_registration = is_registration,is_singup = is_singup,is_tanseeq_university = is_tanseeq_university)
             if university_logo:
                 university_obj.university_logo = university_logo
+                university_obj.save()
+            if tanseeq_guide:
+                university_obj.tanseeq_guide = tanseeq_guide
+                university_obj.save()
+            if registration_guide:
+                university_obj.registration_guide = registration_guide
+                university_obj.save()
+            if university_stamp:
+                university_obj.university_stamp = university_stamp
                 university_obj.save()
             messages.success(request, "Record saved.")
         except:
@@ -1873,37 +1964,69 @@ def add_university(request):
         return redirect('/masters/university_settings/')
     university_type_recs = UniversityTypeDetails.objects.filter(status = True)
     type_recs = TypeDetails.objects.filter(status = True)
-    return render(request, 'add_university.html',{'university_type_recs':university_type_recs,'type_recs':type_recs})
+    context = {
+        'university_type_recs':university_type_recs,
+        'type_recs':type_recs,
+    }
+    return render(request, 'add_university.html',context)
 
 
 @permission_required('masters.change_universitydetails', raise_exception=True)
 def edit_university(request, university_id=None):
+    request.user.role.all()
     university_obj = UniversityDetails.objects.get(id=university_id)
     if request.method == 'POST':
         university_logo = request.FILES.get('university_logo', None)
+        tanseeq_guide = request.FILES.get('tanseeq_guide', None)
+        registration_guide = request.FILES.get('registration_guide', None)
+        university_stamp = request.FILES.get('university_stamp', None)
         university_type = request.POST.get('university_type')
         type = request.POST.get('type')
         university_name = request.POST.get('university_name')
         email = request.POST.get('email')
         telephone = request.POST.get('telephone')
         website = request.POST.get('website')
-        university_address = request.POST.get('university_address')
-        status = request.POST.get('status')
-        if status == 'on':
-            status = True
+        address = request.POST.get('address')
+        university_code = request.POST.get('university_code')
+        contact_details = request.POST.get('contact_details')
+        is_active = request.POST.get('is_active')
+        is_registration = request.POST.get('is_registration')
+        is_singup = request.POST.get('is_singup')
+        if is_active == 'on':
+            is_active = True
         else:
-            status = False
+            is_active = False
+
+        if is_registration == 'on':
+            is_registration = True
+        else:
+            is_registration = False
+
+        if is_singup == 'on':
+            is_singup = True
+        else:
+            is_singup = False
         try:
             university_obj.university_type_id = university_type
             university_obj.type_id = type
             university_obj.university_name = university_name
+            university_obj.university_code = university_code
             university_obj.email = email
             university_obj.telephone = telephone
             university_obj.website = website
-            university_obj.address = university_address
-            university_obj.is_active = status
+            university_obj.address = address
+            university_obj.contact_details = contact_details
+            university_obj.is_active = is_active
+            university_obj.is_registration = is_registration
+            university_obj.is_singup = is_singup
             if university_logo:
                 university_obj.university_logo = university_logo
+            if tanseeq_guide:
+                university_obj.tanseeq_guide = tanseeq_guide
+            if registration_guide:
+                university_obj.registration_guide = registration_guide
+            if university_stamp:
+                university_obj.university_stamp = university_stamp
             university_obj.save()
             messages.success(request, "Record saved.")
         except:
@@ -1911,19 +2034,25 @@ def edit_university(request, university_id=None):
         return redirect('/masters/university_settings/')
     university_type_recs = UniversityTypeDetails.objects.filter(status=True)
     type_recs = TypeDetails.objects.filter(status=True)
-    return render(request, "edit_university.html", {'university_obj': university_obj,'type_recs':type_recs,'university_type_recs':university_type_recs})
-
+    context = {
+        'university_obj':university_obj,
+        'type_recs':type_recs,
+        'university_type_recs':university_type_recs,
+    }
+    return render(request, "edit_university.html", context)
 
 @permission_required('masters.delete_universitydetails', raise_exception=True)
-def delete_university(request):
-    if request.method == 'POST':
-        university_delete_id = request.POST.get('university_delete_id')
-        try:
-            UniversityDetails.objects.filter(id=university_delete_id).delete()
-            messages.success(request, "Record deleted.")
-        except:
-            messages.warning(request, "Record not deleted.")
-        return redirect('/masters/university_settings/')
+def delete_university(request,pk):
+    try:
+        instance = get_object_or_404(UniversityDetails, pk=pk)
+        instance.university_logo.delete()
+        instance.tanseeq_guide.delete()
+        instance.registration_guide.delete()
+        instance.delete()
+        messages.success(request, "Record deleted.")
+    except:
+        messages.warning(request, "Record not deleted.")
+    return redirect('/masters/university_settings/')
 
 
 @permission_required('masters.can_view_faculty_details', raise_exception=True)
@@ -2557,6 +2686,8 @@ def delete_program(request):
 @permission_required('masters.can_view_year_details', raise_exception=True)
 def year_settings(request):
     year_recs = YearDetails.objects.all()
+    if request.user.is_tanseeq_admin():
+        year_recs = YearDetails.objects.filter(is_tanseeq_year=True)
     return render(request, 'year_settings.html', {'year_recs': year_recs})
 
 
@@ -2568,16 +2699,27 @@ def add_year(request):
     end_dt = datetime.datetime.strptime(str(end_date), "%Y-%m-%d").date()
     start_dt = datetime.datetime.strptime(str(start_date), "%Y-%m-%d").date()
 
+    is_tanseeq_year = False
+    if request.user.role.filter(name='Tanseeq Admin').exists():
+        is_tanseeq_year = True
+
     try:
-        if YearDetails.objects.filter(year_name=year_name).exists():
-            messages.warning(request, "Year name already exists.")
+        if request.user.is_tanseeq_admin():
+            if YearDetails.objects.filter(year_name=year_name, is_tanseeq_year=True).exists():
+                messages.warning(request, "Year name already exists.")
+                return redirect('/masters/year_settings/')
+        else:
+            if YearDetails.objects.filter(year_name=year_name, is_tanseeq_year=False).exists():
+                messages.warning(request, "Year name already exists.")
+                return redirect('/masters/year_settings/')
+
 
         # elif YearDetails.objects.all().filter(
         #         (Q(start_date__lte=start_dt) & Q(end_date__gte=end_dt)) | Q(start_date__range=(start_dt, end_dt)) | Q(
         #                 end_date__range=(start_dt, end_dt))):
         #     messages.success(request, "Academic year already Exists")
 
-        else:
+        # else:
 
             # today = date.today()
             #
@@ -2588,8 +2730,8 @@ def add_year(request):
             # else:
             #     YearDetails.objects.create(year_name=year_name.lower(), start_date=start_date, end_date=end_date)
 
-            YearDetails.objects.create(year_name=year_name, start_date=start_date, end_date=end_date)
-            messages.success(request, "Record saved.")
+        YearDetails.objects.create(year_name=year_name, start_date=start_date, end_date=end_date, is_tanseeq_year = is_tanseeq_year)
+        messages.success(request, "Record saved.")
     except:
         messages.warning(request, "Record not saved.")
     return redirect('/masters/year_settings/')

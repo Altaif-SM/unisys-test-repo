@@ -1,0 +1,114 @@
+{% extends "template_base_page.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'tanseeq_app:tanseeq_admin' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> {% trans 'Tanseeq Faculty' %} </span>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>{% if instance %}
+                    <span> {% trans 'Edit Tanseeq Faculty' %} </span>
+                {% else %}
+                    <span> {% trans 'Add Tanseeq Faculty' %} </span>
+                {% endif %}
+
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">{% if instance %}Edit Tanseeq Faculty {% else %} Add Tanseeq Faculty {% endif %} </span>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form
+                    {% if instance %}
+                        action="{% url 'tanseeq_app:edit_tanseeq_faculty' instance.pk%}"
+                    {%else%}
+                        action="{% url 'tanseeq_app:add_tanseeq_faculty' %}"
+                    {% endif %}
+                    method="POST"
+                    enctype="multipart/form-data"
+                    id="id_form"
+                    class="form-horizontal"
+                >
+                    {% csrf_token %}
+                    {% if instance %}
+                        <input type="hidden" name="_method" value="PATCH">
+                    {% endif %}
+                    <div class="form-body">
+                        <div class="row item_experience" id="item_experience_1">
+                            <div class="row">
+                                <label class="col-md-2 control-label">{% trans form.universities.label %}:
+                                    <span style="color: red">*</span>
+                                </label>
+                                <div class="col-md-3">
+                                    {{form.universities}}
+                                </div>
+                                <label class="col-md-2 control-label">{% trans form.code.label %}:
+                                    <span style="color: red">*</span>
+                                </label>
+                                <div class="col-md-3">
+                                    {{form.code}}
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <label class="col-md-2 control-label">{% trans form.name.label %}:
+                                    <span style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    {{form.name}}
+                                </div>
+                                <label class="col-md-2 control-label">{% trans form.is_active.label %}:
+                                    <span style="color: red">*</span>
+                                </label>
+                                <div class="col-md-3">
+                                    {{form.is_active}}
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <label class="col-md-2 control-label">{% trans form.notes.label %}:
+                                    <span style="color: red">*</span>
+                                </label>
+                                <div class="col-md-6">
+                                    {{form.notes}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                                        onclick=window.location="{% url 'tanseeq_app:list_tanseeq_faculty' %}"
+                                >
+                                    Back
+                                </button>
+                                <button type="submit" class="btn green" id="save_form">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

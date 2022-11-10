@@ -24,6 +24,7 @@ urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
     path('', views.template_signin, name='template_signin'),
     path('agent/', views.agent_login, name='agent'),
+    path('tanseeq/', views.tanseeq_student_login, name='tanseeq_student'),
     path('accounts/', include('accounts.urls', namespace='accounts')),
     path('masters/', include('masters.urls', namespace='masters')),
     path('student/', include('student.urls', namespace='student')),
@@ -36,5 +37,6 @@ urlpatterns = [
     path('password_reset/', include('password_reset.urls', namespace='password_reset')),
     path('api/', include('rest_api.urls')),
     path('agents/', include('agents.urls')),
+    path('tanseeq/', include('tanseeq_app.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

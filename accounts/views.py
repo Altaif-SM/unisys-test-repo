@@ -606,30 +606,24 @@ def user_signin(request):
             dashboard_path = user.get_dashboard_path()
             return redirect(dashboard_path)
         else:
-            messages.error(request, "Enter Valid User Name and Password.")
+            messages.error(request, "Enter valid email and password.")
+            if request.POST.get('role') == 'Tanseeq Student':
+                return redirect('/tanseeq/')
             return redirect('/')
 
-        # if user:
-        #     if user.is_active:
-        #         login(request, user)
-        #         dashboard_path = user.get_dashboard_path()
-        #         return redirect(dashboard_path)
-        #     else:
-        #         messages.success(request,
-        #                          "Please activate your account first. Activation link has been sent to your email " + str(
-        #                              user.email) + '.')
-        #         return redirect('/')
-        # else:
-        #     messages.success(request, "Enter Valid User Name and Password.")
-        #     return redirect('/')
 
 
 @user_login_required
 def user_signout(request):
+    tanseeq_role = ['Tanseeq Student', 'Tanseeq Admin', 'Tanseeq Finance', 'Tanseeq Reviewer']
+    agent_role = ['Agent']
     if request.user.role.all():
-        if request.user.role.all()[0].name == 'Agent':
+        if request.user.role.filter(name__in = agent_role):
             logout(request)
             return redirect('/agent/')
+        elif request.user.role.filter(name__in = tanseeq_role):
+            logout(request)
+            return redirect('/tanseeq/')
         else:
             logout(request)
             return redirect('/')
@@ -1064,7 +1058,7 @@ def add_staff(request):
         'university_type_recs':university_type_recs
 
     }
-    return render(request, 'add_staff.html',{'country_list':country_list,'staff_dict':staff_dict})
+    return render(request, 'add_staff.html', {'country_list':country_list,'staff_dict':staff_dict})
 
 
 @permission_required('accounts.change_user', raise_exception=True)
@@ -1448,6 +1442,18 @@ def agent_login(request):
     }
     return render(request, "template_login.html",context)
 
+
+def tanseeq_student_login(request):
+    is_tanseeq_student = True
+    form = loginForm()
+    if request.user.is_authenticated:
+        dashboard_path = request.user.get_dashboard_path()
+        return redirect(dashboard_path)
+    context = {
+        'form':form,
+        'is_tanseeq_student':is_tanseeq_student,
+    }
+    return render(request, "template_login.html",context)
 
 
 

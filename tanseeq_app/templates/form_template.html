@@ -1,0 +1,53 @@
+{% load  i18n %}
+
+<div class="portlet-body">
+    <div class="form-body">
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+            id="id_form"
+            class="form-horizontal"
+        >
+            {% csrf_token %}
+            <div class="form-body">
+                <div class="row item_experience" id="item_experience_1">
+                    <div class="row">
+                            {% for field in form %}
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <label class="col-md-4 control-label">{% trans field.label %}:
+                                        <span style="color: red">*</span>
+                                    </label>
+                                    <div class="col-md-8">
+                                        {{ field }}
+                                    </div>
+                                </div>
+                                <br>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    <div class="row">
+                        <div class="col-md-offset-10 col-md-7">
+
+                            {% if instance == None %}
+                                <button type="submit" class="btn green" id="save_form">Save Next</button>
+                            {% else %}
+                                {% if  instance.application_status == 'Not Submitted' %}
+                                    <button type="submit" class="btn green" id="save_form">Save Next</button>
+
+                                {% else %}
+                                    <button type="button"
+                                            onClick="location.href='{% url 'tanseeq_app:add_secondary_certificate_info' %}'"
+                                            class="btn green" id="next" style="float: left">Next
+                                    </button>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <br>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>

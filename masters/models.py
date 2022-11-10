@@ -6,6 +6,7 @@ from accounts.models import User
 from student.models import *
 from student.models import StudentDetails, ApplicationDetails
 from donor.models import DonorDetails
+from masters.helpers import document_upload_path,university_logo_upload_path,tanseeq_guide_upload_path,registration_guide_upload_path,university_stamp_upload_path
 
 
 def content_file_name_partner(instance, filename):
@@ -21,9 +22,27 @@ def content_file_name_donor(instance, filename):
     filename = "%s_%s.%s" % (instance.user.first_name, dirname, ext)
     return os.path.join('reports', filename)
 
+class CitiDetails(BaseModel):
+    city = models.CharField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        ordering = ('id',)
+
+    def __str__(self):
+        return self.city
+
+    def to_dict(self):
+        res = {
+            'id': self.id if self.id else '',
+            'city': self.city if self.city else '',
+        }
+
+        return res
+
 
 class CountryDetails(BaseModel):
     country_name = models.CharField(max_length=100, blank=True, null=True)
+    city = models.ManyToManyField(CitiDetails, related_name='country_city')
 
     class Meta:
         ordering = ('id',)
@@ -159,6 +178,7 @@ class YearDetails(BaseModel):
     start_date = models.DateField()
     end_date = models.DateField()
     active_year = models.BooleanField(default=False)
+    is_tanseeq_year = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('year_name',)
@@ -168,6 +188,10 @@ class YearDetails(BaseModel):
 
     def __str__(self):
         return self.year_name
+
+    @classmethod
+    def active_records(cls):
+        return cls.objects.filter(is_tanseeq_year=True)
 
     def to_dict(self):
         res = {
@@ -307,24 +331,33 @@ class StudentDonorMapping(BaseModel):
 
 
 class UniversityDetails(BaseModel):
-    country = models.ForeignKey(CountryDetails, null=True, related_name='university_country_rel',
-                                on_delete=models.SET_NULL)
-    university_name = models.CharField(max_length=100, blank=True, null=True)
+    COLLEGE_TYPES = (
+        ("Community College", "COMMUNITY COLLEGE"),
+        ("College", "COLLEGE"),
+    )
+    college_type = models.CharField(choices=COLLEGE_TYPES, max_length=50,blank=True, null=True)
+    university_name = models.CharField(max_length=150, blank=True, null=True)
+    university_code = models.CharField(max_length=30, blank=True, null=True)
     email = models.CharField(max_length=50, blank=True, null=True)
     telephone = models.CharField(max_length=30, blank=True, null=True)
     website = models.CharField(max_length=50, blank=True, null=True)
-    university_logo = models.ImageField(upload_to='university_logo/', null=True, blank=True)
+    university_logo = models.ImageField(upload_to=university_logo_upload_path, max_length=256, blank=True, null=True)
+    tanseeq_guide = models.FileField(upload_to=tanseeq_guide_upload_path, max_length=256, blank=True, null=True)
+    registration_guide = models.FileField(upload_to=registration_guide_upload_path, max_length=256, blank=True, null=True)
     address = models.TextField(blank=True, null=True)
+    contact_details = models.TextField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
+    is_registration = models.BooleanField(default=True)
+    is_singup = models.BooleanField(default=True)
     is_delete = models.BooleanField(default=False)
     is_partner_university = models.BooleanField(default=False)
     university_type = models.ForeignKey(UniversityTypeDetails, null=True, related_name='university_type_rel',
                                 on_delete=models.SET_NULL)
-
-    type = models.ForeignKey(TypeDetails, null=True, related_name='type_rel',
-                                        on_delete=models.SET_NULL)
-
-
+    type = models.ForeignKey(TypeDetails, null=True, related_name='type_rel', on_delete=models.SET_NULL)
+    file = models.FileField(upload_to=document_upload_path, max_length=256, blank=True, null=True)
+    is_tanseeq_university = models.BooleanField(default=False)
+    university_stamp = models.FileField(upload_to=university_stamp_upload_path, max_length=256, blank=True,
+                                          null=True)
     class Meta:
         ordering = ('-id',)
         permissions = (
@@ -333,6 +366,12 @@ class UniversityDetails(BaseModel):
 
     def __str__(self):
         return self.university_name
+
+
+
+    @classmethod
+    def active_records(cls,):
+        return cls.objects.filter(is_active=True, is_delete=False, is_tanseeq_university = True)
 
     def to_dict(self):
         res = {
@@ -404,7 +443,10 @@ class DegreeDetails(BaseModel):
 
 
 class StudyModeDetails(BaseModel):
-    study_mode = models.CharField(max_length=50, blank=True, null=True)
+    universities = models.ManyToManyField(UniversityDetails, related_name="study_mode_details_university_details")
+    study_mode = models.CharField(max_length=150, blank=True, null=True)
+    code = models.CharField(max_length=50, blank=True, null=True)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.study_mode
@@ -417,13 +459,15 @@ class StudyTypeDetails(BaseModel):
 
     class Meta:
         ordering = ('-id',)
-        permissions = (
-            ('can_view_studytypedetails', 'Can View Study Type Details'),
-        )
+
+    permissions = (
+        ('can_view_studytypedetails', 'Can View Study Type Details'),
+    )
 
 
 class Department(models.Model):
     department = models.CharField(max_length=100, blank=True, null=True)
+
 
 class FacultyDetails(BaseModel):
     university = models.ForeignKey(UniversityDetails, null=True, related_name='university_faculty_rel',
@@ -441,9 +485,13 @@ class FacultyDetails(BaseModel):
 
     class Meta:
         ordering = ('-id',)
-        permissions = (
-            ('can_view_faculty_details', 'Can View Faculty Details'),
-        )
+
+    def __str__(self):
+        return self.faculty_name
+
+    permissions = (
+        ('can_view_faculty_details', 'Can View Faculty Details'),
+    )
 
 class CampusBranchesDetails(BaseModel):
     campus_name = models.CharField(max_length=150, blank=True, null=True)

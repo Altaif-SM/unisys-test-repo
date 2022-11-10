@@ -1,0 +1,185 @@
+{% extends "template_base_page.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    </head>
+    <!-- END HEAD -->
+    <style>
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+            $('#sample_1').dataTable().fnDestroy();
+            $('#sample_1').dataTable({
+                "aoColumnDefs": [
+                    {'bSortable': false}
+                ]
+            });
+        }
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'tanseeq_app:tanseeq_admin' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> {% trans 'Tanseeq Program' %} </span>
+            </li>
+        </ul>
+    </div>
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">
+                {% if request.user.is_tanseeq_admin %}
+                    {% trans 'Manage Tanseeq Program' %}
+                {% else %}
+                    {% trans 'Tanseeq Programs' %}
+                {% endif %}
+            </span>
+            </div>
+            {% if request.user.is_tanseeq_admin %}
+                <a href="{% url 'tanseeq_app:add_tanseeq_program' %}">
+                    <button type="submit" class="btn green" id="save" style="margin-left:74%;background-color: #3598dc">
+                        Add
+                    </button>
+                </a>
+            {% endif %}
+        </div>
+        <div class="portlet-body">
+            {% if request.user.is_tanseeq_admin %}
+                <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">
+            {% endif %}
+            {% csrf_token %}
+            <table class="table table-striped table-hover table-bordered" id="sample_1">
+                <thead>
+                <tr>
+                    <th style="display: none">Id</th>
+                    <th> {% trans 'University' %}</th>
+                    <th> {% trans 'Faculty' %}</th>
+                    <th> {% trans 'Name' %}</th>
+                    <th> {% trans 'Code' %}</th>
+                    <th> {% trans 'Status' %}</th>
+                    {% if request.user.is_tanseeq_admin %}
+                        <th width="10%">{% trans 'Action' %}</th>
+                    {% endif %}
+                </tr>
+                </thead>
+                <tbody id="tbody">
+                {% for rec in object_list %}
+                    <tr id="item{{ rec.id }}" class="item">
+                        <td style="display: none"><input id="university_id" value="{{ rec.id }}"></td>
+                        <td>
+                            {{ rec.university.university_name|default_if_none:"" }}
+                        </td>
+                        <td>
+                            {{ rec.faculty.name|default_if_none:"" }}
+                        </td>
+                        <td>{{ rec.name|default_if_none:"" }}</td>
+                        <td>{{ rec.code|default_if_none:"" }}</td>
+                        <td>
+                            {% if rec.is_active == True %}
+                                <i class="fa fa-power-off" aria-hidden="true"
+                                   style="margin-left: 30px;margin-top:8px;font-size:18px;color:green"></i>
+                            {% else %}
+                                <i class="fa fa-power-off" aria-hidden="true"
+                                   style="margin-left: 30px;margin-top:8px;font-size:18px;color:red"></i>
+                            {% endif %}
+                        </td>
+                        {% if request.user.is_tanseeq_admin %}
+                            <td>
+                                <a href="{% url 'tanseeq_app:edit_tanseeq_program' rec.id %}">
+                                <span type="button" name="edit" id="edit{{ forloop.counter }}"
+                                      class=" edit_btn btn blue glyphicon glyphicon-pencil">
+                                </span>
+                                </a>
+                                <button type="button" delete-url="{% url 'tanseeq_app:delete_tanseeq_program' rec.id %}"
+                                        class="delete btn red glyphicon glyphicon-trash" name="delete"
+                                >
+                                </button>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% if request.user.is_tanseeq_admin %}
+                </form>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if request.user.is_tanseeq_admin %}
+        {% include 'delete_modal.html' %}
+    {% endif %}
+{% endblock %}
+{% block ajax %}
+    {% if request.user.is_tanseeq_admin %}
+        <script>
+            $(".delete").on("click", (e) => {
+                $("#id_delete_model").modal()
+                $("#id_confirm_delete").attr("delete-url", $(e.target).attr("delete-url"))
+            });
+            $("#id_confirm_delete").on("click", (e) => {
+                $(e.target).attr('disabled', true)
+                deleteTanseeqPeriod($(e.target).attr("delete-url"))
+                $("#id_delete_model").modal('hide')
+            })
+
+            function deleteTanseeqPeriod(url) {
+                console.log(url)
+                $.ajax({
+                    type: 'DELETE',
+                    url: url,
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                    },
+                    success: function (data) {
+                        if (data.status == 200) {
+                            const table = $('#sample_1').DataTable();
+                            const id = url.split('/')[3]
+                            table.row($(`#item${id}`)).remove().draw();
+                        }
+                    },
+                    complete: function () {
+                        $("#id_confirm_delete").attr('disabled', false)
+                    },
+                    error: function (xhr, msg, err) {
+                    }
+                });
+            }
+        </script>
+    {% endif %}
+{% endblock %}

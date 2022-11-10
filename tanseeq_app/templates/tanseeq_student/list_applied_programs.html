@@ -1,0 +1,154 @@
+{% extends "template_base_page.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    </head>
+    <!-- END HEAD -->
+    <style>
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+            $('#sample_1').dataTable().fnDestroy();
+            $('#sample_1').dataTable({
+                "aoColumnDefs": [
+                    {'bSortable': false}
+                ]
+            });
+        }
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+    </script>
+{% endblock %}
+
+{% block content %}
+<div class="page-bar" style="margin-bottom: 1px;">
+    <ul class="page-breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            <a href="{% url 'tanseeq_app:tanseeq_student' %}">Home</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <span> {% trans 'Wishes selected' %} </span>
+        </li>
+    </ul>
+</div>
+{% for message in messages %}
+    <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    </div>
+{% endfor %}
+<div class="portlet light portlet-fit portlet-form ">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-settings font-red"></i>
+            <span class="caption-subject font-red sbold uppercase">
+                {% trans 'Wishes selected' %}
+            </span>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="table table-striped table-hover table-bordered" id="sample_1">
+            <thead>
+            <tr>
+                <th style="display: none">Id</th>
+                <th> {% trans 'University' %}</th>
+                <th> {% trans 'Faculty' %}</th>
+                <th> {% trans 'Study Mode' %}</th>
+                <th> {% trans 'Program' %}</th>
+                <th> {% trans 'Fee' %}</th>
+                <th> {% trans 'Voucher' %}</th>
+                <th> {% trans 'Actions' %}</th>
+
+            </tr>
+            </thead>
+            <tbody id="tbody">
+            {% for rec in object_list %}
+                <tr id="item{{ rec.id }}" class="item">
+                    <td style="display: none"><input id="university_id" value="{{ rec.id }}"></td>
+                    <td>
+                        {{ rec.program_details.university.university_name|default_if_none:"" }}
+                    </td>
+                    <td>
+                        {{ rec.program_details.faculty.name|default_if_none:"" }}
+                    </td>
+                    <td>{{ rec.program_details.study_mode.study_mode|default_if_none:"" }}</td>
+                    <td>{{ rec.program_details.program.name|default_if_none:"" }}</td>
+                    <td>{{ rec.program_details.fee|default_if_none:"" }}</td>
+
+                    <td>
+                        <a target="_blank" href="{% url 'tanseeq_app:print_voucher' rec.id %}"
+                        class="btn glyphicon glyphicon-file">
+                        </a>
+                    </td>
+
+
+                    <td>
+                        <button type="button" delete-url="{% url 'tanseeq_app:delete_applied_program' rec.id %}"
+                            class="delete btn-danger glyphicon glyphicon-remove" name="delete">
+                        </button>
+                    </td>
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% include 'delete_modal.html' %}
+{% endblock %}
+
+{% block ajax %}
+<script>
+    $(".delete").on("click", (e)=>{
+        $("#id_delete_model").modal()
+       $("#id_confirm_delete").attr("delete-url", $(e.target).attr("delete-url"))
+   });
+   $("#id_confirm_delete").on("click", (e)=>{
+       $(e.target).attr('disabled', true)
+       removeProgram($(e.target).attr("delete-url"))
+       $("#id_delete_model").modal('hide')
+   })
+
+   function removeProgram(url) {
+       $.ajax({
+           type: 'DELETE',
+           url: url,
+           beforeSend: function(xhr, settings) {
+               xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+           },
+           success: function (data, textStatus, xhr) {
+               if(xhr.status == 202){
+                    console.log("running")
+                    location.reload()
+                }
+           },
+           complete: function (){
+               $("#id_confirm_delete").attr('disabled', false)
+           },
+           error: function (xhr, msg, err) {
+           }
+       });
+    }
+</script>
+{% endblock %}

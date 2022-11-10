@@ -1,0 +1,214 @@
+{% extends "template_base_page.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <style>
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+            $('#sample_1').dataTable().fnDestroy();
+            $('#sample_1').dataTable({
+                "aoColumnDefs": [
+                    {'bSortable': false}
+                ]
+            });
+        }
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+    </script>
+{% endblock %}
+
+{% block content %}
+<div class="page-bar" style="margin-bottom: 1px;">
+    <ul class="page-breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            <a href="{% url 'tanseeq_app:tanseeq_admin' %}">Home</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <span> {% trans 'Tanseeq Condition/Filter' %} </span>
+        </li>
+    </ul>
+</div>
+{% for message in messages %}
+    <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    </div>
+{% endfor %}
+<div class="portlet light portlet-fit portlet-form ">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-settings font-red"></i>
+            <span class="caption-subject font-red sbold uppercase"> {% trans 'Manage Condition/Filters' %}</span>
+        </div>
+        <a href="{% url 'tanseeq_app:add_tanseeq_filter' %}">
+            <button type="submit" class="btn green" id="save" style="margin-left:74%;background-color: #3598dc">Add
+            </button>
+        </a>
+    </div>
+    <div class="row" style="padding-left: 30px;">
+        <form method="GET">
+            <div class="col-md-3">
+                <select class="form-control" name="university" id="id_university">
+                    <option selected value="">Select University</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-control" name="faculty" id="id_faculty">
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-control" name="study_mode" id="id_study_mode">
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn">Search</button>
+            </div>
+        </form>
+    </div>
+<br>
+    <div class="portlet-body">
+        <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <table class="table table-striped table-hover table-bordered" id="sample_1">
+                <thead>
+                <tr>
+                    <th style="display: none">Id</th>
+                    <th> {% trans 'University' %}</th>
+                    <th> {% trans 'Study Mode' %}</th>
+                    <th> {% trans 'Faculty Name' %}</th>
+                    <th> {% trans 'Program' %}</th>
+                    <th width="10%">{% trans 'Academic Year' %}</th>
+                    <th> {% trans 'Type of Secondary' %}</th>
+                    <th width="10%">{% trans 'Start Date' %}</th>
+                    <th width="10%">{% trans 'End Date' %}</th>
+                    <th width="10%">{% trans 'Average' %}</th>
+                    <th width="10%">{% trans 'capacity' %}</th>
+                    <th width="10%">{% trans 'Fee' %}</th>
+                    <th width="10%">{% trans 'Exam' %}</th>
+                    <th width="10%">{% trans 'Status' %}</th>
+                    <th width="10%">{% trans 'Actions' %}</th>
+                </tr>
+                </thead>
+                <tbody id="tbody">
+                {% for rec in object_list %}
+                    <tr id="item{{ rec.id }}" class="item">
+                        <td style="display: none"><input id="university_id" value="{{ rec.id }}"></td>
+                        <td>{{rec.university.university_name|default_if_none:""}}</td>
+                        <td>{{rec.study_mode}}</td>
+                        <td>{{ rec.faculty.name|default_if_none:"" }}</td>
+                        <td>{{ rec.program.name|default_if_none:"" }}</td>
+                        <td>{{ rec.academic_year.year_name|default_if_none:"" }}</td>
+                        <td>{{ rec.type_of_secondary|default_if_none:"" }}</td>
+                        <td>{{ rec.start_date|default_if_none:"" }}</td>
+                        <td>{{ rec.end_date|default_if_none:"" }}</td>
+                        <td>{{ rec.average|default_if_none:"" }}</td>
+                        <td>{{ rec.capacity|default_if_none:"" }}</td>
+                        <td>{{ rec.fee|default_if_none:"" }}</td>
+                        <td>
+                            {% if rec.is_active == True %}
+                            <i class="fa fa-power-off" aria-hidden="true"
+                            style="margin-left: 30px;margin-top:8px;font-size:18px;color:green"></i>
+                            {% else %}
+                            <i class="fa fa-power-off" aria-hidden="true"
+                            style="margin-left: 30px;margin-top:8px;font-size:18px;color:red"></i>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if rec.is_exam == True %}
+                            <i class="fa fa-power-off" aria-hidden="true"
+                            style="margin-left: 30px;margin-top:8px;font-size:18px;color:green"></i>
+                            {% else %}
+                            <i class="fa fa-power-off" aria-hidden="true"
+                            style="margin-left: 30px;margin-top:8px;font-size:18px;color:red"></i>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'tanseeq_app:edit_tanseeq_filter' rec.id %}">
+                                <span type="button" name="edit" id="edit{{ forloop.counter }}"
+                                class=" edit_btn btn blue glyphicon glyphicon-pencil">
+                            </span>
+                        </a>
+                        <button type="button" delete-url="{% url 'tanseeq_app:delete_tanseeq_filter' rec.id %}"
+                            class="delete btn red glyphicon glyphicon-trash" name="delete">
+                        </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>
+{% include 'delete_modal.html' %}
+{% endblock %}
+
+{% block ajax %}
+<script>
+    $(".delete").on("click", (e)=>{
+         $("#id_delete_model").modal()
+        $("#id_confirm_delete").attr("delete-url", $(e.target).attr("delete-url"))
+    });
+    $("#id_confirm_delete").on("click", (e)=>{
+        $(e.target).attr('disabled', true)
+        deleteTanseeqPeriod($(e.target).attr("delete-url"))
+        $("#id_delete_model").modal('hide')
+    })
+
+    function deleteTanseeqPeriod(url) {
+        $.ajax({
+            type: 'DELETE',
+            url: url,
+            beforeSend: function(xhr, settings) {
+                xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+            },
+            success: function (data) {
+                if(data.status == 200){
+                    const table = $('#sample_1').DataTable();
+                    const id = url.split('/')[3]
+                    table.row($(`#item${id}`)).remove().draw();
+                }
+            },
+            complete: function (){
+                $("#id_confirm_delete").attr('disabled', false)
+            },
+            error: function (xhr, msg, err) {
+            }
+        });
+    }
+
+    const getUniversitiesUrl = "{% url 'tanseeq_app:get_universities' %}"
+    const getFacultyDataUrl = "{% url 'tanseeq_app:list_tanseeq_faculty' %}"
+    const getStudyModeDataUrl = "{% url 'tanseeq_app:list_study_mode' %}"
+    $(document).ready(function() {
+        getUniversityData(getUniversitiesUrl)
+        getStudyModeData(getStudyModeDataUrl)
+        getFacultyData(getFacultyDataUrl)
+        $("#id_university").on("change", function(){
+            getFacultyData(getFacultyDataUrl)
+            getStudyModeData(getStudyModeDataUrl)
+        })
+    });
+</script>
+<script src="{% static 'tanseeq\admin\conditionFilters.js' %}" type="text/javascript"></script>
+{% endblock %}

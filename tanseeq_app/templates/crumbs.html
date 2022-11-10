@@ -1,0 +1,18 @@
+{% load  i18n %}
+<div class="page-bar" style="margin-bottom: 1px;">
+    <ul class="page-breadcrumb">
+        {% for crumb in crumbs %}
+            <li>
+                {% if crumb.url == "/" %}
+                    <i class="icon-home"></i>
+                    <a href="{{crumb.url}}">{% trans crumb.title %}</a>
+                {% elif crumb.url and crumb.url != "/" %}
+                    <a href="{% url  crumb.url%}">{% trans crumb.title %}</a>
+                {% else %}
+                    <span> {%trans crumb.title%} </span>
+                {% endif %}
+                <i class="fa fa-angle-right"></i>
+            </li>
+        {% endfor %}
+    </ul>
+</div>

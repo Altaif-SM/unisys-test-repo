@@ -37,13 +37,18 @@ urlpatterns = [
     path('country_settings/', views.country_settings, name='country_settings'),
     path('save_country/', views.save_country, name='save_country'),
     path('update_country/', views.update_country, name='update_country'),
-    path('delete_country/', views.delete_country, name='delete_country'),
+    path('delete_country/<int:pk>/', views.delete_country, name='delete_country'),
+
+    # ********------ City Master --------****************************
+    path('city_settings/<int:pk>/', views.city_settings, name='city_settings'),
+    path('save_city/', views.save_city, name='save_city'),
+    path('update_city/', views.update_city, name='update_city'),
+    path('delete_city/<int:pk>/', views.delete_city, name='delete_city'),
 
     # ********------ university Master --------****************************
     path('template_university_master/', views.template_university_master, name='template_university_master'),
     path('save_university/', views.save_university, name='save_university'),
     path('update_university/', views.update_university, name='update_university'),
-    path('delete_university/', views.delete_university, name='delete_university'),
 
     # ********------ semester Master --------****************************
     path('template_semester_master/', views.template_semester_master, name='template_semester_master'),
@@ -146,7 +151,7 @@ urlpatterns = [
     path('university_settings/', views.university_settings, name='university_settings'),
     path('add_university/', views.add_university, name='add_university'),
     path('edit_university/<int:university_id>/', views.edit_university, name='edit_university'),
-    path('delete_university/', views.delete_university, name='delete_university'),
+    path('delete_university/<int:pk>/', views.delete_university, name='delete_university'),
 
     path('faculty_settings/', views.faculty_settings, name='faculty_settings'),
     path('add_faculty/', views.add_faculty, name='add_faculty'),

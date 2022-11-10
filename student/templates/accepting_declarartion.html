@@ -36,21 +36,40 @@
             $(document).ready(function () {
 
 
+                 $('input[type="radio"]').on('change', function () {
+                    var is_deferment_study = $('input[name="is_deferment_study"]:checked').val();
+                    console.log("is_deferment_study"+is_deferment_study);
+
+                    if(is_deferment_study == 'Yes'){
+                        $('.deferment').show();
+                    }
+                    else{
+                         $('.deferment').hide();
+                    }
+
+
+                })
+
+            /*
+
                 $(document).on("click", "#save_id", function () {
+
+
                     $('#id_accept_student_model').modal();
                 });
 
                  $(document).on("click", "#submit_appplication", function () {
                     $("#form_sample_1").submit();
                 });
+*/
 
-
+                 /*
 
                 if ($('.aggre_term').is(":checked")) {
                     $('#save_id').attr("disabled", false);
                 } else {
                     $('#save_id').attr("disabled", true);
-                }
+                }*/
 
 
                 $(".aggre_term").click(function () {
@@ -118,7 +137,7 @@
 
         <div class="portlet-body">
             <div class="form-body">
-                <form action="{% url 'student:submit_application' %}"
+                <form action="{% url 'student:submit_acceptance' %}"
                       id="id_form"
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
@@ -131,7 +150,10 @@
                                 <span class="caption-subject font-red sbold uppercase">{% trans 'Acceptance & Declaration' %}:</span>
                             </div>
                         </div>
-                        <hr>
+                    <br>
+
+
+
                         {% if application_obj.first_interview == False and  application_obj.first_interview_attend == False %}
                             <div class="row">
 
@@ -147,43 +169,413 @@
                         {% else %}
                         <div class="row">
 
-                         <div class="">
-                                <div class="col-md-8" style="margin-left: 10%;font-size:15px">
-                                   Programme of Study: <b>{% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.program.program_name|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.program_2.program_name|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.program_3.program_name|default_if_none:"" }} {% else %}{{ application_obj.program.program_name|default_if_none:"" }}{% endif %}</b>
+                        <div class="row" style="margin-left: 10%;font-size:15px">
+                    <div class="col-xs-8">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                            <tr>
 
-                                </div>
-                            </div>
-                            <br>
+                                <th >
 
-                        <div class="">
-                                <div class="col-md-8" style="margin-left: 10%;font-size:15px">
-                                   Level of Study: <b>{{ application_obj.study_level.study_level|default_if_none:"" }}</b>
+                                </th>
+                                <th >
 
-                                </div>
-                            </div>
-                             <br>
-                        <div class="">
-                                <div class="col-md-8" style="margin-left: 10%;font-size:15px">
-                                   Faculty: <b>{% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.faculty.faculty_name|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.faculty_2.faculty_name|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.faculty_3.faculty_name|default_if_none:"" }} {% else %}{{ application_obj.faculty.faculty_name|default_if_none:"" }}{% endif %}</b>
+                                </th>
 
-                                </div>
-                            </div>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td >
+                                    Name
+                                </td>
+                                <td >
+                                    {{ application_obj.get_full_name }}
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td >
+                                    Programme of Study
+                                </td>
+                                <td >
+                                    {% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.program.program_name|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.program_2.program_name|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.program_3.program_name|default_if_none:"" }} {% else %}{{ application_obj.program.program_name|default_if_none:"" }}{% endif %}
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td >
+                                    Level of Study
+                                </td>
+                                <td >
+                                    {{ application_obj.study_level.study_level|default_if_none:"" }}
+                                </td>
+
+                            </tr>
+
+                             <tr>
+                                <td >
+                                    Faculty
+                                </td>
+                                <td >
+                                    {% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.faculty.faculty_name|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.faculty_2.faculty_name|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.faculty_3.faculty_name|default_if_none:"" }} {% else %}{{ application_obj.faculty.faculty_name|default_if_none:"" }}{% endif %}
+                                </td>
+
+                            </tr>
+
+                             <tr>
+                                <td >
+                                    Program Mode
+                                </td>
+                                <td >
+                                    {% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.program_mode.study_type|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.program_mode_2.study_type|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.program_mode_3.study_type|default_if_none:"" }} {% else %}{{ application_obj.program_mode.study_type|default_if_none:"" }}{% endif %}
+                                </td>
+
+                            </tr>
+
+                             <tr>
+                                <td >
+                                    Offer Letter
+                                </td>
+                                <td >
+                                    <a href="{% url 'student:application_offer_letter_pdf' application_obj.id %}" target="_blank">{% if application_obj.first_interview_attend %}Download Full Offer{% else %}Download Conditional Offer{% endif %}</a>
+                                </td>
+
+                            </tr>
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+                        <div class="row" style="margin-left: 6%;font-size:15px">
+
+                            <span style="padding:inherit;margin-left: 60px;">{% trans 'Deferment of Study' %}:  </span>
+                        {% if deferment_obj %}
+                        {% if deferment_obj.is_deferment_study == False %}
+                         <span style="padding:inherit;margin-left:30px">{% trans 'No' %}</span>
+                        <input class="current" type="radio" checked name="is_deferment_study" id="" value="No">
+                        <span style="padding:inherit;margin-left:20px">{% trans 'Yes' %}</span>
+                        <input class="current" type="radio" name="is_deferment_study" value="Yes"
+                               id="">
+                        {% else %}
+                            <span style="padding:inherit;margin-left:30px">{% trans 'No' %}</span>
+                        <input class="current" type="radio"  name="is_deferment_study" id="" value="No">
+                        <span style="padding:inherit;margin-left:20px">{% trans 'Yes' %}</span>
+                        <input class="current" type="radio" checked name="is_deferment_study" value="Yes"
+                               id="">
+                        {% endif %}
+                            {% else %}
+                            <span style="padding:inherit;margin-left:30px">{% trans 'No' %}</span>
+                        <input class="current" type="radio" checked name="is_deferment_study" id="" value="No">
+                        <span style="padding:inherit;margin-left:20px">{% trans 'Yes' %}</span>
+                        <input class="current" type="radio" name="is_deferment_study" value="Yes"
+                               id="">
+                        {% endif %}
+
+
+                        </div>
+
+
+
+
+                     {% if deferment_obj.is_deferment_study == True %}
+                         <div class="deferment">
+
                         <br>
 
+                            <div class="row" style="margin-left: 2%;font-size:15px">
 
-                         <div class="">
-                                <div class="col-md-8" style="margin-left: 10%;font-size:15px">
-                                   Program Mode: <b>{% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.program_mode.study_type|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.program_mode_2.study_type|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.program_mode_3.study_type|default_if_none:"" }} {% else %}{{ application_obj.program_mode.study_type|default_if_none:"" }}{% endif %}</b>
+                            <div class="">
+                                <label class="col-md-3 control-label">{% trans 'Reasons for Deferment' %}:</label>
+                                <div class="col-md-3">
+                                    <select id='deferment_reasons' title="Select Reasons for Deferment" name="deferment_reasons"
+                                            class="form-control" data-live-search="true" >
 
+                                        {% if deferment_obj.deferment_reasons %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ deferment_obj.deferment_reasons|default_if_none:"" }}"
+                                                    >{{ deferment_obj.deferment_reasons|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option disabled selected="selected" id=""
+                                                    value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+
+                                            <option value='Health'>Health</option>
+                                            <option value='Others'>Others</option>
+
+                                    </select>
                                 </div>
+
+
                             </div>
+
+
+                        </div>
                         <br>
-                        <div class="">
-                                <div class="col-md-8" style="margin-left: 10%;font-size:15px">
-                                   Offer Letter: <a href="{% url 'student:application_offer_letter_pdf' application_obj.id %}" target="_blank">{% if application_obj.first_interview_attend %}Download Full Offer{% else %}Download Conditional Offer{% endif %}</a>
+                        <div class="row" style="margin-left: -7%;font-size:15px">
 
+                            <div class="">
+                                <label class="col-md-3 control-label">{% trans 'Justification' %}:</label>
+                                <div class="col-md-8">
+                                    <textarea name="justifications" class="form-control">{{ deferment_obj.justifications|default_if_none:"" }}</textarea>
                                 </div>
+
+
                             </div>
+
+
+                        </div>
+                        <br>
+
+                            <div class="row" style="margin-left: 8%;font-size:15px">
+
+                            <div class="">
+                                <label class="col-md-3 control-label"><b>Upload Supporting Documents:</b></label>
+
+
+
+                            </div>
+
+
+                        </div>
+                        <br>
+                        <div class="row" style="margin-left: 7%;font-size:15px">
+                            <div class="">
+
+                                <label class="col-md-2 control-label">Medical Certificate/Report:
+
+                                </label>
+
+
+                                <div class="col-md-3" id="parent2">
+                                    <input type="file"  class="form-control"accept="application/pdf,"
+                                           title="Select Medical Certificate/Report" id="medical_certificate"
+                                           name="medical_certificate" class="doc form-control">
+                                </div>
+
+
+
+
+                            </div>
+
+                             {% if deferment_obj.medical_certificate %}
+                                        <a target="_blank"href="{{ deferment_obj.medical_certificate.url }}"><i style="    font-size: 25px;
+    margin-top: 13px;" class="fa fa-cloud-download" aria-hidden="true"></i>
+</a>
+                                        {% endif %}
+
+                        </div>
+                        <br>
+                        <div class="row" style="margin-left: 7%;font-size:15px">
+                            <div class="">
+
+                                <label class="col-md-2 control-label">Sponsorship Letter:
+
+                                </label>
+
+
+                                <div class="col-md-3" id="parent2">
+                                  <input type="file"  class="form-control"accept="application/pdf,"
+                                           title="Select Sponsorship Letter" id="sponsorship_letter"
+                                           name="sponsorship_letter" class="doc form-control">
+                                </div>
+
+
+
+
+                            </div>
+
+                             {% if deferment_obj.sponsorship_letter %}
+                                        <a target="_blank"href="{{ deferment_obj.sponsorship_letter.url }}"><i style="    font-size: 25px;
+    margin-top: 13px;" class="fa fa-cloud-download" aria-hidden="true"></i>
+</a>
+                                        {% endif %}
+
+
+                        </div>
+                        <br>
+                         <div class="row" style="margin-left: 7%;font-size:15px">
+                            <div class="">
+
+                                <label class="col-md-2 control-label">Other Supporting:
+
+                                </label>
+
+
+                                <div class="col-md-3" id="parent2">
+                                   <input type="file"  class="form-control"accept="application/pdf,"
+                                           title="Select Other Supporting" id="other_document"
+                                           name="other_document" class="doc form-control">
+                                </div>
+
+
+
+
+                            </div>
+
+                              {% if deferment_obj.other_document %}
+                                        <a target="_blank"href="{{ deferment_obj.other_document.url }}"><i style="    font-size: 25px;
+    margin-top: 13px;" class="fa fa-cloud-download" aria-hidden="true"></i>
+</a>
+                                        {% endif %}
+
+                        </div>
+                         </div>
+
+                     {% else %}
+                          <div class="deferment" style="display: none;">
+
+                        <br>
+
+                            <div class="row" style="margin-left: 2%;font-size:15px">
+
+                            <div class="">
+                                <label class="col-md-3 control-label">{% trans 'Reasons for Deferment' %}:</label>
+                                <div class="col-md-3">
+                                    <select id='deferment_reasons' title="Select Reasons for Deferment" name="deferment_reasons"
+                                            class="form-control" data-live-search="true" >
+
+                                        {% if deferment_obj.deferment_reasons %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ deferment_obj.deferment_reasons|default_if_none:"" }}"
+                                                    >{{ deferment_obj.deferment_reasons|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option disabled selected="selected" id=""
+                                                    value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+
+                                            <option value='Health'>Health</option>
+                                            <option value='Others'>Others</option>
+
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                        <br>
+                        <div class="row" style="margin-left: -7%;font-size:15px">
+
+                            <div class="">
+                                <label class="col-md-3 control-label">{% trans 'Justification' %}:</label>
+                                <div class="col-md-8">
+                                    <textarea name="justifications" class="form-control">{{ deferment_obj.justifications|default_if_none:"" }}</textarea>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                        <br>
+
+                            <div class="row" style="margin-left: 8%;font-size:15px">
+
+                            <div class="">
+                                <label class="col-md-3 control-label"><b>Upload Supporting Documents:</b></label>
+
+
+
+                            </div>
+
+
+                        </div>
+                        <br>
+                        <div class="row" style="margin-left: 7%;font-size:15px">
+                            <div class="">
+
+                                <label class="col-md-2 control-label">Medical Certificate/Report:
+
+                                </label>
+
+
+                                <div class="col-md-3" id="parent2">
+                                    <input type="file"  class="form-control"accept="application/pdf,"
+                                           title="Select Medical Certificate/Report" id="medical_certificate"
+                                           name="medical_certificate" class="doc form-control">
+                                </div>
+
+
+
+
+                            </div>
+                             {% if deferment_obj.medical_certificate %}
+                                        <a target="_blank"href="{{ deferment_obj.medical_certificate.url }}"><i style="    font-size: 25px;
+    margin-top: 13px;" class="fa fa-cloud-download" aria-hidden="true"></i>
+</a>
+                                        {% endif %}
+
+
+                        </div>
+                        <br>
+                        <div class="row" style="margin-left: 7%;font-size:15px">
+                            <div class="">
+
+                                <label class="col-md-2 control-label">Sponsorship Letter:
+
+                                </label>
+
+
+                                <div class="col-md-3" id="parent2">
+                                  <input type="file"  class="form-control"accept="application/pdf,"
+                                           title="Select Sponsorship Letter" id="sponsorship_letter"
+                                           name="sponsorship_letter" class="doc form-control">
+                                </div>
+
+
+
+
+                            </div>
+                            {% if deferment_obj.sponsorship_letter %}
+                                        <a target="_blank"href="{{ deferment_obj.sponsorship_letter.url }}"><i style="    font-size: 25px;
+    margin-top: 13px;" class="fa fa-cloud-download" aria-hidden="true"></i>
+</a>
+                                        {% endif %}
+
+                        </div>
+                        <br>
+                         <div class="row" style="margin-left: 7%;font-size:15px">
+                            <div class="">
+
+                                <label class="col-md-2 control-label">Other Supporting:
+
+                                </label>
+
+
+                                <div class="col-md-3" id="parent2">
+                                   <input type="file"  class="form-control"accept="application/pdf,"
+                                           title="Select Other Supporting" id="other_document"
+                                           name="other_document" class="doc form-control">
+                                </div>
+
+
+
+
+                            </div>
+                             {% if deferment_obj.other_document %}
+                                        <a target="_blank"href="{{ deferment_obj.other_document.url }}"><i style="    font-size: 25px;
+    margin-top: 13px;" class="fa fa-cloud-download" aria-hidden="true"></i>
+</a>
+                                        {% endif %}
+
+                        </div>
+                         </div>
+
+
+
+                {% endif %}
+
+
+
+
 
                         {% if application_obj.is_offer_accepted %}
                         <br><br><div class="">
@@ -194,58 +586,59 @@
                             </div>
                         {% endif %}
 
-                            <br><br>
-                                 {% if not application_obj.is_offer_accepted %}
-                            <div class="">
-                                <div class="col-md-8" style="margin-left: 10%;font-size:15px">
-                                    {% blocktrans %}
-                                    Please read the following terms & conditions carefully and tick the checkbox to
-                                    indicate your
-                                    agreement.
-                                    {% endblocktrans %}
+{#                            <br><br>#}
+{#                                 {% if not application_obj.is_offer_accepted %}#}
+{#                            <div class="">#}
+{#                                <div class="col-md-8" style="margin-left: 10%;font-size:15px">#}
+{#                                    {% blocktrans %}#}
+{#                                    Please read the following terms & conditions carefully and tick the checkbox to#}
+{#                                    indicate your#}
+{#                                    agreement.#}
+{#                                    {% endblocktrans %}#}
+{##}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <br><br>#}
+{##}
+{##}
+{#                        <div class="">#}
+{#                                <div class="col-md-8" style="margin-left: 10%;font-size:15px">#}
+{#                                    {% blocktrans %}#}
+{#                                    I declare that all the information provided is correct and complete. I hereby give my consent to#}
+{#the University to obtain information relating to my admission into #Uni Name from relevant#}
+{#authorities. I understand that #Uni Name reserves the right to request any additional#}
+{#information before a decision on admission is made. I understand that any misinformation or#}
+{#incomplete application could result in the rejection of my application.#}
+{#                                    {% endblocktrans %}#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <br><br><br><br><br><br>#}
+{#                        {% endif %}#}
 
-                                </div>
-                            </div>
-                            <br><br>
-
-
-                        <div class="">
-                                <div class="col-md-8" style="margin-left: 10%;font-size:15px">
-                                    {% blocktrans %}
-                                    I declare that all the information provided is correct and complete. I hereby give my consent to
-the University to obtain information relating to my admission into #Uni Name from relevant
-authorities. I understand that #Uni Name reserves the right to request any additional
-information before a decision on admission is made. I understand that any misinformation or
-incomplete application could result in the rejection of my application.
-                                    {% endblocktrans %}
-                                </div>
-                            </div>
-                            <br><br><br><br><br><br>
-                        {% endif %}
-
-                            <div class="">
-                                <div class="col-md-8" style="margin-left: 10%;">
-                                    {% if application_obj.is_offer_accepted %}
-                                    {% else %}
-                                        <span style="color: red"></span>
-                                        <input type="checkbox" class="aggre_term">
-                                    {% endif %}
-                                 {% if not application_obj.is_offer_accepted %}
-
-
-                                    <b style="font-size: 15px;">{% trans 'I have read the Declaration and agree to the terms and conditions.' %}</b>
-                                {% endif %}
-
-                                </div>
-                            </div>
+{#                            <div class="">#}
+{#                                <div class="col-md-8" style="margin-left: 10%;">#}
+{#                                    {% if application_obj.is_offer_accepted %}#}
+{#                                    {% else %}#}
+{#                                        <span style="color: red"></span>#}
+{#                                        <input type="checkbox" class="aggre_term">#}
+{#                                    {% endif %}#}
+{#                                 {% if not application_obj.is_offer_accepted %}#}
+{##}
+{##}
+{#                                    <b style="font-size: 15px;">{% trans 'I have read the Declaration and agree to the terms and conditions.' %}</b>#}
+{#                                {% endif %}#}
+{##}
+{#                                </div>#}
+{#                            </div>#}
                         </div>
+                            <hr>
                         <div class="row">
                             <div class="col-md-offset-3 col-md-9">
 
 
                                 {% if application_obj %}
                                     {% if not application_obj.is_offer_accepted %}
-                                        <button type="button" class="btn green" id="save_id" style="margin-left:70%">{% trans 'Accept Application' %}
+                                        <button type="submit" class="btn green" id="save_id" style="margin-left:70%">{% trans 'Applay' %}
                                         </button>
                                     {% endif %}
                                 {% endif %}
