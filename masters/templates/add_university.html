@@ -272,16 +272,24 @@
                                 </div>
 
                             </div>
-                        <br>
+                        <hr>
+                            <div class="portlet-title">
+                                <div class="caption">
+                                    <i class="icon-settings font-red"></i>
+                                    <span class="caption-subject font-red sbold uppercase">Attachements </span>
+                                </div>
+                            </div>
                             <div class="row">
 
                                 <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'Logo' %}:
+                                    <label class="col-md-4 control-label">{% trans 'Logo' %}:
+                                        <span
+                                            style="color: red">(Only formats are allowed png/jpg)</span>
 
                                     </label>
                                     <div class="col-md-3">
 
-                                        <input name="university_logo" type="file" title="Select University Logo"
+                                        <input class="form-control" name="university_logo" type="file" title="Select University Logo"
                                                accept="image/gif, image/jpeg, image/png"
                                                id="id_university_logo"
                                                >
@@ -293,13 +301,20 @@
 
 
 
-                                <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'Tanseeq Guide' %}:
+
+
+
+                            </div>
+                            <br>
+                        <div class="row">
+                             <div class="">
+                                    <label class="col-md-4 control-label">{% trans 'Tanseeq Guide' %}:<span
+                                            style="color: red">(Only formats are allowed pdf)</span>
 
                                     </label>
                                     <div class="col-md-3">
 
-                                        <input name="tanseeq_guide" type="file" title="Select Tanseeq Guide"
+                                        <input class="form-control" name="tanseeq_guide" type="file" title="Select Tanseeq Guide"
                                                accept="application/pdf"
                                                id="id_tanseeq_guide"
                                                >
@@ -308,22 +323,44 @@
                                     </div>
 
                                 </div>
-
-
-                            </div>
-                            <br>
+                        </div>
+                        <br>
 
 
                             <div class="row">
                                 <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'Registration Guide' %}:
+                                    <label class="col-md-4 control-label">{% trans 'Registration Guide' %}:<span
+                                            style="color: red">(Only formats are allowed pdf)</span>
 
                                     </label>
                                     <div class="col-md-3">
 
-                                        <input name="registration_guide" type="file" title="Select University Logo"
+                                        <input class="form-control" name="registration_guide" type="file" title="Select University Logo"
                                                accept="application/pdf"
                                                id="id_registration_guide"
+                                               >
+
+
+                                    </div>
+
+                                </div>
+
+
+
+                            </div>
+
+                        <br>
+                        <div class="row">
+                                <div class="">
+                                    <label class="col-md-4 control-label">{% trans 'University Stamp' %}:<span
+                                            style="color: red">(Only formats are allowed png)</span>
+
+                                    </label>
+                                    <div class="col-md-3">
+
+                                        <input class="form-control" name="university_stamp" type="file" title="Select University Stamp"
+                                               accept="image/png,"
+                                               id="id_university_stamp"
                                                >
 
 

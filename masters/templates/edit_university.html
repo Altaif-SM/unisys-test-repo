@@ -22,37 +22,38 @@
 {% block content %}
     <div class="page-bar" style="margin-bottom: 1px;">
         <ul class="page-breadcrumb">
-           <li>
+            <li>
                 <i class="icon-home"></i>
-                <a {% if request.user.is_tanseeq_admin %} href="{% url 'tanseeq_app:tanseeq_admin' %}" {% else %} href="{% url 'accounts:home' %}" {% endif %}>Home</a>
+                <a {% if request.user.is_tanseeq_admin %} href="{% url 'tanseeq_app:tanseeq_admin' %}" {% else %}
+                                                          href="{% url 'accounts:home' %}" {% endif %}>Home</a>
                 <i class="fa fa-angle-right"></i>
             </li>
-        {% if request.user.is_tanseeq_admin %}
+            {% if request.user.is_tanseeq_admin %}
 
-            <li>
-                <span> Tanseeq University </span>
-                <i class="fa fa-angle-right"></i>
-            </li>
-            <li>
-                <span> Edit University</span>
-            </li>
+                <li>
+                    <span> Tanseeq University </span>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <span> Edit University</span>
+                </li>
 
 
             {% else %}
 
-            <li>
-                <span> Master Settings </span>
-                <i class="fa fa-angle-right"></i>
-            </li>
-            <li>
-                <span> University Settings</span>
-                <i class="fa fa-angle-right"></i>
-            </li>
+                <li>
+                    <span> Master Settings </span>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <span> University Settings</span>
+                    <i class="fa fa-angle-right"></i>
+                </li>
 
-            <li>
-                <span> {% trans 'Edit University' %} </span>
-            </li>
-        {% endif %}
+                <li>
+                    <span> {% trans 'Edit University' %} </span>
+                </li>
+            {% endif %}
         </ul>
     </div>
     {% for message in messages %}
@@ -70,7 +71,7 @@
         </div>
         <div class="portlet-body">
             <div class="form-body">
-               <form action="{% url 'masters:edit_university' university_obj.id %}"
+                <form action="{% url 'masters:edit_university' university_obj.id %}"
                       id="id_form"
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
@@ -154,20 +155,18 @@
                                                 name="college_type"
                                                 class="form-control" required>
                                             {% if university_obj.college_type %}
-                                                <option style="display: none" selected="selected" value="{{ university_obj.college_type }}">{{ university_obj.college_type }}</option>
-                                                {% else %}
+                                                <option style="display: none" selected="selected"
+                                                        value="{{ university_obj.college_type }}">{{ university_obj.college_type }}</option>
+                                            {% else %}
                                                 <option selected="selected" value=""> Please Select</option>
                                             {% endif %}
 
-                                                <option value="Community College">Community College</option>
-                                                <option value="College">College</option>
+                                            <option value="Community College">Community College</option>
+                                            <option value="College">College</option>
 
                                         </select>
                                     </div>
                                 </div>
-
-
-
 
 
                             </div>
@@ -202,8 +201,6 @@
                                 </div>
 
 
-
-
                             </div>
                             <br>
                             <div class="row">
@@ -217,7 +214,6 @@
 
                                     </div>
                                 </div>
-
 
 
                                 <div class="">
@@ -240,7 +236,7 @@
 
                                     </label>
                                     <div class="col-md-8">
-                                        <textarea rows="2" class="form-control "  id="id_address"
+                                        <textarea rows="2" class="form-control " id="id_address"
                                                   name="address">{{ university_obj.address|default_if_none:"" }}</textarea>
 
                                     </div>
@@ -253,7 +249,7 @@
 
                                     </label>
                                     <div class="col-md-8">
-                                        <textarea rows="2" class="form-control "  id="id_contact_details"
+                                        <textarea rows="2" class="form-control " id="id_contact_details"
                                                   name="contact_details">{{ university_obj.contact_details|default_if_none:"" }}</textarea>
 
                                     </div>
@@ -305,17 +301,25 @@
                                 </div>
 
                             </div>
-                            <br>
+                            <hr>
+                            <div class="portlet-title">
+                                <div class="caption">
+                                    <i class="icon-settings font-red"></i>
+                                    <span class="caption-subject font-red sbold uppercase">Attachements </span>
+                                </div>
+                            </div>
                             <div class="row">
 
                                 <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'Logo' %}:
+                                    <label class="col-md-4 control-label">{% trans 'Logo' %}:<span
+                                            style="color: red">(Only formats are allowed png/jpg)</span>
 
                                     </label>
-                                    <div class="col-md-2">
+                                    <div class="col-md-3">
 
-                                        <input name="university_logo" type="file" title="Select University Logo"
-                                               accept="image/gif, image/jpeg, image/png"
+                                        <input class="form-control" name="university_logo" type="file"
+                                               title="Select University Logo"
+                                               accept="image/jpeg, image/png"
                                                id="id_university_logo"
                                         >
 
@@ -323,7 +327,7 @@
                                     </div>
                                     {% if university_obj.university_logo %}
                                         <div class="col-md-1" style="margin-top: 5px;
-    font-size: 20px;">
+    font-size: 22px;">
 
                                             <a href="{{ university_obj.university_logo.url }}" download>
                                                 <i class="fa fa-cloud-download" aria-hidden="true"></i>
@@ -336,13 +340,19 @@
                                 </div>
 
 
+                            </div>
+                            <br>
+
+                            <div class="row">
                                 <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'Tanseeq Guide' %}:
+                                    <label class="col-md-4 control-label">{% trans 'Tanseeq Guide' %}:<span
+                                            style="color: red">(Only formats are allowed pdf)</span>
 
                                     </label>
-                                    <div class="col-md-2">
+                                    <div class="col-md-3">
 
-                                        <input name="tanseeq_guide" type="file" title="Select Tanseeq Guide"
+                                        <input class="form-control" name="tanseeq_guide" type="file"
+                                               title="Select Tanseeq Guide"
                                                accept="application/pdf"
                                                id="id_tanseeq_guide"
                                         >
@@ -351,7 +361,7 @@
                                     </div>
                                     {% if university_obj.tanseeq_guide %}
                                         <div class="col-md-1" style="margin-top: 5px;
-    font-size: 20px;">
+    font-size: 22px;">
                                             <a href="{{ university_obj.tanseeq_guide.url }}" download>
                                                 <i class="fa fa-cloud-download" aria-hidden="true"></i>
 
@@ -360,19 +370,20 @@
 
                                 </div>
 
-
                             </div>
                             <br>
 
 
                             <div class="row">
                                 <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'Registration Guide' %}:
+                                    <label class="col-md-4 control-label">{% trans 'Registration Guide' %}:<span
+                                            style="color: red">(Only formats are allowed pdf)</span>
 
                                     </label>
-                                    <div class="col-md-2">
+                                    <div class="col-md-3">
 
-                                        <input name="registration_guide" type="file" title="Select University Logo"
+                                        <input class="form-control" name="registration_guide" type="file"
+                                               title="Select University Logo"
                                                accept="application/pdf"
                                                id="id_registration_guide"
                                         >
@@ -381,7 +392,7 @@
                                     </div>
                                     {% if university_obj.registration_guide %}
                                         <div class="col-md-1" style="margin-top: 5px;
-    font-size: 20px;">
+    font-size: 22px;">
 
                                             <a href="{{ university_obj.registration_guide.url }}" download>
                                                 <i class="fa fa-cloud-download" aria-hidden="true"></i>
@@ -392,6 +403,39 @@
 
                                 </div>
 
+
+                            </div>
+
+                            <br>
+                            <div class="row">
+                                <div class="">
+                                    <label class="col-md-4 control-label">{% trans 'University Stamp' %}:<span
+                                            style="color: red">(Only formats are allowed png)</span>
+
+                                    </label>
+                                    <div class="col-md-3">
+
+                                        <input class="form-control" name="university_stamp" type="file"
+                                               title="Select University Stamp"
+                                               accept="image/png,"
+                                               id="id_university_stamp"
+                                        >
+
+
+                                    </div>
+                                    {% if university_obj.university_stamp %}
+                                        <div class="col-md-1" style="margin-top: 5px;
+    font-size: 22px;">
+
+                                            <a href="{{ university_obj.university_stamp.url }}" download>
+                                                <i class="fa fa-cloud-download" aria-hidden="true"></i>
+
+                                            </a>
+                                        </div>
+                                    {% endif %}
+
+
+                                </div>
 
                             </div>
 

@@ -1886,6 +1886,7 @@ def add_university(request):
         university_logo = request.FILES.get('university_logo', None)
         tanseeq_guide = request.FILES.get('tanseeq_guide', None)
         registration_guide = request.FILES.get('registration_guide', None)
+        university_stamp = request.FILES.get('university_stamp', None)
         university_type = request.POST.get('university_type')
         type = request.POST.get('type')
         university_name = request.POST.get('university_name')
@@ -1930,6 +1931,9 @@ def add_university(request):
             if registration_guide:
                 university_obj.registration_guide = registration_guide
                 university_obj.save()
+            if university_stamp:
+                university_obj.university_stamp = university_stamp
+                university_obj.save()
             messages.success(request, "Record saved.")
         except:
             messages.warning(request, "Record not saved.")
@@ -1949,6 +1953,7 @@ def edit_university(request, university_id=None):
         university_logo = request.FILES.get('university_logo', None)
         tanseeq_guide = request.FILES.get('tanseeq_guide', None)
         registration_guide = request.FILES.get('registration_guide', None)
+        university_stamp = request.FILES.get('university_stamp', None)
         university_type = request.POST.get('university_type')
         type = request.POST.get('type')
         university_name = request.POST.get('university_name')
@@ -1996,6 +2001,8 @@ def edit_university(request, university_id=None):
                 university_obj.tanseeq_guide = tanseeq_guide
             if registration_guide:
                 university_obj.registration_guide = registration_guide
+            if university_stamp:
+                university_obj.university_stamp = university_stamp
             university_obj.save()
             messages.success(request, "Record saved.")
         except:
