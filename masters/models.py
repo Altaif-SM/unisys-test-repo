@@ -46,6 +46,9 @@ class CountryDetails(BaseModel):
 
     class Meta:
         ordering = ('id',)
+        permissions = (
+            ('can_view_country_details', 'Can View Country Details'),
+        )
 
     def __str__(self):
         return self.country_name
@@ -63,6 +66,9 @@ class ArabCompetencyTestDetails(BaseModel):
 
     class Meta:
         ordering = ('id',)
+        permissions = (
+            ('can_view_arab_competency_test_details', 'Can View Arab Competency Test Details'),
+        )
 
     def __str__(self):
         return self.arab_competency_test
@@ -80,6 +86,9 @@ class EnglishCompetencyTestDetails(BaseModel):
 
     class Meta:
         ordering = ('id',)
+        permissions = (
+            ('can_view_english_competency_test_details', 'Can View English Competency Test Details'),
+        )
 
     def __str__(self):
         return self.english_competency_test
@@ -98,6 +107,9 @@ class UniversityTypeDetails(BaseModel):
 
     class Meta:
         ordering = ('id',)
+        permissions = (
+            ('can_view_university_type_details', 'Can View University Type Details'),
+        )
 
 
 class TypeDetails(BaseModel):
@@ -106,7 +118,9 @@ class TypeDetails(BaseModel):
 
     class Meta:
         ordering = ('id',)
-
+        permissions = (
+            ('can_view_type_details', 'Can View Type Details'),
+        )
 
 
 class AllCountries(BaseModel):
@@ -168,6 +182,9 @@ class YearDetails(BaseModel):
 
     class Meta:
         ordering = ('year_name',)
+        permissions = (
+            ('can_view_year_details', 'Can view Year Details'),
+        )
 
     def __str__(self):
         return self.year_name
@@ -343,6 +360,9 @@ class UniversityDetails(BaseModel):
                                           null=True)
     class Meta:
         ordering = ('-id',)
+        permissions = (
+            ('can_view_university_details', 'Can View University Details'),
+        )
 
     def __str__(self):
         return self.university_name
@@ -363,6 +383,12 @@ class UniversityDetails(BaseModel):
 
 class StudyLevelDetails(BaseModel):
     study_level = models.CharField(max_length=50, blank=True, null=True)
+
+    class Meta:
+        permissions = (
+            ('can_view_studyleveldetails', 'Can View Study Level Details'),
+        )
+
     def __str__(self):
         return self.study_level
 
@@ -384,6 +410,11 @@ class SemesterDetails(BaseModel):
     semester = models.ManyToManyField(Semester, blank=True)
     university_type = models.ForeignKey(UniversityTypeDetails, null=True, related_name='semester_university_type_rel',
                                         on_delete=models.SET_NULL)
+
+    class Meta:
+        permissions = (
+            ('can_view_semester_details', 'Can View Semester Details'),
+        )
 
     def __str__(self):
         return self.semester_name
@@ -429,6 +460,10 @@ class StudyTypeDetails(BaseModel):
     class Meta:
         ordering = ('-id',)
 
+    permissions = (
+        ('can_view_studytypedetails', 'Can View Study Type Details'),
+    )
+
 
 class Department(models.Model):
     department = models.CharField(max_length=100, blank=True, null=True)
@@ -450,9 +485,13 @@ class FacultyDetails(BaseModel):
 
     class Meta:
         ordering = ('-id',)
-    
+
     def __str__(self):
         return self.faculty_name
+
+    permissions = (
+        ('can_view_faculty_details', 'Can View Faculty Details'),
+    )
 
 class CampusBranchesDetails(BaseModel):
     campus_name = models.CharField(max_length=150, blank=True, null=True)
@@ -471,6 +510,9 @@ class CampusBranchesDetails(BaseModel):
 
     class Meta:
         ordering = ('-id',)
+        permissions = (
+            ('can_view_campus_branches_details', 'Can View Campus Branches Details'),
+        )
 
     def __str__(self):
         return self.campus_name
@@ -525,6 +567,9 @@ class ProgramDetails(BaseModel):
 
     class Meta:
         ordering = ('program_name',)
+        permissions = (
+            ('can_view_program_details', 'Can View Program Details'),
+        )
 
     def __str__(self):
         return self.program_name
@@ -563,6 +608,10 @@ class ProgramFeeDetails(BaseModel):
     university_type = models.ForeignKey(UniversityTypeDetails, null=True, related_name='program_fee_university_type_rel',
                                         on_delete=models.SET_NULL)
 
+    class Meta:
+        permissions = (
+            ('can_view_program_fee_details', 'Can View Program Fee Details'),
+        )
 
 
 class ModuleDetails(BaseModel):
@@ -657,6 +706,9 @@ class LanguageDetails(BaseModel):
 
     class Meta:
         ordering = ('-id',)
+        permissions = (
+            ('can_read_language_details', 'Can Read Language Details'),
+        )
 
 class CurrencyDetails(BaseModel):
     currency_number = models.CharField(max_length=11, blank=True, null=True)
@@ -668,6 +720,9 @@ class CurrencyDetails(BaseModel):
     exchange_type = models.CharField(max_length=50, blank=True, null=True)
     class Meta:
         ordering = ('-id',)
+        permissions = (
+            ('can_read_currency_details', 'Can Read currency Details'),
+        )
 
 
 class ActivityDetails(BaseModel):
@@ -676,6 +731,9 @@ class ActivityDetails(BaseModel):
 
     class Meta:
         ordering = ('-id',)
+        permissions = (
+            ('can_view_activity_details', 'Can View Activity Details'),
+        )
 
     def __str__(self):
         return self.acivity_name
@@ -687,6 +745,9 @@ class StudentModeDetails(BaseModel):
 
     class Meta:
         ordering = ('-id',)
+        permissions = (
+            ('can_view_student_mode_details', 'Can View Student Mode Details'),
+        )
 
     def __str__(self):
         return self.student_mode
@@ -705,6 +766,9 @@ class LearningCentersDetails(BaseModel):
                                         on_delete=models.SET_NULL)
     class Meta:
         ordering = ('id',)
+        permissions = (
+            ('can_view_learning_centers_details', 'Can View Learning Centers Details'),
+        )
 
     def __str__(self):
         return self.lc_name
@@ -741,6 +805,9 @@ class CalenderDetails(BaseModel):
 
     class Meta:
         ordering = ('-id',)
+        permissions = (
+            ('can_view_calender_details', 'Can View Calender Details'),
+        )
 
 
 
@@ -893,6 +960,9 @@ class PrerequisiteCourseDetails(BaseModel):
 
     class Meta:
         ordering = ('-id',)
+        permissions = (
+            ('can_view_prerequisite_course_details', 'Can View Prerequisite Course Details'),
+        )
 
     def __str__(self):
         return self.code
@@ -1018,4 +1088,7 @@ class ReferralFeeDetails(BaseModel):
     program = models.ForeignKey(ProgramDetails, null=True, related_name='referral_fee_program_rel',
                                 on_delete=models.SET_NULL)
 
-
+    class Meta:
+        permissions = (
+            ('can_view_referral_fee_details', 'Can view Referral Dee Details'),
+        )

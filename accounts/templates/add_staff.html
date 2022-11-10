@@ -102,21 +102,20 @@
             $(document).ready(function () {
                 $("#status").Sswitch({});
 
-
                 $(document).on("change", "#university_type", function (e) {
                 var university_type_id = $(this).val();
                 var url = '/student/get_university_from_type/';
                 get_university_from_university_type(url, university_type_id)
             })
 
-                  $(document).on("change", "#email", function (e) {
+                $(document).on("change", "#email", function (e) {
                 var email = $(this).val();
                  var user_id = $('#user_id').val()
                 var url = '/accounts/get_email_exists/';
                 get_email_exists_fun(url, email,user_id)
             })
 
-                   $(document).on("change", "#university", function (e) {
+                $(document).on("change", "#university", function (e) {
 
                         $('#faculty').empty();
                         $('#facculty_div').hide();
@@ -156,7 +155,12 @@
                     $("#supervisor_faculty").prop('required',true);
                     var url = '/accounts/get_program_from_faculty/';
                     get_program_from_faculty(url, account_type,faculty_id,university)
-            })
+                })
+
+                $(document).on("change", "#id_account_type", function (e) {
+                    const permissions_list_url = "{% url 'masters:list_permissions' %}" 
+                    get_permissions_list(permissions_list_url)
+                })
 
                 function get_program_from_faculty(url, account_type,faculty_id,university) {
             $.ajax({
@@ -169,39 +173,36 @@
                     csrfmiddlewaretoken: '{{ csrf_token }}',
                 },
                 success: function (data) {
+                    $('#supervisor_program').empty();
 
-                        $('#supervisor_program').empty();
+                    $('#faculty').empty();
+                    $('#facculty_div').hide();
 
-                        $('#faculty').empty();
-                        $('#facculty_div').hide();
+                    $('#program').empty();
+                    $('#program_div').hide();
 
-                        $('#program').empty();
-                        $('#program_div').hide();
-
+                    $('#supervisor_program').append(
+                        '<option value="" >Please select</option>');
+                    for (var i = 0; i < data.length; i++) {
                         $('#supervisor_program').append(
-                            '<option value="" >Please select</option>');
-                        for (var i = 0; i < data.length; i++) {
-                            $('#supervisor_program').append(
-                                '<option value="' + data[i]['id'] + '">'
-                                + data[i]['program'] + '</option>')
-                        }
-                    },
+                            '<option value="' + data[i]['id'] + '">'
+                            + data[i]['program'] + '</option>')
+                    }
+                },
                 error: function (xhr, msg, err) {
                     alert(xhr.responseJSON.error);
                 }
             });
         }
 
-
-
                 $(document).on("change", "#id_account_type", function (e) {
                 var account_type = $(this).val();
                 var university = $('#university').val();
 
                 $("#faculty").prop('required',false);
-                 $("#program").prop('required',false);
-                 $("#supervisor_faculty").prop('required',false);
-                 $("#supervisor_program").prop('required',false);
+                    $("#program").prop('required',false);
+                    $("#supervisor_faculty").prop('required',false);
+                    $("#supervisor_program").prop('required',false);
 
                 if(account_type == 'Faculty'){
                     $("#faculty").prop('required',true);
@@ -222,25 +223,22 @@
 
                     }
                 else{
-                     $("#faculty").prop('required',false);
-                     $('#faculty').empty();
-                     $('#facculty_div').hide();
+                    $("#faculty").prop('required',false);
+                    $('#faculty').empty();
+                    $('#facculty_div').hide();
 
-                     $("#program").prop('required',false);
-                     $('#program').empty();
-                     $('#program_div').hide();
+                    $("#program").prop('required',false);
+                    $('#program').empty();
+                    $('#program_div').hide();
 
+                    $("#supervisor_faculty").prop('required',false);
+                    $('#supervisor_faculty').empty();
 
-                      $("#supervisor_faculty").prop('required',false);
-                     $('#supervisor_faculty').empty();
+                    $("#supervisor_program").prop('required',false);
+                    $('#supervisor_program').empty();
 
-                     $("#supervisor_program").prop('required',false);
-                     $('#supervisor_program').empty();
-
-
-
-                     $('#supervisor_facculty_program_div').hide();
-                }
+                    $('#supervisor_facculty_program_div').hide();
+                    }
 
             })
 
@@ -255,90 +253,80 @@
                 },
                 success: function (data) {
 
-                        $('#program').empty();
-                        $('#program_div').hide();
+                    $('#program').empty();
+                    $('#program_div').hide();
 
-                        $('#faculty').empty();
-                        $('#facculty_div').hide();
-
-
-                        $('#supervisor_faculty').empty();
-                        $('#supervisor_facculty_program_div').show();
+                    $('#faculty').empty();
+                    $('#facculty_div').hide();
 
 
-                        $('#supervisor_program').empty();
-                        $('#supervisor_program').append(
-                            '<option value="" >Please select</option>');
+                    $('#supervisor_faculty').empty();
+                    $('#supervisor_facculty_program_div').show();
 
+                    $('#supervisor_program').empty();
+                    $('#supervisor_program').append(
+                        '<option value="" >Please select</option>');
 
+                    $('#supervisor_faculty').append(
+                        '<option value="" >Please select</option>');
+                    for (var i = 0; i < data.length; i++) {
                         $('#supervisor_faculty').append(
-                            '<option value="" >Please select</option>');
-                        for (var i = 0; i < data.length; i++) {
-                            $('#supervisor_faculty').append(
-                                '<option value="' + data[i]['id'] + '">'
-                                + data[i]['faculty'] + '</option>')
-                        }
-                    },
+                            '<option value="' + data[i]['id'] + '">'
+                            + data[i]['faculty'] + '</option>')
+                    }
+                },
                 error: function (xhr, msg, err) {
                     alert(xhr.responseJSON.error);
                 }
             });
         }
 
-
                 /*
                 $("#staff_form").submit(function (e) {
-
                 if ($('#university_exists').is(":visible")) {
                     return false;
                 }
-
-
-            })*/
-
-
+                })*/
                 var password = document.getElementById("password")
                 var confirm_password = document.getElementById("confirm_password");
                 password.onchange = validatePassword;
                 confirm_password.onkeyup = validatePassword;
-
-
             });
 
-            function validatePassword() {
-                if (password.value != confirm_password.value) {
-                    confirm_password.setCustomValidity("Passwords Don't Match");
-                } else {
-                    confirm_password.setCustomValidity('');
-                }
+        function validatePassword() {
+            if (password.value != confirm_password.value) {
+                confirm_password.setCustomValidity("Passwords Don't Match");
+            } else {
+                confirm_password.setCustomValidity('');
             }
+        }
 
-            function get_university_from_university_type(url, university_type_id) {
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: {
-                        university_type_id: university_type_id,
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                    },
-                    success: function (data) {
+        function get_university_from_university_type(url, university_type_id) {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {
+                    university_type_id: university_type_id,
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+                success: function (data) {
 
-                        $('#university').empty();
+                    $('#university').empty();
+                    $('#university').append(
+                        '<option value="" >Please select</option>');
+                    for (var i = 0; i < data.length; i++) {
                         $('#university').append(
-                            '<option value="" >Please select</option>');
-                        for (var i = 0; i < data.length; i++) {
-                            $('#university').append(
-                                '<option value="' + data[i]['id'] + '">'
-                                + data[i]['university_name'] + '</option>')
-                        }
-                    },
-                    error: function (xhr, msg, err) {
-                        alert(xhr.responseJSON.error);
+                            '<option value="' + data[i]['id'] + '">'
+                            + data[i]['university_name'] + '</option>')
                     }
-                });
-            }
+                },
+                error: function (xhr, msg, err) {
+                    alert(xhr.responseJSON.error);
+                }
+            });
+        }
 
-             function get_email_exists_fun(url, email,user_id) {
+        function get_email_exists_fun(url, email,user_id) {
             $.ajax({
                 type: 'POST',
                 url: url,
@@ -375,31 +363,30 @@
                     csrfmiddlewaretoken: '{{ csrf_token }}',
                 },
                 success: function (data) {
+                    $('#supervisor_faculty').empty();
+                    $('#supervisor_program').empty();
+                    $('#supervisor_facculty_program_div').hide();
 
-                        $('#supervisor_faculty').empty();
-                        $('#supervisor_program').empty();
-                        $('#supervisor_facculty_program_div').hide();
+                    $('#faculty').empty();
+                    $('#facculty_div').hide();
 
-                        $('#faculty').empty();
-                        $('#facculty_div').hide();
-
-                        $('#program').empty();
-                        $('#program_div').show();
+                    $('#program').empty();
+                    $('#program_div').show();
+                    $('#program').append(
+                        '<option value="" >Please select</option>');
+                    for (var i = 0; i < data.length; i++) {
                         $('#program').append(
-                            '<option value="" >Please select</option>');
-                        for (var i = 0; i < data.length; i++) {
-                            $('#program').append(
-                                '<option value="' + data[i]['id'] + '">'
-                                + data[i]['program'] + '</option>')
-                        }
-                    },
+                            '<option value="' + data[i]['id'] + '">'
+                            + data[i]['program'] + '</option>')
+                    }
+                },
                 error: function (xhr, msg, err) {
                     alert(xhr.responseJSON.error);
                 }
             });
         }
 
-          function get_faculty_from_account_type(url, account_type,university) {
+        function get_faculty_from_account_type(url, account_type,university) {
             $.ajax({
                 type: 'POST',
                 url: url,
@@ -409,31 +396,30 @@
                     csrfmiddlewaretoken: '{{ csrf_token }}',
                 },
                 success: function (data) {
+                    $('#supervisor_faculty').empty();
+                    $('#supervisor_program').empty();
+                    $('#supervisor_facculty_program_div').hide();
 
-                        $('#supervisor_faculty').empty();
-                        $('#supervisor_program').empty();
-                        $('#supervisor_facculty_program_div').hide();
+                    $('#program').empty();
+                    $('#program_div').hide();
 
-                        $('#program').empty();
-                        $('#program_div').hide();
-
-                        $('#faculty').empty();
-                        $('#facculty_div').show();
+                    $('#faculty').empty();
+                    $('#facculty_div').show();
+                    $('#faculty').append(
+                        '<option value="" >Please select</option>');
+                    for (var i = 0; i < data.length; i++) {
                         $('#faculty').append(
-                            '<option value="" >Please select</option>');
-                        for (var i = 0; i < data.length; i++) {
-                            $('#faculty').append(
-                                '<option value="' + data[i]['id'] + '">'
-                                + data[i]['faculty'] + '</option>')
-                        }
-                    },
+                            '<option value="' + data[i]['id'] + '">'
+                            + data[i]['faculty'] + '</option>')
+                    }
+                },
                 error: function (xhr, msg, err) {
                     alert(xhr.responseJSON.error);
                 }
             });
         }
 
-            function get_university_exists(url, university,user_id) {
+        function get_university_exists(url, university,user_id) {
             $.ajax({
                 type: 'POST',
                 url: url,
@@ -458,18 +444,14 @@
                 }
             });
         }
-
-
         }
-
-
         window.setTimeout(function () {
             $(".alert").fadeTo(500, 0).slideUp(500, function () {
                 $(this).remove();
             });
         }, 4000);
     </script>
-
+    <script src="{% static 'admin/js/super_user_funcs.js' %}" type="text/javascript"></script>
 {% endblock %}
 
 
@@ -687,27 +669,36 @@
 
 
                         <div class="" style="display: none;" id="facculty_div">
-                                    <label class="col-md-2 control-label">{% trans 'Faculty' %}:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <select name="faculty" class="form-control" id="faculty" >
+                            <label class="col-md-2 control-label">{% trans 'Faculty' %}:<span
+                                    style="color: red">*</span></label>
+                            <div class="col-md-3">
+                                <select name="faculty" class="form-control" id="faculty" >
 
 
-                                        </select>
-                                    </div>
-                                </div>
+                                </select>
+                            </div>
+                        </div>
 
                         <div class="" style="display: none;" id="program_div">
-                                    <label class="col-md-2 control-label">{% trans 'Program' %}:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <select name="program" class="form-control" id="program" >
+                            <label class="col-md-2 control-label">{% trans 'Program' %}:<span
+                                    style="color: red">*</span></label>
+                            <div class="col-md-3">
+                                <select name="program" class="form-control" id="program" >
+                                </select>
+                            </div>
+                        </div>
 
-
-                                        </select>
-                                    </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="" style="display: none;" id="permissions_div">
+                                <label class="col-md-2 control-label">{% trans 'Permissions' %}:<span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    <select multiple name="permissions" class="form-control" id="permissions" >
+                                    </select>
                                 </div>
-
+                            </div>
                         </div>
                         <br>
                         <div class="row" id="supervisor_facculty_program_div" style="display: none;">
@@ -716,7 +707,6 @@
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <select name="supervisor_faculty" class="form-control" id="supervisor_faculty" >
-
 
                                         </select>
                                     </div>

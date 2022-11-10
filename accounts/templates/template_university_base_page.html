@@ -918,19 +918,12 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </li>
                             {% endif %}
 
-
-
-
                             <li class="nav-item module_settings_nav_item">
-{#                                {% if 'Application Settings' in access_list %}#}
                                     <a href="javascript:;" class="nav-link nav-toggle">
                                         <i class="fa fa-tasks" aria-hidden="true"></i>
-
-
                                         <span class="title">{% trans 'Application Settings' %}</span>
                                         <span class="arrow module_settings_arrow"></span>
                                     </a>
-{#                                {% endif %}#}
                                 <ul class="sub-menu module_settings_sub_menu">
                                     {% if 'Manage Applicant Documents' in access_list %}
                                         <li class="nav-item ">
@@ -938,7 +931,6 @@ License: You must have a valid license purchased only from themeforest(the above
                                                class="nav-link ">{% trans 'Manage Applicant Documents' %}</a>
                                         </li>
                                     {% endif %}
-{#                                    {% if 'Approving Applicant Details' in access_list %}#}
                                  {% if not user.is_supervisor %}
                                         <li class="nav-item ">
                                             <a href="{% url 'partner:template_approving_application' %}"
@@ -959,29 +951,26 @@ License: You must have a valid license purchased only from themeforest(the above
                                         </li>
                                      {% endif %}
 
-
                                 {% endif %}
 
                                 {% if user.is_supervisor %}
-
                                         <li class="nav-item ">
                                             <a href="{% url 'partner:template_approving_application' %}"
                                                class="nav-link ">{% trans 'Approving Research Proposal' %}</a>
                                         </li>
                                 {% endif %}
-
-
-{#                                    {% endif %}#}
-
-
-
-
                                 </ul>
                             </li>
 
+                        <!-- sidebar permission dependent menu -->
+                        {% if request.user.is_superuser%}
+                            {% include 'super_admin_side_bar.html' %}
+                        {%else%}
+                            {% include 'role_user_side_bar.html' %}
+                        {% endif %}
+                        <!-- end of permission dependent sidebar menu -->
+
                         {% if user.is_super_admin %}
-
-
                             <li class="nav-item accounting_nav_item">
                                 <a href="javascript:;" class="nav-link nav-toggle">
                                     <i class="fa fa-briefcase" aria-hidden="true"></i>
@@ -997,21 +986,9 @@ License: You must have a valid license purchased only from themeforest(the above
                                                class="nav-link ">{% trans 'Payment Settings' %}</a>
                                         </li>
                                     {% endif %}
-
-{#                                    <li class="nav-item ">#}
-{#                                        <a href="{% url 'accounting:get_payment_report' %}"#}
-{#                                           class="nav-link ">{% trans 'Payment Report' %}</a>#}
-{#                                    </li>#}
-
-
                                 </ul>
                             </li>
                         {% endif %}
-
-
-
-
-
 
                             {% if 'donor.can_view_scholarship' in perms %}
                                 <li class="nav-item " id="acd_qli">
@@ -1635,7 +1612,6 @@ License: You must have a valid license purchased only from themeforest(the above
             $(".program_settings_nav_item").addClass("open");
             $(".program_settings_arrow").addClass("open");
             $('.program_settings_sub_menu').css('display', 'block');
-
         }
     {% endif %}
 
@@ -1650,7 +1626,6 @@ License: You must have a valid license purchased only from themeforest(the above
             $(".organization_settings_nav_item").addClass("open");
             $(".organization_settings_arrow").addClass("open");
             $('.organization_settings_sub_menu').css('display', 'block');
-
         }
     {% endif %}
 
@@ -1665,7 +1640,6 @@ License: You must have a valid license purchased only from themeforest(the above
             $(".staff_settings_nav_item").addClass("open");
             $(".staff_settings_arrow").addClass("open");
             $('.staff_settings_sub_menu').css('display', 'block');
-
         }
     {% endif %}
 
@@ -1676,13 +1650,8 @@ License: You must have a valid license purchased only from themeforest(the above
 
             var element = document.getElementById("app_anch");
             element.classList.add("active");
-
-
         }
     {% endif %}
-
-
-
 
     $(document).on("click", "#id_toggle", function (e) {
         if ($('body').attr("class") == "page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid") {
@@ -1699,7 +1668,6 @@ License: You must have a valid license purchased only from themeforest(the above
         var selected_year = $(this).attr('id');
         var url = '/masters/change_session_year/';
 
-        {#alert(selected_year);#}
         change_session_year(url, selected_year)
     })
 
@@ -1719,7 +1687,12 @@ License: You must have a valid license purchased only from themeforest(the above
             }
         });
     }
-
-
+    
+    // hide side menu item if user doesnt have permission 
+    for (a of $('.page-sidebar-menu li a[href="javascript:;"]')) {
+        const parentListItem = $(a).parent('li');
+        if(!parentListItem.find('ul').children().length)
+            parentListItem.hide()
+    }
 </script>
 </html>

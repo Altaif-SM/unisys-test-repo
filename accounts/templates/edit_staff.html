@@ -102,44 +102,43 @@
             $(document).ready(function () {
                 $("#status").Sswitch({});
 
-                  $(document).on("change", "#university_type", function (e) {
-                var university_type_id = $(this).val();
-                console.log("university_type_id"+university_type_id);
-                var url = '/student/get_university_from_type/';
-                get_university_from_university_type(url, university_type_id)
-            })
+                $(document).on("change", "#university_type", function (e) {
+                    var university_type_id = $(this).val();
+                    console.log("university_type_id"+university_type_id);
+                    var url = '/student/get_university_from_type/';
+                    get_university_from_university_type(url, university_type_id)
+                })
 
-                   $(document).on("change", "#email", function (e) {
-                var email = $(this).val();
-                 var user_id = $('#user_id').val()
-                var url = '/accounts/get_email_exists/';
-                get_email_exists_fun(url, email,user_id)
-            })
+                $(document).on("change", "#email", function (e) {
+                    var email = $(this).val();
+                    var user_id = $('#user_id').val()
+                    var url = '/accounts/get_email_exists/';
+                    get_email_exists_fun(url, email,user_id)
+                })
 
                 $(document).on("change", "#university", function (e) {
 
-                        $('#faculty').empty();
-                        $('#facculty_div').hide();
+                    $('#faculty').empty();
+                    $('#facculty_div').hide();
 
-                        $('#program').empty();
-                        $('#program_div').hide();
+                    $('#program').empty();
+                    $('#program_div').hide();
 
-                          $('#supervisor_faculty').empty();
-                         $('#supervisor_program').empty();
-                        $('#supervisor_facculty_program_div').hide();
+                        $('#supervisor_faculty').empty();
+                        $('#supervisor_program').empty();
+                    $('#supervisor_facculty_program_div').hide();
 
-                        $('#id_account_type').empty();
-                        $('#id_account_type').append(
-                            '<option value="" >Please select</option>');
-                        $('#id_account_type').append(
-                            '<option value="Administrator" >Admission Unit</option>');
-                        $('#id_account_type').append(
-                            '<option value="Faculty" >Faculty</option>');
-                        $('#id_account_type').append(
-                            '<option value="Program" >Program</option>');
-                        $('#id_account_type').append(
-                            '<option value="Supervisor" >Supervisor</option>');
-
+                    $('#id_account_type').empty();
+                    $('#id_account_type').append(
+                        '<option value="" >Please select</option>');
+                    $('#id_account_type').append(
+                        '<option value="Administrator" >Admission Unit</option>');
+                    $('#id_account_type').append(
+                        '<option value="Faculty" >Faculty</option>');
+                    $('#id_account_type').append(
+                        '<option value="Program" >Program</option>');
+                    $('#id_account_type').append(
+                        '<option value="Supervisor" >Supervisor</option>');
 
                     /*
                 var university = $(this).val();
@@ -147,28 +146,32 @@
                 var url = '/accounts/get_university_exists/';
                 get_university_exists(url, university,user_id)
                 */
-            })
+                })
 
-                 $(document).on("change", "#supervisor_faculty", function (e) {
+                $(document).on("change", "#supervisor_faculty", function (e) {
                     var faculty_id = $(this).val();
                     var account_type = $('#id_account_type').val();
                     var university = $('#university').val();
                     $("#supervisor_faculty").prop('required',true);
                     var url = '/accounts/get_program_from_faculty/';
                     get_program_from_faculty(url, account_type,faculty_id,university)
-            })
-                function get_program_from_faculty(url, account_type,faculty_id,university) {
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: {
-                    account_type: account_type,
-                    faculty_id: faculty_id,
-                    university: university,
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                },
-                success: function (data) {
-
+                })
+                // $(document).on("change", "#id_account_type", function (e) {
+                    const permissions_list_url = "{% url 'masters:list_permissions' %}"
+                    const permission_list = {{user_obj.permission_list | safe}};
+                    get_permissions_list(permissions_list_url, permission_list)
+                // })
+            function get_program_from_faculty(url, account_type,faculty_id,university) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        account_type: account_type,
+                        faculty_id: faculty_id,
+                        university: university,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data) {
                         $('#supervisor_program').empty();
 
                         $('#faculty').empty();
@@ -185,11 +188,11 @@
                                 + data[i]['program'] + '</option>')
                         }
                     },
-                error: function (xhr, msg, err) {
-                    alert(xhr.responseJSON.error);
-                }
-            });
-        }
+                    error: function (xhr, msg, err) {
+                        alert(xhr.responseJSON.error);
+                    }
+                });
+            }
 
                  $(document).on("change", "#id_account_type", function (e) {
                 var account_type = $(this).val();
@@ -468,6 +471,7 @@
             });
         }, 4000);
     </script>
+    <script src="{% static 'admin/js/super_user_funcs.js' %}" type="text/javascript"></script>
 
 {% endblock %}
 
@@ -763,6 +767,17 @@
                                     </div>
                                 </div>
 
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="" id="permissions_div">
+                                <label class="col-md-2 control-label">{% trans 'Permissions' %}:<span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    <select style="height: 200px" multiple name="permissions" class="form-control" id="permissions" >
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         <br>
                         <div class="row" id="supervisor_facculty_program_div" {% if user_obj.is_supervisor == True %} style="display: block" {% else %} style="display: none" {% endif %}>

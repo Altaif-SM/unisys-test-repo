@@ -12,23 +12,28 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 import stripe
+import environ
 from django.utils.translation import ugettext_lazy as _
 
 # import psycopg2
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# Initialise environment variables
+
+env = environ.Env()
+environ.Env.read_env()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'gchy7$_ctk45##d%(p*+*v6ciju3&#h72dwfz2ugx%u11q1)c&'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = ['*']
+print(env('ALLOWED_HOSTS').split(','))
+ALLOWED_HOSTS = env('ALLOWED_HOSTS').split(',')
 
 
 # Application definition
@@ -45,11 +50,10 @@ INSTALLED_APPS = [
     'common.apps.CommonConfig',
     'masters.apps.MastersConfig',
     'student.apps.StudentConfig',
-    'accounting.apps.AccountingConfig',
     'partner.apps.PartnerConfig',
-    'payments.apps.PaymentsConfig',
+    'accounting.apps.AccountingConfig',
     'donor.apps.DonorConfig',
-    'computed_property',
+    'payments.apps.PaymentsConfig',
     'parent.apps.ParentConfig',
     'mathfilters',
     'password_reset.apps.PasswordResetConfig',
@@ -69,6 +73,15 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+}
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = int(env('DATA_UPLOAD_MAX_MEMORY_SIZE'))
 
 ROOT_URLCONF = 'scholarship_mgmt.urls'
 
@@ -99,52 +112,28 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 MEDIA_URL = '/media/'
 
+FILE_UPLOAD_HANDLERS = env('FILE_UPLOAD_HANDLERS').split(',')
+
+from django.contrib.messages import constants as message_constants
+MESSAGE_TAGS = {message_constants.DEBUG: 'debug',
+                message_constants.INFO: 'info',
+                message_constants.SUCCESS: 'success',
+                message_constants.WARNING: 'warning',
+                message_constants.ERROR: 'danger',}
+
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-
-
 
 DATABASES = {
      'default': {
           'ENGINE': 'django.db.backends.mysql',
-          'NAME': 'university_system',
-          # 'NAME': 'indonesia_university_system_test_17_03_2022',
-          'USER':'root',
-          'PASSWORD':'Sayyed@123',
-          'HOST': '127.0.0.1',
-          'PORT':'3306'
+          'NAME':  env('DATABASE_NAME'),
+          'USER': env('DATABASE_USER'),
+          'PASSWORD': env('DATABASE_PASS'),
+          'HOST': env('DATABASE_HOST'),
+          'PORT': env('DATABASE_PORT')
      }
  }
-
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
-    ),
-
-}
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-#         'NAME':'scholarship_test',                      # Or path to database file if using sqlite3.
-#         'USER':'sms',                      # Not used with sqlite3.
-#         'PASSWORD':'redbytes',                  # Not used with sqlite3.
-#         'HOST':'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
-#         'PORT':'',                    # Set to empty string for default. Not used with sqlite3.
-#         # 'ATOMIC_REQUESTS':True
-#     },
-#     'OPTIONS': {
-#         'isolation_level' : psycopg2.extensions.ISOLATION_LEVEL_SERIALIZABLE
-#     }
-# }
-
-'''DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}'''
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -191,18 +180,18 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = None
 
 REGISTRATION_FLAG = False
 
-EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'sayyedriyaj55@gmail.com'
-EMAIL_HOST_PASSWORD = 'Sayyed@123'
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = True
 
-SERVER_HOST_NAME = "http://127.0.0.1:4000/"
+SERVER_HOST_NAME = env('SERVER_HOST_NAME')
 
-stripe.api_key = 'sk_test_51JcmDhSIeVZrpBOQmSMJtfkhTDY8JkkrbnjdEw2wurzt9nQdK74CGYCX90l5q0VfEUuq4oLzQHMA1mgpeUqsKK6G00fUXuYOIG'
+stripe.api_key = env('STRIPE_API_KEY')
 
-STRIPE_SECRET_KEY = 'sk_test_51JcmDhSIeVZrpBOQmSMJtfkhTDY8JkkrbnjdEw2wurzt9nQdK74CGYCX90l5q0VfEUuq4oLzQHMA1mgpeUqsKK6G00fUXuYOIG'
-STRIPE_PUBLISHABLE_KEY = 'pk_test_51JcmDhSIeVZrpBOQvbNkpUdU9H7l6iGwMyHzsASeNF6howwGwp9asyxWfjukiP7bHqB5EnGKIwGBR02f5431Qni700Zf86Q6VI'
+STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
+STRIPE_PUBLISHABLE_KEY = env('STRIPE_PUBLISHABLE_KEY')
 
 USE_I18N = True
 

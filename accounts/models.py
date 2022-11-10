@@ -1,8 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from common.models import BaseModel
-from django.db.models import Q
-
+from django.db.models import Q, F, Value, CharField
+from django.db.models.functions import Concat
 
 # Create your models here.
 class UserRole(BaseModel):
@@ -86,7 +86,14 @@ class User(AbstractUser):
     class Meta:
         permissions = (
             ('can_view_year_master', 'can view year master'),
+            ('can_view_users', 'Can view Users'),
+            ('delete_staff', 'Can Delete Staff'),
+            ('can_view_agentrecruiter', 'Can view Agent Recruiter'),
+            ('add_agentrecruiter', 'Can Add Agent Recruiter'),
+            ('change_agentrecruiter', 'Can Change Agent Recruiter'),
+            ('delete_agentrecruiter', 'Can Delete Agent Recruiter'),
         )
+
 
     @staticmethod
     def get_instance(user_detail_form, user=None, generate_password=False):
@@ -216,6 +223,9 @@ class User(AbstractUser):
 
             for obj in group_include_perms:
                 perms.append(obj.content_type.app_label + '.' + obj.codename)
+        
+        user_permissions = self.user_permissions.all().annotate(new_codename=Concat(F('content_type__app_label'), Value('.'), F('codename'), output_field=CharField()))
+        perms.extend(user_permissions.values_list('new_codename', flat=True))
         return perms
 
     def to_dict(self):

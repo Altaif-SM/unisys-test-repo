@@ -22,6 +22,7 @@ from accounts.service import UserService
 from datetime import date
 from masters.models import UniversityDetails
 from django.http import JsonResponse
+from django.contrib.auth.decorators import permission_required
 # Create your views here.
 
 def index(request):
@@ -937,6 +938,7 @@ class AuthRequiredMiddleware(object):
         return None
 
 
+@permission_required('accounts.can_view_users', raise_exception=True)
 def staff_settings(request):
     country_list = CountryDetails.objects.all()
     role_name_list = ['Admin','Student','Donor','Partner','Parent','System Admin']
@@ -944,6 +946,8 @@ def staff_settings(request):
     return render(request, 'staff_settings.html',
                   {'country_list': country_list, 'user_recs': user_recs})
 
+
+@permission_required('accounts.add_user', raise_exception=True)
 def add_staff(request):
     country_list = CountryDetails.objects.all()
     system_settings_list = ['Manage Language', 'Manage Currency', 'Manage Country', 'Manage Study Mode', 'Manage Study Level','Manage Study Type','Manage Student Mode', 'Manage Learning Centers', 'Manage Faculties', 'Link Faculty to User']
@@ -951,6 +955,7 @@ def add_staff(request):
     university_settings_list = ['Manage Universities', 'Manage University Partner', 'Link University to User', 'Manage Program', 'Manage Campus','Link Campus to User', 'Manage Department', 'Link Department to User']
     academic_settings_list = ['Manage Year', 'Manage Semester', 'Manage Activity', 'Manage Calendar']
     module_settings_list = ['Manage Applicant Documents', 'Approving Applicant Details','Payment Settings']
+    
     if request.method == 'POST':
         faculty = request.POST.get('faculty',None)
         program = request.POST.get('program',None)
@@ -969,7 +974,8 @@ def add_staff(request):
         country = request.POST.get('country')
         residential_address = request.POST.get('address')
         status = request.POST.get('status')
-        permission_list = request.POST.getlist('checks[]')
+        # permission_list = request.POST.getlist('checks[]')  # old
+        permission_list = request.POST.getlist('permissions')
         if status == 'on':
             status = True
         else:
@@ -998,6 +1004,7 @@ def add_staff(request):
 
             staff_obj = User.objects.create(email = email,username = email,password = make_password(password),is_active = status,university_id = university,faculty_id = faculty,program_id = program)
             staff_obj.role.add(UserRole.objects.get(name=role))
+            staff_obj.user_permissions.set(permission_list)
             try:
                 country = CountryDetails.objects.get(id=country)
                 address = AddressDetails.objects.create(country=country,residential_address = residential_address)
@@ -1005,7 +1012,7 @@ def add_staff(request):
             except:
                 pass
             staff_obj.save()
-
+            """
             system_check = any(item in system_settings_list for item in permission_list)
             user_check = any(item in user_settings_list for item in permission_list)
             university_check = any(item in university_settings_list for item in permission_list)
@@ -1025,9 +1032,9 @@ def add_staff(request):
             for rec in permission_list:
                 permission_obj = PersmissionDetails.objects.create(permission=rec)
                 staff_obj.permission.add(permission_obj)
+            """
             messages.success(request, "Record saved.")
         except Exception as e:
-            print(e)
             messages.warning(request, "Record not saved.")
         return redirect('/accounts/staff_settings/')
     university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
@@ -1053,19 +1060,12 @@ def add_staff(request):
     }
     return render(request, 'add_staff.html', {'country_list':country_list,'staff_dict':staff_dict})
 
-def delete_staff(request):
-    if request.method == 'POST':
-        staff_delete_id = request.POST.get('staff_delete_id')
-        try:
-            User.objects.filter(id=staff_delete_id).delete()
-            messages.success(request, "Record deleted.")
-        except:
-            messages.warning(request, "Record not deleted.")
-        return redirect('/accounts/staff_settings/')
 
+@permission_required('accounts.change_user', raise_exception=True)
 def edit_staff(request, staff_id=None):
     country_list = CountryDetails.objects.all()
     user_obj = User.objects.get(id=staff_id)
+    permission_list = list(user_obj.user_permissions.values_list("id", flat=True))
     system_settings_list = ['Manage Language', 'Manage Currency', 'Manage Country', 'Manage Study Mode', 'Manage Study Level','Manage Study Type','Manage Student Mode', 'Manage Learning Centers', 'Manage Faculties', 'Link Faculty to User']
     user_settings_list = ['Manage Group', 'Manage Users']
     university_settings_list = ['Manage Universities', 'Manage University Partner', 'Link University to User', 'Manage Program', 'Manage Campus','Link Campus to User','Manage Department', 'Link Department to User']
@@ -1091,8 +1091,8 @@ def edit_staff(request, staff_id=None):
         country = request.POST.get('country')
         residential_address = request.POST.get('address')
         status = request.POST.get('status')
-        permission_list = request.POST.getlist('checks[]')
-
+        # permission_list = request.POST.getlist('checks[]')
+        permission_list = request.POST.getlist('permissions')
         if status == 'on':
             status = True
         else:
@@ -1141,9 +1141,17 @@ def edit_staff(request, staff_id=None):
             user.username = email
             user.is_active = status
             user.save()
+            current_permission_list = list(
+                user.user_permissions.values_list("id", flat=True)
+            )
+            permission_list = list(map(int, permission_list))
+            current_permission_list.sort()
+            permission_list.sort()
+            if current_permission_list != permission_list:
+                user.user_permissions.set(permission_list)
 
 
-
+            """
             system_check = any(item in system_settings_list for item in permission_list)
             user_check = any(item in user_settings_list for item in permission_list)
             university_check = any(item in university_settings_list for item in permission_list)
@@ -1166,9 +1174,10 @@ def edit_staff(request, staff_id=None):
             for rec in permission_list:
                 permission_obj = PersmissionDetails.objects.create(permission=rec)
                 user.permission.add(permission_obj)
+            """
 
             messages.success(request, "Record saved.")
-        except:
+        except Exception as e:
             messages.warning(request, "Record not saved.")
         return redirect('/accounts/staff_settings/')
     # if user_obj.university:
@@ -1262,7 +1271,8 @@ def edit_staff(request, staff_id=None):
         'university_settings_list': university_settings_list,
         'academic_settings_list': academic_settings_list,
         'module_settings_list': module_settings_list,
-        'permission_list':user_obj.permission.values_list('permission',flat=True),
+        # 'permission_list':user_obj.permission.values_list('permission',flat=True),  # old
+        'permission_list':permission_list,
         'university_recs':university_recs,
         'university':user_obj.university,
         'is_faculty':is_faculty,
@@ -1280,6 +1290,18 @@ def edit_staff(request, staff_id=None):
 
     }
     return render(request, "edit_staff.html", {'user_obj': user_obj,'country_list':country_list})
+
+
+@permission_required('accounts.delete_staff', raise_exception=True)
+def delete_staff(request):
+    if request.method == 'POST':
+        staff_delete_id = request.POST.get('staff_delete_id')
+        try:
+            User.objects.filter(id=staff_delete_id).delete()
+            messages.success(request, "Record deleted.")
+        except:
+            messages.warning(request, "Record not deleted.")
+        return redirect('/accounts/staff_settings/')
 
 
 def get_user_permission(request):
@@ -1480,6 +1502,7 @@ def edit_agent(request, agent_id=None):
         return render(request, "agent_details.html",context)
 
 
+@permission_required('accounts.can_view_agentrecruiter', raise_exception=True)
 def agent_recruiter_settings(request):
     context = {
         'agent_recruiter_recs': User.objects.filter(role__name = 'Agent Recruiter')
@@ -1487,6 +1510,7 @@ def agent_recruiter_settings(request):
     return render(request, 'agent_recruiter_settings.html',context)
 
 
+@permission_required('accounts.add_agentrecruiter', raise_exception=True)
 def add_agent_recruiter(request):
     if request.method == 'POST':
         try:
@@ -1522,6 +1546,7 @@ def add_agent_recruiter(request):
         return render(request, 'add_agent_recruiter.html',context)
 
 
+@permission_required('accounts.change_agentrecruiter', raise_exception=True)
 def edit_agent_recruiter(request, recruiter_id=None):
     user_obj = User.objects.get(id=recruiter_id)
     if request.method == 'POST':
