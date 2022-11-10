@@ -313,6 +313,11 @@ class StudentDonorMapping(BaseModel):
 
 
 class UniversityDetails(BaseModel):
+    COLLEGE_TYPES = (
+        ("Community College", "COMMUNITY COLLEGE"),
+        ("College", "COLLEGE"),
+    )
+    college_type = models.CharField(choices=COLLEGE_TYPES, max_length=50,blank=True, null=True)
     university_name = models.CharField(max_length=150, blank=True, null=True)
     university_code = models.CharField(max_length=30, blank=True, null=True)
     email = models.CharField(max_length=50, blank=True, null=True)
