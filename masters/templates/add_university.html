@@ -24,35 +24,36 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a {% if request.user.is_tanseeq_admin %} href="{% url 'tanseeq_app:tanseeq_admin' %}" {% else %} href="{% url 'accounts:home' %}" {% endif %}>Home</a>
+                <a {% if request.user.is_tanseeq_admin %} href="{% url 'tanseeq_app:tanseeq_admin' %}" {% else %}
+                                                          href="{% url 'accounts:home' %}" {% endif %}>Home</a>
                 <i class="fa fa-angle-right"></i>
             </li>
-        {% if request.user.is_tanseeq_admin %}
+            {% if request.user.is_tanseeq_admin %}
 
-            <li>
-                <span> Tanseeq University </span>
-                <i class="fa fa-angle-right"></i>
-            </li>
-            <li>
-                <span> Add University</span>
-            </li>
+                <li>
+                    <span> Tanseeq University </span>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <span> Add University</span>
+                </li>
 
 
             {% else %}
 
-            <li>
-                <span> Master Settings </span>
-                <i class="fa fa-angle-right"></i>
-            </li>
-            <li>
-                <span> University Settings</span>
-                <i class="fa fa-angle-right"></i>
-            </li>
+                <li>
+                    <span> Master Settings </span>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <span> University Settings</span>
+                    <i class="fa fa-angle-right"></i>
+                </li>
 
-            <li>
-                <span> {% trans 'Add University' %} </span>
-            </li>
-        {% endif %}
+                <li>
+                    <span> {% trans 'Add University' %} </span>
+                </li>
+            {% endif %}
 
         </ul>
     </div>
@@ -123,40 +124,32 @@
                             <div class="row">
 
                                 <div class="">
-                                        <label class="col-md-2 control-label">{% trans 'University Code' %}:<span
-                                                style="color: red">*</span></label>
-                                        <div class="col-md-3">
-                                            <input type="text" title="Enter University Code" id="id_university_code"
-                                                   value=""
-                                                   name="university_code"
-                                                   class="form-control" required>
-
-
-                                        </div>
-                                    </div>
-
-                                <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'College Type' %}:<span
+                                    <label class="col-md-2 control-label">{% trans 'University Code' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
-                                        <select id='id_college_type' title="Select College Type"
-                                                name="college_type"
-                                                class="form-control" required>
-                                            <option selected="selected" value=""> Please Select</option>
-                                                <option value="Community College">Community College</option>
-                                                <option value="College">College</option>
+                                        <input type="text" title="Enter University Code" id="id_university_code"
+                                               value=""
+                                               name="university_code"
+                                               class="form-control" required>
 
-                                        </select>
+
                                     </div>
                                 </div>
 
-
-
-                            </div>
-                            <br>
-
-                            <div class="row">
-
+                                {#                                <div class="">#}
+                                {#                                    <label class="col-md-2 control-label">{% trans 'College Type' %}:<span#}
+                                {#                                            style="color: red">*</span></label>#}
+                                {#                                    <div class="col-md-3">#}
+                                {#                                        <select id='id_college_type' title="Select College Type"#}
+                                {#                                                name="college_type"#}
+                                {#                                                class="form-control" required>#}
+                                {#                                            <option selected="selected" value=""> Please Select</option>#}
+                                {#                                                <option value="Community College">Community College</option>#}
+                                {#                                                <option value="College">College</option>#}
+                                {##}
+                                {#                                        </select>#}
+                                {#                                    </div>#}
+                                {#                                </div>#}
                                 <div class="">
                                     <label class="col-md-2 control-label">{% trans 'University Name' %}:<span
                                             style="color: red">*</span></label>
@@ -169,8 +162,14 @@
                                     </div>
 
 
-
                                 </div>
+
+
+                            </div>
+                            <br>
+
+                            <div class="row">
+
 
                                 <div class="">
                                     <label class="col-md-2 control-label">{% trans 'Email' %}:</label>
@@ -182,15 +181,6 @@
 
                                     </div>
                                 </div>
-
-
-
-
-
-                            </div>
-                            <br>
-                            <div class="row">
-
                                 <div class="">
                                     <label class="col-md-2 control-label">{% trans 'Telephone' %}:</label>
                                     <div class="col-md-3">
@@ -201,6 +191,13 @@
 
                                     </div>
                                 </div>
+
+
+                            </div>
+                            <br>
+                            <div class="row">
+
+
 
                                 <div class="">
                                     <label class="col-md-2 control-label">{% trans 'Website' %}:</label>
@@ -222,7 +219,7 @@
 
                                     </label>
                                     <div class="col-md-8">
-                                        <textarea rows="2" class="form-control "  id="id_address"
+                                        <textarea rows="2" class="form-control " id="id_address"
                                                   name="address"></textarea>
 
                                     </div>
@@ -235,7 +232,7 @@
 
                                     </label>
                                     <div class="col-md-8">
-                                        <textarea rows="2" class="form-control "  id="id_contact_details"
+                                        <textarea rows="2" class="form-control " id="id_contact_details"
                                                   name="contact_details"></textarea>
 
                                     </div>
@@ -244,9 +241,9 @@
 
                             <br>
 
-                        <div class="row">
+                            <div class="row">
 
-                            <div class="">
+                                <div class="">
                                     <label class="col-md-2 control-label">{% trans 'Active' %}:</label>
                                     <div class="col-md-2">
                                         <input type="checkbox" id="id_is_active" name="is_active" checked>
@@ -272,7 +269,7 @@
                                 </div>
 
                             </div>
-                        <hr>
+                            <hr>
                             <div class="portlet-title">
                                 <div class="caption">
                                     <i class="icon-settings font-red"></i>
@@ -284,15 +281,16 @@
                                 <div class="">
                                     <label class="col-md-4 control-label">{% trans 'Logo' %}:
                                         <span
-                                            style="color: red">(Only formats are allowed png/jpg)</span>
+                                                style="color: red">(Only formats are allowed png/jpg)</span>
 
                                     </label>
                                     <div class="col-md-3">
 
-                                        <input class="form-control" name="university_logo" type="file" title="Select University Logo"
+                                        <input class="form-control" name="university_logo" type="file"
+                                               title="Select University Logo"
                                                accept="image/gif, image/jpeg, image/png"
                                                id="id_university_logo"
-                                               >
+                                        >
 
 
                                     </div>
@@ -300,31 +298,28 @@
                                 </div>
 
 
-
-
-
-
                             </div>
                             <br>
-                        <div class="row">
-                             <div class="">
+                            <div class="row">
+                                <div class="">
                                     <label class="col-md-4 control-label">{% trans 'Tanseeq Guide' %}:<span
                                             style="color: red">(Only formats are allowed pdf)</span>
 
                                     </label>
                                     <div class="col-md-3">
 
-                                        <input class="form-control" name="tanseeq_guide" type="file" title="Select Tanseeq Guide"
+                                        <input class="form-control" name="tanseeq_guide" type="file"
+                                               title="Select Tanseeq Guide"
                                                accept="application/pdf"
                                                id="id_tanseeq_guide"
-                                               >
+                                        >
 
 
                                     </div>
 
                                 </div>
-                        </div>
-                        <br>
+                            </div>
+                            <br>
 
 
                             <div class="row">
@@ -335,10 +330,11 @@
                                     </label>
                                     <div class="col-md-3">
 
-                                        <input class="form-control" name="registration_guide" type="file" title="Select University Logo"
+                                        <input class="form-control" name="registration_guide" type="file"
+                                               title="Select University Logo"
                                                accept="application/pdf"
                                                id="id_registration_guide"
-                                               >
+                                        >
 
 
                                     </div>
@@ -346,11 +342,10 @@
                                 </div>
 
 
-
                             </div>
 
-                        <br>
-                        <div class="row">
+                            <br>
+                            <div class="row">
                                 <div class="">
                                     <label class="col-md-4 control-label">{% trans 'University Stamp' %}:<span
                                             style="color: red">(Only formats are allowed png)</span>
@@ -358,10 +353,11 @@
                                     </label>
                                     <div class="col-md-3">
 
-                                        <input class="form-control" name="university_stamp" type="file" title="Select University Stamp"
+                                        <input class="form-control" name="university_stamp" type="file"
+                                               title="Select University Stamp"
                                                accept="image/png,"
                                                id="id_university_stamp"
-                                               >
+                                        >
 
 
                                     </div>
@@ -369,13 +365,11 @@
                                 </div>
 
 
-
                             </div>
 
 
-
                         </div>
-                    <hr>
+                        <hr>
 
                         <div class="row">
                             <div class="col-md-offset-5 col-md-7">
