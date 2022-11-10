@@ -97,6 +97,9 @@ class ConditionFilters(BaseModel):
     year = models.IntegerField(
         _('year'), choices=YEAR_CHOICES, validators=[MinValueValidator(1984), max_value_current_year]
     )
+    academic_year = models.ForeignKey(
+        YearDetails, related_name="condition_filter_academic_year", on_delete=models.PROTECT, null=True
+    )
     start_date = models.DateField()
     end_date = models.DateField()
     average = models.FloatField(max_length=50, validators=[MinValueValidator(0), MaxValueValidator(100)])
