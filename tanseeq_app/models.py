@@ -155,6 +155,7 @@ class ApplicationDetails(BaseModel):
     nationality = models.ForeignKey('masters.CountryDetails', null=True, related_name='student_nationality_details', on_delete=models.PROTECT)
     country = models.ForeignKey('masters.CountryDetails', null=True, related_name='student_country_details', on_delete=models.PROTECT)
     city = models.ForeignKey('masters.CitiDetails', null=True, related_name='student_city_details', on_delete=models.PROTECT)
+    district = models.CharField(max_length=150, blank=True, null=True)
     contact_number = models.CharField(max_length=12, blank=True, null=True)
     user = models.ForeignKey(User, null=True, related_name='student_user_details', on_delete=models.PROTECT)
     address = models.TextField(null=True, blank=True)
@@ -173,6 +174,9 @@ class SecondaryCertificateInfo(BaseModel):
     YEAR_CHOICES = [(r, r) for r in range(1984, datetime.date.today().year + 1)]
     year = models.IntegerField(
         _('year'), choices=YEAR_CHOICES, validators=[MinValueValidator(1984), max_value_current_year]
+    )
+    academic_year = models.ForeignKey(
+        YearDetails, related_name="secondary_certificate_academic_year", on_delete=models.PROTECT, null=True
     )
     secondary_certificate = models.ForeignKey(SecondarySchoolCetificate, null=True, related_name='student_secondary_certificate_details', on_delete=models.PROTECT)
     seat_number = models.CharField(max_length=50, blank=True, null=True)

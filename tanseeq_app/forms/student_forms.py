@@ -20,7 +20,7 @@ class ApplicationInfoForm(forms.ModelForm):
 
     class Meta:
         model = ApplicationDetails
-        fields = ("first_name","last_name","gender_type", "birth_date", "nationality", "country", "city",
+        fields = ("first_name","last_name","gender_type", "birth_date", "nationality", "country", "city","district",
             "contact_number", "address",
         )
 
@@ -43,7 +43,7 @@ class SecondaryCertificationForm(forms.ModelForm):
 
     class Meta:
         model = SecondaryCertificateInfo
-        fields = ("year", "secondary_certificate", "seat_number", "average", "school_name", "country", "city",)
+        fields = ("academic_year", "secondary_certificate", "seat_number", "average", "school_name", "country", "city",)
 
 
 class StudentStudyModeForm(forms.ModelForm):

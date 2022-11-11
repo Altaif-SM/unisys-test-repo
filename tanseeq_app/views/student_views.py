@@ -17,9 +17,11 @@ from tanseeq_app.forms.student_forms import (
     ApplyProgramForm,
     ApplicantAttachementsForm,
 )
+from masters.models import CountryDetails, YearDetails
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 from django.conf import settings
+from django.core import serializers
 
 # Create your views here.
 class TanseeqStudentHome(TemplateView):
@@ -41,6 +43,7 @@ class PersonalInfoView(View):
         if ApplicationDetails.objects.filter(created_by=request.user).exists():
             instance = get_object_or_404(self.model, created_by=request.user)
             context["instance"] = instance
+            context["cities"] = CountryDetails.objects.get(id = instance.country.id).city.all()
             context["form"] = self.form_class(
                 instance=get_object_or_404(self.model, created_by=request.user))
         return render(request, self.template_name, context)
@@ -85,14 +88,16 @@ class SecondaryCertificateInfoView(View):
             messages.info(
                 self.request, "Please add personal info first.")
             return redirect("tanseeq_app:add_personal_info")
-
+        academic_year_objs = YearDetails.active_records()
         context = {
             "form": self.form_class(),
             "tanseeq_application": tanseeq_application,
+            "academic_year_objs": academic_year_objs,
         }
         if SecondaryCertificateInfo.objects.filter(created_by=request.user).exists():
             instance = get_object_or_404(self.model, created_by=request.user)
             context["instance"] = instance
+            context["cities"] = CountryDetails.objects.get(id=instance.country.id).city.all()
             context["form"] = self.form_class(
                 instance=get_object_or_404(self.model, created_by=request.user))
         return render(request, self.template_name, context)
@@ -186,7 +191,7 @@ class ListStudentPrograms(ListView):
         queryset = ConditionFilters.objects.filter(
             type_of_secondary=cert_obj.secondary_certificate,
             average__lte=cert_obj.average,
-            year__gte=cert_obj.year,
+            academic_year__year_name__gte=int(cert_obj.academic_year.year_name),
             **extra_filters
         ).select_related("university", "faculty", "program").extra(
             select={
@@ -389,3 +394,19 @@ def print_voucher(request, pk):
     except Exception as e:
         messages.warning(request, "An error occurred " + str(e))
         return redirect(redirect_url)
+
+class TanseeqCityList(ListView):
+    model = CountryDetails
+
+    def get(self, request, *args, **kwargs):
+        if request.GET.get("type") == "JSON":
+            queryset = self.get_queryset()
+            data = serializers.serialize("json", queryset)
+            return JsonResponse(data, status=200, safe=False)
+        return super().get(args, kwargs)
+
+    def get_queryset(self):
+        country_id = self.request.GET.get("country")
+        if country_id:
+            return self.model.objects.get(id=country_id).city.all()
+        return super().get_queryset()
