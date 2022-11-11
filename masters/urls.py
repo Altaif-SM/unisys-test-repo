@@ -336,6 +336,5 @@ urlpatterns = [
     path('research_year_semester_already_exists/', views.research_year_semester_already_exists, name='research_year_semester_already_exists'),
     
 	path('list_permissions/', user_login_required(views.list_permissions), name='list_permissions'),
-	path('import_year_settings/', user_login_required(views.import_year_settings), name='import_year_settings'),
 
 ]
