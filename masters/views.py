@@ -2685,9 +2685,10 @@ def delete_program(request):
 
 # @permission_required('masters.can_view_year_details', raise_exception=True)
 def year_settings(request):
-    year_recs = YearDetails.objects.all()
     if request.user.is_tanseeq_admin():
         year_recs = YearDetails.objects.filter(is_tanseeq_year=True)
+    else:
+        year_recs = YearDetails.objects.filter(is_tanseeq_year=False)
     return render(request, 'year_settings.html', {'year_recs': year_recs})
 
 
