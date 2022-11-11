@@ -176,7 +176,7 @@ def delete_scholarship(request):
 
 
 # *********------------ Country Master ----------***************
-@permission_required('masters.can_view_country_details', raise_exception=True)
+# @permission_required('masters.can_view_country_details', raise_exception=True)
 def country_settings(request):
     country_recs = CountryDetails.objects.all()
     return render(request, 'template_country_master.html', {'country_recs': country_recs})
@@ -2682,8 +2682,240 @@ def delete_program(request):
             messages.warning(request, "Record not deleted.")
         return redirect('/masters/program_settings/')
 
+def import_year_settings(request):
+    year_list = [
+        {
+            'year_name': '1984',
+            'start_date': '1984-01-01',
+            'end_date': '1984-12-31',
 
-@permission_required('masters.can_view_year_details', raise_exception=True)
+        },
+        {
+            'year_name': '1985',
+            'start_date': '1985-01-01',
+            'end_date': '1985-12-31',
+
+        },
+        {
+            'year_name': '1986',
+            'start_date': '1986-01-01',
+            'end_date': '1986-12-31',
+
+        },
+        {
+            'year_name': '1987',
+            'start_date': '1987-01-01',
+            'end_date': '1987-12-31',
+
+        },
+        {
+            'year_name': '1988',
+            'start_date': '1988-01-01',
+            'end_date': '1988-12-31',
+
+        },
+        {
+            'year_name': '1989',
+            'start_date': '1989-01-01',
+            'end_date': '1989-12-31',
+
+        },
+        {
+            'year_name': '1990',
+            'start_date': '1990-01-01',
+            'end_date': '1990-12-31',
+
+        },
+        {
+            'year_name': '1991',
+            'start_date': '1991-01-01',
+            'end_date': '1991-12-31',
+
+        },
+        {
+            'year_name': '1992',
+            'start_date': '1992-01-01',
+            'end_date': '1992-12-31',
+
+        },
+        {
+            'year_name': '1993',
+            'start_date': '1993-01-01',
+            'end_date': '1993-12-31',
+
+        },
+        {
+            'year_name': '1994',
+            'start_date': '1994-01-01',
+            'end_date': '1994-12-31',
+
+        },
+        {
+            'year_name': '1995',
+            'start_date': '1995-01-01',
+            'end_date': '1995-12-31',
+
+        },
+        {
+            'year_name': '1996',
+            'start_date': '1996-01-01',
+            'end_date': '1996-12-31',
+
+        },
+        {
+            'year_name': '1997',
+            'start_date': '1997-01-01',
+            'end_date': '1997-12-31',
+
+        },
+        {
+            'year_name': '1998',
+            'start_date': '1998-01-01',
+            'end_date': '1998-12-31',
+
+        },
+        {
+            'year_name': '1999',
+            'start_date': '1999-01-01',
+            'end_date': '1999-12-31',
+
+        },
+        {
+            'year_name': '2000',
+            'start_date': '2000-01-01',
+            'end_date': '2000-12-31',
+
+        },
+        {
+            'year_name': '2001',
+            'start_date': '2001-01-01',
+            'end_date': '2001-12-31',
+
+        },
+        {
+            'year_name': '2002',
+            'start_date': '2002-01-01',
+            'end_date': '2002-12-31',
+
+        },
+        {
+            'year_name': '2003',
+            'start_date': '2003-01-01',
+            'end_date': '2003-12-31',
+
+        },
+        {
+            'year_name': '2004',
+            'start_date': '2004-01-01',
+            'end_date': '2004-12-31',
+
+        },
+        {
+            'year_name': '2005',
+            'start_date': '2005-01-01',
+            'end_date': '2005-12-31',
+
+        },
+        {
+            'year_name': '2006',
+            'start_date': '2006-01-01',
+            'end_date': '2006-12-31',
+
+        },
+        {
+            'year_name': '2007',
+            'start_date': '2007-01-01',
+            'end_date': '2007-12-31',
+
+        },
+        {
+            'year_name': '2008',
+            'start_date': '2008-01-01',
+            'end_date': '2008-12-31',
+
+        },
+        {
+            'year_name': '2009',
+            'start_date': '2009-01-01',
+            'end_date': '2009-12-31',
+
+        },
+        {
+            'year_name': '2010',
+            'start_date': '2010-01-01',
+            'end_date': '2010-12-31',
+
+        }, {
+            'year_name': '2011',
+            'start_date': '2011-01-01',
+            'end_date': '2011-12-31',
+
+        }, {
+            'year_name': '2012',
+            'start_date': '2012-01-01',
+            'end_date': '2012-12-31',
+
+        }, {
+            'year_name': '2013',
+            'start_date': '2013-01-01',
+            'end_date': '2013-12-31',
+
+        }, {
+            'year_name': '2014',
+            'start_date': '2014-01-01',
+            'end_date': '2014-12-31',
+
+        }, {
+            'year_name': '2015',
+            'start_date': '2015-01-01',
+            'end_date': '2015-12-31',
+
+        }, {
+            'year_name': '2016',
+            'start_date': '2016-01-01',
+            'end_date': '2016-12-31',
+
+        }, {
+            'year_name': '2017',
+            'start_date': '2017-01-01',
+            'end_date': '2017-12-31',
+
+        }, {
+            'year_name': '2018',
+            'start_date': '2018-01-01',
+            'end_date': '2018-12-31',
+
+        }, {
+            'year_name': '2019',
+            'start_date': '2019-01-01',
+            'end_date': '2019-12-31',
+
+        }, {
+            'year_name': '2020',
+            'start_date': '2020-01-01',
+            'end_date': '2020-12-31',
+
+        }, {
+            'year_name': '2021',
+            'start_date': '2021-01-01',
+            'end_date': '2021-12-31',
+
+        },
+        {
+            'year_name': '2022',
+            'start_date': '2022-01-01',
+            'end_date': '2022-12-31',
+
+        },
+    ]
+    for rec in year_list:
+        YearDetails.objects.create(year_name=rec['year_name'], start_date=rec['start_date'], end_date=rec['end_date'],
+                               is_tanseeq_year=True)
+    return redirect('/masters/year_settings/')
+
+
+
+# @permission_required('masters.can_view_year_details', raise_exception=True)
 def year_settings(request):
     year_recs = YearDetails.objects.all()
     if request.user.is_tanseeq_admin():
@@ -2691,7 +2923,7 @@ def year_settings(request):
     return render(request, 'year_settings.html', {'year_recs': year_recs})
 
 
-@permission_required(('masters.add_yeardetails', 'masters.change_yeardetails',), raise_exception=True)
+# @permission_required(('masters.add_yeardetails', 'masters.change_yeardetails',), raise_exception=True)
 def add_year(request):
     year_name = request.POST.get('year_name')
     start_date = request.POST.get('start_date')
@@ -2737,7 +2969,7 @@ def add_year(request):
     return redirect('/masters/year_settings/')
 
 
-@permission_required('masters.delete_yeardetails', raise_exception=True)
+# @permission_required('masters.delete_yeardetails', raise_exception=True)
 def delete_year(request):
     if request.method == 'POST':
         year_delete_id = request.POST.get('year_delete_id')
