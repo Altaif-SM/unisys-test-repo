@@ -194,7 +194,7 @@ class TanseeqUserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ("first_name", "last_name", "email", "role", "university", "faculty", "program", "is_active", "password1", "password2",)
+        fields = ("first_name", "last_name", "email", "role", "university", "tanseeq_faculty", "tanseeq_program", "is_active", "password1", "password2",)
                              
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
@@ -209,13 +209,20 @@ class TanseeqUserForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(TanseeqUserForm, self).__init__(*args, **kwargs)
         self.fields['role'].queryset = self.fields['role'].queryset.filter(is_tanseeq=True)
+        self.fields['university'].queryset = self.fields['university'].queryset.filter(
+            is_tanseeq_university=True, is_active=True, is_delete=False
+        )
+        self.fields["tanseeq_faculty"].widget.attrs.update({"id": "id_faculty"})
+        self.fields["tanseeq_program"].widget.attrs.update({"id": "id_program"})
         for field in self.fields:
-            if field != "is_active":
+            if field not in "is_active":
                 self.fields[field].widget.attrs.update({
                     "class": "form-control",
                     "required": "true",
                 })
         if self.instance.id:
+            self.fields["password1"].widget.attrs.pop("required")
+            self.fields["password2"].widget.attrs.pop("required")
             self.fields["password1"].required = False
             self.fields["password2"].required = False
     
@@ -227,8 +234,7 @@ class TanseeqUserForm(forms.ModelForm):
 
     def _post_clean(self):
         super(TanseeqUserForm, self)._post_clean()
-        # Validate the password after self.instance is updated with form data
-        # by super().
+        # Validate the password after self.instance is updated with form data by super().
         password = self.cleaned_data.get('password2')
         if password:
             try:

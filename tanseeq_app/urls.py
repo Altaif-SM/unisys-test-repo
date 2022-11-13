@@ -285,8 +285,4 @@ urlpatterns = [
         login_required(ReviewApplication.as_view()),
         name='reviewer_review_application'
     ),
-
-    
-    
-
 ]

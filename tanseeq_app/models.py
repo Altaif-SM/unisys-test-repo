@@ -1,4 +1,3 @@
-import uuid
 import datetime
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -91,8 +90,9 @@ def max_value_current_year(value):
 class ConditionFilters(BaseModel):
     YEAR_CHOICES = [(r,r) for r in range(1984, datetime.date.today().year+1)]
 
-    study_mode = models.ForeignKey(StudyModeDetails, on_delete=models.PROTECT)
+    university = models.ForeignKey(UniversityDetails, on_delete=models.PROTECT, null=True)
     faculty = models.ForeignKey(TanseeqFaculty, on_delete=models.PROTECT)
+    study_mode = models.ForeignKey(StudyModeDetails, on_delete=models.PROTECT)
     program = models.ForeignKey(TanseeqProgram, on_delete=models.PROTECT)
     type_of_secondary = models.ForeignKey(SecondarySchoolCetificate, on_delete=models.PROTECT)
     year = models.IntegerField(
@@ -108,7 +108,6 @@ class ConditionFilters(BaseModel):
     fee = models.FloatField(max_length=50)
     is_exam = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True)
-    university = models.ForeignKey(UniversityDetails, on_delete=models.PROTECT, null=True)
 
     class Meta:
         verbose_name = "Condition Filters"
@@ -170,10 +169,11 @@ class ApplicationDetails(BaseModel):
         )
         super(ApplicationDetails, self).save(args, kwargs)
 
+
 class SecondaryCertificateInfo(BaseModel):
     YEAR_CHOICES = [(r, r) for r in range(1984, datetime.date.today().year + 1)]
     year = models.IntegerField(
-        _('year'), choices=YEAR_CHOICES, validators=[MinValueValidator(1984), max_value_current_year]
+        _('year'), choices=YEAR_CHOICES, validators=[MinValueValidator(1984), max_value_current_year], blank=True, null=True
     )
     academic_year = models.ForeignKey(
         YearDetails, related_name="secondary_certificate_academic_year", on_delete=models.PROTECT, null=True

@@ -22,12 +22,20 @@ from django.template.loader import get_template
 from xhtml2pdf import pisa
 from django.conf import settings
 from django.core import serializers
+from django.utils.decorators import method_decorator
+from accounts.models import User
+from common.decorators import check_permissions
+from tanseeq_app.helpers import get_tanseeq_application
+
 
 # Create your views here.
+
+@method_decorator(check_permissions(User.TANSEEQ_STUDENT), name='dispatch')
 class TanseeqStudentHome(TemplateView):
     template_name = 'tanseeq_student/student_home.html'
 
 
+@method_decorator(check_permissions(User.TANSEEQ_STUDENT), name='dispatch')
 class PersonalInfoView(View):
     model = ApplicationDetails
     form_class = ApplicationInfoForm
@@ -74,6 +82,7 @@ class PersonalInfoView(View):
         return redirect(self.redirect_url)
 
 
+@method_decorator(check_permissions(User.TANSEEQ_STUDENT), name='dispatch')
 class SecondaryCertificateInfoView(View):
     model = SecondaryCertificateInfo
     form_class = SecondaryCertificationForm
@@ -128,6 +137,7 @@ class SecondaryCertificateInfoView(View):
         return redirect(self.redirect_url)
 
 
+@method_decorator(check_permissions(User.TANSEEQ_STUDENT), name='dispatch')
 class StudentStudyModeView(View):
     """
     Not using it at the moment
@@ -169,6 +179,7 @@ class StudentStudyModeView(View):
         return redirect(self.redirect_url)
 
 
+@method_decorator(check_permissions(User.TANSEEQ_STUDENT), name='dispatch')
 class ListStudentPrograms(ListView):
     model = ConditionFilters
     template_name = "tanseeq_student/list_student_programs.html"
@@ -218,6 +229,7 @@ class ListStudentPrograms(ListView):
         return super().get(args, kwargs)
 
 
+@method_decorator(check_permissions(User.TANSEEQ_STUDENT), name='dispatch')
 class ListAppliedPrograms(ListView):
     model = AppliedPrograms
     template_name = "tanseeq_student/list_applied_programs.html"
@@ -227,6 +239,7 @@ class ListAppliedPrograms(ListView):
         return self.model.objects.filter(user=user).select_related("program_details")
 
 
+@method_decorator(check_permissions(User.TANSEEQ_STUDENT), name='dispatch')
 class ApplyProgramView(View):
     model = AppliedPrograms
     form_class = ApplyProgramForm
@@ -239,16 +252,11 @@ class ApplyProgramView(View):
             id=condition_filter_id,
             type_of_secondary=cert_obj.secondary_certificate,
             average__lte=cert_obj.average,
-            year__gte=cert_obj.year,
-        ).exists()
+            academic_year__year_name__gte=int(cert_obj.academic_year.year_name),
+        )
         if get_obj:
-            return ConditionFilters.objects.filter(
-                id=condition_filter_id,
-                type_of_secondary=cert_obj.secondary_certificate,
-                average__lte=cert_obj.average,
-                year__gte=cert_obj.year,
-            ).first()
-        return is_conditions_pass
+            return is_conditions_pass.first()
+        return is_conditions_pass.exists()
 
     def check_applied(self, condition_filter_id):
         user = self.request.user
@@ -292,6 +300,7 @@ class ApplyProgramView(View):
             return JsonResponse(data, status=404, safe=False)
 
 
+@method_decorator(check_permissions(User.TANSEEQ_STUDENT), name='dispatch')
 class ApplicantAttachmentsView(View):
     model = ApplicantAttachment
     form_class = ApplicantAttachementsForm
@@ -335,6 +344,7 @@ class ApplicantAttachmentsView(View):
             return render(request, self.template_name, context)
 
 
+@method_decorator(check_permissions(User.TANSEEQ_STUDENT), name='dispatch')
 class DeclarationSubmissionView(View):
     model = ApplicationDetails
     template_name = "tanseeq_student/applicant_declaration.html"
@@ -359,10 +369,6 @@ class DeclarationSubmissionView(View):
         obj.save()
         data = {"msg": "Application Subnitted"}
         return JsonResponse(data, status=202, safe=False)
-
-
-def get_tanseeq_application(user):
-    return ApplicationDetails.objects.filter(created_by=user).first()
 
 
 def print_voucher(request, pk):
@@ -394,6 +400,7 @@ def print_voucher(request, pk):
     except Exception as e:
         messages.warning(request, "An error occurred " + str(e))
         return redirect(redirect_url)
+
 
 class TanseeqCityList(ListView):
     model = CountryDetails
