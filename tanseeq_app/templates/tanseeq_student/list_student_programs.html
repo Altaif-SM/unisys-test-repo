@@ -119,7 +119,7 @@
                     <td>{{ rec.program.name|default_if_none:"" }}</td>
                     <td>{{ rec.program.code|default_if_none:"" }}</td>
                     <td>{{ rec.average|default_if_none:"" }}</td>
-                    <td>{{ rec.year|default_if_none:"" }}</td>
+                    <td>{{ rec.academic_year.year_name|default_if_none:"" }}</td>
                     <td>
                         {% if rec.is_applied%}
                             <p class="btn btn-success disabled">Applied</p>

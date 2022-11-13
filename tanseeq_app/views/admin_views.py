@@ -33,13 +33,17 @@ from tanseeq_app.forms.admin_forms import (
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from django.http.request import QueryDict
+from django.utils.decorators import method_decorator
+from common.decorators import check_permissions
 # Create your views here.
 
 
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class TanseeqAdminHome(TemplateView):
     template_name = 'tanseeq_admin/admin_home.html'
 
 
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class TanseeqPeriodListView(ListView):
     model = TanseeqPeriod
     template_name = 'tanseeq_admin/tanseeq_period_view.html'
@@ -49,6 +53,7 @@ class TanseeqPeriodListView(ListView):
         return queryset
 
 
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class TanseeqPeriodView(View):
     model = TanseeqPeriod
 
@@ -97,12 +102,14 @@ class TanseeqPeriodView(View):
         return JsonResponse({"status": 200})
 
 
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class UniversityGuideList(ListView):
     model = UniversityDetails
     template_name = "tanseeq_admin/list_university_guide.html"
     fields = ["university_name", "file"]
 
 
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class UniversityGuideUpdateView(UpdateView):
     model = UniversityDetails
     template_name = "tanseeq_admin/add_university_guide.html"
@@ -117,6 +124,7 @@ class UniversityGuideUpdateView(UpdateView):
         return JsonResponse({"status": 200})
 
 
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class UniversityGuideDeleteView(DeleteView):
     model = UniversityDetails
 
@@ -126,6 +134,7 @@ class UniversityGuideDeleteView(DeleteView):
         return JsonResponse({"status": 200})
 
 
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class SecondarySchoolCertificateListView(ListView):
     model = SecondarySchoolCetificate
     template_name = 'tanseeq_admin/secondary_certificate_view.html'
@@ -152,6 +161,7 @@ class SecondarySchoolCertificateListView(ListView):
         return JsonResponse({"status": 200})
 
 
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class SecondarySchoolCertificateUpdateView(UpdateView):
     model = SecondarySchoolCetificate
     template_name = "tanseeq_admin/secondary_certificate_view.html"
@@ -166,11 +176,13 @@ class SecondarySchoolCertificateUpdateView(UpdateView):
         return JsonResponse({"status": 200})
 
 
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class UniversityAttachmentList(ListView):
     model = UniversityAttachment
     template_name = "tanseeq_admin/list_university_attachment.html"
 
 
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class UniversityAttachmentView(View):
     model = UniversityAttachment
     form_class = UniversityAttachmentForm
@@ -216,6 +228,7 @@ class UniversityAttachmentView(View):
         return JsonResponse({"status": 200})
 
 
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class StudyModeList(ListView):
     model = StudyModeDetails
     template_name = "tanseeq_admin/list_study_mode.html"
@@ -234,6 +247,7 @@ class StudyModeList(ListView):
         return super().get_queryset()
 
 
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class StudyModeView(View):
     model = StudyModeDetails
     form_class = StudyModeForm
@@ -279,6 +293,7 @@ class StudyModeView(View):
         return JsonResponse({"status": 200})
 
 
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class StudyModeView(View):
     model = StudyModeDetails
     form_class = StudyModeForm
@@ -323,6 +338,7 @@ class StudyModeView(View):
         return JsonResponse({"status": 200})
 
 
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class TanseeqFacultyList(ListView):
     model = TanseeqFaculty
     template_name = "tanseeq_admin/list_tanseeq_faculty.html"
@@ -341,6 +357,7 @@ class TanseeqFacultyList(ListView):
         return super().get_queryset()
 
 
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class TanseeqFacultyView(View):
     model = TanseeqFaculty
     form_class = TanseeqFacultyForm
@@ -384,6 +401,7 @@ class TanseeqFacultyView(View):
         return JsonResponse({"status": 200})
 
 
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class TanseeqProgramList(ListView):
     model = TanseeqProgram
     template_name = "tanseeq_admin/list_tanseeq_program.html"
@@ -397,11 +415,16 @@ class TanseeqProgramList(ListView):
 
     def get_queryset(self):
         faculty_id = self.request.GET.get("faculty")
+        university_id =  self.request.GET.get("university")
+        filters = {}
+        if university_id:
+            filters["university_id"] = university_id
         if faculty_id:
-            return self.model.objects.filter(faculty_id=faculty_id)
-        return super().get_queryset()
+            filters["faculty_id"] = faculty_id
+        return self.model.objects.filter(**filters)
 
 
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class TanseeqProgramView(View):
     model = TanseeqProgram
     form_class = TanseeqProgramForm
@@ -452,6 +475,7 @@ class TanseeqProgramView(View):
         return JsonResponse({"status": 200})
 
 
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class ConditionFiltersList(ListView):
     model = ConditionFilters
     template_name = "tanseeq_admin/list_condition_filters.html"
@@ -466,6 +490,7 @@ class ConditionFiltersList(ListView):
         return query_set
 
 
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class ConditionsView(View):
     model = ConditionFilters
     form_class = ConditionFiltersForm
@@ -523,11 +548,13 @@ def get_universities(request):
     return JsonResponse(data,status=200, safe=False)
 
 
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class TanseeqFeeList(ListView):
     model = TanseeqFee
     template_name = "tanseeq_admin/list_tansseq_fees.html"
 
 
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class TansseqFeeView(View):
     model = TanseeqFee
     form_class = TanseeqFeeForm
@@ -573,6 +600,7 @@ class TansseqFeeView(View):
         return JsonResponse({"status": 200})
 
 
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class TanseeqCourseListView(ListView):
     model = TanseeqCourses
     template_name = 'tanseeq_admin/list_tanseeq_courses.html'
@@ -601,6 +629,7 @@ class TanseeqCourseListView(ListView):
         return JsonResponse({"status": 200})
 
 
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class TanseeqCourseUpdateView(UpdateView):
     model = TanseeqCourses
     template_name = "tanseeq_admin/list_tanseeq_courses.html"
@@ -615,6 +644,7 @@ class TanseeqCourseUpdateView(UpdateView):
         return JsonResponse({"status": 200})
 
 
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class CourseListView(View):
     model = Course
     form_class = CourseForm
@@ -649,6 +679,7 @@ class CourseListView(View):
         return JsonResponse({"status": 200})
 
 
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class CourseUpdateView(UpdateView):
     model = Course
     template_name = "tanseeq_admin/list_courses.html"
@@ -663,11 +694,13 @@ class CourseUpdateView(UpdateView):
         return JsonResponse({"status": 200})
 
 
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class ListAppliedApplicants(ListView):
     model = ApplicationDetails
     template_name = "tanseeq_admin/list_applied_applicants.html"
 
 
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class ListUsers(ListView):
     model = User
     template_name = "tanseeq_admin/list_users.html"
@@ -685,6 +718,8 @@ class ListUsers(ListView):
         context["crumbs"] = self.crumbs
         return context
 
+
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class ManageUsers(View):
     model = User
     template_name = "tanseeq_admin/add_user.html"
@@ -735,6 +770,8 @@ class ManageUsers(View):
             return render(request, self.template_name, context)
         return redirect(self.redirect_url)
 
+
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class ManageApplicationStatus(View):
     model = ApplicationDetails
 

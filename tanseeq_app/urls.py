@@ -254,6 +254,11 @@ urlpatterns = [
         login_required(print_voucher),
         name='print_voucher'
     ),
+    path(
+        'tanseeq_city/',
+        login_required(TanseeqCityList.as_view()),
+        name='list_tanseeq_city'
+    ),
 
     # Finance
     path(
@@ -280,8 +285,4 @@ urlpatterns = [
         login_required(ReviewApplication.as_view()),
         name='reviewer_review_application'
     ),
-
-    
-    
-
 ]

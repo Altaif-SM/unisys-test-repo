@@ -334,7 +334,6 @@ urlpatterns = [
     path('edit_research/<int:research_id>/', views.edit_research, name='edit_research'),
     path('delete_research_plan/', views.delete_research_plan, name='delete_research_plan'),
     path('research_year_semester_already_exists/', views.research_year_semester_already_exists, name='research_year_semester_already_exists'),
-    
 	path('list_permissions/', user_login_required(views.list_permissions), name='list_permissions'),
 
 ]

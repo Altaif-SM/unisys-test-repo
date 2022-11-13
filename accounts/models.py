@@ -4,6 +4,7 @@ from common.models import BaseModel
 from django.db.models import Q, F, Value, CharField
 from django.db.models.functions import Concat
 
+
 # Create your models here.
 class UserRole(BaseModel):
     name = models.CharField(max_length=50)
@@ -78,8 +79,14 @@ class User(AbstractUser):
     faculty = models.ForeignKey('masters.FacultyDetails', blank=True, null=True,
                                    related_name='user_faculty_rel',
                                    on_delete=models.SET_NULL)
+    tanseeq_faculty = models.ForeignKey("tanseeq_app.TanseeqFaculty", blank=True, null=True,
+                                   related_name='user_tanseeq_faculty',
+                                   on_delete=models.SET_NULL)
     program = models.ForeignKey('masters.ProgramDetails', blank=True, null=True,
                                 related_name='user_program_rel',
+                                on_delete=models.SET_NULL)
+    tanseeq_program = models.ForeignKey("tanseeq_app.TanseeqProgram", blank=True, null=True,
+                                related_name='user_tanseeq_program',
                                 on_delete=models.SET_NULL)
     created_by = models.ForeignKey("self", on_delete=models.SET_NULL, blank=True, null=True)    
 

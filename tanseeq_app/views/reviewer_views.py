@@ -1,7 +1,7 @@
 from django.views.generic import View, ListView
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
+from accounts.models import User
 from tanseeq_app.models import (
     AppliedPrograms,
     ApplicationDetails,
@@ -13,8 +13,12 @@ from tanseeq_app.forms.student_forms import(
     SecondaryCertificationForm,
 )
 from tanseeq_app.forms.reviewer_forms import ReviewerForm
+from django.utils.decorators import method_decorator
+from common.decorators import check_permissions
 
 
+
+@method_decorator(check_permissions(User.TANSEEQ_REVIEWER), name='dispatch')
 class ListReviewApplications(ListView):
     model = AppliedPrograms
     template_name = "tanseeq_reviewer/list_review_applications.html"
@@ -32,6 +36,7 @@ class ListReviewApplications(ListView):
         return query_set
 
 
+@method_decorator(check_permissions(User.TANSEEQ_REVIEWER), name='dispatch')
 class ReviewApplication(View):
     model = AppliedPrograms
     template_name = "tanseeq_reviewer/review_application.html"
@@ -51,7 +56,6 @@ class ReviewApplication(View):
             "applied_program": applied_program,
             "form": self.form_class(instance=applied_program)
         }
-
         return context
 
     def get(self, request, pk):

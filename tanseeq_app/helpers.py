@@ -1,5 +1,5 @@
 import uuid
-
+from tanseeq_app import models
 
 def profile_picture_upload_path(instance, filename):
     """
@@ -19,3 +19,7 @@ def school_certificate_upload_path(instance, filename):
     if instance.application:
         folder_name = "{}/{}".format("School Certificate", instance.application.tanseeq_id.strip())
     return '{}/{}--{}'.format(folder_name, str(uuid.uuid4()), instance.school_certificate.name)
+
+
+def get_tanseeq_application(user):
+    return models.ApplicationDetails.objects.filter(created_by=user).first()

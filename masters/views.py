@@ -176,13 +176,13 @@ def delete_scholarship(request):
 
 
 # *********------------ Country Master ----------***************
-@permission_required('masters.can_view_country_details', raise_exception=True)
+# @permission_required('masters.can_view_country_details', raise_exception=True)
 def country_settings(request):
     country_recs = CountryDetails.objects.all()
     return render(request, 'template_country_master.html', {'country_recs': country_recs})
 
 
-@permission_required('masters.add_countrydetails', raise_exception=True)
+# @permission_required('masters.add_countrydetails', raise_exception=True)
 def save_country(request):
     country_name = request.POST.get('country_name')
     try:
@@ -196,7 +196,7 @@ def save_country(request):
     return redirect('/masters/country_settings/')
 
 
-@permission_required('masters.change_countrydetails', raise_exception=True)
+# @permission_required('masters.change_countrydetails', raise_exception=True)
 def update_country(request):
     country_id = request.POST.get('country_id')
     country_name = request.POST.get('country_name')
@@ -214,7 +214,7 @@ def update_country(request):
     return HttpResponse(json.dumps({'error': 'Record not updated.'}), content_type="application/json")
 
 
-@permission_required('masters.delete_countrydetails', raise_exception=True)
+# @permission_required('masters.delete_countrydetails', raise_exception=True)
 def delete_country(request,pk):
     try:
         instance = get_object_or_404(CountryDetails, pk=pk)
@@ -1893,7 +1893,7 @@ def delete_currency(request):
         return redirect('/masters/currency_settings/')
 
 
-@permission_required('masters.can_view_university_details', raise_exception=True)
+# @permission_required('masters.can_view_university_details', raise_exception=True)
 def university_settings(request):
     if request.user.is_tanseeq_admin():
         university_recs = UniversityDetails.objects.filter(is_delete = False,is_tanseeq_university = True)
@@ -1905,7 +1905,7 @@ def university_settings(request):
     return render(request, 'university_settings.html', context)
 
 
-@permission_required('masters.add_universitydetails', raise_exception=True)
+# @permission_required('masters.add_universitydetails', raise_exception=True)
 def add_university(request):
     if request.method == 'POST':
         university_logo = request.FILES.get('university_logo', None)
@@ -1971,7 +1971,7 @@ def add_university(request):
     return render(request, 'add_university.html',context)
 
 
-@permission_required('masters.change_universitydetails', raise_exception=True)
+# @permission_required('masters.change_universitydetails', raise_exception=True)
 def edit_university(request, university_id=None):
     request.user.role.all()
     university_obj = UniversityDetails.objects.get(id=university_id)
@@ -2041,7 +2041,7 @@ def edit_university(request, university_id=None):
     }
     return render(request, "edit_university.html", context)
 
-@permission_required('masters.delete_universitydetails', raise_exception=True)
+# @permission_required('masters.delete_universitydetails', raise_exception=True)
 def delete_university(request,pk):
     try:
         instance = get_object_or_404(UniversityDetails, pk=pk)
@@ -2683,15 +2683,16 @@ def delete_program(request):
         return redirect('/masters/program_settings/')
 
 
-@permission_required('masters.can_view_year_details', raise_exception=True)
+# @permission_required('masters.can_view_year_details', raise_exception=True)
 def year_settings(request):
-    year_recs = YearDetails.objects.all()
     if request.user.is_tanseeq_admin():
         year_recs = YearDetails.objects.filter(is_tanseeq_year=True)
+    else:
+        year_recs = YearDetails.objects.filter(is_tanseeq_year=False)
     return render(request, 'year_settings.html', {'year_recs': year_recs})
 
 
-@permission_required(('masters.add_yeardetails', 'masters.change_yeardetails',), raise_exception=True)
+# @permission_required(('masters.add_yeardetails', 'masters.change_yeardetails',), raise_exception=True)
 def add_year(request):
     year_name = request.POST.get('year_name')
     start_date = request.POST.get('start_date')
@@ -2737,7 +2738,7 @@ def add_year(request):
     return redirect('/masters/year_settings/')
 
 
-@permission_required('masters.delete_yeardetails', raise_exception=True)
+# @permission_required('masters.delete_yeardetails', raise_exception=True)
 def delete_year(request):
     if request.method == 'POST':
         year_delete_id = request.POST.get('year_delete_id')

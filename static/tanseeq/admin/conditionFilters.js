@@ -98,6 +98,7 @@ function getProgramData(getProgramDataUrl){
         data: {
             "type": "JSON",
             "faculty": $("#id_faculty").val(),
+            "university": $("#id_university").val(),
         },
         success: function (response) {
             const jsonRes = JSON.parse(response)
