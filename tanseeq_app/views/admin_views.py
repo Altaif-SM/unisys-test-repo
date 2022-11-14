@@ -750,6 +750,7 @@ class ManageUsers(View):
             form = self.form_class(request.POST)
         if form.is_valid():
             obj = form.save(commit=False)
+
             if form.cleaned_data["password1"]:
                 obj.set_password(form.cleaned_data["password1"])
 
@@ -760,6 +761,7 @@ class ManageUsers(View):
                 obj.created_by = request.user
                 obj.username = obj.email
                 messages.success(request, "Record saved.")
+            obj.role.add(form.data['tanseeq_role'])
             obj.save()
             form.save_m2m()
         else:
