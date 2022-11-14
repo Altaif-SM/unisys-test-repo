@@ -711,7 +711,8 @@ class ListUsers(ListView):
     ]
 
     def get_queryset(self):
-        return User.objects.filter(created_by=self.request.user)
+        # return User.objects.filter(created_by=self.request.user)
+        return User.objects.filter(tanseeq_role__name__in = ['Tanseeq Finance', 'Tanseeq Reviewer'])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -750,6 +751,7 @@ class ManageUsers(View):
             form = self.form_class(request.POST)
         if form.is_valid():
             obj = form.save(commit=False)
+
             if form.cleaned_data["password1"]:
                 obj.set_password(form.cleaned_data["password1"])
 
@@ -760,6 +762,7 @@ class ManageUsers(View):
                 obj.created_by = request.user
                 obj.username = obj.email
                 messages.success(request, "Record saved.")
+            obj.role.add(form.data['tanseeq_role'])
             obj.save()
             form.save_m2m()
         else:

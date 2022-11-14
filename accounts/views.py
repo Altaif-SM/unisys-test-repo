@@ -549,6 +549,11 @@ def user_signup(request):
                         organisation = request.POST.get('organisation')
                         DonorDetails.objects.create(user=user, address=address, organisation=organisation)
 
+                    if request.POST['role'] == "Tanseeq Student":
+                        role_obj = UserRole.objects.get(name=request.POST['role'])
+                        user.tanseeq_role_id = role_obj.id
+                        user.save()
+
             except Exception as e:
                 if user:
                     user.delete()
