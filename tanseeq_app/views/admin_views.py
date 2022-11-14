@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.core import serializers
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, View, ListView, UpdateView, DeleteView
-from accounts.models import User
+from accounts.models import User, UserRole
 from tanseeq_app.models import (
     TanseeqPeriod,
     SecondarySchoolCetificate,
@@ -762,8 +762,9 @@ class ManageUsers(View):
                 obj.created_by = request.user
                 obj.username = obj.email
                 messages.success(request, "Record saved.")
-            obj.role.add(form.data['tanseeq_role'])
+            # obj.role.add(UserRole.objects.get(id=form.data['tanseeq_role']))
             obj.save()
+            obj.role.add(UserRole.objects.get(id=form.data['tanseeq_role']))
             form.save_m2m()
         else:
             context = {
