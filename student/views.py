@@ -3177,7 +3177,7 @@ def submit_acceptance(request):
                 if other_document:
                     deferment_obj.other_document = other_document
                 deferment_obj.save()
-        return redirect('/student/acceptance_declaration/')
+            # return redirect('/student/acceptance_declaration/')
 
         ApplicationDetails.objects.filter(application_id=request.user.get_application_id).update(is_offer_accepted=True,is_online_admission = True)
         ApplicationHistoryDetails.objects.create(applicant_id=request.user.get_application,
