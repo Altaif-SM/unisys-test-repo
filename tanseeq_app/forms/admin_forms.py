@@ -194,7 +194,7 @@ class TanseeqUserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ("first_name", "last_name", "email", "role", "university", "tanseeq_faculty", "tanseeq_program", "is_active", "password1", "password2",)
+        fields = ("first_name", "last_name", "email", "tanseeq_role", "university", "tanseeq_faculty", "tanseeq_program", "is_active", "password1", "password2",)
                              
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
@@ -208,7 +208,7 @@ class TanseeqUserForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(TanseeqUserForm, self).__init__(*args, **kwargs)
-        self.fields['role'].queryset = self.fields['role'].queryset.filter(is_tanseeq=True)
+        self.fields['tanseeq_role'].queryset = self.fields['tanseeq_role'].queryset.filter(is_tanseeq=True)
         self.fields['university'].queryset = self.fields['university'].queryset.filter(
             is_tanseeq_university=True, is_active=True, is_delete=False
         )

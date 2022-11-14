@@ -445,6 +445,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                 {% include 'tanseeq_finance/finance_side_bar.html' %}
                             {% elif request.user.is_tanseeq_reviewer  %}
                                 {% include 'tanseeq_reviewer/reviewer_side_bar.html' %}
+                            {% elif request.user.is_student %}
+                                {% include 'student_side_bar.html' %}
                             {%else%}
                                 {% include 'role_user_side_bar.html' %}
                             {% endif %}
