@@ -421,36 +421,37 @@ class User(AbstractUser):
 
     def get_dashboard_path(self):
         dashboard_path = User.ADMIN_DASHBOARD
-        if self.role.get().name == User.ADMIN:
+        print("self.role", self.role.all().exists())
+        if self.role.all().exists() and self.role.get().name == User.ADMIN:
             dashboard_path = User.ADMIN_DASHBOARD
-        elif self.role.get().name == User.STUDENT:
+        elif self.role.all().exists() and self.role.get().name == User.STUDENT:
             dashboard_path = User.STUDENT_DASHBOARD
-        elif self.role.get().name == User.PARTNER:
+        elif self.role.all().exists() and self.role.get().name == User.PARTNER:
             dashboard_path = User.PARTNER_DASHBOARD
-        elif self.role.get().name == User.PARENT:
+        elif self.role.all().exists() and self.role.get().name == User.PARENT:
             dashboard_path = User.PARENT_DASHBOARD
-        elif self.role.get().name == User.DONOR:
+        elif self.role.all().exists() and self.role.get().name == User.DONOR:
             dashboard_path = User.DONOR_DASHBOARD
-        elif self.role.get().name == User.ACCOUNTANT:
+        elif self.role.all().exists() and self.role.get().name == User.ACCOUNTANT:
             dashboard_path = User.ACCOUNTANT_DASHBOARD
-        elif self.role.get().name == User.ADMINISTRATOR:
+        elif self.role.all().exists() and self.role.get().name == User.ADMINISTRATOR:
             dashboard_path = User.ADMINISTRATOR_DASHBOARD
-        elif self.role.get().name == User.FACULTY:
+        elif self.role.all().exists() and self.role.get().name == User.FACULTY:
             dashboard_path = User.ADMINISTRATOR_DASHBOARD
-        elif self.role.get().name == User.PROGRAM:
+        elif self.role.all().exists() and self.role.get().name == User.PROGRAM:
             dashboard_path = User.ADMINISTRATOR_DASHBOARD
-        elif self.role.get().name == User.SUPERVISOR:
+        elif self.role.all().exists() and self.role.get().name == User.SUPERVISOR:
             dashboard_path = User.ADMINISTRATOR_DASHBOARD
-        elif self.role.get().name == User.AGENT:
+        elif self.role.all().exists() and self.role.get().name == User.AGENT:
             dashboard_path = User.AGENT_DASHBOARD
-        elif self.role.get().name == User.AGENT_RECRUITER:
+        elif self.role.all().exists() and self.role.get().name == User.AGENT_RECRUITER:
             dashboard_path = User.AGENT_RECRUITER_DASHBOARD
-        elif self.role.get().name == User.TANSEEQ_ADMIN:
+        elif self.tanseeq_role.name == User.TANSEEQ_ADMIN:
             dashboard_path = User.TANSEEQ_ADMIN_DASHBOARD
-        elif self.role.get().name == User.TANSEEQ_STUDENT:
+        elif self.tanseeq_role.name == User.TANSEEQ_STUDENT:
             dashboard_path = User.TANSEEQ_STUDENT_DASHBOARD
-        elif self.role.get().name == User.TANSEEQ_FINANCE:
+        elif self.tanseeq_role.name == User.TANSEEQ_FINANCE:
             dashboard_path = User.TANSEEQ_FINANCE_DASHBOARD
-        elif self.role.get().name == User.TANSEEQ_REVIEWER:
+        elif self.tanseeq_role.name == User.TANSEEQ_REVIEWER:
             dashboard_path = User.TANSEEQ_REVIEWER_DASHBOARD
         return dashboard_path
