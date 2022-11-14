@@ -96,7 +96,7 @@ class ConditionFilters(BaseModel):
     program = models.ForeignKey(TanseeqProgram, on_delete=models.PROTECT)
     type_of_secondary = models.ForeignKey(SecondarySchoolCetificate, on_delete=models.PROTECT)
     year = models.IntegerField(
-        _('year'), choices=YEAR_CHOICES, validators=[MinValueValidator(1984), max_value_current_year]
+        _('year'), choices=YEAR_CHOICES, blank=True, null=True, validators=[MinValueValidator(1984), max_value_current_year]
     )
     academic_year = models.ForeignKey(
         YearDetails, related_name="condition_filter_academic_year", on_delete=models.PROTECT, null=True
