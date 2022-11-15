@@ -228,7 +228,6 @@ class UniversityAttachmentView(View):
         return JsonResponse({"status": 200})
 
 
-@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class StudyModeList(ListView):
     model = StudyModeDetails
     template_name = "tanseeq_admin/list_study_mode.html"
@@ -338,7 +337,6 @@ class StudyModeView(View):
         return JsonResponse({"status": 200})
 
 
-@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class TanseeqFacultyList(ListView):
     model = TanseeqFaculty
     template_name = "tanseeq_admin/list_tanseeq_faculty.html"

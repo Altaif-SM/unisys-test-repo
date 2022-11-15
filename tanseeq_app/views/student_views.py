@@ -202,7 +202,7 @@ class ListStudentPrograms(ListView):
         queryset = ConditionFilters.objects.filter(
             type_of_secondary=cert_obj.secondary_certificate,
             average__lte=cert_obj.average,
-            academic_year__year_name__gte=int(cert_obj.academic_year.year_name),
+            academic_year__end_date__lte=cert_obj.academic_year.end_date,
             **extra_filters
         ).select_related("university", "faculty", "program").extra(
             select={
@@ -252,7 +252,7 @@ class ApplyProgramView(View):
             id=condition_filter_id,
             type_of_secondary=cert_obj.secondary_certificate,
             average__lte=cert_obj.average,
-            academic_year__year_name__gte=int(cert_obj.academic_year.year_name),
+            academic_year__end_date__lte=cert_obj.academic_year.end_date,
         )
         if get_obj:
             return is_conditions_pass.first()
