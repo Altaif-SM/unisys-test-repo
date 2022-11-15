@@ -44,8 +44,11 @@ class ReviewApplication(View):
 
     def get_context_data(self, pk):
         applied_program = get_object_or_404(self.model, pk=pk)
+        print("applied_program")
         app_details_obj = get_object_or_404(ApplicationDetails, user_id=applied_program.user_id)
+        print("applied_program2")
         secondary_cert_obj = get_object_or_404(SecondaryCertificateInfo, created_by_id=applied_program.user_id)
+        print("applied_program3")
 
         context = {
             "attachments": get_object_or_404(ApplicantAttachment, created_by_id=applied_program.user_id),
@@ -79,12 +82,12 @@ class ReviewApplication(View):
         if form_of and form_of == "application_details":
             instance = get_object_or_404(ApplicationDetails, user_id=applied_program.user_id)
             form = ApplicationInfoForm(data, instance=instance)
-            return self.update_details(applied_program, form)
+            return self.update_details(form)
 
         elif form_of and form_of == "secondary_cert":
             instance = get_object_or_404(SecondaryCertificateInfo, created_by_id=applied_program.user_id)
             form = SecondaryCertificationForm(data, instance=instance)
-            return self.update_details(applied_program, form)
+            return self.update_details(form)
 
         instance = get_object_or_404(self.model, pk=pk)
         form = self.form_class(data, instance=instance)

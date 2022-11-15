@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.core import serializers
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, View, ListView, UpdateView, DeleteView
-from accounts.models import User
+from accounts.models import User, UserRole
 from tanseeq_app.models import (
     TanseeqPeriod,
     SecondarySchoolCetificate,
@@ -709,7 +709,8 @@ class ListUsers(ListView):
     ]
 
     def get_queryset(self):
-        return User.objects.filter(created_by=self.request.user)
+        # return User.objects.filter(created_by=self.request.user)
+        return User.objects.filter(tanseeq_role__name__in = ['Tanseeq Finance', 'Tanseeq Reviewer'])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -748,6 +749,7 @@ class ManageUsers(View):
             form = self.form_class(request.POST)
         if form.is_valid():
             obj = form.save(commit=False)
+
             if form.cleaned_data["password1"]:
                 obj.set_password(form.cleaned_data["password1"])
 
@@ -758,7 +760,9 @@ class ManageUsers(View):
                 obj.created_by = request.user
                 obj.username = obj.email
                 messages.success(request, "Record saved.")
+            # obj.role.add(UserRole.objects.get(id=form.data['tanseeq_role']))
             obj.save()
+            obj.role.add(UserRole.objects.get(id=form.data['tanseeq_role']))
             form.save_m2m()
         else:
             context = {

@@ -187,7 +187,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                     <h4 class="modal-title" style="color: #2a015e; text-align: center"><b>Modify Secondary Certificate Info.</b></h4>
                 </div>
-                <d  iv class="modal-body">
+                <div class="modal-body">
                     {% for field in secondary_cert_form %}
                         <div class="row" style="margin-top: 15px;">
                             <label class="col-md-4 control-label">{% trans field.label %}:
@@ -198,12 +198,12 @@
                             </div>
                         </div>
                     {% endfor %}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" id="id_cancel_secondary_cert" data-dismiss="modal" class="btn dark btn-outline">
-                        Cancel
-                    </button>
-                    <button type="submit" id="id_confirm_secondary_cert" class="btn btn-primary">Update</button>
+                    <div class="modal-footer">
+                        <button type="button" id="id_cancel_secondary_cert" data-dismiss="modal" class="btn dark btn-outline">
+                            Cancel
+                        </button>
+                        <button type="submit" id="id_confirm_secondary_cert" class="btn btn-primary">Update</button>
+                    </div>
                 </div>
             </div>
         </form>
