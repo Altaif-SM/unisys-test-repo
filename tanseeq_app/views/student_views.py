@@ -188,22 +188,22 @@ class ListStudentPrograms(ListView):
         faculty_id = self.request.GET.get("faculty")
         university_id = self.request.GET.get("university")
         study_mode_id = self.request.GET.get("study_mode")
+        cert_obj = SecondaryCertificateInfo.objects.filter(created_by=user).first()
         extra_filters = {}
         if faculty_id:
             extra_filters["faculty_id"] = faculty_id
         if university_id:
             extra_filters["university_id"] = university_id
+
         if study_mode_id:
             extra_filters["study_mode_id"] = study_mode_id
-
-        cert_obj = SecondaryCertificateInfo.objects.filter(
-            created_by=user).first()
+        else:
+            extra_filters["study_mode_id"] = cert_obj.study_mode.id
 
         if ConditionFilters.objects.filter(academic_year__end_date = cert_obj.academic_year.end_date).exists():
             queryset = ConditionFilters.objects.filter(
                 type_of_secondary_id=cert_obj.secondary_certificate.id,
                 average__lte=cert_obj.average,
-                study_mode_id=cert_obj.study_mode.id,
                 academic_year__end_date__gte=cert_obj.academic_year.end_date,
                 **extra_filters
             ).select_related("university", "faculty", "program").extra(
