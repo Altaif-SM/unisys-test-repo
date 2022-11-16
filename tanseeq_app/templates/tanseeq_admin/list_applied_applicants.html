@@ -25,11 +25,33 @@
 {% block ScriptBlock %}
     <script>
         window.onload = function () {
-            $('#sample_1').dataTable().fnDestroy();
+             $('#sample_1').dataTable().fnDestroy();
+
             $('#sample_1').dataTable({
                 "aoColumnDefs": [
                     {'bSortable': false}
-                ]
+                ],
+                "scrollX": true,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        title: 'APPLICANTS LIST DETAILS',
+                        exportOptions: {
+                            //columns: ':visible'
+                            columns: [1, 2, 3, 4, 5, 6, 7, 8,]
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        title: 'APPLICANTS LIST DETAILS',
+                        orientation: 'landscape',
+                        exportOptions: {
+                            columns: [1, 2, 3, 4, 5, 6, 7, 8,]
+                            //columns: ':visible'
+                        }
+                    },
+                ],
             });
         }
         window.setTimeout(function () {

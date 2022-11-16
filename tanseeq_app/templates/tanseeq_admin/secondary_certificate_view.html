@@ -54,13 +54,36 @@
                 });
             });
 
+             $('#sample_1').dataTable().fnDestroy();
 
-            $('#sample_1').dataTable().fnDestroy();
-            $('#sample_1').dataTable({
-                "aoColumnDefs": [
-                    {'bSortable': false}
-                ]
-            });
+                $('#sample_1').dataTable({
+                    "aoColumnDefs": [
+                        {'bSortable': false}
+                    ],
+                    "scrollX": true,
+                    dom: 'Bfrtip',
+                    buttons: [
+                        {
+                            extend: 'excelHtml5',
+                            title: 'SECONDARY SCHOOL CERTIFICATE DETAILS',
+                            exportOptions: {
+                                //columns: ':visible'
+                                columns: [1,]
+                            }
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            title: 'SECONDARY SCHOOL CERTIFICATE DETAILS',
+                            orientation: 'portrait',
+                            exportOptions: {
+                                columns: [1,]
+                                //columns: ':visible'
+                            }
+                        },
+                    ],
+                });
+
+
         }
 
 

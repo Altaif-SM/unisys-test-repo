@@ -30,99 +30,36 @@
 {% block ScriptBlock %}
     <script>
         window.onload = function () {
-            $(document).ready(function () {
-                $(document).on("click", ".update", function (e) {
-
-                    var parent_id = $(this).closest('tr').attr('id');
-                    var semester_id = $('#' + parent_id + ' #semester_id').val();
-                    var semester_name = $('#' + parent_id + ' .semester_name').val();
-                    var start_date = $('#' + parent_id + ' .start_date').val();
-                    var end_date = $('#' + parent_id + ' .end_date').val();
-
-                    if (semester_name == '') {
-                        $('#' + parent_id + ' .semester_name').focus();
-                        $('#' + parent_id + ' .semester_name').css('border-color', 'red');
-                        return false;
-                    }
-
-                    var url = '/masters/update_semester/';
-                    update_semester_info(url, semester_id, semester_name, start_date, end_date)
-                })
-
-                $(document).on("click", ".delete", function (e) {
-
-                    $('#id_delete_staff_model').modal();
-                    var parent_id = $(this).closest('tr').attr('id');
-                    var staff_id = $('#' + parent_id + ' #staff_id').val();
-                    $("#staff_delete_id").val(staff_id)
-
-                    {#var url = '/masters/delete_semester/';#}
-                    {#delete_semester_info(url, language_id)#}
-                })
-
-                function delete_semester_info(url, semester_id) {
-                    $.ajax({
-                        type: 'POST',
-                        url: url,
-                        data: {
-                            semester_id: semester_id,
-                            csrfmiddlewaretoken: '{{ csrf_token }}',
-                        },
-                        success: function (data) {
-                            location.reload(true)
-                        },
-                        error: function (xhr, msg, err) {
-                            alert(xhr.responseJSON.error);
-                        }
-                    });
-                }
-
-                function update_semester_info(url, semester_id, semester_name, start_date, end_date) {
-                    $.ajax({
-                        type: 'POST',
-                        url: url,
-                        data: {
-                            semester_id: semester_id,
-                            semester_name: semester_name,
-                            start_date: start_date,
-                            end_date: end_date,
-                            csrfmiddlewaretoken: '{{ csrf_token }}',
-                        },
-                        success: function (data) {
-                            location.reload(true)
-                        },
-                        error: function (xhr, msg, err) {
-                            alert(xhr.responseJSON.error);
-                        }
-                    });
-                }
-
-
-                $(document).on("click", ".edit", function (e) {
-                    var parent_id = $(this).closest('tr').attr('id');
-                    $('.semester_name').css('border-color', '');
-                    var id = $(this).attr('id');
-                    var i = id.split("edit")[1]
-
-                    $(".data").prop("disabled", true);
-                    $(".edit").show();
-                    $(".update").hide();
-
-                    $("#update" + i).show();
-                    $("#edit" + i).hide();
-                    $("#semester_name" + i).prop("disabled", false);
-                    $("#start_date" + i).prop("disabled", false);
-                    $("#end_date" + i).prop("disabled", false);
-                });
-            });
-
-
             $('#sample_1').dataTable().fnDestroy();
+
             $('#sample_1').dataTable({
                 "aoColumnDefs": [
                     {'bSortable': false}
-                ]
+                ],
+                "scrollX": true,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        title: 'USERS DETAILS',
+                        exportOptions: {
+                            //columns: ':visible'
+                            columns: [1, 2, 3, 4, 5, 6, 7, 8,]
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        title: 'USERS DETAILS',
+                        orientation: 'landscape',
+                        exportOptions: {
+                            columns: [1, 2, 3, 4, 5, 6, 7, 8,]
+                            //columns: ':visible'
+                        }
+                    },
+                ],
             });
+
+
         }
 
 
@@ -152,7 +89,7 @@
                 <span class="caption-subject font-red sbold uppercase">{% trans 'Manage Users' %}</span>
             </div>
             <a href="{% url 'tanseeq_app:add_user' %}">
-                <button type="submit" class="btn green" id="save" style="margin-left:83%;background-color: #3598dc">{% trans 'Add' %}
+                <button type="submit" class="btn green" id="save" style="margin-left:75%;margin-bottom:10px;background-color: #3598dc">{% trans 'Add' %}
                 </button>
             </a>
         </div>
@@ -199,15 +136,7 @@
                                 <td>{{ rec.role.all.0.name|default_if_none:"" }} - {{ rec.program.program_name|default_if_none:"" }}</td>
                             {% endif %}
                             <td>{{ rec.address.country.country_name|title }}</td>
-                            <td>
-                                {% if rec.is_active == True %}
-                                    <i class="fa fa-power-off" aria-hidden="true"
-                                       style="margin-left: 30px;margin-top:8px;font-size:18px;color:green"></i>
-                                {% else %}
-                                    <i class="fa fa-power-off" aria-hidden="true"
-                                       style="margin-left: 30px;margin-top:8px;font-size:18px;color:red"></i>
-                                {% endif %}
-                            </td>
+                           <td>{{ rec.is_active }}</td>
                             <td>
                                 <a href="{% url 'tanseeq_app:manage_user' rec.id %}">
                                 <span type="button" name="edit" id="edit{{ forloop.counter }}"

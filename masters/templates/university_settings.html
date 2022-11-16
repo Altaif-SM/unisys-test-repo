@@ -11,29 +11,30 @@
 
             <li>
                 <i class="icon-home"></i>
-                <a {% if request.user.is_tanseeq_admin %} href="{% url 'tanseeq_app:tanseeq_admin' %}" {% else %}  href="{% url 'accounts:home' %}" {% endif  %}>Home</a>
+                <a {% if request.user.is_tanseeq_admin %} href="{% url 'tanseeq_app:tanseeq_admin' %}" {% else %}
+                                                          href="{% url 'accounts:home' %}" {% endif %}>Home</a>
                 <i class="fa fa-angle-right"></i>
             </li>
 
             {% if request.user.is_tanseeq_admin %}
-                 <li>
-                <span> Tanseeq University </span>
-            </li>
-
-
-                {% else %}
                 <li>
-                <span> Master Settings </span>
-                <i class="fa fa-angle-right"></i>
-            </li>
-            <li>
-                <span> {% trans 'University Settings' %}</span>
-                <i class="fa fa-angle-right"></i>
-            </li>
+                    <span> Tanseeq University </span>
+                </li>
 
-            <li>
-                <span> {% trans 'Manage Universities' %} </span>
-            </li>
+
+            {% else %}
+                <li>
+                    <span> Master Settings </span>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <span> {% trans 'University Settings' %}</span>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+
+                <li>
+                    <span> {% trans 'Manage Universities' %} </span>
+                </li>
 
             {% endif %}
 
@@ -54,7 +55,7 @@
                 <span class="caption-subject font-red sbold uppercase"> {% trans 'Manage Universities' %}</span>
             </div>
             <a href="{% url 'masters:add_university' %}">
-                <button type="submit" class="btn green" id="save" style="margin-left:78%;background-color: #3598dc">Add
+                <button type="submit" class="btn green" id="save" style="margin-left:70%;margin-bottom:10px;background-color: #3598dc">Add
                 </button>
             </a>
         </div>
@@ -69,14 +70,18 @@
                     <thead>
                     <tr>
                         <th style="display: none">Id</th>
-                        <th> {% trans 'University Type' %}</th>
-                        <th> {% trans 'Type' %}</th>
-                        <th>{% trans 'University Code' %}</th>
-                        <th> {% trans 'University' %}</th>
-                        <th> {% trans 'Email' %}</th>
-                        <th> {% trans 'Active' %}</th>
-                        <th> {% trans 'Registration' %}</th>
-                        <th> {% trans 'Singup' %}</th>
+                        <th width="10%"> {% trans 'University Type' %}</th>
+                        <th width="10%"> {% trans 'Type' %}</th>
+                        <th width="10%">{% trans 'University Code' %}</th>
+                        <th width="10%"> {% trans 'University' %}</th>
+                        <th width="10%"> {% trans 'Email' %}</th>
+                        <th width="10%"> {% trans 'Telephone' %}</th>
+                        <th width="10%"> {% trans 'Website' %}</th>
+                        <th width="10%"> {% trans 'Address' %}</th>
+                        <th width="10%"> {% trans 'Contact Details' %}</th>
+                        <th width="10%"> {% trans 'Active' %}</th>
+                        <th width="10%"> {% trans 'Registration' %}</th>
+                        <th width="10%"> {% trans 'Singup' %}</th>
                         <th width="10%">{% trans 'Action' %}</th>
                     </tr>
                     </thead>
@@ -90,9 +95,16 @@
                             <td>{{ rec.university_code|default_if_none:"" }}</td>
                             <td>{{ rec.university_name|default_if_none:"" }}</td>
 
-
                             <td>{{ rec.email|default_if_none:"" }}</td>
-                            <td>
+                            <td>{{ rec.telephone|default_if_none:"" }}</td>
+                            <td>{{ rec.website|default_if_none:"" }}</td>
+
+                            <td>{{ rec.address|default_if_none:"" }}</td>
+                            <td>{{ rec.contact_details|default_if_none:"" }}</td>
+                            <td>{{ rec.is_active }}</td>
+                            <td>{{ rec.is_registration }}</td>
+                            <td>{{ rec.is_singup }}</td>
+                            <!--<td>
                                 {% if rec.is_active == True %}
                                     <i class="fa fa-power-off" aria-hidden="true"
                                        style="margin-left: 30px;margin-top:8px;font-size:18px;color:green"></i>
@@ -118,7 +130,7 @@
                                     <i class="fa fa-power-off" aria-hidden="true"
                                        style="margin-left: 30px;margin-top:8px;font-size:18px;color:red"></i>
                                 {% endif %}
-                            </td>
+                            </td>-->
 
                             <td>
                                 <a href="{% url 'masters:edit_university' rec.id %}">
@@ -147,16 +159,52 @@
 
 {% block ajax %}
     <script>
-        $(".delete").on("click", (e) => {
-            $("#id_delete_model").modal()
-            $("#id_confirm_delete").attr("delete-url", $(e.target).attr("delete-url"))
+
+
+        $(document).ready(function () {
+            $('#sample_1').dataTable().fnDestroy();
+
+            $('#sample_1').dataTable({
+                "aoColumnDefs": [
+                    {'bSortable': false}
+                ],
+                "scrollX": true,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        title: 'UNIVERSITY DETAILS',
+                        exportOptions: {
+                            //columns: ':visible'
+                            columns: [1, 2, 3, 4, 5, 6,  7, 8,  9, 10, 11, 12,]
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        title: 'UNIVERSITY DETAILS',
+                        orientation: 'landscape',
+                        exportOptions: {
+                            columns: [1, 2, 3, 4, 5, 6,  7, 8,  9, 10, 11, 12,]
+                            //columns: ':visible'
+                        }
+                    },
+                ],
+            });
+
+
+            $(".delete").on("click", (e) => {
+                $("#id_delete_model").modal()
+                $("#id_confirm_delete").attr("delete-url", $(e.target).attr("delete-url"))
+
+
+            });
+            $("#id_confirm_delete").on("click", (e) => {
+                var delete_url = $(e.target).attr("delete-url")
+                window.location.href = delete_url;
+            })
 
 
         });
-        $("#id_confirm_delete").on("click", (e) => {
-            var delete_url = $(e.target).attr("delete-url")
-            window.location.href = delete_url;
-        })
 
 
     </script>

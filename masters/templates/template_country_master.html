@@ -54,15 +54,39 @@
                     $("#edit" + i).hide();
                     $("#country_name" + i).prop("disabled", false);
                 });
+
+                $('#sample_1').dataTable().fnDestroy();
+
+                $('#sample_1').dataTable({
+                    "aoColumnDefs": [
+                        {'bSortable': false}
+                    ],
+                    "scrollX": true,
+                    dom: 'Bfrtip',
+                    buttons: [
+                        {
+                            extend: 'excelHtml5',
+                            title: 'COUNTRY DETAILS',
+                            exportOptions: {
+                                //columns: ':visible'
+                                columns: [1, 2,]
+                            }
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            title: 'COUNTRY DETAILS',
+                            orientation: 'portrait',
+                            exportOptions: {
+                                columns: [1, 2,]
+                                //columns: ':visible'
+                            }
+                        },
+                    ],
+                });
+
             });
 
 
-            $('#sample_1').dataTable().fnDestroy();
-            $('#sample_1').dataTable({
-                "aoColumnDefs": [
-                    {'bSortable': false}
-                ]
-            });
         }
 
         window.setTimeout(function () {
@@ -79,31 +103,32 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a {% if request.user.is_tanseeq_admin %} href="{% url 'tanseeq_app:tanseeq_admin' %}" {% else %} href="{% url 'accounts:home' %}" {% endif %}>Home</a>
+                <a {% if request.user.is_tanseeq_admin %} href="{% url 'tanseeq_app:tanseeq_admin' %}" {% else %}
+                                                          href="{% url 'accounts:home' %}" {% endif %}>Home</a>
                 <i class="fa fa-angle-right"></i>
             </li>
 
-        {% if request.user.is_tanseeq_admin %}
+            {% if request.user.is_tanseeq_admin %}
 
-            <li>
-                <span>{% trans 'Country' %}</span>
-            </li>
+                <li>
+                    <span>{% trans 'Country' %}</span>
+                </li>
 
 
             {% else %}
-            <li>
-                <span>{% trans 'Master Settings' %}</span>
-                <i class="fa fa-angle-right"></i>
-            </li>
-            <li>
-                <span>{% trans 'System Settings' %}</span>
-                <i class="fa fa-angle-right"></i>
-            </li>
+                <li>
+                    <span>{% trans 'Master Settings' %}</span>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <span>{% trans 'System Settings' %}</span>
+                    <i class="fa fa-angle-right"></i>
+                </li>
 
-            <li>
-                <span>{% trans 'Manage Country' %}</span>
-            </li>
-        {% endif %}
+                <li>
+                    <span>{% trans 'Manage Country' %}</span>
+                </li>
+            {% endif %}
 
         </ul>
     </div>
@@ -145,7 +170,7 @@
                             </div>
                             <div class="">
                                 <div class="col-md-3">
-                                    <button  type="submit" class="btn green"
+                                    <button type="submit" class="btn green"
                                             id="save">{% trans 'Add' %}</button>
                                 </div>
                             </div>
@@ -182,22 +207,14 @@
                                        id="country_name{{ forloop.counter }}" value="{{ rec.country_name|title }}"
                                        required="True" pattern='[A-Za-z+-]+'
                                        title='Please enter country name' disabled></td>
+                            <td>{% for city in rec.city.all %}{{ city.city|title }},{% endfor %}</td>
                             <td>
-
-                                {% for city in rec.city.all %}
-                                    {{ city.city|title }},
-                                {% endfor %}
-
-
-
-                            </td>
-                        <td>
-                            <a href="{% url 'masters:city_settings' rec.id %}">
+                                <a href="{% url 'masters:city_settings' rec.id %}">
                                 <span type="button" name="city_{{ forloop.counter }}" id="id_city_{{ forloop.counter }}"
                                       class=" city btn green glyphicon glyphicon-eye-open">
                                 </span>
                                 </a>
-                        </td>
+                            </td>
                             <td>
 
                                 <span type="button" name="updt" id="update{{ forloop.counter }}"

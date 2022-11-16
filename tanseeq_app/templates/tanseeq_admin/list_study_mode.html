@@ -6,11 +6,33 @@
     <script>
         window.onload = function () {
             $('#sample_1').dataTable().fnDestroy();
-            $('#sample_1').dataTable({
-                "aoColumnDefs": [
-                    {'bSortable': false}
-                ]
-            });
+
+                $('#sample_1').dataTable({
+                    "aoColumnDefs": [
+                        {'bSortable': false}
+                    ],
+                    "scrollX": true,
+                    dom: 'Bfrtip',
+                    buttons: [
+                        {
+                            extend: 'excelHtml5',
+                            title: 'STUDY MODE DETAILS',
+                            exportOptions: {
+                                //columns: ':visible'
+                                columns: [1, 2, 3, 4,]
+                            }
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            title: 'STUDY MODE DETAILS',
+                            orientation: 'landscape',
+                            exportOptions: {
+                                columns: [1, 2, 3, 4,]
+                                //columns: ':visible'
+                            }
+                        },
+                    ],
+                });
         }
         window.setTimeout(function () {
             $(".alert").fadeTo(500, 0).slideUp(500, function () {
@@ -45,7 +67,7 @@
             <span class="caption-subject font-red sbold uppercase"> {% trans 'Manage Study Mode' %}</span>
         </div>
         <a href="{% url 'tanseeq_app:add_study_mode' %}">
-            <button type="submit" class="btn green" id="save" style="margin-left:78%;background-color: #3598dc">Add
+            <button type="submit" class="btn green" id="save" style="margin-left:71%;margin-bottom:10px;background-color: #3598dc">Add
             </button>
         </a>
     </div>
@@ -67,23 +89,12 @@
                 {% for rec in object_list %}
                     <tr id="item{{ rec.id }}" class="item">
                         <td style="display: none"><input id="university_id" value="{{ rec.id }}"></td>
-                        <td>
-                            {% for university in rec.universities.all%}
-                                {{university.university_name}}{% if forloop.last %} ... {%else %}, {% endif %}
-                            {% endfor %}
-                        </td>
+                        <td>{% for university in rec.universities.all%}{{university.university_name}}{% if forloop.last %}...{%else %},{% endif %}{% endfor %}</td>
                         <td>{{ rec.code|default_if_none:"" }}</td>
                         <td>{{ rec.study_mode|default_if_none:"" }}</td>
+                        <td>{{ rec.is_active }}</td>
 
-                    <td>
-                            {% if rec.is_active == True %}
-                                <i class="fa fa-power-off" aria-hidden="true"
-                                   style="margin-left: 30px;margin-top:8px;font-size:18px;color:green"></i>
-                            {% else %}
-                                <i class="fa fa-power-off" aria-hidden="true"
-                                   style="margin-left: 30px;margin-top:8px;font-size:18px;color:red"></i>
-                            {% endif %}
-                        </td>
+
                         <td>
                             <a href="{% url 'tanseeq_app:update_study_mode' rec.id %}">
                             <span type="button" name="edit" id="edit{{ forloop.counter }}"

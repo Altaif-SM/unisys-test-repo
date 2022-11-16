@@ -10,11 +10,34 @@
     <script>
         window.onload = function () {
             $('#sample_1').dataTable().fnDestroy();
+
             $('#sample_1').dataTable({
                 "aoColumnDefs": [
                     {'bSortable': false}
-                ]
+                ],
+                "scrollX": true,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        title: 'TANSEEQ FEE DETAILS',
+                        exportOptions: {
+                            //columns: ':visible'
+                            columns: [1, 2, 3, 4,]
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        title: 'TANSEEQ FEE DETAILS',
+                        orientation: 'landscape',
+                        exportOptions: {
+                            columns: [1, 2, 3, 4,]
+                            //columns: ':visible'
+                        }
+                    },
+                ],
             });
+
         }
         window.setTimeout(function () {
             $(".alert").fadeTo(500, 0).slideUp(500, function () {
@@ -25,122 +48,111 @@
 {% endblock %}
 
 {% block content %}
-<div class="page-bar" style="margin-bottom: 1px;">
-    <ul class="page-breadcrumb">
-        <li>
-            <i class="icon-home"></i>
-            <a href="{% url 'tanseeq_app:tanseeq_admin' %}">Home</a>
-            <i class="fa fa-angle-right"></i>
-        </li>
-        <li>
-            <span> {% trans 'Tanseeq Fee' %} </span>
-        </li>
-    </ul>
-</div>
-{% for message in messages %}
-    <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'tanseeq_app:tanseeq_admin' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> {% trans 'Tanseeq Fee' %} </span>
+            </li>
+        </ul>
     </div>
-{% endfor %}
-<div class="portlet light portlet-fit portlet-form ">
-    <div class="portlet-title">
-        <div class="caption">
-            <i class="icon-settings font-red"></i>
-            <span class="caption-subject font-red sbold uppercase"> {% trans 'Manage Tanseeq Fee' %}</span>
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
         </div>
-        <a href="{% url 'tanseeq_app:add_tanseeq_fees' %}">
-            <button type="submit" class="btn green" id="save" style="margin-left:78%;background-color: #3598dc">Add
-            </button>
-        </a>
-    </div>
-    <div class="portlet-body">
-        <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            <table class="table table-striped table-hover table-bordered" id="sample_1">
-                <thead>
-                <tr>
-                    <th style="display: none">Id</th>
-                    <th> {% trans 'Universities' %}</th>
-                    <th> {% trans 'Faculty' %}</th>
-                    <th> {% trans 'Fee' %}</th>
-                    <th> {% trans 'Active' %}</th>
-                    <th width="10%">{% trans 'Action' %}</th>
-                </tr>
-                </thead>
-                <tbody id="tbody">
-                {% for rec in object_list %}
-                    <tr id="item{{ rec.id }}" class="item">
-                        <td style="display: none"><input id="university_id" value="{{ rec.id }}"></td>
-                        <td>
-                            {% for university in rec.universities.all%}
-                                {{university.university_name}}{% if forloop.last %} ... {%else %}, {% endif %}
-                            {% endfor %}
-                        </td>
-                        <td>{{ rec.faculty.name|default_if_none:"" }}</td>
-                        <td>{{ rec.fee|floatformat:"2" }}</td>
-                    <td>
-                            {% if rec.is_active == True %}
-                                <i class="fa fa-power-off" aria-hidden="true"
-                                   style="margin-left: 30px;margin-top:8px;font-size:18px;color:green"></i>
-                            {% else %}
-                                <i class="fa fa-power-off" aria-hidden="true"
-                                   style="margin-left: 30px;margin-top:8px;font-size:18px;color:red"></i>
-                            {% endif %}
-                        </td>
-                        <td>
-                            <a href="{% url 'tanseeq_app:update_tanseeq_fee' rec.id %}">
+    {% endfor %}
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase"> {% trans 'Manage Tanseeq Fee' %}</span>
+            </div>
+            <a href="{% url 'tanseeq_app:add_tanseeq_fees' %}">
+                <button type="submit" class="btn green" id="save"
+                        style="margin-left:71%;margin-bottom:10px;background-color: #3598dc">Add
+                </button>
+            </a>
+        </div>
+        <div class="portlet-body">
+            <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <table class="table table-striped table-hover table-bordered" id="sample_1">
+                    <thead>
+                    <tr>
+                        <th style="display: none">Id</th>
+                        <th> {% trans 'Universities' %}</th>
+                        <th> {% trans 'Faculty' %}</th>
+                        <th> {% trans 'Fee' %}</th>
+                        <th> {% trans 'Active' %}</th>
+                        <th width="10%">{% trans 'Action' %}</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbody">
+                    {% for rec in object_list %}
+                        <tr id="item{{ rec.id }}" class="item">
+                            <td style="display: none"><input id="university_id" value="{{ rec.id }}"></td>
+                            <td>{% for university in rec.universities.all %}{{ university.university_name }}{% if forloop.last %}...{% else %},{% endif %}{% endfor %}</td>
+                            <td>{{ rec.faculty.name|default_if_none:"" }}</td>
+                            <td>{{ rec.fee|floatformat:"2" }}</td>
+                            <td>{{ rec.is_active }}</td>
+                            <td>
+                                <a href="{% url 'tanseeq_app:update_tanseeq_fee' rec.id %}">
                             <span type="button" name="edit" id="edit{{ forloop.counter }}"
                                   class=" edit_btn btn blue glyphicon glyphicon-pencil">
                             </span>
                                 </a>
-                            <button type="button" delete-url="{% url 'tanseeq_app:delete_tanseeq_fees' rec.id %}"
-                                  class="delete btn red glyphicon glyphicon-trash" name="delete"
-                            >
-                            </button>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </form>
+                                <button type="button" delete-url="{% url 'tanseeq_app:delete_tanseeq_fees' rec.id %}"
+                                        class="delete btn red glyphicon glyphicon-trash" name="delete"
+                                >
+                                </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </form>
+        </div>
     </div>
-</div>
-{% include 'delete_modal.html' %}
+    {% include 'delete_modal.html' %}
 {% endblock %}
 
 {% block ajax %}
-<script>
-    $(".delete").on("click", (e)=>{
-         $("#id_delete_model").modal()
-        $("#id_confirm_delete").attr("delete-url", $(e.target).attr("delete-url"))
-    });
-    $("#id_confirm_delete").on("click", (e)=>{
-        $(e.target).attr('disabled', true)
-        deleteTanseeqFee($(e.target).attr("delete-url"))
-        $("#id_delete_model").modal('hide')
-    })
-
-    function deleteTanseeqFee(url) {
-        console.log(url)
-        $.ajax({
-            type: 'DELETE',
-            url: url,
-            beforeSend: function(xhr, settings) {
-                xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
-             } ,
-            success: function (data) {
-                if(data.status == 200){
-                    const table = $('#sample_1').DataTable();
-                    const id = url.split('/')[3]
-                    table.row($(`#item${id}`)).remove().draw();
-                }
-            },
-            complete: function (){
-                $("#id_confirm_delete").attr('disabled', false)
-            },
-            error: function (xhr, msg, err) {
-            }
+    <script>
+        $(".delete").on("click", (e) => {
+            $("#id_delete_model").modal()
+            $("#id_confirm_delete").attr("delete-url", $(e.target).attr("delete-url"))
         });
-    }
-</script>
+        $("#id_confirm_delete").on("click", (e) => {
+            $(e.target).attr('disabled', true)
+            deleteTanseeqFee($(e.target).attr("delete-url"))
+            $("#id_delete_model").modal('hide')
+        })
+
+        function deleteTanseeqFee(url) {
+            console.log(url)
+            $.ajax({
+                type: 'DELETE',
+                url: url,
+                beforeSend: function (xhr, settings) {
+                    xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                },
+                success: function (data) {
+                    if (data.status == 200) {
+                        const table = $('#sample_1').DataTable();
+                        const id = url.split('/')[3]
+                        table.row($(`#item${id}`)).remove().draw();
+                    }
+                },
+                complete: function () {
+                    $("#id_confirm_delete").attr('disabled', false)
+                },
+                error: function (xhr, msg, err) {
+                }
+            });
+        }
+    </script>
 {% endblock %}

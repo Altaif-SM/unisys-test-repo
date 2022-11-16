@@ -111,13 +111,36 @@
                 });
             });
 
+             $('#sample_1').dataTable().fnDestroy();
 
-            $('#sample_1').dataTable().fnDestroy();
-            $('#sample_1').dataTable({
-                "aoColumnDefs": [
-                    {'bSortable': false}
-                ]
-            });
+                $('#sample_1').dataTable({
+                    "aoColumnDefs": [
+                        {'bSortable': false}
+                    ],
+                    "scrollX": true,
+                    dom: 'Bfrtip',
+                    buttons: [
+                        {
+                            extend: 'excelHtml5',
+                            title: 'YEAR DETAILS',
+                            exportOptions: {
+                                //columns: ':visible'
+                                columns: [1, 2, 3,]
+                            }
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            title: 'YEAR DETAILS',
+                            orientation: 'portrait',
+                            exportOptions: {
+                                columns: [1, 2, 3,]
+                                //columns: ':visible'
+                            }
+                        },
+                    ],
+                });
+
+
         }
 
         window.setTimeout(function () {
@@ -257,14 +280,19 @@
                     {% for rec in year_recs %}
                         <tr id="item{{ forloop.counter }}" class="item">
                             <td style="display: none"><input id="year_id" value="{{ rec.id }}"></td>
-                            <td><text hidden>{{ rec.year_name|default_if_none:"" }}</text> <input class="form-control data year_name" name="year_name_saved" type="text"
+                            <td>
+                                <text hidden>{{ rec.year_name|default_if_none:"" }}</text> <input class="form-control data year_name" name="year_name_saved" type="text"
                                        id="year_name{{ forloop.counter }}" value="{{ rec.year_name|default_if_none:"" }}"
                                        required="True" pattern='[A-Za-z+-]+'
                                        title='Please enter year name' disabled></td>
-                            <td><input class="form-control data start_date" name="start_date_saved" type="date"
+                            <td>
+                                <text hidden>{{ rec.start_date|date:"Y-m-d" }}</text>
+                                <input class="form-control data start_date" name="start_date_saved" type="date"
                                        id="start_date{{ forloop.counter }}"
-                                       value="{{ rec.start_date|date:"Y-m-d" }}" required="True" disabled></td>
-                            <td><input class="form-control data end_date" name="end_date_saved" type="date"
+                                       value="{{ rec.start_date|date:"Y-m-d" }}" required="True" disabled>
+
+                            </td>
+                            <td><text hidden>{{ rec.end_date|date:"Y-m-d" }}</text><input class="form-control data end_date" name="end_date_saved" type="date"
                                        id="end_date{{ forloop.counter }}"
                                        value="{{ rec.end_date|date:"Y-m-d" }}" required="True" disabled></td>
 {#                            {% if rec.active_year %}#}
