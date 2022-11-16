@@ -98,7 +98,7 @@
                             <td>{% for university in rec.universities.all %}{{ university.university_name }}{% if forloop.last %}...{% else %},{% endif %}{% endfor %}</td>
                             <td>{{ rec.faculty.name|default_if_none:"" }}</td>
                             <td>{{ rec.fee|floatformat:"2" }}</td>
-                            <td>{{ rec.is_active }}</td>
+                            <td>{% if rec.is_active == True %}Yes{% else %}No{% endif %}</td>
                             <td>
                                 <a href="{% url 'tanseeq_app:update_tanseeq_fee' rec.id %}">
                             <span type="button" name="edit" id="edit{{ forloop.counter }}"

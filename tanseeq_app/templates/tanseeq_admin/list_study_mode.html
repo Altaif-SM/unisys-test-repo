@@ -92,7 +92,7 @@
                         <td>{% for university in rec.universities.all%}{{university.university_name}}{% if forloop.last %}...{%else %},{% endif %}{% endfor %}</td>
                         <td>{{ rec.code|default_if_none:"" }}</td>
                         <td>{{ rec.study_mode|default_if_none:"" }}</td>
-                        <td>{{ rec.is_active }}</td>
+                    <td>{% if rec.is_active == True %}Yes{% else %}No{% endif %}</td>
 
 
                         <td>

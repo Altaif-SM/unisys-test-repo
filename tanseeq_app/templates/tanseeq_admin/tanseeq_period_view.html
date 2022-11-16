@@ -40,7 +40,7 @@
                             title: 'TANSEEQ PERIOD DETAILS',
                             exportOptions: {
                                 //columns: ':visible'
-                                columns: [1, 2, 3, 4,]
+                                columns: [1, 2, 3, 4, 5,]
                             }
                         },
                         {
@@ -48,7 +48,7 @@
                             title: 'TANSEEQ PERIOD DETAILS',
                             orientation: 'landscape',
                             exportOptions: {
-                                columns: [1, 2, 3, 4,]
+                                columns: [1, 2, 3, 4, 5,]
                                 //columns: ':visible'
                             }
                         },
@@ -123,7 +123,7 @@
                             <td>{{ rec.academic_year|default_if_none:"" }}</td>
                             <td>{{ rec.from_date|default_if_none:"" }}</td>
                             <td>{{ rec.to_date|default_if_none:"" }}</td>
-                            <td>{{ rec.is_active }}</td>
+                            <td>{% if rec.is_active == True %}Yes{% else %}No{% endif %}</td>
                             <!--<td>
                                 {% if rec.is_active == True %}
                                     <i class="fa fa-power-off" aria-hidden="true"

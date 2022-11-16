@@ -128,7 +128,7 @@
                     <th width="10%">{% trans 'capacity' %}</th>
                     <th width="10%">{% trans 'Fee' %}</th>
                     <th width="10%">{% trans 'Exam' %}</th>
-                    <th width="10%">{% trans 'Status' %}</th>
+                    <th width="10%">{% trans 'Active' %}</th>
                     <th width="10%">{% trans 'Actions' %}</th>
                 </tr>
                 </thead>
@@ -147,8 +147,8 @@
                         <td>{{ rec.average|default_if_none:"" }}</td>
                         <td>{{ rec.capacity|default_if_none:"" }}</td>
                         <td>{{ rec.fee|default_if_none:"" }}</td>
-                        <td>{{ rec.is_active }}</td>
-                        <td>{{ rec.is_exam }}</td>
+                        <td>{% if rec.is_active == True %}Yes{% else %}No{% endif %}</td>
+                    <td>{% if rec.is_exam == True %}Yes{% else %}No{% endif %}</td>
                         <td>
                             <a href="{% url 'tanseeq_app:edit_tanseeq_filter' rec.id %}">
                                 <span type="button" name="edit" id="edit{{ forloop.counter }}"

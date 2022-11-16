@@ -55,7 +55,7 @@
                 <span class="caption-subject font-red sbold uppercase"> {% trans 'Manage Universities' %}</span>
             </div>
             <a href="{% url 'masters:add_university' %}">
-                <button type="submit" class="btn green" id="save" style="margin-left:70%;margin-bottom:10px;background-color: #3598dc">Add
+                <button type="submit" class="btn green" id="save" style="margin-left:71%;margin-bottom:10px;background-color: #3598dc">Add
                 </button>
             </a>
         </div>
@@ -101,9 +101,9 @@
 
                             <td>{{ rec.address|default_if_none:"" }}</td>
                             <td>{{ rec.contact_details|default_if_none:"" }}</td>
-                            <td>{{ rec.is_active }}</td>
-                            <td>{{ rec.is_registration }}</td>
-                            <td>{{ rec.is_singup }}</td>
+                            <td>{% if rec.is_active == True %}Yes{% else %}No{% endif %}</td>
+                            <td>{% if rec.is_registration == True %}Yes{% else %}No{% endif %}</td>
+                            <td>{% if rec.is_singup == True %}Yes{% else %}No{% endif %}</td>
                             <!--<td>
                                 {% if rec.is_active == True %}
                                     <i class="fa fa-power-off" aria-hidden="true"

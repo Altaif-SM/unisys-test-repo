@@ -102,7 +102,7 @@
                         <th> {% trans 'Universities' %}</th>
                         <th> {% trans 'Faculty Name' %}</th>
                         <th> {% trans 'Code' %}</th>
-                        <th> {% trans 'Status' %}</th>
+                        <th> {% trans 'Active' %}</th>
                         <th width="10%">{% trans 'Notes' %}</th>
                         <th width="10%">{% trans 'Action' %}</th>
                     </tr>
@@ -114,9 +114,10 @@
                             <td>{% for university in rec.universities.all %}{{ university.university_name }}{% if forloop.last %}...{% else %},{% endif %}{% endfor %}</td>
                             <td>{{ rec.name|default_if_none:"" }}</td>
                             <td>{{ rec.code|default_if_none:"" }}</td>
-                            <td>{{ rec.is_active }}</td>
+                        <td>{% if rec.is_active == True %}Yes{% else %}No{% endif %}</td>
 
                             <td>{{ rec.notes|default_if_none:"" }}</td>
+
                             <td>
                                 <a href="{% url 'tanseeq_app:edit_tanseeq_faculty' rec.id %}">
                             <span type="button" name="edit" id="edit{{ forloop.counter }}"

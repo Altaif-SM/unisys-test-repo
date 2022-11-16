@@ -94,7 +94,7 @@
                         <td>{% for university in rec.universities.all%}{{university.university_name}}{% if forloop.last %}...{%else %}, {% endif %}{% endfor %}</td>
                         <td>{{ rec.attachment_name|default_if_none:"" }}</td>
                         <td>{{ rec.type_of_attachment|default_if_none:"" }}</td>
-                        <td>{{ rec.is_required|default_if_none:"" }}</td>
+                    <td>{% if rec.is_required == True %}Yes{% else %}No{% endif %}</td>
                         <td>
                             <a href="{% url 'tanseeq_app:update_university_attachment' rec.id %}">
                             <span type="button" name="edit" id="edit{{ forloop.counter }}"

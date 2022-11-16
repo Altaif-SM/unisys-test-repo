@@ -111,7 +111,7 @@
                         <th>{% trans 'Type' %}</th>
                         <th>{% trans 'Role' %}</th>
                         <th>{% trans 'Country' %}</th>
-                        <th>{% trans 'Status' %}</th>
+                        <th>{% trans 'Active' %}</th>
                         <th width="10%">{% trans 'Action' %}</th>
                     </tr>
                     </thead>
@@ -136,7 +136,7 @@
                                 <td>{{ rec.role.all.0.name|default_if_none:"" }} - {{ rec.program.program_name|default_if_none:"" }}</td>
                             {% endif %}
                             <td>{{ rec.address.country.country_name|title }}</td>
-                           <td>{{ rec.is_active }}</td>
+                        <td>{% if rec.is_active == True %}Yes{% else %}No{% endif %}</td>
                             <td>
                                 <a href="{% url 'tanseeq_app:manage_user' rec.id %}">
                                 <span type="button" name="edit" id="edit{{ forloop.counter }}"
