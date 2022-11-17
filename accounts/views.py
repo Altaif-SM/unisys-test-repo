@@ -1539,6 +1539,12 @@ def add_agent_recruiter(request):
             address = AddressDetails.objects.create(country=country, residential_address=address)
             user_obj.address = address
             user_obj.save()
+
+            subject = 'AGENT RECRUITER - Online Admission System'
+            message = 'Your account as Agent Recruiter has been created successfully. In order to login your account please use below details.'
+            send_signup_email_to_agent_recruiter(user_obj.email, subject, message, user_obj.id, password)
+
+
             messages.success(request, "Record saved.")
             return redirect('/accounts/agent_recruiter_settings/')
         except Exception as e:
