@@ -531,6 +531,18 @@ def send_signup_email_to_agent(from_email, to_mail, subject, message,user_id, pa
         messages.warning('Network Error Occur Please Try Later')
     return to_mail
 
+def send_signup_email_to_agent_recruiter(to_mail, subject, message, user_id, password):
+    from_email = settings.EMAIL_HOST_USER
+    to = [to_mail, from_email]
+    logo_url = 'http://unisys.online/static/images/university_logo.png'
+    html_content = render_to_string('agent_recruiter_email_template.html',{ 'message': message,'user_id':user_id,'password':password,'logo_url':logo_url, 'to_mail':to_mail})
+
+    try:
+        send_mail(subject, message, from_email, to, fail_silently=True, html_message=html_content)
+    except:
+        messages.warning('Network Error Occur Please Try Later')
+    return to_mail
+
 # def encode_url(url):
 #     cipher = AES.new(settings.HASHING_SECRET_KEY, AES.MODE_ECB)  #secret key is from settings file and Aes is for encreption
 #     encoded_url = base64.b64encode(cipher.encrypt(url))

@@ -451,6 +451,7 @@
                                                     {{ rec.program.program_name|default_if_none:"" }}
                                                 </td>
                                             {% endif %}
+                                        <!--
                                          {% if request.user.is_agent == True %}
                                         <td>
                                             {% if rec|is_paid_program_registration_payment %}
@@ -460,7 +461,10 @@
                                             {% endif %}
                                         </td>
                                              {% else %}
-                                             <td>
+
+
+                                        {% endif %}-->
+                                        <td>
                                                 {% if rec.first_interview == True and rec.first_interview_attend == False and rec.incomplete == False %}
                                                     <span style="color: #bfb53c">Conditional</span>
                                                 {% elif  rec.first_interview == False and rec.first_interview_attend == True and rec.incomplete == False %}
@@ -471,8 +475,6 @@
                                                     <span style="color: red">Rejected</span>
                                                 {% endif %}
                                             </td>
-
-                                        {% endif %}
 
 
 
