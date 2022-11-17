@@ -75,7 +75,7 @@ def delete_application(request, app_id):
         messages.warning(request, "An error occurred " + str(e))
     return redirect('/student/student_home/')
 
-@student_login_required
+# @student_login_required
 def applicant_personal_info(request):
     country_recs = CountryDetails.objects.all()
     religion_recs = ReligionDetails.objects.all()
@@ -87,8 +87,15 @@ def applicant_personal_info(request):
         application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
         if application_obj.agent_id:
             agent_obj = AgentIDDetails.objects.get(user_id=application_obj.agent_id)
+
+    context ={}
+    if request.user.is_agent():
+        context['my_template'] = 'template_agent_base.html'
+    else:
+        context['my_template'] = 'template_base_page.html'
+
     return render(request, 'applicant_personal_info.html',
-                  {'country_recs': country_recs, 'religion_recs': religion_recs, 'application_obj': application_obj,'student_recs':student_recs,'agent_recs':agent_recs,'agent_obj':agent_obj})
+                  {'country_recs': country_recs, 'religion_recs': religion_recs, 'application_obj': application_obj,'student_recs':student_recs,'agent_recs':agent_recs,'agent_obj':agent_obj,'context':context})
 
 
 def save_update_applicant_personal_info(request):

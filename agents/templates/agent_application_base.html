@@ -372,17 +372,17 @@ License: You must have a valid license purchased only from themeforest(the above
 
                             <li>
                                 <a href="{% url 'accounts:edit_agent' user.id %}">
-                                    <i class="icon-eye" aria-hidden="true"></i>{% trans 'Update Profile' %}</a>
+                                    <i class="icon-eye" aria-hidden="true"></i>{% trans 'UPDATE PROFILE' %}</a>
                             </li>
 
                             <li>
                                 <a href="/accounts/change_password/">
-                                    <i class="icon-key" aria-hidden="true"></i>{% trans 'Change Password' %}</a>
+                                    <i class="icon-key" aria-hidden="true"></i>{% trans 'CHANGE PASSWORD' %}</a>
                             </li>
 
                             <li>
                                 <a href="/accounts/user_signout/">
-                                    <i class="fa fa-sign-out"></i>{% trans 'Logout' %}</a>
+                                    <i class="fa fa-sign-out"></i>{% trans 'LOGOUT' %}</a>
                             </li>
 
 
@@ -442,7 +442,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             <li class="nav-item " id="dashboard">
                                 <a href="/agents/dashboard/" class="nav-link nav-toggle">
                                     <i class="glyphicon glyphicon-stats"></i>
-                                    <span class="title">{% trans 'Dashboard' %}</span>
+                                    <span class="title">{% trans 'DASHBOARD' %}</span>
                                     <span class="selected"></span>
                                 </a>
 
@@ -459,7 +459,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             <li class="nav-item " id="personal_info">
                                     <a href="{% url 'agents:personal_info' %}" class="nav-link nav-toggle">
                                         <i class="fa fa-id-card"></i>
-                                        <span class="title">{% trans 'Personal Info' %}</span>
+                                        <span class="title">{% trans 'PERSONAL INFO' %}</span>
                                         {% if user.get_agent_profile_details.personal_info %}
                                             <span class="title glyphicon glyphicon-ok"
                                                   style="color: #41bc2c;font-size: 16px"></span>
@@ -473,7 +473,7 @@ License: You must have a valid license purchased only from themeforest(the above
                      <li class="nav-item " id="personal_info">
                                     <a href="{% url 'agents:corporate_info' %}" class="nav-link nav-toggle">
                                     <i class="fa fa-users" aria-hidden="true"></i>
-                                        <span class="title">{% trans 'Corporate Info' %}</span>
+                                        <span class="title">{% trans 'CORPORATE INFO' %}</span>
                                         {% if user.get_agent_profile_details.corporate_info %}
                                             <span class="title glyphicon glyphicon-ok"
                                                   style="color: #41bc2c;font-size: 16px"></span>
@@ -502,7 +502,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <a href="{% url 'agents:attachment' %}"
                                        class="nav-link nav-toggle">
                                         <i class="glyphicon glyphicon-copy"></i>
-                                        <span class="title">{% trans 'Attachement' %}</span>
+                                        <span class="title">{% trans 'ATTACHEMENT' %}</span>
                                         {% if user.get_agent_profile_details.attachment %}
                                             <span class="title glyphicon glyphicon-ok"
                                                   style="color: #41bc2c;font-size: 16px"></span>{% else %}
@@ -516,7 +516,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <a href="{% url 'agents:declaration' %}"
                                        class="nav-link nav-toggle">
                                         <i class="glyphicon glyphicon-pencil"></i>
-                                        <span class="title">{% trans 'Declaration' %}</span>
+                                        <span class="title">{% trans 'DECLARATION' %}</span>
                                         {% if user.get_agent_profile_details.is_submitted %}
                                             <span class="title glyphicon glyphicon-ok"
                                                   style="color: #41bc2c;font-size: 16px"></span>{% else %}
@@ -556,7 +556,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                 <a href="{% url 'partner:approved_application' %}"
                                        class="nav-link nav-toggle">
                                         <i class="fa fa-tasks"></i>
-                                        <span class="title">{% trans 'My Application' %}</span>
+                                        <span class="title">{% trans 'MY APPLICATION' %}</span>
                                     </a>
 
 
@@ -574,6 +574,10 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </a>
                                 </li>
 
+{#                            <li class="nav-item ">#}
+{#                                            <a href="{% url 'partner:approved_application' %}"#}
+{#                                               class="nav-link ">{% trans 'STUDENT APPLICATION' %}</a>#}
+{#                                        </li>#}
 
 
 
@@ -587,7 +591,6 @@ License: You must have a valid license purchased only from themeforest(the above
                         <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
 
-                            <!--
                             <li class="nav-item ">
 
 
@@ -598,119 +601,24 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </a>
 
 
-                                        </li>-->
+                                        </li>
 
-                            <li class="nav-item " id="personal_info">
-                                    <a href="{% url 'student:applicant_personal_info' %}" class="nav-link nav-toggle">
-                                        <i class="fa fa-id-card"></i>
-                                        <span class="title">{% trans 'Personal Info' %}</span>
-                                        {% if user.get_student_application.personal_info_flag %}
-                                            <span class="title glyphicon glyphicon-ok"
-                                                  style="color: #41bc2c;font-size: 16px"></span>
-                                        {% else %}
-                                            <span class="title glyphicon glyphicon-exclamation-sign"
-                                                  style="color: #dc302b; font-size: 16px"></span>{% endif %}
-                                        <span class="selected"></span>
-                                    </a>
-                                </li>
-
-                        <li class="nav-item " id="personal_info">
-                                    <a href="{% url 'student:applicant_intake_info' %}" class="nav-link nav-toggle">
-                                        <i class="fa fa-university"></i>
-                                        <span class="title">{% trans 'Intake Info' %}</span>
-                                        {% if user.get_student_application.intake_flag %}
-                                            <span class="title glyphicon glyphicon-ok"
-                                                  style="color: #41bc2c;font-size: 16px"></span>
-                                        {% else %}
-                                            <span class="title glyphicon glyphicon-exclamation-sign"
-                                                  style="color: #dc302b; font-size: 16px"></span>{% endif %}
-                                        <span class="selected"></span>
-                                    </a>
-                                </li>
-                        <li class="nav-item " id="acd_qli">
-                                    <a href="{% url 'student:applicant_academic_english_qualification' %}"
+                            <li class="nav-item " id="acd_qli">
+                                    <a href=""
                                        class="nav-link nav-toggle">
-                                        <i class="glyphicon glyphicon-education"></i>
-                                        <span class="title">{% trans 'Academic Qualification' %}</span>
-                                        {% if user.get_student_application.english_qualification %}
-                                            <span class="title glyphicon glyphicon-ok"
-                                                  style="color: #41bc2c;font-size: 16px"></span>{% else %}
-                                            <span class="title glyphicon glyphicon-exclamation-sign"
-                                                  style="color: #dc302b; font-size: 16px"></span>{% endif %}
+
+                                        <span class="title"></span>
+
+
+                                        </span>
                                         <span class="selected"></span>
                                     </a>
                                 </li>
 
-                        <li class="nav-item " id="acd_qli">
-                                    <a href="{% url 'student:applicant_employement_history_info' %}"
-                                       class="nav-link nav-toggle">
-                                        <i class="fa fa-history"></i>
-                                        <span class="title">{% trans 'Working Experience' %}</span>
-                                        {% if user.get_student_application.working_experience %}
-                                            <span class="title glyphicon glyphicon-ok"
-                                                  style="color: #41bc2c;font-size: 16px"></span>{% else %}
-                                            <span class="title glyphicon glyphicon-exclamation-sign"
-                                                  style="color: #dc302b; font-size: 16px"></span>{% endif %}
-                                        <span class="selected"></span>
-                                    </a>
-                                </li>
-                        <li class="nav-item " id="acd_qli">
-                                    <a href="{% url 'student:applicant_additional_information' %}"
-                                       class="nav-link nav-toggle">
-                                        <i class="glyphicon glyphicon-star"></i>
-                                        <span class="title">{% trans 'Additional Information' %}</span>
-                                        {% if user.get_student_application.scholarship_selection %}
-                                            <span class="title glyphicon glyphicon-ok"
-                                                  style="color: #41bc2c;font-size: 16px"></span>{% else %}
-                                            <span class="title glyphicon glyphicon-exclamation-sign"
-                                                  style="color: #dc302b; font-size: 16px"></span>{% endif %}
-                                        <span class="selected"></span>
-                                    </a>
-                                </li>
-                        <li class="nav-item " id="acd_qli">
-                                    <a href="{% url 'payments:checkout' %}"
-                                       class="nav-link nav-toggle">
-                                        <i class="glyphicon glyphicon-credit-card"></i>
-                                        <span class="title">{% trans 'Payments' %}</span>
-                                        {% if user.get_student_application.payment %}
-                                            <span class="title glyphicon glyphicon-ok"
-                                                  style="color: #41bc2c;font-size: 16px"></span>{% else %}
-                                            <span class="title glyphicon glyphicon-exclamation-sign"
-                                                  style="color: #dc302b; font-size: 16px"></span>{% endif %}
-                                        <span class="selected"></span>
-                                    </a>
-                                </li>
-
-                        <li class="nav-item " id="acd_qli">
-                                    <a href="{% url 'student:applicant_attachment_submission' %}"
-                                       class="nav-link nav-toggle">
-                                        <i class="glyphicon glyphicon-copy"></i>
-                                        <span class="title">{% trans 'Attachment' %}</span>
-                                        {% if user.get_student_application.attachment %}
-                                            <span class="title glyphicon glyphicon-ok"
-                                                  style="color: #41bc2c;font-size: 16px"></span>{% else %}
-                                            <span class="title glyphicon glyphicon-exclamation-sign"
-                                                  style="color: #dc302b; font-size: 16px"></span>{% endif %}
-                                        <span class="selected"></span>
-                                    </a>
-                                </li>
-
-                         <li class="nav-item " id="acd_qli">
-                                    <a href="{% url 'student:applicant_declaration' %}"
-                                       class="nav-link nav-toggle">
-                                        <i class="glyphicon glyphicon-pencil"></i>
-                                        <span class="title">{% trans 'Declaration' %}</span>
-                                        {% if user.get_student_application.declaration %}
-                                            <span class="title glyphicon glyphicon-ok"
-                                                  style="color: #41bc2c;font-size: 16px"></span>{% else %}
-                                            <span class="title glyphicon glyphicon-exclamation-sign"
-                                                  style="color: #dc302b; font-size: 16px"></span>{% endif %}
-                                        <span class="selected"></span>
-                                    </a>
-                                </li>
-
-
-
+{#                            <li class="nav-item ">#}
+{#                                            <a href="{% url 'partner:approved_application' %}"#}
+{#                                               class="nav-link ">{% trans 'STUDENT APPLICATION' %}</a>#}
+{#                                        </li>#}
 
 
 
@@ -734,10 +642,8 @@ License: You must have a valid license purchased only from themeforest(the above
             <div class="col-md-12" style="margin-left: 180px;">
                 <div class="tabs-left">
                     <ul class="nav nav-tabs menu" style="border-bottom: none">
-                            <li id="agent_application"><a href="{% url 'agents:personal_info' %}" >{% trans 'Agent Application' %}</a></li>
-                        <li id="finance_management"><a href="{% url 'student:applicant_personal_info' %}" >{% trans 'Create New Application' %}</a></li>
-                        <li id="application_management"><a href="{% url 'partner:approved_application' %}" >{% trans 'My Application' %}</a></li>
-
+                            <li id="agent_application"><a href="{% url 'agents:personal_info' %}" >{% trans 'AGENT APPLICATION' %}</a></li>
+                        <li id="application_management"><a href="{% url 'partner:approved_application' %}" >{% trans 'APPLICATION MANAGEMENT' %}</a></li>
 {#                        <li id="finance_management"><a href="{% url 'agents:referral_fee_topup' %}" >{% trans 'FINANCE MANAGEMENT' %}</a></li>#}
 
                     </ul>
@@ -888,7 +794,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-    {%  if request.resolver_match.url_name == 'referral_fee_topup' or request.resolver_match.url_name == 'template_applicant_all_details'  or request.resolver_match.url_name == 'applicant_personal_info' %}
+    {%  if request.resolver_match.url_name == 'referral_fee_topup' or request.resolver_match.url_name == 'template_applicant_all_details'  %}
         {
             var element = document.getElementById("finance_management_tab");
             element.classList.add("active");
