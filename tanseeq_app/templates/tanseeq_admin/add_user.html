@@ -25,7 +25,6 @@
 <script>
     const getFacultyDataUrl = "{% url 'tanseeq_app:list_tanseeq_faculty' %}"
     const getProgramDataUrl = "{% url 'tanseeq_app:list_tanseeq_program' %}"
-
     $(document).ready(function() {
         $("#id_university").on("change", function(){
             getFacultyData(getFacultyDataUrl)

@@ -212,6 +212,7 @@ class ListStudentPrograms(ListView):
                     'program_details_id=tanseeq_app_conditionfilters.id AND user_id = %s'
                 }, select_params=(self.request.user.id,)
             )
+            print(len(queryset))
             return queryset
         else:
             return ConditionFilters.objects.none()

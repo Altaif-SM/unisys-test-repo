@@ -419,6 +419,9 @@ class TanseeqProgramList(ListView):
             filters["university_id"] = university_id
         if faculty_id:
             filters["faculty_id"] = faculty_id
+        if self.request.GET.get("faculty[]"):
+            filters["faculty_id__in"] = self.request.GET.getlist("faculty[]")
+        print("filters")
         return self.model.objects.filter(**filters)
 
 

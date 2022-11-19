@@ -82,12 +82,10 @@ class User(AbstractUser):
                                 related_name='user_program_rel',
                                 on_delete=models.SET_NULL)
     tanseeq_role = models.ForeignKey(UserRole, related_name='tanseeq_user_role', on_delete=models.SET_NULL, blank=True, null=True)
-    tanseeq_faculty = models.ForeignKey("tanseeq_app.TanseeqFaculty", blank=True, null=True,
-                                   related_name='user_tanseeq_faculty',
-                                   on_delete=models.SET_NULL)
-    tanseeq_program = models.ForeignKey("tanseeq_app.TanseeqProgram", blank=True, null=True,
-                                related_name='user_tanseeq_program',
-                                on_delete=models.SET_NULL)
+    tanseeq_faculty = models.ManyToManyField("tanseeq_app.TanseeqFaculty", blank=True, null=True,
+                                   related_name='user_tanseeq_faculty')
+    tanseeq_program = models.ManyToManyField("tanseeq_app.TanseeqProgram", blank=True, null=True,
+                                related_name='user_tanseeq_program')
     created_by = models.ForeignKey("self", on_delete=models.SET_NULL, blank=True, null=True)    
 
     class Meta:
