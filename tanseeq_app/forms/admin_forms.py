@@ -207,14 +207,6 @@ class TanseeqUserForm(forms.ModelForm):
         strip=False,
         help_text="Enter the same password as before, for verification.",
     )
-    # tanseeq_faculty = forms.ModelMultipleChoiceField(
-    #     queryset=TanseeqFaculty.objects.none(),
-    #     label="tanseeq_faculty",
-    # )
-    # tanseeq_program = forms.ModelMultipleChoiceField(
-    #     queryset=TanseeqProgram.objects.none(),
-    #     label="tanseeq_program",
-    # )
 
     class Meta:
         model = User
@@ -229,12 +221,6 @@ class TanseeqUserForm(forms.ModelForm):
                 code='password_mismatch',
             )
         return password2
-
-    def get_initial(self):
-        print("running initial")
-        initial = super().get_initial()
-        initial['tanseeq_faculty'] = self.instance.tanseeq_faculty.all()
-        return initial
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -251,52 +237,25 @@ class TanseeqUserForm(forms.ModelForm):
                     "required": "true",
                 })
 
-        self.fields["password1"].widget.attrs.pop("required")
-        self.fields["password2"].widget.attrs.pop("required")
-        self.fields["password1"].required = False
-        self.fields["password2"].required = False
 
-        # if self.instance.id:
-            # if self.instance.university:
-            #     self.fields["tanseeq_faculty"].queryset = self.fields["tanseeq_faculty"].queryset.filter(
-            #         universities=self.instance.university
-            #     )
-            # if self.instance.tanseeq_faculty:
-            #     self.fields["tanseeq_program"].queryset = self.fields["tanseeq_program"].queryset.filter(
-            #         university_id=self.instance.university_id,
-            #         faculty_id__in=self.instance.tanseeq_faculty.all().values_list("id", flat=True)
-            #     )
-            # if self.instance.tanseeq_faculty:
-            #     self.fields["tanseeq_faculty"].choices = [
-            #         (str(faculty.id), faculty.name) for faculty in self.instance.tanseeq_faculty.all()
-            #     ]
-            #     self.fields["tanseeq_faculty"].initial = [
-            #         (str(faculty.id), faculty.name) for faculty in self.instance.tanseeq_faculty.all()
-            #     ]
-
-            # if self.instance.tanseeq_program:
-            #     print("im running")
-            #     self.fields["tanseeq_program"].choices = [
-            #         (str(program.id), program.name) for program in self.instance.tanseeq_program.all()
-            #     ]
-            #     self.fields["tanseeq_program"].initial = "2"
-            #     self.fields["tanseeq_program"].initial = [
-            #         (str(program.id), program.name) for program in self.instance.tanseeq_program.all()
-            #     ]
+        if self.instance.id:
+            self.fields["password1"].widget.attrs.pop("required")
+            self.fields["password2"].widget.attrs.pop("required")
+            self.fields["password1"].required = False
+            self.fields["password2"].required = False
+            if self.instance.university:
+                self.fields["tanseeq_faculty"].queryset = self.fields["tanseeq_faculty"].queryset.filter(
+                    universities=self.instance.university
+                )
+            if self.instance.tanseeq_faculty:
+                self.fields["tanseeq_program"].queryset = self.fields["tanseeq_program"].queryset.filter(
+                    university_id=self.instance.university_id,
+                    faculty_id__in=self.instance.tanseeq_faculty.all().values_list("id", flat=True)
+                )
 
         if self.data:
-            faculties = TanseeqFaculty.objects.filter(universities__in=[self.data['university']])
-            programs = TanseeqProgram.objects.filter(university_id=self.data['university'])
-            
-            self.fields["tanseeq_faculty"].choices =  [
-               (str(faculty.id), faculty.name) for faculty in faculties
-            ]
-            self.fields["tanseeq_program"].choices =  [
-               (str(program.id), program.name) for program in programs
-            ]
-        print("initial", self.fields["tanseeq_faculty"].choices)
-        print(self.fields["tanseeq_program"].initial)
-        print(dir(self.fields["tanseeq_program"]))
+            self.fields["tanseeq_faculty"].queryset = TanseeqFaculty.objects.filter(universities__in=[self.data['university']])
+            self.fields["tanseeq_program"].queryset = TanseeqProgram.objects.filter(university_id=self.data['university'])
 
     def clean_email(self):
         email=self.cleaned_data['email']

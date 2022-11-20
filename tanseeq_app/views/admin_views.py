@@ -712,8 +712,10 @@ class ListUsers(ListView):
     ]
 
     def get_queryset(self):
-        # return User.objects.filter(created_by=self.request.user)
-        return User.objects.filter(tanseeq_role__name__in = ['Tanseeq Finance', 'Tanseeq Reviewer'])
+        return User.objects.filter(tanseeq_role__name__in = [
+            User.TANSEEQ_FINANCE, User.TANSEEQ_REVIEWER,
+            User.TANSEEQ_EXAMINER, User.TANSEEQ_FACULTY,
+        ])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

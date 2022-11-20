@@ -58,6 +58,8 @@ class User(AbstractUser):
     TANSEEQ_STUDENT = 'Tanseeq Student'
     TANSEEQ_FINANCE = 'Tanseeq Finance'
     TANSEEQ_REVIEWER = 'Tanseeq Reviewer'
+    TANSEEQ_EXAMINER = 'Tanseeq Examiner'
+    TANSEEQ_FACULTY = 'Tanseeq Faculty'
 
 
     first_name = models.CharField(max_length=256, blank=True, null=True)
@@ -208,6 +210,12 @@ class User(AbstractUser):
 
     def is_tanseeq_reviewer(self):
         return True if self.role.all().filter(name__in=[self.TANSEEQ_REVIEWER]).exists() else False
+
+    def is_tanseeq_examiner(self):
+        return True if self.role.all().filter(name__in=[self.TANSEEQ_EXAMINER]).exists() else False
+
+    def is_tanseeq_faculty(self):
+        return True if self.role.all().filter(name__in=[self.TANSEEQ_FACULTY]).exists() else False
 
     @property
     def get_user_permissions(self):
@@ -415,11 +423,12 @@ class User(AbstractUser):
     TANSEEQ_STUDENT_DASHBOARD = '/tanseeq/student/'
     TANSEEQ_FINANCE_DASHBOARD = '/tanseeq/requestlist/'
     TANSEEQ_REVIEWER_DASHBOARD = '/tanseeq/list_application/'
+    TANSEEQ_EXAMINER_DASHBOARD = '/tanseeq/list_examiner_students/'
+    TANSEEQ_FACULTY_DASHBOARD = '/tanseeq/list_faculty_students/'
 
 
     def get_dashboard_path(self):
         dashboard_path = User.ADMIN_DASHBOARD
-        print("self.role", self.role.all().exists())
         if self.role.all().exists() and self.role.get().name == User.ADMIN:
             dashboard_path = User.ADMIN_DASHBOARD
         elif self.role.all().exists() and self.role.get().name == User.STUDENT:
@@ -452,4 +461,8 @@ class User(AbstractUser):
             dashboard_path = User.TANSEEQ_FINANCE_DASHBOARD
         elif self.tanseeq_role.name == User.TANSEEQ_REVIEWER:
             dashboard_path = User.TANSEEQ_REVIEWER_DASHBOARD
+        elif self.tanseeq_role.name == User.TANSEEQ_EXAMINER:
+            dashboard_path = User.TANSEEQ_EXAMINER_DASHBOARD
+        elif self.tanseeq_role.name == User.TANSEEQ_FACULTY:
+            dashboard_path = User.TANSEEQ_FACULTY_DASHBOARD
         return dashboard_path

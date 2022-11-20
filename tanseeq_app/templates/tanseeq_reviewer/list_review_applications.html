@@ -118,10 +118,10 @@
                 <th> {% trans 'Applicant Name' %}</th>
                 <th> {% trans 'University' %}</th>
                 <th> {% trans 'Faculty' %}</th>
-                <th> {% trans 'Study Mode' %}</th>
                 <th> {% trans 'Program' %}</th>
-                <th> {% trans 'Order Status' %}</th>
-                <th> {% trans 'Pay the fees' %}</th>
+                <th> {% trans 'Study Mode' %}</th>
+                <th> {% trans 'Application Status' %}</th>
+                <th></th>
 
             </tr>
             </thead>
@@ -132,8 +132,8 @@
                     <td>{{ rec.user.first_name|default_if_none:"" }} {{ rec.user.last_name|default_if_none:"" }}</td>
                     <td>{{ rec.program_details.university.university_name|default_if_none:"" }}</td>
                     <td>{{ rec.program_details.faculty.name|default_if_none:"" }}</td>
-                    <td>{{ rec.program_details.study_mode.study_mode|default_if_none:"" }}</td>
                     <td>{{ rec.program_details.program.name|default_if_none:"" }}</td>
+                    <td>{{ rec.program_details.study_mode.study_mode|default_if_none:"" }}</td>
                     <td>
                         {% if rec.review_status == 1 %}
                             {% trans 'Accepted' %}
