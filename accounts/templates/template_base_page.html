@@ -445,6 +445,10 @@ License: You must have a valid license purchased only from themeforest(the above
                                 {% include 'tanseeq_finance/finance_side_bar.html' %}
                             {% elif request.user.is_tanseeq_reviewer  %}
                                 {% include 'tanseeq_reviewer/reviewer_side_bar.html' %}
+                            {% elif request.user.is_tanseeq_examiner  %}
+                                {% include 'tanseeq_examiner/side_bar.html' %}
+                            {% elif request.user.is_tanseeq_faculty  %}
+                                {% include 'tanseeq_faculty/side_bar.html' %}
                             {% elif request.user.is_student %}
                                 {% include 'student_side_bar.html' %}
                             {%else%}
@@ -1484,7 +1488,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-    {% if request.resolver_match.url_name == 'staff_settings'  or request.resolver_match.url_name == 'add_staff'   or request.resolver_match.url_name == 'edit_staff' or request.resolver_match.url_name == 'group_settings' or request.resolver_match.url_name == 'add_group' or request.resolver_match.url_name == 'agent_recruiter_settings' or request.resolver_match.url_name == 'add_agent_recruiter' or request.resolver_match.url_name == 'edit_agent_recruiter' %}
+    {% if request.resolver_match.url_name == 'staff_settings'  or request.resolver_match.url_name == 'add_staff'   or request.resolver_match.url_name == 'edit_staff' or request.resolver_match.url_name == 'group_settings' or request.resolver_match.url_name == 'add_group' or request.resolver_match.url_name == 'agent_recruiter_settings' or request.resolver_match.url_name == 'add_agent_recruiter' or request.resolver_match.url_name == 'edit_agent_recruiter' or request.resolver_match.url_name == 'agent_settings' or request.resolver_match.url_name == 'add_agent' or request.resolver_match.url_name == 'update_agent' %}
         {
             var element = document.getElementById("b");
             element.classList.add("active");

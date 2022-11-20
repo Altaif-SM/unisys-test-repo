@@ -178,7 +178,6 @@ class StudentStudyModeView(View):
             return render(request, self.template_name, context)
         return redirect(self.redirect_url)
 
-
 @method_decorator(check_permissions(User.TANSEEQ_STUDENT), name='dispatch')
 class ListStudentPrograms(ListView):
     model = ConditionFilters
@@ -189,28 +188,34 @@ class ListStudentPrograms(ListView):
         faculty_id = self.request.GET.get("faculty")
         university_id = self.request.GET.get("university")
         study_mode_id = self.request.GET.get("study_mode")
+        cert_obj = SecondaryCertificateInfo.objects.filter(created_by=user).first()
         extra_filters = {}
         if faculty_id:
             extra_filters["faculty_id"] = faculty_id
         if university_id:
             extra_filters["university_id"] = university_id
+
         if study_mode_id:
             extra_filters["study_mode_id"] = study_mode_id
+        else:
+            extra_filters["study_mode_id"] = cert_obj.study_mode.id
 
-        cert_obj = SecondaryCertificateInfo.objects.filter(
-            created_by=user).first()
-        queryset = ConditionFilters.objects.filter(
-            type_of_secondary=cert_obj.secondary_certificate,
-            average__lte=cert_obj.average,
-            academic_year__year_name__gte=int(cert_obj.academic_year.year_name),
-            **extra_filters
-        ).select_related("university", "faculty", "program").extra(
-            select={
-                'is_applied': 'SELECT 1 FROM tanseeq_app_appliedprograms WHERE ' +
-                'program_details_id=tanseeq_app_conditionfilters.id AND user_id = %s'
-            }, select_params=(self.request.user.id,)
-        )
-        return queryset
+        if ConditionFilters.objects.filter(academic_year__end_date = cert_obj.academic_year.end_date).exists():
+            queryset = ConditionFilters.objects.filter(
+                type_of_secondary_id=cert_obj.secondary_certificate.id,
+                average__lte=cert_obj.average,
+                academic_year__end_date__gte=cert_obj.academic_year.end_date,
+                **extra_filters
+            ).select_related("university", "faculty", "program").extra(
+                select={
+                    'is_applied': 'SELECT 1 FROM tanseeq_app_appliedprograms WHERE ' +
+                    'program_details_id=tanseeq_app_conditionfilters.id AND user_id = %s'
+                }, select_params=(self.request.user.id,)
+            )
+            print(len(queryset))
+            return queryset
+        else:
+            return ConditionFilters.objects.none()
 
     def get(self, request, *args, **kwargs):
         cert_obj = ApplicationDetails.objects.filter(
@@ -252,7 +257,7 @@ class ApplyProgramView(View):
             id=condition_filter_id,
             type_of_secondary=cert_obj.secondary_certificate,
             average__lte=cert_obj.average,
-            academic_year__year_name__gte=int(cert_obj.academic_year.year_name),
+            academic_year__end_date__lte=cert_obj.academic_year.end_date,
         )
         if get_obj:
             return is_conditions_pass.first()

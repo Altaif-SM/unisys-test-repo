@@ -71,26 +71,26 @@
     <!-- END HEAD -->
 
     <body class=" login">
-{#    <br>#}
-{#    <div class="" style="float: right">#}
-{#        <form action="{% url 'set_language' %}" method="post">{% csrf_token %}#}
-{#            <input name="next" type="hidden" value="{{ redirect_to }}">#}
-{#            <select name="language" class="form-control" id="exampleFormControlSelect1"#}
-{#                    onchange="this.form.submit()">#}
-{#                {% get_current_language as LANGUAGE_CODE %}#}
-{#                {% get_available_languages as LANGUAGES %}#}
-{#                {% get_language_info_list for LANGUAGES as languages %}#}
-{#                {% for language in languages %}#}
-{#                    <option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %}selected{% endif %}>#}
-{#                        {{ language.name_local }}#}
-                        {#                                    {{ language.name_local }} {{ language.code }}#}
-{#                    </option>#}
-{#                {% endfor %}#}
-{#            </select>#}
-{#        </form>#}
-{##}
-{##}
-{#    </div>#}
+    {#    <br>#}
+    {#    <div class="" style="float: right">#}
+    {#        <form action="{% url 'set_language' %}" method="post">{% csrf_token %}#}
+    {#            <input name="next" type="hidden" value="{{ redirect_to }}">#}
+    {#            <select name="language" class="form-control" id="exampleFormControlSelect1"#}
+    {#                    onchange="this.form.submit()">#}
+    {#                {% get_current_language as LANGUAGE_CODE %}#}
+    {#                {% get_available_languages as LANGUAGES %}#}
+    {#                {% get_language_info_list for LANGUAGES as languages %}#}
+    {#                {% for language in languages %}#}
+    {#                    <option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %}selected{% endif %}>#}
+    {#                        {{ language.name_local }}#}
+    {#                                    {{ language.name_local }} {{ language.code }}#}
+    {#                    </option>#}
+    {#                {% endfor %}#}
+    {#            </select>#}
+    {#        </form>#}
+    {##}
+    {##}
+    {#    </div>#}
 
 
     <!-- BEGIN LOGO -->
@@ -106,13 +106,13 @@
         <form class="login-form" method="post" action="{% url 'accounts:user_signin' %}">
             {% csrf_token %}
 
-                {% if is_agent %}
-                    <input type="hidden" name="role" value="Agent" class="form-control"/>
-                {% elif is_tanseeq_student %}
-                    <input type="hidden" name="role" value="Tanseeq Student" class="form-control"/>
-                {% else %}
-                    <input type="hidden" name="role" value="Student" class="form-control"/>
-                {% endif %}
+            {% if is_agent %}
+                <input type="hidden" name="role" value="Agent" class="form-control"/>
+            {% elif is_tanseeq_student %}
+                <input type="hidden" name="role" value="Tanseeq Student" class="form-control"/>
+            {% else %}
+                <input type="hidden" name="role" value="Student" class="form-control"/>
+            {% endif %}
 
             <h3 class="form-title font" style="color: #0a001f;">{% trans 'Sign In' %}</h3>
             <div class="alert alert-danger display-hide">
@@ -142,18 +142,23 @@
                 <label class="control-label visible-ie8 visible-ie9">Password</label>
                 {{ form.password }}</div>
             <div class="form-actions" id="log">
-                <button type="submit" style="background-color: #262668;color: aliceblue" class="btn uppercase">{% trans 'Login' %}</button>
+                <button type="submit" style="background-color: #262668;color: aliceblue"
+                        class="btn uppercase">{% trans 'Login' %}</button>
                 <label class="rememberme check mt-checkbox mt-checkbox-outline">
                     <input type="checkbox" name="remember" value="1"/>{% trans 'Remember' %}
                     <span></span>
                 </label>
-{#                <a href="/password_reset/recover/" id="forget-password" class="forget-password">{% trans 'Forgot Password?' %}</a>#}
+                {#                <a href="/password_reset/recover/" id="forget-password" class="forget-password">{% trans 'Forgot Password?' %}</a>#}
             </div>
-            <div class="create-account" style="background-color: #262668;">
-                <p>
-                    <a href="javascript:;" id="register-btn" class="uppercase">{% trans 'Create an account' %}</a>
-                </p>
-            </div>
+            {% if not is_agent %}
+                <div class="create-account" style="background-color: #262668;">
+
+                    <p>
+                        <a href="javascript:;" id="register-btn" class="uppercase">{% trans 'Create an account' %}</a>
+                    </p>
+
+                </div>
+            {% endif %}
 
         </form>
         <!-- END LOGIN FORM -->
@@ -167,11 +172,13 @@
             <p class="hint">{% trans 'Enter your personal details below:' %}</p>
             <div class="form-group">
                 <label class="control-label visible-ie8 visible-ie9">First Name</label>
-                <input class="form-control placeholder-no-fix" type="text" placeholder="{% trans 'First Name' %}" name="first_name"
+                <input class="form-control placeholder-no-fix" type="text" placeholder="{% trans 'First Name' %}"
+                       name="first_name"
                        required/></div>
             <div class="form-group">
                 <label class="control-label visible-ie8 visible-ie9">Last Name</label>
-                <input class="form-control placeholder-no-fix" type="text" placeholder="{% trans 'Last Name' %}" name="last_name"
+                <input class="form-control placeholder-no-fix" type="text" placeholder="{% trans 'Last Name' %}"
+                       name="last_name"
                        required/></div>
             {#                <div class="form-group">#}
             {#                    <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->#}
@@ -200,7 +207,8 @@
                 {% endif %}
                 <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
                 <label class="control-label visible-ie8 visible-ie9">Email</label>
-                <input class="form-control placeholder-no-fix" type="text" placeholder="{% trans 'Email' %}" name="email"/></div>
+                <input class="form-control placeholder-no-fix" type="text" placeholder="{% trans 'Email' %}"
+                       name="email"/></div>
             <div class="form-group">
                 <label class="control-label visible-ie8 visible-ie9">Password</label>
                 <input class="form-control placeholder-no-fix" type="password" autocomplete="off" id="register_password"

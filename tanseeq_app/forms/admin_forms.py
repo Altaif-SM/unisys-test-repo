@@ -178,6 +178,22 @@ class CourseForm(forms.ModelForm):
         fields = ('course','mark',)
 
 
+class CustomChoiceField(forms.ChoiceField):
+    def valid_value(self, value):
+        print(self)
+        """Check to see if the provided value is a valid choice."""
+        text_value = str(value)
+        for k, v in self.choices:
+            if isinstance(v, (list, tuple)):
+                # This is an optgroup, so look inside the group for options
+                for k2, v2 in v:
+                    if value == k2 or text_value == str(k2):
+                        return True
+            else:
+                if value == k or text_value == str(k):
+                    return True
+        return False
+
 class TanseeqUserForm(forms.ModelForm):
     password1 = forms.CharField(
         label="Password",
@@ -207,7 +223,7 @@ class TanseeqUserForm(forms.ModelForm):
         return password2
 
     def __init__(self, *args, **kwargs):
-        super(TanseeqUserForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['tanseeq_role'].queryset = self.fields['tanseeq_role'].queryset.filter(is_tanseeq=True)
         self.fields['university'].queryset = self.fields['university'].queryset.filter(
             is_tanseeq_university=True, is_active=True, is_delete=False
@@ -220,12 +236,27 @@ class TanseeqUserForm(forms.ModelForm):
                     "class": "form-control",
                     "required": "true",
                 })
+
+
         if self.instance.id:
             self.fields["password1"].widget.attrs.pop("required")
             self.fields["password2"].widget.attrs.pop("required")
             self.fields["password1"].required = False
             self.fields["password2"].required = False
-    
+            if self.instance.university:
+                self.fields["tanseeq_faculty"].queryset = self.fields["tanseeq_faculty"].queryset.filter(
+                    universities=self.instance.university
+                )
+            if self.instance.tanseeq_faculty:
+                self.fields["tanseeq_program"].queryset = self.fields["tanseeq_program"].queryset.filter(
+                    university_id=self.instance.university_id,
+                    faculty_id__in=self.instance.tanseeq_faculty.all().values_list("id", flat=True)
+                )
+
+        if self.data:
+            self.fields["tanseeq_faculty"].queryset = TanseeqFaculty.objects.filter(universities__in=[self.data['university']])
+            self.fields["tanseeq_program"].queryset = TanseeqProgram.objects.filter(university_id=self.data['university'])
+
     def clean_email(self):
         email=self.cleaned_data['email']
         if User.objects.filter(~Q(id=self.instance.id), email=email).exists():

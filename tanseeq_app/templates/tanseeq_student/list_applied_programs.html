@@ -76,6 +76,7 @@
                 <th> {% trans 'Faculty' %}</th>
                 <th> {% trans 'Study Mode' %}</th>
                 <th> {% trans 'Program' %}</th>
+                <th> {% trans 'Type of Secondary' %}</th>
                 <th> {% trans 'Fee' %}</th>
                 <th> {% trans 'Voucher' %}</th>
                 <th> {% trans 'Actions' %}</th>
@@ -94,6 +95,7 @@
                     </td>
                     <td>{{ rec.program_details.study_mode.study_mode|default_if_none:"" }}</td>
                     <td>{{ rec.program_details.program.name|default_if_none:"" }}</td>
+                    <td>{{ rec.program_details.type_of_secondary.school_certificate|default_if_none:"" }}</td>
                     <td>{{ rec.program_details.fee|default_if_none:"" }}</td>
 
                     <td>

@@ -23,10 +23,32 @@
     <script>
         window.onload = function () {
             $('#sample_1').dataTable().fnDestroy();
+
             $('#sample_1').dataTable({
                 "aoColumnDefs": [
                     {'bSortable': false}
-                ]
+                ],
+                "scrollX": true,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        title: 'CONDITION/FILTERS DETAILS',
+                        exportOptions: {
+                            //columns: ':visible'
+                            columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        title: 'CONDITION/FILTERS DETAILS',
+                        orientation: 'landscape',
+                        exportOptions: {
+                            columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+                            //columns: ':visible'
+                        }
+                    },
+                ],
             });
         }
         window.setTimeout(function () {
@@ -106,7 +128,7 @@
                     <th width="10%">{% trans 'capacity' %}</th>
                     <th width="10%">{% trans 'Fee' %}</th>
                     <th width="10%">{% trans 'Exam' %}</th>
-                    <th width="10%">{% trans 'Status' %}</th>
+                    <th width="10%">{% trans 'Active' %}</th>
                     <th width="10%">{% trans 'Actions' %}</th>
                 </tr>
                 </thead>
@@ -125,24 +147,8 @@
                         <td>{{ rec.average|default_if_none:"" }}</td>
                         <td>{{ rec.capacity|default_if_none:"" }}</td>
                         <td>{{ rec.fee|default_if_none:"" }}</td>
-                        <td>
-                            {% if rec.is_active == True %}
-                            <i class="fa fa-power-off" aria-hidden="true"
-                            style="margin-left: 30px;margin-top:8px;font-size:18px;color:green"></i>
-                            {% else %}
-                            <i class="fa fa-power-off" aria-hidden="true"
-                            style="margin-left: 30px;margin-top:8px;font-size:18px;color:red"></i>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if rec.is_exam == True %}
-                            <i class="fa fa-power-off" aria-hidden="true"
-                            style="margin-left: 30px;margin-top:8px;font-size:18px;color:green"></i>
-                            {% else %}
-                            <i class="fa fa-power-off" aria-hidden="true"
-                            style="margin-left: 30px;margin-top:8px;font-size:18px;color:red"></i>
-                            {% endif %}
-                        </td>
+                        <td>{% if rec.is_active == True %}Yes{% else %}No{% endif %}</td>
+                    <td>{% if rec.is_exam == True %}Yes{% else %}No{% endif %}</td>
                         <td>
                             <a href="{% url 'tanseeq_app:edit_tanseeq_filter' rec.id %}">
                                 <span type="button" name="edit" id="edit{{ forloop.counter }}"

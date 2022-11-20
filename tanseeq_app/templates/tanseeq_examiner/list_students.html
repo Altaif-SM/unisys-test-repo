@@ -71,7 +71,7 @@
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <span> {% trans 'Applicants List' %} </span>
+                <span> {% trans 'Students List' %} </span>
             </li>
         </ul>
     </div>
@@ -85,7 +85,7 @@
             <div class="caption">
                 <i class="icon-settings font-red"></i>
                 <span class="caption-subject font-red sbold uppercase">
-                {% trans 'Applicants List' %}
+                {% trans 'Students List' %}
             </span>
             </div>
         </div>
@@ -95,19 +95,15 @@
                 <tr>
                     <th style="display: none">Id</th>
                     <th> {% trans 'Date' %}</th>
-                    <th> {% trans 'Tanseeq ID' %}</th>
                     <th> {% trans 'Applicant Name' %}</th>
                     <th> {% trans 'University' %}</th>
                     <th> {% trans 'Faculty' %}</th>
                     <th> {% trans 'Study mode' %}</th>
-                    <th> {% trans 'Created by' %}</th>
                     <th> {% trans 'Status' %}</th>
                     <th> {% trans 'Action' %}</th>
-                    <th> {% trans 'Attachements' %}</th>
-
-
                 </tr>
                 </thead>
+
                 <tbody id="tbody">
                 {% for rec in object_list %}
                     <tr id="item{{ forloop.counter }}" class="item">
@@ -116,75 +112,31 @@
                             {{ rec.created_on|date:"d/m/Y" }}
                         </td>
                         <td>
-                            {{ rec.tanseeq_id|default_if_none:"" }}
+                            {{ rec.user.first_name|default_if_none:"" }} {{ rec.user.last_name|default_if_none:"" }}
                         </td>
                         <td>
-                            {{ rec.first_name|default_if_none:"" }} {{ rec.last_name|default_if_none:"" }}
+                            {{rec.program_details.university.university_name}}
                         </td>
                         <td>
-
+                            {{rec.program_details.faculty.name}}
                         </td>
                         <td>
+                            {{rec.program_details.study_mode.study_mode}}
+                        </td>
+                        
+                        <td class="application_status" value={{rec.review_status}}>
+                            {{ rec.get_review_status_display }}
                         </td>
                         <td>
-                            {% if rec.student_secondary_application_details.all %}
-                                {% if rec.student_secondary_application_details.all.0.study_mode %}
-                                    {{ rec.student_secondary_application_details.all.0.study_mode.study_mode }}
-                                {% endif %}
-                            {% endif %}
-
-                        </td>
-
-                        <td>
-                            {{ rec.created_by.first_name|default_if_none:"" }} {{ rec.created_by.last_name|default_if_none:"" }}
-                        </td>
-                        <td class="application_status">
-                            {{ rec.application_status|default_if_none:"" }}
-
-
-                        </td>
-                        <td>
-                            <button type="button" status-url="{% url 'tanseeq_app:application_update_status' rec.id %}"
+                            <button type="button" status-url="{% url 'tanseeq_app:examiner_review' rec.id %}"
                                     class="change_status btn-primary btn-xs">
                                 Change Status
                             </button>
                         </td>
-
-
-                        <td>
-
-                            {% if rec.student_attachement_application.all %}
-                                {% if rec.student_attachement_application.all.0.photo %}
-
-                                    <a href="{{ rec.student_attachement_application.all.0.photo.url }}" target="_blank"
-                                       class="ink-file-upload zoom-image"><img
-                                            src="{{ rec.student_attachement_application.all.0.photo.url }}"
-                                            class="rounded-circle" width="50"
-                                            height="50"></a>
-
-                                {% endif %}
-                            {% endif %}
-
-                            {% if rec.student_attachement_application.all %}
-                                {% if rec.student_attachement_application.all.0.school_certificate %}
-
-                                    <a href="{{ rec.student_attachement_application.all.0.school_certificate.url }}"
-                                       target="_blank"
-                                       class="ink-file-upload zoom-image"><img
-                                            src="{{ rec.student_attachement_application.all.0.school_certificate.url }}"
-                                            class="rounded-circle" width="50"
-                                            height="50"></a>
-
-                                {% endif %}
-                            {% endif %}
-
-
-                        </td>
-
-
                     </tr>
                 {% endfor %}
                 </tbody>
+
             </table>
         </div>
     </div>
@@ -201,20 +153,10 @@
                     <form id="id_update_fee_form">
                         <div class="row">
                             <div class="col-md-3 text-right control-label">
-                                <label class="text-center">Status</label>
+                                <label class="text-center">{{form.review_status.label}}</label>
                             </div>
                             <div class="col-md-6">
-
-                                <select id='id_status' title="Select Status"
-                                        name="status"
-                                        class="form-control" required>
-                                    <option selected="selected" value="">{% trans 'Please Select' %}</option>
-
-                                    <option value="Submitted">Submitted</option>
-                                    <option value="Not Submitted">Not Submitted</option>
-
-                                </select>
-
+                                {{form.review_status}}
                             </div>
                         </div>
                     </form>
@@ -228,30 +170,23 @@
             </div>
         </div>
     </div>
-    {% include 'delete_modal.html' %}
 {% endblock %}
 
 {% block ajax %}
     <script>
 
         $(document).on("click", ".change_status", function (e) {
-            var application_status = $(this).closest('tr').find('.application_status').text().trim();
-            $('#id_status').empty();
-            $('#id_status').append(
-                '<option value="' + application_status + '">'
-                + application_status + '</option>');
-            if (application_status == 'Not Submitted') {
-                $('#id_status').append(
-                    '<option value="Submitted">Submitted</option>');
-            } else {
-                $('#id_status').append(
-                    '<option value="Not Submitted">Not Submitted</option>');
+            const application_status =  $(this).closest('tr').find('.application_status')
+            if ($(`#id_review_status option[value="${application_status.attr("value")}"]`)[0]){
+                console.log("riuning")
+                $(`#id_review_status option[value="${application_status.attr("value")}"]`).prop('selected', true)
             }
-
-
+            else{
+                $(`#id_review_status option[value=""]`).prop('selected', true)
+            }
+            
             $("#id_status_model").modal()
-            $("#id_confirm_status").attr("status-url", $(e.target).attr("status-url"))
-
+            $("#id_confirm_status").attr("status-url", $(e.target).attr("status-url")) 
         })
 
 
@@ -261,47 +196,14 @@
             $("#id_status_model").modal('hide')
         })
 
-
-        $(".delete").on("click", (e) => {
-            $("#id_delete_model").modal()
-            $("#id_confirm_delete").attr("delete-url", $(e.target).attr("delete-url"))
-        });
-        $("#id_confirm_delete").on("click", (e) => {
-            $(e.target).attr('disabled', true)
-            removeProgram($(e.target).attr("delete-url"))
-            $("#id_delete_model").modal('hide')
-        })
-
-        function removeProgram(url) {
-            $.ajax({
-                type: 'DELETE',
-                url: url,
-                beforeSend: function (xhr, settings) {
-                    xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
-                },
-                success: function (data, textStatus, xhr) {
-                    console.log(data, textStatus, xhr)
-                    if (xhr.status == 202) {
-                        console.log("running")
-                        location.reload()
-                    }
-                },
-                complete: function () {
-                    $("#id_confirm_delete").attr('disabled', false)
-                },
-                error: function (xhr, msg, err) {
-                }
-            });
-        }
-
         function updateStaus(url) {
             const formData = new FormData($("#id_update_fee_form")[0])
-            formData.set("status", formData.get("status").trim())
+            formData.set("review_status", formData.get("review_status").trim())
             $.ajax({
                 type: 'PATCH',
                 url: url,
                 data: {
-                    "status": formData.get("status")
+                    "review_status": formData.get("review_status")
                 },
                 beforeSend: function (xhr, settings) {
                     xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');

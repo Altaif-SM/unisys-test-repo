@@ -26,10 +26,32 @@
     <script>
         window.onload = function () {
             $('#sample_1').dataTable().fnDestroy();
+
             $('#sample_1').dataTable({
                 "aoColumnDefs": [
                     {'bSortable': false}
-                ]
+                ],
+                "scrollX": true,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        title: 'TANSEEQ PROGRAM DETAILS',
+                        exportOptions: {
+                            //columns: ':visible'
+                            columns: [1, 2, 3, 4, 5,]
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        title: 'TANSEEQ PROGRAM DETAILS',
+                        orientation: 'landscape',
+                        exportOptions: {
+                            columns: [1, 2, 3, 4, 5,]
+                            //columns: ':visible'
+                        }
+                    },
+                ],
             });
         }
         window.setTimeout(function () {
@@ -72,7 +94,7 @@
             </div>
             {% if request.user.is_tanseeq_admin %}
                 <a href="{% url 'tanseeq_app:add_tanseeq_program' %}">
-                    <button type="submit" class="btn green" id="save" style="margin-left:74%;background-color: #3598dc">
+                    <button type="submit" class="btn green" id="save" style="margin-left:66%;margin-bottom:10px;background-color: #3598dc">
                         Add
                     </button>
                 </a>
@@ -91,7 +113,7 @@
                     <th> {% trans 'Faculty' %}</th>
                     <th> {% trans 'Name' %}</th>
                     <th> {% trans 'Code' %}</th>
-                    <th> {% trans 'Status' %}</th>
+                    <th> {% trans 'Active' %}</th>
                     {% if request.user.is_tanseeq_admin %}
                         <th width="10%">{% trans 'Action' %}</th>
                     {% endif %}
@@ -109,15 +131,8 @@
                         </td>
                         <td>{{ rec.name|default_if_none:"" }}</td>
                         <td>{{ rec.code|default_if_none:"" }}</td>
-                        <td>
-                            {% if rec.is_active == True %}
-                                <i class="fa fa-power-off" aria-hidden="true"
-                                   style="margin-left: 30px;margin-top:8px;font-size:18px;color:green"></i>
-                            {% else %}
-                                <i class="fa fa-power-off" aria-hidden="true"
-                                   style="margin-left: 30px;margin-top:8px;font-size:18px;color:red"></i>
-                            {% endif %}
-                        </td>
+                        <td>{% if rec.is_active == True %}Yes{% else %}No{% endif %}</td>
+
                         {% if request.user.is_tanseeq_admin %}
                             <td>
                                 <a href="{% url 'tanseeq_app:edit_tanseeq_program' rec.id %}">

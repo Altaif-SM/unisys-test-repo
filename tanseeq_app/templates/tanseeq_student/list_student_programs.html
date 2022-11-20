@@ -97,6 +97,7 @@
                 <th> {% trans 'Study Mode' %}</th>
                 <th> {% trans 'Faculty' %}</th>
                 <th> {% trans 'Program' %}</th>
+                <th> {% trans 'Type of Secondary' %}</th>
                 <th> {% trans 'Code' %}</th>
                 <th> {% trans 'Average' %}</th>
                 <th> {% trans 'Year' %}</th>
@@ -117,6 +118,7 @@
                         {{ rec.faculty.name|default_if_none:"" }}
                     </td>
                     <td>{{ rec.program.name|default_if_none:"" }}</td>
+                    <td>{{ rec.type_of_secondary.school_certificate|default_if_none:"" }}</td>
                     <td>{{ rec.program.code|default_if_none:"" }}</td>
                     <td>{{ rec.average|default_if_none:"" }}</td>
                     <td>{{ rec.academic_year.year_name|default_if_none:"" }}</td>

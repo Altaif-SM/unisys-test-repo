@@ -276,3 +276,17 @@ def referral_fee_topup(request):
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
     return render(request, 'referral_fee_topup.html',{'accepted_applicants': accepted_applicants,'context':context})
+
+def applicant_personal_info(request):
+    country_recs = CountryDetails.objects.all()
+    religion_recs = ReligionDetails.objects.all()
+    student_recs = StudentDetails.objects.filter(user__is_active = True)
+    agent_recs = AgentDetails.objects.filter()
+    application_obj = ''
+    agent_obj = ''
+    if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
+        application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
+        if application_obj.agent_id:
+            agent_obj = AgentIDDetails.objects.get(user_id=application_obj.agent_id)
+    return render(request, 'applicant_personal_info.html',
+                  {'country_recs': country_recs, 'religion_recs': religion_recs, 'application_obj': application_obj,'student_recs':student_recs,'agent_recs':agent_recs,'agent_obj':agent_obj})

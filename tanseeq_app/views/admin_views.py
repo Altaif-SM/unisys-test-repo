@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.core import serializers
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, View, ListView, UpdateView, DeleteView
-from accounts.models import User
+from accounts.models import User, UserRole
 from tanseeq_app.models import (
     TanseeqPeriod,
     SecondarySchoolCetificate,
@@ -228,7 +228,6 @@ class UniversityAttachmentView(View):
         return JsonResponse({"status": 200})
 
 
-@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class StudyModeList(ListView):
     model = StudyModeDetails
     template_name = "tanseeq_admin/list_study_mode.html"
@@ -338,7 +337,6 @@ class StudyModeView(View):
         return JsonResponse({"status": 200})
 
 
-@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class TanseeqFacultyList(ListView):
     model = TanseeqFaculty
     template_name = "tanseeq_admin/list_tanseeq_faculty.html"
@@ -421,6 +419,9 @@ class TanseeqProgramList(ListView):
             filters["university_id"] = university_id
         if faculty_id:
             filters["faculty_id"] = faculty_id
+        if self.request.GET.get("faculty[]"):
+            filters["faculty_id__in"] = self.request.GET.getlist("faculty[]")
+        print("filters")
         return self.model.objects.filter(**filters)
 
 
@@ -711,8 +712,10 @@ class ListUsers(ListView):
     ]
 
     def get_queryset(self):
-        # return User.objects.filter(created_by=self.request.user)
-        return User.objects.filter(tanseeq_role__name__in = ['Tanseeq Finance', 'Tanseeq Reviewer'])
+        return User.objects.filter(tanseeq_role__name__in = [
+            User.TANSEEQ_FINANCE, User.TANSEEQ_REVIEWER,
+            User.TANSEEQ_EXAMINER, User.TANSEEQ_FACULTY,
+        ])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -762,8 +765,9 @@ class ManageUsers(View):
                 obj.created_by = request.user
                 obj.username = obj.email
                 messages.success(request, "Record saved.")
-            obj.role.add(form.data['tanseeq_role'])
+            # obj.role.add(UserRole.objects.get(id=form.data['tanseeq_role']))
             obj.save()
+            obj.role.add(UserRole.objects.get(id=form.data['tanseeq_role']))
             form.save_m2m()
         else:
             context = {

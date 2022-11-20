@@ -4,6 +4,9 @@ from tanseeq_app.views.admin_views import *
 from tanseeq_app.views.student_views import *
 from tanseeq_app.views.finance_views import *
 from tanseeq_app.views.reviewer_views import *
+from tanseeq_app.views.examiner_views import *
+from tanseeq_app.views.faculty_views import *
+
 
 app_name = 'tanseeq_app'
 
@@ -285,4 +288,29 @@ urlpatterns = [
         login_required(ReviewApplication.as_view()),
         name='reviewer_review_application'
     ),
+
+    #Examiner
+    path(
+        'list_examiner_students/',
+        login_required(ListExaminerStudents.as_view()),
+        name='examiner_list_application'
+    ),
+    path(
+        'examiner_review/<int:pk>',
+        login_required(ManageStudentApplication.as_view()),
+        name='examiner_review'
+    ),
+
+    #faculty
+    path(
+        'list_faculty_students/',
+        login_required(ListFacultyStudents.as_view()),
+        name='faculty_list_application'
+    ),
+    path(
+        'faculty_review/<int:pk>',
+        login_required(ManageFacultyStudentApplication.as_view()),
+        name='faculty_review'
+    ),
+
 ]
