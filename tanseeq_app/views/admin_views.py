@@ -419,6 +419,9 @@ class TanseeqProgramList(ListView):
             filters["university_id"] = university_id
         if faculty_id:
             filters["faculty_id"] = faculty_id
+        if self.request.GET.get("faculty[]"):
+            filters["faculty_id__in"] = self.request.GET.getlist("faculty[]")
+        print("filters")
         return self.model.objects.filter(**filters)
 
 
@@ -709,8 +712,10 @@ class ListUsers(ListView):
     ]
 
     def get_queryset(self):
-        # return User.objects.filter(created_by=self.request.user)
-        return User.objects.filter(tanseeq_role__name__in = ['Tanseeq Finance', 'Tanseeq Reviewer'])
+        return User.objects.filter(tanseeq_role__name__in = [
+            User.TANSEEQ_FINANCE, User.TANSEEQ_REVIEWER,
+            User.TANSEEQ_EXAMINER, User.TANSEEQ_FACULTY,
+        ])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

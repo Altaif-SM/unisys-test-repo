@@ -44,11 +44,8 @@ class ReviewApplication(View):
 
     def get_context_data(self, pk):
         applied_program = get_object_or_404(self.model, pk=pk)
-        print("applied_program")
         app_details_obj = get_object_or_404(ApplicationDetails, user_id=applied_program.user_id)
-        print("applied_program2")
         secondary_cert_obj = get_object_or_404(SecondaryCertificateInfo, created_by_id=applied_program.user_id)
-        print("applied_program3")
 
         context = {
             "attachments": get_object_or_404(ApplicantAttachment, created_by_id=applied_program.user_id),

@@ -1,7 +1,6 @@
 from django.http.request import QueryDict
 from django.views.generic import View, ListView
 from django.http import JsonResponse
-from django.contrib import messages
 from django.utils.decorators import method_decorator
 from accounts.models import User
 from tanseeq_app.models import AppliedPrograms
@@ -23,9 +22,10 @@ class AdvanceOrders(ListView):
             filters["bond_no__isnull"] = True
         return self.model.objects.filter(
             program_details__university=user.university,
-            program_details__faculty=user.tanseeq_faculty,
-            program_details__program=user.tanseeq_program,
-            is_denied=False, **filters
+            program_details__faculty__in=user.tanseeq_faculty.all(),
+            program_details__program__in=user.tanseeq_program.all(),
+            is_denied=False,
+            **filters
         ).select_related("program_details")
         
 
@@ -38,7 +38,14 @@ class ManageAdvanceOrders(View):
         bond_no = data.get("bond_no")
         if not bond_no:
             return JsonResponse({"msg": "Bond No. is required."}, status=304)
-        obj = self.model.objects.filter(pk=pk)
+        current_user = request.user
+        obj = self.model.objects.filter(
+            pk=pk,
+            program_details__university=current_user.university,
+            program_details__faculty__in=current_user.tanseeq_faculty.all(),
+            program_details__program__in=current_user.tanseeq_program.all(),
+            is_denied=False,
+        )
         if not obj:
             return JsonResponse({}, status=404)
         obj.update(bond_no=bond_no)

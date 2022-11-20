@@ -13,6 +13,7 @@ class ReviewerForm(forms.ModelForm):
                 "class": "form-control",
                 "required": "true",
             })
+        self.fields["review_status"].choices = AppliedPrograms.REVIEWER_STATUS
 
     class Meta:
         model = AppliedPrograms

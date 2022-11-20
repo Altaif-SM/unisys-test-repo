@@ -201,16 +201,34 @@ class ApplicantAttachment(BaseModel):
 
 
 class AppliedPrograms(BaseModel):
-    REVIEW_STATUS = (
-        (0, "Not Acceptable"),
-        (1, "Accepted")
+    REJECT_BY_REVIEWER = 0
+    ACCEPTED_BY_REVIEWER = 1
+    REJECT_BY_EXAMINER = 2
+    ACCEPTED_BY_EXAMINER = 3
+    REJECTED_BY_FACULTY = 4
+    ACCEPTED_BY_FACULTY = 5
+
+    REVIEWER_STATUS = (
+        (REJECT_BY_REVIEWER, "Not Acceptable"),
+        (ACCEPTED_BY_REVIEWER, "Accepted"),
     )
+    EXAMINER_STATUS = (
+        (REJECT_BY_EXAMINER, "Rejected by Examiner"),
+        (ACCEPTED_BY_EXAMINER, "Accepted by Examiner"),
+    )
+
+    FACULTY_STATUS = (
+        (REJECTED_BY_FACULTY, "Rejected by Faculty"),
+        (ACCEPTED_BY_FACULTY, "Accepted by Faculty"),
+    )
+
+    STATUS = REVIEWER_STATUS + EXAMINER_STATUS + FACULTY_STATUS
 
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     program_details = models.ForeignKey(ConditionFilters, on_delete=models.PROTECT)
     bond_no = models.CharField(max_length=255, blank=True, null=True)
     is_denied = models.BooleanField(default=False)
-    review_status = models.IntegerField(choices=REVIEW_STATUS, max_length=50, blank=True, null=True)
+    review_status = models.IntegerField(choices=STATUS, max_length=50, blank=True, null=True)
     review_note = models.TextField(blank=True, null=True)
 
     class Meta:
