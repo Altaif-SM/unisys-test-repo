@@ -342,6 +342,8 @@
                 <i class="icon-settings font-red"></i>
                 <span class="caption-subject font-red sbold uppercase"> {% trans 'My Application' %}</span>
             </div>
+
+
         </div>
 
         <div class="portlet-body">
@@ -381,7 +383,7 @@
                                         <th>{% trans 'Faculty' %}</th>
                                         <th>{% trans 'Program' %}</th>
                                         {% if request.user.is_agent == True %}
-                                        <th>{% trans 'Status' %}</th>
+                                            <th>{% trans 'Status' %}</th>
                                         {% else %}
                                             <th>{% trans 'Status' %}</th>
                                         {% endif %}
@@ -416,7 +418,7 @@
 
 
 
-                                        {% if rec.choice_1 == True and rec.choice_2 == False and rec.choice_3 == False %}
+                                            {% if rec.choice_1 == True and rec.choice_2 == False and rec.choice_3 == False %}
                                                 <td>
                                                     {{ rec.faculty.faculty_name|default_if_none:"" }}
                                                 </td>
@@ -429,7 +431,7 @@
                                                     {{ rec.faculty_3.faculty_name|default_if_none:"" }}
                                                 </td>
                                             {% else %}
-                                                 <td>
+                                                <td>
                                                     {{ rec.faculty.faculty_name|default_if_none:"" }}
                                                 </td>
                                             {% endif %}
@@ -447,11 +449,11 @@
                                                     {{ rec.program_3.program_name|default_if_none:"" }}
                                                 </td>
                                             {% else %}
-                                                 <td>
+                                                <td>
                                                     {{ rec.program.program_name|default_if_none:"" }}
                                                 </td>
                                             {% endif %}
-                                        <!--
+                                            <!--
                                          {% if request.user.is_agent == True %}
                                         <td>
                                             {% if rec|is_paid_program_registration_payment %}
@@ -464,27 +466,42 @@
 
 
                                         {% endif %}-->
-                                        <td>
-                                                {% if rec.first_interview == True and rec.first_interview_attend == False and rec.incomplete == False %}
-                                                    <span style="color: #bfb53c">Conditional</span>
-                                                {% elif  rec.first_interview == False and rec.first_interview_attend == True and rec.incomplete == False %}
-                                                    <span style="color: green">Full</span>
-                                                {% elif  rec.first_interview == False and rec.first_interview_attend == False and rec.incomplete == True %}
-                                                    <span style="color: darkred">Incomplete</span>
+                                            <td>
+                                                {% if rec.is_submitted == False %}
+                                                    <span style="color: #bfb53c">Not Submitted</span>
                                                 {% else %}
-                                                    <span style="color: red">Rejected</span>
+
+
+                                                    {% if rec.first_interview == True and rec.first_interview_attend == False and rec.incomplete == False %}
+                                                        <span style="color: #bfb53c">Conditional</span>
+                                                    {% elif  rec.first_interview == False and rec.first_interview_attend == True and rec.incomplete == False %}
+                                                        <span style="color: green">Full</span>
+                                                    {% elif  rec.first_interview == False and rec.first_interview_attend == False and rec.incomplete == True %}
+                                                        <span style="color: darkred">Incomplete</span>
+                                                    {% elif  rec.first_interview == False and rec.first_interview_attend == False and rec.incomplete == False and rec.application_rejection == True %}
+                                                        <span style="color: darkred">Rejected</span>
+                                                    {% else %}
+                                                        <span style="color: green">Submitted</span>
+                                                    {% endif %}
                                                 {% endif %}
                                             </td>
 
 
-
-
                                             <td>
-                                                <a href="{% url 'partner:template_applicant_all_details' rec.id %}">
+                                                {% if rec.is_submitted == False %}
+                                                     <a href="{% url 'agents:applicant_personal_info' rec.student.user.id %}">
                                 <span type="button" name="edit" id="edit{{ forloop.counter }}"
-                                      class=" edit_btn btn blue glyphicon glyphicon-edit">
+                                      class=" edit_btn btn red glyphicon glyphicon-edit">
                                 </span>
                                                 </a>
+                                                {% else %}
+                                                    <a href="{% url 'partner:template_applicant_all_details' rec.id %}">
+                                <span type="button" name="edit" id="edit{{ forloop.counter }}"
+                                      class=" edit_btn btn blue glyphicon glyphicon-eye-open">
+                                </span>
+                                                </a>
+                                                {% endif %}
+
 
 
                                             </td>

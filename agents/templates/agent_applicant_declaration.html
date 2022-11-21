@@ -1,0 +1,226 @@
+{% extends "template_agent_base.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+
+
+            $(document).ready(function () {
+
+
+                $(document).on("click", "#save_id", function () {
+                    $('#id_accept_student_model').modal();
+                });
+
+                 $(document).on("click", "#submit_appplication", function () {
+                    $("#form_sample_1").submit();
+                });
+
+
+
+                if ($('.aggre_term').is(":checked")) {
+                    $('#save_id').attr("disabled", false);
+                } else {
+                    $('#save_id').attr("disabled", true);
+                }
+
+
+                $(".aggre_term").click(function () {
+                    if ($(this).is(":checked")) {
+                        $('#save_id').attr("disabled", false);
+                    } else {
+                        $('#save_id').attr("disabled", true);
+                    }
+                });
+
+
+
+
+
+                $('#sample_1').dataTable().fnDestroy();
+                $('#sample_1').dataTable({
+                    "aoColumnDefs": [
+                        {'bSortable': false}
+                    ]
+                });
+            });
+        }
+
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+
+
+    </script>
+
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'student:student_home' %}">{% trans 'Home' %}</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span>{% trans 'Declaration' %}</span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form action="{% url 'agents:submit_application' %}"
+                      id="id_form"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-body">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-settings font-red"></i>
+                                <span class="caption-subject font-red sbold uppercase">{% trans 'Declaration' %}:</span>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="">
+                                <div class="col-md-8" style="margin-left: 10%;font-size:15px">
+                                    {% blocktrans %}
+                                    Please read the following terms & conditions carefully and tick the checkbox to
+                                    indicate your
+                                    agreement.
+                                    {% endblocktrans %}
+
+                                </div>
+                            </div>
+                            <br><br>
+
+                        <div class="">
+                                <div class="col-md-8" style="margin-left: 10%;font-size:15px">
+                                    {% blocktrans %}
+                                    I declare that all the information provided is correct and complete. I hereby give my consent to
+the University to obtain information relating to my admission into #Uni Name from relevant
+authorities. I understand that #Uni Name reserves the right to request any additional
+information before a decision on admission is made. I understand that any misinformation or
+incomplete application could result in the rejection of my application.
+                                    {% endblocktrans %}
+                                </div>
+                            </div>
+                            <br><br><br><br><br><br>
+
+                            <div class="">
+                                <div class="col-md-8" style="margin-left: 10%;">
+                                    {% if application_obj.is_submitted %}
+                                        <span style="color: red"></span>
+                                        <input type="checkbox" checked class="aggre_term">
+
+                                    {% else %}
+                                        <input type="checkbox" class="aggre_term">
+                                    {% endif %}
+
+
+                                    <b>{% trans 'I have read the Declaration and agree to the terms and conditions.' %}</b>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <br><br>
+
+                        <div class="row">
+                            <div class="col-md-offset-3 col-md-9">
+                                <button type="button" class="btn blue" id="save" style="margin-left: 70%"
+                                        onclick="window.location='{% url "agents:applicant_attachment_submission" %}'">
+                                    {% trans 'Back' %}
+                                </button>
+
+                                {% if application_obj %}
+                                    {% if not application_obj.is_submitted %}
+                                        <button type="button" class="btn green" id="save_id" style="">{% trans 'Submit Application' %}
+                                        </button>
+                                    {% endif %}
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="id_accept_student_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{% url 'agents:submit_application' %}"
+                        id="form_sample_1"
+                        class="form-horizontal"
+                        method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h4 class="modal-title" style="color: #2a015e; text-align: center"><b>Confirmation</b></h4>
+                    </div>
+                    <div class="modal-body">
+                        <p> Are you sure, you want to submit application? </p>
+                        <p> After submission you will not be able to modify the application. </p>
+                                                <input type="hidden" name="app_id" value="{{ application_obj.id }}">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancel_mosudel" data-dismiss="modal" class="btn dark btn-outline">
+                            Cancel
+                        </button>
+                        <button type="button" id="submit_appplication" class="btn green">Confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

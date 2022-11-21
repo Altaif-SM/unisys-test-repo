@@ -370,10 +370,10 @@ License: You must have a valid license purchased only from themeforest(the above
 
                         <ul class="dropdown-menu dropdown-menu-default">
 
-                            <li>
-                                <a href="{% url 'accounts:edit_agent' user.id %}">
-                                    <i class="icon-eye" aria-hidden="true"></i>{% trans 'Update Profile' %}</a>
-                            </li>
+{#                            <li>#}
+{#                                <a href="{% url 'accounts:edit_agent' user.id %}">#}
+{#                                    <i class="icon-eye" aria-hidden="true"></i>{% trans 'Update Profile' %}</a>#}
+{#                            </li>#}
 
                             <li>
                                 <a href="/accounts/change_password/">
@@ -601,7 +601,11 @@ License: You must have a valid license purchased only from themeforest(the above
                                         </li>-->
 
                             <li class="nav-item " id="personal_info">
-                                    <a href="{% url 'student:applicant_personal_info' %}" class="nav-link nav-toggle">
+                            {% if user %}
+                                <a href="{% url 'agents:applicant_personal_info' user.id %}" class="nav-link nav-toggle">
+                                {% else %}
+                                    <a href="{% url 'agents:applicant_personal_info' request.user.id %}" class="nav-link nav-toggle">
+                                    {% endif %}
                                         <i class="fa fa-id-card"></i>
                                         <span class="title">{% trans 'Personal Info' %}</span>
                                         {% if user.get_student_application.personal_info_flag %}
@@ -615,7 +619,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </li>
 
                         <li class="nav-item " id="personal_info">
-                                    <a href="{% url 'student:applicant_intake_info' %}" class="nav-link nav-toggle">
+                                    <a href="{% url 'agents:applicant_intake_info' %}" class="nav-link nav-toggle">
                                         <i class="fa fa-university"></i>
                                         <span class="title">{% trans 'Intake Info' %}</span>
                                         {% if user.get_student_application.intake_flag %}
@@ -628,7 +632,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </a>
                                 </li>
                         <li class="nav-item " id="acd_qli">
-                                    <a href="{% url 'student:applicant_academic_english_qualification' %}"
+                                    <a href="{% url 'agents:applicant_academic_english_qualification' %}"
                                        class="nav-link nav-toggle">
                                         <i class="glyphicon glyphicon-education"></i>
                                         <span class="title">{% trans 'Academic Qualification' %}</span>
@@ -642,7 +646,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </li>
 
                         <li class="nav-item " id="acd_qli">
-                                    <a href="{% url 'student:applicant_employement_history_info' %}"
+                                    <a href="{% url 'agents:applicant_employement_history_info' %}"
                                        class="nav-link nav-toggle">
                                         <i class="fa fa-history"></i>
                                         <span class="title">{% trans 'Working Experience' %}</span>
@@ -655,7 +659,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </a>
                                 </li>
                         <li class="nav-item " id="acd_qli">
-                                    <a href="{% url 'student:applicant_additional_information' %}"
+                                    <a href="{% url 'agents:applicant_additional_information' %}"
                                        class="nav-link nav-toggle">
                                         <i class="glyphicon glyphicon-star"></i>
                                         <span class="title">{% trans 'Additional Information' %}</span>
@@ -668,7 +672,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </a>
                                 </li>
                         <li class="nav-item " id="acd_qli">
-                                    <a href="{% url 'payments:checkout' %}"
+                                    <a href="{% url 'agents:checkout' %}"
                                        class="nav-link nav-toggle">
                                         <i class="glyphicon glyphicon-credit-card"></i>
                                         <span class="title">{% trans 'Payments' %}</span>
@@ -682,7 +686,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </li>
 
                         <li class="nav-item " id="acd_qli">
-                                    <a href="{% url 'student:applicant_attachment_submission' %}"
+                                    <a href="{% url 'agents:applicant_attachment_submission' %}"
                                        class="nav-link nav-toggle">
                                         <i class="glyphicon glyphicon-copy"></i>
                                         <span class="title">{% trans 'Attachment' %}</span>
@@ -696,7 +700,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </li>
 
                          <li class="nav-item " id="acd_qli">
-                                    <a href="{% url 'student:applicant_declaration' %}"
+                                    <a href="{% url 'agents:applicant_declaration' %}"
                                        class="nav-link nav-toggle">
                                         <i class="glyphicon glyphicon-pencil"></i>
                                         <span class="title">{% trans 'Declaration' %}</span>
@@ -735,7 +739,11 @@ License: You must have a valid license purchased only from themeforest(the above
                 <div class="tabs-left">
                     <ul class="nav nav-tabs menu" style="border-bottom: none">
                             <li id="agent_application"><a href="{% url 'agents:personal_info' %}" >{% trans 'Agent Application' %}</a></li>
-                        <li id="finance_management"><a href="{% url 'student:applicant_personal_info' %}" >{% trans 'Create New Application' %}</a></li>
+                        {% if user %}
+                        <li id="finance_management"><a href="{% url 'agents:applicant_personal_info' user.id %}" ><i class="fa fa-plus" aria-hidden="true"></i>{% trans 'Application Management' %}</a></li>
+                            {% else %}
+                        <li id="finance_management"><a href="{% url 'agents:applicant_personal_info' request.user.id %}" ><i class="fa fa-plus" aria-hidden="true"></i>{% trans 'Application Management' %}</a></li>
+                        {% endif %}
                         <li id="application_management"><a href="{% url 'partner:approved_application' %}" >{% trans 'My Application' %}</a></li>
 
 {#                        <li id="finance_management"><a href="{% url 'agents:referral_fee_topup' %}" >{% trans 'FINANCE MANAGEMENT' %}</a></li>#}
@@ -878,7 +886,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-    {%  if request.resolver_match.url_name == 'approved_application' %}
+    {%  if request.resolver_match.url_name == 'approved_application' or request.resolver_match.url_name == 'template_applicant_all_details'%}
         {
             var element = document.getElementById("application_management_tab");
             element.classList.add("active");
@@ -888,7 +896,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-    {%  if request.resolver_match.url_name == 'referral_fee_topup' or request.resolver_match.url_name == 'template_applicant_all_details'  or request.resolver_match.url_name == 'applicant_personal_info' %}
+    {%  if request.resolver_match.url_name == 'referral_fee_topup'  or request.resolver_match.url_name == 'applicant_personal_info' or request.resolver_match.url_name == 'applicant_intake_info' or request.resolver_match.url_name == 'applicant_academic_english_qualification' or request.resolver_match.url_name == 'applicant_credit_transfer' or request.resolver_match.url_name == 'applicant_credit_transfer_attachement' or request.resolver_match.url_name == 'applicant_employement_history_info' or request.resolver_match.url_name == 'applicant_additional_information' or request.resolver_match.url_name == 'checkout' or request.resolver_match.url_name == 'applicant_attachment_submission' or request.resolver_match.url_name == 'applicant_declaration' %}
         {
             var element = document.getElementById("finance_management_tab");
             element.classList.add("active");

@@ -1,0 +1,3565 @@
+{% extends "template_agent_base.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        .custom-file-upload {
+            border: 1px solid #ccc;
+            display: inline-block;
+            padding: 6px 12px;
+            cursor: pointer;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+
+        {% comment %} hr {
+     display: block;
+     margin-top: 0.5em;
+     margin-bottom: 0.5em;
+     margin-left: auto;
+     margin-right: auto;
+     border-style: inset;
+     border-width: 0.5px;
+ }{% endcomment %}
+
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+
+
+
+
+
+
+        window.onload = function () {
+
+
+
+
+            $(document).ready(function () {
+
+                {% if application_obj.program_mode.study_type == 'Research' %}
+                    $('#study_level_2').prop('required',false);
+                    $('#faculty_2').prop('required',false);
+                    $('#program_2').prop('required',false);
+                    $('#study_level_3').prop('required',false);
+                    $('#faculty_3').prop('required',false);
+                    $('#program_3').prop('required',false);
+
+                {% endif %}
+
+
+
+
+
+
+
+
+
+            $(document).on("change", "#program", function (e) {
+                    var program = $(this).val();
+                    var faculty = $('#faculty').val();
+                    var university = $('#university').val();
+                    var url = '/student/get_supervisor_from_university/';
+                    get_supervisor_from_university(url, program,faculty,university)
+            })
+
+             function get_supervisor_from_university(url,program,faculty,university) {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {
+                    program: program,
+                    faculty: faculty,
+                    university: university,
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+                success: function (data) {
+                        $('#supervisor').empty();
+                        $('#supervisor').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#supervisor').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['supervisor'] + '</option>')
+                        }
+                    },
+                error: function (xhr, msg, err) {
+                    alert(xhr.responseJSON.error);
+                }
+            });
+        }
+
+
+
+                $("#form_save").submit(function () {
+
+                     var study_mode_value = $('#study_level :selected').text();
+                 if(study_mode_value !== 'Research'){
+
+                     if( !$('#faculty').val() ) {
+                         $('#faculty').css("border", "red solid 1px");
+                         return false;
+
+                    }else if( !$('#program').val()){
+                        $('#faculty').css("border", "#c2cad8 solid 1px");
+                        $('#program').css("border", "red solid 1px");
+                        return false;
+
+                    }
+                    else if( !$('#faculty_2').val() ) {
+                         $('#faculty_2').css("border", "red solid 1px");
+                         return false;
+
+                    }else if( !$('#program_2').val()){
+                        $('#faculty_2').css("border", "#c2cad8 solid 1px");
+                        $('#program_2').css("border", "red solid 1px");
+                        return false;
+
+                    }
+                    else if( !$('#faculty_3').val() ) {
+                         $('#faculty_3').css("border", "red solid 1px");
+                         return false;
+
+                    }else if( !$('#program_3').val()){
+                        $('#faculty_3').css("border", "#c2cad8 solid 1px");
+                        $('#program_3').css("border", "red solid 1px");
+                        return false;
+
+                    }
+
+                 }
+
+
+                });
+
+                {% if user.get_application %}
+                    {% if user.get_application.is_submitted %}
+                        $('input').prop('disabled', 'true');
+                        $('select').prop('disabled', 'true');
+                        $('label').prop('readonly', 'true');
+                        $('textarea').prop('disabled', 'true');
+                    {% endif %}
+                {% endif %}
+
+
+
+                $(document).on("change", "#country", function (e) {
+                    var country_id = $(this).val();
+                    var university = $('#university').val();
+                    var url = '/student/get_learning_centre_from_country/';
+                    get_learning_center_from_country(url, country_id, university)
+                })
+
+                function get_learning_center_from_country(url, country_id, university) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            country_id: country_id,
+                            university: university,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+
+                            $('#learning_centre').empty();
+                            $('#learning_centre').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#learning_centre').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['learning_centre_name'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+            /*
+                $('input[type="radio"]').on('change', function () {
+                    var university_type = $('input[name="university_type"]:checked').val();
+                    var url = '/student/get_university_from_type/';
+                    get_university_from_university_type(url, university_type)
+
+                    var url = '/student/get_all_program_mode/';
+                    get_all_program_mode(url)
+
+                     var url = '/student/get_all_study_level/';
+                    get_all_study_level(url)
+
+
+
+                })*/
+
+
+
+                $(document).on("change", "#university_type", function (e) {
+                    {#var university_type_id = $(this).val();#}
+                    {#var url = '/student/get_university_from_type/';#}
+                    {#get_university_from_university_type(url, university_type_id)#}
+
+                    var url = '/student/get_all_program_mode/';
+                    get_all_program_mode(url)
+
+                    var url = '/student/get_all_study_level/';
+                    get_all_study_level(url)
+
+                     var url = '/student/get_type_details/';
+                    get_type_details(url)
+                })
+
+             $(document).on("change", "#type", function (e) {
+                    var type_id = $(this).val();
+                    var university_type_id = $('#university_type').val();
+                    var url = '/student/get_university_from_type_scope/';
+                    get_university_from_type_scope(url, type_id,university_type_id)
+
+                    var url = '/student/get_all_program_mode/';
+                    get_all_program_mode(url)
+
+
+                   var url = '/student/get_all_study_level/';
+                    get_all_study_level(url)
+
+                })
+
+            function get_university_from_type_scope(url, type_id,university_type_id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            type_id: type_id,
+                            university_type_id: university_type_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+
+                            $('#university').empty();
+                            $('#university').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#year').empty();
+                            $('#year').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#semester').empty();
+                            $('#semester').append(
+                                '<option value="" >Please select</option>');
+
+
+                            $('#learning_centre').empty();
+                            $('#learning_centre').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#study_mode').empty();
+                            $('#study_mode').append(
+                                '<option value="" >Please select</option>');
+                            $('#study_mode').append(
+                                '<option value="Online" >Online</option>');
+                            $('#study_mode').append(
+                                '<option value="On Campus" >On Campus</option>');
+
+
+                            $('#faculty').empty();
+                            $('#faculty').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#department').empty();
+                            $('#department').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program').empty();
+                            $('#program').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_mode').empty();
+                            $('#program_mode').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#study_mode_2').empty();
+                            $('#study_mode_2').append(
+                                '<option value="" >Please select</option>');
+                            $('#study_mode_2').append(
+                                '<option value="Online" >Online</option>');
+                            $('#study_mode_2').append(
+                                '<option value="On Campus" >On Campus</option>');
+
+
+                            $('#faculty_2').empty();
+                            $('#faculty_2').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#department_2').empty();
+                            $('#department_2').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_2').empty();
+                            $('#program_2').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_mode_2').empty();
+                            $('#program_mode_2').append(
+                                '<option value="" >Please select</option>');
+
+
+                            $('#study_mode_3').empty();
+                            $('#study_mode_3').append(
+                                '<option value="" >Please select</option>');
+                            $('#study_mode_3').append(
+                                '<option value="Online" >Online</option>');
+                            $('#study_mode_3').append(
+                                '<option value="On Campus" >On Campus</option>');
+
+
+                            $('#faculty_3').empty();
+                            $('#faculty_3').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#department_3').empty();
+                            $('#department_3').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_3').empty();
+                            $('#program_3').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_mode_3').empty();
+                            $('#program_mode_3').append(
+                                '<option value="" >Please select</option>');
+
+
+                            for (var i = 0; i < data.length; i++) {
+                                $('#university').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['university_name'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+
+            function get_type_details(url) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            $('#university').empty();
+                            $('#university').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#year').empty();
+                            $('#year').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#semester').empty();
+                            $('#semester').append(
+                                '<option value="" >Please select</option>');
+
+
+                            $('#learning_centre').empty();
+                            $('#learning_centre').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#study_mode').empty();
+                            $('#study_mode').append(
+                                '<option value="" >Please select</option>');
+                            $('#study_mode').append(
+                                '<option value="Online" >Online</option>');
+                            $('#study_mode').append(
+                                '<option value="On Campus" >On Campus</option>');
+
+
+                            $('#faculty').empty();
+                            $('#faculty').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#department').empty();
+                            $('#department').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program').empty();
+                            $('#program').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_mode').empty();
+                            $('#program_mode').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#study_mode_2').empty();
+                            $('#study_mode_2').append(
+                                '<option value="" >Please select</option>');
+                            $('#study_mode_2').append(
+                                '<option value="Online" >Online</option>');
+                            $('#study_mode_2').append(
+                                '<option value="On Campus" >On Campus</option>');
+
+
+                            $('#faculty_2').empty();
+                            $('#faculty_2').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#department_2').empty();
+                            $('#department_2').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_2').empty();
+                            $('#program_2').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_mode_2').empty();
+                            $('#program_mode_2').append(
+                                '<option value="" >Please select</option>');
+
+
+                            $('#study_mode_3').empty();
+                            $('#study_mode_3').append(
+                                '<option value="" >Please select</option>');
+                            $('#study_mode_3').append(
+                                '<option value="Online" >Online</option>');
+                            $('#study_mode_3').append(
+                                '<option value="On Campus" >On Campus</option>');
+
+
+                            $('#faculty_3').empty();
+                            $('#faculty_3').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#department_3').empty();
+                            $('#department_3').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_3').empty();
+                            $('#program_3').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_mode_3').empty();
+                            $('#program_mode_3').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#type').empty();
+                            $('#type').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#type').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['type'] + '</option>')
+                            }
+
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+            function get_all_study_level(url) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            $('#program_level').empty();
+                            $('#program_level').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#program_level').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['study_level'] + '</option>')
+                            }
+
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+            function get_all_program_mode(url) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            $('.research_details').hide();
+                            $('.second_third_choice').show();
+                            $('#study_level').empty();
+                            $('#study_level_2').empty();
+                            $('#study_level_3').empty();
+
+
+
+                            $('#study_level').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#study_level').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['study_type'] + '</option>')
+                            }
+
+                             $('#study_level_2').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                if (data[i]['study_type'] !== 'Research' ){
+                                    $('#study_level_2').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['study_type'] + '</option>')
+                                }
+
+                            }
+
+                             $('#study_level_3').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                if (data[i]['study_type'] !== 'Research' ){
+                                    $('#study_level_3').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['study_type'] + '</option>')
+
+                                }
+
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+                 function get_all_program_mode_exclude(url) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            $('#study_level_2').empty();
+                            $('#study_level_3').empty();
+
+
+
+
+                             $('#study_level_2').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                if (data[i]['study_type'] !== 'Research' ){
+                                    $('#study_level_2').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['study_type'] + '</option>')
+                                }
+
+                            }
+
+                             $('#study_level_3').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                if (data[i]['study_type'] !== 'Research' ){
+                                    $('#study_level_3').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['study_type'] + '</option>')
+
+                                }
+
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+                function get_university_from_university_type(url, university_type_id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            university_type_id: university_type_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                             $('#type').empty();
+                            $('#type').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#university').empty();
+                            $('#university').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#year').empty();
+                            $('#year').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#semester').empty();
+                            $('#semester').append(
+                                '<option value="" >Please select</option>');
+
+                            {#$('#country').empty();#}
+                            {#$('#country').append(#}
+                            {#    '<option value="" >Please select</option>');#}
+
+                            $('#learning_centre').empty();
+                            $('#learning_centre').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#study_mode').empty();
+                            $('#study_mode').append(
+                                '<option value="" >Please select</option>');
+                            $('#study_mode').append(
+                                '<option value="Online" >Online</option>');
+                            $('#study_mode').append(
+                                '<option value="On Campus" >On Campus</option>');
+
+                            {#$('#program_level').empty();#}
+                            {#$('#program_level').append(#}
+                            {#    '<option value="" >Please select</option>');#}
+                            {#$('#program_level').append(#}
+                            {#    '<option value="2" >Undergraduate</option>');#}
+                            {#$('#program_level').append(#}
+                            {#    '<option value="1" >Postgraduate</option>');#}
+
+                            $('#faculty').empty();
+                            $('#faculty').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#department').empty();
+                            $('#department').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program').empty();
+                            $('#program').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_mode').empty();
+                            $('#program_mode').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#study_mode_2').empty();
+                            $('#study_mode_2').append(
+                                '<option value="" >Please select</option>');
+                            $('#study_mode_2').append(
+                                '<option value="Online" >Online</option>');
+                            $('#study_mode_2').append(
+                                '<option value="On Campus" >On Campus</option>');
+
+                            {#$('#study_level_2').empty();#}
+                            {#$('#study_level_2').append(#}
+                            {#    '<option value="" >Please select</option>');#}
+                            {#$('#study_level_2').append(#}
+                            {#    '<option value="2" >Undergraduate</option>');#}
+                            {#$('#study_level_2').append(#}
+                            {#    '<option value="1" >Postgraduate</option>');#}
+
+                            $('#faculty_2').empty();
+                            $('#faculty_2').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#department_2').empty();
+                            $('#department_2').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_2').empty();
+                            $('#program_2').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_mode_2').empty();
+                            $('#program_mode_2').append(
+                                '<option value="" >Please select</option>');
+
+
+                            $('#study_mode_3').empty();
+                            $('#study_mode_3').append(
+                                '<option value="" >Please select</option>');
+                            $('#study_mode_3').append(
+                                '<option value="Online" >Online</option>');
+                            $('#study_mode_3').append(
+                                '<option value="On Campus" >On Campus</option>');
+
+                            {#$('#study_level_3').empty();#}
+                            {#$('#study_level_3').append(#}
+                            {#    '<option value="" >Please select</option>');#}
+                            {#$('#study_level_3').append(#}
+                            {#    '<option value="2" >Undergraduate</option>');#}
+                            {#$('#study_level_3').append(#}
+                            {#    '<option value="1" >Postgraduate</option>');#}
+
+                            $('#faculty_3').empty();
+                            $('#faculty_3').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#department_3').empty();
+                            $('#department_3').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_3').empty();
+                            $('#program_3').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_mode_3').empty();
+                            $('#program_mode_3').append(
+                                '<option value="" >Please select</option>');
+
+
+                            for (var i = 0; i < data.length; i++) {
+                                $('#university').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['university_name'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+                $(document).on("change", "#semester", function (e) {
+                    var university = $('#university').val();
+                    {#var url = '/masters/get_country_from_semester_year/';#}
+                    {#get_country_from_semester_year(url, university)#}
+
+                    var country_id = $('#country').val();
+                    var url = '/student/get_learning_centre_from_country/';
+                    get_learning_center_from_country(url, country_id, university)
+
+
+                })
+
+                function get_country_from_semester_year(url, university) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            university: university,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            $('#country').empty();
+                            $('#country').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#country').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['country'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+                $(document).on("change", "#year", function (e) {
+                    var year = $(this).val();
+                    var university = $('#university').val();
+                    var program_level = $('#program_level').val();
+                    var url = '/masters/get_intake_semester_from_year/';
+                    get_intake_semester_from_year(url, year, university,program_level)
+                })
+
+
+                $(document).on("change", "#program_level", function (e) {
+                    var program_level = $(this).val();
+                    var university = $('#university').val();
+                    var url = '/masters/get_year_from_study_level/';
+                    get_year_from_study_level(url, program_level, university)
+
+                    var url = '/student/get_all_program_mode/';
+                    get_all_program_mode(url)
+
+                })
+
+            $(document).on("keypress", "#acceptance_avg", function (e) {
+
+                    var url = '/student/get_all_acceptance_avg_program_mode/';
+                    get_all_acceptance_avg_program_mode(url)
+
+                })
+
+            function get_all_acceptance_avg_program_mode(url) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+
+                            $('.research_details').hide();
+                            $('.second_third_choice').show();
+
+                            $('#learning_centre').empty();
+                            $('#learning_centre').append(
+                                '<option value="" >Please select</option>');
+
+
+                            $('#faculty').empty();
+                            $('#faculty').append(
+                                '<option value="" >Please select</option>');
+
+
+                            $('#program').empty();
+                            $('#program').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_mode').empty();
+                            $('#program_mode').append(
+                                '<option value="" >Please select</option>');
+
+
+                            $('#faculty_2').empty();
+                            $('#faculty_2').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_2').empty();
+                            $('#program_2').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_mode_2').empty();
+                            $('#program_mode_2').append(
+                                '<option value="" >Please select</option>');
+
+
+
+                            $('#faculty_3').empty();
+                            $('#faculty_3').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_3').empty();
+                            $('#program_3').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_mode_3').empty();
+                            $('#program_mode_3').append(
+                                '<option value="" >Please select</option>');
+
+
+                            $('#study_level').empty();
+                            $('#study_level_2').empty();
+                            $('#study_level_3').empty();
+
+
+
+                            $('#study_level').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#study_level').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['study_type'] + '</option>')
+                            }
+
+                             $('#study_level_2').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                if (data[i]['study_type'] !== 'Research' ){
+                                    $('#study_level_2').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['study_type'] + '</option>')
+                                }
+
+                            }
+
+                             $('#study_level_3').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                if (data[i]['study_type'] !== 'Research' ){
+                                     $('#study_level_3').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['study_type'] + '</option>')
+                                }
+                            }
+
+
+
+
+
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+             function get_year_from_study_level(url, program_level, university) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            program_level: program_level,
+                            university: university,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+
+
+                            $('#semester').empty();
+                            $('#semester').append(
+                                '<option value="" >Please select</option>');
+
+                            {#$('#country').empty();#}
+                            {#$('#country').append(#}
+                            {#    '<option value="" >Please select</option>');#}
+
+                            $('#learning_centre').empty();
+                            $('#learning_centre').append(
+                                '<option value="" >Please select</option>');
+
+
+                            $('#faculty').empty();
+                            $('#faculty').append(
+                                '<option value="" >Please select</option>');
+
+
+                            $('#program').empty();
+                            $('#program').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_mode').empty();
+                            $('#program_mode').append(
+                                '<option value="" >Please select</option>');
+
+
+                            $('#faculty_2').empty();
+                            $('#faculty_2').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_2').empty();
+                            $('#program_2').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_mode_2').empty();
+                            $('#program_mode_2').append(
+                                '<option value="" >Please select</option>');
+
+
+
+                            $('#faculty_3').empty();
+                            $('#faculty_3').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_3').empty();
+                            $('#program_3').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_mode_3').empty();
+                            $('#program_mode_3').append(
+                                '<option value="" >Please select</option>');
+
+
+
+                            $('#year').empty();
+                            $('#year').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#year').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['year'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+                function get_intake_semester_from_year(url, year, university,program_level) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            year: year,
+                            program_level: program_level,
+                            university: university,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            $('#semester').empty();
+                            $('#semester').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#semester').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['semester'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+                $(document).on("change", "#university", function (e) {
+                    var university = $(this).val();
+                    var url = '/masters/get_year_from_university/';
+                    get_year_from_university(url, university)
+
+                    var url = '/student/get_all_program_mode/';
+                    get_all_program_mode(url)
+
+
+                    var url = '/student/get_all_study_level/';
+                    get_all_study_level(url)
+
+
+
+
+                })
+
+                function get_year_from_university(url, university) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            university: university,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+
+                            $('#year').empty();
+                            $('#year').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#year').empty();
+                            $('#year').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#semester').empty();
+                            $('#semester').append(
+                                '<option value="" >Please select</option>');
+
+                            {#$('#country').empty();#}
+                            {#$('#country').append(#}
+                            {#    '<option value="" >Please select</option>');#}
+
+                            $('#learning_centre').empty();
+                            $('#learning_centre').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#study_mode').empty();
+                            $('#study_mode').append(
+                                '<option value="" >Please select</option>');
+                            $('#study_mode').append(
+                                '<option value="Online" >Online</option>');
+                            $('#study_mode').append(
+                                '<option value="On Campus" >On Campus</option>');
+
+                            {#$('#study_level').empty();#}
+                            {#$('#study_level').append(#}
+                            {#    '<option value="" >Please select</option>');#}
+                            {#$('#study_level').append(#}
+                            {#    '<option value="2" >Undergraduate</option>');#}
+                            {#$('#study_level').append(#}
+                            {#    '<option value="1" >Postgraduate</option>');#}
+
+                            $('#faculty').empty();
+                            $('#faculty').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#department').empty();
+                            $('#department').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program').empty();
+                            $('#program').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_mode').empty();
+                            $('#program_mode').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#study_mode_2').empty();
+                            $('#study_mode_2').append(
+                                '<option value="" >Please select</option>');
+                            $('#study_mode_2').append(
+                                '<option value="Online" >Online</option>');
+                            $('#study_mode_2').append(
+                                '<option value="On Campus" >On Campus</option>');
+
+                            {#$('#study_level_2').empty();#}
+                            {#$('#study_level_2').append(#}
+                            {#    '<option value="" >Please select</option>');#}
+                            {#$('#study_level_2').append(#}
+                            {#    '<option value="2" >Undergraduate</option>');#}
+                            {#$('#study_level_2').append(#}
+                            {#    '<option value="1" >Postgraduate</option>');#}
+
+                            $('#faculty_2').empty();
+                            $('#faculty_2').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#department_2').empty();
+                            $('#department_2').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_2').empty();
+                            $('#program_2').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_mode_2').empty();
+                            $('#program_mode_2').append(
+                                '<option value="" >Please select</option>');
+
+
+                            $('#study_mode_3').empty();
+                            $('#study_mode_3').append(
+                                '<option value="" >Please select</option>');
+                            $('#study_mode_3').append(
+                                '<option value="Online" >Online</option>');
+                            $('#study_mode_3').append(
+                                '<option value="On Campus" >On Campus</option>');
+
+                            {#$('#study_level_3').empty();#}
+                            {#$('#study_level_3').append(#}
+                            {#    '<option value="" >Please select</option>');#}
+                            {#$('#study_level_3').append(#}
+                            {#    '<option value="2" >Undergraduate</option>');#}
+                            {#$('#study_level_3').append(#}
+                            {#    '<option value="1" >Postgraduate</option>');#}
+
+                            $('#faculty_3').empty();
+                            $('#faculty_3').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#department_3').empty();
+                            $('#department_3').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_3').empty();
+                            $('#program_3').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_mode_3').empty();
+                            $('#program_mode_3').append(
+                                '<option value="" >Please select</option>');
+
+
+                            for (var i = 0; i < data.length; i++) {
+                                $('#year').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['year'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+
+                $(document).on("change", "#study_mode", function (e) {
+                    var study_mode = $(this).val();
+                    var study_level = $('#study_level').val();
+                    var university = $('#university').val();
+                    var url = '/masters/get_faculty_from_study_mode/';
+                    get_faculty_from_study_mode(url, study_mode, study_level, university)
+
+
+
+                })
+
+
+                function get_faculty_from_study_mode(url, study_mode, study_level, university) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            study_mode: study_mode,
+                            study_level: study_level,
+                            university: university,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+                            if (data.length != 0) {
+                                $('#faculty').removeAttr('disabled');
+                            } else {
+                                $('#faculty').attr('disabled', 'disabled');
+
+                                $('#department').empty();
+                                $('#department').append(
+                                    '<option value="" >Please select</option>');
+                                $('#department').attr('disabled', 'disabled');
+
+                                $('#program').empty();
+                                $('#program').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program').attr('disabled', 'disabled');
+
+                                $('#program_mode').empty();
+                                $('#program_mode').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_mode').attr('disabled', 'disabled');
+
+                            }
+
+                            $('#faculty').empty();
+                            $('#faculty').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#faculty').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['faculty'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+                $(document).on("change", "#study_mode_2", function (e) {
+                    var study_mode_2 = $(this).val();
+                    var study_level_2 = $('#study_level_2').val();
+                    var university = $('#university').val();
+                    var url = '/masters/get_faculty_from_study_mode_2/';
+                    get_faculty_from_study_mode_2(url, study_mode_2, study_level_2, university)
+                })
+
+                function get_faculty_from_study_mode_2(url, study_mode_2, study_level_2, university) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            study_mode_2: study_mode_2,
+                            study_level_2: study_level_2,
+                            university: university,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            if (data.length != 0) {
+                                $('#faculty_2').removeAttr('disabled');
+                            } else {
+                                $('#faculty_2').attr('disabled', 'disabled');
+
+                                $('#department_2').empty();
+                                $('#department_2').append(
+                                    '<option value="" >Please select</option>');
+                                $('#department_2').attr('disabled', 'disabled');
+
+                                $('#program_2').empty();
+                                $('#program_2').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_2').attr('disabled', 'disabled');
+
+                                $('#program_mode_2').empty();
+                                $('#program_mode_2').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_mode_2').attr('disabled', 'disabled');
+
+                            }
+
+                            $('#faculty_2').empty();
+                            $('#faculty_2').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#faculty_2').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['faculty'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+
+                $(document).on("change", "#study_mode_3", function (e) {
+                    var study_mode = $(this).val();
+                    var study_level = $('#study_level_3').val();
+                    var university = $('#university').val();
+                    var url = '/masters/get_faculty_from_study_mode_3/';
+                    get_faculty_from_study_mode_3(url, study_mode, study_level, university)
+                })
+
+
+                function get_faculty_from_study_mode_3(url, study_mode, study_level, university) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            study_mode: study_mode,
+                            study_level: study_level,
+                            university: university,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            if (data.length != 0) {
+                                $('#faculty_3').removeAttr('disabled');
+                            } else {
+                                $('#faculty_3').attr('disabled', 'disabled');
+
+                                $('#department_3').empty();
+                                $('#department_3').append(
+                                    '<option value="" >Please select</option>');
+                                $('#department_3').attr('disabled', 'disabled');
+
+                                $('#program_3').empty();
+                                $('#program_3').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_3').attr('disabled', 'disabled');
+
+                                $('#program_mode_3').empty();
+                                $('#program_mode_3').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_mode_3').attr('disabled', 'disabled');
+
+                            }
+
+                            $('#faculty_3').empty();
+                            $('#faculty_3').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#faculty_3').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['faculty'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+                 var study_mode_value = $('#study_level :selected').text();
+                 if(study_mode_value == 'Research'){
+                     $('#supervisor').prop('required',false);
+
+                 }else{
+                     $('#supervisor').prop('required',false);
+
+                 }
+
+
+                $(document).on("change", "#study_level", function (e) {
+                    var study_mode = $(this).val();
+                    var study_mode_value = $('#study_level :selected').text();
+                    if(study_mode_value == 'Research'){
+
+                        var url = '/student/get_all_program_mode_exclude/';
+                        get_all_program_mode_exclude(url)
+
+
+
+                        $('.second_third_choice').hide();
+                        $('.research_details').show();
+
+                        $('#supervisor').prop('required',false);
+
+                        $('#study_level_2').prop('required',false);
+                        $('#faculty_2').prop('required',false);
+                        $('#program_2').prop('required',false);
+
+                        $('#study_level_3').prop('required',false);
+                        $('#faculty_3').prop('required',false);
+                        $('#program_3').prop('required',false);
+
+                         $('#program').empty();
+                         $('#program').append(
+                                '<option value="" >Please select</option>');
+                         $('#faculty').empty();
+                         $('#faculty').append(
+                                '<option value="" >Please select</option>');
+
+
+                         $('#program_2').empty();
+                         $('#program_2').append(
+                                '<option value="" >Please select</option>');
+
+                             $('#faculty_2').empty();
+                            $('#faculty_2').append(
+                                '<option value="" >Please select</option>');
+
+                             $('#program_3').empty();
+                            $('#program_3').append(
+                                '<option value="" >Please select</option>');
+
+                             $('#faculty_3').empty();
+                            $('#faculty_3').append(
+                                '<option value="" >Please select</option>');
+
+
+                            $('#supervisor').empty();
+                            $('#supervisor').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#research_title').val('');
+                            $('#project_outline').val('');
+                            $('#data_collection').val('');
+                            $('#data_analysis').val('');
+                            $('#progress_date').val('');
+                            $('#problems_encountered').val('');
+
+
+
+
+
+                    }else{
+
+                         var url = '/student/get_all_program_mode_exclude/';
+                        get_all_program_mode_exclude(url)
+
+
+                         $('.research_details').hide();
+                         $('.second_third_choice').show();
+
+                         $('#program').empty();
+                            $('#program').append(
+                                '<option value="" >Please select</option>');
+
+                             $('#faculty').empty();
+                            $('#faculty').append(
+                                '<option value="" >Please select</option>');
+
+                             $('#program_2').empty();
+                            $('#program_2').append(
+                                '<option value="" >Please select</option>');
+
+                             $('#faculty_2').empty();
+                            $('#faculty_2').append(
+                                '<option value="" >Please select</option>');
+
+                            $('#program_3').empty();
+                            $('#program_3').append(
+                                '<option value="" >Please select</option>');
+
+                             $('#faculty_3').empty();
+                            $('#faculty_3').append(
+                                '<option value="" >Please select</option>');
+
+                        $('#supervisor').empty();
+                            $('#supervisor').append(
+                                '<option value="" >Please select</option>');
+                        $('#supervisor').prop('required',false);
+
+                        $('#study_level_2').prop('required',true);
+                        $('#faculty_2').prop('required',true);
+                        $('#program_2').prop('required',true);
+
+                        $('#study_level_3').prop('required',true);
+                        $('#faculty_3').prop('required',true);
+                        $('#program_3').prop('required',true);
+
+                         $('#research_title').val('');
+                            $('#project_outline').val('');
+                            $('#data_collection').val('');
+                            $('#data_analysis').val('');
+                            $('#progress_date').val('');
+                            $('#problems_encountered').val('');
+
+
+
+
+
+
+
+
+                    }
+                    var study_level = $('#program_level').val();
+                    var university = $('#university').val();
+                    var url = '/masters/get_faculty_from_study_level/';
+                    get_faculty_from_study_level(url, study_mode, study_level, university)
+                })
+
+                function get_faculty_from_study_level(url, study_mode, study_level, university) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            study_mode: study_mode,
+                            study_level: study_level,
+                            university: university,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+                            if (data.length != 0) {
+                                $('#faculty').removeAttr('disabled');
+                            } else {
+                                $('#faculty').attr('disabled', 'disabled');
+
+                                $('#department').empty();
+                                $('#department').append(
+                                    '<option value="" >Please select</option>');
+                                $('#department').attr('disabled', 'disabled');
+
+                                $('#program').empty();
+                                $('#program').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program').attr('disabled', 'disabled');
+
+                                $('#program_mode').empty();
+                                $('#program_mode').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_mode').attr('disabled', 'disabled');
+
+                            }
+
+                            $('#faculty').empty();
+                            $('#faculty').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#faculty').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['faculty'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+
+                $(document).on("change", "#study_level_2", function (e) {
+                    var study_mode_2 = $(this).val();
+                    var study_level_2 = $('#program_level').val();
+                    var university = $('#university').val();
+                    var url = '/masters/get_faculty_from_study_level_2/';
+                    get_faculty_from_study_level_2(url, study_mode_2, study_level_2, university)
+                })
+
+
+                function get_faculty_from_study_level_2(url, study_mode_2, study_level_2, university) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            study_mode_2: study_mode_2,
+                            study_level_2: study_level_2,
+                            university: university,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            if (data.length != 0) {
+                                $('#faculty_2').removeAttr('disabled');
+                            } else {
+                                $('#faculty_2').attr('disabled', 'disabled');
+
+                                $('#department_2').empty();
+                                $('#department_2').append(
+                                    '<option value="" >Please select</option>');
+                                $('#department_2').attr('disabled', 'disabled');
+
+                                $('#program_2').empty();
+                                $('#program_2').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_2').attr('disabled', 'disabled');
+
+                                $('#program_mode_2').empty();
+                                $('#program_mode_2').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_mode_2').attr('disabled', 'disabled');
+
+                            }
+
+                            $('#faculty_2').empty();
+                            $('#faculty_2').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#faculty_2').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['faculty'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+                $(document).on("change", "#study_level_3", function (e) {
+                    var study_mode = $(this).val();
+                    var study_level = $('#program_level').val();
+                    var university = $('#university').val();
+                    var url = '/masters/get_faculty_from_study_level_3/';
+                    get_faculty_from_study_level_3(url, study_mode, study_level, university)
+                })
+
+                function get_faculty_from_study_level_3(url, study_mode, study_level, university) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            study_mode: study_mode,
+                            study_level: study_level,
+                            university: university,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            if (data.length != 0) {
+                                $('#faculty_3').removeAttr('disabled');
+                            } else {
+                                $('#faculty_3').attr('disabled', 'disabled');
+
+                                $('#department_3').empty();
+                                $('#department_3').append(
+                                    '<option value="" >Please select</option>');
+                                $('#department_3').attr('disabled', 'disabled');
+
+                                $('#program_3').empty();
+                                $('#program_3').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_3').attr('disabled', 'disabled');
+
+                                $('#program_mode_3').empty();
+                                $('#program_mode_3').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_mode_3').attr('disabled', 'disabled');
+
+                            }
+
+                            $('#faculty_3').empty();
+                            $('#faculty_3').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#faculty_3').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['faculty'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+
+                $(document).on("change", "#department", function (e) {
+                    var department = $(this).val();
+                    var study_mode = $('#study_mode').val();
+                    var university = $('#university').val();
+                    var study_level = $('#study_level').val();
+                    var faculty = $('#faculty').val();
+                    var url = '/masters/get_programs_from_filter/';
+                    get_programs_from_filter(url, study_mode, university, study_level, faculty, department)
+                })
+
+                function get_programs_from_filter(url, study_mode, university, study_level, faculty, department) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            study_mode: study_mode,
+                            university: university,
+                            study_level: study_level,
+                            faculty: faculty,
+                            department: department,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+
+                            if (data.length != 0) {
+                                $('#program').removeAttr('disabled');
+                            } else {
+                                $('#program').attr('disabled', 'disabled');
+
+
+                                $('#program_mode').empty();
+                                $('#program_mode').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_mode').attr('disabled', 'disabled');
+
+                            }
+
+
+                            $('#program').empty();
+                            $('#program').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#program').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['program'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+                $(document).on("change", "#department_2", function (e) {
+                    var department = $(this).val();
+                    var study_mode = $('#study_mode_2').val();
+                    var university = $('#university').val();
+                    var study_level = $('#study_level_2').val();
+                    var faculty = $('#faculty_2').val();
+
+                    var url = '/masters/get_programs_from_filter/';
+                    get_programs_from_filter_dep_2(url, study_mode, university, study_level, faculty, department)
+                })
+
+                function get_programs_from_filter_dep_2(url, study_mode, university, study_level, faculty, department) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            study_mode: study_mode,
+                            university: university,
+                            study_level: study_level,
+                            faculty: faculty,
+                            department: department,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            if (data.length != 0) {
+                                $('#program_2').removeAttr('disabled');
+                            } else {
+                                $('#program_2').attr('disabled', 'disabled');
+
+
+                                $('#program_mode_2').empty();
+                                $('#program_mode_2').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_mode_2').attr('disabled', 'disabled');
+
+                            }
+
+
+                            $('#program_2').empty();
+                            $('#program_2').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#program_2').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['program'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+                $(document).on("change", "#department_3", function (e) {
+                    var department = $(this).val();
+                    var study_mode = $('#study_mode_3').val();
+                    var university = $('#university').val();
+                    var study_level = $('#study_level_3').val();
+                    var faculty = $('#faculty_3').val();
+
+                    var url = '/masters/get_programs_from_filter/';
+                    get_programs_from_filter_dep_3(url, study_mode, university, study_level, faculty, department)
+                })
+
+                function get_programs_from_filter_dep_3(url, study_mode, university, study_level, faculty, department) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            study_mode: study_mode,
+                            university: university,
+                            study_level: study_level,
+                            faculty: faculty,
+                            department: department,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            if (data.length != 0) {
+                                $('#program_3').removeAttr('disabled');
+                            } else {
+                                $('#program_3').attr('disabled', 'disabled');
+
+
+                                $('#program_mode_3').empty();
+                                $('#program_mode_3').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_mode_3').attr('disabled', 'disabled');
+
+                            }
+
+                            $('#program_3').empty();
+                            $('#program_3').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#program_3').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['program'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+
+                $(document).on("change", "#faculty", function (e) {
+                    $('#faculty').css("border", "#c2cad8 solid 1px");
+                    var faculty_id = $(this).val();
+                    var study_mode = $('#study_mode').val();
+                    var university = $('#university').val();
+                    var study_level = $('#study_level').val();
+                    var department = $('#department').val();
+                    var acceptance_avg = $('#acceptance_avg').val();
+
+                    {#var url = '/masters/get_departments_from_faculty/';#}
+                    {#get_departments_from_faculty(url, faculty_id)#}
+
+                    var url = '/masters/get_programs_from_faculty/';
+                    get_programs_from_faculty(url, study_mode, university, study_level, faculty_id, department, acceptance_avg)
+
+                })
+
+                function get_departments_from_faculty(url, faculty_id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            faculty_id: faculty_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            if (data.length != 0) {
+                                $('#department').removeAttr('disabled');
+                            } else {
+                                $('#department').attr('disabled', 'disabled');
+
+
+                                $('#program').empty();
+                                $('#program').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program').attr('disabled', 'disabled');
+
+                                $('#program_mode').empty();
+                                $('#program_mode').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_mode').attr('disabled', 'disabled');
+
+                            }
+
+                            $('#department').empty();
+                            $('#department').append(
+                                '<option value="" >Please Select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#department').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['department'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+                function get_programs_from_faculty(url, study_mode, university, study_level, faculty, department, acceptance_avg) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            study_mode: study_mode,
+                            university: university,
+                            study_level: study_level,
+                            faculty: faculty,
+                            department: department,
+                            acceptance_avg: acceptance_avg,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            if (data.length != 0) {
+                                $('#program').removeAttr('disabled');
+                            } else {
+                                $('#program').attr('disabled', 'disabled');
+
+
+                                $('#program_mode').empty();
+                                $('#program_mode').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_mode').attr('disabled', 'disabled');
+
+                            }
+
+
+                            $('#program').empty();
+                            $('#program').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#program').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['program'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+
+                $(document).on("change", "#faculty_2", function (e) {
+                    $('#faculty_2').css("border", "#c2cad8 solid 1px");
+                    var faculty_id = $(this).val();
+                    var study_mode = $('#study_mode_2').val();
+                    var university = $('#university').val();
+                    var study_level = $('#study_level_2').val();
+                    var department = $('#department_2').val();
+                    var acceptance_avg = $('#acceptance_avg').val();
+
+                    var url = '/masters/get_departments_from_faculty_2/';
+                    get_departments_from_faculty_2(url, faculty_id)
+
+                    var url = '/masters/get_programs_from_faculty_2/';
+                    get_programs_from_faculty_2(url, study_mode, university, study_level, faculty_id, department,acceptance_avg)
+
+                })
+
+                function get_departments_from_faculty_2(url, faculty_id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            faculty_id: faculty_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            if (data.length != 0) {
+                                $('#department_2').removeAttr('disabled');
+                            } else {
+                                $('#department_2').attr('disabled', 'disabled');
+
+
+                                $('#program_2').empty();
+                                $('#program_2').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_2').attr('disabled', 'disabled');
+
+                                $('#program_mode_2').empty();
+                                $('#program_mode_2').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_mode_2').attr('disabled', 'disabled');
+
+                            }
+
+                            $('#department_2').empty();
+                            $('#department_2').append(
+                                '<option value="" >Please Select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#department_2').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['department'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+                function get_programs_from_faculty_2(url, study_mode, university, study_level, faculty, department,acceptance_avg) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            study_mode: study_mode,
+                            university: university,
+                            study_level: study_level,
+                            faculty: faculty,
+                            department: department,
+                            acceptance_avg: acceptance_avg,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            if (data.length != 0) {
+                                $('#program_2').removeAttr('disabled');
+                            } else {
+                                $('#program_2').attr('disabled', 'disabled');
+
+
+                                $('#program_mode_2').empty();
+                                $('#program_mode_2').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_mode_2').attr('disabled', 'disabled');
+
+                            }
+
+                            $('#program_2').empty();
+                            $('#program_2').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#program_2').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['program'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+
+                $(document).on("change", "#faculty_3", function (e) {
+                    $('#faculty_3').css("border", "#c2cad8 solid 1px");
+                    var faculty_id = $(this).val();
+                    var study_mode = $('#study_mode_3').val();
+                    var university = $('#university').val();
+                    var study_level = $('#study_level_3').val();
+                    var department = $('#department_3').val();
+                    var acceptance_avg = $('#acceptance_avg').val();
+
+                    var url = '/masters/get_departments_from_faculty_3/';
+                    get_departments_from_faculty_3(url, faculty_id)
+
+                    var url = '/masters/get_programs_from_faculty_3/';
+                    get_programs_from_faculty_3(url, study_mode, university, study_level, faculty_id, department,acceptance_avg)
+
+                })
+
+                function get_departments_from_faculty_3(url, faculty_id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            faculty_id: faculty_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            if (data.length != 0) {
+                                $('#department_3').removeAttr('disabled');
+                            } else {
+                                $('#department_3').attr('disabled', 'disabled');
+
+
+                                $('#program_3').empty();
+                                $('#program_3').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_3').attr('disabled', 'disabled');
+
+                                $('#program_mode_3').empty();
+                                $('#program_mode_3').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_mode_3').attr('disabled', 'disabled');
+
+                            }
+
+                            $('#department_3').empty();
+                            $('#department_3').append(
+                                '<option value="" >Please Select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#department_3').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['department'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+                function get_programs_from_faculty_3(url, study_mode, university, study_level, faculty, department,acceptance_avg) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            study_mode: study_mode,
+                            university: university,
+                            study_level: study_level,
+                            faculty: faculty,
+                            department: department,
+                            acceptance_avg: acceptance_avg,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            if (data.length != 0) {
+                                $('#program_3').removeAttr('disabled');
+                            } else {
+                                $('#program_3').attr('disabled', 'disabled');
+
+
+                                $('#program_mode_3').empty();
+                                $('#program_mode_3').append(
+                                    '<option value="" >Please select</option>');
+                                $('#program_mode_3').attr('disabled', 'disabled');
+
+                            }
+
+                            $('#program_3').empty();
+                            $('#program_3').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#program_3').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['program'] + '</option>')
+                            }
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+
+                $(document).on("change", "#program", function (e) {
+                    $('#program').css("border", "#c2cad8 solid 1px");
+                    var program_id = $(this).val();
+                    var url = '/masters/get_program_mode_from_selected_program/';
+                    get_program_mode_from_selected_program(url, program_id)
+                })
+
+                function get_program_mode_from_selected_program(url, program_id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            program_id: program_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            if (data.length != 0) {
+                                $('#program_mode').removeAttr('disabled');
+                            } else {
+                                $('#program_mode').attr('disabled', 'disabled');
+
+                            }
+
+                            $('#program_mode').empty();
+                            $('#program_mode').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                if (i === (data.length - 1)) {
+                                    $('#program_mode').append(
+                                        '<option value="' + data[i]['id'] + '">'
+                                        + data[i]['program_mode'] + '</option>')
+
+                                }
+
+                            }
+
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+
+                $(document).on("change", "#program_2", function (e) {
+                    $('#program_2').css("border", "#c2cad8 solid 1px");
+                    var program_id = $(this).val();
+                    var url = '/masters/get_program_mode_from_selected_program_2/';
+                    get_program_mode_from_selected_program_2(url, program_id)
+                })
+
+                function get_program_mode_from_selected_program_2(url, program_id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            program_id: program_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            if (data.length != 0) {
+                                $('#program_mode_2').removeAttr('disabled');
+                            } else {
+                                $('#program_mode_2').attr('disabled', 'disabled');
+
+                            }
+
+
+                            $('#program_mode_2').empty();
+                            $('#program_mode_2').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                if (i === (data.length - 1)) {
+                                    $('#program_mode_2').append(
+                                        '<option value="' + data[i]['id'] + '">'
+                                        + data[i]['program_mode'] + '</option>')
+
+                                }
+
+                            }
+
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+
+                $(document).on("change", "#program_3", function (e) {
+                    $('#program_3').css("border", "#c2cad8 solid 1px");
+                    var program_id = $(this).val();
+                    var url = '/masters/get_program_mode_from_selected_program_3/';
+                    get_program_mode_from_selected_program_3(url, program_id)
+                })
+
+                function get_program_mode_from_selected_program_3(url, program_id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            program_id: program_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            if (data.length != 0) {
+                                $('#program_mode_3').removeAttr('disabled');
+                            } else {
+                                $('#program_mode_3').attr('disabled', 'disabled');
+
+                            }
+
+
+                            $('#program_mode_3').empty();
+                            $('#program_mode_3').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                if (i === (data.length - 1)) {
+                                    $('#program_mode_3').append(
+                                        '<option value="' + data[i]['id'] + '">'
+                                        + data[i]['program_mode'] + '</option>')
+
+                                }
+
+                            }
+
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                {% if user.get_application %}
+                    {% if user.get_application.is_submitted %}
+                        $('.submitted').prop('readonly', 'True')
+                    {% endif %}
+                {% endif %}
+
+            });
+
+
+            $('#sample_1').dataTable().fnDestroy();
+            $('#sample_1').dataTable({
+                "aoColumnDefs": [
+                    {'bSortable': false}
+                ]
+            });
+        }
+
+        function validate_avergare(evt) {
+            var theEvent = evt || window.event;
+
+            // Handle paste
+            if (theEvent.type === 'paste') {
+                key = event.clipboardData.getData('text/plain');
+            } else {
+                // Handle key press
+                var key = theEvent.keyCode || theEvent.which;
+                key = String.fromCharCode(key);
+            }
+            var regex = /[0-9]|\./;
+            if (!regex.test(key)) {
+                theEvent.returnValue = false;
+                if (theEvent.preventDefault) theEvent.preventDefault();
+            }
+        }
+
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'student:student_home' %}">{% trans 'Home' %}</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span>{% trans 'Intake Info' %}</span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+
+{#        <span style="padding:inherit;margin-left: 20px;"><b>{% trans 'RESEARCH PROPOSAL' %}:  </b></span>#}
+{#                        {% if agent_obj %}#}
+{#                         <span style="padding:inherit;margin-left:30px">{% trans 'No' %}</span>#}
+{#                        <input class="current" type="radio"  name="research_proposal" id="" value="No">#}
+{#                        <span style="padding:inherit;margin-left:20px">{% trans 'Yes' %}</span>#}
+{#                        <input class="current" type="radio" checked name="research_proposal{{ forloop.counter }}" value="Yes"#}
+{#                               id="">#}
+{#                        {% else %}#}
+{#                            <span style="padding:inherit;margin-left:30px">{% trans 'No' %}</span>#}
+{#                        <input class="current" type="radio"  checked name="research_proposal" id="" value="No">#}
+{#                        <span style="padding:inherit;margin-left:20px">{% trans 'Yes' %}</span>#}
+{#                        <input class="current" type="radio"  name="research_proposal" value="Yes"#}
+{#                               id="">#}
+{#                        {% endif %}#}
+{#    <hr>#}
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">{% trans 'Intake Info' %}</span>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form action="{% url 'agents:save_update_applicant_intake_info' %}"
+                      id="form_save"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <input type="hidden" value="{{ application_obj.id }}" id="application_id" name="application_id">
+
+                    <div class="form-body">
+                        <div class="row">
+{#                            <div class="">#}
+{#                                <label class="col-md-2 control-label">{% trans 'University Type' %}: <span#}
+{#                                        style="color: red">*</span></label>#}
+{#                                {% if application_obj.university %}#}
+{#                                    <div class="col-md-4">#}
+{#                                        {% if  application_obj.university.is_partner_university == False %}#}
+{#                                            <input class="current" type="radio" checked name="university_type"#}
+{#                                                   id="university_main"#}
+{#                                                   value="Main">#}
+{#                                            <span style="padding:inherit">{% trans 'Main' %}</span>&nbsp;&nbsp;#}
+{#                                            <input class="current" type="radio" name="university_type" value="Partner"#}
+{#                                                   id="university_partner">#}
+{#                                            <span style="padding:inherit">{% trans 'International' %}</span>#}
+{#                                        {% else %}#}
+{#                                            <input class="current" type="radio" name="university_type"#}
+{#                                                   id="university_main"#}
+{#                                                   value="Main">#}
+{#                                            <span style="padding:inherit">{% trans 'Main' %}</span>&nbsp;&nbsp;#}
+{#                                            <input class="current" type="radio" checked name="university_type"#}
+{#                                                   value="Partner"#}
+{#                                                   id="university_partner">#}
+{#                                            <span style="padding:inherit">{% trans 'International' %}</span>#}
+{#                                        {% endif %}#}
+{#                                    </div>#}
+{#                                {% else %}#}
+{#                                    <div class="col-md-4">#}
+{#                                        <input class="current" type="radio" checked name="university_type"#}
+{#                                               id="university_main"#}
+{#                                               value="Main">#}
+{#                                        <span style="padding:inherit">{% trans 'Main' %}</span>&nbsp;&nbsp;#}
+{#                                        <input class="current" type="radio" name="university_type" value="Partner"#}
+{#                                               id="university_partner">#}
+{#                                        <span style="padding:inherit">{% trans 'International' %}</span>#}
+{#                                    </div>#}
+{#                                {% endif %}#}
+{#                            </div>#}
+
+                             <div class="">
+    <label class="col-md-2 control-label">{% trans 'University Type' %}:<span
+            style="color: red">*</span></label>
+    <div class="col-md-4">
+        <select id='university_type' title="Select University"
+                name="university_type"
+                class="form-control" required>
+            {% if application_obj.university_type %}
+                <option style="display:none;" selected="selected"
+                        value="{{ application_obj.university_type.id|default_if_none:"" }}"> {{ application_obj.university_type.university_type|default_if_none:"" }}</option>
+            {% else %}
+                <option selected="selected" value=""> Please Select</option>
+            {% endif %}
+            {% for rec in university_type_recs %}
+                <option value="{{ rec.id }}">{{ rec.university_type|default_if_none:"" }}</option>
+            {% endfor %}
+
+        </select>
+    </div>
+</div>
+
+
+                        </div>
+                    <br>
+
+                    <div class="row">
+                        <div class="">
+    <label class="col-md-2 control-label">{% trans 'Type' %}:<span
+            style="color: red">*</span></label>
+    <div class="col-md-4">
+        <select id='type' title="Select Type"
+                name="type"
+                class="form-control" required>
+            {% if application_obj.type %}
+                <option style="display:none;" selected="selected"
+                        value="{{ application_obj.type.id|default_if_none:"" }}"> {{ application_obj.type.type|default_if_none:"" }}</option>
+            {% else %}
+                <option selected="selected" value=""> Please Select</option>
+            {% endif %}
+            {% for rec in type_recs %}
+                <option value="{{ rec.id }}">{{ rec.type|default_if_none:"" }}</option>
+            {% endfor %}
+
+        </select>
+    </div>
+</div>
+
+
+                    </div>
+
+                        <br>
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'University' %}: <span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-4">
+                                    <select id='university' title="Select University" name="university"
+                                            class="form-control value_check" required>
+
+                                        {% if application_obj.university %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.university.id }}"
+                                            >{{ application_obj.university.university_name|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option disabled selected="selected"
+                                                    value="">{% trans 'Please Select' %}</option>
+                                        {% endif %}
+
+                                        {% for rec in university_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.university_name|default_if_none:"" }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                    <div class="row">
+                            <input hidden id="value_check" name="value_check">
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Study Level' %}: <span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-4">
+                                    <select id='program_level' title="Select Study Level" name="program_level"
+                                            class="form-control value_check" required>
+
+                                        {% if application_obj.study_level %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.study_level.id }}"
+                                            >{{ application_obj.study_level.study_level|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option disabled selected="selected" value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in study_level_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.study_level|default_if_none:"" }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <br>
+                        <div class="row">
+                            <input hidden id="value_check" name="value_check">
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Academic Year' %}: <span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-4">
+                                    <select id='year' title="Select Year" name="year"
+                                            class="form-control value_check" required>
+
+                                        {% if application_obj.academic_year %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.year.id }}"
+                                            >{{ application_obj.academic_year.year_name|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option disabled selected="selected" value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in year_recs %}
+                                            <option value='{{ rec.year.id }}'>{{ rec.year.year_name|default_if_none:"" }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+                        <br>
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Intake/Semester' %}: <span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-4">
+                                    <select id='semester' title="Select Semester" name="semester"
+                                            class="form-control value_check" required>
+
+                                        {% if application_obj.semester %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.semester.id }}"
+                                            >{{ application_obj.semester.semester|default_if_none:"" }} {{ application_obj.semester.start_date|date:"Y-m-d" }} - {{ application_obj.semester.end_date|date:"Y-m-d" }}</option>
+                                        {% else %}
+                                            <option disabled selected="selected" value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in semester_recs %}
+                                            {% for sem in rec.semester.all %}
+                                                <option value='{{ sem.id }}'>{{ sem.semester|default_if_none:"" }} {{ sem.start_date|date:"Y-m-d" }} - {{ sem.end_date|date:"Y-m-d" }}</option>
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+{#                        <br>#}
+{#                    <div class="row">#}
+{#                        <div class="">#}
+{#                                    <label class="col-md-2 control-label">{% trans 'Average' %}:<span#}
+{#                                            style="color: red">*</span></label>#}
+{#                                    <div class="col-md-1">#}
+{#                                        <input onkeypress='validate_avergare(event)' type="text" title="Enter Acceptance(Avg)" id="acceptance_avg"#}
+{#                                               value="{{ application_obj.acceptance_avg|default_if_none:"" }}"#}
+{#                                               name="acceptance_avg"#}
+{#                                               class="form-control" required>#}
+{##}
+{#                                    </div>#}
+{#                                </div>#}
+{#                    </div>#}
+
+
+
+                        <hr>
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-settings font-red"></i>
+                                <span class="caption-subject font-red sbold uppercase">{% trans 'ACADEMIC PROGRAM DETAILS' %}</span>
+                            </div>
+                        </div>
+                        <hr>
+                        <span style="padding:inherit;color: red">{% trans 'FIRST CHOICE' %}:  </span><br><br>
+
+{#                        <div class="row">#}
+{##}
+{#                            <div class="">#}
+{#                                <label class="col-md-2 control-label">{% trans 'Mode' %}: <span#}
+{#                                        style="color: red">*</span></label>#}
+{#                                <div class="col-md-4">#}
+{#                                    <select id='study_mode' title="Select Mode" name="study_mode"#}
+{#                                            class="form-control value_check" data-live-search="true" required>#}
+{##}
+{#                                        {% if application_obj.study_mode %}#}
+{#                                            <option style="display:none" selected="selected"#}
+{#                                                    value="{{ application_obj.study_mode }}"#}
+{#                                                    value="">{{ application_obj.study_mode|default_if_none:"" }}</option>#}
+{#                                        {% else %}#}
+{#                                            <option disabled selected="selected" id=""#}
+{#                                                    value="">{% trans 'Please Select' %}#}
+{#                                            </option>#}
+{#                                        {% endif %}#}
+{##}
+{#                                        {% for rec in study_mode_list %}#}
+{#                                            <option value='{{ rec }}'>{{ rec }}</option>#}
+{#                                        {% endfor %}#}
+{##}
+{#                                    </select>#}
+{#                                </div>#}
+{##}
+{##}
+{#                            </div>#}
+{##}
+{##}
+{#                        </div>#}
+{#                        <br>#}
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Mode' %}: <span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-4">
+                                    <select id='study_level' title="Select Mode" name="study_level"
+                                            class="form-control value_check" data-live-search="true" required>
+
+{#                                        {% if application_obj.study_level %}#}
+{#                                            <option style="display:none" selected="selected"#}
+{#                                                    value="{{ application_obj.study_level.id }}"#}
+{#                                                    value="">{{ application_obj.study_level|default_if_none:"" }}</option>#}
+{#                                        {% else %}#}
+{#                                            <option disabled selected="selected" id=""#}
+{#                                                    value="">{% trans 'Please Select' %}#}
+{#                                            </option>#}
+{#                                        {% endif %}#}
+{##}
+{#                                        {% for rec in study_level_recs %}#}
+{#                                            <option value='{{ rec.id }}'>{{ rec.study_level|default_if_none:"" }}</option>#}
+{#                                        {% endfor %}#}
+
+
+                                         {% if application_obj.program_mode %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.program_mode.id }}"
+                                                    value="">{{ application_obj.program_mode.study_type|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option disabled selected="selected" id=""
+                                                    value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in study_mode_list %}
+                                            <option value='{{ rec.id }}'>{{ rec.study_type|default_if_none:"" }}</option>
+                                        {% endfor %}
+
+
+
+
+                                    </select>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Faculty' %}: <span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-4">
+                                    <select id='faculty' title="Select Faculty" name="faculty"
+                                            class="form-control value_check" data-live-search="true" required>
+
+                                        {% if application_obj.faculty %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.faculty.id }}"
+                                                    value="">{{ application_obj.faculty.faculty_name|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option disabled selected="selected" id=""
+                                                    value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in faculty_final_list %}
+                                            <option value='{{ rec.id }}'>{{ rec.faculty|default_if_none:"" }}</option>
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                        <br>
+
+                        <div class="row">
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Program' %}: <span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-4">
+                                    <select id='program' title="Select Program" name="program"
+                                            class="form-control value_check" data-live-search="true" required>
+
+                                        {% if application_obj.program %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.program.id }}"
+                                                    value="">{{ application_obj.program.program_name|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option selected="selected" id="" value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in program_final_list %}
+                                            <option value='{{ rec.id }}'>{{ rec.program|default_if_none:"" }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                    {% if application_obj.program_mode.study_type == 'Research' %}
+                        <div class="research_details">
+                        <br>
+                        <div class="row research_mode">
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Supervisor' %}:</label>
+                                <div class="col-md-4">
+                                    <select id='supervisor' title="Select Supervisor" name="supervisor"
+                                            class="form-control">
+                                        {% if research_details.supervisor %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ research_details.supervisor.id }}"
+                                                    >{{ research_details.supervisor.email|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+                                        {% for rec in supervisor_list %}
+                                            <option value='{{ rec.id }}'>{{ rec.email|default_if_none:"" }}</option>
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                        <hr>
+
+                         <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-settings font-red"></i>
+                                <span class="caption-subject font-red sbold uppercase">{% trans 'RESEARCH DETAILS' %}</span>
+                            </div>
+                        </div>
+                        <hr>
+
+                        <div class="row">
+
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Title of Thesis/Research Project' %}:</label>
+                                <div class="col-md-8">
+                                    <textarea class="form-control" id="research_title" name="research_title">{{ research_details.research_title|default_if_none:"" }}</textarea>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+
+                        <br>
+
+
+                        <div class="row">
+                           <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Project Outline' %}:</label>
+                                <div class="col-md-8">
+                                   <textarea class="form-control" id="project_outline" name="project_outline">{{ research_details.project_outline|default_if_none:"" }}</textarea>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <br>
+
+
+                         <div class="row">
+
+                                      <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Data Collection' %}:</label>
+                                <div class="col-md-8">
+                                   <textarea class="form-control" id="data_collection" name="data_collection">{{ research_details.data_collection|default_if_none:"" }}</textarea>
+                                </div>
+                            </div>
+
+
+                                 </div>
+                        <br>
+                        <div class="row">
+
+                                      <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Data Analysis' %}:</label>
+                                <div class="col-md-8">
+                                   <textarea class="form-control" id="data_analysis" name="data_analysis">{{ research_details.data_analysis|default_if_none:"" }}</textarea>
+                                </div>
+                            </div>
+
+
+                                 </div>
+                        <br>
+                        <div class="row">
+
+                                      <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Progress to Date' %}:</label>
+                                <div class="col-md-8">
+                                   <textarea class="form-control" id="progress_date" name="progress_date">{{ research_details.progress_date|default_if_none:"" }}</textarea>
+                                </div>
+                            </div>
+
+
+                                 </div>
+                        <br>
+                        <div class="row">
+
+                                      <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Problems encountered while conducting your Research (If any)' %}:</label>
+                                <div class="col-md-8">
+                                   <textarea class="form-control" id="problems_encountered" name="problems_encountered">{{ research_details.problems_encountered|default_if_none:"" }}</textarea>
+                                </div>
+                            </div>
+
+
+                                 </div>
+                        </div>
+
+
+                    {% else %}
+                         <br>
+                        <div class="research_details" style="display: none">
+
+                        <div class="row research_mode">
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Supervisor' %}:</label>
+                                <div class="col-md-4">
+                                    <select id='supervisor' title="Select Supervisor" name="supervisor"
+                                            class="form-control">
+                                        {% if research_details.supervisor %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ research_details.supervisor.id }}"
+                                                    >{{ research_details.supervisor.email|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+                                        {% for rec in supervisor_list %}
+                                            <option value='{{ rec.id }}'>{{ rec.email|default_if_none:"" }}</option>
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                        <br>
+
+                         <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-settings font-red"></i>
+                                <span class="caption-subject font-red sbold uppercase">{% trans 'RESEARCH DETAILS' %}</span>
+                            </div>
+                        </div>
+                        <hr>
+
+                        <div class="row">
+
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Title of Thesis/Research Project' %}:</label>
+                                <div class="col-md-8">
+                                    <textarea class="form-control" id="research_title" name="research_title">{{ research_details.research_title|default_if_none:"" }}</textarea>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+
+                        <br>
+
+
+                        <div class="row">
+                           <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Project Outline' %}:</label>
+                                <div class="col-md-8">
+                                   <textarea class="form-control" id="project_outline" name="project_outline">{{ research_details.project_outline|default_if_none:"" }}</textarea>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <br>
+
+
+                         <div class="row">
+
+                                      <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Data Collection' %}:</label>
+                                <div class="col-md-8">
+                                   <textarea class="form-control" id="data_collection" name="data_collection">{{ research_details.data_collection|default_if_none:"" }}</textarea>
+                                </div>
+                            </div>
+
+
+                                 </div>
+                        <br>
+                        <div class="row">
+
+                                      <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Data Analysis' %}:</label>
+                                <div class="col-md-8">
+                                   <textarea class="form-control" id="data_analysis" name="data_analysis">{{ research_details.data_analysis|default_if_none:"" }}</textarea>
+                                </div>
+                            </div>
+
+
+                                 </div>
+                        <br>
+                        <div class="row">
+
+                                      <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Progress to Date' %}:</label>
+                                <div class="col-md-8">
+                                   <textarea class="form-control" id="progress_date" name="progress_date">{{ research_details.progress_date|default_if_none:"" }}</textarea>
+                                </div>
+                            </div>
+
+
+                                 </div>
+                        <br>
+                        <div class="row">
+
+                                      <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Problems encountered while conducting your Research (If any)' %}:</label>
+                                <div class="col-md-8">
+                                   <textarea class="form-control" id="problems_encountered" name="problems_encountered">{{ research_details.problems_encountered|default_if_none:"" }}</textarea>
+                                </div>
+                            </div>
+
+
+                                 </div>
+                        </div>
+
+
+                    {% endif %}
+                    {% if application_obj.program_mode.study_type == 'Research' %}
+                     <hr>
+                        <div class="second_third_choice" style="display: none;">
+
+
+                        <span style="padding:inherit;color: red">{% trans 'SECOND CHOICE' %}:  </span><br><br>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Mode' %}: <span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-4">
+                                    <select id='study_level_2' title="Select Mode" name="study_level_2"
+                                            class="form-control value_check" data-live-search="true" required>
+
+
+                                         {% if application_obj.program_mode_2 %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.program_mode_2.id }}"
+                                                    value="">{{ application_obj.program_mode_2.study_type|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option disabled selected="selected" id=""
+                                                    value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in study_mode_list_2 %}
+                                            <option value='{{ rec.id }}'>{{ rec.study_type|default_if_none:"" }}</option>
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Faculty' %}: <span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-4">
+                                    <select id='faculty_2' title="Select Faculty" name="faculty_2"
+                                            class="form-control value_check" data-live-search="true" required>
+
+                                        {% if application_obj.faculty_2 %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.faculty_2.id }}"
+                                                    value="">{{ application_obj.faculty_2.faculty_name|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option disabled selected="selected" id=""
+                                                    value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in faculty_2_final_list %}
+                                            <option value='{{ rec.id }}'>{{ rec.faculty|default_if_none:"" }}</option>
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                        <br>
+
+                        <div class="row">
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Program' %}: <span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-4">
+                                    <select id='program_2' title="Select Program" name="program_2"
+                                            class="form-control value_check" data-live-search="true" required>
+
+                                        {% if application_obj.program_2 %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.program_2.id }}"
+                                                    value="">{{ application_obj.program_2.program_name|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option selected="selected" id="" value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in program_2_final_list %}
+                                            <option value='{{ rec.id }}'>{{ rec.program|default_if_none:"" }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                        <hr>
+
+
+                        <span style="padding:inherit;color: red">{% trans 'THIRD CHOICE' %}:  </span><br><br>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Mode' %}: <span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-4">
+                                    <select id='study_level_3' title="Select Mode" name="study_level_3"
+                                            class="form-control value_check" data-live-search="true" required>
+
+
+                                         {% if application_obj.program_mode_3 %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.program_mode_3.id }}"
+                                                    value="">{{ application_obj.program_mode_3.study_type|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option disabled selected="selected" id=""
+                                                    value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in study_mode_list_3 %}
+                                            <option value='{{ rec.id }}'>{{ rec.study_type|default_if_none:"" }}</option>
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Faculty' %}: <span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-4">
+                                    <select id='faculty_3' title="Select Faculty" name="faculty_3"
+                                            class="form-control value_check" data-live-search="true" required>
+
+                                        {% if application_obj.faculty_3 %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.faculty_3.id }}"
+                                                    value="">{{ application_obj.faculty_3.faculty_name|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option disabled selected="selected" id=""
+                                                    value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in faculty_3_final_list %}
+                                            <option value='{{ rec.id }}'>{{ rec.faculty|default_if_none:"" }}</option>
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                        <br>
+
+                        <div class="row">
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Program' %}: <span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-4">
+                                    <select id='program_3' title="Select Program" name="program_3"
+                                            class="form-control value_check" data-live-search="true" required>
+
+                                        {% if application_obj.program_3 %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.program_3.id }}"
+                                                    value="">{{ application_obj.program_3.program_name|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option selected="selected" id="" value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in program_3_final_list %}
+                                            <option value='{{ rec.id }}'>{{ rec.program|default_if_none:"" }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                        <hr>
+                        </div>
+
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-settings font-red"></i>
+                                <span class="caption-subject font-red sbold uppercase">{% trans 'EXAM CENTRE INFO' %}</span>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Country:</label>
+                                <div class="col-md-4">
+                                    <select id='country' title="Select Country" name="country"
+                                            class="form-control value_check" data-live-search="true">
+
+                                        {% if application_obj.learning_country %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.learning_country.id }}"
+                                                    value="">{{ application_obj.learning_country.country_name|title }}</option>
+                                        {% else %}
+                                            <option disabled selected="selected" id=""
+                                                    value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in country_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+
+                    {% else %}
+                          <br>
+                        <div class="second_third_choice" >
+
+
+                        <span style="padding:inherit;color: red">{% trans 'SECOND CHOICE' %}:  </span><br><br>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Mode' %}: <span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-4">
+                                    <select id='study_level_2' title="Select Mode" name="study_level_2"
+                                            class="form-control value_check" data-live-search="true" required>
+
+
+                                         {% if application_obj.program_mode_2 %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.program_mode_2.id }}"
+                                                    value="">{{ application_obj.program_mode_2.study_type|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option disabled selected="selected" id=""
+                                                    value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in study_mode_list_2 %}
+                                            <option value='{{ rec.id }}'>{{ rec.study_type|default_if_none:"" }}</option>
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Faculty' %}: <span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-4">
+                                    <select id='faculty_2' title="Select Faculty" name="faculty_2"
+                                            class="form-control value_check" data-live-search="true" required>
+
+                                        {% if application_obj.faculty_2 %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.faculty_2.id }}"
+                                                    value="">{{ application_obj.faculty_2.faculty_name|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option disabled selected="selected" id=""
+                                                    value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in faculty_2_final_list %}
+                                            <option value='{{ rec.id }}'>{{ rec.faculty|default_if_none:"" }}</option>
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                        <br>
+
+                        <div class="row">
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Program' %}: <span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-4">
+                                    <select id='program_2' title="Select Program" name="program_2"
+                                            class="form-control value_check" data-live-search="true" required>
+
+                                        {% if application_obj.program_2 %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.program_2.id }}"
+                                                    value="">{{ application_obj.program_2.program_name|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option selected="selected" id="" value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in program_2_final_list %}
+                                            <option value='{{ rec.id }}'>{{ rec.program|default_if_none:"" }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                        <hr>
+
+
+                        <span style="padding:inherit;color: red">{% trans 'THIRD CHOICE' %}:  </span><br><br>
+
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Mode' %}: <span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-4">
+                                    <select id='study_level_3' title="Select Mode" name="study_level_3"
+                                            class="form-control value_check" data-live-search="true" required>
+
+
+                                         {% if application_obj.program_mode_3 %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.program_mode_3.id }}"
+                                                    value="">{{ application_obj.program_mode_3.study_type|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option disabled selected="selected" id=""
+                                                    value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in study_mode_list_3 %}
+                                            <option value='{{ rec.id }}'>{{ rec.study_type|default_if_none:"" }}</option>
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Faculty' %}: <span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-4">
+                                    <select id='faculty_3' title="Select Faculty" name="faculty_3"
+                                            class="form-control value_check" data-live-search="true" required>
+
+                                        {% if application_obj.faculty_3 %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.faculty_3.id }}"
+                                                    value="">{{ application_obj.faculty_3.faculty_name|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option disabled selected="selected" id=""
+                                                    value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in faculty_3_final_list %}
+                                            <option value='{{ rec.id }}'>{{ rec.faculty|default_if_none:"" }}</option>
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                        <br>
+
+                        <div class="row">
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Program' %}: <span
+                                        style="color: red">*</span></label>
+                                <div class="col-md-4">
+                                    <select id='program_3' title="Select Program" name="program_3"
+                                            class="form-control value_check" data-live-search="true" required>
+
+                                        {% if application_obj.program_3 %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.program_3.id }}"
+                                                    value="">{{ application_obj.program_3.program_name|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option selected="selected" id="" value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in program_3_final_list %}
+                                            <option value='{{ rec.id }}'>{{ rec.program|default_if_none:"" }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                        <hr>
+                        </div>
+
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-settings font-red"></i>
+                                <span class="caption-subject font-red sbold uppercase">{% trans 'EXAM CENTRE INFO' %}</span>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+
+
+                            <div class="">
+                                <label class="col-md-2 control-label">Country:</label>
+                                <div class="col-md-4">
+                                    <select id='country' title="Select Country" name="country"
+                                            class="form-control value_check" data-live-search="true">
+
+                                        {% if application_obj.learning_country %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.learning_country.id }}"
+                                                    value="">{{ application_obj.learning_country.country_name|title }}</option>
+                                        {% else %}
+                                            <option disabled selected="selected" id=""
+                                                    value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in country_recs %}
+                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                        <br>
+                      {% endif %}
+                     <br>
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-2 control-label">{% trans 'Exam Centre' %}:</label>
+                                <div class="col-md-4">
+                                    <select id='learning_centre' title="Select Learning Centre" name="learning_centre"
+                                            class="form-control value_check" data-live-search="true">
+
+                                        {% if application_obj.learning_centre %}
+                                            <option style="display:none" selected="selected"
+                                                    value="{{ application_obj.learning_centre.id }}"
+                                                    value="">{{ application_obj.learning_centre.lc_name|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option disabled selected="selected" id=""
+                                                    value="">{% trans 'Please Select' %}
+                                            </option>
+                                        {% endif %}
+
+                                        {% for rec in learning_centre_list %}
+                                            <option value='{{ rec.id }}'>{{ rec.learning_centre_name|default_if_none:"" }}</option>
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+                        <hr>
+
+
+                        <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                                        onclick="window.location='{% url 'agents:applicant_personal_info' user.id %}'">{% trans 'Back' %}
+                                </button>
+
+                                {#                            {% if application_obj.application_id %}#}
+                                {#                                <button type="submit" class="btn green" id="save">{% trans 'Save/Next' %}</button>#}
+                                {#                            {% endif %}#}
+                                {% comment %}
+                                    <button type="button" class="btn blue" id="next"
+                                            onclick="window.location='{% url "student:applicant_academic_english_qualification" %}'">
+                                        Next
+                                    </button>{% endcomment %}
+
+                                {% if application_obj %}
+                                    {% if not application_obj.is_submitted %}
+                                        <button type="submit" class="btn green"
+                                                id="save">{% trans 'Save/Next' %}</button>
+                                    {% else %}
+                                        <button type="button"
+                                                onclick="window.location='{% url "student:applicant_academic_english_qualification" %}'"
+                                                class="btn green" id="save">{% trans 'Next' %}</button>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

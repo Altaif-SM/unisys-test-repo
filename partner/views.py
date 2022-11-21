@@ -2386,7 +2386,7 @@ def approved_application(request):
     context = {}
     try:
         if request.user.is_agent():
-            accepted_applicants = ApplicationDetails.objects.filter(is_submitted=True, agent_id = request.user.id,
+            accepted_applicants = ApplicationDetails.objects.filter(agent_id = request.user.id,
                                                                     year=get_current_year(request),
                                                                     )
             context['my_template'] = 'template_agent_base.html'
@@ -2398,6 +2398,10 @@ def approved_application(request):
 
     except Exception as e:
         messages.warning(request, "Form have some error" + str(e))
+    try:
+        del request.session['form_data']
+    except:
+        pass
     return render(request, 'accepted_application.html',{'accepted_applicants': accepted_applicants,'context':context})
 
 

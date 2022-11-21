@@ -1,0 +1,64 @@
+{% extends "template_agent_base.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+{% block styleBlock %}
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+{% endblock %}
+
+{% block content %}
+
+
+
+
+
+
+    <div class="portlet light">
+        <div class="portlet-body">
+            <div class="invoice">
+                <div class="row invoice-logo">
+                    <div class="col-xs-8">
+                        <p>
+                            #5652256 / {% now "j F Y " %}
+
+                            <span class="muted">
+										Online Admission ({{ application_obj.university.university_name|default_if_none:"" }}) </span>
+                        </p>
+                    </div>
+
+
+                </div>
+
+                <div class="row invoice-logo">
+                    <div class="col-xs-4 invoice-logo-space">
+                    </div>
+
+                     <div class="col-xs-8">
+                        <p>
+                            <span class="muted" style="color: red;font-size: 16px">
+										There is no application fee associated with this university! </span>
+                        </p>
+                    </div>
+                </div>
+                <hr/>
+
+
+            <br>
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+{% endblock %}

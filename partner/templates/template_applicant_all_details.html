@@ -44,7 +44,7 @@
                 {% elif user.is_partner %}
                     <a href="{% url 'accounts:home' %}">Home</a>
                   {% elif user.is_agent %}
-                    <a href="{% url 'agents:dashboard' %}">HOME</a>
+                    <a href="{% url 'agents:dashboard' %}">Home</a>
                 {% else %}
                     <a href="{% url 'accounts:home' %}">Home</a>
                 {% endif %}
@@ -77,7 +77,7 @@
          {% if user.is_agent %}
 
             <li>
-                <span> {% trans 'APPLICATIONS DETAILS' %}</span>
+                <span> {% trans 'Applications Details' %}</span>
 
             </li>
         {% else %}
@@ -104,6 +104,12 @@
                 <span class="caption-subject font-red sbold uppercase"> {% trans 'Applications Details' %}</span>
 
             </div>
+                {% if user.is_agent %}
+            <a href="{% url 'partner:approved_application' %}">
+                <button type="submit" class="btn green" id="save" style="margin-left:77%;background-color: #3598dc">{% trans 'Back' %}
+                </button>
+            </a>
+            {% endif %}
 
 
         </div>

@@ -1,0 +1,461 @@
+{% extends "template_agent_base.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+
+            $(document).ready(function () {
+
+                {% if user.get_application %}
+                    {% if user.get_application.is_submitted %}
+                        $('input').prop('disabled', 'true');
+                        $('select').prop('disabled', 'true');
+                        $('label').prop('readonly', 'true');
+                        $(".add_experience_row").removeClass("add_experience_row");
+                    {% endif %}
+                {% endif %}
+
+
+                 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                    var target = $(e.target).attr("data-id")
+                    var priorities = target
+                     if (parseInt(priorities) == 1) {
+                        $(location).prop('href', "{% url 'agents:applicant_academic_english_qualification' %}")
+
+                    }
+                     else if(parseInt(priorities) == 2){
+                         $(location).prop('href', "{% url 'agents:applicant_credit_transfer' %}")
+
+                     }
+                    else{
+                        $(location).prop('href', "{% url 'agents:applicant_credit_transfer_attachement' %}")
+                    }
+
+
+                });
+
+
+                var experience_count = 1;
+                {% if credit_transfer_count == 0 %}
+                    var experience_count = 1;
+                {% else %}
+                    var experience_count = "{{ credit_transfer_count }}"
+                {% endif %}
+                $(document).on("click", ".add_experience_row", function (e) {
+                    experience_count = parseInt(experience_count) + 1;
+                    {#var row = '<div class="row item_experience" id="item_experience_' + experience_count + '"><div class="row"><div class=""><label class="col-md-2 control-label">Course Code:</label><div class="col-md-3"><input type="text" title="Enter Course Code" id="course_code_' + experience_count + '" value="" name="course_code_' + experience_count + '" class="form-control"><input hidden type="text" name="credit_transfer_obj_' + experience_count + '" id="credit_transfer_obj_' + experience_count + '"></div></div><div class=""><label class="col-md-2 control-label">Course Title:</label><div class="col-md-3"><input type="text" title="Enter Course Title" id="course_title_' + experience_count + '" value="" name="course_title_' + experience_count + '" class="form-control"></div></div><div class="col-md-1"><a href="javascript:;" class="delete_experience btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Credit Hours:</label><div class="col-md-3"><input type="text" title="Enter Credit Hours" id="credit_hours_' + experience_count + '" value="" name="credit_hours_' + experience_count + '" class="form-control"></div></div><div class=""><label class="col-md-2 control-label">Grade:</label><div class="col-md-3"><input type="text" title="Enter Grade" id="grade_' + experience_count + '" value="" name="grade_' + experience_count + '" class="form-control"></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Institution/University:</label><div class="col-md-3"><input type="text" title="Enter Institution/University" id="institution_' + experience_count + '" value="" name="institution_' + experience_count + '" class="form-control"></div></div></div><br><hr><br></div>';#}
+                    var row = '<div class="row item_experience" id="item_experience_' + experience_count + '"><div class="row"><div class=""><label class="col-md-2 control-label">Course Code:</label><div class="col-md-3"><input type="text" title="Enter Course Code" id="course_code_' + experience_count + '" value="" name="course_code_' + experience_count + '" class="form-control"><input hidden type="text" name="credit_transfer_obj_' + experience_count + '" id="credit_transfer_obj_' + experience_count + '"></div></div><div class=""><label class="col-md-2 control-label">Course Title:</label><div class="col-md-3"><input type="text" title="Enter Course Title" id="course_title_' + experience_count + '" value="" name="course_title_' + experience_count + '" class="form-control"></div></div><div class="col-md-1"><a href="javascript:;" class="delete_experience btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Program Study Status:</label><div class="col-md-3"><select id="program_study_status_' + experience_count + '" title="Select Program Study Status" name="program_study_status_' + experience_count + '" class="form-control chk"><option style="display:none" selected="selected" id="" value="">Please Select</option><option value="Complete">Complete</option><option value="Withdrawn">Withdrawn</option><option value="Terminated">Terminated</option><option value="Currently Studying">Currently Studying</option></select></div></div><div class=""><label class="col-md-2 control-label">Credit Hours:</label><div class="col-md-3"><input type="text" title="Enter Credit Hours" id="credit_hours_' + experience_count + '" value="" name="credit_hours_' + experience_count + '" class="form-control"></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Grade:</label><div class="col-md-3"><input type="text" title="Enter Grade" id="grade_' + experience_count + '" value="" name="grade_' + experience_count + '" class="form-control"></div></div><div class=""><label class="col-md-2 control-label">Institution/University:</label><div class="col-md-3"><input type="text" title="Enter Institution/University" id="institution_' + experience_count + '" value="" name="institution_' + experience_count + '" class="form-control"></div></div></div><br><hr><br></div>';
+                    $(row).removeAttr().hide().insertAfter(".item_experience:last").slideDown(300);
+                });
+
+                $(document).on("click", ".delete_experience", function () {
+                    {#$(this).parents('.curriculum_item').next().closest('br').remove();#}
+                    $(this).parents('.item_experience').remove();
+                });
+
+                $(document).on("click", "#save_form", function (e) {
+                    var rowCount = $(".item_experience").length;
+                    $('#experience_count').val(rowCount);
+                    $('#id_form').submit()
+
+                });
+                $('#sample_1').dataTable().fnDestroy();
+                $('#sample_1').dataTable({
+                    "aoColumnDefs": [
+                        {'bSortable': false}
+                    ]
+                });
+            });
+        }
+
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'student:student_home' %}">{% trans 'Home' %}</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span>{% trans 'Academic Qualification' %}</span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <br>
+    <div class="tabbable-custom nav-justified">
+                            <ul class="nav nav-tabs nav-justified">
+                                <li >
+                                    <a data-id="1" href="#tab_1_1_1" data-toggle="tab">
+                                        Qualification </a>
+                                </li>
+                                <li class="active">
+                                    <a data-id="2" href="#tab_1_1_2" data-toggle="tab">
+                                        Credit Transfer </a>
+                                </li>
+                                <li class="">
+                                    <a data-id="3" href="#tab_1_1_3" data-toggle="tab">
+                                        Credit Transfer Attachment </a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content">
+                                <div class="tab-pane " id="tab_1_1_1">
+                                </div>
+                                <div class="tab-pane active" id="tab_1_1_2">
+                                    <div class="portlet light portlet-fit portlet-form ">
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form action="{% url 'agents:save_credit_transfer' %}"
+                      id="id_form"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                <input type="hidden" value="{{ application_obj.id }}" id="application_id" name="application_id">
+
+                    <div class="form-body">
+
+                        <input id="curriculum_count" name="curriculum_count" hidden>
+
+
+                        <div class="portlet-title" style="margin-left:-15px;font-size: 16px;">
+                            <div class="caption">
+                                <i class="icon-settings font-red"></i>
+                                <span class="caption-subject font-red sbold uppercase">{% trans 'Credit Transfer' %}</span>
+                                <br>
+                                <span style="font-family: 'Times New Roman';font-size: 16px;"><b>({% trans 'Optional If Applicable' %})</b></span>
+                            </div>
+                        </div>
+                        <hr>
+
+                        <input id="experience_count" name="experience_count" hidden>
+
+                        <div class="" style="float: right; padding-right: 98px">
+                            <div class="">
+                                <a href="javascript:;" id="add" class="btn btn-icon-only green add_experience_row"
+                                   style="">
+                                    <i class="fa fa-plus "></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        {% if credit_transfer_recs %}
+                            {% for credit_transfer_obj in credit_transfer_recs %}
+                                <div class="row item_experience" id="item_experience_{{ forloop.counter }}">
+
+                                    <div class="row">
+                                        <div class="">
+                                            <label class="col-md-2 control-label">{% trans 'Course Code' %}:</label>
+                                            <div class="col-md-3">
+                                                <input type="text" title="Enter Course Code"
+                                                       id="course_code_{{ forloop.counter }}"
+                                                       value="{{ credit_transfer_obj.course_code|default_if_none:"" }}" name="course_code_{{ forloop.counter }}"
+                                                       class="form-control">
+
+                                                <input hidden type="text" name="credit_transfer_obj_{{ forloop.counter }}" value="{{ credit_transfer_obj.id }}"
+                                                       id="credit_transfer_obj_{{ forloop.counter }}">
+                                            </div>
+                                        </div>
+
+
+                                        <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'Course Title' %}:</label>
+                                        <div class="col-md-3">
+                                            <input type="text" title="Enter Course Title" id="course_title_{{ forloop.counter }}"
+                                                   value="{{ credit_transfer_obj.course_title|default_if_none:""}}" name="course_title_{{ forloop.counter }}"
+                                                   class="form-control">
+
+                                        </div>
+                                    </div>
+
+                                    </div>
+
+
+
+                                    <br>
+
+
+
+                                    <div class="row">
+
+                                         <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'Program Study Status' %}:</label>
+                                        <div class="col-md-3">
+                                            <select id='program_study_status_{{ forloop.counter }}' title="Select Program Study Status" name="program_study_status_{{ forloop.counter }}"
+                                                    class="form-control chk">
+
+                                             {% if credit_transfer_obj.program_study_status %}
+
+                                                        <option style="display:none" selected="selected"
+                                                                value="{{ credit_transfer_obj.program_study_status }}"
+                                                                >{{ credit_transfer_obj.program_study_status|default_if_none:"" }}</option>
+                                                {% else %}
+                                                        <option style="display:none" selected="selected" id="" value="">
+                                                            {% trans 'Please Select' %}
+                                                        </option>
+                                                {% endif %}
+                                                <option value="Complete">Complete</option>
+                                                <option value="Withdrawn">Withdrawn</option>
+                                                <option value="Terminated">Terminated</option>
+                                                <option value="Currently Studying">Currently Studying</option>
+                                            </select>
+
+                                        </div>
+                                    </div>
+
+
+                                        <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'Credit Hours' %}:</label>
+                                        <div class="col-md-3">
+                                            <input type="text" title="Enter Credit Hours" id="credit_hours_{{ forloop.counter }}"
+                                                   value="{{ credit_transfer_obj.credit_hours}}" name="credit_hours_{{ forloop.counter }}"
+                                                   class="form-control">
+
+                                        </div>
+                                    </div>
+
+
+
+
+                                    </div>
+                                <br>
+
+                                    <div class="row">
+
+                                         <div class="">
+                                            <label class="col-md-2 control-label">{% trans 'Grade' %}:</label>
+                                            <div class="col-md-3">
+                                                <input type="text" title="Enter Grade"
+                                                       id="grade_{{ forloop.counter }}"
+                                                       value="{{ credit_transfer_obj.grade|default_if_none:""}}" name="grade_{{ forloop.counter }}"
+                                                       class="form-control">
+
+                                            </div>
+                                        </div>
+
+                                        <div class="">
+                                            <label class="col-md-2 control-label">{% trans 'Institution/University' %}:</label>
+                                            <div class="col-md-3">
+                                                <input type="text" title="Enter Institution/University"
+                                                       id="institution_{{ forloop.counter }}"
+                                                       value="{{ credit_transfer_obj.institution|default_if_none:""}}" name="institution_{{ forloop.counter }}"
+                                                       class="form-control">
+
+                                            </div>
+                                        </div>
+
+
+
+
+
+                                    </div>
+
+                                    <br>
+
+
+
+
+                                    <hr>
+                                    <br>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+
+                            <div class="row item_experience" id="item_experience_1">
+
+                                <div class="row">
+                                    <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'Course Code' %}:</label>
+                                        <div class="col-md-3">
+                                            <input type="text" title="Enter Course Code" id="course_code_1"
+                                                   value="" name="course_code_1"
+                                                   class="form-control">
+
+                                            <input hidden type="text" name="credit_transfer_obj_1" id="credit_transfer_obj_1">
+                                        </div>
+                                    </div>
+
+                                    <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'Course Title' %}:</label>
+                                        <div class="col-md-3">
+                                            <input type="text" title="Enter Course Title" id="course_title_1"
+                                                   value="" name="course_title_1"
+                                                   class="form-control">
+
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+
+                                <br>
+
+
+                                 <div class="row">
+
+                                     <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'Program Study Status' %}:</label>
+                                        <div class="col-md-3">
+                                            <select id='program_study_status_1' title="Select Program Study Status" name="program_study_status_1"
+                                                    class="form-control chk">
+
+                                            <option style="display:none" selected="selected" id="" value="">
+                                                            {% trans 'Please Select' %}
+                                                        </option>
+
+                                                <option value="Complete">Complete</option>
+                                                <option value="Withdrawn">Withdrawn</option>
+                                                <option value="Terminated">Terminated</option>
+                                                <option value="Currently Studying">Currently Studying</option>
+                                            </select>
+
+                                        </div>
+                                    </div>
+
+
+
+                                     <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'Credit Hours' %}:</label>
+                                        <div class="col-md-3">
+                                            <input type="text" title="Enter Credit Hours" id="credit_hours_1"
+                                                   value="" name="credit_hours_1"
+                                                   class="form-control">
+
+                                        </div>
+                                    </div>
+
+
+
+
+                                 </div>
+                                <br>
+
+
+                                <div class="row">
+                                    <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'Grade' %}:</label>
+                                        <div class="col-md-3">
+                                            <input type="text" title="Enter Grade" id="grade_1"
+                                                   value="" name="grade_1"
+                                                   class="form-control">
+
+                                        </div>
+                                    </div>
+
+                                        <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'Institution/University' %}:</label>
+                                        <div class="col-md-3">
+                                            <input type="text" title="Enter Institution/University" id="institution_1"
+                                                   value="" name="institution_1"
+                                                   class="form-control">
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            <br>
+
+
+                                <hr>
+                                <br>
+                            </div>
+                        {% endif %}
+
+
+
+                        <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                                        onclick="window.location='{% url "agents:applicant_academic_english_qualification" %}'">
+                                    {% trans 'Back' %}
+                                </button>
+
+
+                                {% if application_obj %}
+                                    {% if not application_obj.is_submitted %}
+                                       <button type="button" class="btn green" id="save_form" style="">{% trans 'Save/Next' %}
+                                        </button>
+                                    {% else %}
+                                        <button type="button" onclick="window.location='{% url "student:applicant_credit_transfer_attachement" %}'" class="btn green" id="save">{% trans 'Next' %}</button>
+                                    {% endif %}
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+                                </div>
+                            <div class="tab-pane " id="tab_1_1_3">
+                                </div>
+                            </div>
+                        </div>
+
+    <!-- BEGIN VALIDATION STATES-->
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+

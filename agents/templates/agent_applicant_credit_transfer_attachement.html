@@ -1,0 +1,418 @@
+{% extends "template_agent_base.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+
+            $(document).ready(function () {
+
+
+             {% if user.get_application %}
+                    {% if user.get_application.is_submitted %}
+                        $('input').prop('disabled', 'true');
+                        $('select').prop('disabled', 'true');
+                        $('label').prop('readonly', 'true');
+                    {% endif %}
+                {% endif %}
+
+             $(document).on("click", ".remove_doc", function (e) {
+                    var parent_id = $(this).closest('div').attr('id');
+                    console.log('parent_id'+parent_id);
+                    $('#' + parent_id + ' .emp').val('');
+                });
+
+             $(document).on("click", ".file", function (e) {
+                    $(this).parent('.form-control').next('.file_type').trigger('click');
+                });
+                var _URL = window.URL || window.webkitURL;
+                $('.file_type').change(function (evt) {
+                    var extension = $(this).val().split('.').pop().toLowerCase();
+                    if ((extension == 'jpeg') || (extension == 'jpg')) {
+
+                        var files = !!this.files ? this.files : [];
+                        var maxSizeKB = 66; //Size in KB
+                        var maxSize = maxSizeKB * 1024; //File size is returned in Bytes
+                        if (files[0].size > maxSize) {
+                            alert('Maximum file size must be 66 KB');
+                            location.reload();
+                            return false;
+                        }
+                        var file, img;
+                        if ((file = files[0])) {
+                            img = new Image();
+                            var objectUrl = _URL.createObjectURL(file);
+                            img.onload = function () {
+                                var width = img.naturalWidth,
+                                    height = img.naturalHeight;
+                                _URL.revokeObjectURL(objectUrl);
+                                if (width <= 217 && height <= 280) {
+                                    var file_name = $(this).val().split('\\')[2];
+                                    $(this).prev().children().children('.file_value').val(file_name);
+                                } else {
+                                    alert('Maximum file height and width must be 280px*217px');
+                                    location.reload();
+                                    return false
+
+                                }
+
+                            };
+                            img.src = objectUrl;
+                            var file_name = $(this).val().split('\\')[2];
+                            $(this).prev().children().children('.file_value').val(file_name);
+                        }
+
+
+                    } else {
+                        var file_name = $(this).val().split('\\')[2];
+                        $(this).prev().children().children('.file_value').val(file_name);
+                    }
+
+                    /*
+                    if (!files.length || !window.FileReader) return;
+                    var fileExtension = ['pdf'];
+                    if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                        alert("Only formats are allowed : " + fileExtension.join(', '));
+                        $(this).val('');
+                        return false;
+                    }
+                    */
+
+                });
+
+
+                 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                    var target = $(e.target).attr("data-id")
+                    var priorities = target
+                     if (parseInt(priorities) == 1) {
+                        $(location).prop('href', "{% url 'agents:applicant_academic_english_qualification' %}")
+
+                    }
+                     else if(parseInt(priorities) == 2){
+                         $(location).prop('href', "{% url 'agents:applicant_credit_transfer' %}")
+
+                     }
+                    else{
+                        $(location).prop('href', "{% url 'agents:applicant_credit_transfer_attachement' %}")
+                    }
+
+
+                });
+
+
+                var experience_count = 1;
+                {% if credit_transfer_count == 0 %}
+                    var experience_count = 1;
+                {% else %}
+                    var experience_count = "{{ credit_transfer_count }}"
+                {% endif %}
+                $(document).on("click", ".add_experience_row", function (e) {
+                    experience_count = parseInt(experience_count) + 1;
+                    {#var row = '<div class="row item_experience" id="item_experience_' + experience_count + '"><div class="row"><div class=""><label class="col-md-2 control-label">Course Code:</label><div class="col-md-3"><input type="text" title="Enter Course Code" id="course_code_' + experience_count + '" value="" name="course_code_' + experience_count + '" class="form-control"><input hidden type="text" name="credit_transfer_obj_' + experience_count + '" id="credit_transfer_obj_' + experience_count + '"></div></div><div class=""><label class="col-md-2 control-label">Course Title:</label><div class="col-md-3"><input type="text" title="Enter Course Title" id="course_title_' + experience_count + '" value="" name="course_title_' + experience_count + '" class="form-control"></div></div><div class="col-md-1"><a href="javascript:;" class="delete_experience btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Credit Hours:</label><div class="col-md-3"><input type="text" title="Enter Credit Hours" id="credit_hours_' + experience_count + '" value="" name="credit_hours_' + experience_count + '" class="form-control"></div></div><div class=""><label class="col-md-2 control-label">Grade:</label><div class="col-md-3"><input type="text" title="Enter Grade" id="grade_' + experience_count + '" value="" name="grade_' + experience_count + '" class="form-control"></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Institution/University:</label><div class="col-md-3"><input type="text" title="Enter Institution/University" id="institution_' + experience_count + '" value="" name="institution_' + experience_count + '" class="form-control"></div></div></div><br><hr><br></div>';#}
+                    var row = '<div class="row item_experience" id="item_experience_' + experience_count + '"><div class="row"><div class=""><label class="col-md-2 control-label">Course Code:</label><div class="col-md-3"><input type="text" title="Enter Course Code" id="course_code_' + experience_count + '" value="" name="course_code_' + experience_count + '" class="form-control"><input hidden type="text" name="credit_transfer_obj_' + experience_count + '" id="credit_transfer_obj_' + experience_count + '"></div></div><div class=""><label class="col-md-2 control-label">Course Title:</label><div class="col-md-3"><input type="text" title="Enter Course Title" id="course_title_' + experience_count + '" value="" name="course_title_' + experience_count + '" class="form-control"></div></div><div class="col-md-1"><a href="javascript:;" class="delete_experience btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Program Study Status:</label><div class="col-md-3"><select id="program_study_status_' + experience_count + '" title="Select Program Study Status" name="program_study_status_' + experience_count + '" class="form-control chk"><option style="display:none" selected="selected" id="" value="">Please Select</option><option value="Complete">Complete</option><option value="Withdrawn">Withdrawn</option><option value="Terminated">Terminated</option><option value="Currently Studying">Currently Studying</option></select></div></div><div class=""><label class="col-md-2 control-label">Credit Hours:</label><div class="col-md-3"><input type="text" title="Enter Credit Hours" id="credit_hours_' + experience_count + '" value="" name="credit_hours_' + experience_count + '" class="form-control"></div></div></div><br><div class="row"><div class=""><label class="col-md-2 control-label">Grade:</label><div class="col-md-3"><input type="text" title="Enter Grade" id="grade_' + experience_count + '" value="" name="grade_' + experience_count + '" class="form-control"></div></div><div class=""><label class="col-md-2 control-label">Institution/University:</label><div class="col-md-3"><input type="text" title="Enter Institution/University" id="institution_' + experience_count + '" value="" name="institution_' + experience_count + '" class="form-control"></div></div></div><br><hr><br></div>';
+                    $(row).removeAttr().hide().insertAfter(".item_experience:last").slideDown(300);
+                });
+
+                $(document).on("click", ".delete_experience", function () {
+                    {#$(this).parents('.curriculum_item').next().closest('br').remove();#}
+                    $(this).parents('.item_experience').remove();
+                });
+
+                $(document).on("click", "#save_form", function (e) {
+                    var rowCount = $(".item_experience").length;
+                    $('#experience_count').val(rowCount);
+                    $('#id_form').submit()
+
+                });
+                $('#sample_1').dataTable().fnDestroy();
+                $('#sample_1').dataTable({
+                    "aoColumnDefs": [
+                        {'bSortable': false}
+                    ]
+                });
+            });
+        }
+
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'student:student_home' %}">{% trans 'Home' %}</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span>{% trans 'Academic Qualification' %}</span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <br>
+    <div class="tabbable-custom nav-justified">
+                            <ul class="nav nav-tabs nav-justified">
+                                <li >
+                                    <a data-id="1" href="#tab_1_1_1" data-toggle="tab">
+                                        Qualification </a>
+                                </li>
+                                <li class="">
+                                    <a data-id="2" href="#tab_1_1_2" data-toggle="tab">
+                                        Credit Transfer </a>
+                                </li>
+                                <li class="active">
+                                    <a data-id="3" href="#tab_1_1_3" data-toggle="tab">
+                                        Credit Transfer Attachment </a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content">
+                                <div class="tab-pane " id="tab_1_1_1">
+                                </div>
+                            <div class="tab-pane " id="tab_1_1_2">
+                                </div>
+                                <div class="tab-pane active" id="tab_1_1_3">
+                                    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">{% trans 'Credit Transfer Attachment' %}</span>
+                 <br>
+                                <span style="font-family: 'Times New Roman';font-size: 16px;"><b>({% trans 'Optional If Applicable' %})</b></span>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form action="{% url 'agents:save_credit_transfer_attachement' %}"
+                      id="form_sample_1"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                <input type="hidden" value="{{ application_obj.id }}" id="application_id" name="application_id">
+
+                    <div class="form-body">
+
+                        <div class="row">
+                            <div class="">
+
+                                <label class="col-md-4 control-label">Grading Scheme:
+
+                                </label>
+
+
+                                <div class="col-md-3" id="parent2">
+                                    {% if credit_transfer_attachment_obj.grading_scheme %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a target="_blank"
+                                                                                      href="{{ credit_transfer_attachment_obj.grading_scheme.url }}"><input
+                                                type="text"
+                                                readonly name="grading_scheme_text" id="grading_scheme_text"
+                                                class="file_value emp"
+                                                style="cursor: pointer;border: none; width: 50%"
+                                                value="{{ credit_transfer_attachment_obj.grading_scheme }}"></a>
+                                        </label>
+                                    {% else %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a><input type="text"
+                                                                                             readonly
+                                                                                             name="grading_scheme_text"
+                                                                                             class="file_value emp"
+                                                                                             style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
+                                    {% endif %}
+                                    <input type="file" style="display: none" class="file_type" accept="application/pdf,"
+                                           title="Select Grading Scheme" id="grading_scheme"
+                                           name="grading_scheme" class="doc form-control">
+                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                                          class="remove_doc fa fa-close"></span>
+                                </div>
+
+
+
+
+                            </div>
+                        </div>
+
+                        <br>
+
+
+                        <div class="row">
+
+                            <div class="">
+                                <label class="col-md-4 control-label">Module Syllabus:
+                                </label>
+                                <div class="col-md-3" id="parent3">
+                                    {% if credit_transfer_attachment_obj.module_syllabus %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a target="_blank"
+                                                                                      href="{{ credit_transfer_attachment_obj.module_syllabus.url }}"><input
+                                                type="text"
+                                                readonly name="module_syllabus_text" id="module_syllabus_text"
+                                                class="file_value emp"
+                                                style="cursor: pointer;border: none; width: 50%"
+                                                value="{{ credit_transfer_attachment_obj.module_syllabus }}"></a>
+                                        </label>
+                                    {% else %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a><input type="text"
+                                                                                             readonly
+                                                                                             name="module_syllabus_text"
+                                                                                             class="file_value emp"
+                                                                                             style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
+                                    {% endif %}
+                                    <input type="file" style="display: none" class="file_type" accept="application/pdf,"
+                                           title="Select Module Syllabus" id="module_syllabus"
+                                           name="module_syllabus">
+                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                                          class="remove_doc fa fa-close"></span>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="">
+                                <label class="col-md-4 control-label">Status Verification Letter:
+                                </label>
+                                <div class="col-md-3" id="parent4">
+                                    {% if credit_transfer_attachment_obj.status_verification_letter %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a  target="_blank"
+                                                href="
+                                                        {{ credit_transfer_attachment_obj.status_verification_letter.url }}"><input
+                                                type="text"
+                                                readonly name="status_verification_letter_text" id="status_verification_letter_text"
+                                                class="file_value emp"
+                                                style="cursor: pointer;border: none; width: 50%"
+                                                value="{{ credit_transfer_attachment_obj.status_verification_letter }}"></a>
+                                        </label>
+                                    {% else %}
+                                        <label class="form-control"
+                                               style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                class="file" style="width: 50%"
+                                                type='button' value='Choose File:'><a><input type="text"
+                                                                                             readonly
+                                                                                             name="status_verification_letter_text"
+                                                                                             class="file_value emp"
+                                                                                             style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
+                                    {% endif %}
+                                    <input type="file" style="display: none" class="file_type" accept="application/pdf,"
+                                           title="Select Status Verification Letter" id="status_verification_letter"
+                                           name="status_verification_letter">
+                                    <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                                          class="remove_doc fa fa-close"></span>
+                                </div>
+
+
+
+
+                            </div>
+                        </div>
+
+
+
+                        <hr>
+
+                        <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="save" style="margin-left: 70%"
+                                        onclick="window.location='{% url "agents:applicant_credit_transfer" %}'">
+                                    {% trans 'Back' %}
+                                </button>
+
+
+                            {% if application_obj %}
+                                    {% if not application_obj.is_submitted %}
+                                         <button type="submit" class="btn green" id="save" style="">{% trans 'Save/Next' %}
+
+                                    </button>
+                                    {% else %}
+                                        <button type="button" onclick="window.location='{% url "student:applicant_employement_history_info" %}'" class="btn green" id="save">{% trans 'Next' %}</button>
+                                    {% endif %}
+                                {% endif %}
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+    <!-- BEGIN VALIDATION STATES-->
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+

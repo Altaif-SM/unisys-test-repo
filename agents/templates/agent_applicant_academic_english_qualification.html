@@ -1,0 +1,964 @@
+{% extends "template_agent_base.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{% static 'assets/global/plugins/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css' %}"
+          rel="stylesheet" type="text/css"/>
+
+    </head>
+    <!-- END HEAD -->
+    <style type="text/css">
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+
+            $(document).ready(function () {
+
+                 {% if user.get_application %}
+                    {% if user.get_application.is_submitted %}
+                        $('input').prop('disabled', 'true');
+                        $('select').prop('disabled', 'true');
+                        $('label').prop('readonly', 'true');
+                        $(".add_acedimic_row").removeClass("add_acedimic_row");
+                        $(".add_arab_row").removeClass("add_arab_row");
+                        $(".add_english_row").removeClass("add_english_row");
+                    {% endif %}
+                {% endif %}
+
+
+                $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                    var target = $(e.target).attr("data-id")
+                    var priorities = target
+                   if (parseInt(priorities) == 1) {
+                        $(location).prop('href', "{% url 'agents:applicant_academic_english_qualification' %}")
+
+                    }
+                     else if(parseInt(priorities) == 2){
+                         $(location).prop('href', "{% url 'agents:applicant_credit_transfer' %}")
+
+                     }
+                    else{
+                        $(location).prop('href', "{% url 'agents:applicant_credit_transfer_attachement' %}")
+                    }
+
+                });
+
+                 $(document).on("change", ".select_data", function (e) {
+                      var select_id = $(this).attr('id');
+                      var res = select_id.charAt(6);
+                      var select_value = $(this).val();
+                      var element=document.getElementById('other_rec'+res)
+                     if(select_value=='OTHERS')
+                           element.style.display='block';
+                     else
+                           element.style.display='none';
+                })
+
+{#                {% if user.get_application %}#}
+{#                    {% if user.get_application.is_submitted %}#}
+{#                        $('input').prop('disabled', 'true');#}
+{#                        $('select').prop('disabled', 'true');#}
+{#                        $('label').prop('readonly', 'true');#}
+{#                    {% endif %}#}
+{#                {% endif %}#}
+
+                {% if qualification_recs %}
+                    var count = $('.item').length;
+                {% else %}
+                    var count = 1;
+                {% endif %}
+
+
+                {% if english_recs %}
+                    var english_count = $('.english_item').length;
+                {% else %}
+                    var english_count = 1;
+                {% endif %}
+
+                 {% if arab_recs %}
+                    var arab_count = $('.arab_item').length;
+                {% else %}
+                    var arab_count = 1;
+                {% endif %}
+
+                $(".add_acedimic_row").click(function () {
+                    count = count + 1;
+                    var row = '<hr><br><div class="row item" id="check_' + count + '"><div class="row"> <div class=""> <label class="col-md-1 control-label">Qualification:</label> <div class="col-md-2"> <select id="degree' + count + '" title="Select Degree" name="degree' + count + '" class="form-control select_data chk"><option selected="selected" id="" value="">Please Select </option><option value="Secondary">Secondary</option> <option value="O-Level">O-Level</option><option value="A-Level">A-Level</option><option value="Bachelor">Bachelor</option><option value="Master">Master</option></select><br> <input type="text" style="display: none;" title="Enter Other" id="other_rec' + count + '" name="other_rec' + count + '"  class="form-control  other_data"></div> </div><div class=""> <label class="col-md-1 control-label">Major :</label> <div class="col-md-2"> <input type="text" title="Enter Level" id="major' + count + '" name="major' + count + '" value="" class="form-control chk"> <input type="text" hidden value="" id="academic_id_' + count + '" name="academic_id_' + count + '"> </div> </div><div class=""> <label class="col-md-1 control-label"> Institution:</label> <div class="col-md-2"> <input type="text" title="Enter institution" id="a_level_institution" name="level_institution' + count + '" value="" class="form-control chk"> </div></div><div class=""><div class="col-md-1"><a href="javascript:;" class="delete btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div> </div><div class="row"><div class=""> <label class="col-md-1 control-label"> Average:</label> <div class="col-md-2"> <input type="text" title="Enter result" id="level_result' + count + '" name="level_result' + count + '" value="" class="form-control chk"> </div> </div><div class=""> <label class="col-md-1 control-label">Year:</label> <div class="col-md-2"> <select id="level_year' + count + '" title="Select Year" name="level_year' + count + '" class="form-control chk"><option selected="selected" id="" value="">Please Select </option>{% for rec in passing_year_recs %} <option value="{{ rec.year }}">{{ rec.year }}</option> {% endfor %} </select> </div> </div><div class=""><label class="col-md-1 control-label">Country:</label> <div class="col-md-2"><select id="country' + count + '" title="Select Year" name="country' + count + '" class="form-control chk"><option selected="selected" id="" value="">Please Select </option>{% for rec in country_recs %} <option value="{{ rec.id }}">{{ rec.country_name|title }}</option> {% endfor %}</select></div></div></div></div>';
+                    {#var row = '<hr><br><div class="row item" id="check_' + count + '"><div class="row"> <div class=""> <label class="col-md-1 control-label">Qualification:</label> <div class="col-md-2"> <select id="degree' + count + '" title="Select Degree" name="degree' + count + '" class="form-control select_data chk"><option selected="selected" id="" value="">Please Select </option><option value="Secondary">Secondary</option> <option value="O-Level">O-Level</option><option value="A-Level">A-Level</option><option value="Bachelor">Bachelor</option><option value="Master">Master</option></select><br> <input type="text" style="display: none;" title="Enter Other" id="other_rec' + count + '" name="other_rec' + count + '"  class="form-control  other_data"></div> </div><div class=""> <label class="col-md-1 control-label">Major :</label> <div class="col-md-2"> <input type="text" title="Enter Level" id="major' + count + '" name="major' + count + '" value="" class="form-control chk"> <input type="text" hidden value="" id="academic_id_' + count + '" name="academic_id_' + count + '"> </div> </div><div class=""> <label class="col-md-1 control-label"> Institution:</label> <div class="col-md-2"> <input type="text" title="Enter institution" id="a_level_institution" name="level_institution' + count + '" value="" class="form-control chk"> </div></div><div class=""><div class="col-md-1"><a href="javascript:;" class="delete btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div> </div> <br> <div class="row"><div class=""> <label class="col-md-1 control-label"> Result:</label> <div class="col-md-2"> <input type="text" title="Enter result" id="level_result' + count + '" name="level_result' + count + '" value="" class="form-control chk"> </div> </div><div class=""> <label class="col-md-1 control-label">Year:</label> <div class="col-md-2"> <select id="level_year' + count + '" title="Select Year" name="level_year' + count + '" class="form-control chk"><option selected="selected" id="" value="">Please Select </option>{% for rec in passing_year_recs %} <option value="{{ rec.year }}">{{ rec.year }}</option> {% endfor %} </select> </div> </div></div></div>';#}
+                    {#var row = '<hr><br><div class="row item" id="check_' + count + '"><div class="row"> <div class=""> <label class="col-md-1 control-label">Qualification:</label> <div class="col-md-2"> <select id="degree' + count + '" title="Select Degree" name="degree' + count + '" class="form-control select_data chk"><option selected="selected" id="" value="">Please Select </option><option value="Secondary">Secondary</option> <option value="O-Level">O-Level</option><option value="A-Level">A-Level</option><option value="Bachelor">Bachelor</option><option value="Master">Master</option></select><br> <input type="text" style="display: none;" title="Enter Other" id="other_rec' + count + '" name="other_rec' + count + '"  class="form-control  other_data"></div> </div><div class=""> <label class="col-md-1 control-label">Major :</label> <div class="col-md-2"> <input type="text" title="Enter Level" id="major' + count + '" name="major' + count + '" value="" class="form-control chk"> <input type="text" hidden value="" id="academic_id_' + count + '" name="academic_id_' + count + '"> </div> </div><div class=""> <label class="col-md-1 control-label"> Institution:</label> <div class="col-md-2"> <input type="text" title="Enter institution" id="a_level_institution" name="level_institution' + count + '" value="" class="form-control chk"> </div></div><div class=""><div class="col-md-1"><a href="javascript:;" class="delete btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div> </div> <br> <div class="row"><div class=""> <label class="col-md-1 control-label"> Result:</label> <div class="col-md-2"> <input type="text" title="Enter result" id="level_result' + count + '" name="level_result' + count + '" value="" class="form-control chk"> </div> </div> <div class=""><label class="col-md-1 control-label">Result Doc:</label> <div class="col-md-2" id="item' + count + '"> <label class="form-control" style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input class="file" style="width: 50%" type="button" value="Choose File:"><a><input type="text" readonly name="level_result_document_text' + count + '" class="file_value emp chk" style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label> <input style="display: none" type="file" title="Select Result document" id="level_result_document' + count + '" name="level_result_document' + count + '" class="file_type"><span style="float: right; color: darkred; cursor: pointer;margin-top: -25px" class="remove_doc fa fa-close"></span></div></div><div class=""> <label class="col-md-1 control-label">Year:</label> <div class="col-md-2"> <select id="level_year' + count + '" title="Select Year" name="level_year' + count + '" class="form-control chk"><option selected="selected" id="" value="">Please Select </option>{% for rec in passing_year_recs %} <option value="{{ rec.year }}">{{ rec.year }}</option> {% endfor %} </select> </div> </div></div></div>';#}
+{#                    var row = '<hr><br><div class="row item" id="check_' + count + '"><div class="row"> <div class=""> <label class="col-md-1 control-label">Level :</label> <div class="col-md-2"> <input type="text" title="Enter Level" id="level' + count + '" name="level' + count + '" value="" class="form-control chk"> <input type="text" hidden value="" id="academic_id_' + count + '" name="academic_id_' + count + '"> </div> </div> <div class=""> <label class="col-md-1 control-label">Year:</label> <div class="col-md-2"> <select id="level_year' + count + '" title="Select Year" name="level_year' + count + '" class="form-control chk"><option selected="selected" id="" value="">Please Select </option>{% for rec in passing_year_recs %} <option value="{{ rec.year }}">{{ rec.year }}</option> {% endfor %} </select> </div> </div> <div class=""> <label class="col-md-1 control-label"> Result:</label> <div class="col-md-2"> <input type="text" title="Enter result" id="level_result' + count + '" name="level_result' + count + '" value="" class="form-control chk"> </div> </div> <div class=""><div class="col-md-1"><a href="javascript:;" class="delete btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div> </div> <br> <div class="row"> <div class=""> <label class="col-md-1 control-label"> Institution:</label> <div class="col-md-2"> <input type="text" title="Enter institution" id="a_level_institution" name="level_institution' + count + '" value="" class="form-control chk"> </div></div><div class=""><label class="col-md-1 control-label">Result Doc:</label> <div class="col-md-2" id="item' + count + '"> <label class="form-control" style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input class="file" style="width: 50%" type="button" value="Choose File:"><a><input type="text" readonly name="level_result_document_text' + count + '" class="file_value emp chk" style="cursor: pointer;border: none; width: 50%; color: #292328"></a></label> <input style="display: none" type="file" title="Select Result document" id="level_result_document' + count + '" name="level_result_document' + count + '" class="file_type"><span style="float: right; color: darkred; cursor: pointer;margin-top: -25px" class="remove_doc fa fa-close"></span></div></div><div class=""> <label class="col-md-1 control-label">Degree:</label> <div class="col-md-2"> <select id="degree' + count + '" title="Select Degree" name="degree' + count + '" class="form-control select_data chk"><option selected="selected" id="" value="">Please Select </option><option value="DOCTORAL (PHD)">DOCTORAL (PHD)</option> <option value="MASTER">MASTER</option><option value="BACHELOR">BACHELOR</option><option value="OTHERS">OTHERS</option></select><br> <input type="text" style="display: none;" title="Enter Other" id="other_rec' + count + '" name="other_rec' + count + '"  class="form-control  other_data"></div> </div></div><div class="row"> <div class=""> <label class="col-md-1 control-label">Major :</label> <div class="col-md-2"> <input type="text" title="Enter Level" id="major' + count + '" name="major' + count + '" value="" class="form-control chk"> <input type="text" hidden value="" id="academic_id_' + count + '" name="academic_id_' + count + '"> </div> </div></div></div>';#}
+                    $(row).removeAttr().hide().insertAfter(".item:last").slideDown(300);
+                });
+
+                $(".add_english_row").click(function () {
+                    english_count = english_count + 1;
+                    var english_row = '<div class="row english_item" id="english_check_' + english_count + '" style="margin-top: 50px"><div class="row"><div class=""> <label class="col-md-2 control-label">English Competency Test:</label> <div class="col-md-2"> <select id="english_competency_test_' + english_count + '" title="Select Year" name="english_competency_test_' + english_count + '" class="form-control"> <option style="display:none" selected="selected" id="" value=""> Please Select </option>{% for rec in english_competency_test_recs %}<option value="{{ rec.id }}">{{ rec.english_competency_test }}</option>{% endfor %} </select></div></div><div class=""> <label class="col-md-2 control-label">Institution:</label> <div class="col-md-2"><input type="text" title="Enter English Competency Test" id="english_test_' + english_count + '" name="english_test_' + english_count + '" value="" class="form-control"> <input hidden type="text" name="english_obj_' + english_count + '" id="english_obj_' + english_count + '"> </div> </div></div><br><div class="row"><div class=""><label class="col-md-2 control-label"> Grade/Level:</label><div class="col-md-2"><input type="text" title="Enter result" id="english_test_result_' + english_count + '" name="english_test_result_' + english_count + '" value="" class="form-control"></div></div><div class=""><div class="col-md-1" style="margin-top: -55px;margin-left: 400px;"><a href="javascript:;" class="delete_english btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div></div>';
+                    $(english_row).removeAttr().hide().insertAfter(".english_item:last").slideDown(300);
+                });
+
+                 $(".add_arab_row").click(function () {
+                    arab_count = arab_count + 1;
+                    console.log("Hi");
+                    var arab_row = '<div class="row arab_item" id="arab_check_' + arab_count + '" style="margin-top: 50px"><div class="row"><div class=""> <label class="col-md-2 control-label">Arab Competency Test:</label> <div class="col-md-2"><input type="text" title="Arab Competency Test" id="arab_competency_test_' + arab_count + '" name="arab_competency_test_' + arab_count + '" value="" class="form-control eng_emp"></div></div><div class=""> <label class="col-md-2 control-label">Institution:</label> <div class="col-md-2"><input type="text" title="Enter Institution" id="arab_test_' + arab_count + '" name="arab_test_' + arab_count + '" value="" class="form-control"> <input hidden type="text" name="arab_obj_' + arab_count + '" id="arab_obj_' + arab_count + '"> </div> </div></div><br><div class="row"><div class=""><label class="col-md-2 control-label"> Grade/Level:</label><div class="col-md-2"><input type="text" title="Enter Grade/Level" id="arab_test_result_' + arab_count + '" name="arab_test_result_' + arab_count + '" value="" class="form-control"></div></div><div class=""><div class="col-md-1" style="margin-top: -55px;margin-left: 400px;"><a href="javascript:;" class="delete_arab btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div></div>';
+                    $(arab_row).removeAttr().hide().insertAfter(".arab_item:last").slideDown(300);
+                });
+
+                $(document).on("click", ".delete", function () {
+
+                    $(this).parents('.item').next().closest('br').remove();
+                    $(this).parents('.item').next().closest('br').remove();
+                    $(this).parents('.item').next().closest('hr').remove();
+                    $(this).parents('.item').prev().closest('hr').remove();
+                    $(this).parents('.item').prev().closest('br').remove();
+                    $(this).parents('.item').remove();
+
+                });
+
+                $(document).on("click", ".delete_english", function () {
+                    $(this).parents('.english_item').next().closest('br').remove();
+                    $(this).parents('.english_item').remove();
+                });
+
+                $(document).on("click", ".delete_arab", function () {
+                    $(this).parents('.arab_item').next().closest('br').remove();
+                    $(this).parents('.arab_item').remove();
+                });
+
+
+                $(document).on("click", ".file", function (e) {
+                    $(this).parent('.form-control').next('.file_type').trigger('click');
+                });
+
+                $(document).on("click", ".remove_doc", function (e) {
+                    var parent_id = $(this).closest('div').attr('id');
+                    $('#' + parent_id + ' .emp').val('');
+                });
+
+
+                $(document).on("change", ".file_type", function (e) {
+                    var files = !!this.files ? this.files : [];
+                    if (!files.length || !window.FileReader) return;
+                    var fileExtension = ['pdf'];
+                    if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                        alert("Only formats are allowed : " + fileExtension.join(', '));
+                        $(this).val('');
+                        return false;
+                    }
+
+                    var file_name = $(this).val().split('\\')[2];
+                    $(this).prev().children().children('.file_value').val(file_name);
+                });
+
+                {#$('#save_form').click(function () {#}
+                $(document).on("click", "#save_form", function (e) {
+                    $('.chk').css('border-color', '');
+                    $('label').css('border-color', '');
+
+                    var final_flag = false;
+
+                    {#alert($('.item').length)#}
+
+                    $('.item').each(function () {
+                        var parent_id = $(this).attr('id');
+
+                        var empty_flag = false;
+                        ;
+                        var check_flag = false;
+                        $('#' + parent_id + ' .chk').each(function (e) {
+                            if ($(this).val() != '') {
+                                empty_flag = true;
+                            }
+                            else {
+                                if ($(this).hasClass('file_value')) {
+                                    $(this).parents('label').css('border-color', 'red');
+                                    check_flag = true;
+                                }
+                                else {
+                                    $(this).css('border-color', 'red');
+                                    check_flag = true;
+                                }
+                            }
+                        })
+
+
+                        if (empty_flag && check_flag) {
+                            {#alert('final_flag')#}
+                            final_flag = true;
+                        }
+
+                        if (!empty_flag) {
+                            $('#' + parent_id + ' .chk').css('border-color', '');
+                            $('#' + parent_id + ' label').css('border-color', '');
+                        }
+                    })
+
+
+                      var flag_emp = false;
+                    $('.chk').css('border-color', '');
+                    $('.chk').each(function () {
+                        if ($(this).val() == '') {
+                            if ($(this).hasClass('file_value')) {
+                                $(this).parents('label:eq(0)').css('border-color', 'red');
+                            }
+                            else {
+                                $(this).css('border-color', 'red');
+                            }
+                            flag_emp = true;
+                        }
+                    })
+
+                    /*
+                    var flag_emp = false;
+                    $('.eng_emp').css('border-color', '');
+                    $('.eng_emp').each(function () {
+                        if ($(this).val() == '') {
+                            if ($(this).hasClass('file_value')) {
+                                $(this).parents('label:eq(0)').css('border-color', 'red');
+                            }
+                            else {
+                                $(this).css('border-color', 'red');
+                            }
+                            flag_emp = true;
+                        }
+                    })
+                    */
+
+                    if (flag_emp) {
+                        return false;
+                    }
+                    else {
+                        if (!final_flag) {
+                            {#alert("Submit.....")#}
+                            var academic_count = $(".item:last").attr('id').split('_')[1];
+                            var english_count = $(".english_item:last").attr('id').split('_')[2];
+                            var arab_count = $(".arab_item:last").attr('id').split('_')[3];
+                            $('#academic_count').val(academic_count);
+                            $('#english_count').val(english_count);
+                             var rowCount = $(".arab_item").length;
+                             $('#arab_count').val(rowCount);
+                            $('#id_form').submit();
+                        }
+                    }
+                })
+
+
+                $('#sample_1').dataTable().fnDestroy();
+                $('#sample_1').dataTable({
+                    "aoColumnDefs": [
+                        {'bSortable': false}
+                    ]
+                });
+            });
+        }
+
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+
+        function check(t){
+             var select_id = t.id;
+             alert(select_id);
+             var abc = document.getElementById(select_id).value = e.target.value;
+             alert(abc);
+
+{#             var rec = ('#' + select_id);#}
+{#             alert(rec);#}
+             var test = $(rec + "option:selected").text();
+             console.log(test);
+             alert(test);
+            }
+
+function showOptions(s) {
+  console.log(s[s.selectedIndex].value); // get value
+  console.log(s[s.selectedIndex].id); // get id
+}
+
+
+
+{#         function CheckOther(val){#}
+{#             var test = document.querySelector('.other_data').id#}
+{#             alert(test);#}
+{#         var element=document.getElementById('other_rec1');#}
+{#         if(val=='OTHERS')#}
+{#           element.style.display='block';#}
+{#         else#}
+{#           element.style.display='none';#}
+{#        }#}
+
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'student:student_home' %}">{% trans 'Home' %}</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+
+            <li>
+                <span>{% trans 'Academic Qualification' %}</span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+    <br>
+
+
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="tabbable-custom nav-justified">
+                            <ul class="nav nav-tabs nav-justified">
+                                <li class="active">
+                                    <a data-id="1" href="#tab_1_1_1" data-toggle="tab">
+                                        Qualification </a>
+                                </li>
+                                <li>
+                                    <a data-id="2" href="#tab_1_1_2" data-toggle="tab">
+                                        Credit Transfer </a>
+                                </li>
+                                <li>
+                                    <a data-id="3" href="#tab_1_1_3" data-toggle="tab">
+                                        Credit Transfer Attachment </a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab_1_1_1">
+                                    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+
+                <span class="caption-subject font-red sbold uppercase"> <i class="icon-settings font-red"></i>{% trans 'ACADEMIC QUALIFICATION DETAILS' %}</span>
+                <br>
+                <span style="font-family: 'Times New Roman';font-size: 16px;"><b>({% trans 'Please include top two highest academic qualification' %})</b></span>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form action="{% url 'agents:save_update_applicant_academic_english_qualification' %}"
+                      id="id_form"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                <input type="hidden" value="{{ application_obj.id }}" id="application_id" name="application_id">
+
+                    <div class="form-body">
+
+
+                        <input id="academic_count" name="academic_count" hidden>
+
+                        <div class="" style="float: right; padding-right: 150px">
+                                <div class="">
+                                    <a href="javascript:;" id="add" class="btn btn-icon-only green add_acedimic_row"
+                                       style="">
+                                        <i class="fa fa-plus "></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                        {% if qualification_recs %}
+                            {% for qualification_obj in qualification_recs %}
+                                <div class="row item" id="check_{{ forloop.counter }}">
+                                    <div class="row">
+
+                                            <input type="text" hidden value="{{ qualification_obj.id }}"
+                                                   id="academic_id_{{ forloop.counter }}"
+                                                   name="academic_id_{{ forloop.counter }}">
+                                    <div class="">
+                                            <label class="col-md-1 control-label">{% trans 'Qualification' %}:</label>
+                                            <div class="col-md-2">
+
+                                                <select id='degree{{ forloop.counter }}' title="Select Degree" name="degree{{ forloop.counter }}"
+                                                        class="form-control select_data chk">
+                                                        <option style="display:none" selected="selected"
+                                                                value="{{ qualification_obj.degree }}">{{ qualification_obj.degree }}</option>
+
+
+                                                        <option value='Secondary'>Secondary</option>
+                                                        <option value='O-Level'>O-Level</option>
+                                                        <option value='A-Level'>A-Level</option>
+                                                        <option value='Bachelor'>Bachelor</option>
+                                                        <option value='Master'>Master</option>
+                                                </select>
+
+                                                <br>
+                                                {% if qualification_obj.degree == 'OTHERS' %}
+                                                    <input type="text" value="{{ qualification_obj.other_degree|default_if_none:"" }}" class="form-control  other_data"  name="other_rec{{ forloop.counter }}" id="other_rec{{ forloop.counter }}"  />
+                                                {% else %}
+                                                    <input type="text" class="form-control  other_data"  name="other_rec{{ forloop.counter }}" id="other_rec{{ forloop.counter }}" style='display:none;' />
+                                                {% endif %}
+
+
+
+                                            </div>
+
+                                        </div>
+
+                                     <div class="">
+                                            <label class="col-md-1 control-label">{% trans 'Major' %}:</label>
+                                            <div class="col-md-2">
+                                                <input type="text" title="Enter institution"
+                                                       id="major{{ forloop.counter }}"
+                                                       name="major{{ forloop.counter }}"
+                                                       value="{{ qualification_obj.major|default_if_none:"" }}"
+                                                       class="form-control chk">
+                                            </div>
+                                        </div>
+
+                                    <div class="">
+                                            <label class="col-md-1 control-label">{% trans 'Institution' %}:</label>
+                                            <div class="col-md-2">
+                                                <input type="text" title="Enter institution"
+                                                       id="level_institution{{ forloop.counter }}"
+                                                       name="level_institution{{ forloop.counter }}"
+                                                       value="{{ qualification_obj.level_institution }}"
+                                                       class="form-control chk">
+                                            </div>
+                                        </div>
+
+
+
+
+                                    </div>
+
+                                    <div class="row">
+
+                                    <div class="">
+                                            <label class="col-md-1 control-label">{% trans 'Average' %}:</label>
+                                            <div class="col-md-2">
+                                                <input type="text" title="Enter result"
+                                                       id="level_result{{ forloop.counter }}"
+                                                       name="level_result{{ forloop.counter }}"
+                                                       value="{{ qualification_obj.level_result }}"
+                                                       class="form-control chk">
+                                            </div>
+                                        </div>
+
+
+
+                                    <div class="">
+                                            <label class="col-md-1 control-label">{% trans 'Year' %}:</label>
+                                            <div class="col-md-2">
+                                                <select id='level_year{{ forloop.counter }}' title="Select Year"
+                                                        name="level_year{{ forloop.counter }}"
+                                                        class="form-control chk">
+                                                    {% if qualification_obj %}
+                                                        <option style="display:none" selected="selected"
+                                                                value="{{ qualification_obj.level_year }}"
+                                                                value="">{{ qualification_obj.level_year }}</option>
+                                                    {% else %}
+                                                        <option style="display:none" selected="selected" id="" value="">
+                                                            Please
+                                                            Select
+                                                        </option>
+                                                    {% endif %}
+
+                                                    {% for rec in passing_year_recs %}
+                                                        <option value='{{ rec.year }}'>{{ rec.year }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    <div class="">
+                                        <label class="col-md-1 control-label">{% trans 'Country' %}:</label>
+                                        <div class="col-md-2">
+                                            <select id='country{{ forloop.counter }}' title="Select Year" name="country{{ forloop.counter }}"
+                                                    class="form-control chk">
+
+                                                {% if qualification_obj.country %}
+
+                                                        <option style="display:none" selected="selected"
+                                                                value="{{ qualification_obj.country.id }}"
+                                                                >{{ qualification_obj.country.country_name|title }}</option>
+                                                {% else %}
+                                                        <option style="display:none" selected="selected" id="" value="">
+                                                            {% trans 'Please Select' %}
+                                                        </option>
+                                                {% endif %}
+
+                                                {% for rec in country_recs %}
+                                                    <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+
+
+
+                                    </div>
+                                <div class="row">
+
+                                </div>
+                                </div>
+                                <br>
+                                <hr><br>
+                            {% endfor %}
+                        {% else %}
+                            <div class="row item" id="check_1">
+                                <div class="row">
+                                 <div class="">
+                                            <label class="col-md-1 control-label">{% trans 'Qualification' %}:</label>
+                                            <div class="col-md-2">
+
+                                                <select id='degree1' title="Select Degree" name="degree1"
+                                                        class="form-control select_data chk">
+                                                        <option value=''>{% trans 'Please Select' %}</option>
+                                                        <option value='Secondary'>Secondary</option>
+                                                        <option value='O-Level'>O-Level</option>
+                                                        <option value='A-Level'>A-Level</option>
+                                                        <option value='Bachelor'>Bachelor</option>
+                                                        <option value='Master'>Master</option>
+                                                </select>
+
+                                                <br>
+                                                <input type="text" class="form-control other_data "  name="other_rec1" id="other_rec1" style='display:none;' />
+
+
+
+                                            </div>
+
+                                        </div>
+                                    <div class="">
+                                                    <label class="col-md-1 control-label">{% trans 'Major' %}:</label>
+                                                    <div class="col-md-2">
+                                                        <input type="text" title="Enter institution"
+                                                               id="major1"
+                                                               name="major1"
+                                                               value="{{ qualification_obj.major|default_if_none:"" }}"
+                                                               class="form-control chk">
+                                                    </div>
+                                                </div>
+
+                                    <div class="">
+                                        <label class="col-md-1 control-label">{% trans 'Institution' %}:</label>
+                                        <div class="col-md-2">
+                                            <input type="text" title="Enter institution" id="level_institution1"
+                                                   name="level_institution1"
+                                                   class="form-control chk">
+                                        </div>
+                                    </div>
+
+
+
+
+
+                                </div>
+
+                                <div class="row">
+                                <div class="">
+                                        <label class="col-md-1 control-label">{% trans 'Average' %}:</label>
+                                        <div class="col-md-2">
+                                            <input type="text" title="Enter result" id="level_result1"
+                                                   name="level_result1"
+                                                   class="form-control chk">
+                                        </div>
+                                    </div>
+
+
+                                    <div class="">
+                                        <label class="col-md-1 control-label">{% trans 'Year' %}:</label>
+                                        <div class="col-md-2">
+                                            <select id='level_year1' title="Select Year" name="level_year1"
+                                                    class="form-control chk">
+                                                <option style="display:none" selected="selected" id="" value="">
+                                                    {% trans 'Please Select' %}
+                                                </option>
+
+                                                {% for rec in passing_year_recs %}
+                                                    <option value='{{ rec.year }}'>{{ rec.year }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                <div class="">
+                                        <label class="col-md-1 control-label">{% trans 'Country' %}:</label>
+                                        <div class="col-md-2">
+                                            <select id='country1' title="Select Year" name="country1"
+                                                    class="form-control chk">
+                                                <option style="display:none" selected="selected" id="" value="">
+                                                    Please
+                                                    Select
+                                                </option>
+
+                                                {% for rec in country_recs %}
+                                                    <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+
+
+
+
+                                </div>
+                            </div>
+                            <br>
+                        {% endif %}
+
+                    <div class="portlet-title" style="margin-left:-15px;font-size: 16px;">
+                            <div class="caption">
+                                <span class="caption-subject font-red sbold uppercase"> <i
+                                        class="icon-settings font-red"></i>{% trans 'Language Proficiency' %}</span>
+                            </div>
+                        </div>
+                        <hr>
+                        <input hidden type="text" id="arab_count" name="arab_count">
+
+                        <div class="" style="float: right;padding-right: 90px; margin-top: 30px">
+                                <div class="" >
+                                    <a href="javascript:;" id="add" class="btn btn-icon-only green add_arab_row"
+                                       style="">
+                                        <i class="fa fa-plus "></i>
+                                    </a>
+                                </div>
+                            </div>
+
+
+                        {% if arab_recs %}
+                             <span style="font-family: 'Times New Roman';font-size: 16px;"><b>Arabic Language Proficiency</b></span>
+                            {% for arab_obj in arab_recs %}
+
+                                <div class="row arab_item" style="margin-top: 30px" id="arab_check_{{ forloop.counter }}">
+                                <div class="row">
+                                    <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'Arab Competency Test' %}:</label>
+                                        <div class="col-md-2">
+
+                                        <input type="text" title="Arab Competency Test"
+                                                   id="arab_competency_test_{{ forloop.counter }}"
+                                                   name="arab_competency_test_{{ forloop.counter }}"
+                                                   value="{{ arab_obj.arab_competency|default_if_none:""}}"
+                                                   class="form-control eng_emp">
+
+{#                                            <select id='arab_competency_test_{{ forloop.counter }}' title="Arab Competency Test"#}
+{#                                                    name="arab_competency_test_{{ forloop.counter }}"#}
+{#                                                    class="form-control eng_emp">#}
+{##}
+{#                                                {% if arab_obj.arab_competency_test %}#}
+{#                                                    <option style="display:none" selected="selected"#}
+{#                                                            value="{{ arab_obj.arab_competency_test.id }}"#}
+{#                                                            value="">{{ arab_obj.arab_competency_test.arab_competency_test|default_if_none:"" }}</option>#}
+{#                                                {% else %}#}
+{#                                                    <option style="display:none" selected="selected" id="" value="">#}
+{#                                                        Please Select#}
+{#                                                    </option>#}
+{#                                                {% endif %}#}
+{##}
+{#                                                {% for rec in arab_competency_test_recs %}#}
+{#                                                    <option value='{{ rec.id }}'>{{ rec.arab_competency_test|default_if_none:"" }}</option>#}
+{#                                                {% endfor %}#}
+{#                                            </select>#}
+                                        </div>
+                                    </div>
+
+
+                                    <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'Institution' %}:</label>
+                                        <div class="col-md-2">
+                                            <input type="text" title="Institution"
+                                                   id="arab_test_{{ forloop.counter }}"
+                                                   name="arab_test_{{ forloop.counter }}"
+                                                   value="{{ arab_obj.arab_test}}"
+                                                   class="form-control eng_emp">
+
+                                            <input hidden type="text" value="{{ arab_obj.id }}" id="arab_obj_{{ forloop.counter }}" name="arab_obj_{{ forloop.counter }}">
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                                <br>
+
+                                <div class="row">
+
+                                    <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'Grade/Level' %}:</label>
+                                        <div class="col-md-2">
+                                            <input type="text" title="Grade/Level"
+                                                   id="arab_test_result_{{ forloop.counter }}"
+                                                   name="arab_test_result_{{ forloop.counter }}"
+                                                   value="{{ arab_obj.arab_test_result }}"
+                                                   class="form-control eng_emp">
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <span style="font-family: 'Times New Roman';font-size: 16px;"><b>Arabic Language Proficiency</b></span>
+                            <div class="row arab_item" style="margin-top: 30px" id="arab_check_1">
+                            <div class="row">
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Arabic Competency Test' %}:</label>
+                                    <div class="col-md-2">
+                                        <input type="text" title="Arab Competency Test"
+                                                   id="arab_competency_test_1"
+                                                   name="arab_competency_test_1"
+                                                   value="{{ arab_obj.arab_competency|default_if_none:""}}"
+                                                   class="form-control eng_emp">
+{#                                        <select id='arab_competency_test_1' title="Select Arabic Competency Test"#}
+{#                                                name="arab_competency_test_1"#}
+{#                                                class="form-control eng_emp">#}
+{##}
+{#                                            <option style="display:none" selected="selected" id="" value="">{% trans 'Please Select' %}#}
+{#                                            </option>#}
+{##}
+{#                                            {% for rec in arab_competency_test_recs %}#}
+{#                                                <option value='{{ rec.id }}'>{{ rec.arab_competency_test|default_if_none:"" }}</option>#}
+{#                                            {% endfor %}#}
+{#                                        </select>#}
+                                    </div>
+                                </div>
+
+
+
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Institution' %}:</label>
+                                    <div class="col-md-2">
+                                        <input type="text" title="Enter Institution" id="arab_test_1"
+                                               name="arab_test_1" value=""
+                                               class="form-control eng_emp">
+
+                                        <input hidden type="text" id="arab_obj_1" name="arab_obj_1">
+                                    </div>
+                                </div>
+
+
+                            </div>
+                              <br>
+
+
+                            <div class="row">
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Grade/Level' %}:</label>
+                                    <div class="col-md-2">
+                                        <input type="text" title="Enter Grade/Level" id="arab_test_result_1"
+                                               name="arab_test_result_1"
+                                               value=""
+                                               class="form-control eng_emp">
+                                    </div>
+                                </div>
+
+                            </div>
+                            </div>
+                        {% endif %}
+
+                        <hr>
+                        <input hidden type="text" id="english_count" name="english_count">
+
+                        <div class="" style="float: right;padding-right: 90px; margin-top: 30px">
+                                <div class="" >
+                                    <a href="javascript:;" id="add" class="btn btn-icon-only green add_english_row"
+                                       style="">
+                                        <i class="fa fa-plus "></i>
+                                    </a>
+                                </div>
+                            </div>
+
+
+                        {% if english_recs %}
+                            <span style="font-family: 'Times New Roman';font-size: 16px;"><b>English Language Proficiency</b></span>
+                            {% for english_obj in english_recs %}
+
+                                <div class="row english_item" style="margin-top: 30px" id="english_check_{{ forloop.counter }}">
+                                <div class="row">
+                                    <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'English Competency Test' %}:</label>
+                                        <div class="col-md-2">
+                                            <select id='english_competency_test_{{ forloop.counter }}' title="Select English Competency Test"
+                                                    name="english_competency_test_{{ forloop.counter }}"
+                                                    class="form-control eng_emp">
+
+                                                {% if english_obj.english_competency_test %}
+                                                    <option style="display:none" selected="selected"
+                                                            value="{{ english_obj.english_competency_test.id }}"
+                                                            value="">{{ english_obj.english_competency_test.english_competency_test|default_if_none:"" }}</option>
+                                                {% else %}
+                                                    <option style="display:none" selected="selected" id="" value="">
+                                                        Please Select
+                                                    </option>
+                                                {% endif %}
+
+                                                {% for rec in english_competency_test_recs %}
+                                                    <option value='{{ rec.id }}'>{{ rec.english_competency_test|default_if_none:"" }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'Institution' %}:</label>
+                                        <div class="col-md-2">
+                                            <input type="text" title="Enter Institution"
+                                                   id="english_test_{{ forloop.counter }}"
+                                                   name="english_test_{{ forloop.counter }}"
+                                                   value="{{ english_obj.english_test}}"
+                                                   class="form-control eng_emp">
+
+                                            <input hidden type="text" value="{{ english_obj.id }}" id="english_obj_{{ forloop.counter }}" name="english_obj_{{ forloop.counter }}">
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                                <br>
+
+                                <div class="row">
+
+                                    <div class="">
+                                        <label class="col-md-2 control-label">{% trans 'Grade/Level' %}:</label>
+                                        <div class="col-md-2">
+                                            <input type="text" title="Enter Grade/Level"
+                                                   id="english_test_result_{{ forloop.counter }}"
+                                                   name="english_test_result_{{ forloop.counter }}"
+                                                   value="{{ english_obj.english_test_result }}"
+                                                   class="form-control eng_emp">
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <span style="font-family: 'Times New Roman';font-size: 16px;"><b>English Language Proficiency</b></span>
+                            <div class="row english_item" style="margin-top: 30px" id="english_check_1">
+                            <div class="row">
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'English Competency Test' %}:</label>
+                                    <div class="col-md-2">
+                                        <select id='english_competency_test_1' title="Select English Language Proficiency"
+                                                name="english_competency_test_1"
+                                                class="form-control eng_emp">
+
+                                            <option style="display:none" selected="selected" id="" value="">{% trans 'Please Select' %}
+                                            </option>
+
+                                            {% for rec in english_competency_test_recs %}
+                                                <option value='{{ rec.id }}'>{{ rec.english_competency_test|default_if_none:"" }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+
+
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Institution' %}:</label>
+                                    <div class="col-md-2">
+                                        <input type="text" title="Enter Institution" id="english_test_1"
+                                               name="english_test_1" value=""
+                                               class="form-control eng_emp">
+
+                                        <input hidden type="text" id="english_obj_1" name="english_obj_1">
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <br>
+
+                            <div class="row">
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Grade/Level' %}:</label>
+                                    <div class="col-md-2">
+                                        <input type="text" title="Enter Grade/Level" id="english_test_result_1"
+                                               name="english_test_result_1"
+                                               value="{{ english_obj.english_test_one_result }}"
+                                               class="form-control eng_emp">
+                                    </div>
+                                </div>
+
+                            </div>
+                            </div>
+                        {% endif %}
+
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="save" style="margin-left: 70%"
+                                        onclick="window.location='{% url "agents:applicant_intake_info" %}'">
+                                    {% trans 'Back' %}
+                                </button>
+
+                                {% if application_obj %}
+                                    {% if not application_obj.is_submitted %}
+                                       <button type="button" class="btn green" id="save_form" style="">{% trans 'Save/Next' %}
+                                        </button>
+                                    {% else %}
+                                        <button type="button" onclick="window.location='{% url "student:applicant_credit_transfer" %}'" class="btn green" id="save">{% trans 'Next' %}</button>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+                                </div>
+                                <div class="tab-pane" id="tab_1_1_2">
+
+                                </div>
+
+                             <div class="tab-pane" id="tab_1_1_3">
+
+                                </div>
+                            </div>
+                        </div>
+
+{% endblock %}
+
+
