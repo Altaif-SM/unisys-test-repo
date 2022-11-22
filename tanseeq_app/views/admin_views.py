@@ -805,7 +805,6 @@ def upload_excel(request):
             #                                          university_type_id=1,
             #                                          type_id=1,
             #                                          is_tanseeq_university=True)
-
             # 2nd Script
             # file_recs = request.FILES['excel'].get_records()
             # for file_rec in file_recs:
@@ -858,17 +857,16 @@ def upload_excel(request):
             #
             #             )
             #             faculty_obj.universities.add(university_obj)
-
             # 3rdt script
-            file_recs = request.FILES['excel'].get_records()
-            for file_rec in file_recs:
-                university_obj = UniversityDetails.objects.get(university_code=file_rec['University Code'])
-                faculty_obj = TanseeqFaculty.objects.filter(name=file_rec['Faculty Name']).first()
-                TanseeqProgram.objects.create(university_id=university_obj.id,
-                                                 faculty_id=faculty_obj.id,
-                                                 name=file_rec['Program Name'],
-                                                 code=file_rec['Program Code'],
-                                              )
+            # file_recs = request.FILES['excel'].get_records()
+            # for file_rec in file_recs:
+            #     university_obj = UniversityDetails.objects.get(university_code=file_rec['University Code'])
+            #     faculty_obj = TanseeqFaculty.objects.filter(name=file_rec['Faculty Name']).first()
+            #     TanseeqProgram.objects.create(university_id=university_obj.id,
+            #                                      faculty_id=faculty_obj.id,
+            #                                      name=file_rec['Program Name'],
+            #                                      code=file_rec['Program Code'],
+            #                                   )
             messages.success(request, "Record saved")
         except Exception as e:
             messages.warning(request, "Form have some error" + str(e))
