@@ -359,7 +359,7 @@ class UniversityDetails(BaseModel):
     university_stamp = models.FileField(upload_to=university_stamp_upload_path, max_length=256, blank=True,
                                           null=True)
     class Meta:
-        ordering = ('-id',)
+        ordering = ('id',)
         permissions = (
             ('can_view_university_details', 'Can View University Details'),
         )

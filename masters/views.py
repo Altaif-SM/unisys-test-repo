@@ -2029,7 +2029,7 @@ def edit_university(request, university_id=None):
                 university_obj.university_stamp = university_stamp
             university_obj.save()
             messages.success(request, "Record saved.")
-        except:
+        except Exception as e:
             messages.warning(request, "Record not saved.")
         return redirect('/masters/university_settings/')
     university_type_recs = UniversityTypeDetails.objects.filter(status=True)

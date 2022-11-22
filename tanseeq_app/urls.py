@@ -262,6 +262,11 @@ urlpatterns = [
         login_required(TanseeqCityList.as_view()),
         name='list_tanseeq_city'
     ),
+    path(
+        'upload_excel/',
+        login_required(upload_excel),
+        name='upload_excel_details'
+    ),
 
     # Finance
     path(

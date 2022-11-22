@@ -147,11 +147,11 @@
         });
         $("#id_confirm_delete").on("click", (e) => {
             $(e.target).attr('disabled', true)
-            deleteTanseeqPeriod($(e.target).attr("delete-url"))
+            deleteTanseeqFaculty($(e.target).attr("delete-url"))
             $("#id_delete_model").modal('hide')
         })
 
-        function deleteTanseeqPeriod(url) {
+        function deleteTanseeqFaculty(url) {
             console.log(url)
             $.ajax({
                 type: 'DELETE',
