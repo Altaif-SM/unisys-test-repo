@@ -488,9 +488,9 @@ def print_voucher_details(request, pk):
         context = (context)
         html = template.render(context)
         """Local Path"""
-        file = open('test.pdf', "w+b")
+        # file = open('test.pdf', "w+b")
         """Production Path"""
-        # file = open('/var/www/university_system_project/university_system/test.pdf', "w+b")
+        file = open('/var/www/university_system_project/university_system/test.pdf', "w+b")
         pisa.CreatePDF(html.encode('utf-8'), dest=file, encoding='utf-8')
         file.seek(0)
         pdf = file.read()
