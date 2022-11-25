@@ -2558,7 +2558,7 @@ def applicant_intake_info(request):
     religion_recs = ReligionDetails.objects.all()
     student_recs = StudentDetails.objects.filter(user__is_active = True)
     university_type_recs = UniversityTypeDetails.objects.filter(status=True)
-    type_recs = TypeDetails.objects.filter(status=True)
+    type_recs = TypeDetails.objects.filter(status=True).exclude(type__in = ['Community Colleage', 'Colleage'])
     year_recs = ''
     semester_recs = ''
     university_recs =''
@@ -2813,7 +2813,7 @@ def applicant_intake_info(request):
             #                                                        is_partner_university=True).order_by('-id')
             # else:
             try:
-                university_recs = UniversityDetails.objects.filter(is_delete=False,
+                university_recs = UniversityDetails.objects.filter(is_delete=False,is_tanseeq_university = False,
                                                                    university_type_id=application_obj.university_type.id,type_id=application_obj.type.id).order_by('-id')
             except:
                 pass
@@ -2839,7 +2839,7 @@ def applicant_intake_info(request):
                 campus_list.append(raw_dict)
 
     else:
-        university_recs = UniversityDetails.objects.filter(is_delete=False, is_partner_university=False).order_by('-id')
+        university_recs = UniversityDetails.objects.filter(is_delete=False, is_partner_university=False,is_tanseeq_university = False).order_by('-id')
 
 
     return render(request, 'intake_details.html',{'country_recs': country_recs, 'religion_recs': religion_recs, 'application_obj': application_obj,'student_recs':student_recs,'agent_recs':agent_recs,'year_recs':year_recs,'semester_recs':semester_recs,
@@ -2879,7 +2879,7 @@ def get_learning_centre_from_country(request):
 def get_university_from_type(request):
     finalDict = []
     university_type_id = request.POST.get('university_type_id', None)
-    university_recs = UniversityDetails.objects.filter(is_delete=False, university_type_id = university_type_id).order_by('-id')
+    university_recs = UniversityDetails.objects.filter(is_delete=False, university_type_id = university_type_id, is_tanseeq_university = False).order_by('-id')
     # if university_type == 'Main':
     #     university_recs = UniversityDetails.objects.filter(is_delete=False, ).order_by('-id')
     # else:
@@ -3214,9 +3214,9 @@ def get_faculty_from_university(request):
     finalDict = []
     university_type = request.POST.get('university_type', None)
     if university_type == 'Main':
-        university_recs = UniversityDetails.objects.filter(is_delete=False, is_partner_university=False).order_by('-id')
+        university_recs = UniversityDetails.objects.filter(is_delete=False, is_partner_university=False, is_tanseeq_university = False).order_by('-id')
     else:
-        university_recs = UniversityDetails.objects.filter(is_delete=False, is_partner_university=True).order_by('-id')
+        university_recs = UniversityDetails.objects.filter(is_delete=False, is_partner_university=True, is_tanseeq_university = False).order_by('-id')
     for rec in university_recs:
         raw_dict = {}
         raw_dict['university_name']=rec.university_name
@@ -3248,7 +3248,7 @@ def get_all_acceptance_avg_program_mode(request):
 
 def get_type_details(request):
     type_list = []
-    type_recs = TypeDetails.objects.all()
+    type_recs = TypeDetails.objects.filter(status=True).exclude(type__in = ['Community Colleage', 'Colleage'])
     for rec in type_recs:
         raw_dict = {}
         raw_dict['id']=rec.id
@@ -3261,7 +3261,7 @@ def get_university_from_type_scope(request):
     finalDict = []
     type_id = request.POST.get('type_id', None)
     university_type_id = request.POST.get('university_type_id', None)
-    university_recs = UniversityDetails.objects.filter(is_delete=False, university_type_id = university_type_id,type_id = type_id).order_by('-id')
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_tanseeq_university = False, university_type_id = university_type_id,type_id = type_id).order_by('-id')
     for rec in university_recs:
         raw_dict = {}
         raw_dict['university_name']=rec.university_name
@@ -3745,7 +3745,7 @@ def applicant_research_details(request):
         faculty_list = []
         program_list = []
         if research_details:
-            university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
+            university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_tanseeq_university = False,
                                                            university_type_id=research_details.university_type.id).order_by('-id')
         if research_details:
             if research_details.university:
