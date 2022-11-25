@@ -113,7 +113,8 @@
 
                 $(document).on("click", ".add_semester", function (e) {
                     semester_count = parseInt(semester_count) + 1;
-                    var row = '<br><div class="row semester" id="semester_' + semester_count + '"> <div class="row"><div class=""><label class="col-md-1 control-label">Semester:</label><div class="col-md-3"><input type="text" title="Enter Semester" id="semester_' + semester_count + '" value="" name="semester_' + semester_count + '" class="form-control" required></div></div><div class=""><label class="col-md-1 control-label">Start Date:</label><div class="col-md-2"><input type="date" name="start_date_' + semester_count + '" id="start_date_' + semester_count + '" class="form-control" required></div></div><div class=""><label class="col-md-1 control-label">End Date:</label><div class="col-md-2"><input type="date" name="end_date_' + semester_count + '" id="end_date_' + semester_count + '" class="form-control" required></div></div><div class="col-md-1"><a href="javascript:;" class="delete_semester btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div>';
+                    {#var row = '<br><div class="row semester" id="semester_' + semester_count + '"> <div class="row"><div class=""><label class="col-md-1 control-label">Semester:</label><div class="col-md-3"><input type="text" title="Enter Semester" id="semester_' + semester_count + '" value="" name="semester_' + semester_count + '" class="form-control" required></div></div><div class=""><label class="col-md-1 control-label">Start Date:</label><div class="col-md-2"><input type="date" name="start_date_' + semester_count + '" id="start_date_' + semester_count + '" class="form-control" required></div></div><div class=""><label class="col-md-1 control-label">End Date:</label><div class="col-md-2"><input type="date" name="end_date_' + semester_count + '" id="end_date_' + semester_count + '" class="form-control" required></div></div><div class="col-md-1"><a href="javascript:;" class="delete_semester btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div>';#}
+                    var row = '<br><div class="row semester" id="semester_' + semester_count + '"> <div class="row"><div class=""><label class="col-md-1 control-label">Semester:</label><div class="col-md-3"><input type="text" title="Enter Semester" id="semester_' + semester_count + '" value="" name="semester_' + semester_count + '" class="form-control" required></div></div><div class="col-md-1"><a href="javascript:;" class="delete_semester btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div>';
                     $(row).removeAttr().hide().insertAfter(".semester:last").slideDown(300);
                 });
 
@@ -457,7 +458,7 @@ function get_university_from_university_type(url, university_type_id) {
 
                             <div class="" style="float: right;
     margin-top: 0px;
-    padding-right:8%;">
+    padding-right:60%;">
                                 <div class="">
                                     <a href="javascript:;" id="add" class="btn btn-icon-only green add_semester"
                                        style="">
@@ -481,23 +482,23 @@ function get_university_from_university_type(url, university_type_id) {
                                         </div>
                                     </div>
 
-                                    <div class="">
-                                        <label class="col-md-1 control-label">{% trans 'Start Date' %}:</label>
-                                        <div class="col-md-2">
-                                            <input type="date" value="{{ sem.start_date|date:"Y-m-d" }}" name="start_date_{{ forloop.counter }}" id="start_date_{{ forloop.counter }}"
-                                                   class="form-control" required>
+{#                                    <div class="">#}
+{#                                        <label class="col-md-1 control-label">{% trans 'Start Date' %}:</label>#}
+{#                                        <div class="col-md-2">#}
+{#                                            <input type="date" value="{{ sem.start_date|date:"Y-m-d" }}" name="start_date_{{ forloop.counter }}" id="start_date_{{ forloop.counter }}"#}
+{#                                                   class="form-control" required>#}
+{##}
+{#                                        </div>#}
+{#                                    </div>#}
 
-                                        </div>
-                                    </div>
-
-                                    <div class="">
-                                        <label class="col-md-1 control-label">{% trans 'End Date' %}:</label>
-                                        <div class="col-md-2">
-                                            <input type="date" value="{{ sem.end_date|date:"Y-m-d" }}" name="end_date_{{ forloop.counter }}" id="end_date_{{ forloop.counter }}" class="form-control"
-                                                   required>
-
-                                        </div>
-                                    </div>
+{#                                    <div class="">#}
+{#                                        <label class="col-md-1 control-label">{% trans 'End Date' %}:</label>#}
+{#                                        <div class="col-md-2">#}
+{#                                            <input type="date" value="{{ sem.end_date|date:"Y-m-d" }}" name="end_date_{{ forloop.counter }}" id="end_date_{{ forloop.counter }}" class="form-control"#}
+{#                                                   required>#}
+{##}
+{#                                        </div>#}
+{#                                    </div>#}
 
 
                                 </div>

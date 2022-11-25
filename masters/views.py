@@ -21,7 +21,7 @@ from django.contrib.auth.decorators import user_passes_test, permission_required
 # *********------------ Year Master ----------***************
 
 def template_year_master(request):
-    year_recs = YearDetails.objects.all()
+    year_recs = YearDetails.objects.filter(is_tanseeq_year=False)
     return render(request, 'template_year_master.html', {'year_recs': year_recs})
 
 
@@ -2364,7 +2364,7 @@ def add_program_fee(request):
             messages.warning(request, "Record not saved.")
         return redirect('/masters/program_fee_settings/')
     university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university = False).order_by('-id')
-    year_recs = YearDetails.objects.all()
+    year_recs = YearDetails.objects.filter(is_tanseeq_year=False)
     program_recs = ProgramDetails.objects.filter(is_delete=False).order_by('-id')
     country_recs = CountryDetails.objects.all()
     university_type_recs = UniversityTypeDetails.objects.filter(status=True)
@@ -2419,7 +2419,7 @@ def edit_program_fee(request, program_id=None):
         return redirect('/masters/program_fee_settings/')
     university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
                                                            university_type_id=program_fee_obj.university_type.id).order_by('-id')
-    year_recs = YearDetails.objects.all()
+    year_recs = YearDetails.objects.filter(is_tanseeq_year=False)
     program_recs = ProgramDetails.objects.filter(is_delete=False).order_by('-id')
     country_recs = CountryDetails.objects.all()
     university_type_recs = UniversityTypeDetails.objects.filter(status=True)
@@ -2651,7 +2651,7 @@ def edit_program(request, program_id=None,type = None):
     course_count = program_obj.course.all().count()
     course_obj = program_obj.course.all()
     passing_year_recs = PassingYear.objects.filter().order_by('-year')
-    year_recs = YearDetails.objects.all()
+    year_recs = YearDetails.objects.filter(is_tanseeq_year=False)
 
     year_list = []
     semester_recs = SemesterDetails.objects.filter(university_id=program_obj.university.id)
@@ -2772,8 +2772,8 @@ def add_semester(request):
                     x = x + 1
                     semester = Semester.objects.create(
                         semester=request.POST.get('semester_' + str(x)),
-                        start_date=request.POST.get('start_date_' + str(x)),
-                        end_date=request.POST.get('end_date_' + str(x))
+                        # start_date=request.POST.get('start_date_' + str(x)),
+                        # end_date=request.POST.get('end_date_' + str(x))
                     )
                     semester_obj.semester.add(semester)
                 except:
@@ -2786,7 +2786,7 @@ def add_semester(request):
         university_type_recs = UniversityTypeDetails.objects.filter(status=True)
         university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
                                                            is_partner_university=False).order_by('-id')
-        year_recs = YearDetails.objects.all()
+        year_recs = YearDetails.objects.filter(is_tanseeq_year=False)
         study_level_recs  = StudyLevelDetails.objects.filter().order_by('-id')
         context = {
             'university_recs':university_recs,
@@ -2839,7 +2839,7 @@ def edit_semester(request, semester_id=None):
     # else:
     university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
                                                            university_type_id=semester_obj.university_type.id).order_by('-id')
-    year_recs = YearDetails.objects.all()
+    year_recs = YearDetails.objects.filter(is_tanseeq_year=False)
     study_level_recs = StudyLevelDetails.objects.filter().order_by('-id')
     university_type_recs = UniversityTypeDetails.objects.filter(status=True)
 
@@ -3256,7 +3256,7 @@ def add_calendar(request):
             messages.warning(request, "Record not saved.")
         return redirect('/masters/calendar_settings/')
     university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_partner_university=False).order_by('-id')
-    year_recs = YearDetails.objects.all()
+    year_recs = YearDetails.objects.filter(is_tanseeq_year=False)
     branch_recs = CampusBranchesDetails.objects.all()
     semester_recs = SemesterDetails.objects.all()
     activity_recs = ActivityDetails.objects.all()
@@ -3299,7 +3299,7 @@ def edit_calender(request, calender_id=None):
         return redirect('/masters/calendar_settings/')
     university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
                                                            university_type_id=calender_obj.university_type.id).order_by('-id')
-    year_recs = YearDetails.objects.all()
+    year_recs = YearDetails.objects.filter(is_tanseeq_year=False)
     branch_recs = CampusBranchesDetails.objects.all()
     semester_recs = SemesterDetails.objects.all()
     activity_recs = ActivityDetails.objects.all()
@@ -4030,7 +4030,8 @@ def get_intake_semester_from_year(request):
             for sem in rec.semester.all():
                 raw_dict = {}
                 raw_dict['id'] = sem.id
-                raw_dict['semester'] = str(sem.semester + ' ' + (str(sem.start_date) + ' - ' + str(sem.end_date)))
+                # raw_dict['semester'] = str(sem.semester + ' ' + (str(sem.start_date) + ' - ' + str(sem.end_date)))
+                raw_dict['semester'] = str(sem.semester)
                 semester_list.append(raw_dict)
     return JsonResponse(semester_list, safe=False)
 
@@ -4686,7 +4687,7 @@ def edit_semester_based(request, semester_id=None):
             messages.warning(request, "Record not saved.")
         return redirect('/masters/view_semester_subject_list/'+str(study_plan_obj.program.id))
     else:
-        year_recs = YearDetails.objects.all()
+        year_recs = YearDetails.objects.filter(is_tanseeq_year=False)
         course_total_count = study_plan_obj.course.all().count()
         year_list = []
         semester_recs = SemesterDetails.objects.filter(university_id=study_plan_obj.program.university.id)
