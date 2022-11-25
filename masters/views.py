@@ -4466,19 +4466,19 @@ def delete_program_fee(request):
 
 def get_year_from_study_level(request):
     year_list = []
-    program_level = request.POST.get('program_level', None)
-    university = request.POST.get('university', None)
-    semester_recs = SemesterDetails.objects.all()
-    if program_level:
-        semester_recs = semester_recs.filter(study_level_id = program_level)
-    if university:
-        semester_recs = semester_recs.filter(university_id = university)
-    if semester_recs:
-        for rec in semester_recs:
-            raw_dict = {}
-            raw_dict['id'] = rec.year.id
-            raw_dict['year'] = rec.year.year_name
-            year_list.append(raw_dict)
+    # program_level = request.POST.get('program_level', None)
+    # university = request.POST.get('university', None)
+    # semester_recs = SemesterDetails.objects.all()
+    # if program_level:
+    #     semester_recs = semester_recs.filter(study_level_id = program_level)
+    # if university:
+    #     semester_recs = semester_recs.filter(university_id = university)
+    # if semester_recs:
+    for rec in YearDetails.objects.filter(is_tanseeq_year = False):
+        raw_dict = {}
+        raw_dict['id'] = rec.id
+        raw_dict['year'] = rec.year_name
+        year_list.append(raw_dict)
     return JsonResponse(year_list, safe=False)
 
 

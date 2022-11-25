@@ -233,6 +233,10 @@
 
                      var url = '/student/get_type_details/';
                     get_type_details(url)
+
+                    var url = '/masters/get_year_from_study_level/';
+                    get_all_academic_year(url)
+
                 })
 
              $(document).on("change", "#type", function (e) {
@@ -247,6 +251,11 @@
 
                    var url = '/student/get_all_study_level/';
                     get_all_study_level(url)
+
+                 var url = '/masters/get_year_from_study_level/';
+                    get_all_academic_year(url)
+
+
 
                 })
 
@@ -511,6 +520,32 @@
                         }
                     });
                 }
+
+                function get_all_academic_year(url) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function (data) {
+
+                            $('#year').empty();
+                            $('#year').append(
+                                '<option value="" >Please select</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#year').append(
+                                    '<option value="' + data[i]['id'] + '">'
+                                    + data[i]['year'] + '</option>')
+                            }
+
+                        },
+                        error: function (xhr, msg, err) {
+                            alert(xhr.responseJSON.error);
+                        }
+                    });
+                }
+
 
             function get_all_program_mode(url) {
                     $.ajax({
@@ -803,11 +838,14 @@
                 $(document).on("change", "#program_level", function (e) {
                     var program_level = $(this).val();
                     var university = $('#university').val();
-                    var url = '/masters/get_year_from_study_level/';
-                    get_year_from_study_level(url, program_level, university)
+                    {#var url = '/masters/get_year_from_study_level/';#}
+                    {#get_year_from_study_level(url, program_level, university)#}
 
                     var url = '/student/get_all_program_mode/';
                     get_all_program_mode(url)
+
+                    var url = '/masters/get_year_from_study_level/';
+                    get_all_academic_year(url)
 
                 })
 
@@ -1035,8 +1073,12 @@
 
                 $(document).on("change", "#university", function (e) {
                     var university = $(this).val();
-                    var url = '/masters/get_year_from_university/';
-                    get_year_from_university(url, university)
+                    {#var url = '/masters/get_year_from_university/';#}
+                    {#get_year_from_university(url, university)#}
+
+                    var url = '/masters/get_year_from_study_level/';
+                    get_all_academic_year(url)
+
 
                     var url = '/student/get_all_program_mode/';
                     get_all_program_mode(url)
@@ -2568,7 +2610,7 @@
                                         {% endif %}
 
                                         {% for rec in year_recs %}
-                                            <option value='{{ rec.year.id }}'>{{ rec.year.year_name|default_if_none:"" }}</option>
+                                            <option value='{{ rec.id }}'>{{ rec.year_name|default_if_none:"" }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>

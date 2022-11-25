@@ -2559,7 +2559,8 @@ def applicant_intake_info(request):
     student_recs = StudentDetails.objects.filter(user__is_active = True)
     university_type_recs = UniversityTypeDetails.objects.filter(status=True)
     type_recs = TypeDetails.objects.filter(status=True).exclude(type__in = ['Community Colleage', 'Colleage'])
-    year_recs = ''
+    # year_recs = ''
+    year_recs = YearDetails.objects.filter(is_tanseeq_year=False)
     semester_recs = ''
     university_recs =''
 
@@ -2807,7 +2808,8 @@ def applicant_intake_info(request):
 
 
         if application_obj.university:
-            year_recs = SemesterDetails.objects.filter(university_id = application_obj.university.id,study_level_id = application_obj.study_level.id)
+
+            # year_recs = SemesterDetails.objects.filter(university_id = application_obj.university.id,study_level_id = application_obj.study_level.id)
             # if application_obj.university.is_partner_university == True:
             #     university_recs = UniversityDetails.objects.filter(is_delete=False,
             #                                                        is_partner_university=True).order_by('-id')
