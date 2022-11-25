@@ -1,0 +1,45 @@
+{% load  i18n %}
+<li class="nav-item ">
+    <a href="{% url 'tanseeq_app:personal_info_details' %}" class="nav-link ">
+        <i class="fa fa-id-card"></i>
+        <span class="title">{% trans 'Personal Info' %}</span>
+    </a>
+</li>
+<li class="nav-item ">
+    <a href="{% url 'tanseeq_app:secondary_certificate_info_details' %}" class="nav-link ">
+        <i class="fa fa-certificate"></i>
+        <span class="title">{% trans 'Secondary Certificate' %}</span>
+    </a>
+</li>
+<li class="nav-item ">
+    <a href="{% url 'tanseeq_app:attachment_details' %}" class="nav-link ">
+        <i class="glyphicon glyphicon-cloud-upload"></i>
+        <span class="title">{% trans 'Attachements' %}</span>
+    </a>
+</li>
+<li class="nav-item ">
+    <a href="{% url 'tanseeq_app:study_mode_details' %}" class="nav-link ">
+        <i class="glyphicon glyphicon-book"></i>
+        <span class="title">{% trans 'Study Mode' %}</span>
+    </a>
+</li>
+
+<li class="nav-item ">
+    <a href="{% url 'tanseeq_app:student_programs_details' %}" class="nav-link ">
+        <i class="fa fa-tasks"></i>
+        <span class="title">{% trans 'Choosing an admission system' %}</span>
+    </a>
+</li>
+<li class="nav-item ">
+    <a href="{% url 'tanseeq_app:applied_programs_details' %}" class="nav-link ">
+        <i class="fa fa-check"></i>
+        <span class="title">{% trans 'Choice Wishes' %}</span>
+    </a>
+</li>
+
+<li class="nav-item ">
+    <a href="{% url 'tanseeq_app:applicant_submission' %}" class="nav-link ">
+        <i class="glyphicon glyphicon-pencil"></i>
+        <span class="title">{% trans 'Declaration & Submission' %}</span>
+    </a>
+</li>

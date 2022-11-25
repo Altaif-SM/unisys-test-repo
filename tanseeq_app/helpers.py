@@ -23,3 +23,6 @@ def school_certificate_upload_path(instance, filename):
 
 def get_tanseeq_application(user):
     return models.ApplicationDetails.objects.filter(created_by=user).first()
+
+def get_tanseeq_application_by_email(application_email):
+    return models.ApplicationDetails.objects.filter(user__email=application_email).first()

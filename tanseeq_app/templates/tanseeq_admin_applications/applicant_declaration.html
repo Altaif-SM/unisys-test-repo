@@ -1,0 +1,183 @@
+{% extends "template_admin_applications_base.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+        }
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+    </script>
+{% endblock %}
+
+{% block content %}
+<div class="page-bar" style="margin-bottom: 1px;">
+    <ul class="page-breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            <a href="{% url 'tanseeq_app:tanseeq_student' %}">Home</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <span> {% trans 'Declaration & Submission' %} </span>
+        </li>
+    </ul>
+</div>
+{% for message in messages %}
+    <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    </div>
+{% endfor %}
+<div class="portlet light portlet-fit portlet-form ">
+
+    <div class="portlet-body">
+        <div class="form-body">
+            <form action="{% url 'student:submit_application' %}"
+                  id="id_form"
+                  class="form-horizontal"
+                  method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="form-body">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="icon-settings font-red"></i>
+                            <span class="caption-subject font-red sbold uppercase">{% trans 'Declaration' %}:</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="">
+                            <div class="col-md-8" style="margin-left: 10%;font-size:15px">
+                                {% blocktrans %}
+                                    Please read the following terms & conditions carefully and tick the checkbox to
+                                    indicate your
+                                    agreement.
+                                {% endblocktrans %}
+
+                            </div>
+                        </div>
+                        <br><br>
+
+                        <div class="">
+                            <div class="col-md-8" style="margin-left: 10%;font-size:15px">
+                                {% blocktrans %}
+                                    I declare that all the information provided is correct and complete. I hereby
+                                    give my consent to
+                                    the University to obtain information relating to my admission into #Uni Name
+                                    from relevant
+                                    authorities. I understand that #Uni Name reserves the right to request any
+                                    additional
+                                    information before a decision on admission is made. I understand that any
+                                    misinformation or
+                                    incomplete application could result in the rejection of my application.
+                                {% endblocktrans %}
+                            </div>
+                        </div>
+                        <br><br><br><br><br><br>
+
+                        <div class="">
+                            <div class="col-md-8" style="margin-left: 10%;">
+                                {% if instance.application_status == 'Submitted' %}
+                                    <span style="color: red"></span>
+                                    <input type="checkbox" checked class="aggre_term" disabled>
+
+                                {% else %}
+                                    <input type="checkbox" class="aggre_term">
+                                {% endif %}
+
+
+                                <b>{% trans 'I have read the Declaration and agree to the terms and conditions.' %}</b>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <br><br>
+
+                    <div class="row">
+                        <div class="col-md-offset-3 col-md-9">
+                            <button type="button" class="btn blue" id="save" style="margin-left: 70%"
+                                    onclick="window.location='{% url "tanseeq_app:applied_programs_details" %}'">
+                                {% trans 'Back' %}
+                            </button>
+
+
+                            {% if instance == None %}
+                            {% else %}
+                                {% if  instance.application_status == 'Not Submitted' %}
+                                     <button type="button" class="btn green submit_application"
+                                            submit-url="{% url 'tanseeq_app:applicant_submission' %}"
+                                            style="">{% trans 'Submit Application' %}
+                                    </button>
+
+                                {% else %}
+                                    <p class="btn btn-success disabled">Submitted</p>
+                                {% endif %}
+                            {% endif %}
+
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% include 'submit_modal.html' %}
+{% endblock %}
+
+{% block ajax %}
+
+    <script>
+        $(".submit_application").on("click", (e) => {
+
+            if ($('.aggre_term').is(":checked")) {
+                $("#id_submit_model").modal()
+                $("#id_confirm_submit").attr("submit-url", $(e.target).attr("submit-url"))
+            }
+            else{
+                alert('Please check terms and conditions.');
+                return false;
+            }
+
+
+
+        });
+        $("#id_confirm_submit").on("click", (e) => {
+            $(e.target).attr('disabled', true)
+            submitApplication($(e.target).attr("submit-url"))
+            $("#id_submit_model").modal('hide')
+        })
+
+        function submitApplication(url) {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                beforeSend: function (xhr, settings) {
+                    xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                },
+                success: function (data, textStatus, xhr) {
+                    console.log(data, textStatus, xhr)
+                    if (xhr.status == 202) {
+                        console.log("running")
+                        location.reload()
+                    }
+                },
+                complete: function () {
+                    $("#id_confirm_submit").attr('disabled', false)
+                },
+                error: function (xhr, msg, err) {
+                }
+            });
+        }
+    </script>
+{% endblock %}

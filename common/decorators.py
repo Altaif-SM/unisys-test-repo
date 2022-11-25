@@ -7,10 +7,16 @@ def check_permissions(role):
     def _method_wrapper(func):
         @wraps(func)
         def inner_func(request, *args, **kwargs):
+            if request.user.role.filter(name__in=[User.TANSEEQ_ADMIN]):
+                try:
+                    del request.session['form_data']
+                except:
+                    pass
             is_admin = request.user.role.filter(name__in=[User.TANSEEQ_ADMIN])
             if is_admin or request.user.tanseeq_role.name == role:
                 return func(request, *args, **kwargs)
             else:
                 raise PermissionDenied
+
         return inner_func
     return _method_wrapper

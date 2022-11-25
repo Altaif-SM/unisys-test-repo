@@ -1,0 +1,190 @@
+{% extends "template_admin_applications_base.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'tanseeq_app:tanseeq_student' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> {% trans 'Secondary Certificate Info' %} </span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">Secondary Certificate Info </span>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form
+                        action="{% url 'tanseeq_app:secondary_certificate_info_details' %}"
+                        method="POST"
+                        enctype="multipart/form-data"
+                        id="id_form"
+                        class="form-horizontal"
+                >
+                    {% csrf_token %}
+                    {% if instance %}
+                        <input type="hidden" name="_method" value="PATCH">
+                    {% endif %}
+                    <div class="form-body">
+                        <div class="row item_experience" id="item_experience_1">
+
+                            <div class="row">
+
+                                <label class="col-md-2 control-label">{% trans form.secondary_certificate.label %}:
+                                    <span style="color: red">*</span>
+                                </label>
+                                <div class="col-md-3">
+                                    {{ form.secondary_certificate }}
+                                </div>
+                                <label class="col-md-2 control-label">{% trans form.school_name.label %}:
+                                    <span style="color: red">*</span>
+                                </label>
+                                <div class="col-md-3">
+                                    {{ form.school_name }}
+                                </div>
+
+
+                            </div>
+                            <br>
+                            <div class="row">
+
+                                <label class="col-md-2 control-label">{% trans 'Graduation Year' %}:
+                                    <span style="color: red">*</span>
+                                </label>
+                                <div class="col-md-3">
+                                    <select id='academic_year' title="Select Type"
+                                            name="academic_year"
+                                            class="form-control">
+                                        <option hidden value=""> Please Select</option>
+                                        {% for rec in academic_year_objs %}
+                                            <option value="{{ rec.id }}"
+                                                    {% if form.academic_year.value|add:"0" == rec.id or instance.academic_year.id == rec.id %}
+                                                    selected
+                                                    {% endif %}
+                                            >
+                                                {{ rec.year_name|default_if_none:"" }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+
+                                <label class="col-md-2 control-label">{% trans form.seat_number.label %}:
+                                    <span style="color: red">*</span>
+                                </label>
+                                <div class="col-md-3">
+                                    {{ form.seat_number }}
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+
+
+                                <label class="col-md-2 control-label">{% trans form.average.label %}:
+                                    <span style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    {{ form.average }}
+                                </div>
+                                <label class="col-md-2 control-label">{% trans form.country.label %}:
+                                    <span style="color: red">*</span>
+                                </label>
+                                <div class="col-md-3">
+                                    {{ form.country }}
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+
+                                <label class="col-md-2 control-label">{% trans 'City' %}:
+                                    <span style="color: red">*</span>
+                                </label>
+                                <div class="col-md-3">
+                                    <select id='id_city' title="Select City"
+                                            name="city"
+                                            class="form-control" required>
+                                        {% if instance.city %}
+                                            <option selected style="display: none"
+                                                    value="{{ instance.city.id }}">{{ instance.city.city|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option value="">Please Select</option>
+                                        {% endif %}
+                                        {% for rec in cities %}
+                                            <option value="{{ rec.id }}">{{ rec.city|default_if_none:"" }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+
+                            </div>
+                            <br>
+
+                        </div>
+                        <div class="row">
+
+
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                                        onclick="window.location='{% url "tanseeq_app:personal_info_details" %}'"
+                                >
+                                    Back
+                                </button>
+                                {% if  tanseeq_application.application_status == 'Not Submitted' %}
+                                    <button type="submit" class="btn green" id="save_form" style="">Save Next</button>
+                                {% else %}
+                                    <button type="button"
+                                            onClick="location.href='{% url 'tanseeq_app:applicant_attachments' %}'"
+                                            class="btn green" id="next">Next
+                                    </button>
+                                {% endif %}
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block ajax %}
+    <script>
+        {% if tanseeq_application.application_status == 'Submitted' %}
+            $('input').prop('disabled', 'true');
+            $('textarea').prop('disabled', 'true');
+            $('select').prop('disabled', 'true');
+            $('label').prop('readonly', 'true');
+        {% endif %}
+
+        const getCityDataUrl = "{% url 'tanseeq_app:list_tanseeq_city' %}"
+
+        $(document).ready(function () {
+            $("#id_country").on("change", function () {
+                getCityData(getCityDataUrl)
+            })
+        });
+    </script>
+    <script src="{% static 'tanseeq\student\StudentApplications.js' %}" type="text/javascript"></script>
+{% endblock %}
+
+

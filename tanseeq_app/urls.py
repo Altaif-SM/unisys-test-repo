@@ -6,6 +6,7 @@ from tanseeq_app.views.finance_views import *
 from tanseeq_app.views.reviewer_views import *
 from tanseeq_app.views.examiner_views import *
 from tanseeq_app.views.faculty_views import *
+from tanseeq_app.views.admin_applications_views import *
 
 
 app_name = 'tanseeq_app'
@@ -266,6 +267,59 @@ urlpatterns = [
         'upload_excel/',
         login_required(upload_excel),
         name='upload_excel_details'
+    ),
+
+    # admin applications
+    path('personal_info_details/', login_required(PersonalInfoDetailsView.as_view()), name='personal_info_details'),
+    path(
+        'personal_info_details/<int:pk>',
+        login_required(PersonalInfoDetailsView.as_view()),
+        name='edit_personal_info_details'
+    ),
+    path(
+        'secondary_certificate_info_details/',
+        login_required(SecondaryCertificateInfoDetailsView.as_view()),
+        name='secondary_certificate_info_details'
+    ),
+    path(
+        'attachment_details/',
+        login_required(ApplicantAttachmentsDetailsView.as_view()),
+        name='attachment_details'
+    ),
+    path(
+        'study_mode_details/',
+        login_required(StudentStudyModeDetailsView.as_view()),
+        name='study_mode_details'
+    ),
+    path(
+        'student_programs_details/',
+        login_required(ListStudentProgramsDetails.as_view()),
+        name='student_programs_details'
+    ),
+    path(
+        'applied_program_details/',
+        login_required(ApplyProgramDetailsView.as_view()),
+        name='applied_program_details'
+    ),
+    path(
+        'applied_program_details/<int:pk>',
+        login_required(ApplyProgramDetailsView.as_view()),
+        name='delete_applied_program_details'
+    ),
+    path(
+        'all/applied_programs_details/',
+        login_required(ListAppliedProgramsDetails.as_view()),
+        name='applied_programs_details'
+    ),
+    path(
+        'applicant_submission/',
+        login_required(DeclarationSubmissionDetailsView.as_view()),
+        name='applicant_submission'
+    ),
+    path(
+        'voucher_details/<int:pk>',
+        login_required(print_voucher_details),
+        name='voucher_details'
     ),
 
     # Finance
