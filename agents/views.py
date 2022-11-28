@@ -1400,7 +1400,7 @@ def checkout(request):
         if PaymentDetails.objects.filter(university_id = application_obj.university.id).exists():
             payement_obj = PaymentDetails.objects.get(university_id = application_obj.university.id)
         if payement_obj == None:
-            return render(request, 'agent_no_university_fee.html',{'application_obj':application_obj})
+            return render(request, 'agent_no_university_fee.html',{'application_obj':application_obj,'user':user})
         order_obj = None
         if ApplicationFeeDetails.objects.filter(application_id=user.get_application.id).exists():
             order_obj = ApplicationFeeDetails.objects.get(application_id_id=user.get_application.id)
