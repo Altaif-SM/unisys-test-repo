@@ -402,12 +402,21 @@ def template_approving_application(request):
         else:
             applicant_recs = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission = True,year=get_current_year(request))
 
-            applicant_recs_1 = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission = True,year=get_current_year(request),choice_1=False,
-                                                                        choice_2=False, choice_3=False,is_accepted = False
-                                                                        ).exclude(program_mode__study_type = 'Research')
-            applicant_recs_2 = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission = True,year=get_current_year(request),choice_1=True,choice_2=False, choice_3=False,is_accepted = False
-                                                                        ).exclude(program_mode_2__study_type = 'Research')
-            applicant_recs_3 = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission = True,year=get_current_year(request),choice_1=True,choice_2=True, choice_3=False,is_accepted = False).exclude(program_mode_3__study_type = 'Research')
+            # applicant_recs_1 = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission = True,year=get_current_year(request),choice_1=False,choice_2=False, choice_3=False,is_accepted = False).exclude(program_mode__study_type = 'Research')
+            # applicant_recs_2 = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission = True,year=get_current_year(request),choice_1=True,choice_2=False, choice_3=False,is_accepted = False).exclude(program_mode_2__study_type = 'Research')
+            # applicant_recs_3 = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission = True,year=get_current_year(request),choice_1=True,choice_2=True, choice_3=False,is_accepted = False).exclude(program_mode_3__study_type = 'Research')
+            applicant_recs_1 = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
+                                                                 year=get_current_year(request), choice_1=False,
+                                                                 choice_2=False, choice_3=False,
+                                                                 is_accepted=False)
+            applicant_recs_2 = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
+                                                                 year=get_current_year(request), choice_1=True,
+                                                                 choice_2=False, choice_3=False,
+                                                                 is_accepted=False)
+            applicant_recs_3 = ApplicationDetails.objects.filter(is_submitted=True, is_online_admission=True,
+                                                                 year=get_current_year(request), choice_1=True,
+                                                                 choice_2=True, choice_3=False,
+                                                                 is_accepted=False)
 
             context['my_template'] = 'template_base_page.html'
             return render(request, 'template_approving_application.html',
