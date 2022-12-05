@@ -60,6 +60,8 @@ class User(AbstractUser):
     TANSEEQ_REVIEWER = 'Tanseeq Reviewer'
     TANSEEQ_EXAMINER = 'Tanseeq Examiner'
     TANSEEQ_FACULTY = 'Tanseeq Faculty'
+    TANSEEQ_UNIVERSITY_ADMIN = 'Tanseeq University Admin'
+    TANSEEQ_APPLICATION_ENTRY = 'Tanseeq Application Entry'
 
 
     first_name = models.CharField(max_length=256, blank=True, null=True)
@@ -88,6 +90,7 @@ class User(AbstractUser):
                                    related_name='user_tanseeq_faculty')
     tanseeq_program = models.ManyToManyField("tanseeq_app.TanseeqProgram", blank=True, null=True,
                                 related_name='user_tanseeq_program')
+    study_mode = models.ManyToManyField("masters.StudyModeDetails", blank=True, null=True,related_name='user_tanseeq_study_mode' )
     created_by = models.ForeignKey("self", on_delete=models.SET_NULL, blank=True, null=True)    
 
     class Meta:
@@ -202,6 +205,9 @@ class User(AbstractUser):
     def is_tanseeq_admin(self):
         return True if self.role.all().filter(name__in=[self.TANSEEQ_ADMIN]).exists() else False
 
+    def is_tanseeq_university_admin(self):
+        return True if self.role.all().filter(name__in=[self.TANSEEQ_UNIVERSITY_ADMIN]).exists() else False
+
     def is_tanseeq_student(self):
         return True if self.role.all().filter(name__in=[self.TANSEEQ_STUDENT]).exists() else False
 
@@ -216,6 +222,11 @@ class User(AbstractUser):
 
     def is_tanseeq_faculty(self):
         return True if self.role.all().filter(name__in=[self.TANSEEQ_FACULTY]).exists() else False
+
+    def is_tanseeq_application_entry(self):
+        return True if self.role.all().filter(name__in=[self.TANSEEQ_APPLICATION_ENTRY]).exists() else False
+
+
 
     @property
     def get_user_permissions(self):
@@ -420,11 +431,13 @@ class User(AbstractUser):
     AGENT_DASHBOARD = '/agents/dashboard/'
     AGENT_RECRUITER_DASHBOARD = '/agents/recruiter_dashboard/'
     TANSEEQ_ADMIN_DASHBOARD = '/tanseeq/admin/'
+    TANSEEQ_UNIVERSITY_ADMIN_DASHBOARD = '/tanseeq/university_admin/'
     TANSEEQ_STUDENT_DASHBOARD = '/tanseeq/student/'
     TANSEEQ_FINANCE_DASHBOARD = '/tanseeq/requestlist/'
     TANSEEQ_REVIEWER_DASHBOARD = '/tanseeq/list_application/'
     TANSEEQ_EXAMINER_DASHBOARD = '/tanseeq/list_examiner_students/'
     TANSEEQ_FACULTY_DASHBOARD = '/tanseeq/list_faculty_students/'
+    TANSEEQ_APPLICATION_ENTRY_DASHBOARD = '/tanseeq/entry_application_list/'
 
 
     def get_dashboard_path(self):
@@ -455,6 +468,8 @@ class User(AbstractUser):
             dashboard_path = User.AGENT_RECRUITER_DASHBOARD
         elif self.tanseeq_role.name == User.TANSEEQ_ADMIN:
             dashboard_path = User.TANSEEQ_ADMIN_DASHBOARD
+        elif self.tanseeq_role.name == User.TANSEEQ_UNIVERSITY_ADMIN:
+            dashboard_path = User.TANSEEQ_UNIVERSITY_ADMIN_DASHBOARD
         elif self.tanseeq_role.name == User.TANSEEQ_STUDENT:
             dashboard_path = User.TANSEEQ_STUDENT_DASHBOARD
         elif self.tanseeq_role.name == User.TANSEEQ_FINANCE:
@@ -465,4 +480,6 @@ class User(AbstractUser):
             dashboard_path = User.TANSEEQ_EXAMINER_DASHBOARD
         elif self.tanseeq_role.name == User.TANSEEQ_FACULTY:
             dashboard_path = User.TANSEEQ_FACULTY_DASHBOARD
+        elif self.tanseeq_role.name == User.TANSEEQ_APPLICATION_ENTRY:
+            dashboard_path = User.TANSEEQ_APPLICATION_ENTRY_DASHBOARD
         return dashboard_path

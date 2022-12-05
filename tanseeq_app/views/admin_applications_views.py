@@ -83,7 +83,13 @@ class PersonalInfoDetailsView(View):
                                            username=request.POST['email'], email=request.POST['email'],
                                            password=make_password('123456'))
                 user.role.add(UserRole.objects.get(name='Tanseeq Student'))
-                user.tanseeq_role_id = UserRole.objects.get(name='Tanseeq Admin').id
+                if request.user.is_tanseeq_university_admin():
+                    role_id = UserRole.objects.get(name='Tanseeq University Admin').id
+                elif request.user.is_tanseeq_application_entry():
+                    role_id = UserRole.objects.get(name='Tanseeq Application Entry').id
+                else:
+                    role_id = UserRole.objects.get(name='Tanseeq Admin').id
+                user.tanseeq_role_id = role_id
                 user.save()
             obj = form.save(commit=False)
             if not ApplicationDetails.objects.filter(user = user):

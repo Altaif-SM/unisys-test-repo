@@ -46,6 +46,7 @@ class UniversityAttachment(BaseModel):
     attachment_name = models.CharField(max_length=255)
     type_of_attachment = models.CharField(choices=ATTACHMENT_TYPES, max_length=50)
     is_required = models.BooleanField(default=True)
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True, )
 
     def __str__(self):
         return self.attachment_name
@@ -57,6 +58,7 @@ class TanseeqFaculty(BaseModel):
     name = models.CharField(max_length=100)
     is_active = models.BooleanField(default=True)
     notes = models.TextField(null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True, )
 
     class Meta:
         pass
@@ -71,6 +73,7 @@ class TanseeqProgram(BaseModel):
     name = models.CharField(max_length=100)
     code = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True, )
 
     class Meta:
         pass
@@ -108,6 +111,7 @@ class ConditionFilters(BaseModel):
     fee = models.FloatField(max_length=50)
     is_exam = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True)
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True, )
 
     class Meta:
         verbose_name = "Condition Filters"
@@ -124,6 +128,7 @@ class TanseeqFee(BaseModel):
                                 on_delete=models.PROTECT)
     fee = models.FloatField(max_length=50, null=True)
     is_active = models.BooleanField(default=True)
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True, )
 
 
 class Course(BaseModel):
@@ -230,6 +235,7 @@ class AppliedPrograms(BaseModel):
     is_denied = models.BooleanField(default=False)
     review_status = models.IntegerField(choices=STATUS, max_length=50, blank=True, null=True)
     review_note = models.TextField(blank=True, null=True)
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True, related_name='accountant_created_by')
 
     class Meta:
         verbose_name = "Applied Program"

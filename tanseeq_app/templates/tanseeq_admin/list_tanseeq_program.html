@@ -85,25 +85,17 @@
             <div class="caption">
                 <i class="icon-settings font-red"></i>
                 <span class="caption-subject font-red sbold uppercase">
-                {% if request.user.is_tanseeq_admin %}
-                    {% trans 'Manage Tanseeq Program' %}
-                {% else %}
                     {% trans 'Tanseeq Programs' %}
-                {% endif %}
             </span>
             </div>
-            {% if request.user.is_tanseeq_admin %}
                 <a href="{% url 'tanseeq_app:add_tanseeq_program' %}">
-                    <button type="submit" class="btn green" id="save" style="margin-left:66%;margin-bottom:10px;background-color: #3598dc">
+                    <button type="submit" class="btn green" id="save" style="margin-left:72%;margin-bottom:10px;background-color: #3598dc">
                         Add
                     </button>
                 </a>
-            {% endif %}
         </div>
         <div class="portlet-body">
-            {% if request.user.is_tanseeq_admin %}
                 <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">
-            {% endif %}
             {% csrf_token %}
             <table class="table table-striped table-hover table-bordered" id="sample_1">
                 <thead>
@@ -114,9 +106,7 @@
                     <th> {% trans 'Name' %}</th>
                     <th> {% trans 'Code' %}</th>
                     <th> {% trans 'Active' %}</th>
-                    {% if request.user.is_tanseeq_admin %}
                         <th width="10%">{% trans 'Action' %}</th>
-                    {% endif %}
                 </tr>
                 </thead>
                 <tbody id="tbody">
@@ -133,7 +123,6 @@
                         <td>{{ rec.code|default_if_none:"" }}</td>
                         <td>{% if rec.is_active == True %}Yes{% else %}No{% endif %}</td>
 
-                        {% if request.user.is_tanseeq_admin %}
                             <td>
                                 <a href="{% url 'tanseeq_app:edit_tanseeq_program' rec.id %}">
                                 <span type="button" name="edit" id="edit{{ forloop.counter }}"
@@ -145,23 +134,17 @@
                                 >
                                 </button>
                             </td>
-                        {% endif %}
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
-            {% if request.user.is_tanseeq_admin %}
                 </form>
-            {% endif %}
         </div>
     </div>
 
-    {% if request.user.is_tanseeq_admin %}
         {% include 'delete_modal.html' %}
-    {% endif %}
 {% endblock %}
 {% block ajax %}
-    {% if request.user.is_tanseeq_admin %}
         <script>
             $(".delete").on("click", (e) => {
                 $("#id_delete_model").modal()
@@ -196,5 +179,4 @@
                 });
             }
         </script>
-    {% endif %}
 {% endblock %}

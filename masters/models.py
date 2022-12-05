@@ -179,7 +179,7 @@ class YearDetails(BaseModel):
     end_date = models.DateField()
     active_year = models.BooleanField(default=False)
     is_tanseeq_year = models.BooleanField(default=False)
-
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True, )
     class Meta:
         ordering = ('year_name',)
         permissions = (
@@ -447,6 +447,7 @@ class StudyModeDetails(BaseModel):
     study_mode = models.CharField(max_length=150, blank=True, null=True)
     code = models.CharField(max_length=50, blank=True, null=True)
     is_active = models.BooleanField(default=True)
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True, )
 
     def __str__(self):
         return self.study_mode

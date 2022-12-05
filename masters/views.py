@@ -66,7 +66,7 @@ def update_year(request):
     start_dt = datetime.datetime.strptime(str(start_date), "%Y-%m-%d").date()
 
     try:
-        if request.user.is_tanseeq_admin():
+        if request.user.is_tanseeq_admin() or request.user.is_tanseeq_university_admin():
             if YearDetails.objects.filter(~Q(id=year_id), year_name=year_name.lower(),is_tanseeq_year=True).exists():
                 messages.warning(request, "Year name already exists. Record not updated.")
 
@@ -2687,6 +2687,8 @@ def delete_program(request):
 def year_settings(request):
     if request.user.is_tanseeq_admin():
         year_recs = YearDetails.objects.filter(is_tanseeq_year=True)
+    elif request.user.is_tanseeq_university_admin():
+        year_recs = YearDetails.objects.filter(is_tanseeq_year=True,created_by = request.user)
     else:
         year_recs = YearDetails.objects.filter(is_tanseeq_year=False)
     return render(request, 'year_settings.html', {'year_recs': year_recs})
@@ -2701,11 +2703,11 @@ def add_year(request):
     start_dt = datetime.datetime.strptime(str(start_date), "%Y-%m-%d").date()
 
     is_tanseeq_year = False
-    if request.user.role.filter(name='Tanseeq Admin').exists():
+    if request.user.role.filter(name__in= ['Tanseeq Admin','Tanseeq University Admin']).exists():
         is_tanseeq_year = True
 
     try:
-        if request.user.is_tanseeq_admin():
+        if request.user.is_tanseeq_admin() or request.user.is_tanseeq_university_admin() :
             if YearDetails.objects.filter(year_name=year_name, is_tanseeq_year=True).exists():
                 messages.warning(request, "Year name already exists.")
                 return redirect('/masters/year_settings/')
@@ -2731,7 +2733,9 @@ def add_year(request):
             # else:
             #     YearDetails.objects.create(year_name=year_name.lower(), start_date=start_date, end_date=end_date)
 
-        YearDetails.objects.create(year_name=year_name, start_date=start_date, end_date=end_date, is_tanseeq_year = is_tanseeq_year)
+        year_obj = YearDetails.objects.create(year_name=year_name, start_date=start_date, end_date=end_date, is_tanseeq_year = is_tanseeq_year)
+        year_obj.created_by = request.user
+        year_obj.save()
         messages.success(request, "Record saved.")
     except:
         messages.warning(request, "Record not saved.")
