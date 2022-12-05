@@ -334,6 +334,13 @@ urlpatterns = [
         name='finance_list_application'
     ),
 
+    path(
+        'reports/',
+        login_required(ListApplicantsReports.as_view()),
+        name='applicants_reports'
+    ),
+
+
     # Finance
     path(
         'requestlist/',

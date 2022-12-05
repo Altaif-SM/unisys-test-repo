@@ -409,6 +409,7 @@ class TanseeqFacultyList(ListView):
                 return self.model.objects.all()
 
 
+
 @method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class TanseeqFacultyView(View):
     model = TanseeqFaculty
@@ -935,6 +936,33 @@ class ListFinanceApplications(ListView):
         context = super().get_context_data(**kwargs)
         context["finance_user_list"] = self.finance_users
         return context
+
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
+class ListApplicantsReports(ListView):
+    model = AppliedPrograms
+    template_name = "tanseeq_admin/list_applicants_reporst.html"
+
+    def get_queryset(self):
+        university = self.request.GET.get("university")
+        faculty = self.request.GET.get("faculty")
+        study_mode = self.request.GET.get("study_mode")
+        program = self.request.GET.get("program")
+        from_date = self.request.GET.get("from_date")
+        to_date = self.request.GET.get("to_date")
+        filters = {}
+        if university:
+            filters["program_details__university_id"] = university
+        if faculty:
+            filters["program_details__faculty_id"] = faculty
+        if study_mode:
+            filters["program_details__study_mode_id"] = study_mode
+        if program:
+            filters["program_details__program_id"] = program
+        if from_date and to_date:
+            filters["created_on__range"] = [from_date, to_date]
+        query_set = self.model.objects.filter(bond_no__isnull=False, is_denied=False, **filters)
+        return query_set
+
 
 
 def upload_excel(request):
