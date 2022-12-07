@@ -963,85 +963,29 @@ class ListApplicantsReports(ListView):
         query_set = self.model.objects.filter(bond_no__isnull=False, is_denied=False, **filters)
         return query_set
 
+def reviewer_reports_view(request):
+    try:
+        university = request.GET.get("university")
+        study_mode = request.GET.get("study_mode")
+        filters = {}
+        if university:
+            filters["program_details__university_id"] = university
+        if study_mode:
+            filters["program_details__study_mode_id"] = study_mode
+        query_set = AppliedPrograms.objects.filter(bond_no__isnull=False, is_denied=False, **filters)
+        reviewer_list = []
+        reviewer_users =  User.objects.filter(tanseeq_role__name__in=[User.TANSEEQ_REVIEWER])
+        for reviewer_obj in reviewer_users:
+            reviewer_dict = {}
+            reviewer_dict['reviewer'] = reviewer_obj
+            reviewer_dict['reviewed_applications'] = query_set.filter(created_by = reviewer_obj).count()
+            reviewer_dict['approved_applications'] = query_set.filter(created_by = reviewer_obj,review_status = 1).count()
+            reviewer_dict['rejected_applications'] = query_set.filter(created_by = reviewer_obj,review_status = 0).count()
+            reviewer_list.append(reviewer_dict)
+        context = {
+            'reviewer_list':reviewer_list,
+        }
+        return render(request, 'tanseeq_admin/list_reviewer_reports.html',context)
+    except Exception as e:
+        return redirect('/tanseeq_app/reviewer_reports/')
 
-
-def upload_excel(request):
-    if request.method == 'POST':
-        try:
-            # 1st script
-            # file_recs = request.FILES['excel'].get_records()
-            # for file_rec in file_recs:
-            #     if not UniversityDetails.objects.filter(university_code=file_rec['University Code']):
-            #         UniversityDetails.objects.create(university_code=file_rec['University Code'],
-            #                                          university_name=file_rec['University Name'],
-            #                                          university_type_id=1,
-            #                                          type_id=1,
-            #                                          is_tanseeq_university=True)
-            # 2nd Script
-            # file_recs = request.FILES['excel'].get_records()
-            # for file_rec in file_recs:
-            #     if file_rec['University Code'] == 1:
-            #         if not TanseeqFaculty.objects.filter(code=file_rec['Facult Code'], name = file_rec['Faculty Name']):
-            #             university_obj = UniversityDetails.objects.get(university_code=file_rec['University Code'])
-            #             faculty_obj = TanseeqFaculty.objects.create(
-            #                 name=file_rec['Faculty Name'],code = file_rec['Facult Code']
-            #
-            #                 )
-            #             faculty_obj.universities.add(university_obj)
-            #
-            #     elif file_rec['University Code'] == 2:
-            #         if not TanseeqFaculty.objects.filter(code=file_rec['Facult Code'], name = file_rec['Faculty Name']):
-            #             university_obj = UniversityDetails.objects.get(university_code=file_rec['University Code'])
-            #             faculty_obj = TanseeqFaculty.objects.create(
-            #                 name=file_rec['Faculty Name'], code=file_rec['Facult Code']
-            #
-            #             )
-            #             faculty_obj.universities.add(university_obj)
-            #     elif file_rec['University Code'] == 3:
-            #         if not TanseeqFaculty.objects.filter(code=file_rec['Facult Code'], name = file_rec['Faculty Name']):
-            #             university_obj = UniversityDetails.objects.get(university_code=file_rec['University Code'])
-            #             faculty_obj = TanseeqFaculty.objects.create(
-            #                 name=file_rec['Faculty Name'], code=file_rec['Facult Code']
-            #
-            #             )
-            #             faculty_obj.universities.add(university_obj)
-            #     elif file_rec['University Code'] == 4:
-            #         if not TanseeqFaculty.objects.filter(code=file_rec['Facult Code'], name=file_rec['Faculty Name']):
-            #             university_obj = UniversityDetails.objects.get(university_code=file_rec['University Code'])
-            #             faculty_obj = TanseeqFaculty.objects.create(
-            #                 name=file_rec['Faculty Name'], code=file_rec['Facult Code']
-            #
-            #             )
-            #             faculty_obj.universities.add(university_obj)
-            #     elif file_rec['University Code'] == 5:
-            #         if not TanseeqFaculty.objects.filter(code=file_rec['Facult Code'], name = file_rec['Faculty Name']):
-            #             university_obj = UniversityDetails.objects.get(university_code=file_rec['University Code'])
-            #             faculty_obj = TanseeqFaculty.objects.create(
-            #                 name=file_rec['Faculty Name'], code=file_rec['Facult Code']
-            #
-            #             )
-            #             faculty_obj.universities.add(university_obj)
-            #     elif file_rec['University Code'] == 6:
-            #         if not TanseeqFaculty.objects.filter(code=file_rec['Facult Code'], name = file_rec['Faculty Name']):
-            #             university_obj = UniversityDetails.objects.get(university_code=file_rec['University Code'])
-            #             faculty_obj = TanseeqFaculty.objects.create(
-            #                 name=file_rec['Faculty Name'], code=file_rec['Facult Code']
-            #
-            #             )
-            #             faculty_obj.universities.add(university_obj)
-            # 3rdt script
-            # file_recs = request.FILES['excel'].get_records()
-            # for file_rec in file_recs:
-            #     university_obj = UniversityDetails.objects.get(university_code=file_rec['University Code'])
-            #     faculty_obj = TanseeqFaculty.objects.filter(name=file_rec['Faculty Name']).first()
-            #     TanseeqProgram.objects.create(university_id=university_obj.id,
-            #                                      faculty_id=faculty_obj.id,
-            #                                      name=file_rec['Program Name'],
-            #                                      code=file_rec['Program Code'],
-            #                                   )
-            messages.success(request, "Record saved")
-        except Exception as e:
-            messages.warning(request, "Form have some error" + str(e))
-        return redirect('/tanseeq/upload_excel/')
-    else:
-        return render(request, 'tanseeq_admin/upload_university_template.html')

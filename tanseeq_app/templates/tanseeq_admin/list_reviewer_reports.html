@@ -73,7 +73,7 @@
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <span> {% trans 'Applications List' %} </span>
+                <span> {% trans 'Reviewer List' %} </span>
             </li>
         </ul>
     </div>
@@ -87,7 +87,7 @@
             <div class="caption">
                 <i class="icon-settings font-red"></i>
                 <span class="caption-subject font-red sbold uppercase">
-                {% trans 'Applications Report' %}
+                {% trans 'Reviewer Report' %}
             </span>
             </div>
         </div>
@@ -100,40 +100,16 @@
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <select class="form-control" name="faculty" id="id_faculty">
-                    </select>
-                </div>
-                <div class="col-md-3">
                     <select class="form-control" name="study_mode" id="id_study_mode">
                     </select>
                 </div>
-                <div class="col-md-3">
-                    <select class="form-control" name="program" id="id_program">
-                        <option selected value="">Select Program</option>
-                    </select>
-                </div>
 
-
-            </div>
-            <br>
-            <div class="row" style="padding-left: 30px;">
-                <span>From Date</span>
-                <div class="">
-
-                    <div class="col-md-3">
-                        <input type="date" name="from_date" class="form-control" required>
-                    </div>
-                </div>
-                <span>To Date</span>
-                <div class="">
-
-                    <div class="col-md-3">
-                        <input type="date" name="to_date" class="form-control" required>
-                    </div>
-                </div>
                 <div class="col-md-2">
                     <button type="submit" class="btn">Search</button>
                 </div>
+
+
+
             </div>
         </form>
         <br><br>
@@ -142,50 +118,21 @@
                 <thead>
                 <tr>
                     <th style="display: none">Id</th>
-                    <th> {% trans 'Application Date' %}</th>
-                    <th> {% trans 'Application ID' %}</th>
-                    <th> {% trans 'Applicant Name' %}</th>
-                    <th> {% trans 'Secondary Type' %}</th>
-                    <th> {% trans 'Seat No' %}</th>
-                    <th> {% trans 'Average' %}</th>
-                    <th> {% trans 'Graduation Year' %}</th>
-                    <th> {% trans 'Secondary City' %}</th>
-                    <th> {% trans 'Gender' %}</th>
-                    <th> {% trans 'Birth Place' %}</th>
-                    <th> {% trans 'Birth Date' %}</th>
-                    <th> {% trans 'Mobile No' %}</th>
-                    <th> {% trans 'University' %}</th>
-                    <th> {% trans 'Faculty' %}</th>
-                    <th> {% trans 'Program' %}</th>
-                    <th> {% trans 'Study Mode' %}</th>
-                    <th> {% trans 'Bond No' %}</th>
-                    <th> {% trans 'Reviwer' %}</th>
+                    <th> {% trans 'Reviewer Name' %}</th>
+                    <th> {% trans 'Number of Reviewed Applications' %}</th>
+                    <th> {% trans 'Number of Approved Applications' %}</th>
+                    <th> {% trans 'Number of Rejected Applications' %}</th>
 
                 </tr>
                 </thead>
                 <tbody id="tbody">
-                {% for rec in object_list %}
+                {% for rec in reviewer_list %}
                     <tr>
-                        <td style="display: none"><input id="university_id" value="{{ rec.id }}"></td>
-                        <td>{{ rec.created_on|date:"Y-m-d" }}</td>
-                        <td>{{ rec.user|get_application_id }}</td>
-                        <td>{{ rec.user.first_name|default_if_none:"" }} {{ rec.user.last_name|default_if_none:"" }}</td>
-                        <td>{{ rec.user|get_secondary_certificate }}</td>
-                        <td>{{ rec.user|get_seat_number }}</td>
-                        <td>{{ rec.user|get_average }}</td>
-                        <td>{{ rec.user|get_graduation_year }}</td>
-                        <td>{{ rec.user|get_secondary_city }}</td>
-                        <td>{{ rec.user|get_applicant_gender|title }}</td>
-                        <td>{{ rec.user|get_birth_place|title }}</td>
-                        <td>{{ rec.user|get_birth_date }}</td>
-                        <td>{{ rec.user|get_mobile_number }}</td>
-                        <td>{{ rec.program_details.university.university_name|default_if_none:"" }}</td>
-                        <td>{{ rec.program_details.faculty.name|default_if_none:"" }}</td>
-                        <td>{{ rec.program_details.program.name|default_if_none:"" }}</td>
-                        <td>{{ rec.program_details.study_mode.study_mode|default_if_none:"" }}</td>
-                        <td>{{ rec.bond_no|default_if_none:"" }}</td>
-                        <td>{{ rec.created_by.first_name|default_if_none:"" }} {{ rec.created_by.last_name|default_if_none:"" }}</td>
-                    </tr>
+                    <td style="display: none"><input id="university_id" value="{{ rec.id }}"></td>
+                    <td>{{ rec.reviewer.first_name|default_if_none:"" }} {{ rec.reviewer.last_name|default_if_none:"" }}</td>
+                    <td>{{ rec.reviewed_applications }}</td>
+                    <td>{{ rec.approved_applications }}</td>
+                    <td>{{ rec.rejected_applications }}</td>
                 {% endfor %}
                 </tbody>
             </table>
@@ -196,20 +143,12 @@
 {% block ajax %}
     <script>
         const getUniversitiesUrl = "{% url 'tanseeq_app:get_universities' %}"
-        const getFacultyDataUrl = "{% url 'tanseeq_app:list_tanseeq_faculty' %}"
-        const getProgramDataUrl = "{% url 'tanseeq_app:list_tanseeq_program' %}"
         const getStudyModeDataUrl = "{% url 'tanseeq_app:list_study_mode' %}"
         $(document).ready(function () {
             getUniversityData(getUniversitiesUrl)
             getStudyModeData(getStudyModeDataUrl)
-            getFacultyData(getFacultyDataUrl)
-            getProgramData(getProgramDataUrl)
             $("#id_university").on("change", function () {
-                getFacultyData(getFacultyDataUrl)
                 getStudyModeData(getStudyModeDataUrl)
-            })
-            $("#id_faculty").on("change", function () {
-                getProgramData(getProgramDataUrl)
             })
         });
     </script>

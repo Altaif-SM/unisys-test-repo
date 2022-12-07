@@ -270,12 +270,6 @@ urlpatterns = [
         login_required(TanseeqCityList.as_view()),
         name='list_tanseeq_city'
     ),
-    path(
-        'upload_excel/',
-        login_required(upload_excel),
-        name='upload_excel_details'
-    ),
-
     # admin applications
     path('personal_info_details/', login_required(PersonalInfoDetailsView.as_view()), name='personal_info_details'),
     path(
@@ -339,7 +333,11 @@ urlpatterns = [
         login_required(ListApplicantsReports.as_view()),
         name='applicants_reports'
     ),
-
+    path(
+        'reviewer_reports/',
+        login_required(reviewer_reports_view),
+        name='list_reviewer_reports'
+    ),
 
     # Finance
     path(
