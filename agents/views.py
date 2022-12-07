@@ -441,7 +441,7 @@ def applicant_intake_info(request):
     religion_recs = ReligionDetails.objects.all()
     student_recs = StudentDetails.objects.filter(user__is_active = True)
     university_type_recs = UniversityTypeDetails.objects.filter(status=True)
-    type_recs = TypeDetails.objects.filter(status=True)
+    type_recs = TypeDetails.objects.filter(status=True).exclude(type__in = ['Community Colleage', 'Colleage'])
     year_recs = ''
     semester_recs = ''
     university_recs =''

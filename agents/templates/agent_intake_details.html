@@ -3216,43 +3216,6 @@
                         <hr>
                         </div>
 
-                        <div class="portlet-title">
-                            <div class="caption">
-                                <i class="icon-settings font-red"></i>
-                                <span class="caption-subject font-red sbold uppercase">{% trans 'EXAM CENTRE INFO' %}</span>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-
-
-                            <div class="">
-                                <label class="col-md-2 control-label">Country:</label>
-                                <div class="col-md-4">
-                                    <select id='country' title="Select Country" name="country"
-                                            class="form-control value_check" data-live-search="true">
-
-                                        {% if application_obj.learning_country %}
-                                            <option style="display:none" selected="selected"
-                                                    value="{{ application_obj.learning_country.id }}"
-                                                    value="">{{ application_obj.learning_country.country_name|title }}</option>
-                                        {% else %}
-                                            <option disabled selected="selected" id=""
-                                                    value="">{% trans 'Please Select' %}
-                                            </option>
-                                        {% endif %}
-
-                                        {% for rec in country_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-
-
-                            </div>
-
-
-                        </div>
 
                     {% else %}
                           <br>
@@ -3457,75 +3420,7 @@
                         <hr>
                         </div>
 
-                        <div class="portlet-title">
-                            <div class="caption">
-                                <i class="icon-settings font-red"></i>
-                                <span class="caption-subject font-red sbold uppercase">{% trans 'EXAM CENTRE INFO' %}</span>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-
-
-                            <div class="">
-                                <label class="col-md-2 control-label">Country:</label>
-                                <div class="col-md-4">
-                                    <select id='country' title="Select Country" name="country"
-                                            class="form-control value_check" data-live-search="true">
-
-                                        {% if application_obj.learning_country %}
-                                            <option style="display:none" selected="selected"
-                                                    value="{{ application_obj.learning_country.id }}"
-                                                    value="">{{ application_obj.learning_country.country_name|title }}</option>
-                                        {% else %}
-                                            <option disabled selected="selected" id=""
-                                                    value="">{% trans 'Please Select' %}
-                                            </option>
-                                        {% endif %}
-
-                                        {% for rec in country_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-
-
-                            </div>
-
-
-                        </div>
-                        <br>
                       {% endif %}
-                     <br>
-                        <div class="row">
-                            <div class="">
-                                <label class="col-md-2 control-label">{% trans 'Exam Centre' %}:</label>
-                                <div class="col-md-4">
-                                    <select id='learning_centre' title="Select Learning Centre" name="learning_centre"
-                                            class="form-control value_check" data-live-search="true">
-
-                                        {% if application_obj.learning_centre %}
-                                            <option style="display:none" selected="selected"
-                                                    value="{{ application_obj.learning_centre.id }}"
-                                                    value="">{{ application_obj.learning_centre.lc_name|default_if_none:"" }}</option>
-                                        {% else %}
-                                            <option disabled selected="selected" id=""
-                                                    value="">{% trans 'Please Select' %}
-                                            </option>
-                                        {% endif %}
-
-                                        {% for rec in learning_centre_list %}
-                                            <option value='{{ rec.id }}'>{{ rec.learning_centre_name|default_if_none:"" }}</option>
-                                        {% endfor %}
-
-                                    </select>
-                                </div>
-
-
-                            </div>
-
-                        </div>
-                        <hr>
 
 
                         <div class="row">
