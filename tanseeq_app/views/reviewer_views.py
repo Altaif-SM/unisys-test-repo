@@ -89,7 +89,9 @@ class ReviewApplication(View):
         instance = get_object_or_404(self.model, pk=pk)
         form = self.form_class(data, instance=instance)
         if form.is_valid():
-            form.save()
+            obj = form.save(commit=False)
+            obj.created_by = request.user
+            obj.save()
         else:
             context = self.get_context_data(pk)
             context["form"] = form
