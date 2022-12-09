@@ -950,8 +950,11 @@ class ListApplicantsReports(ListView):
         from_date = self.request.GET.get("from_date")
         to_date = self.request.GET.get("to_date")
         filters = {}
-        if university:
-            filters["program_details__university_id"] = university
+        if self.request.user.is_tanseeq_university_admin():
+            filters["program_details__university_id"] = self.request.user.university.id
+        else:
+            if university:
+                filters["program_details__university_id"] = university
         if faculty:
             filters["program_details__faculty_id"] = faculty
         if study_mode:
@@ -968,8 +971,11 @@ def reviewer_reports_view(request):
         university = request.GET.get("university")
         study_mode = request.GET.get("study_mode")
         filters = {}
-        if university:
-            filters["program_details__university_id"] = university
+        if request.user.is_tanseeq_university_admin():
+            filters["program_details__university_id"] = request.user.university.id
+        else:
+            if university:
+                filters["program_details__university_id"] = university
         if study_mode:
             filters["program_details__study_mode_id"] = study_mode
         query_set = AppliedPrograms.objects.filter(bond_no__isnull=False, is_denied=False, **filters)
