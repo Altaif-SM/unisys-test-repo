@@ -1037,7 +1037,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <a href="{% url 'payments:registration_checkout' %}"
                                        class="nav-link nav-toggle">
                                         <i class="glyphicon glyphicon-credit-card"></i>
-                                        <span class="title">{% trans 'Program Registration Payment' %}</span>
+                                        <span class="title">{% trans 'Registration' %}</span>
                                         <span class="selected"></span>
                                     </a>
                                 </li>
@@ -1157,7 +1157,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
                      {% if user.is_student %}
                          {% if user.get_student_application.offer_accepted %}
-                            <li id="offer_accepted"><a href="{% url 'payments:registration_checkout' %}" >{% trans 'Program Registration Payment' %}</a></li>
+                            <li id="offer_accepted"><a href="{% url 'payments:registration_checkout' %}" >{% trans 'Registration' %}</a></li>
                          {% endif %}
                     {% endif %}
                     {% if user.is_student %}
