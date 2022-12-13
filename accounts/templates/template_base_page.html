@@ -467,7 +467,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
 
                         {% if 'student.can_view_student_application_progress_history' in perms %}
-                            {% if user.get_application.is_submitted %}
+                            {% if not user.get_application.is_submitted %}
                                 <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'student:applicant_program_search' %}"
                                        class="nav-link nav-toggle">
