@@ -75,16 +75,16 @@ License: You must have a valid license purchased only from themeforest(the above
     {% block styleBlock %}
     {% endblock %}
 
-    <!--
-    <script src="https://global.localizecdn.com/localize.js"></script>
-    <script>!function(a){if(!a.Localize){a.Localize={};for(var e=["translate","untranslate","phrase","initialize","translatePage","setLanguage","getLanguage","getSourceLanguage","detectLanguage","getAvailableLanguages","untranslatePage","bootstrap","prefetch","on","off","hideWidget","showWidget"],t=0;t<e.length;t++)a.Localize[e[t]]=function(){}}}(window);</script>
+<!--
+<script src="https://global.localizecdn.com/localize.js"></script>
+<script>!function(a){if(!a.Localize){a.Localize={};for(var e=["translate","untranslate","phrase","initialize","translatePage","setLanguage","getLanguage","getSourceLanguage","detectLanguage","getAvailableLanguages","untranslatePage","bootstrap","prefetch","on","off","hideWidget","showWidget"],t=0;t<e.length;t++)a.Localize[e[t]]=function(){}}}(window);</script>
 
-    <script>
-      Localize.initialize({
-        key: '2059d20d75a09',
-        rememberLanguage: true,
-      });
-    </script>-->
+<script>
+  Localize.initialize({
+    key: '2059d20d75a09',
+    rememberLanguage: true,
+  });
+</script>-->
 
 </head>
 
@@ -154,20 +154,18 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <span class="username username-hide-on-mobile"> {{ user.get_application.first_name|default_if_none:"" }} {{ user.get_application.last_name|default_if_none:"" }} </span>
                                     -<b><span
                                         class="username username-hide-on-mobile"> {{ user.get_application_id }}</span></b>
-                                    <span class=""><a href="https://www.youtube.com/watch?v=oos1R1tMPKY"
-                                                      target="_blanck" class="Fs20" style="color: #EF3C56;margin-top: -60px;
+                                    <span class=""><a href="https://www.youtube.com/watch?v=oos1R1tMPKY" target="_blanck" class="Fs20" style="color: #EF3C56;margin-top: -60px;
     margin-left: 350px;
     font-size: 15px;">Tutorial Video - Click here to watch the registration video tutorial</a></span>
-                                    {#                                    <span><a href="https://www.youtube.com/watch?v=oos1R1tMPKY" target="_blanck" class="Fs20" style="color: #EF3C56">Tutorial Video - Click here to watch the registration video tutorial</a></span>#}
+{#                                    <span><a href="https://www.youtube.com/watch?v=oos1R1tMPKY" target="_blanck" class="Fs20" style="color: #EF3C56">Tutorial Video - Click here to watch the registration video tutorial</a></span>#}
                                 {% endif %}
                             {% else %}
                                 {#                                <img alt="" class="img-circle" src="../../media/{{ user.get_application.image }}"/>#}
                                 <b><span class="username username-hide-on-mobile">
                             {% if user.is_tanseeq_student or request.user.is_tanseeq_admin or request.user.is_tanseeq_finance or  request.user.is_tanseeq_reviewer or request.user.is_tanseeq_university_admin or request.user.is_tanseeq_application_entry %}
                                 {{ user.role.all.0.name }}
-                            {% else %}
-                                {{ user.role.all.0.name }} (
-                                {{ user.first_name|default_if_none:"" }}{{ user.last_name|default_if_none:"" }})
+                            {%else%}
+                                {{ user.role.all.0.name }} ({{ user.first_name|default_if_none:"" }}{{ user.last_name|default_if_none:""}})
                             {% endif %}
 
 
@@ -301,38 +299,35 @@ License: You must have a valid license purchased only from themeforest(the above
                         </li>
                     {% endif %}
 
-                    {% if user.is_student %}
+                {% if user.is_student %}
 
-                        <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
-                            {% if user.get_progress_history.flag %}
-                                <a href="/student/student_notifications/" class="dropdown-toggle"
-                                   data-toggle="dropdown1" data-hover="dropdown1"
-                                   data-close-others="true">
-                                    <i class="icon-bell"></i>
-                                    {% if user.get_progress_history.active_count != 0 %}
-                                        <span class="badge badge-default"
-                                              style="color: white;background:#eb5151;font-weight: bold">{{ user.get_progress_history.active_count }}</span>
-                                    {% endif %}
-                                </a>
+                    <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
+                        {% if user.get_progress_history.flag %}
+                            <a href="/student/student_notifications/" class="dropdown-toggle" data-toggle="dropdown1" data-hover="dropdown1"
+                               data-close-others="true">
+                                <i class="icon-bell"></i>
+                                {% if user.get_progress_history.active_count != 0 %}
+                                    <span class="badge badge-default" style="color: white;background:#eb5151;font-weight: bold">{{ user.get_progress_history.active_count }}</span>
+                                {% endif %}
+                            </a>
 
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a href="/student/student_notifications/">{% trans 'See All' %}</a>
-                                        {% for notification in user.get_progress_history.notifications %}
-                                            <a>{{ notification.remark|truncatechars:30 }}</a>
-                                        {% endfor %}
-                                    </li>
-                                </ul>
+                            <ul  class="dropdown-menu">
+                                <li >
+                                    <a href="/student/student_notifications/">{% trans 'See All' %}</a>
+                                    {% for notification in user.get_progress_history.notifications %}
+                                         <a>{{ notification.remark|truncatechars:30 }}</a>
+                                    {% endfor %}
+                                </li>
+                            </ul>
 
-                            {% else %}
-                                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"
-                                   data-hover="dropdown"
-                                   data-close-others="true">
-                                    <i class="icon-bell"></i>
-                                    <span class="badge badge-default"></span>
-                                </a>
-                            {% endif %}
-                        </li>
+                        {% else %}
+                            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
+                               data-close-others="true">
+                                <i class="icon-bell"></i>
+                                <span class="badge badge-default"></span>
+                            </a>
+                        {% endif %}
+                    </li>
                     {% endif %}
 
                     <!-- BEGIN NOTIFICATION DROPDOWN -->
@@ -442,25 +437,25 @@ License: You must have a valid license purchased only from themeforest(the above
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
                             {% if request.user.is_superuser %}
                                 {% include 'super_admin_side_bar.html' %}
-                            {% elif request.user.is_tanseeq_admin %}
+                            {% elif request.user.is_tanseeq_admin  %}
                                 {% include 'tanseeq_admin/admin_side_bar.html' %}
-                            {% elif request.user.is_tanseeq_application_entry %}
+                            {% elif request.user.is_tanseeq_application_entry  %}
                                 {% include 'tanseeq_application_entry/application_entry_side_bar.html' %}
-                            {% elif request.user.is_tanseeq_university_admin %}
+                            {% elif request.user.is_tanseeq_university_admin  %}
                                 {% include 'tanseeq_university_admin/university_admin_side_bar.html' %}
-                            {% elif request.user.is_tanseeq_student %}
+                            {% elif request.user.is_tanseeq_student  %}
                                 {% include 'tanseeq_student/student_side_bar.html' %}
-                            {% elif request.user.is_tanseeq_finance %}
+                            {% elif request.user.is_tanseeq_finance  %}
                                 {% include 'tanseeq_finance/finance_side_bar.html' %}
-                            {% elif request.user.is_tanseeq_reviewer %}
+                            {% elif request.user.is_tanseeq_reviewer  %}
                                 {% include 'tanseeq_reviewer/reviewer_side_bar.html' %}
-                            {% elif request.user.is_tanseeq_examiner %}
+                            {% elif request.user.is_tanseeq_examiner  %}
                                 {% include 'tanseeq_examiner/side_bar.html' %}
-                            {% elif request.user.is_tanseeq_faculty %}
+                            {% elif request.user.is_tanseeq_faculty  %}
                                 {% include 'tanseeq_faculty/side_bar.html' %}
                             {% elif request.user.is_student %}
                                 {% include 'student_side_bar.html' %}
-                            {% else %}
+                            {%else%}
                                 {% include 'role_user_side_bar.html' %}
                             {% endif %}
                         </ul>
@@ -470,8 +465,9 @@ License: You must have a valid license purchased only from themeforest(the above
                     <div class="tab-pane " id="c"><!--Application Management-->
                         <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-                            {% if not user.get_application.is_submitted %}
 
+                        {% if 'student.can_view_student_application_progress_history' in perms %}
+                            {% if user.get_application.is_submitted %}
                                 <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'student:applicant_program_search' %}"
                                        class="nav-link nav-toggle">
@@ -480,6 +476,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                         <span class="selected"></span>
                                     </a>
                                 </li>
+                                {% endif %}
                             {% endif %}
 
 
@@ -533,7 +530,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </li>
                             {% endif %}
 
-                            {% if 'student.can_view_student_academic_qualification' in perms %}
+                        {% if 'student.can_view_student_academic_qualification' in perms %}
                                 <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'student:applicant_employement_history_info' %}"
                                        class="nav-link nav-toggle">
@@ -565,7 +562,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </li>
                             {% endif %}
 
-                            {% if 'student.can_view_student_psychometric_test' in perms %}
+                        {% if 'student.can_view_student_psychometric_test' in perms %}
                                 <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'payments:checkout' %}"
                                        class="nav-link nav-toggle">
@@ -656,46 +653,50 @@ License: You must have a valid license purchased only from themeforest(the above
                                         </li>
                                     {% endif %}
 
-                                    <li class="nav-item ">
-                                        <a href="{% url 'partner:approved_application' %}"
-                                           class="nav-link ">{% trans 'Approved Applications' %}</a>
-                                    </li>
+                                        <li class="nav-item ">
+                                            <a href="{% url 'partner:approved_application' %}"
+                                               class="nav-link ">{% trans 'Approved Applications' %}</a>
+                                        </li>
 
-                                    <li class="nav-item ">
-                                        <a href="{% url 'partner:accepted_application' %}"
-                                           class="nav-link ">{% trans 'Offer Accepted Applicant' %}</a>
-                                    </li>
+                                <li class="nav-item ">
+                                            <a href="{% url 'partner:accepted_application' %}"
+                                               class="nav-link ">{% trans 'Offer Accepted Applicant' %}</a>
+                                        </li>
 
-                                    <li class="nav-item ">
-                                        <a href="{% url 'partner:template_approving_matric_cards' %}"
-                                           class="nav-link ">{% trans 'Approving Matric Cards' %}</a>
-                                    </li>
+                                <li class="nav-item ">
+                                            <a href="{% url 'partner:template_approving_matric_cards' %}"
+                                               class="nav-link ">{% trans 'Approving Matric Cards' %}</a>
+                                        </li>
+
+
+
+
 
 
                                 </ul>
                             </li>
 
-                            {% if user.is_super_admin %}
+                        {% if user.is_super_admin %}
 
 
-                                <li class="nav-item accounting_nav_item">
-                                    <a href="javascript:;" class="nav-link nav-toggle">
-                                        <i class="fa fa-briefcase" aria-hidden="true"></i>
+                            <li class="nav-item accounting_nav_item">
+                                <a href="javascript:;" class="nav-link nav-toggle">
+                                    <i class="fa fa-briefcase" aria-hidden="true"></i>
 
 
-                                        <span class="title">{% trans 'Accounting' %}</span>
-                                        <span class="arrow accounting_arrow"></span>
-                                    </a>
-                                    <ul class="sub-menu accounting_sub_menu">
-                                        {% if 'Payment Settings' in access_list %}
-                                            <li class="nav-item ">
-                                                <a href="{% url 'masters:application_fee' %}"
-                                                   class="nav-link ">{% trans 'Application Fee' %}</a>
-                                            </li>
-                                        {% endif %}
-                                    </ul>
-                                </li>
-                            {% endif %}
+                                    <span class="title">{% trans 'Accounting' %}</span>
+                                    <span class="arrow accounting_arrow"></span>
+                                </a>
+                                <ul class="sub-menu accounting_sub_menu">
+                                    {% if 'Payment Settings' in access_list %}
+                                        <li class="nav-item ">
+                                            <a href="{% url 'masters:application_fee' %}"
+                                               class="nav-link ">{% trans 'Application Fee' %}</a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </li>
+                        {% endif %}
 
 
 
@@ -980,7 +981,7 @@ License: You must have a valid license purchased only from themeforest(the above
                         <!-- END SIDEBAR MENU -->
                     </div>  <!-- END tabpane -->
 
-                    <div class="tab-pane " id="application_program_search">
+                <div class="tab-pane " id="application_program_search">
                         <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
 
@@ -1026,7 +1027,7 @@ License: You must have a valid license purchased only from themeforest(the above
                     <div class="tab-pane " id="offer_status">
                         <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-                            {% if 'student.can_view_student_application_progress_history' in perms %}
+                         {% if 'student.can_view_student_application_progress_history' in perms %}
                                 <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'student:acceptance_declaration' %}"
                                        class="nav-link nav-toggle">
@@ -1040,11 +1041,11 @@ License: You must have a valid license purchased only from themeforest(the above
                         <!-- END SIDEBAR MENU -->
                     </div>  <!-- END tabpane -->
 
-                    <div class="tab-pane " id="program_registration">
+                <div class="tab-pane " id="program_registration">
                         <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
 
-                            {% if 'student.can_view_student_application_progress_history' in perms %}
+                        {% if 'student.can_view_student_application_progress_history' in perms %}
                                 <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'payments:registration_checkout' %}"
                                        class="nav-link nav-toggle">
@@ -1060,10 +1061,10 @@ License: You must have a valid license purchased only from themeforest(the above
                     </div>  <!-- END tabpane -->
 
 
-                    <div class="tab-pane " id="matric_card_list">
+                <div class="tab-pane " id="matric_card_list">
                         <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-                            {% if 'student.can_view_student_application_progress_history' in perms %}
+                        {% if 'student.can_view_student_application_progress_history' in perms %}
                                 <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'student:application_matric_card' %}"
                                        class="nav-link nav-toggle">
@@ -1076,10 +1077,10 @@ License: You must have a valid license purchased only from themeforest(the above
                         </ul>
                         <!-- END SIDEBAR MENU -->
                     </div>  <!-- END tabpane -->
-                    <div class="tab-pane " id="course_registration_list">
+                 <div class="tab-pane " id="course_registration_list">
                         <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-                            {% if 'student.can_view_student_application_progress_history' in perms %}
+                        {% if 'student.can_view_student_application_progress_history' in perms %}
                                 <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'student:semester_course_registration' %}"
                                        class="nav-link nav-toggle">
@@ -1089,7 +1090,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </a>
                                 </li>
 
-                                <li class="nav-item " id="acd_qli">
+                            <li class="nav-item " id="acd_qli">
                                     <a href="{% url 'student:research_plan_registration' %}"
                                        class="nav-link nav-toggle">
                                         <i class="fa fa-tasks"></i>
@@ -1137,70 +1138,56 @@ License: You must have a valid license purchased only from themeforest(the above
                         {#<li class="active"><a href="#a" data-toggle="tab">Dashboard</a></li>#}
                         {% if not user.is_student %}
                             {% if 'System Settings' in access_list %}
-                                <li id="setting_anch"><a href="#b" data-toggle="tab">{% trans 'Master Settings' %}</a>
-                                </li>
+                                <li id="setting_anch"><a href="#b" data-toggle="tab">{% trans 'Master Settings' %}</a></li>
                             {% elif 'User Settings' in access_list %}
-                                <li id="setting_anch"><a href="#b" data-toggle="tab">{% trans 'Master Settings' %}</a>
-                                </li>
+                                <li id="setting_anch"><a href="#b" data-toggle="tab">{% trans 'Master Settings' %}</a></li>
                             {% elif 'University Settings' in access_list %}
-                                <li id="setting_anch"><a href="#b" data-toggle="tab">{% trans 'Master Settings' %}</a>
-                                </li>
+                                <li id="setting_anch"><a href="#b" data-toggle="tab">{% trans 'Master Settings' %}</a></li>
                             {% elif 'Academic Settings' in access_list %}
-                                <li id="setting_anch"><a href="#b" data-toggle="tab">{% trans 'Master Settings' %}</a>
-                                </li>
+                                <li id="setting_anch"><a href="#b" data-toggle="tab">{% trans 'Master Settings' %}</a></li>
                             {% endif %}
 
                         {% endif %}
                         {% if user.is_student %}
-                            <li id="app_anch"><a
-                                    href="{% url 'student:student_home' %}">{% trans 'Application Management' %}</a>
-                            </li>
+                            <li id="app_anch"><a href="{% url 'student:student_home' %}" >{% trans 'Application Management' %}</a></li>
                         {% else %}
                             {% if 'Application Settings' in access_list %}
                                 <li id="app_anch"><a href="#c" data-toggle="tab">{% trans 'Module Settings' %}</a></li>
                             {% endif %}
                         {% endif %}
 
-                        {#                    {% if user.is_student %}#}
-                        {#                            <li id="program_search"><a href="{% url 'student:applicant_program_search' %}" >{% trans 'Program Search' %}</a></li>#}
-                        {#                        {% endif %}#}
+{#                    {% if user.is_student %}#}
+{#                            <li id="program_search"><a href="{% url 'student:applicant_program_search' %}" >{% trans 'Program Search' %}</a></li>#}
+{#                        {% endif %}#}
 
-                        {#                        {% if user.is_student %}#}
-                        {#                            <li id="app_prog"><a href="{% url 'student:applicant_progress_history' %}" >{% trans 'Application Progress History' %}</a></li>#}
-                        {#                        {% endif %}#}
-
-                        {% if user.is_student %}
-                            <li id="app_offer_status"><a
-                                    href="{% url 'student:acceptance_declaration' %}">{% trans 'Application Status' %}</a>
-                            </li>
-                        {% endif %}
+{#                        {% if user.is_student %}#}
+{#                            <li id="app_prog"><a href="{% url 'student:applicant_progress_history' %}" >{% trans 'Application Progress History' %}</a></li>#}
+{#                        {% endif %}#}
 
                         {% if user.is_student %}
-                            {% if user.get_student_application.offer_accepted %}
-                                <li id="offer_accepted"><a
-                                        href="{% url 'payments:registration_checkout' %}">{% trans 'Registration' %}</a>
-                                </li>
-                            {% endif %}
-                        {% endif %}
-                        {% if user.is_student %}
-                            {% if user.get_student_application.matric_cards %}
-                                <li id="matric_card"><a
-                                        href="{% url 'student:application_matric_card' %}">{% trans 'Matric Card' %}</a>
-                                </li>
-                            {% endif %}
+                            <li id="app_offer_status"><a href="{% url 'student:acceptance_declaration' %}" >{% trans 'Application Status' %}</a></li>
                         {% endif %}
 
-                        {% if user.is_student %}
-                            {% if user.get_student_application.course_registration %}
-                                <li id="course_registration"><a
-                                        href="{% url 'student:semester_course_registration' %}">{% trans 'Course Registration' %}</a>
-                                </li>
-                            {% endif %}
-                        {% endif %}
+                     {% if user.is_student %}
+                         {% if user.get_student_application.offer_accepted %}
+                            <li id="offer_accepted"><a href="{% url 'payments:registration_checkout' %}" >{% trans 'Registration' %}</a></li>
+                         {% endif %}
+                    {% endif %}
+                    {% if user.is_student %}
+                         {% if user.get_student_application.matric_cards %}
+                            <li id="matric_card"><a href="{% url 'student:application_matric_card' %}" >{% trans 'Matric Card' %}</a></li>
+                         {% endif %}
+                    {% endif %}
 
-                        {#                        {% if user.is_student %}#}
-                        {#                            <li id="app_payments"><a href="{% url 'payments:checkout' %}" >{% trans 'Payments' %}</a></li>#}
-                        {#                        {% endif %}#}
+                     {% if user.is_student %}
+                         {% if user.get_student_application.course_registration %}
+                            <li id="course_registration"><a href="{% url 'student:semester_course_registration' %}" >{% trans 'Course Registration' %}</a></li>
+                         {% endif %}
+                    {% endif %}
+
+{#                        {% if user.is_student %}#}
+{#                            <li id="app_payments"><a href="{% url 'payments:checkout' %}" >{% trans 'Payments' %}</a></li>#}
+{#                        {% endif %}#}
 
                     </ul>
 
@@ -1212,30 +1199,26 @@ License: You must have a valid license purchased only from themeforest(the above
                     <div id="loading-img"></div>
                 </div>
                 <div class="clearfix">
-                    <!-- Error messaging -->
-                    {% if form.errors %}
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-8 col-sm-12 m-auto p-auto">
-                                    <div id="errors" class="mt-2 text-center">
-                                        <div class="inner font-weight-bold"
-                                             style="background-color: #d9534f; padding: 10px; border-radius:20px; color:white">
-                                            <p>There were some errors in the information you entered. Please correct the
-                                                following:</p>
-                                            {{ form.non_field_errors }}
-                                            <ul class="text-capitalize">
-                                                {% for field in form %}
-                                                    {% if field.errors %}
-                                                        <li>{{ field.label }}: {{ field.errors|striptags }}</li>
-                                                    {% endif %}
-                                                {% endfor %}
-                                            </ul>
-                                        </div>
+                    	<!-- Error messaging -->
+                {% if form.errors %}
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-8 col-sm-12 m-auto p-auto">
+                                <div id="errors" class="mt-2 text-center" >
+                                    <div class="inner font-weight-bold" style="background-color: #d9534f; padding: 10px; border-radius:20px; color:white">
+                                        <p>There were some errors in the information you entered. Please correct the following:</p>
+                                        {{ form.non_field_errors }}
+                                        <ul class="text-capitalize">
+                                            {% for field in form %}
+                                            {% if field.errors %}<li>{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}
+                                            {% endfor %}
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    {% endif %}
+                    </div>
+                {% endif %}
                     {% block content %}
                     {% endblock %}
 
@@ -1440,7 +1423,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-    {% if request.resolver_match.url_name == 'application_matric_card' %}
+     {% if request.resolver_match.url_name == 'application_matric_card' %}
         {
             var element = document.getElementById("matric_card_list");
             element.classList.add("active");
@@ -1450,7 +1433,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-    {% if request.resolver_match.url_name == 'semester_course_registration' or  request.resolver_match.url_name == 'course_registration_checkout' or request.resolver_match.url_name == 'credit_course_registration' or request.resolver_match.url_name == 'add_prerequisite_courses' or request.resolver_match.url_name == 'credit_course_registration_checkout' or request.resolver_match.url_name == 'research_plan_registration' or request.resolver_match.url_name == 'research_registration_checkout' %}
+     {% if request.resolver_match.url_name == 'semester_course_registration' or  request.resolver_match.url_name == 'course_registration_checkout' or request.resolver_match.url_name == 'credit_course_registration' or request.resolver_match.url_name == 'add_prerequisite_courses' or request.resolver_match.url_name == 'credit_course_registration_checkout' or request.resolver_match.url_name == 'research_plan_registration' or request.resolver_match.url_name == 'research_registration_checkout' %}
         {
             var element = document.getElementById("course_registration_list");
             element.classList.add("active");
