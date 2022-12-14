@@ -153,5 +153,7 @@ urlpatterns = [
                   path('get_supervisor_from_university/', views.get_supervisor_from_university, name='get_supervisor_from_university'),
                   path('get_all_program_mode_exclude/', views.get_all_program_mode_exclude, name='get_all_program_mode_exclude'),
                   path('generate_pdf/<int:app_id>/', views.generate_pdf, name='generate_pdf'),
+                  path('qualifying_test/', views.qualifying_test, name='qualifying_test'),
+                  path('get_qualifying_test/', views.get_qualifying_test, name='get_qualifying_test_result'),
 
-              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

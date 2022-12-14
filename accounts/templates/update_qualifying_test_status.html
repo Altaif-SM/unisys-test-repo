@@ -1,0 +1,67 @@
+{% extends "template_university_base_page.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block content %}
+    {% include 'crumbs.html' %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+        {% endfor %}
+        
+        <!-- BEGIN VALIDATION STATES-->
+        <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">Qualifying Test </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h4><b>Qualifying Test Result</b></h4>
+            </div>
+            <div class="col-md-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Application Date</th>
+                            <th>Process</th>
+                            <th>status</th>
+                            <th>Remarks</th>
+                            <th>Process Date</th>
+                            <th>Grade</th>
+                            <th>Final Result</th>
+                        </tr>
+                    </thead>
+                    <tbody id="qualifying_test_status">
+                        {% for data in qualifying_test_obj%}
+                            {% if forloop.first %}
+                                <tr>
+                                    <td rowspan="4">{{data.test.created_on}}</td>
+                                    <td>Student</td>
+                                    <td class="success">Submitted</td>
+                                    <td>-</td>
+                                    <td>{{data.test.created_on}}</td>
+                                    <td rowspan="4">{{data.test.grade|default:"Pending"}}</td>
+                                    <td rowspan="4">{{data.test.result|default:"Pending"}}</td>
+                                </tr>
+                            {%endif%}
+                            <tr>
+                                <td>{{data.user.role.all.0.name}}</td>
+                                <td class="{% if data.status%} success {%else%}danger{%endif%}">{{data.status|default:"Pending"}}</td>
+                                <td>{{data.remarks|default:"Pending"}}</td>
+                                <td>{% if data.status %}{{result.updated_on}}{%endif%}</td>
+                            </tr>
+                        {%endfor%}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% include 'form_template.html' %}
+    </div>
+{% endblock %}
+{% block ajax %}
+
+{% endblock %}  

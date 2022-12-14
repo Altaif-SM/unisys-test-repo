@@ -1685,3 +1685,60 @@ def update_agent(request, agent_id=None):
             'user_obj': user_obj,
         }
         return render(request, 'edit_agent_details.html', context)
+
+
+from django.views.generic import ListView, View
+class QualifyingTestList(ListView):
+    model = QualifyingTestStatus
+    template_name = "list_qualifying_test.html"
+
+    def get_queryset(self):
+        return self.model.objects.filter(user=self.request.user)
+
+from django.shortcuts import get_object_or_404
+from accounts.forms import QualifyingTestStatusForm
+
+class UpdateQualifyingTestStatus(View):
+    model = QualifyingTestStatus
+    template_name = "update_qualifying_test_status.html"
+    form_class = QualifyingTestStatusForm
+    redirect_url = "accounts:update_qualifying_test_status"
+    crumbs = [
+        {"title": "Home", "url": "/"},
+        {"title": "List Qualifying Test", "url": "accounts:list_qualifying_test"},
+    ]
+
+    def get(self, request, pk):
+        instance = get_object_or_404(self.model, pk=pk, user=request.user)
+        context = {
+            "form": QualifyingTestStatusForm(instance=instance),
+            "crumbs": self.crumbs,
+            "qualifying_test_obj": self.model.objects.filter(test=instance.test),
+        }
+        return render(request, self.template_name, context)
+    
+    def post(self, request, pk):
+        instance = get_object_or_404(self.model, pk=pk, user=request.user)
+        form = self.form_class(request.POST, instance=instance)
+        if form.is_valid():
+            obj = form.save()
+            if obj.status in ["APPROVED", "RECOMMENDED", "ENDORSE"]:
+                research_details = ResearchDetails.objects.get(application_id=instance.test.student.get_application)
+                faculty_user = User.objects.filter(
+                    role__name=User.FACULTY,
+                    university=research_details.university,
+                    faculty=research_details.faculty,
+                ).first()
+                QualifyingTestStatus.objects.get_or_create(
+                    test=instance.test,
+                    user=faculty_user
+                )
+            messages.success(request, "Record Updated.")
+        else:
+            context = {
+                "form": form,
+                "crumbs": self.crumbs,
+                "qualifying_test_obj": self.model.objects.filter(test=instance.test),
+            }
+            return render(request, self.template_name, context)
+        return redirect(self.redirect_url, pk)

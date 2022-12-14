@@ -1,0 +1,149 @@
+{% extends "template_base_page.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table bordered">
+                <tr>
+                    <th>Name</th>
+                    <td>
+                        {{registered_courses.0.application_id.first_name}} {{registered_courses.0.application_id.middle_name}} {{registered_courses.0.application_id.last_name}}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Matric NO</th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Program</th>
+                    <td>{{registered_courses.0.application_id.program.program_name}}</td>
+                </tr>
+                <tr>
+                    <th>Mode of Study</th>
+                    <td>{{registered_courses.0.application_id.program_mode.study_type}}</td>
+                </tr>
+                <tr>
+                    <th>Type of Study</th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Original Language</th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Supervisor</th>
+                    <td>{{research_details.supervisor.email}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-12">
+            <p>Fullfilment of Qualifying Test:</p>
+            <table class="table">
+                <tbody>
+                    {% for course in registered_courses%}
+                        <tr>
+                            <td><b>{{course.course.title}}</b></td>
+                            <td>To be added</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% if not is_qualifying_test %}
+            <form method="POST">
+                {% csrf_token %}
+                <div class="col-md-12 text-center">
+                    <button id="apply_test" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        {% else %}
+            <div class="col-md-12 text-center">
+                <h4 class="btn btn-primary">Applied</button>
+            </div>
+        {% endif %}
+        <div class="col-md-12">
+            <p><b>Note:</b> To be added.</p>
+        </div>
+    </div>
+    {% if is_qualifying_test%}
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h4><b>Qualifying Test Result</b></h4>
+            </div>
+            <div class="col-md-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Application Date</th>
+                            <th>Process</th>
+                            <th>status</th>
+                            <th>Remarks</th>
+                            <th>Process Date</th>
+                            <th>Grade</th>
+                            <th>Final Result</th>
+                        </tr>
+                    </thead>
+                    <tbody id="qualifying_test_status">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block ajax %}
+<script>
+    {% if is_qualifying_test%}
+        function getTestResult() {
+            $.ajax({
+                type: "GET",
+                url: "{% url 'student:get_qualifying_test_result' %}",
+            
+                success: function (data, textStatus, xhr) {
+                    if(xhr.status == 200){
+                        const qualifying_test = data.qualifying_test;
+                        $("#qualifying_test_status").append(`
+                            <tr>
+                                <td rowspan="4">${data.created_on}</td>
+                                <td>Student</td>
+                                <td class="success">Submitted</td>
+                                <td>-</td>
+                                <td>${data.created_on}</td>
+                                <td rowspan="4">${data.grade||"Pending"}</td>
+                                <td rowspan="4">${data.result||"Pending"}</td>
+                            </tr>
+                        `)
+                        // Now it can be used reliably with $.map()
+                        $.map(qualifying_test, function(result) {
+                            // Do something
+                            console.log("status", qualifying_test)
+                            $("#qualifying_test_status").append(
+                                `
+                                <tr>
+                                    <td>${result.user["role"][0].name}</td>
+                                    <td class="${result.status? "success": "danger"}">${result.status||"Pending"}</td>
+                                    <td>-</td>
+                                    <td>${result.last_updated}</td>
+                                </tr>
+                                `
+                            )
+                        });
+                    }
+                },
+                complete: function (){
+                },
+                error: function (xhr, msg, err) {
+                }
+            });
+        }
+    
+        getTestResult()
+    {% endif %}
+</script>
+{% endblock %}
+

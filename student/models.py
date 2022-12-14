@@ -832,3 +832,45 @@ class ResearchDetails(BaseModel):
     faculty_rejection = models.TextField(blank=True, null=True)
     program_status = models.CharField(max_length=50, default="Pending", blank=True, null=True)
     program_rejection = models.TextField(blank=True, null=True)
+
+
+class QualifyingTest(BaseModel):
+    RESULT_CHOICES = (
+        ("PASS", "Pass"),
+        ("FAIL", "Fail"),
+    )
+
+    student = models.ForeignKey(
+        User, null=True, related_name='qualifying_test_student', on_delete=models.SET_NULL
+    )
+    grade = models.CharField(max_length=50, blank=True, null=True)
+    result = models.CharField(choices=RESULT_CHOICES, max_length=50, blank=True, null=True)
+
+    class Meta:
+        pass
+
+
+class QualifyingTestStatus(BaseModel):
+    SUPERVISOR_CHOICES = (
+        ("", "----"),
+        ("RECOMMENDED", "Recommended"),
+        ("NOT RECOMMENDED", "Not Recommended"),
+    )
+    FACULTY_CHOICES = (
+        ("", "----"),
+        ("APPROVED", "Approved"),
+        ("REJECTED", "Rejected"),
+    )
+    PPS_CHOICES = (
+        ("", "----"),
+        ("ENDORSE", "Endorse"),
+        ("REJECTED", "Rejected"),
+    )
+
+    test = models.ForeignKey(QualifyingTest, related_name="status_qualifying_test" , on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    status = models.CharField(max_length=50)
+    remarks = models.TextField(blank=True, null=True)
+
+    class Meta:
+        pass
