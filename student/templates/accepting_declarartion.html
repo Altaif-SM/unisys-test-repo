@@ -99,6 +99,24 @@
             });
         }, 4000);
 
+        function validate(evt) {
+            var theEvent = evt || window.event;
+
+            // Handle paste
+            if (theEvent.type === 'paste') {
+                key = event.clipboardData.getData('text/plain');
+            } else {
+                // Handle key press
+                var key = theEvent.keyCode || theEvent.which;
+                key = String.fromCharCode(key);
+            }
+            var regex = /[0-9]|\./;
+            if (!regex.test(key)) {
+                theEvent.returnValue = false;
+                if (theEvent.preventDefault) theEvent.preventDefault();
+            }
+        }
+
 
     </script>
 
@@ -316,6 +334,33 @@
 
 
                         </div>
+                         <br><div class="row" style="margin-left: 5%;font-size:15px">
+
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Min Duration' %}:</label>
+                                    <div class="col-md-1">
+                                        <input type="text" maxlength="1" title="Enter Min Duration Deferment" id="id_min_duration" onkeypress='validate(event)'
+                                               value="{{ deferment_obj.min_duration|default_if_none:"" }}"
+                                               name="min_duration"
+                                               class="form-control">
+
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Max Duration' %}:</label>
+                                    <div class="col-md-1">
+                                        <input type="text" maxlength="1" title="Enter Max Duration Deferment" id="id_max_duration" onkeypress='validate(event)'
+                                               value="{{ deferment_obj.max_duration|default_if_none:"" }}"
+                                               name="max_duration"
+                                               class="form-control">
+
+                                    </div>
+                                </div>
+
+
+                            </div>
                         <br>
                         <div class="row" style="margin-left: -7%;font-size:15px">
 
@@ -461,6 +506,34 @@
 
 
                         </div>
+                          <br>
+                           <div class="row" style="margin-left: 5%;font-size:15px">
+
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Min Duration' %}:</label>
+                                    <div class="col-md-1">
+                                        <input type="text" maxlength="1" title="Enter Min Duration Deferment" id="id_min_duration" onkeypress='validate(event)'
+                                               value=""
+                                               name="min_duration"
+                                               class="form-control">
+
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Max Duration' %}:</label>
+                                    <div class="col-md-1">
+                                        <input type="text" maxlength="1" title="Enter Max Duration Deferment" id="id_max_duration" onkeypress='validate(event)'
+                                               value=""
+                                               name="max_duration"
+                                               class="form-control">
+
+                                    </div>
+                                </div>
+
+
+                            </div>
                         <br>
                         <div class="row" style="margin-left: -7%;font-size:15px">
 
@@ -577,10 +650,17 @@
 
 
 
-                        {% if application_obj.is_offer_accepted %}
+                        {% if application_obj.is_offer_accepted and deferment_obj %}
                         <br><br><div class="">
                                 <div class="col-md-8" style="margin-left: 10%;font-size:15px">
-                                   Offer Status: <span style="color: green">ACCEPTED</span>
+                                   Offer Status: <span style="color: green">Deffered</span>
+
+                                </div>
+                            </div>
+                        {% elif application_obj.is_offer_accepted %}
+                            <br><br><div class="">
+                                <div class="col-md-8" style="margin-left: 10%;font-size:15px">
+                                   Offer Status: <span style="color: green">Accepted</span>
 
                                 </div>
                             </div>

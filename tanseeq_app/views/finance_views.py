@@ -48,7 +48,7 @@ class ManageAdvanceOrders(View):
         )
         if not obj:
             return JsonResponse({}, status=404)
-        obj.update(bond_no=bond_no)
+        obj.update(bond_no=bond_no,created_by = current_user)
         return JsonResponse({}, status=200)
     
     def delete(self, request, pk):

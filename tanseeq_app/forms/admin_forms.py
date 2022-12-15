@@ -210,7 +210,7 @@ class TanseeqUserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ("first_name", "last_name", "email", "tanseeq_role", "university", "tanseeq_faculty", "tanseeq_program", "is_active", "password1", "password2",)
+        fields = ("first_name", "last_name", "email", "tanseeq_role", "university", "study_mode", "tanseeq_faculty", "tanseeq_program", "password1", "password2", "is_active",)
                              
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
@@ -230,6 +230,7 @@ class TanseeqUserForm(forms.ModelForm):
         )
         self.fields["tanseeq_faculty"].widget.attrs.update({"id": "id_faculty"})
         self.fields["tanseeq_program"].widget.attrs.update({"id": "id_program"})
+        self.fields["study_mode"].widget.attrs.update({"id": "id_study_mode"})
         for field in self.fields:
             if field not in "is_active":
                 self.fields[field].widget.attrs.update({

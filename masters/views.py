@@ -66,7 +66,7 @@ def update_year(request):
     start_dt = datetime.datetime.strptime(str(start_date), "%Y-%m-%d").date()
 
     try:
-        if request.user.is_tanseeq_admin():
+        if request.user.is_tanseeq_admin() or request.user.is_tanseeq_university_admin():
             if YearDetails.objects.filter(~Q(id=year_id), year_name=year_name.lower(),is_tanseeq_year=True).exists():
                 messages.warning(request, "Year name already exists. Record not updated.")
 
@@ -1924,6 +1924,7 @@ def add_university(request):
         is_active = request.POST.get('is_active')
         is_registration = request.POST.get('is_registration')
         is_singup = request.POST.get('is_singup')
+        max_duration = request.POST.get('max_duration')
         if is_active == 'on':
             is_active = True
         else:
@@ -1943,7 +1944,7 @@ def add_university(request):
         if request.user.role.filter(name = 'Tanseeq Admin').exists():
             is_tanseeq_university = True
         try:
-            university_obj = UniversityDetails.objects.create(university_code = university_code,contact_details = contact_details,
+            university_obj = UniversityDetails.objects.create(university_code = university_code,contact_details = contact_details,max_duration= max_duration,
                                              university_name=university_name, email=email,telephone = telephone,website = website,
                                              address = address,is_active = is_active,university_type_id = university_type,type_id = type,is_registration = is_registration,is_singup = is_singup,is_tanseeq_university = is_tanseeq_university)
             if university_logo:
@@ -1992,6 +1993,7 @@ def edit_university(request, university_id=None):
         is_active = request.POST.get('is_active')
         is_registration = request.POST.get('is_registration')
         is_singup = request.POST.get('is_singup')
+        max_duration = request.POST.get('max_duration')
         if is_active == 'on':
             is_active = True
         else:
@@ -2010,6 +2012,7 @@ def edit_university(request, university_id=None):
             university_obj.university_type_id = university_type
             university_obj.type_id = type
             university_obj.university_name = university_name
+            university_obj.max_duration = max_duration
             university_obj.university_code = university_code
             university_obj.email = email
             university_obj.telephone = telephone
@@ -2687,6 +2690,8 @@ def delete_program(request):
 def year_settings(request):
     if request.user.is_tanseeq_admin():
         year_recs = YearDetails.objects.filter(is_tanseeq_year=True)
+    elif request.user.is_tanseeq_university_admin():
+        year_recs = YearDetails.objects.filter(is_tanseeq_year=True,created_by = request.user)
     else:
         year_recs = YearDetails.objects.filter(is_tanseeq_year=False)
     return render(request, 'year_settings.html', {'year_recs': year_recs})
@@ -2701,11 +2706,11 @@ def add_year(request):
     start_dt = datetime.datetime.strptime(str(start_date), "%Y-%m-%d").date()
 
     is_tanseeq_year = False
-    if request.user.role.filter(name='Tanseeq Admin').exists():
+    if request.user.role.filter(name__in= ['Tanseeq Admin','Tanseeq University Admin']).exists():
         is_tanseeq_year = True
 
     try:
-        if request.user.is_tanseeq_admin():
+        if request.user.is_tanseeq_admin() or request.user.is_tanseeq_university_admin() :
             if YearDetails.objects.filter(year_name=year_name, is_tanseeq_year=True).exists():
                 messages.warning(request, "Year name already exists.")
                 return redirect('/masters/year_settings/')
@@ -2731,7 +2736,9 @@ def add_year(request):
             # else:
             #     YearDetails.objects.create(year_name=year_name.lower(), start_date=start_date, end_date=end_date)
 
-        YearDetails.objects.create(year_name=year_name, start_date=start_date, end_date=end_date, is_tanseeq_year = is_tanseeq_year)
+        year_obj = YearDetails.objects.create(year_name=year_name, start_date=start_date, end_date=end_date, is_tanseeq_year = is_tanseeq_year)
+        year_obj.created_by = request.user
+        year_obj.save()
         messages.success(request, "Record saved.")
     except:
         messages.warning(request, "Record not saved.")

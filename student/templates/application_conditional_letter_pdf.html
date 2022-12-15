@@ -27,11 +27,10 @@
 
     @page {
         margin: 1cm;
-        margin-top: 2cm;
+        margin-top: 4cm;
 
         @frame header {
         -pdf-frame-content: header;
-        -pdf-frame-content: headerFirst;
     {#font-size: 20px;#}
     {#font-weight: 100;#}
     {#text-align: center;#}
@@ -60,90 +59,76 @@
 
     .wrapper {
         display: table;
-        width: 150%;
+        width: 100%;
     }
 
     .left {
         display: table-cell;
     }
+
     .max-lines {
-  display: block;/* or inline-block */
-  text-overflow: ellipsis;
-  word-wrap: break-word;
-  overflow: hidden;
-  max-height: 2.6em;
-  line-height: 1.5em;
-}
+        display: block; /* or inline-block */
+        text-overflow: ellipsis;
+        word-wrap: break-word;
+        overflow: hidden;
+        max-height: 2.6em;
+        line-height: 1.5em;
+    }
 </style>
 
 {% block content %}
     <div class='wrapper'>
         <div class='header' id="header" style="text-align: center;">
+            <br><br>
+            <span class='title'
+                  style="font-size: 26px; color: #13084e;text-align: center"><b>{{ application_obj.university.university_name|default_if_none:"" }} Offer Letter</b></span>
             <img src="{{ header_path }}" alt="logo"
-                 style="width: 600px;height: 80px;margin-top: 25px; text-align: center" class="logo-default"/><br><br>
-            <span class='title' style="font-size: 20px; color: #13084e;"><b>Conditional Offer Letter</b></span>
+                 style="width: 300px;height: 80px;margin-top: 25px; text-align: center" class="logo-default"/>
+
         </div>
+        <span style="font-size: 17px;color: #333;font-weight: bold">To</span>
+        <br><br>
+        <span style="font-size: 17px;color: #333">{{ application_obj.first_name|default_if_none:"" }} {{ application_obj.middle_name|default_if_none:"" }} {{ application_obj.last_name|default_if_none:"" }} ,</span>
+        <br><br>
+        <span style="font-size: 17px;color: #333">{{ current_date }}</span>
+
         <br><br><br>
-        <span style="font-size: 17px;color: #333">{{ current_date }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 17px;color: #333">Student ID : {{ student_id }}</span>
-        <br><br>
-        <span style="font-size: 17px;color: #333">Student Name  : {{ application_obj.first_name|default_if_none:"" }} {{ application_obj.middle_name|default_if_none:"" }} {{ application_obj.last_name|default_if_none:"" }}</span>
-        <br><br>
 
-        <span class="max-lines" style="font-size: 17px;color: #333">Address : {{ application_obj.address.residential_address|default_if_none:"" }}</span>
+        <span style="font-size: 17px;color: #333">Good day!</span>
+        <br><br>
+        <span class="max-lines"
+              style="font-size: 17px;color: #333">The {{ application_obj.university.university_name|default_if_none:"" }} Admission Selection Committee would like to take this opportunity to congratulate you on your successful application for admission to the
+            {% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}
+                ({{ application_obj.program.program_name|default_if_none:"" }}
+                ){% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}
+                ({{ application_obj.program_2.program_name|default_if_none:"" }})
+            {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}
+                ({{ application_obj.program_3.program_name|default_if_none:"" }}){% else %}
+                {{ application_obj.program.program_name|default_if_none:"" }}{% endif %}
+            in the academic year ({{ application_obj.academic_year.year_name|default_if_none:"" }}).</span>
         <br>
-        <span style="font-size: 17px;color: #333">Country of Origin: {{ application_obj.address.country.country_name|title }}</span>
-        <br><br>
-        <span style="font-size: 17px;color: #333">Dear MR / Ms :  {{ application_obj.first_name|default_if_none:"" }} {{ application_obj.last_name|default_if_none:"" }}</span>
-        <br><br><br>
-{#        <span style="font-size: 17px;color: #333"><b>UNDERGRADUATE CONDITIONAL OFFER OF ADMISSION {{ application_obj.application_id|upper|default_if_none:"" }}</b></span>#}
-            <span style="font-size: 17px;color: #333"><b>OFFER OF #{% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.program.program_name|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.program_2.program_name|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.program_3.program_name|default_if_none:"" }} {% else %}{{ application_obj.program.program_name|default_if_none:"" }}{% endif %} {{ application_obj.application_id|upper|default_if_none:"" }}</b></span>
-
-
-        <br><br>
-        <span class="max-lines" style="font-size: 17px;color: #333">I am pleased to inform you that the {{ application_obj.university.university_name|default_if_none:"" }} is making you a Conditional Offer for a place in the following programme:</span>
-
-        <br><br>
-        <span style="font-size: 17px;color: #333">Programme of Study : {% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.program.program_name|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.program_2.program_name|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.program_3.program_name|default_if_none:"" }} {% else %}{{ application_obj.program.program_name|default_if_none:"" }}{% endif %}</span>
-        <br><br>
-        <span style="font-size: 17px;color: #333">Registration Number : {{ registration_number }}</span>
-        <br><br>
-        <span style="font-size: 17px;color: #333">Mode of Study : {% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.study_mode|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.study_mode_2|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.study_mode_3|default_if_none:"" }} {% else %}{{ application_obj.study_mode|default_if_none:"" }}{% endif %}</span>
-        <br><br>
-        <span style="font-size: 17px;color: #333">Level of Study : {% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.study_level.study_level|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.study_level_2.study_level|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.study_level_3.study_level|default_if_none:"" }} {% else %}{{ application_obj.study_level.study_level|default_if_none:"" }}{% endif %}</span>
-         <br><br>
-        <span style="font-size: 17px;color: #333">Faculty : {% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.faculty.faculty_name|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.faculty_2.faculty_name|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.faculty_3.faculty_name|default_if_none:"" }} {% else %}{{ application_obj.faculty.faculty_name|default_if_none:"" }}{% endif %}</span>
-         <br><br>
-        <span style="font-size: 17px;color: #333">Department : {% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.department.department|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.department_2.department|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.department_3.department|default_if_none:"" }} {% else %}{{ application_obj.department.department|default_if_none:"" }}{% endif %}</span>
-        <br><br>
-        <span style="font-size: 17px;color: #333">Program Mode : {% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.program_mode.study_type|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.program_mode_2.study_type|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.program_mode_3.study_type|default_if_none:"" }} {% else %}{{ application_obj.program_mode.study_type|default_if_none:"" }}{% endif %}</span>
-
-        <br><br> <br><br>
-     <span class="max-lines" style="font-size: 17px;color: #333">
-         Visa Fee: ##	Applicable for on campus programmes and for those selected required visa (or we just make it tab after offer letter visa requirement if student select required visa (can fill up form with required visa details)
-     </span>
-
-        <br><br><br><br>
-        <span class="max-lines" style="font-size: 17px;color: #333">This is a conditional offer and will be confirmed if you fulfill {{ application_obj.university.university_name|default_if_none:"" }} Entry Requirement as per {{ application_obj.university.university_name|default_if_none:"" }}'s approval.</span>
+        <span class="max-lines" style="font-size: 17px;color: #333">We are confident that our rigorous program will serve as a training ground to enhance your skills in the field.This offer is conditional upon your agreement to fulfill the following requirements:</span>
         <br>
-        <span style="font-size: 17px;color: #333"><b>You are required to submit the following documents for verification:</b></span>
         {% for rec in application_obj.applicant_verification_document.all %}
-            <span class="max-lines" style="font-size: 17px;color: red">{{ forloop.counter }}-{{ rec.required_document|default_if_none:"" }}</span>
+            <span class="max-lines"
+                  style="font-size: 15px;font-weight: bold">{{ forloop.counter }}. {{ rec.required_document|default_if_none:"" }}</span>
         {% endfor %}
-        <br><br> <br>
-        <span class="max-lines" style="font-size: 17px;color: #333">The Actual Offer letter will be emailed to you upon obtaining the approval from ## Uni’s board. The details of the Registration Day will be provided in the Actual Offer letter.</span>
-        <br>
-        <span class="max-lines" style="font-size: 17px;color: #333">I regret to inform you that the offer will be automatically void if the above documents are not received before or on the programme commencement date.</span>
-        <br>
-        <span class="max-lines" style="font-size: 17px;color: #333">This letter will be revoked in the event any incorrect, false or forged documents are found to be submitted to us</span>
-        <br>
-        <span class="max-lines" style="font-size: 17px;color: #333">I look forward to welcoming you to {{ application_obj.university.university_name|default_if_none:"" }}. </span>
-        <br><br><br>
-        <span class="max-lines" style="font-size: 17px;color: #333">Yours sincerely,</span>
-         <br><br><br><br>
-        <span style="font-size: 17px;color: #333"><b>ACADEMIC REGISTRAR</b></span>
-    <br><br>
-        <span style="font-size: 17px;color: #333"><b>{{ application_obj.university.university_name|default_if_none:"" }}</b></span>
 
+        <br>
+        <span class="max-lines"
+              style="font-size: 17px;color: #333">To proceed for registration for Sem ({{ application_obj.semester.semester|default_if_none:"" }}), Year ({{ application_obj.academic_year.year_name|default_if_none:"" }}), please be informed that you are required to follow registration procedures in unisys.online.</span>
+        <br>
+        <span class="max-lines" style="font-size: 17px;color: #333">Registration payment shall be made to the following account:</span>
+        <br>
+        <span class="max-lines" style="font-size: 17px;color: #333">Once again, congratulations on your successful application, and we look forward to your response to this offer.</span>
+        <br><br>
+        <span style="font-size: 17px;color: #333">Regards,</span>
+        <br><br>
+        <span style="font-size: 17px;color: #333"><b>Super Admin</b></span>
+        <br><br>
+        <span style="font-size: 17px;color: #333"><b>Admission Selection Committee Director</b></span>
+        <br><br>
+        <span style="font-size: 17px;color: #333"><b>{{ application_obj.university.university_name|default_if_none:"" }}</b></span>
 
 
     </div>

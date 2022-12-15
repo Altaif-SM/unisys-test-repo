@@ -441,7 +441,7 @@ def applicant_intake_info(request):
     religion_recs = ReligionDetails.objects.all()
     student_recs = StudentDetails.objects.filter(user__is_active = True)
     university_type_recs = UniversityTypeDetails.objects.filter(status=True)
-    type_recs = TypeDetails.objects.filter(status=True)
+    type_recs = TypeDetails.objects.filter(status=True).exclude(type__in = ['Community Colleage', 'Colleage'])
     year_recs = ''
     semester_recs = ''
     university_recs =''
@@ -514,6 +514,9 @@ def applicant_intake_info(request):
     learning_centre_recs = []
     research_details = ''
     supervisor_list = ''
+    attachment_obj = None
+    if ApplicantAttachementDetails.objects.filter(applicant_id=user.get_application).exists():
+        attachment_obj = ApplicantAttachementDetails.objects.get(applicant_id=user.get_application)
 
     country_recs = CountryDetails.objects.all()
     if not user == None :
@@ -699,12 +702,14 @@ def applicant_intake_info(request):
                                                   'supervisor_list':supervisor_list,
                                                   'research_details':research_details,
                                                         'user': user,
+                                                        "attachment_obj":attachment_obj,
                                                   })
 
 def save_update_applicant_intake_info(request):
     if request.POST:
         try:
             application_id = request.POST['application_id']
+            research_proposal = request.FILES.get('research_proposal', None)
             application_obj = ApplicationDetails.objects.get(id = application_id)
             user = User.objects.get(email = application_obj.email)
             if not application_obj.university:
@@ -785,8 +790,18 @@ def save_update_applicant_intake_info(request):
                                                    university_id = university,
 
                                                    )
+                if ApplicantAttachementDetails.objects.filter(applicant_id=user.get_application).exists():
+                    attachment_obj = ApplicantAttachementDetails.objects.get(applicant_id=user.get_application)
+                else:
+                    if (research_proposal is not None):
+                        attachment_obj = ApplicantAttachementDetails.objects.create(applicant_id=user.get_application)
+                if research_proposal:
+                    attachment_obj.research_proposal = research_proposal
+                    attachment_obj.save()
+
             else:
                 ResearchDetails.objects.filter(application_id=user.get_application).filter().delete()
+                ApplicantAttachementDetails.objects.filter(applicant_id=user.get_application).filter().delete()
 
             redirect_flag = True
             if redirect_flag:

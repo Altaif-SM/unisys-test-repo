@@ -1,7 +1,7 @@
 from django import template
 from masters.views import RegisteredPrerequisiteCourses,ProgramFeeDetails,ReferralFeeDetails
 from payments.models import ProgramRegistrationFeeDetails
-from datetime import datetime
+from tanseeq_app.models import ApplicationDetails, SecondaryCertificateInfo
 
 register = template.Library()
 
@@ -61,3 +61,97 @@ def get_referral_Fee(application_obj):
         return float(referral_fee_obj.amount)
     else:
         return '-'
+
+
+@register.filter
+def get_application_date(user_obj):
+    try:
+        app_details_obj = ApplicationDetails.objects.get(user_id = user_obj.id)
+        return str(app_details_obj.created_on.date())
+    except:
+        return None
+
+@register.filter
+def get_application_id(user_obj):
+    try:
+        app_details_obj = ApplicationDetails.objects.get(user_id = user_obj.id)
+        return str(app_details_obj.tanseeq_id)
+    except:
+        return None
+
+@register.filter
+def get_secondary_certificate(user_obj):
+    try:
+        app_details_obj = ApplicationDetails.objects.get(user_id = user_obj.id)
+        secondar_certificate_obj = SecondaryCertificateInfo.objects.get(application_id = app_details_obj.id)
+        return str(secondar_certificate_obj.secondary_certificate.school_certificate)
+    except:
+        return None
+
+@register.filter
+def get_seat_number(user_obj):
+    try:
+        app_details_obj = ApplicationDetails.objects.get(user_id = user_obj.id)
+        secondar_certificate_obj = SecondaryCertificateInfo.objects.get(application_id = app_details_obj.id)
+        return str(secondar_certificate_obj.seat_number)
+    except:
+        return None
+
+@register.filter
+def get_average(user_obj):
+    try:
+        app_details_obj = ApplicationDetails.objects.get(user_id = user_obj.id)
+        secondar_certificate_obj = SecondaryCertificateInfo.objects.get(application_id = app_details_obj.id)
+        return str(secondar_certificate_obj.average)
+    except:
+        return None
+
+@register.filter
+def get_graduation_year(user_obj):
+    try:
+        app_details_obj = ApplicationDetails.objects.get(user_id = user_obj.id)
+        secondar_certificate_obj = SecondaryCertificateInfo.objects.get(application_id = app_details_obj.id)
+        return str(secondar_certificate_obj.academic_year.year_name)
+    except:
+        return None
+
+@register.filter
+def get_secondary_city(user_obj):
+    try:
+        app_details_obj = ApplicationDetails.objects.get(user_id = user_obj.id)
+        secondar_certificate_obj = SecondaryCertificateInfo.objects.get(application_id = app_details_obj.id)
+        return str(secondar_certificate_obj.city.city)
+    except:
+        return None
+
+@register.filter
+def get_applicant_gender(user_obj):
+    try:
+        app_details_obj = ApplicationDetails.objects.get(user_id = user_obj.id)
+        return str(app_details_obj.gender_type)
+    except:
+        return None
+
+@register.filter
+def get_birth_place(user_obj):
+    try:
+        app_details_obj = ApplicationDetails.objects.get(user_id = user_obj.id)
+        return str(app_details_obj.country.country_name)
+    except:
+        return None
+
+@register.filter
+def get_birth_date(user_obj):
+    try:
+        app_details_obj = ApplicationDetails.objects.get(user_id = user_obj.id)
+        return str(app_details_obj.birth_date)
+    except:
+        return None
+
+@register.filter
+def get_mobile_number(user_obj):
+    try:
+        app_details_obj = ApplicationDetails.objects.get(user_id = user_obj.id)
+        return str(app_details_obj.contact_number)
+    except:
+        return None

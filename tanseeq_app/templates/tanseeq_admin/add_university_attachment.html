@@ -76,12 +76,23 @@
                     <div class="form-body">
                         <div class="row item_experience" id="item_experience_1">
                             <div class="row">
-                                <label class="col-md-2 control-label">{% trans form.universities.label %}:
+
+                                <label class="col-md-2 control-label">{% trans 'University' %}:
                                     <span style="color: red">*</span>
                                 </label>
                                 <div class="col-md-3">
-                                    {{form.universities}}
+                                    <select id='universities' title="Select University" multiple
+                                            name="universities"
+                                            class="form-control" required>
+                                        <option hidden value="">Please Select</option>
+                                        {% for rec in university_objs %}
+                                            <option value="{{ rec.id }}">{{ rec.university_name|default_if_none:"" }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
+
+
                                 <label class="col-md-2 control-label">{% trans form.attachment_name.label %}:
                                     <span style="color: red">*</span>
                                 </label>
@@ -124,4 +135,22 @@
             </div>
         </div>
     </div>
+{% endblock %}
+{% block ajax %}
+    <script>
+        const selectValues = "{{ selected_universities }}";
+        /* Iterate options of select element */
+        for (const option of document.querySelectorAll('#universities option')) {
+            /* Parse value to integer */
+            const value = Number.parseInt(option.value);
+            /* If option value contained in values, set selected attribute */
+            if (selectValues.indexOf(value) !== -1) {
+                option.setAttribute('selected', 'selected');
+            }
+            /* Otherwise ensure no selected attribute on option */
+            else {
+                option.removeAttribute('selected');
+            }
+        }
+    </script>
 {% endblock %}

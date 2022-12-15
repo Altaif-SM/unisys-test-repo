@@ -72,6 +72,60 @@
 
                 {% endif %}
 
+            $(document).on("click", ".file", function (e) {
+                    $(this).parent('.form-control').next('.file_type').trigger('click');
+                });
+                var _URL = window.URL || window.webkitURL;
+                $('.file_type').change(function (evt) {
+                    var extension = $(this).val().split('.').pop().toLowerCase();
+                    if ((extension == 'jpeg') || (extension == 'jpg')) {
+
+                        var files = !!this.files ? this.files : [];
+                        var maxSizeKB = 66; //Size in KB
+                        var maxSize = maxSizeKB * 1024; //File size is returned in Bytes
+                        if (files[0].size > maxSize) {
+                            alert('Maximum file size must be 66 KB');
+                            location.reload();
+                            return false;
+                        }
+                        var file, img;
+                        if ((file = files[0])) {
+                            img = new Image();
+                            var objectUrl = _URL.createObjectURL(file);
+                            img.onload = function () {
+                                var width = img.naturalWidth,
+                                    height = img.naturalHeight;
+                                _URL.revokeObjectURL(objectUrl);
+                                if (width <= 217 && height <= 280) {
+                                    var file_name = $(this).val().split('\\')[2];
+                                    $(this).prev().children().children('.file_value').val(file_name);
+                                } else {
+                                    alert('Maximum file height and width must be 280px*217px');
+                                    location.reload();
+                                    return false
+
+                                }
+
+                            };
+                            img.src = objectUrl;
+                            var file_name = $(this).val().split('\\')[2];
+                            $(this).prev().children().children('.file_value').val(file_name);
+                        }
+
+
+                    } else {
+                        var file_name = $(this).val().split('\\')[2];
+                        $(this).prev().children().children('.file_value').val(file_name);
+                    }
+
+
+                });
+
+                $(document).on("click", ".remove_doc", function (e) {
+                    var parent_id = $(this).closest('div').attr('id');
+                    $('#' + parent_id + ' .emp').val('');
+                });
+
 
 
 
@@ -2890,6 +2944,50 @@
 
 
                                  </div>
+                        <br>
+                        <div class="row">
+
+                                    <div class="">
+                                        <label class="col-md-2 control-label">Research Proposal:
+
+
+                                        </label>
+                                        <div class="col-md-4" id="parent8">
+                                            {% if attachment_obj.research_proposal %}
+                                                <label class="form-control"
+                                                       style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                        class="file" style="width: 50%"
+                                                        type='button' value='Choose File:'><a target="_blank"
+                                                                                              href="
+                                                        {{ attachment_obj.research_proposal.url }}"><input
+                                                        type="text"
+                                                        readonly name="research_proposal_text"
+                                                        id="research_proposal_text"
+                                                        class="file_value emp"
+                                                        style="cursor: pointer;border: none; width: 50%"
+                                                        value="{{ attachment_obj.research_proposal }}"></a>
+                                                </label>
+                                            {% else %}
+                                                <label class="form-control"
+                                                       style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                        class="file" style="width: 50%"
+                                                        type='button' value='Choose File:'><a><input type="text"
+                                                                                                     readonly
+                                                                                                     name="research_proposal_text"
+                                                                                                     class="file_value emp"
+                                                                                                     style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
+                                            {% endif %}
+                                            <input type="file" style="display: none" class="file_type"
+                                                   accept="application/pdf,"
+                                                   title="Select Research Proposal" id="research_proposal"
+                                                   name="research_proposal">
+                                            <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                                                  class="remove_doc fa fa-close"></span>
+                                        </div>
+
+
+                                    </div>
+                                </div>
                         </div>
 
 
@@ -3009,6 +3107,34 @@
 
 
                                  </div>
+                        <br>
+                        <div class="row">
+
+                                    <div class="">
+                                        <label class="col-md-2 control-label">Research Proposal:
+
+
+                                        </label>
+                                        <div class="col-md-4" id="parent8">
+                                            <label class="form-control"
+                                                   style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                                    class="file" style="width: 50%"
+                                                    type='button' value='Choose File:'><a><input type="text"
+                                                                                                 readonly
+                                                                                                 name="research_proposal_text"
+                                                                                                 class="file_value emp"
+                                                                                                 style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
+                                            <input type="file" style="display: none" class="file_type"
+                                                   accept="application/pdf,"
+                                                   title="Select Research Proposal" id="research_proposal"
+                                                   name="research_proposal">
+                                            <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                                                  class="remove_doc fa fa-close"></span>
+                                        </div>
+
+
+                                    </div>
+                                </div>
                         </div>
 
 
@@ -3216,43 +3342,6 @@
                         <hr>
                         </div>
 
-                        <div class="portlet-title">
-                            <div class="caption">
-                                <i class="icon-settings font-red"></i>
-                                <span class="caption-subject font-red sbold uppercase">{% trans 'EXAM CENTRE INFO' %}</span>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-
-
-                            <div class="">
-                                <label class="col-md-2 control-label">Country:</label>
-                                <div class="col-md-4">
-                                    <select id='country' title="Select Country" name="country"
-                                            class="form-control value_check" data-live-search="true">
-
-                                        {% if application_obj.learning_country %}
-                                            <option style="display:none" selected="selected"
-                                                    value="{{ application_obj.learning_country.id }}"
-                                                    value="">{{ application_obj.learning_country.country_name|title }}</option>
-                                        {% else %}
-                                            <option disabled selected="selected" id=""
-                                                    value="">{% trans 'Please Select' %}
-                                            </option>
-                                        {% endif %}
-
-                                        {% for rec in country_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-
-
-                            </div>
-
-
-                        </div>
 
                     {% else %}
                           <br>
@@ -3457,75 +3546,7 @@
                         <hr>
                         </div>
 
-                        <div class="portlet-title">
-                            <div class="caption">
-                                <i class="icon-settings font-red"></i>
-                                <span class="caption-subject font-red sbold uppercase">{% trans 'EXAM CENTRE INFO' %}</span>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-
-
-                            <div class="">
-                                <label class="col-md-2 control-label">Country:</label>
-                                <div class="col-md-4">
-                                    <select id='country' title="Select Country" name="country"
-                                            class="form-control value_check" data-live-search="true">
-
-                                        {% if application_obj.learning_country %}
-                                            <option style="display:none" selected="selected"
-                                                    value="{{ application_obj.learning_country.id }}"
-                                                    value="">{{ application_obj.learning_country.country_name|title }}</option>
-                                        {% else %}
-                                            <option disabled selected="selected" id=""
-                                                    value="">{% trans 'Please Select' %}
-                                            </option>
-                                        {% endif %}
-
-                                        {% for rec in country_recs %}
-                                            <option value='{{ rec.id }}'>{{ rec.country_name|title }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-
-
-                            </div>
-
-
-                        </div>
-                        <br>
                       {% endif %}
-                     <br>
-                        <div class="row">
-                            <div class="">
-                                <label class="col-md-2 control-label">{% trans 'Exam Centre' %}:</label>
-                                <div class="col-md-4">
-                                    <select id='learning_centre' title="Select Learning Centre" name="learning_centre"
-                                            class="form-control value_check" data-live-search="true">
-
-                                        {% if application_obj.learning_centre %}
-                                            <option style="display:none" selected="selected"
-                                                    value="{{ application_obj.learning_centre.id }}"
-                                                    value="">{{ application_obj.learning_centre.lc_name|default_if_none:"" }}</option>
-                                        {% else %}
-                                            <option disabled selected="selected" id=""
-                                                    value="">{% trans 'Please Select' %}
-                                            </option>
-                                        {% endif %}
-
-                                        {% for rec in learning_centre_list %}
-                                            <option value='{{ rec.id }}'>{{ rec.learning_centre_name|default_if_none:"" }}</option>
-                                        {% endfor %}
-
-                                    </select>
-                                </div>
-
-
-                            </div>
-
-                        </div>
-                        <hr>
 
 
                         <div class="row">

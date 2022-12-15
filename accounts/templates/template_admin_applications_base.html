@@ -162,7 +162,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             {% else %}
                                 {#                                <img alt="" class="img-circle" src="../../media/{{ user.get_application.image }}"/>#}
                                 <b><span class="username username-hide-on-mobile">
-                            {% if user.is_tanseeq_student or request.user.is_tanseeq_admin or request.user.is_tanseeq_finance or  request.user.is_tanseeq_reviewer %}
+                            {% if user.is_tanseeq_student or request.user.is_tanseeq_admin or request.user.is_tanseeq_finance or  request.user.is_tanseeq_reviewer or  request.user.is_tanseeq_university_admin or request.user.is_tanseeq_application_entry %}
                                 {{ user.role.all.0.name }}
                             {%else%}
                                 {{ user.role.all.0.name }} ({{ user.first_name|default_if_none:"" }}{{ user.last_name|default_if_none:""}})
@@ -423,7 +423,7 @@ License: You must have a valid license purchased only from themeforest(the above
                     <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                         data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
                         <li class="nav-item " id="dashboard">
-                            <a href="{% url 'tanseeq_app:list_applicants' %}" class="nav-link nav-toggle">
+                            <a {% if request.user.is_tanseeq_application_entry %} href="{% url 'tanseeq_app:list_applicants_entry' %}" {% else %} href="{% url 'tanseeq_app:list_applicants' %}" {% endif %}class="nav-link nav-toggle">
                                 <i class="glyphicon glyphicon-stats"></i>
                                 <span class="title">Tanseeq Admin <i class="fa fa-arrow-circle-right" style="font-size: 16px;"></i></span>
                                 <span class="selected"></span>
@@ -437,7 +437,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
                             {% if request.user.is_superuser %}
                                 {% include 'super_admin_side_bar.html' %}
-                            {% elif request.user.is_tanseeq_admin  %}
+                            {% elif request.user.is_tanseeq_admin or request.user.is_tanseeq_university_admin or request.user.is_tanseeq_application_entry %}
                                 {% include 'tanseeq_admin_applications/admin_applications_side_bar.html' %}
                             {% elif request.user.is_tanseeq_student  %}
                                 {% include 'tanseeq_student/student_side_bar.html' %}

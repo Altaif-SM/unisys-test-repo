@@ -115,6 +115,7 @@
                 <th> {% trans 'Study Mode' %}</th>
                 <th> {% trans 'Program' %}</th>
                 <th> {% trans 'Fee' %}</th>
+                <th> {% trans 'Bond No' %}</th>
                 <th> {% trans 'Fee Status' %}</th>
                 <th> {% trans 'Pay the fees' %}</th>
 
@@ -136,6 +137,7 @@
                     <td>{{ rec.program_details.study_mode.study_mode|default_if_none:"" }}</td>
                     <td>{{ rec.program_details.program.name|default_if_none:"" }}</td>
                     <td>{{ rec.program_details.fee|default_if_none:"" }}</td>
+                    <td>{{ rec.bond_no|default_if_none:"" }}</td>
                     <td>
                         {% if rec.bond_no %}
                             {% trans 'Paid' %}

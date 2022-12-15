@@ -228,12 +228,16 @@
         <div class="portlet-body">
             <div class="form-body">
                 <h3 style="color: darkred; text-align: center;font-size: 21px"><b>{% trans 'Welcome' %}<span
-                        style="color: #0c203a">{{ username|title }}</span>. <br><br>
+                        style="color: #0c203a"> {{ username|title }}</span>. <br><br>
                     {% if application %}
                         {% if not application.is_submitted %}
                             {% trans 'To proceed with the application, please complete the sections on the left side of the screen. Good luck!' %}
                         {% else %}
-                            {% trans 'Your application is submitted and your University will be notified on further updates regarding your applications. it can no longer be edited.' %}
+                            {% if application.is_submitted and application.first_interview or application.first_interview_attend %}
+                                {% trans 'Congratulations! Your application is approved and your University will be notified on further updates regarding your applications.' %}
+                            {% else %}
+                                {% trans 'Your application is submitted and your University will be notified on further updates regarding your applications. it can no longer be edited.' %}
+                            {% endif %}
 
                         {% endif %}
                     {% else %}

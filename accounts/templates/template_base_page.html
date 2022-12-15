@@ -162,7 +162,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             {% else %}
                                 {#                                <img alt="" class="img-circle" src="../../media/{{ user.get_application.image }}"/>#}
                                 <b><span class="username username-hide-on-mobile">
-                            {% if user.is_tanseeq_student or request.user.is_tanseeq_admin or request.user.is_tanseeq_finance or  request.user.is_tanseeq_reviewer %}
+                            {% if user.is_tanseeq_student or request.user.is_tanseeq_admin or request.user.is_tanseeq_finance or  request.user.is_tanseeq_reviewer or request.user.is_tanseeq_university_admin or request.user.is_tanseeq_application_entry %}
                                 {{ user.role.all.0.name }}
                             {%else%}
                                 {{ user.role.all.0.name }} ({{ user.first_name|default_if_none:"" }}{{ user.last_name|default_if_none:""}})
@@ -439,6 +439,10 @@ License: You must have a valid license purchased only from themeforest(the above
                                 {% include 'super_admin_side_bar.html' %}
                             {% elif request.user.is_tanseeq_admin  %}
                                 {% include 'tanseeq_admin/admin_side_bar.html' %}
+                            {% elif request.user.is_tanseeq_application_entry  %}
+                                {% include 'tanseeq_application_entry/application_entry_side_bar.html' %}
+                            {% elif request.user.is_tanseeq_university_admin  %}
+                                {% include 'tanseeq_university_admin/university_admin_side_bar.html' %}
                             {% elif request.user.is_tanseeq_student  %}
                                 {% include 'tanseeq_student/student_side_bar.html' %}
                             {% elif request.user.is_tanseeq_finance  %}
@@ -461,6 +465,19 @@ License: You must have a valid license purchased only from themeforest(the above
                     <div class="tab-pane " id="c"><!--Application Management-->
                         <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
                             data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+
+                        {% if 'student.can_view_student_application_progress_history' in perms %}
+                            {% if not user.get_application.is_submitted %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'student:applicant_program_search' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="glyphicon glyphicon-search"></i>
+                                        <span class="title">{% trans 'Program Search' %}</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                                {% endif %}
+                            {% endif %}
 
 
                             {% if 'student.can_view_student_personal_info' in perms %}
@@ -1033,7 +1050,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <a href="{% url 'payments:registration_checkout' %}"
                                        class="nav-link nav-toggle">
                                         <i class="glyphicon glyphicon-credit-card"></i>
-                                        <span class="title">{% trans 'Program Registration Payment' %}</span>
+                                        <span class="title">{% trans 'Registration' %}</span>
                                         <span class="selected"></span>
                                     </a>
                                 </li>
@@ -1139,9 +1156,9 @@ License: You must have a valid license purchased only from themeforest(the above
                             {% endif %}
                         {% endif %}
 
-                    {% if user.is_student %}
-                            <li id="program_search"><a href="{% url 'student:applicant_program_search' %}" >{% trans 'Program Search' %}</a></li>
-                        {% endif %}
+{#                    {% if user.is_student %}#}
+{#                            <li id="program_search"><a href="{% url 'student:applicant_program_search' %}" >{% trans 'Program Search' %}</a></li>#}
+{#                        {% endif %}#}
 
 {#                        {% if user.is_student %}#}
 {#                            <li id="app_prog"><a href="{% url 'student:applicant_progress_history' %}" >{% trans 'Application Progress History' %}</a></li>#}
@@ -1153,7 +1170,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
                      {% if user.is_student %}
                          {% if user.get_student_application.offer_accepted %}
-                            <li id="offer_accepted"><a href="{% url 'payments:registration_checkout' %}" >{% trans 'Program Registration Payment' %}</a></li>
+                            <li id="offer_accepted"><a href="{% url 'payments:registration_checkout' %}" >{% trans 'Registration' %}</a></li>
                          {% endif %}
                     {% endif %}
                     {% if user.is_student %}
@@ -1320,7 +1337,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <script type="text/javascript">
 
 
-    {% if request.resolver_match.url_name == 'student_home' or request.resolver_match.url_name == 'applicant_personal_info' or request.resolver_match.url_name == 'applicant_academic_english_qualification' or request.resolver_match.url_name == 'applicant_curriculum_experience_info' or request.resolver_match.url_name == 'applicant_additional_information' or request.resolver_match.url_name == 'applicant_attachment_submission'  or request.resolver_match.url_name == 'applicant_declaration' or request.resolver_match.url_name == 'my_application'  or request.resolver_match.url_name == 'applicant_employement_history_info'  or request.resolver_match.url_name == 'applicant_intake_info'  or request.resolver_match.url_name == 'applicant_credit_transfer'  or request.resolver_match.url_name == 'checkout' or request.resolver_match.url_name == 'applicant_credit_transfer_attachement' or request.resolver_match.url_name == 'applicant_research_details' or request.resolver_match.url_name == 'student_notifications' %}
+    {% if request.resolver_match.url_name == 'student_home' or request.resolver_match.url_name == 'applicant_personal_info' or request.resolver_match.url_name == 'applicant_academic_english_qualification' or request.resolver_match.url_name == 'applicant_curriculum_experience_info' or request.resolver_match.url_name == 'applicant_additional_information' or request.resolver_match.url_name == 'applicant_attachment_submission'  or request.resolver_match.url_name == 'applicant_declaration' or request.resolver_match.url_name == 'my_application'  or request.resolver_match.url_name == 'applicant_employement_history_info'  or request.resolver_match.url_name == 'applicant_intake_info'  or request.resolver_match.url_name == 'applicant_credit_transfer'  or request.resolver_match.url_name == 'checkout' or request.resolver_match.url_name == 'applicant_credit_transfer_attachement' or request.resolver_match.url_name == 'applicant_research_details' or request.resolver_match.url_name == 'student_notifications' or request.resolver_match.url_name == 'applicant_program_search' %}
         {
             var element = document.getElementById("c");
             element.classList.add("active");
@@ -1342,7 +1359,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-    {% if request.resolver_match.url_name == 'applicant_program_search' %}
+    {% if request.resolver_match.url_name == 'applicant_program_search1' %}
         {
             var element = document.getElementById("application_program_search");
             element.classList.add("active");

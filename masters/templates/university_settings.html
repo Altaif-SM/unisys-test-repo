@@ -77,6 +77,7 @@
                         <th width="10%"> {% trans 'Email' %}</th>
                         <th width="10%"> {% trans 'Telephone' %}</th>
                         <th width="10%"> {% trans 'Website' %}</th>
+                        <th width="10%"> {% trans 'Deferment Max Duration' %}</th>
                         <th width="10%"> {% trans 'Address' %}</th>
                         <th width="10%"> {% trans 'Contact Details' %}</th>
                         <th width="10%"> {% trans 'Active' %}</th>
@@ -98,6 +99,7 @@
                             <td>{{ rec.email|default_if_none:"" }}</td>
                             <td>{{ rec.telephone|default_if_none:"" }}</td>
                             <td>{{ rec.website|default_if_none:"" }}</td>
+                            <td>{{ rec.max_duration|default_if_none:"" }}</td>
 
                             <td>{{ rec.address|default_if_none:"" }}</td>
                             <td>{{ rec.contact_details|default_if_none:"" }}</td>

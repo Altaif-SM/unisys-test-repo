@@ -2622,8 +2622,12 @@ def applicant_intake_info(request):
     learning_centre_recs = []
     research_details = ''
     supervisor_list = ''
+    attachment_obj = None
 
     country_recs = CountryDetails.objects.all()
+
+    if ApplicantAttachementDetails.objects.filter(applicant_id=request.user.get_application).exists():
+        attachment_obj = ApplicantAttachementDetails.objects.get(applicant_id=request.user.get_application)
 
     if ApplicationDetails.objects.filter(application_id=request.user.get_application_id).exists():
         application_obj = ApplicationDetails.objects.get(application_id=request.user.get_application_id)
@@ -2861,6 +2865,7 @@ def applicant_intake_info(request):
                                                   'type_recs':type_recs,
                                                   'supervisor_list':supervisor_list,
                                                   'research_details':research_details,
+                                                  'attachment_obj':attachment_obj,
                                                   })
 
 
@@ -2898,6 +2903,7 @@ def save_update_applicant_intake_info(request):
     if request.POST:
         try:
             application_id = request.POST['application_id']
+            research_proposal = request.FILES.get('research_proposal', None)
             application_obj = ApplicationDetails.objects.get(id = application_id)
             if not application_obj.university:
                 progress_counter = application_obj.progress_counter
@@ -2975,10 +2981,19 @@ def save_update_applicant_intake_info(request):
                                                    program_research_id = program_research,
                                                    faculty_id = faculty,
                                                    university_id = university,
-
                                                    )
+
+                if ApplicantAttachementDetails.objects.filter(applicant_id=request.user.get_application).exists():
+                    attachment_obj = ApplicantAttachementDetails.objects.get(applicant_id=request.user.get_application)
+                else:
+                    if (research_proposal is not None):
+                        attachment_obj = ApplicantAttachementDetails.objects.create(applicant_id=request.user.get_application)
+                if research_proposal:
+                    attachment_obj.research_proposal = research_proposal
+                    attachment_obj.save()
             else:
                 ResearchDetails.objects.filter(application_id=request.user.get_application).filter().delete()
+                ApplicantAttachementDetails.objects.filter(applicant_id=request.user.get_application).filter().delete()
 
             redirect_flag = True
             if redirect_flag:
@@ -3154,6 +3169,8 @@ def submit_acceptance(request):
             is_deferment_study = False
         deferment_reasons = request.POST.get('deferment_reasons')
         justifications = request.POST.get('justifications')
+        min_duration = request.POST.get('min_duration')
+        max_duration = request.POST.get('max_duration')
         medical_certificate = request.FILES.get('medical_certificate')
         sponsorship_letter = request.FILES.get('sponsorship_letter')
         other_document = request.FILES.get('other_document')
@@ -3166,6 +3183,8 @@ def submit_acceptance(request):
                 deferment_obj.is_deferment_study = is_deferment_study
                 deferment_obj.deferment_reasons = deferment_reasons
                 deferment_obj.justifications = justifications
+                deferment_obj.min_duration = min_duration
+                deferment_obj.max_duration = max_duration
                 if medical_certificate:
                     deferment_obj.medical_certificate = medical_certificate
                 if sponsorship_letter:
@@ -3179,6 +3198,8 @@ def submit_acceptance(request):
                 deferment_obj.is_deferment_study = is_deferment_study
                 deferment_obj.deferment_reasons = deferment_reasons
                 deferment_obj.justifications = justifications
+                deferment_obj.min_duration = min_duration
+                deferment_obj.max_duration = max_duration
                 if medical_certificate:
                     deferment_obj.medical_certificate = medical_certificate
                 if sponsorship_letter:
