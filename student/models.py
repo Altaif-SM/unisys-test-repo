@@ -491,6 +491,8 @@ class SiblingDetails(BaseModel):
 class DefermentDetails(BaseModel):
     is_deferment_study   = models.BooleanField(default=False)
     deferment_reasons = models.CharField(max_length=50,blank=True, null=True)
+    min_duration = models.CharField(max_length=10,blank=True, null=True)
+    max_duration = models.CharField(max_length=10,blank=True, null=True)
     justifications = models.TextField(blank=True, null=True)
     medical_certificate = models.FileField(upload_to='document/', null=True, blank=True)
     sponsorship_letter = models.FileField(upload_to='document/', null=True, blank=True)

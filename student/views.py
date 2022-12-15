@@ -3169,6 +3169,8 @@ def submit_acceptance(request):
             is_deferment_study = False
         deferment_reasons = request.POST.get('deferment_reasons')
         justifications = request.POST.get('justifications')
+        min_duration = request.POST.get('min_duration')
+        max_duration = request.POST.get('max_duration')
         medical_certificate = request.FILES.get('medical_certificate')
         sponsorship_letter = request.FILES.get('sponsorship_letter')
         other_document = request.FILES.get('other_document')
@@ -3181,6 +3183,8 @@ def submit_acceptance(request):
                 deferment_obj.is_deferment_study = is_deferment_study
                 deferment_obj.deferment_reasons = deferment_reasons
                 deferment_obj.justifications = justifications
+                deferment_obj.min_duration = min_duration
+                deferment_obj.max_duration = max_duration
                 if medical_certificate:
                     deferment_obj.medical_certificate = medical_certificate
                 if sponsorship_letter:
@@ -3194,6 +3198,8 @@ def submit_acceptance(request):
                 deferment_obj.is_deferment_study = is_deferment_study
                 deferment_obj.deferment_reasons = deferment_reasons
                 deferment_obj.justifications = justifications
+                deferment_obj.min_duration = min_duration
+                deferment_obj.max_duration = max_duration
                 if medical_certificate:
                     deferment_obj.medical_certificate = medical_certificate
                 if sponsorship_letter:

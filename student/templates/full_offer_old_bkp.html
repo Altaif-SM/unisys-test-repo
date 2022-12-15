@@ -1,0 +1,142 @@
+{#{% extends "template_base_page.html" %}#}
+{#{% load staticfiles %}#}
+<style>
+
+
+    {% comment %}@page {
+        margin: 1cm;
+        margin-bottom: 2.5cm;
+        @frame footer {
+        -pdf-frame-content: footerContent;
+        bottom: 2cm;
+        margin-left: 1cm;
+        margin-right: 1cm;
+        height: 1cm;
+    }
+    }{% endcomment %}
+
+    table {
+        border-collapse: collapse;
+    }
+
+    td {
+        padding-top: .5em;
+        padding-bottom: .5em;
+
+    }
+
+    @page {
+        margin: 1cm;
+        margin-top: 5cm;
+
+        @frame header {
+        -pdf-frame-content: header;
+    {#font-size: 20px;#}
+    {#font-weight: 100;#}
+    {#text-align: center;#}
+    {#color: #007cae;#}
+    {#font-size: 50px;#}
+    {#background-color: red;#}
+    }
+    margin-bottom: 2.5cm;
+
+    @frame footer {
+    -pdf-frame-content:footerContent;
+    bottom: 15cm;
+    height: 18cm;
+
+
+    margin-top:25pt;
+
+
+    }
+    }
+
+
+    @page header {
+
+    }
+
+    .wrapper {
+        display: table;
+        width: 150%;
+    }
+
+    .left {
+        display: table-cell;
+    }
+    .max-lines {
+  display: block;/* or inline-block */
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  overflow: hidden;
+  max-height: 2.6em;
+  line-height: 1.5em;
+}
+</style>
+
+{% block content %}
+    <div class='wrapper'>
+        <div class='header' id="header" style="text-align: center;">
+            <br><br>
+            <img src="{{ header_path }}" alt="logo"
+                 style="width: 600px;height: 80px;margin-top: 25px; text-align: center" class="logo-default"/><br><br>
+            <span class='title' style="font-size: 20px; color: #13084e;"><b>Offer Letter</b></span>
+        </div>
+        <span style="font-size: 17px;color: #333">{{ current_date }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 17px;color: #333">Student ID : {{ student_id }}</span>
+        <br><br>
+        <span style="font-size: 17px;color: #333">Student Name  : {{ application_obj.first_name|default_if_none:"" }} {{ application_obj.middle_name|default_if_none:"" }} {{ application_obj.last_name|default_if_none:"" }}</span>
+        <br><br>
+
+        <span class="max-lines" style="font-size: 17px;color: #333">Address : {{ application_obj.address.residential_address|default_if_none:"" }}</span>
+        <br>
+        <span style="font-size: 17px;color: #333">Country of Origin: {{ application_obj.address.country.country_name|title }}</span>
+        <br><br>
+        <span style="font-size: 17px;color: #333">Dear MR / Ms :  {{ application_obj.first_name|default_if_none:"" }} {{ application_obj.last_name|default_if_none:"" }}</span>
+        <br><br><br>
+        <span style="font-size: 17px;color: #333"><b>OFFER OF #
+
+             {% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.program.program_name|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.program_2.program_name|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.program_3.program_name|default_if_none:"" }} {% else %}{{ application_obj.program.program_name|default_if_none:"" }}{% endif %}
+
+            {{ application_obj.application_id|upper|default_if_none:"" }}</b></span>
+
+        <br><br>
+        <span class="max-lines" style="font-size: 17px;color: #333">Congratulations! We are pleased to inform you that your application for admission to the above programme has been approved. Your candidature as a graduate student is subject to the rules and regulations of the Graduate Studies Regulations of the University. The details of this offer are as follows:</span>
+
+        <br><br>
+          <span style="font-size: 17px;color: #333">Programme of Study : {% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.program.program_name|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.program_2.program_name|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.program_3.program_name|default_if_none:"" }} {% else %}{{ application_obj.program.program_name|default_if_none:"" }}{% endif %}</span>
+        <br><br>
+        <span style="font-size: 17px;color: #333">Registration Number : {{ registration_number }}</span>
+        <br><br>
+        <span style="font-size: 17px;color: #333">Mode of Study : {% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.study_mode|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.study_mode_2|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.study_mode_3|default_if_none:"" }} {% else %}{{ application_obj.study_mode|default_if_none:"" }}{% endif %}</span>
+        <br><br>
+        <span style="font-size: 17px;color: #333">Level of Study : {% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.study_level.study_level|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.study_level_2.study_level|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.study_level_3.study_level|default_if_none:"" }} {% else %}{{ application_obj.study_level.study_level|default_if_none:"" }}{% endif %}</span>
+         <br><br>
+        <span style="font-size: 17px;color: #333">Faculty : {% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.faculty.faculty_name|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.faculty_2.faculty_name|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.faculty_3.faculty_name|default_if_none:"" }} {% else %}{{ application_obj.faculty.faculty_name|default_if_none:"" }}{% endif %}</span>
+         <br><br>
+        <span style="font-size: 17px;color: #333">Department : {% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.department.department|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.department_2.department|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.department_3.department|default_if_none:"" }} {% else %}{{ application_obj.department.department|default_if_none:"" }}{% endif %}</span>
+        <br><br>
+        <span style="font-size: 17px;color: #333">Program Mode : {% if application_obj.choice_1 == True and application_obj.choice_2 == False and application_obj.choice_3 == False %}{{ application_obj.program_mode.study_type|default_if_none:"" }}{% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == False %}{{ application_obj.program_mode_2.study_type|default_if_none:"" }} {% elif  application_obj.choice_1 == True and application_obj.choice_2 == True and application_obj.choice_3 == True %}{{ application_obj.program_mode_3.study_type|default_if_none:"" }} {% else %}{{ application_obj.program_mode.study_type|default_if_none:"" }}{% endif %}</span>
+
+{#        <br><br>#}
+{#        <span style="font-size: 17px;color: #333">Date of Registration : {{ created_on }}</span>#}
+
+        <br><br>
+     <span class="max-lines" style="font-size: 17px;color: #333">
+         Visa Fee: ##	Applicable for on campus programmes and for those selected required visa (or we just make it tab after offer letter visa requirement if student select required visa (can fill up form with required visa details)
+     </span>
+
+        <br><br>
+        <span style="font-size: 17px;color: #333">We look forward to welcoming you {{ application_obj.university.university_name|default_if_none:"" }}</span>
+        <br><br><br>
+        <span style="font-size: 17px;color: #333">Yours sincerely,</span>
+        <br><br>
+        <span style="font-size: 17px;color: #333"><b>ACADEMIC REGISTRAR</b></span>
+    <br><br>
+        <span style="font-size: 17px;color: #333"><b>{{ application_obj.university.university_name|default_if_none:"" }}</b></span>
+
+
+
+    </div>
+
+{% endblock %}
