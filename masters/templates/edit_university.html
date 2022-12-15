@@ -230,6 +230,17 @@
                                     </div>
                                 </div>
 
+                                <div class="">
+                                    <label class="col-md-2 control-label">{% trans 'Max Duration Deferment' %}:</label>
+                                    <div class="col-md-1">
+                                        <input type="text" maxlength="1" title="Enter Max Duration Deferment" id="id_max_duration" onkeypress='validate(event)'
+                                               value="{{ university_obj.max_duration|default_if_none:"" }}"
+                                               name="max_duration"
+                                               class="form-control">
+
+                                    </div>
+                                </div>
+
 
                             </div>
                             <br>

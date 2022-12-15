@@ -337,6 +337,7 @@ class UniversityDetails(BaseModel):
     )
     college_type = models.CharField(choices=COLLEGE_TYPES, max_length=50,blank=True, null=True)
     university_name = models.CharField(max_length=150, blank=True, null=True)
+    max_duration = models.CharField(max_length=10, blank=True, null=True)
     university_code = models.CharField(max_length=30, blank=True, null=True)
     email = models.CharField(max_length=50, blank=True, null=True)
     telephone = models.CharField(max_length=30, blank=True, null=True)

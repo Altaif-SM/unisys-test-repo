@@ -1924,6 +1924,7 @@ def add_university(request):
         is_active = request.POST.get('is_active')
         is_registration = request.POST.get('is_registration')
         is_singup = request.POST.get('is_singup')
+        max_duration = request.POST.get('max_duration')
         if is_active == 'on':
             is_active = True
         else:
@@ -1943,7 +1944,7 @@ def add_university(request):
         if request.user.role.filter(name = 'Tanseeq Admin').exists():
             is_tanseeq_university = True
         try:
-            university_obj = UniversityDetails.objects.create(university_code = university_code,contact_details = contact_details,
+            university_obj = UniversityDetails.objects.create(university_code = university_code,contact_details = contact_details,max_duration= max_duration,
                                              university_name=university_name, email=email,telephone = telephone,website = website,
                                              address = address,is_active = is_active,university_type_id = university_type,type_id = type,is_registration = is_registration,is_singup = is_singup,is_tanseeq_university = is_tanseeq_university)
             if university_logo:
@@ -1992,6 +1993,7 @@ def edit_university(request, university_id=None):
         is_active = request.POST.get('is_active')
         is_registration = request.POST.get('is_registration')
         is_singup = request.POST.get('is_singup')
+        max_duration = request.POST.get('max_duration')
         if is_active == 'on':
             is_active = True
         else:
@@ -2010,6 +2012,7 @@ def edit_university(request, university_id=None):
             university_obj.university_type_id = university_type
             university_obj.type_id = type
             university_obj.university_name = university_name
+            university_obj.max_duration = max_duration
             university_obj.university_code = university_code
             university_obj.email = email
             university_obj.telephone = telephone
