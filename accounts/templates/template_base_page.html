@@ -1091,14 +1091,14 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </li>
 
                             <li class="nav-item " id="acd_qli">
-                                    <a href="{% url 'student:research_plan_registration' %}"
-                                       class="nav-link nav-toggle">
-                                        <i class="fa fa-tasks"></i>
-                                        <span class="title">{% trans 'Research Plan' %}</span>
-                                        <span class="selected"></span>
-                                    </a>
-                                </li>
-                            {% endif %}
+                                <a href="{% url 'student:research_plan_registration' %}"
+                                    class="nav-link nav-toggle">
+                                    <i class="fa fa-tasks"></i>
+                                    <span class="title">{% trans 'Research Plan' %}</span>
+                                    <span class="selected"></span>
+                                </a>
+                            </li>
+                        {% endif %}
                         </ul>
                         <!-- END SIDEBAR MENU -->
                     </div>  <!-- END tabpane -->
@@ -1179,9 +1179,14 @@ License: You must have a valid license purchased only from themeforest(the above
                          {% endif %}
                     {% endif %}
 
-                     {% if user.is_student %}
+                    {% if user.is_student %}
                          {% if user.get_student_application.course_registration %}
                             <li id="course_registration"><a href="{% url 'student:semester_course_registration' %}" >{% trans 'Course Registration' %}</a></li>
+                         {% endif %}
+                    {% endif %}
+                    {% if user.is_student %}
+                         {% if user.get_student_application.course_registration %}
+                            <li id="qualifying_test"><a href="{% url 'student:qualifying_test' %}" >{% trans 'Qualifying Test' %}</a></li>
                          {% endif %}
                     {% endif %}
 

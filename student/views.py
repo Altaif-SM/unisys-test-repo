@@ -1,3 +1,4 @@
+import cgi, html
 from django.shortcuts import render, redirect
 from masters.views import *
 from django.http import HttpResponse, JsonResponse
@@ -9,13 +10,14 @@ import os
 import shutil
 from django.contrib.auth.hashers import make_password
 import datetime
-import uuid
 import binascii
 
 from io import BytesIO
 from django.template.loader import get_template
 from xhtml2pdf import pisa
-import cgi, html
+from student.serializers import QualifyingTestSerializer
+from student.models import QualifyingTest, QualifyingTestStatus, ResearchDetails
+
 cgi.escape = html.escape
 
 # Create your views here.
@@ -4085,3 +4087,52 @@ def student_notifications(request):
         'application_history_obj':application_history_obj
     }
     return render(request, 'all_notifications.html', context)
+
+
+def qualifying_test(request):
+    is_qualifying_test = QualifyingTest.objects.filter(student=request.user).exists()
+    research_details = ResearchDetails.objects.get(application_id=request.user.get_application)
+    
+    if request.method == "POST":
+        if is_qualifying_test:
+            messages.info(request, "Already Applied")
+            return redirect("student:qualifying_test")
+        #TODO check to be added to check student have passed first semster  
+        qualifying_test = QualifyingTest.objects.create(student=request.user)
+        # faculty_user = User.objects.filter(
+        #     role__name=User.FACULTY,
+        #     university=research_details.university,
+        #     faculty=research_details.faculty,
+        # ).first()
+        # test_status_users = [research_details.supervisor, faculty_user]
+        # qualifying_test_status_objs = list()
+        # for test_status_user in test_status_users:
+        #     qualifying_test_status_objs.append(
+        #         QualifyingTestStatus(
+        #             test=qualifying_test,
+        #             user=test_status_user,
+        #         )
+        #     )
+        # QualifyingTestStatus.objects.bulk_create(qualifying_test_status_objs)
+        QualifyingTestStatus.objects.get_or_create(
+            test=qualifying_test,
+            user=research_details.supervisor
+        )
+        messages.success(request, "Applied")
+        return redirect("student:qualifying_test")
+    else:
+        registered_courses = StudentRegisteredCreditCourseDetails.objects.filter(
+            application_id=request.user.get_application
+        ).select_related("application_id", "course")
+        context = {
+            "registered_courses": registered_courses,
+            "research_details": research_details,
+            "is_qualifying_test": is_qualifying_test,
+        }
+    return render(request, "qualifying_test.html", context)
+
+
+def get_qualifying_test(request):
+    qualifying_test = QualifyingTest.objects.prefetch_related("status_qualifying_test").filter(student=request.user).first()
+    data = QualifyingTestSerializer(qualifying_test).data
+    return JsonResponse(data, status=200, safe=False)

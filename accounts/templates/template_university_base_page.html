@@ -931,20 +931,24 @@ License: You must have a valid license purchased only from themeforest(the above
                                                class="nav-link ">{% trans 'Manage Applicant Documents' %}</a>
                                         </li>
                                     {% endif %}
-                                 {% if not user.is_supervisor %}
+                                 {% if not request.user.is_supervisor %}
                                         <li class="nav-item ">
                                             <a href="{% url 'partner:template_approving_application' %}"
                                                class="nav-link ">{% trans 'Approving Applicant Details' %}</a>
                                         </li>
 
-                                     {% if  user.is_faculty %}
+                                     {% if  request.user.is_faculty %}
                                         <li class="nav-item ">
                                             <a href="{% url 'partner:approving_faculty_application' %}"
                                                class="nav-link ">{% trans 'Approving Research Proposal' %}</a>
                                         </li>
+                                        <li class="nav-item ">
+                                            <a href="{% url 'accounts:list_qualifying_test' %}"
+                                               class="nav-link ">{% trans 'Qualifying Test' %}</a>
+                                        </li>
                                      {% endif %}
 
-                                      {% if  user.is_program %}
+                                      {% if  request.user.is_program %}
                                         <li class="nav-item ">
                                             <a href="{% url 'partner:approving_program_application' %}"
                                                class="nav-link ">{% trans 'Approving Research Proposal' %}</a>
@@ -953,7 +957,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
                                 {% endif %}
 
-                                {% if user.is_supervisor %}
+                                {% if request.user.is_supervisor %}
                                         <li class="nav-item ">
                                             <a href="{% url 'partner:template_approving_application' %}"
                                                class="nav-link ">{% trans 'Approving Research Proposal' %}</a>

@@ -2,9 +2,8 @@ from django import forms
 from accounts.models import *
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.auth.hashers import make_password
-
 from django.contrib.auth import authenticate
-
+from student.models import QualifyingTestStatus
 
 class loginForm(forms.Form):
     username = forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'form-control form-control-solid placeholder-no-fix' , 'placeholder':'Email','autocomplete': 'off'}))
@@ -83,3 +82,27 @@ class ChangePasswordForm(forms.Form):
         if self.cleaned_data['password'] != self.cleaned_data['password1']:
             raise forms.ValidationError("The passwords did not match.")
         return self.cleaned_data
+
+
+class QualifyingTestStatusForm(forms.ModelForm):
+
+    status = forms.ChoiceField(choices=(), required=True)
+
+    class Meta:
+        model = QualifyingTestStatus
+        fields = ("status", "remarks")
+    
+    def __init__(self, *args, **kwargs):
+        super(QualifyingTestStatusForm, self).__init__(*args, **kwargs)
+        user_role = self.instance.user.role.all().first()
+        choices = {
+            User.FACULTY: QualifyingTestStatus.FACULTY_CHOICES,
+            User.SUPERVISOR: QualifyingTestStatus.SUPERVISOR_CHOICES,
+        }
+        self.fields["status"].choices = choices[user_role.name]
+        for field in self.fields:
+            if field != "remarks":
+                self.fields[field].widget.attrs.update({
+                    "class": "form-control",
+                    "required": "true",
+                })

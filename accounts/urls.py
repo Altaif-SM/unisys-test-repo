@@ -36,4 +36,6 @@ urlpatterns = [
     path('get_faculty_from_account_type/', views.get_faculty_from_account_type, name='get_faculty_from_account_type'),
     path('get_program_from_account_type/', views.get_program_from_account_type, name='get_program_from_account_type'),
     path('get_program_from_faculty/', views.get_program_from_faculty, name='get_program_from_faculty'),
+    path('list_qualifying_test/', views.QualifyingTestList.as_view(), name='list_qualifying_test'),
+    path('update/qualifyingteststatus/<int:pk>', views.UpdateQualifyingTestStatus.as_view(), name='update_qualifying_test_status'),
 ]
