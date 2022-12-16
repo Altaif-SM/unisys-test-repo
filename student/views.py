@@ -2829,7 +2829,8 @@ def applicant_intake_info(request):
         #     university_recs = UniversityDetails.objects.filter(is_delete=False,
         #                                                        is_partner_university=False).order_by('-id')
         if application_obj.university and application_obj.academic_year:
-            semester_recs = SemesterDetails.objects.filter(university_id = application_obj.university.id,year_id = application_obj.academic_year.id,study_level_id = application_obj.study_level.id)
+            # semester_recs = SemesterDetails.objects.filter(university_id = application_obj.university.id,year_id = application_obj.academic_year.id,study_level_id = application_obj.study_level.id)
+            semester_recs = SemesterDetails.objects.filter(university_id = application_obj.university.id,year_id = application_obj.academic_year.id)
 
         if application_obj.university:
             learning_centre_recs = LearningCentersDetails.objects.filter(university_id=application_obj.university.id)

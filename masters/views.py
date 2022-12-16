@@ -4042,6 +4042,24 @@ def get_intake_semester_from_year(request):
                 semester_list.append(raw_dict)
     return JsonResponse(semester_list, safe=False)
 
+def get_semester_from_university(request):
+    semester_list = []
+    year = request.POST.get('year', None)
+    university = request.POST.get('university', None)
+    semester_recs = SemesterDetails.objects.all()
+    if year:
+        semester_recs = semester_recs.filter(year_id = year)
+    if university:
+        semester_recs = semester_recs.filter(university_id = university)
+    if semester_recs:
+        for rec in semester_recs:
+            for sem in rec.semester.all():
+                raw_dict = {}
+                raw_dict['id'] = sem.id
+                raw_dict['semester'] = str(sem.semester)
+                semester_list.append(raw_dict)
+    return JsonResponse(semester_list, safe=False)
+
 def get_semester_already_exists(request):
     semester_id = request.POST.get('semester_id', None)
     university = request.POST.get('university', None)

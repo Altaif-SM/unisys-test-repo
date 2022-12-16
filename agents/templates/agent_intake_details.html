@@ -849,7 +849,7 @@
                     var year = $(this).val();
                     var university = $('#university').val();
                     var program_level = $('#program_level').val();
-                    var url = '/masters/get_intake_semester_from_year/';
+                    var url = '/masters/get_semester_from_university/';
                     get_intake_semester_from_year(url, year, university,program_level)
                 })
 
@@ -2644,7 +2644,7 @@
                                         {% if application_obj.semester %}
                                             <option style="display:none" selected="selected"
                                                     value="{{ application_obj.semester.id }}"
-                                            >{{ application_obj.semester.semester|default_if_none:"" }} {{ application_obj.semester.start_date|date:"Y-m-d" }} - {{ application_obj.semester.end_date|date:"Y-m-d" }}</option>
+                                            >{{ application_obj.semester.semester|default_if_none:"" }}</option>
                                         {% else %}
                                             <option disabled selected="selected" value="">{% trans 'Please Select' %}
                                             </option>
@@ -2652,7 +2652,7 @@
 
                                         {% for rec in semester_recs %}
                                             {% for sem in rec.semester.all %}
-                                                <option value='{{ sem.id }}'>{{ sem.semester|default_if_none:"" }} {{ sem.start_date|date:"Y-m-d" }} - {{ sem.end_date|date:"Y-m-d" }}</option>
+                                                <option value='{{ sem.id }}'>{{ sem.semester|default_if_none:"" }} </option>
                                             {% endfor %}
                                         {% endfor %}
                                     </select>

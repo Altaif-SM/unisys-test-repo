@@ -864,7 +864,8 @@
                     var year = $(this).val();
                     var university = $('#university').val();
                     var program_level = $('#program_level').val();
-                    var url = '/masters/get_intake_semester_from_year/';
+                    {#var url = '/masters/get_intake_semester_from_year/';#}
+                    var url = '/masters/get_semester_from_university/';
                     get_intake_semester_from_year(url, year, university, program_level)
                 })
 
