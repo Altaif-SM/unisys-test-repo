@@ -1,0 +1,147 @@
+{% extends "template_base_page.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+{% load custom_tags %}
+
+{% block styleBlock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    </head>
+    <!-- END HEAD -->
+    <style>
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-weight: normal;
+            white-space: nowrap;
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 30px;
+        }
+
+        div.dataTables_wrapper div.dataTables_length {
+            padding-right: 40px;
+            padding-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block ScriptBlock %}
+    <script>
+        window.onload = function () {
+            $('#sample_1').dataTable().fnDestroy();
+
+            $('#sample_1').dataTable({
+                "aoColumnDefs": [
+                    {'bSortable': false}
+                ],
+                "scrollX": true,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        title: 'REVIEW ORDERS DETAILS',
+                        exportOptions: {
+                            //columns: ':visible'
+                            columns: [1, 2, 3, 4, 5, 6,]
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        title: 'REVIEW ORDERS DETAILS',
+                        orientation: 'landscape',
+                        exportOptions: {
+                            columns: [1, 2, 3, 4, 5, 6,]
+                            //columns: ':visible'
+                        }
+                    },
+                ],
+            });
+        }
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="/">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> {% trans 'List Progress Meetings' %} </span>
+            </li>
+        </ul>
+    </div>
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">
+                {% trans 'List Progress Meetings' %}
+            </span>
+            </div>
+        </div>
+        <div class="row" style="padding-left: 30px;">
+            <form method="GET">
+                <div class="col-md-2">
+                    <select class="form-control" name="filter_by_status" id="id_filter_by_status">
+                        <option value="">All</option>
+                        <option value="pending">Pending</option>
+                        <option value="0">Rejected</option>
+                        <option value="1">Accepted</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn">Apply</button>
+                </div>
+            </form>
+        </div>
+        <br>
+        <div class="portlet-body">
+            <table class="table table-striped table-hover table-bordered" id="sample_1">
+                <thead>
+                <tr>
+                    <th style="display: none">Id</th>
+                    <th> {% trans 'Applicant Name' %}</th>
+                    <th> {% trans 'Date' %}</th>
+                    <th> {% trans 'Time' %}</th>
+                    <th> {% trans 'Venue' %}</th>
+                    <th> {% trans 'Matters Discussed' %}</th>
+                    <th> {% trans 'Attendance' %}</th>
+                    <th> {% trans 'Supervisor Status' %}</th>
+                    <th> {% trans 'Process Date' %}</th>
+                </tr>
+                </thead>
+                <tbody id="tbody">
+                {% for rec in object_list %}
+                    <tr>
+                        <td style="display: none"><input id="university_id" value="{{ rec.id }}"></td>
+                        <td>{{ rec.student.first_name|default_if_none:"" }} {{ rec.student.last_name|default_if_none:"" }}</td>
+                        <td>{{ rec.progress_date|date:"d/m/Y" }}</td>
+                        <td>{{ rec.progress_time|time:"H:i" }}</td>
+                        <td>{{ rec.venue|default_if_none:"" }}</td>
+                        <td>{{ rec.progress_matters|default_if_none:"" }}</td>
+                        <td>{% for obj in rec.attendance.all %}{{ obj.attendance }}{% if forloop.last %}...{% else %},
+                        {% endif %}{% endfor %}</td>
+                        <td class="{% if rec|get_progress_meeting_status == 'Approved'%} success {% elif  rec|get_progress_meeting_status == 'Rejected' %} danger {%else%}{%endif%}">{{ rec|get_progress_meeting_status|upper }}</td>
+                        <td>{{ rec.created_on|default_if_none:"" }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block ajax %}
+
+{% endblock %}

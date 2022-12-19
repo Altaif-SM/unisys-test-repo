@@ -1,0 +1,187 @@
+{% extends "template_base_page.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table bordered">
+                    <tr>
+                        <th>Name</th>
+                        <td>
+                            {{ registered_courses.0.application_id.first_name }} {{ registered_courses.0.application_id.middle_name }} {{ registered_courses.0.application_id.last_name }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Matric NO</th>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>Program</th>
+                        <td>{{ registered_courses.0.application_id.program.program_name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Mode of Study</th>
+                        <td>{{ registered_courses.0.application_id.program_mode.study_type }}</td>
+                    </tr>
+                    <tr>
+                        <th>Type of Study</th>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>Research Language</th>
+                        <td>English</td>
+                    </tr>
+                    <tr>
+                        <th>Research Title</th>
+                        <td>{{ research_details.research_title|default_if_none:"" }}</td>
+                    </tr>
+                    <tr>
+                        <th>Supervisor</th>
+                        <td>{{ research_details.supervisor.email }}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-12">
+                <p><b>To view submitted progress meetings, click </b><a href="/student/list_progress_meetings/">here</a></p>
+            </div>
+        </div>
+        <hr>
+        <form method="POST" id="id_attendance_form">
+            {% csrf_token %}
+            <input type="hidden" id="attendance_count" name="attendance_count">
+
+            <div class="row">
+
+                <div class="">
+                    <label class="col-md-2 control-label">{% trans 'Date' %}:<span
+                            style="color: red">*</span></label>
+                    <div class="col-md-3">
+                        <input type="date" id="id_progress_date" name="progress_date" max="2999-12-31"
+                               value=""
+                               class="form-control" required>
+                    </div>
+                </div>
+
+
+                <div class="">
+                    <label class="col-md-2 control-label">{% trans 'Time' %}:<span
+                            style="color: red">*</span></label>
+                    <div class="col-md-3">
+                        <input type="time" id="id_progress_time" name="progress_time" max="2999-12-31"
+                               value=""
+                               class="form-control" required>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <br>
+            <div class="row">
+                <div class="">
+                    <label class="col-md-2 control-label">{% trans 'Venue' %}:<span
+                            style="color: red">*</span></label>
+                    <div class="col-md-8">
+                        <textarea type="text" title="Enter Venue Name" id="id_venue"
+                                  value=""
+                                  name="venue"
+                                  class="form-control" required></textarea>
+
+                    </div>
+                </div>
+
+
+            </div>
+            <br>
+            <div class="row">
+                <div class="">
+                    <label class="col-md-2 control-label">{% trans 'Matters Discussed' %}:<span
+                            style="color: red">*</span></label>
+                    <div class="col-md-8">
+                        <textarea type="text" title="Enter Matters Discussed" id="id_progress_matters"
+                                  name="progress_matters"
+                                  class="form-control" required></textarea>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+
+            <hr>
+
+
+            <div class="" style="float: right;
+    margin-top: 0px;
+    padding-right: 50%;">
+                <div class="">
+                    <a href="javascript:;" id="add" class="btn btn-icon-only green add_attendance"
+                       style="">
+                        <i class="fa fa-plus "></i>
+                    </a>
+                </div>
+            </div>
+
+            <div style="margin-right:-76px;" class="row attendance" id="attendance_1">
+
+                <div class="row">
+                    <div class="">
+                        <label class="col-md-2 control-label">Attendance:
+                            <br>
+                            <span style="font-size: 12px">(Add more to the Attendance list)</span>
+                        </label>
+                        <div class="col-md-3">
+                            <input type="text" title="Enter Attendance" id="attendance_1"
+                                   value="" name="attendance_1"
+                                   class="form-control">
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+            <br>
+
+            <div class="col-md-12 text-center">
+                <button id="apply_test" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+
+
+    </div>
+{% endblock %}
+
+{% block ajax %}
+    <script>
+        window.onload = function () {
+            $(document).ready(function () {
+
+                var attendance_count = 1;
+                $(document).on("click", ".add_attendance", function (e) {
+                    attendance_count = attendance_count + 1;
+                    var row = '<br><div style="margin-right:-76px;" class="row attendance" id="attendance_' + attendance_count + '"><div class="row"><div class=""><label class="col-md-2 control-label">Attendance:</label><div class="col-md-3"><input type="text" title="Enter Attendance" id="attendance_' + attendance_count + '" value="" name="attendance_' + attendance_count + '" class="form-control" required></div></div><div class="col-md-1"><a href="javascript:;" class="delete_attendance btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div>'
+                    $(row).removeAttr().hide().insertAfter(".attendance:last").slideDown(300);
+                });
+
+
+                $(document).on("click", ".delete_attendance", function () {
+                    $(this).parents('.attendance').remove();
+                });
+
+                $("#id_attendance_form").submit(function (e) {
+                    var rowCount = $(".attendance").length;
+                    $('#attendance_count').val(rowCount);
+                })
+
+
+            });
+        }
+    </script>
+{% endblock %}
+

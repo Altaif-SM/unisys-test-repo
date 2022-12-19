@@ -30,9 +30,13 @@
                     <td></td>
                 </tr>
                 <tr>
-                    <th>Original Language</th>
-                    <td></td>
+                    <th>Research Language</th>
+                    <td>English</td>
                 </tr>
+                <tr>
+                        <th>Research Title</th>
+                        <td>{{ research_details.research_title|default_if_none:"" }}</td>
+                    </tr>
                 <tr>
                     <th>Supervisor</th>
                     <td>{{research_details.supervisor.email}}</td>
@@ -61,7 +65,7 @@
             </form>
         {% else %}
             <div class="col-md-12 text-center">
-                <h4 class="btn btn-primary">Applied</button>
+                <button class="btn btn-primary">Applied</button>
             </div>
         {% endif %}
         <div class="col-md-12">

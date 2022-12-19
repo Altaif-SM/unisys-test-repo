@@ -835,6 +835,35 @@ class ResearchDetails(BaseModel):
     program_status = models.CharField(max_length=50, default="Pending", blank=True, null=True)
     program_rejection = models.TextField(blank=True, null=True)
 
+class Attendance(models.Model):
+    attendance = models.CharField(max_length=150, blank=True, null=True)
+
+class ProgressMeetings(BaseModel):
+    student = models.ForeignKey(
+        User, null=True, related_name='progress_meeting_student', on_delete=models.SET_NULL
+    )
+    venue = models.TextField(blank=True, null=True)
+    progress_matters = models.TextField(blank=True, null=True)
+    progress_date = models.DateField(blank=True, null=True)
+    progress_time = models.TimeField(blank=True, null=True)
+    attendance = models.ManyToManyField(Attendance, blank=True)
+
+    class Meta:
+        pass
+
+class ProgressMeetingStatus(BaseModel):
+    SUPERVISOR_CHOICES = (
+        ("", "----"),
+        ("APPROVED", "Approved"),
+        ("REJECTED", "Rejected"),
+    )
+    meeting = models.ForeignKey(ProgressMeetings, related_name="status_progress_meeting" , on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    status = models.CharField(max_length=50)
+    remarks = models.TextField(blank=True, null=True)
+
+    class Meta:
+        pass
 
 class QualifyingTest(BaseModel):
     RESULT_CHOICES = (

@@ -1098,10 +1098,79 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <span class="selected"></span>
                                 </a>
                             </li>
+
+                            <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'student:qualifying_test' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="fa fa-check"></i>
+                                        <span class="title">{% trans 'Qualifying Test' %}</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'student:progress_meeting' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="fa fa-handshake-o"></i>
+                                        <span class="title">{% trans 'Progress Meeting' %}</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+
+                             <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'student:list_progress_meetings' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="fa fa-list"></i>
+                                        <span class="title">{% trans 'List Progress Meetings' %}</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+
                         {% endif %}
                         </ul>
                         <!-- END SIDEBAR MENU -->
                     </div>  <!-- END tabpane -->
+
+                <div class="tab-pane " id="progress_meeting">
+                        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
+                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+                        {% if 'student.can_view_student_application_progress_history' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'student:progress_meeting' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="fa fa-handshake-o"></i>
+                                        <span class="title">{% trans 'Progress Meeting' %}</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'student:list_progress_meetings' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="fa fa-list"></i>
+                                        <span class="title">{% trans 'List Progress Meetings' %}</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                        <!-- END SIDEBAR MENU -->
+                    </div>
+
+                    <div class="tab-pane " id="qualifying_test">
+                        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
+                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+                        {% if 'student.can_view_student_application_progress_history' in perms %}
+                                <li class="nav-item " id="acd_qli">
+                                    <a href="{% url 'student:qualifying_test' %}"
+                                       class="nav-link nav-toggle">
+                                        <i class="fa fa-check"></i>
+                                        <span class="title">{% trans 'Qualifying Test' %}</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                        <!-- END SIDEBAR MENU -->
+                    </div>
 
                     <div class="tab-pane " id="payments">
                         <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed"
@@ -1184,11 +1253,16 @@ License: You must have a valid license purchased only from themeforest(the above
                             <li id="course_registration"><a href="{% url 'student:semester_course_registration' %}" >{% trans 'Course Registration' %}</a></li>
                          {% endif %}
                     {% endif %}
-                    {% if user.is_student %}
-                         {% if user.get_student_application.course_registration %}
-                            <li id="qualifying_test"><a href="{% url 'student:qualifying_test' %}" >{% trans 'Qualifying Test' %}</a></li>
-                         {% endif %}
-                    {% endif %}
+{#                    {% if user.is_student %}#}
+{#                         {% if user.get_student_application.course_registration %}#}
+{#                            <li id="id_qualifying_test"><a href="{% url 'student:qualifying_test' %}" >{% trans 'Qualifying Test' %}</a></li>#}
+{#                         {% endif %}#}
+{#                    {% endif %}#}
+{#                    {% if user.is_student %}#}
+{#                         {% if user.get_student_application.course_registration %}#}
+{#                            <li id="id_progress_meeting"><a href="{% url 'student:progress_meeting' %}" >{% trans 'Progress Meeting ' %}</a></li>#}
+{#                         {% endif %}#}
+{#                    {% endif %}#}
 
 {#                        {% if user.is_student %}#}
 {#                            <li id="app_payments"><a href="{% url 'payments:checkout' %}" >{% trans 'Payments' %}</a></li>#}
@@ -1438,7 +1512,31 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-     {% if request.resolver_match.url_name == 'semester_course_registration' or  request.resolver_match.url_name == 'course_registration_checkout' or request.resolver_match.url_name == 'credit_course_registration' or request.resolver_match.url_name == 'add_prerequisite_courses' or request.resolver_match.url_name == 'credit_course_registration_checkout' or request.resolver_match.url_name == 'research_plan_registration' or request.resolver_match.url_name == 'research_registration_checkout' %}
+{#    {% if request.resolver_match.url_name == 'progress_meeting' or request.resolver_match.url_name == 'list_progress_meetings' %}#}
+{#        {#}
+{#            var element = document.getElementById("progress_meeting");#}
+{#            element.classList.add("active");#}
+{##}
+{#            var element = document.getElementById("id_progress_meeting");#}
+{#            element.classList.add("active");#}
+{#        }#}
+{#    {% endif %}#}
+{##}
+{#    {% if request.resolver_match.url_name == 'qualifying_test' %}#}
+{#        {#}
+{#            var element = document.getElementById("qualifying_test");#}
+{#            element.classList.add("active");#}
+{##}
+{#            var element = document.getElementById("id_qualifying_test");#}
+{#            element.classList.add("active");#}
+{#        }#}
+{#    {% endif %}#}
+
+
+
+
+
+     {% if request.resolver_match.url_name == 'semester_course_registration' or  request.resolver_match.url_name == 'course_registration_checkout' or request.resolver_match.url_name == 'credit_course_registration' or request.resolver_match.url_name == 'add_prerequisite_courses' or request.resolver_match.url_name == 'credit_course_registration_checkout' or request.resolver_match.url_name == 'research_plan_registration' or request.resolver_match.url_name == 'research_registration_checkout' or request.resolver_match.url_name == 'qualifying_test' or request.resolver_match.url_name == 'progress_meeting' or request.resolver_match.url_name == 'list_progress_meetings' %}
         {
             var element = document.getElementById("course_registration_list");
             element.classList.add("active");

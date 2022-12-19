@@ -16,7 +16,7 @@ from io import BytesIO
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 from student.serializers import QualifyingTestSerializer
-from student.models import QualifyingTest, QualifyingTestStatus, ResearchDetails
+from student.models import QualifyingTest, QualifyingTestStatus, ResearchDetails, ProgressMeetings, Attendance, ProgressMeetingStatus
 
 cgi.escape = html.escape
 
@@ -4137,3 +4137,50 @@ def get_qualifying_test(request):
     qualifying_test = QualifyingTest.objects.prefetch_related("status_qualifying_test").filter(student=request.user).first()
     data = QualifyingTestSerializer(qualifying_test).data
     return JsonResponse(data, status=200, safe=False)
+
+
+def progress_meeting(request):
+    research_details = ResearchDetails.objects.get(application_id=request.user.get_application)
+    if request.method == "POST":
+        progress_date = request.POST.get('progress_date')
+        progress_time = request.POST.get('progress_time')
+        venue = request.POST.get('venue')
+        progress_matters = request.POST.get('progress_matters')
+        attendance_count = request.POST.get('attendance_count')
+        try:
+            progress_meeting_obj = ProgressMeetings.objects.create(student = request.user,progress_date=progress_date,
+                                                        progress_time=progress_time, venue=venue, progress_matters=progress_matters,
+                                                        )
+            progress_meeting_obj.attendance.clear()
+            for x in range(int(attendance_count)):
+                try:
+                    x = x + 1
+                    attendance_obj = Attendance.objects.create(
+                        attendance=request.POST.get('attendance_' + str(x)))
+                    progress_meeting_obj.attendance.add(attendance_obj)
+                except:
+                    pass
+            ProgressMeetingStatus.objects.get_or_create(
+                meeting=progress_meeting_obj,
+                user=research_details.supervisor
+            )
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect("student:list_progress_meetings")
+    else:
+        registered_courses = StudentRegisteredCreditCourseDetails.objects.filter(
+            application_id=request.user.get_application
+        ).select_related("application_id", "course")
+        context = {
+            "registered_courses": registered_courses,
+            "research_details": research_details,
+        }
+    return render(request, "progress_meeting.html", context)
+
+from django.views.generic import ListView, View
+class ProgressMeetingsList(ListView):
+    model = ProgressMeetings
+    template_name = "list_submitted_progress_meetings.html"
+
+    def get_queryset(self):
+        return self.model.objects.filter(student=self.request.user)

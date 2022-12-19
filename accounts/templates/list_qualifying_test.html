@@ -127,7 +127,7 @@
                     <td>{{ rec.test.grade|default_if_none:"" }}</td>
                     <td>{{rec.test.result|default_if_none:""}}</td>
                     <td>
-                        <a target="_blank" href="{% url 'accounts:update_qualifying_test_status' rec.id %}"
+                        <a  href="{% url 'accounts:update_qualifying_test_status' rec.id %}"
                         class="btn-primary btn">
                             {% trans "Review" %}
                         </a>

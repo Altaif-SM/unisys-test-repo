@@ -962,6 +962,15 @@ License: You must have a valid license purchased only from themeforest(the above
                                             <a href="{% url 'partner:template_approving_application' %}"
                                                class="nav-link ">{% trans 'Approving Research Proposal' %}</a>
                                         </li>
+
+                                        <li class="nav-item ">
+                                            <a href="{% url 'accounts:list_qualifying_test' %}"
+                                               class="nav-link ">{% trans 'Qualifying Test' %}</a>
+                                        </li>
+                                    <li class="nav-item ">
+                                            <a href="{% url 'accounts:list_supervisor_progress_meetings' %}"
+                                               class="nav-link ">{% trans 'Progress Meetings' %}</a>
+                                        </li>
                                 {% endif %}
                                 </ul>
                             </li>
@@ -1534,7 +1543,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-    {% if request.resolver_match.url_name == 'template_approving_application' or request.resolver_match.url_name == 'edit_document' or request.resolver_match.url_name == 'document_settings' or  request.resolver_match.url_name == 'template_applicant_all_details' or request.resolver_match.url_name == 'research_details' or  request.resolver_match.url_name == 'approving_faculty_application' or request.resolver_match.url_name == 'approving_program_application'%}
+    {% if request.resolver_match.url_name == 'template_approving_application' or request.resolver_match.url_name == 'edit_document' or request.resolver_match.url_name == 'document_settings' or  request.resolver_match.url_name == 'template_applicant_all_details' or request.resolver_match.url_name == 'research_details' or  request.resolver_match.url_name == 'approving_faculty_application' or request.resolver_match.url_name == 'approving_program_application' or request.resolver_match.url_name == 'list_qualifying_test' or request.resolver_match.url_name == 'list_supervisor_progress_meetings' or request.resolver_match.url_name == 'update_qualifying_test_status' or request.resolver_match.url_name == 'update_progress_meetings' %}
         {
             var element = document.getElementById("c");
             element.classList.add("active");

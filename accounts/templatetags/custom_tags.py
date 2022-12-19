@@ -2,7 +2,7 @@ from django import template
 from masters.views import RegisteredPrerequisiteCourses,ProgramFeeDetails,ReferralFeeDetails
 from payments.models import ProgramRegistrationFeeDetails
 from tanseeq_app.models import ApplicationDetails, SecondaryCertificateInfo
-
+from student.models import ProgressMeetingStatus
 register = template.Library()
 
 
@@ -155,3 +155,11 @@ def get_mobile_number(user_obj):
         return str(app_details_obj.contact_number)
     except:
         return None
+
+@register.filter
+def get_progress_meeting_status(progress_obj):
+    try:
+        progress_meeting_status = ProgressMeetingStatus.objects.get(meeting = progress_obj)
+        return str(progress_meeting_status.status)
+    except:
+        return 'Pending'

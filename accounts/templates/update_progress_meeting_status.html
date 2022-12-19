@@ -1,0 +1,127 @@
+{% extends "template_university_base_page.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+{% endblock %}
+
+{% block ScriptBlock %}
+
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="/">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> Progress Meeting </span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">{% trans 'Progress Meeting' %} </span>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form action="{% url 'accounts:update_progress_meetings' progress_meeting_obj.id %}"
+                      id="id_form"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-body">
+
+                        <div class="row item_experience" id="item_experience_1">
+
+
+                            <div class="row">
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Status:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select id='id_status' title="Select Status"
+                                                name="status"
+                                                class="form-control" required>
+                                            {% if progress_meeting_obj.status %}
+                                                <option style="display:none;" selected="selected"
+                                                        value="{{ progress_meeting_obj.status|default_if_none:"" }}"> {{ progress_meeting_obj.status|default_if_none:"" }}</option>
+                                            {% else %}
+                                                <option selected="selected" value=""> Please Select</option>
+                                            {% endif %}
+
+                                            <option value="Approved">Approved</option>
+                                            <option value="Rejected">Rejected</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="">
+                                    <label class="col-md-2 control-label">Remarks:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-8">
+                                        <textarea style="width: 100%" id="id_remarks" name="remarks">{{ progress_meeting_obj.remarks|default_if_none:"" }}</textarea>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                        <br>
+
+                        <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                                        onclick="window.location='{% url "accounts:list_supervisor_progress_meetings" %}'">
+                                    Back
+                                </button>
+
+                                <button type="submit" class="btn green" id="save_form" style="">Save
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

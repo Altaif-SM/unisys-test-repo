@@ -1742,3 +1742,29 @@ class UpdateQualifyingTestStatus(View):
             }
             return render(request, self.template_name, context)
         return redirect(self.redirect_url, pk)
+
+class SupervisorProgressMeetingsList(ListView):
+    model = ProgressMeetingStatus
+    template_name = "list_supervisor_progress_meetings.html"
+
+    def get_queryset(self):
+        return self.model.objects.filter(user=self.request.user)
+
+def update_progress_meetings(request, progress_id=None):
+    progress_meeting_obj = ProgressMeetingStatus.objects.get(id=progress_id)
+    if request.method == 'POST':
+        status = request.POST.get('status')
+        remarks = request.POST.get('remarks')
+        try:
+            progress_meeting_obj.status = status
+            progress_meeting_obj.remarks = remarks
+            progress_meeting_obj.save()
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect("accounts:list_supervisor_progress_meetings")
+    else:
+        pass
+    context = {
+        'progress_meeting_obj':progress_meeting_obj,
+    }
+    return render(request, "update_progress_meeting_status.html",context)
