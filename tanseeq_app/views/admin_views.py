@@ -199,6 +199,7 @@ class UniversityAttachmentList(ListView):
         else:
             return self.model.objects.all()
 
+
 @method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class UniversityAttachmentView(View):
     model = UniversityAttachment

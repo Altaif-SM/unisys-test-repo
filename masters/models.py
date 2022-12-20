@@ -1094,3 +1094,35 @@ class ReferralFeeDetails(BaseModel):
         permissions = (
             ('can_view_referral_fee_details', 'Can view Referral Dee Details'),
         )
+
+
+class Subject(BaseModel):
+    name = models.CharField(max_length=100)
+    program = models.ForeignKey(ProgramDetails, related_name="subject_program", blank=True, null=True, on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=True)
+    created_by = models.ForeignKey(User, related_name="subject_created_by", on_delete=models.PROTECT)
+    updated_by = models.ForeignKey(User, related_name="subject_updated_by", on_delete=models.PROTECT)
+
+    class Meta:
+        verbose_name = "Subjects"
+        verbose_name_plural = "Subjects"
+        unique_together = ('name', 'program',)
+
+    def __str__(self):
+        return self.name
+
+
+class SubjectsComponent(BaseModel):
+    name = models.CharField(max_length=100, unique=True)
+    subjects = models.ManyToManyField(Subject)
+    fee_per_credit = models.DecimalField(decimal_places=2, max_digits=10)
+    is_active = models.BooleanField(default=True)
+    created_by = models.ForeignKey(User, related_name="subject_component_created_by", on_delete=models.PROTECT)
+    updated_by = models.ForeignKey(User, related_name="subject_component_updated_by", on_delete=models.PROTECT)
+
+    class Meta:
+        verbose_name = "Subject Components"
+        verbose_name_plural = "Subject Components"
+
+    def __str__(self):
+        return self.name

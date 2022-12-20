@@ -233,7 +233,7 @@ class AppliedPrograms(BaseModel):
     program_details = models.ForeignKey(ConditionFilters, on_delete=models.PROTECT)
     bond_no = models.CharField(max_length=255, blank=True, null=True)
     is_denied = models.BooleanField(default=False)
-    review_status = models.IntegerField(choices=STATUS, max_length=50, blank=True, null=True)
+    review_status = models.IntegerField(choices=STATUS, blank=True, null=True)
     review_note = models.TextField(blank=True, null=True)
     created_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True, related_name='accountant_created_by')
 

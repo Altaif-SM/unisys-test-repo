@@ -334,6 +334,14 @@ urlpatterns = [
     path('edit_research/<int:research_id>/', views.edit_research, name='edit_research'),
     path('delete_research_plan/', views.delete_research_plan, name='delete_research_plan'),
     path('research_year_semester_already_exists/', views.research_year_semester_already_exists, name='research_year_semester_already_exists'),
-	path('list_permissions/', user_login_required(views.list_permissions), name='list_permissions'),
+    path('list_permissions/', user_login_required(views.list_permissions), name='list_permissions'),
+
+    path('list_subjects/', user_login_required(views.ListSubjects.as_view()), name='list_subjects'),
+    path('subject/', user_login_required(views.SubjectView.as_view()), name='add_subject'),
+    path('subject/<int:pk>', user_login_required(views.SubjectView.as_view()), name='update_subject'),
+
+    path('list_subjects_components/', user_login_required(views.ListSubjectComponents.as_view()), name='list_subject_components'),
+    path('subject_component/', user_login_required(views.SubjectComponentView.as_view()), name='add_subject_component'),
+    path('subject_component/<int:pk>', user_login_required(views.SubjectComponentView.as_view()), name='update_subject_component'),
 
 ]
