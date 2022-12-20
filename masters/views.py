@@ -5355,3 +5355,153 @@ def list_permissions(request):
     user.user_permissions.set(['47','48'])
 
     return JsonResponse(list(permissions), safe=False)
+
+
+from masters.forms import SubjectForm, SubjectsComponentForm
+from django.views.generic import View, ListView
+
+
+# @method_decorator(check_permissions(User), name='dispatch')
+class ListSubjects(ListView):
+    model = Subject
+    template_name = 'list_subjects.html'
+    crumbs = [
+        {"title": "Home", "url": "/"},
+        {"title": "Subjects", "url": ""},
+    ]
+
+    def get_queryset(self):
+        program = self.request.GET.get("program")
+        filters = {}
+        if program:
+            filters["program_id"] = program
+        queryset = self.model.objects.filter(created_by=self.request.user, **filters)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["crumbs"] = self.crumbs
+        return context
+
+
+class SubjectView(View):
+    model = Subject
+    form_class = SubjectForm
+    template_name = "add_subject.html"
+    redirect_url = "masters:list_subjects"
+    crumbs = [
+        {"title": "Home", "url": "/"},
+        {"title": "Subjects", "url": redirect_url},
+        {"title": "Add Subject", "url": ""},
+    ]
+
+    def get_context_data(self, pk):
+        if pk:
+            subject_obj = self.model.objects.filter(id=pk, created_by=self.request.user).first()
+            form = self.form_class(instance=subject_obj)
+        else:
+            form = self.form_class()
+        return {"form": form, "crumbs": self.crumbs}
+
+    def get(self, request, pk=None):
+        context = self.get_context_data(pk)
+        return render(request, self.template_name, context)
+
+    def post(self, request, pk=None):
+        if pk:
+            subject_obj = self.model.objects.filter(id=pk, created_by=self.request.user).first()
+            form = self.form_class(request.POST, instance=subject_obj)
+        else:
+            form = self.form_class(request.POST)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            if not pk:
+                obj.created_by = request.user
+            obj.updated_by = request.user
+            obj.save()
+            messages.success(request, "Record saved.")
+            return redirect(self.redirect_url)
+        else:
+            context = {
+                "form": form,
+                "crumbs": self.crumbs,
+            }
+            return render(request, self.template_name, context)
+
+    def delete(self, request, pk):
+        instance = get_object_or_404(self.model, pk=pk, created_by=request.user)
+        instance.delete()
+        return JsonResponse(data={}, status=200)
+
+
+class ListSubjectComponents(ListView):
+    model = SubjectsComponent
+    template_name = 'list_subject_components.html'
+    crumbs = [
+        {"title": "Home", "url": "/"},
+        {"title": "Subject Components", "url": ""},
+    ]
+
+    def get_queryset(self):
+        program = self.request.GET.get("program")
+        filters = {}
+        if program:
+            filters["program_id"] = program
+        queryset = self.model.objects.filter(created_by=self.request.user, **filters)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["crumbs"] = self.crumbs
+        return context
+
+
+class SubjectComponentView(View):
+    model = SubjectsComponent
+    form_class = SubjectsComponentForm
+    template_name = "add_subject_component.html"
+    redirect_url = "masters:list_subject_components"
+    crumbs = [
+        {"title": "Home", "url": "/"},
+        {"title": "Subject Components", "url": redirect_url},
+        {"title": "Add Subject Component", "url": ""},
+    ]
+
+    def get_context_data(self, pk):
+        if pk:
+            subject_comp_obj = self.model.objects.filter(id=pk, created_by=self.request.user).first()
+            form = self.form_class(instance=subject_comp_obj)
+        else:
+            form = self.form_class()
+        return {"form": form, "crumbs": self.crumbs}
+
+    def get(self, request, pk=None):
+        context = self.get_context_data(pk)
+        return render(request, self.template_name, context)
+
+    def post(self, request, pk=None):
+        if pk:
+            subject_comp_obj = self.model.objects.filter(id=pk, created_by=self.request.user).first()
+            form = self.form_class(request.POST, instance=subject_comp_obj)
+        else:
+            form = self.form_class(request.POST)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            if not pk:
+                obj.created_by = request.user
+            obj.updated_by = request.user
+            obj.save()
+            form.save_m2m()
+            messages.success(request, "Record saved.")
+            return redirect(self.redirect_url)
+        else:
+            context = {
+                "form": form,
+                "crumbs": self.crumbs,
+            }
+            return render(request, self.template_name, context)
+
+    def delete(self, request, pk):
+        instance = get_object_or_404(self.model, pk=pk, created_by=request.user)
+        instance.delete()
+        return JsonResponse(data={}, status=200)

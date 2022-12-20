@@ -67,7 +67,7 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=256, blank=True, null=True)
     middle_name = models.CharField(max_length=256, blank=True, null=True)
     last_name = models.CharField(max_length=256, blank=True, null=True)
-    role = models.ManyToManyField(UserRole, related_name='user_role', blank=True, null=True)
+    role = models.ManyToManyField(UserRole, related_name='user_role', blank=True)
     registration_switch = models.BooleanField(default=False)
     submission_switch = models.BooleanField(default=False)
     psyc_switch = models.BooleanField(default=False)
@@ -86,11 +86,11 @@ class User(AbstractUser):
                                 related_name='user_program_rel',
                                 on_delete=models.SET_NULL)
     tanseeq_role = models.ForeignKey(UserRole, related_name='tanseeq_user_role', on_delete=models.SET_NULL, blank=True, null=True)
-    tanseeq_faculty = models.ManyToManyField("tanseeq_app.TanseeqFaculty", blank=True, null=True,
+    tanseeq_faculty = models.ManyToManyField("tanseeq_app.TanseeqFaculty", blank=True,
                                    related_name='user_tanseeq_faculty')
-    tanseeq_program = models.ManyToManyField("tanseeq_app.TanseeqProgram", blank=True, null=True,
+    tanseeq_program = models.ManyToManyField("tanseeq_app.TanseeqProgram", blank=True,
                                 related_name='user_tanseeq_program')
-    study_mode = models.ManyToManyField("masters.StudyModeDetails", blank=True, null=True,related_name='user_tanseeq_study_mode' )
+    study_mode = models.ManyToManyField("masters.StudyModeDetails", blank=True, related_name='user_tanseeq_study_mode' )
     created_by = models.ForeignKey("self", on_delete=models.SET_NULL, blank=True, null=True)    
 
     class Meta:

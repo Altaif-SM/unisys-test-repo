@@ -1,0 +1,26 @@
+{% extends "template_base_page.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block content %}
+    {% include 'crumbs.html' %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+        {% endfor %}
+        
+        <!-- BEGIN VALIDATION STATES-->
+        <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">Add Subject Component </span>
+            </div>
+        </div>
+        {% include 'form_template.html' %}
+    </div>
+{% endblock %}
+{% block ajax %}
+
+{% endblock %}  
