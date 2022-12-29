@@ -155,7 +155,10 @@ urlpatterns = [
                   path('generate_pdf/<int:app_id>/', views.generate_pdf, name='generate_pdf'),
                   path('qualifying_test/', views.qualifying_test, name='qualifying_test'),
                   path('get_qualifying_test/', views.get_qualifying_test, name='get_qualifying_test_result'),
+                  path('online_progress_report/', views.online_progress_report, name='online_progress_report'),
                   path('progress_meeting/', views.progress_meeting, name='progress_meeting'),
                   path('list_progress_meetings/', views.ProgressMeetingsList.as_view(), name='list_progress_meetings'),
+                  path('get_supervisor_details/', views.get_supervisor_details, name='get_supervisor_details'),
+                  path('add_supervisor/<int:application_id>/', views.add_supervisor, name='add_supervisor'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

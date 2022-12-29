@@ -67,6 +67,8 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=256, blank=True, null=True)
     middle_name = models.CharField(max_length=256, blank=True, null=True)
     last_name = models.CharField(max_length=256, blank=True, null=True)
+    area_expertise = models.CharField(max_length=256, blank=True, null=True)
+    contact = models.CharField(max_length=20, blank=True, null=True)
     role = models.ManyToManyField(UserRole, related_name='user_role', blank=True)
     registration_switch = models.BooleanField(default=False)
     submission_switch = models.BooleanField(default=False)

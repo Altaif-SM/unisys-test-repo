@@ -1117,10 +1117,10 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </li>
 
                              <li class="nav-item " id="acd_qli">
-                                    <a href="{% url 'student:list_progress_meetings' %}"
+                                    <a href="{% url 'student:online_progress_report' %}"
                                        class="nav-link nav-toggle">
-                                        <i class="fa fa-list"></i>
-                                        <span class="title">{% trans 'List Progress Meetings' %}</span>
+                                        <i class="fa fa-file"></i>
+                                        <span class="title">{% trans 'Online Progress Report' %}</span>
                                         <span class="selected"></span>
                                     </a>
                                 </li>
@@ -1416,7 +1416,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <script type="text/javascript">
 
 
-    {% if request.resolver_match.url_name == 'student_home' or request.resolver_match.url_name == 'applicant_personal_info' or request.resolver_match.url_name == 'applicant_academic_english_qualification' or request.resolver_match.url_name == 'applicant_curriculum_experience_info' or request.resolver_match.url_name == 'applicant_additional_information' or request.resolver_match.url_name == 'applicant_attachment_submission'  or request.resolver_match.url_name == 'applicant_declaration' or request.resolver_match.url_name == 'my_application'  or request.resolver_match.url_name == 'applicant_employement_history_info'  or request.resolver_match.url_name == 'applicant_intake_info'  or request.resolver_match.url_name == 'applicant_credit_transfer'  or request.resolver_match.url_name == 'checkout' or request.resolver_match.url_name == 'applicant_credit_transfer_attachement' or request.resolver_match.url_name == 'applicant_research_details' or request.resolver_match.url_name == 'student_notifications' or request.resolver_match.url_name == 'applicant_program_search' %}
+    {% if request.resolver_match.url_name == 'student_home' or request.resolver_match.url_name == 'applicant_personal_info' or request.resolver_match.url_name == 'applicant_academic_english_qualification' or request.resolver_match.url_name == 'applicant_curriculum_experience_info' or request.resolver_match.url_name == 'applicant_additional_information' or request.resolver_match.url_name == 'applicant_attachment_submission'  or request.resolver_match.url_name == 'applicant_declaration' or request.resolver_match.url_name == 'my_application'  or request.resolver_match.url_name == 'applicant_employement_history_info'  or request.resolver_match.url_name == 'applicant_intake_info'  or request.resolver_match.url_name == 'applicant_credit_transfer'  or request.resolver_match.url_name == 'checkout' or request.resolver_match.url_name == 'applicant_credit_transfer_attachement' or request.resolver_match.url_name == 'applicant_research_details' or request.resolver_match.url_name == 'student_notifications' or request.resolver_match.url_name == 'applicant_program_search' or request.resolver_match.url_name == 'add_supervisor'%}
         {
             var element = document.getElementById("c");
             element.classList.add("active");
@@ -1536,7 +1536,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
 
 
-     {% if request.resolver_match.url_name == 'semester_course_registration' or  request.resolver_match.url_name == 'course_registration_checkout' or request.resolver_match.url_name == 'credit_course_registration' or request.resolver_match.url_name == 'add_prerequisite_courses' or request.resolver_match.url_name == 'credit_course_registration_checkout' or request.resolver_match.url_name == 'research_plan_registration' or request.resolver_match.url_name == 'research_registration_checkout' or request.resolver_match.url_name == 'qualifying_test' or request.resolver_match.url_name == 'progress_meeting' or request.resolver_match.url_name == 'list_progress_meetings' %}
+     {% if request.resolver_match.url_name == 'semester_course_registration' or  request.resolver_match.url_name == 'course_registration_checkout' or request.resolver_match.url_name == 'credit_course_registration' or request.resolver_match.url_name == 'add_prerequisite_courses' or request.resolver_match.url_name == 'credit_course_registration_checkout' or request.resolver_match.url_name == 'research_plan_registration' or request.resolver_match.url_name == 'research_registration_checkout' or request.resolver_match.url_name == 'qualifying_test' or request.resolver_match.url_name == 'progress_meeting' or request.resolver_match.url_name == 'list_progress_meetings' or request.resolver_match.url_name == 'online_progress_report' %}
         {
             var element = document.getElementById("course_registration_list");
             element.classList.add("active");
@@ -1547,7 +1547,7 @@ License: You must have a valid license purchased only from themeforest(the above
     {% endif %}
 
 
-    {% if request.resolver_match.url_name == 'language_settings' or request.resolver_match.url_name == 'add_language' or request.resolver_match.url_name == 'edit_language' or request.resolver_match.url_name == 'currency_settings' or request.resolver_match.url_name == 'add_currency' or request.resolver_match.url_name == 'edit_currency'   or request.resolver_match.url_name == 'study_mode_settings'  or request.resolver_match.url_name == 'study_level_settings' or request.resolver_match.url_name == 'study_type_settings'  or request.resolver_match.url_name == 'country_settings'  or request.resolver_match.url_name == 'learning_centers_settings' or request.resolver_match.url_name == 'add_learning_centers' or request.resolver_match.url_name == 'edit_learning_centers' or request.resolver_match.url_name == 'student_mode_settings'  or request.resolver_match.url_name == 'faculty_settings' or request.resolver_match.url_name == 'add_faculty'  or request.resolver_match.url_name == 'edit_faculty' or request.resolver_match.url_name == 'link_faculty_staff' or request.resolver_match.url_name == 'arabic_lang_proficiency_settings' or request.resolver_match.url_name == 'english_lang_proficiency_settings' or request.resolver_match.url_name == 'university_type_settings' or request.resolver_match.url_name == 'add_university_type' or request.resolver_match.url_name == 'edit_university_type'  or request.resolver_match.url_name == 'type_settings' or request.resolver_match.url_name == 'add_type' or request.resolver_match.url_name == 'edit_type' or request.resolver_match.url_name == 'course_master_settings'%}
+    {% if request.resolver_match.url_name == 'language_settings' or request.resolver_match.url_name == 'add_language' or request.resolver_match.url_name == 'edit_language' or request.resolver_match.url_name == 'currency_settings' or request.resolver_match.url_name == 'add_currency' or request.resolver_match.url_name == 'edit_currency'   or request.resolver_match.url_name == 'study_mode_settings'  or request.resolver_match.url_name == 'study_level_settings' or request.resolver_match.url_name == 'study_type_settings' or request.resolver_match.url_name == 'learning_centers_settings' or request.resolver_match.url_name == 'add_learning_centers' or request.resolver_match.url_name == 'edit_learning_centers' or request.resolver_match.url_name == 'student_mode_settings'  or request.resolver_match.url_name == 'faculty_settings' or request.resolver_match.url_name == 'add_faculty'  or request.resolver_match.url_name == 'edit_faculty' or request.resolver_match.url_name == 'link_faculty_staff' or request.resolver_match.url_name == 'arabic_lang_proficiency_settings' or request.resolver_match.url_name == 'english_lang_proficiency_settings' or request.resolver_match.url_name == 'university_type_settings' or request.resolver_match.url_name == 'add_university_type' or request.resolver_match.url_name == 'edit_university_type'  or request.resolver_match.url_name == 'type_settings' or request.resolver_match.url_name == 'add_type' or request.resolver_match.url_name == 'edit_type' or request.resolver_match.url_name == 'course_master_settings'%}
         {
             var element = document.getElementById("b");
             element.classList.add("active");
@@ -1563,7 +1563,7 @@ License: You must have a valid license purchased only from themeforest(the above
     {% endif %}
 
 
-    {% if request.resolver_match.url_name == 'year_settings' or request.resolver_match.url_name == 'edit_semester' or request.resolver_match.url_name == 'add_semester' or request.resolver_match.url_name == 'semester_settings' or request.resolver_match.url_name == 'activity_settings' or  request.resolver_match.url_name == 'calendar_settings'  or request.resolver_match.url_name == 'add_calendar' or request.resolver_match.url_name == 'edit_calender' %}
+    {% if request.resolver_match.url_name == 'edit_semester' or request.resolver_match.url_name == 'add_semester' or request.resolver_match.url_name == 'semester_settings' or request.resolver_match.url_name == 'activity_settings' or  request.resolver_match.url_name == 'calendar_settings'  or request.resolver_match.url_name == 'add_calendar' or request.resolver_match.url_name == 'edit_calender' %}
         {
             var element = document.getElementById("b");
             element.classList.add("active");
@@ -1593,7 +1593,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-    {% if request.resolver_match.url_name == 'university_settings' or request.resolver_match.url_name == 'edit_university' or request.resolver_match.url_name == 'add_university' or request.resolver_match.url_name == 'university_partner_settings' or request.resolver_match.url_name == 'add_university_partner' or request.resolver_match.url_name == 'edit_university_partner' or request.resolver_match.url_name == 'campus_settings'  or request.resolver_match.url_name == 'add_campus'  or request.resolver_match.url_name == 'edit_campus'   or request.resolver_match.url_name == 'program_settings'   or request.resolver_match.url_name == 'program_fee_settings'  or request.resolver_match.url_name == 'add_program' or request.resolver_match.url_name == 'edit_program' or request.resolver_match.url_name == 'link_campus_staff'  or request.resolver_match.url_name == 'department_settings' or request.resolver_match.url_name == 'add_department' or request.resolver_match.url_name == 'edit_department' or request.resolver_match.url_name == 'link_department_staff' or request.resolver_match.url_name == 'link_university_staff' or request.resolver_match.url_name == 'add_program_fee' or request.resolver_match.url_name == 'edit_program_fee' or request.resolver_match.url_name == 'view_semester_subject_list' or request.resolver_match.url_name == 'edit_semester_based' or request.resolver_match.url_name == 'semester_fee_details' or request.resolver_match.url_name == 'view_credit_study_plan' or request.resolver_match.url_name == 'edit_credit_based' or request.resolver_match.url_name == 'credit_fee_details' or request.resolver_match.url_name == 'research_plan' or request.resolver_match.url_name == 'add_research' or request.resolver_match.url_name == 'edit_research'  or request.resolver_match.url_name == 'research_fee_details'%}
+    {% if request.resolver_match.url_name == 'university_partner_settings' or request.resolver_match.url_name == 'add_university_partner' or request.resolver_match.url_name == 'edit_university_partner' or request.resolver_match.url_name == 'campus_settings'  or request.resolver_match.url_name == 'add_campus'  or request.resolver_match.url_name == 'edit_campus'   or request.resolver_match.url_name == 'program_settings'   or request.resolver_match.url_name == 'program_fee_settings'  or request.resolver_match.url_name == 'add_program' or request.resolver_match.url_name == 'edit_program' or request.resolver_match.url_name == 'link_campus_staff'  or request.resolver_match.url_name == 'department_settings' or request.resolver_match.url_name == 'add_department' or request.resolver_match.url_name == 'edit_department' or request.resolver_match.url_name == 'link_department_staff' or request.resolver_match.url_name == 'link_university_staff' or request.resolver_match.url_name == 'add_program_fee' or request.resolver_match.url_name == 'edit_program_fee' or request.resolver_match.url_name == 'view_semester_subject_list' or request.resolver_match.url_name == 'edit_semester_based' or request.resolver_match.url_name == 'semester_fee_details' or request.resolver_match.url_name == 'view_credit_study_plan' or request.resolver_match.url_name == 'edit_credit_based' or request.resolver_match.url_name == 'credit_fee_details' or request.resolver_match.url_name == 'research_plan' or request.resolver_match.url_name == 'add_research' or request.resolver_match.url_name == 'edit_research'  or request.resolver_match.url_name == 'research_fee_details'%}
         {
             var element = document.getElementById("b");
             element.classList.add("active");
@@ -1608,7 +1608,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
     {% endif %}
 
-    {% if request.resolver_match.url_name == 'staff_settings'  or request.resolver_match.url_name == 'add_staff'   or request.resolver_match.url_name == 'edit_staff' or request.resolver_match.url_name == 'group_settings' or request.resolver_match.url_name == 'add_group' or request.resolver_match.url_name == 'agent_recruiter_settings' or request.resolver_match.url_name == 'add_agent_recruiter' or request.resolver_match.url_name == 'edit_agent_recruiter' or request.resolver_match.url_name == 'agent_settings' or request.resolver_match.url_name == 'add_agent' or request.resolver_match.url_name == 'update_agent' %}
+    {% if request.resolver_match.url_name == 'staff_settings'  or request.resolver_match.url_name == 'add_staff'   or request.resolver_match.url_name == 'edit_staff' or request.resolver_match.url_name == 'group_settings' or request.resolver_match.url_name == 'add_group' or request.resolver_match.url_name == 'agent_recruiter_settings' or request.resolver_match.url_name == 'add_agent_recruiter' or request.resolver_match.url_name == 'edit_agent_recruiter' or request.resolver_match.url_name == 'agent_settings' or request.resolver_match.url_name == 'add_agent' or request.resolver_match.url_name == 'update_agent' or request.resolver_match.url_name == 'supervisor_committee' or request.resolver_match.url_name == 'add_supervisor_committee' or request.resolver_match.url_name == 'edit_supervisor_committee' %}
         {
             var element = document.getElementById("b");
             element.classList.add("active");
@@ -1632,6 +1632,62 @@ License: You must have a valid license purchased only from themeforest(the above
             element.classList.add("active");
 
 
+        }
+    {% endif %}
+    {% if request.user.is_tanseeq_admin %}{
+        {% if request.resolver_match.url_name == 'year_settings' or request.resolver_match.url_name == 'country_settings' or request.resolver_match.url_name == 'university_settings' or request.resolver_match.url_name == 'edit_university' or request.resolver_match.url_name == 'add_university' or request.resolver_match.url_name == 'city_settings'  %}
+            $(".tanseeq_settings").addClass("open");
+            $(".tanseeq_settings_arrow").addClass("open");
+            $('.tanseeq_settings_sub').css('display', 'block');
+        {% endif %}
+    }
+    {% else %}{
+        {% if request.resolver_match.url_name == 'year_settings' or request.resolver_match.url_name == 'country_settings' or request.resolver_match.url_name == 'university_settings' or request.resolver_match.url_name == 'edit_university' or request.resolver_match.url_name == 'add_university' or request.resolver_match.url_name == 'city_settings' %}
+             var element = document.getElementById("b");
+            element.classList.add("active");
+
+            var element = document.getElementById("setting_anch");
+            element.classList.add("active");
+
+            $(".program_settings_nav_item").addClass("open");
+            $(".program_settings_arrow").addClass("open");
+            $('.program_settings_sub_menu').css('display', 'block');
+            {% endif %}
+
+        }
+
+    {% endif %}
+
+
+     {% if request.resolver_match.url_name == 'list_tanseeq_filters' or request.resolver_match.url_name == 'add_tanseeq_filter' or request.resolver_match.url_name == 'edit_tanseeq_filter' or request.resolver_match.url_name == 'list_tanseeq_fees' or request.resolver_match.url_name == 'add_tanseeq_fees' or request.resolver_match.url_name == 'update_tanseeq_fee' or request.resolver_match.url_name == 'list_tanseeq_program' or request.resolver_match.url_name == 'add_tanseeq_program' or request.resolver_match.url_name == 'edit_tanseeq_program' or request.resolver_match.url_name == 'list_tanseeq_faculty' or request.resolver_match.url_name == 'add_tanseeq_faculty' or request.resolver_match.url_name == 'edit_tanseeq_faculty' or request.resolver_match.url_name == 'list_study_mode' or request.resolver_match.url_name == 'add_study_mode' or request.resolver_match.url_name == 'update_study_mode' or request.resolver_match.url_name == 'list_university_attachment' or request.resolver_match.url_name == 'add_university_attachment' or request.resolver_match.url_name == 'update_university_attachment' or request.resolver_match.url_name == 'list_tanseeq_period' or request.resolver_match.url_name == 'add_tanseeq_period' or request.resolver_match.url_name == 'tanseeq_period' or request.resolver_match.url_name == 'list_secondary_certificate' %}
+        {
+            $(".tanseeq_settings").addClass("open");
+            $(".tanseeq_settings_arrow").addClass("open");
+            $('.tanseeq_settings_sub').css('display', 'block');
+        }
+    {% endif %}
+
+      {% if request.resolver_match.url_name == 'list_tanseeq_users' or request.resolver_match.url_name == 'add_user' or request.resolver_match.url_name == 'manage_user'  %}
+        {
+            $(".tanseeq_users").addClass("open");
+            $(".tanseeq_users_arrow").addClass("open");
+            $('.tanseeq_users_sub').css('display', 'block');
+        }
+    {% endif %}
+
+     {% if request.resolver_match.url_name == 'list_applicants' or request.resolver_match.url_name == 'finance_requestlist' or request.resolver_match.url_name == 'reviewer_list_application' or request.resolver_match.url_name == 'examiner_list_application' or request.resolver_match.url_name == 'reviewer_review_application' %}
+        {
+            $(".tanseeq_application_management").addClass("open");
+            $(".tanseeq_application_management_arrow").addClass("open");
+            $('.tanseeq_application_management_sub').css('display', 'block');
+        }
+    {% endif %}
+
+    {% if request.resolver_match.url_name == 'applicants_reports' or request.resolver_match.url_name == 'finance_list_application' or request.resolver_match.url_name == 'list_reviewer_reports'   %}
+        {
+            $(".tanseeq_reports").addClass("open");
+            $(".tanseeq_reports_arrow").addClass("open");
+            $('.tanseeq_reports_sub').css('display', 'block');
         }
     {% endif %}
 

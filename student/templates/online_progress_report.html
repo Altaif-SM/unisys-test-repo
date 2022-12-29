@@ -1,0 +1,440 @@
+{% extends "template_base_page.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table bordered">
+                    <tr>
+                        <th>Name</th>
+                        <td>
+                            {{ registered_courses.0.application_id.first_name }} {{ registered_courses.0.application_id.middle_name }} {{ registered_courses.0.application_id.last_name }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Matric NO</th>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>Program</th>
+                        <td>{{ registered_courses.0.application_id.program.program_name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Mode of Study</th>
+                        <td>{{ registered_courses.0.application_id.program_mode.study_type }}</td>
+                    </tr>
+                    <tr>
+                        <th>Type of Study</th>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>Research Language</th>
+                        <td>English</td>
+                    </tr>
+                    <tr>
+                        <th>Research Title</th>
+                        <td>{{ research_details.research_title|default_if_none:"" }}</td>
+                    </tr>
+                    <tr>
+                        <th>Supervisor</th>
+                        <td>{{ research_details.supervisor.email }}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-12">
+                <p><b>Thesis title: </b>{{ research_details.research_title|default_if_none:"" }}</p>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="">
+                <label style="color: darkgray"
+                       class="col-md-6 control-label">{% trans 'A. RESEARCH THESIS WRITING PROGRESS' %}</label>
+
+            </div>
+
+
+        </div>
+        <hr>
+        <form method="POST" id="chapter_form">
+            {% csrf_token %}
+            <input type="hidden" id="chapter_count" name="chapter_count">
+
+            <div class="row">
+                <div class="">
+
+                    <label class="col-md-4 control-label">1. Abstract:
+
+                    </label>
+
+
+                    <div class="col-md-3" id="parent1">
+                        {% if online_progress_obj.abstract %}
+                            <label class="form-control"
+                                   style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                    class="file" style="width: 50%"
+                                    type='button' value='Choose File:'><a target="_blank"
+                                                                          href="{{ online_progress_obj.abstract.url }}"><input
+                                    type="text"
+                                    readonly name="abstract_text" id="abstract_text"
+                                    class="file_value emp"
+                                    style="cursor: pointer;border: none; width: 50%"
+                                    value="{{ online_progress_obj.abstract }}"></a>
+                            </label>
+                        {% else %}
+                            <label class="form-control"
+                                   style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                    class="file" style="width: 50%"
+                                    type='button' value='Choose File:'><a><input type="text"
+                                                                                 readonly
+                                                                                 name="abstract_text"
+                                                                                 class="file_value emp"
+                                                                                 style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
+                        {% endif %}
+                        <input type="file" style="display: none" class="file_type" accept="application/pdf,"
+                               title="Select Abstract" id="abstract"
+                               name="abstract" class="doc form-control">
+                        <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                              class="remove_doc fa fa-close"></span>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="">
+                    <label class="col-md-4 control-label">2. Questionnaire Development:
+                    </label>
+                    <div class="col-md-3" id="parent2">
+                        {% if online_progress_obj.questionnaire_development %}
+                            <label class="form-control"
+                                   style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                    class="file" style="width: 50%"
+                                    type='button' value='Choose File:'><a target="_blank"
+                                                                          href="{{ online_progress_obj.questionnaire_development.url }}"><input
+                                    type="text"
+                                    readonly name="questionnaire_development_text" id="questionnaire_development"
+                                    class="file_value emp"
+                                    style="cursor: pointer;border: none; width: 50%"
+                                    value="{{ online_progress_obj.questionnaire_development }}"></a>
+                            </label>
+                        {% else %}
+                            <label class="form-control"
+                                   style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                    class="file" style="width: 50%"
+                                    type='button' value='Choose File:'><a><input type="text"
+                                                                                 readonly
+                                                                                 name="questionnaire_development_text"
+                                                                                 class="file_value emp"
+                                                                                 style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
+                        {% endif %}
+                        <input type="file" style="display: none" class="file_type" accept="application/pdf,"
+                               title="Select Questionnaire Development" id="questionnaire_development"
+                               name="questionnaire_development">
+                        <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                              class="remove_doc fa fa-close"></span>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="">
+                    <label class="col-md-4 control-label">3. Data Collection and Input:
+                    </label>
+                    <div class="col-md-3" id="parent3">
+                        {% if online_progress_obj.data_collection_input %}
+                            <label class="form-control"
+                                   style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                    class="file" style="width: 50%"
+                                    type='button' value='Choose File:'><a target="_blank"
+                                                                          href="
+                                                        {{ online_progress_obj.data_collection_input.url }}"><input
+                                    type="text"
+                                    readonly name="data_collection_input_text" id="data_collection_input_text"
+                                    class="file_value emp"
+                                    style="cursor: pointer;border: none; width: 50%"
+                                    value="{{ online_progress_obj.data_collection_input }}"></a>
+                            </label>
+                        {% else %}
+                            <label class="form-control"
+                                   style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                    class="file" style="width: 50%"
+                                    type='button' value='Choose File:'><a><input type="text"
+                                                                                 readonly
+                                                                                 name="data_collection_input_text"
+                                                                                 class="file_value emp"
+                                                                                 style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
+                        {% endif %}
+                        <input type="file" style="display: none" class="file_type" accept="application/pdf,"
+                               title="Select Data Collection Input" id="data_collection_input"
+                               name="data_collection_input">
+                        <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                              class="remove_doc fa fa-close"></span>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="">
+
+                    <label class="col-md-4 control-label">4. Data Analysis:
+
+                    </label>
+
+
+                    <div class="col-md-3" id="parent4">
+                        {% if online_progress_obj.data_analysis %}
+                            <label class="form-control"
+                                   style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                    class="file" style="width: 50%"
+                                    type='button' value='Choose File:'><a target="_blank"
+                                                                          href="{{ online_progress_obj.data_analysis.url }}"><input
+                                    type="text"
+                                    readonly name="data_analysis_text" id="data_analysis_text"
+                                    class="file_value emp"
+                                    style="cursor: pointer;border: none; width: 50%"
+                                    value="{{ online_progress_obj.data_analysis }}"></a>
+                            </label>
+                        {% else %}
+                            <label class="form-control"
+                                   style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                    class="file" style="width: 50%"
+                                    type='button' value='Choose File:'><a><input type="text"
+                                                                                 readonly
+                                                                                 name="data_analysis_text"
+                                                                                 class="file_value emp"
+                                                                                 style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
+                        {% endif %}
+                        <input type="file" style="display: none" class="file_type" accept="application/pdf,"
+                               title="Select Data Anlysis" id="data_analysis"
+                               name="data_analysis" class="doc form-control">
+                        <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                              class="remove_doc fa fa-close"></span>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="">
+                    <label class="col-md-4 control-label">5. Experiential Design:
+                    </label>
+                    <div class="col-md-3" id="parent5">
+                        {% if online_progress_obj.experiential_design %}
+                            <label class="form-control"
+                                   style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                    class="file" style="width: 50%"
+                                    type='button' value='Choose File:'><a target="_blank"
+                                                                          href="{{ online_progress_obj.experiential_design.url }}"><input
+                                    type="text"
+                                    readonly name="experiential_design_text" id="experiential_design_text"
+                                    class="file_value emp"
+                                    style="cursor: pointer;border: none; width: 50%"
+                                    value="{{ online_progress_obj.experiential_design }}"></a>
+                            </label>
+                        {% else %}
+                            <label class="form-control"
+                                   style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                    class="file" style="width: 50%"
+                                    type='button' value='Choose File:'><a><input type="text"
+                                                                                 readonly
+                                                                                 name="experiential_design_text"
+                                                                                 class="file_value emp"
+                                                                                 style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
+                        {% endif %}
+                        <input type="file" style="display: none" class="file_type" accept="application/pdf,"
+                               title="Select Experiential Design" id="experiential_design"
+                               name="experiential_design">
+                        <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                              class="remove_doc fa fa-close"></span>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="">
+                    <label class="col-md-4 control-label">6. Result Validation:
+                    </label>
+                    <div class="col-md-3" id="parent6">
+                        {% if online_progress_obj.result_validation %}
+                            <label class="form-control"
+                                   style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                    class="file" style="width: 50%"
+                                    type='button' value='Choose File:'><a target="_blank"
+                                                                          href="
+                                                        {{ online_progress_obj.result_validation.url }}"><input
+                                    type="text"
+                                    readonly name="result_validation_text" id="result_validation_text"
+                                    class="file_value emp"
+                                    style="cursor: pointer;border: none; width: 50%"
+                                    value="{{ online_progress_obj.result_validation }}"></a>
+                            </label>
+                        {% else %}
+                            <label class="form-control"
+                                   style="border-color: #b1ad9f;  width: 100%;text-align: left;"><input
+                                    class="file" style="width: 50%"
+                                    type='button' value='Choose File:'><a><input type="text"
+                                                                                 readonly
+                                                                                 name="result_validation_text"
+                                                                                 class="file_value emp"
+                                                                                 style="cursor: pointer;border: none;width: 50%; color: #292328"></a></label>
+                        {% endif %}
+                        <input type="file" style="display: none" class="file_type" accept="application/pdf,"
+                               title="Select Result Validation" id="result_validation"
+                               name="result_validation">
+                        <span style="float: right; color: darkred; cursor: pointer;margin-top: -25px"
+                              class="remove_doc fa fa-close"></span>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="">
+                    <label class="col-md-4 control-label">7. Chapters Completed:
+                    </label>
+
+
+                </div>
+            </div>
+
+            <br>
+
+            <div class="" style="float: right;
+    margin-top: 0px;
+    padding-right: 50%;">
+                <div class="">
+                    <a href="javascript:;" id="add" class="btn btn-icon-only green add_chapter"
+                       style="">
+                        <i class="fa fa-plus "></i>
+                    </a>
+                </div>
+            </div>
+
+            <div style="margin-right:-76px;" class="row chapter" id="chapter_1">
+
+                <div class="row" style="text-align: center">
+                    <div class="">
+                        <label class="col-md-2 control-label">Chapter:
+                        </label>
+                        <div class="col-md-3">
+                            <input type="text" title="Enter Chapter" id="chapter_1" required
+                                   value="" name="chapter_1"
+                                   class="form-control">
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+            <br>
+
+            <div class="col-md-12 text-center">
+                <button id="apply_test" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+
+
+    </div>
+{% endblock %}
+
+{% block ajax %}
+    <script>
+        window.onload = function () {
+            $(document).ready(function () {
+
+                $(document).on("click", ".file", function (e) {
+                    $(this).parent('.form-control').next('.file_type').trigger('click');
+                });
+                var _URL = window.URL || window.webkitURL;
+                $('.file_type').change(function (evt) {
+                    var extension = $(this).val().split('.').pop().toLowerCase();
+                    if ((extension == 'jpeg') || (extension == 'jpg')) {
+
+                        var files = !!this.files ? this.files : [];
+                        var maxSizeKB = 66; //Size in KB
+                        var maxSize = maxSizeKB * 1024; //File size is returned in Bytes
+                        if (files[0].size > maxSize) {
+                            alert('Maximum file size must be 66 KB');
+                            location.reload();
+                            return false;
+                        }
+                        var file, img;
+                        if ((file = files[0])) {
+                            img = new Image();
+                            var objectUrl = _URL.createObjectURL(file);
+                            img.onload = function () {
+                                var width = img.naturalWidth,
+                                    height = img.naturalHeight;
+                                _URL.revokeObjectURL(objectUrl);
+                                if (width <= 217 && height <= 280) {
+                                    var file_name = $(this).val().split('\\')[2];
+                                    $(this).prev().children().children('.file_value').val(file_name);
+                                } else {
+                                    alert('Maximum file height and width must be 280px*217px');
+                                    location.reload();
+                                    return false
+
+                                }
+
+                            };
+                            img.src = objectUrl;
+                            var file_name = $(this).val().split('\\')[2];
+                            $(this).prev().children().children('.file_value').val(file_name);
+                        }
+
+
+                    } else {
+                        var file_name = $(this).val().split('\\')[2];
+                        $(this).prev().children().children('.file_value').val(file_name);
+                    }
+
+                    /*
+                    if (!files.length || !window.FileReader) return;
+                    var fileExtension = ['pdf'];
+                    if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                        alert("Only formats are allowed : " + fileExtension.join(', '));
+                        $(this).val('');
+                        return false;
+                    }
+                    */
+
+                });
+                $(document).on("click", ".remove_doc", function (e) {
+                    var parent_id = $(this).closest('div').attr('id');
+                    $('#' + parent_id + ' .emp').val('');
+                });
+
+                var chapter_count = 1;
+                $(document).on("click", ".add_chapter", function (e) {
+                    chapter_count = chapter_count + 1;
+                    var row = '<br><div style="margin-right:-76px;" class="row chapter" id="chapter_' + chapter_count + '"><div class="row" style="text-align: center"><div class=""><label class="col-md-2 control-label">Chapter:</label><div class="col-md-3"><input type="text" title="Enter Chapter" id="chapter_' + chapter_count + '" value="" name="chapter_' + chapter_count + '" class="form-control" required></div></div><div class="col-md-1"><a href="javascript:;" class="delete_chapter btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div>'
+                    $(row).removeAttr().hide().insertAfter(".chapter:last").slideDown(300);
+                });
+
+
+                $(document).on("click", ".delete_chapter", function () {
+                    $(this).parents('.chapter').remove();
+                });
+
+                $("#chapter_form").submit(function (e) {
+                    var rowCount = $(".chapter").length;
+                    $('#chapter_count').val(rowCount);
+                })
+
+
+            });
+        }
+    </script>
+{% endblock %}
+

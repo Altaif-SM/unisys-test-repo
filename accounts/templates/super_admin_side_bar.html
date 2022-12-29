@@ -124,6 +124,14 @@
             </li>
         {% endif %}
 
+     {% if 'Manage Users' in access_list %}
+            <li class="nav-item  ">
+                <a href="/accounts/supervisor_committee/" class="nav-link ">
+                    <span class="title">{% trans 'Supervisor Committee' %}</span>
+                </a>
+            </li>
+        {% endif %}
+
     <li class="nav-item  ">
                 <a href="/accounts/agent_settings/" class="nav-link ">
                     <span class="title">{% trans 'Manage Agent' %}</span>

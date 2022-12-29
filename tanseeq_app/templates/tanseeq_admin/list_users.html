@@ -89,7 +89,8 @@
                 <span class="caption-subject font-red sbold uppercase">{% trans 'Manage Users' %}</span>
             </div>
             <a href="{% url 'tanseeq_app:add_user' %}">
-                <button type="submit" class="btn green" id="save" style="margin-left:75%;margin-bottom:10px;background-color: #3598dc">{% trans 'Add' %}
+                <button type="submit" class="btn green" id="save"
+                        style="margin-left:75%;margin-bottom:10px;background-color: #3598dc">{% trans 'Add' %}
                 </button>
             </a>
         </div>
@@ -112,7 +113,7 @@
                         <th>{% trans 'Role' %}</th>
                         <th>{% trans 'Country' %}</th>
                         <th>{% trans 'Active' %}</th>
-                        <th width="10%">{% trans 'Action' %}</th>
+                        <th width="15%">{% trans 'Action' %}</th>
                     </tr>
                     </thead>
 
@@ -131,18 +132,26 @@
                             {% elif rec.role.all.0.name == 'Supervisor' %}
                                 <td>{{ rec.role.all.0.name|default_if_none:"" }}</td>
                             {% elif rec.role.all.0.name == 'Faculty' %}
-                                <td>{{ rec.role.all.0.name|default_if_none:"" }} - {{ rec.faculty.faculty_name|default_if_none:"" }}</td>
+                                <td>{{ rec.role.all.0.name|default_if_none:"" }}
+                                    - {{ rec.faculty.faculty_name|default_if_none:"" }}</td>
                             {% else %}
-                                <td>{{ rec.role.all.0.name|default_if_none:"" }} - {{ rec.program.program_name|default_if_none:"" }}</td>
+                                <td>{{ rec.role.all.0.name|default_if_none:"" }}
+                                    - {{ rec.program.program_name|default_if_none:"" }}</td>
                             {% endif %}
                             <td>{{ rec.address.country.country_name|title }}</td>
-                        <td>{% if rec.is_active == True %}Yes{% else %}No{% endif %}</td>
+                            <td>{% if rec.is_active == True %}Yes{% else %}No{% endif %}</td>
                             <td>
                                 <a href="{% url 'tanseeq_app:manage_user' rec.id %}">
-                                <span type="button" name="edit" id="edit{{ forloop.counter }}"
-                                      class=" edit_btn btn blue glyphicon glyphicon-pencil">
+                                <span style="font-size:10px;" type="button" name="edit" id="edit{{ forloop.counter }}"
+                                      class=" edit_btn btn blue glyphicon glyphicon-edit">
                                 </span>
-                                    </a>
+                                </a>
+
+                                <button type="button" reset-url="{% url 'tanseeq_app:password_reset' rec.id %}"
+                                        class="password_reset btn-primary btn-xs">
+                                    Password Reset
+                                </button>
+
                             </td>
                         </tr>
                     {% endfor %}
@@ -152,33 +161,64 @@
         </div>
     </div>
 
-    <div id="id_delete_staff_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form action="{% url 'accounts:delete_staff' %}"
-                        id="form_sample_1"
-                        class="form-horizontal"
-                        method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <input type="hidden" id="staff_delete_id" name="staff_delete_id">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                        <h4 class="modal-title" style="color: #2a015e; text-align: center"><b  >Delete Confirmation</b></h4>
-                    </div>
-                    <div class="modal-body">
-                        <p> {% trans 'Are you sure, you want to delete Staff?' %} </p>
-                        <p> {% trans 'After delete you will not be able to modify the Staff.' %} </p>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" id="cancel_model" data-dismiss="modal" class="btn dark btn-outline">
-                            Cancel
-                        </button>
-                        <button type="submit" id="delete_language" class="btn red">Confirm</button>
+<!-- pop up modal -->
+<div id="password_reset_modal" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title" style="color: #2a015e; text-align: center"><b>Password Reset</b></h4>
+            </div>
+            <div class="modal-body">
+                <form id="id_update_fee_form">
+                    <div class="row">
+                        <div class="col-md-12 text-center control-label">
+                            <label class="text-center" style="color: red;font-weight: bold">The password will be reset to the default 000000</label>
+                        </div>
                     </div>
                 </form>
             </div>
+            <div class="modal-footer">
+                <button type="button" id="id_fee_cancel_model" data-dismiss="modal" class="btn dark btn-outline">
+                    Cancel
+                </button>
+                <button type="button" id="id_confirm" class="btn btn-primary">Confirm</button>
+            </div>
         </div>
     </div>
-
+</div>
+{% endblock %}
+{% block ajax %}
+<script>
+    $(".password_reset").on("click", (e)=>{
+        $("#password_reset_modal").modal()
+       $("#id_confirm").attr("reset-url", $(e.target).attr("reset-url"))
+   });
+   $("#id_confirm").on("click", (e)=>{
+       $(e.target).attr('disabled', true)
+       passwordReset($(e.target).attr("reset-url"))
+       $("#password_reset_modal").modal('hide')
+   })
+    function passwordReset(url) {
+        $.ajax({
+            type: 'PATCH',
+            url: url,
+            data : {
+            },
+            beforeSend: function(xhr, settings) {
+                xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+            },
+            success: function (data, textStatus, xhr) {
+                if(xhr.status == 200){
+                    location.reload()
+                }
+            },
+            complete: function (){
+                $("#id_confirm").attr('disabled', false)
+            },
+            error: function (xhr, msg, err) {
+            }
+        });
+    }
+</script>
 {% endblock %}

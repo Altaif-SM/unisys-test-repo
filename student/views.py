@@ -4184,3 +4184,146 @@ class ProgressMeetingsList(ListView):
 
     def get_queryset(self):
         return self.model.objects.filter(student=self.request.user)
+
+def online_progress_report(request):
+    research_details = ResearchDetails.objects.get(application_id=request.user.get_application)
+    if request.method == "POST":
+        abstract = request.FILES.get('abstract')
+        questionnaire_development = request.FILES.get('questionnaire_development')
+        data_collection_input = request.FILES.get('data_collection_input')
+        data_analysis = request.FILES.get('data_analysis')
+        experiential_design = request.FILES.get('experiential_design')
+        result_validation = request.FILES.get('result_validation')
+        chapter_count = request.POST.get('chapter_count')
+        try:
+            online_progress_obj = OnlineProgressReport.objects.create(student = request.user)
+            if abstract:
+                online_progress_obj.abstract = abstract
+            if questionnaire_development:
+                online_progress_obj.questionnaire_development = questionnaire_development
+            if data_collection_input:
+                online_progress_obj.data_collection_input = data_collection_input
+            if data_analysis:
+                online_progress_obj.data_analysis = data_analysis
+            if experiential_design:
+                online_progress_obj.experiential_design = experiential_design
+            if result_validation:
+                online_progress_obj.result_validation = result_validation
+
+            online_progress_obj.chapter.clear()
+            for x in range(int(chapter_count)):
+                try:
+                    x = x + 1
+                    chapter_obj = ChapterDetails.objects.create(
+                        chapter=request.POST.get('chapter_' + str(x)))
+                    online_progress_obj.chapter.add(chapter_obj)
+                except:
+                    pass
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect("student:online_progress_report")
+    else:
+        registered_courses = StudentRegisteredCreditCourseDetails.objects.filter(
+            application_id=request.user.get_application
+        ).select_related("application_id", "course")
+        context = {
+            "registered_courses": registered_courses,
+            "research_details": research_details,
+        }
+    return render(request, "online_progress_report.html", context)
+
+
+def add_supervisor(request, application_id):
+    application_obj = ApplicationDetails.objects.get(id=application_id)
+    if request.method == 'POST':
+        university = request.POST.get('university', None)
+        faculty = request.POST.get('faculty', None)
+        program = request.POST.get('program', None)
+        area_expertise = request.POST.get('area_expertise', None)
+        supervisor = request.POST.get('supervisor', None)
+        try:
+            if not SupervisorDetails.objects.filter(application_id=request.user.get_application):
+                SupervisorDetails.objects.create(application_id=request.user.get_application,university_id = university, faculty_id = faculty, program_id = program, area_expertise = area_expertise, supervisor_id = supervisor)
+            else:
+                supervisor_obj = SupervisorDetails.objects.get(application_id=request.user.get_application)
+                supervisor_obj.university_id = university
+                supervisor_obj.faculty_id = faculty
+                supervisor_obj.program_id = program
+                supervisor_obj.area_expertise = area_expertise
+                supervisor_obj.supervisor_id = supervisor
+                supervisor_obj.save()
+        except Exception as e:
+            pass
+        return redirect('/student/add_supervisor/'+str(application_id))
+    else:
+        supervisor_obj = None
+        faculty_list = []
+        faculty_ids = []
+        program_list = []
+        supervisor_list = []
+        university_recs = None
+
+        if SupervisorDetails.objects.filter(application_id=request.user.get_application).exists():
+            supervisor_obj = SupervisorDetails.objects.get(application_id=request.user.get_application)
+            if supervisor_obj:
+                university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,university_type = supervisor_obj.university.university_type,
+                                                                   is_tanseeq_university=False,
+                                                                   is_partner_university=False)
+
+                faculty_recs = ProgramDetails.objects.filter(university_id=supervisor_obj.university.id)
+                for rec in faculty_recs:
+                    if not rec.faculty.id in faculty_ids:
+                        raw_dict = {}
+                        raw_dict['id'] = rec.faculty.id
+                        raw_dict['faculty'] = rec.faculty.faculty_name
+                        faculty_ids.append(rec.faculty.id)
+                        faculty_list.append(raw_dict)
+                program_recs = ProgramDetails.objects.filter(university_id=supervisor_obj.university.id,
+                                                             faculty_id=supervisor_obj.faculty_id, is_delete=False)
+                for rec in program_recs:
+                    raw_dict = {}
+                    raw_dict['id'] = rec.id
+                    raw_dict['program'] = rec.program_name
+                    program_list.append(raw_dict)
+
+                supervisor_recs = User.objects.filter(university_id=supervisor_obj.university.id,
+                                                             faculty_id=supervisor_obj.faculty_id, program_id = supervisor_obj.program.id)
+                for rec in supervisor_recs:
+                    raw_dict = {}
+                    raw_dict['id'] = rec.id
+                    raw_dict['supervisor'] = rec.first_name
+                    program_list.append(raw_dict)
+
+        context = {
+            'application_obj':application_obj,
+            'supervisor_list':supervisor_list,
+            'faculty_list':faculty_list,
+            'program_list':program_list,
+            'university_recs':university_recs,
+            'supervisor_obj':supervisor_obj,
+            'university_type_recs':UniversityTypeDetails.objects.filter(status=True),
+            'area_expertise_list': User.objects.filter(role__name__in=['Supervisor']).values_list('area_expertise',flat=True).distinct()
+        }
+        return render(request, 'add_supervisor_details.html',context)
+
+def get_supervisor_details(request):
+    supervisor_list = []
+    university = request.POST.get('university', None)
+    faculty = request.POST.get('faculty', None)
+    program = request.POST.get('program', None)
+    area_expertise = request.POST.get('area_expertise', None)
+    user_recs = User.objects.filter(role__name__in = ['Supervisor'])
+    if university:
+        user_recs = user_recs.filter(university_id = university)
+    if faculty:
+        user_recs = user_recs.filter(faculty_id=faculty)
+    if program:
+        user_recs = user_recs.filter(program_id=program)
+    if area_expertise:
+        user_recs = user_recs.filter(area_expertise=area_expertise)
+    for rec in user_recs:
+        raw_dict = {}
+        raw_dict['id'] = rec.id
+        raw_dict['supervisor'] = rec.first_name
+        supervisor_list.append(raw_dict)
+    return JsonResponse(supervisor_list, safe=False)

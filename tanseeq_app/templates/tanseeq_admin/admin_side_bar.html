@@ -1,116 +1,169 @@
 {% load  i18n %}
-<li class="nav-item ">
-    <a href="{% url 'masters:university_settings' %}" class="nav-link ">
-        <i class="fa fa-university"></i>
-        <span class="title">{% trans 'Tanseeq University' %}</span>
-    </a>
-</li>
-<li class="nav-item ">
-    <a href="{% url 'masters:country_settings' %}" class="nav-link ">
-        <i class="fa fa-flag"></i>
-        <span class="title">{% trans 'Manage Country' %}</span>
-    </a>
-</li>
-<li class="nav-item ">
-    <a href="{% url 'masters:year_settings' %}" class="nav-link ">
-        <i class="fa fa-calendar"></i>
-        <span class="title">{% trans 'Manage Academic Year' %}</span>
-    </a>
-</li>
-<li class="nav-item ">
-    <a href="{% url 'tanseeq_app:list_secondary_certificate' %}" class="nav-link ">
-        <i class="glyphicon glyphicon-education"></i>
-        <span class="title">{% trans 'Secondary School Cetificate' %}</span>
 
-    </a>
-</li>
-<li class="nav-item ">
-    <a href="{% url 'tanseeq_app:list_tanseeq_period' %}" class="nav-link ">
-        <i class="glyphicon glyphicon-time"></i>
-        <span class="title">{% trans 'Tanseeq Period' %}</span>
-    </a>
-</li>
-<li class="nav-item ">
-    <a href="{% url 'tanseeq_app:list_university_attachment' %}" class="nav-link ">
-        <i class="glyphicon glyphicon-cloud-upload"></i>
-        <span class="title">{% trans 'University Attachement' %}</span>
+<li class="nav-item tanseeq_settings">
+    <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="fa fa-cog" aria-hidden="true"></i>
 
+        <span class="title">{% trans 'Tansseq Settings' %}</span>
+        <span class="arrow tanseeq_settings_arrow"></span>
     </a>
-</li>
-<li class="nav-item ">
-    <a href="{% url 'tanseeq_app:list_study_mode' %}" class="nav-link ">
-        <i class="glyphicon glyphicon-book"></i>
-        <span class="title">{% trans 'Study Mode' %}</span>
-    </a>
-</li>
-<li class="nav-item ">
-    <a href="{% url 'tanseeq_app:list_tanseeq_faculty' %}" class="nav-link ">
-        <i class="fa fa-user-circle-o"></i>
-        <span class="title">{% trans 'Tanseeq Faculty' %}</span>
-    </a>
-</li>
-<li class="nav-item ">
-    <a href="{% url 'tanseeq_app:list_tanseeq_program' %}" class="nav-link ">
-        <i class="fa fa-tasks"></i>
-        <span class="title">{% trans 'Tanseeq Program' %}</span>
-    </a>
-</li>
+    <ul class="sub-menu tanseeq_settings_sub">
+        <li class="nav-item ">
+            <a href="{% url 'masters:university_settings' %}" class="nav-link ">
+                <i class="fa fa-university"></i>
+                <span class="title">{% trans 'Tanseeq University' %}</span>
+            </a>
+        </li>
+        <li class="nav-item ">
+            <a href="{% url 'masters:country_settings' %}" class="nav-link ">
+                <i class="fa fa-flag"></i>
+                <span class="title">{% trans 'Manage Country' %}</span>
+            </a>
+        </li>
+        <li class="nav-item ">
+            <a href="{% url 'masters:year_settings' %}" class="nav-link ">
+                <i class="fa fa-calendar"></i>
+                <span class="title">{% trans 'Manage Academic Year' %}</span>
+            </a>
+        </li>
+        <li class="nav-item ">
+            <a href="{% url 'tanseeq_app:list_secondary_certificate' %}" class="nav-link ">
+                <i class="glyphicon glyphicon-education"></i>
+                <span class="title">{% trans 'Secondary School Cetificate' %}</span>
 
-<li class="nav-item ">
-    <a href="{% url 'tanseeq_app:list_tanseeq_fees' %}" class="nav-link ">
-        <i class="fa fa-money"></i>
-        <span class="title">{% trans 'Tansseq Fees' %}</span>
-    </a>
-</li>
+            </a>
+        </li>
+        <li class="nav-item ">
+            <a href="{% url 'tanseeq_app:list_tanseeq_period' %}" class="nav-link ">
+                <i class="glyphicon glyphicon-time"></i>
+                <span class="title">{% trans 'Tanseeq Period' %}</span>
+            </a>
+        </li>
+        <li class="nav-item ">
+            <a href="{% url 'tanseeq_app:list_university_attachment' %}" class="nav-link ">
+                <i class="glyphicon glyphicon-cloud-upload"></i>
+                <span class="title">{% trans 'University Attachement' %}</span>
 
-<li class="nav-item ">
-    <a href="{% url 'tanseeq_app:list_tanseeq_filters' %}" class="nav-link ">
-        <i class="fa fa-filter"></i>
-        <span class="title">{% trans 'Condition/Filter' %}</span>
-    </a>
-</li>
-
-<li class="nav-item ">
-    <a href="{% url 'tanseeq_app:list_applicants' %}" class="nav-link ">
-        <i class="fa fa-list"></i>
-        <span class="title">{% trans 'List of applicants' %}</span>
-    </a>
-</li>
-
-<li class="nav-item ">
-    <a href="{% url 'tanseeq_app:list_tanseeq_users' %}" class="nav-link ">
-        <i class="fa fa-users"></i>
-        <span class="title">{% trans 'Users' %}</span>
-    </a>
-</li>
-
-<li class="nav-item ">
-    <a href="{% url 'tanseeq_app:finance_list_application' %}" class="nav-link ">
-        <i class="fa fa-credit-card"></i>
-        <span class="title">{% trans 'List of Finance applicants' %}</span>
-    </a>
-</li>
-
-<li class="nav-item ">
-    <a href="{% url 'tanseeq_app:applicants_reports' %}" class="nav-link ">
-        <i class="fa fa-file"></i>
-        <span class="title">{% trans 'Application Reports' %}</span>
-    </a>
-</li>
-
-<li class="nav-item ">
-    <a href="{% url 'tanseeq_app:list_reviewer_reports' %}" class="nav-link ">
-        <i class="fa fa-file"></i>
-        <span class="title">{% trans 'Reviewer Reports' %}</span>
-    </a>
-</li>
+            </a>
+        </li>
+        <li class="nav-item ">
+            <a href="{% url 'tanseeq_app:list_study_mode' %}" class="nav-link ">
+                <i class="glyphicon glyphicon-book"></i>
+                <span class="title">{% trans 'Study Mode' %}</span>
+            </a>
+        </li>
+        <li class="nav-item ">
+            <a href="{% url 'tanseeq_app:list_tanseeq_faculty' %}" class="nav-link ">
+                <i class="fa fa-user-circle-o"></i>
+                <span class="title">{% trans 'Tanseeq Faculty' %}</span>
+            </a>
+        </li>
+        <li class="nav-item ">
+            <a href="{% url 'tanseeq_app:list_tanseeq_program' %}" class="nav-link ">
+                <i class="fa fa-tasks"></i>
+                <span class="title">{% trans 'Tanseeq Program' %}</span>
+            </a>
+        </li>
+        <li class="nav-item ">
+            <a href="{% url 'tanseeq_app:list_tanseeq_fees' %}" class="nav-link ">
+                <i class="fa fa-money"></i>
+                <span class="title">{% trans 'Tansseq Fees' %}</span>
+            </a>
+        </li>
+        <li class="nav-item ">
+            <a href="{% url 'tanseeq_app:list_tanseeq_filters' %}" class="nav-link ">
+                <i class="fa fa-filter"></i>
+                <span class="title">{% trans 'Condition/Filter' %}</span>
+            </a>
+        </li>
 
 
+    </ul>
+</li>
 
-<!--
-<li class="nav-item ">
-    <a href="{% url 'tanseeq_app:list_tanseeq_courses' %}" class="nav-link ">
-        <i class="fa fa-cog"></i>
-        <span class="title">{% trans 'Courses' %}</span>
+<li class="nav-item tanseeq_users">
+    <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="fa fa-user" aria-hidden="true"></i>
+
+        <span class="title">{% trans 'Tanseeq User' %}</span>
+        <span class="arrow tanseeq_users_arrow"></span>
     </a>
-</li>-->
+    <ul class="sub-menu tanseeq_users_sub">
+        <li class="nav-item ">
+            <a href="{% url 'tanseeq_app:list_tanseeq_users' %}" class="nav-link ">
+                <i class="fa fa-user"></i>
+                <span class="title">{% trans 'Users' %}</span>
+            </a>
+        </li>
+
+
+    </ul>
+</li>
+
+<li class="nav-item tanseeq_application_management">
+    <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="fa fa-tasks" aria-hidden="true"></i>
+
+        <span class="title">{% trans 'Application Management' %}</span>
+        <span class="arrow tanseeq_application_management_arrow"></span>
+    </a>
+    <ul class="sub-menu tanseeq_application_management_sub">
+        <li class="nav-item ">
+            <a href="{% url 'tanseeq_app:list_applicants' %}" class="nav-link ">
+                <i class="fa fa-list"></i>
+                <span class="title">{% trans 'Applicant List' %}</span>
+            </a>
+        </li>
+        <li class="nav-item ">
+            <a href="{% url 'tanseeq_app:finance_requestlist' %}" class="nav-link ">
+                <i class="glyphicon glyphicon-check"></i>
+                <span class="title">{% trans 'Finance Applicant List' %}</span>
+            </a>
+        </li>
+
+        <li class="nav-item ">
+            <a href="{% url 'tanseeq_app:reviewer_list_application' %}" class="nav-link ">
+                <i class="glyphicon glyphicon-check"></i>
+                <span class="title">{% trans 'Reviewer Applicant List' %}</span>
+            </a>
+        </li>
+
+        <li class="nav-item ">
+            <a href="{% url 'tanseeq_app:examiner_list_application' %}" class="nav-link ">
+                <i class="glyphicon glyphicon-check"></i>
+                <span class="title">{% trans 'Coordinator Applicant List' %}</span>
+            </a>
+        </li>
+
+
+    </ul>
+</li>
+<li class="nav-item tanseeq_reports">
+    <a href="javascript:;" class="nav-link nav-toggle">
+        <i class="fa fa-file" aria-hidden="true"></i>
+
+        <span class="title">{% trans 'Reports' %}</span>
+        <span class="arrow tanseeq_reports_arrow"></span>
+    </a>
+    <ul class="sub-menu tanseeq_reports_sub">
+        <li class="nav-item ">
+            <a href="{% url 'tanseeq_app:finance_list_application' %}" class="nav-link ">
+                <i class="fa fa-credit-card"></i>
+                <span class="title">{% trans 'List of Finance applicants' %}</span>
+            </a>
+        </li>
+        <li class="nav-item ">
+            <a href="{% url 'tanseeq_app:applicants_reports' %}" class="nav-link ">
+                <i class="fa fa-file"></i>
+                <span class="title">{% trans 'Application Reports' %}</span>
+            </a>
+        </li>
+        <li class="nav-item ">
+            <a href="{% url 'tanseeq_app:list_reviewer_reports' %}" class="nav-link ">
+                <i class="fa fa-file"></i>
+                <span class="title">{% trans 'Reviewer Reports' %}</span>
+            </a>
+        </li>
+    </ul>
+</li>
+

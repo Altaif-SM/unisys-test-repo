@@ -942,7 +942,130 @@ class AuthRequiredMiddleware(object):
             return HttpResponseRedirect("/")
         return None
 
+@permission_required('accounts.can_view_users', raise_exception=True)
+def supervisor_committee(request):
+    user_recs = User.objects.filter(role__name__in = ['Supervisor'])
+    context ={
+        'user_recs':user_recs,
+    }
+    return render(request, 'list_supervisor_committee.html',context)
 
+
+@permission_required('accounts.add_user', raise_exception=True)
+def add_supervisor_committee(request):
+    if request.method == 'POST':
+        faculty = request.POST.get('faculty', None)
+        program = request.POST.get('program', None)
+        university = request.POST.get('university')
+        first_name = request.POST.get('first_name')
+        email = request.POST.get('email')
+        role = request.POST.get('role')
+        area_expertise = request.POST.get('area_expertise')
+        contact = request.POST.get('contact')
+        password = request.POST.get('password')
+        residential_address = request.POST.get('address')
+        status = request.POST.get('status')
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            if User.objects.filter(email=email).exists():
+                messages.warning(request, "Email already exists.")
+                return redirect('/accounts/supervisor_committee/')
+            supervisor_obj = User.objects.create(first_name = first_name,email=email, username=email, password=make_password(password),area_expertise = area_expertise,contact = contact,
+                                            is_active=status, university_id=university, faculty_id=faculty,
+                                            program_id=program)
+            supervisor_obj.role.add(UserRole.objects.get(name=role))
+            try:
+                address = AddressDetails.objects.create(residential_address=residential_address)
+                supervisor_obj.address = address
+            except:
+                pass
+            supervisor_obj.save()
+            messages.success(request, "Record saved.")
+        except Exception as e:
+            messages.warning(request, "Record not saved.")
+        return redirect('/accounts/supervisor_committee/')
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_tanseeq_university = False,
+                                                       is_partner_university=False).order_by('-id')
+    university_type_recs = UniversityTypeDetails.objects.filter(status=True)
+    context = {
+        'university_recs': university_recs,
+        'university_type_recs': university_type_recs,
+    }
+    return render(request, 'add_supervisor_committee.html', context)
+
+def edit_supervisor_committee(request, supervisor_id):
+    supervisor_obj = User.objects.get(id = supervisor_id)
+    if request.method == 'POST':
+        faculty = request.POST.get('faculty', None)
+        program = request.POST.get('program', None)
+        university = request.POST.get('university')
+        first_name = request.POST.get('first_name')
+        email = request.POST.get('email')
+        role = request.POST.get('role')
+        area_expertise = request.POST.get('area_expertise')
+        contact = request.POST.get('contact')
+        password = request.POST.get('password')
+        residential_address = request.POST.get('address')
+        status = request.POST.get('status')
+        if status == 'on':
+            status = True
+        else:
+            status = False
+        try:
+            if User.objects.filter(~Q(id=supervisor_id), email=email).exists():
+                messages.warning(request, "Email already exists.")
+                return redirect('/accounts/supervisor_committee/')
+            supervisor_obj.first_name = first_name
+            supervisor_obj.email = email
+            supervisor_obj.username = email
+            if password:
+                supervisor_obj.set_password(password)
+            supervisor_obj.area_expertise = area_expertise
+            supervisor_obj.contact = contact
+            supervisor_obj.is_active = status
+            supervisor_obj.university_id = university
+            supervisor_obj.faculty_id = faculty
+            supervisor_obj.program_id = program
+            supervisor_obj.save()
+            AddressDetails.objects.filter(id= supervisor_obj.address.id).update(residential_address = residential_address)
+            messages.success(request, "Record saved.")
+        except Exception as e:
+            messages.warning(request, "Record not saved.")
+        return redirect('/accounts/supervisor_committee/')
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True, is_tanseeq_university=False,
+                                                       is_partner_university=False).order_by('-id')
+    university_type_recs = UniversityTypeDetails.objects.filter(status=True)
+
+    faculty_list = []
+    faculty_ids = []
+    faculty_recs = ProgramDetails.objects.filter(university_id=supervisor_obj.university.id)
+    for rec in faculty_recs:
+        if not rec.faculty.id in faculty_ids:
+            raw_dict = {}
+            raw_dict['id'] = rec.faculty.id
+            raw_dict['faculty'] = rec.faculty.faculty_name
+            faculty_ids.append(rec.faculty.id)
+            faculty_list.append(raw_dict)
+
+    program_list = []
+    program_recs = ProgramDetails.objects.filter(university_id=supervisor_obj.university.id, faculty_id = supervisor_obj.faculty_id,is_delete=False)
+    for rec in program_recs:
+        raw_dict = {}
+        raw_dict['id'] = rec.id
+        raw_dict['program'] = rec.program_name
+        program_list.append(raw_dict)
+
+    context = {
+        'university_recs': university_recs,
+        'university_type_recs': university_type_recs,
+        'supervisor_obj': supervisor_obj,
+        'faculty_list': faculty_list,
+        'program_list': program_list,
+    }
+    return render(request, 'edit_supervisor_committee.html', context)
 @permission_required('accounts.can_view_users', raise_exception=True)
 def staff_settings(request):
     country_list = CountryDetails.objects.all()
@@ -1042,7 +1165,7 @@ def add_staff(request):
         except Exception as e:
             messages.warning(request, "Record not saved.")
         return redirect('/accounts/staff_settings/')
-    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_tanseeq_university = False,
                                                        is_partner_university=False).order_by('-id')
     university_type_recs = UniversityTypeDetails.objects.filter(status=True)
     staff_dict = {
@@ -1194,7 +1317,7 @@ def edit_staff(request, staff_id=None):
     # else:
     #     university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
     #                                                            is_partner_university=False).order_by('-id')
-    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,
+    university_recs = UniversityDetails.objects.filter(is_delete=False, is_active=True,is_tanseeq_university = False,
                                                        university_type_id=user_obj.university.university_type.id).order_by(
         '-id')
     is_faculty = False

@@ -3001,31 +3001,47 @@
                             <br>
                             <div class="research_details" style="display: none">
 
-                                <div class="row research_mode">
-                                    <div class="">
-                                        <label class="col-md-2 control-label">{% trans 'Supervisor' %}:</label>
-                                        <div class="col-md-4">
-                                            <select id='supervisor' title="Select Supervisor" name="supervisor"
-                                                    class="form-control">
-                                                {% if research_details.supervisor %}
-                                                    <option style="display:none" selected="selected"
-                                                            value="{{ research_details.supervisor.id }}"
-                                                    >{{ research_details.supervisor.email|default_if_none:"" }}</option>
-                                                {% else %}
-                                                    <option style="display:none" selected="selected" id=""
-                                                            value="">{% trans 'Please Select' %}
-                                                    </option>
-                                                {% endif %}
-                                                {% for rec in supervisor_list %}
-                                                    <option value='{{ rec.id }}'>{{ rec.email|default_if_none:"" }}</option>
-                                                {% endfor %}
+                                <div class="row">
 
-                                            </select>
+                                    <div class="">
+                                        <label class="col-md-2 control-label"></label>
+                                        <div class="col-md-4">
+                                            <a target="_blank" href="{% url 'student:add_supervisor' application_obj.id %}" class="nav-link ">
+                                                <i class="fa fa-plus" aria-hidden="true"></i>
+                                                <span class="title">{% trans 'Add Supervisor' %}</span>
+                                            </a>
+
                                         </div>
                                     </div>
 
 
                                 </div>
+
+                                {#                                <div class="row research_mode">#}
+                                {#                                    <div class="">#}
+                                {#                                        <label class="col-md-2 control-label">{% trans 'Supervisor' %}:</label>#}
+                                {#                                        <div class="col-md-4">#}
+                                {#                                            <select id='supervisor' title="Select Supervisor" name="supervisor"#}
+                                {#                                                    class="form-control">#}
+                                {#                                                {% if research_details.supervisor %}#}
+                                {#                                                    <option style="display:none" selected="selected"#}
+                                {#                                                            value="{{ research_details.supervisor.id }}"#}
+                                {#                                                    >{{ research_details.supervisor.email|default_if_none:"" }}</option>#}
+                                {#                                                {% else %}#}
+                                {#                                                    <option style="display:none" selected="selected" id=""#}
+                                {#                                                            value="">{% trans 'Please Select' %}#}
+                                {#                                                    </option>#}
+                                {#                                                {% endif %}#}
+                                {#                                                {% for rec in supervisor_list %}#}
+                                {#                                                    <option value='{{ rec.id }}'>{{ rec.email|default_if_none:"" }}</option>#}
+                                {#                                                {% endfor %}#}
+                                {##}
+                                {#                                            </select>#}
+                                {#                                        </div>#}
+                                {#                                    </div>#}
+                                {##}
+                                {##}
+                                {#                                </div>#}
                                 <br>
 
                                 <div class="portlet-title">

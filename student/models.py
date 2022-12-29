@@ -799,7 +799,20 @@ class CreditTransferAttachmentDetails(BaseModel):
     status_verification_letter = models.FileField(upload_to='document/', null=True, blank=True)
     applicant_id = models.ForeignKey(ApplicationDetails, null=True, related_name='applicant_credit_transfer_attachement_rel',
                                      on_delete=models.SET_NULL)
-
+class SupervisorDetails(BaseModel):
+    application_id = models.ForeignKey(ApplicationDetails, null=True, related_name='supervisor_pg_application',
+                                       on_delete=models.SET_NULL)
+    supervisor = models.ForeignKey(User, null=True, related_name='supervisor_pg_user',
+                                   on_delete=models.SET_NULL)
+    university = models.ForeignKey('masters.UniversityDetails', null=True, related_name='supervisor_pg_university',
+                                   on_delete=models.SET_NULL)
+    faculty = models.ForeignKey('masters.FacultyDetails', blank=True, null=True,
+                                related_name='supervisor_pg_faculty',
+                                on_delete=models.SET_NULL)
+    program = models.ForeignKey('masters.ProgramDetails', blank=True, null=True,
+                                         related_name='supervisor_pg_program',
+                                         on_delete=models.SET_NULL)
+    area_expertise = models.CharField(max_length=150, blank=True, null=True)
 
 class ResearchDetails(BaseModel):
     program = models.CharField(max_length=150, blank=True, null=True)
@@ -850,6 +863,27 @@ class ProgressMeetings(BaseModel):
 
     class Meta:
         pass
+
+class ChapterDetails(models.Model):
+    chapter = models.CharField(max_length=150, blank=True, null=True)
+
+
+class OnlineProgressReport(BaseModel):
+    student = models.ForeignKey(
+        User, null=True, related_name='online_progress_student', on_delete=models.SET_NULL
+    )
+    abstract = models.FileField(upload_to='document/', null=True, blank=True)
+    questionnaire_development = models.FileField(upload_to='document/', null=True, blank=True)
+    data_collection_input = models.FileField(upload_to='document/', null=True, blank=True)
+    data_analysis = models.FileField(upload_to='document/', null=True, blank=True)
+    experiential_design = models.FileField(upload_to='document/', null=True, blank=True)
+    result_validation = models.FileField(upload_to='document/', null=True, blank=True)
+    chapter = models.ManyToManyField(ChapterDetails, blank=True)
+
+    class Meta:
+        pass
+
+
 
 class ProgressMeetingStatus(BaseModel):
     SUPERVISOR_CHOICES = (

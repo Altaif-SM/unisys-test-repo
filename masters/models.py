@@ -1038,7 +1038,7 @@ class ResearchPlanDetails(BaseModel):
                              on_delete=models.SET_NULL)
 
 class AgentIDDetails(BaseModel):
-    agent_id = models.CharField(max_length=150, blank=True, null=True)
+    agent_id = models.CharField(max_length=100, blank=True, null=True)
     user = models.ForeignKey(User, null=True, related_name='agent_user_rel', on_delete=models.SET_NULL)
     mobile = models.CharField(max_length=15, blank=True, null=True)
     country_code = models.CharField(max_length=10, blank=True, null=True)

@@ -899,6 +899,15 @@ class ManageUsers(View):
             return render(request, self.template_name, context)
         return redirect(self.redirect_url)
 
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
+class ManagePasswordReset(View):
+    model = User
+
+    def patch(self, request, pk):
+        obj = self.model.objects.get(id = pk)
+        obj.set_password('000000')
+        obj.save()
+        return JsonResponse({}, status=200)
 
 @method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class ManageApplicationStatus(View):
