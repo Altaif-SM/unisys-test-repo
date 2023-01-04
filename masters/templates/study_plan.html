@@ -1,0 +1,55 @@
+{% include 'create_template.html' %}
+
+{% block ajax %}
+<script>
+    $("#id_academic_year").on("change", ()=>{
+        getData({
+            "id": "id_study_semester",
+            "url": "{%url 'masters:get_semesters' %}",
+            "params": {"year_id": $("#id_academic_year").val()},
+        })
+    })
+    $('#id_is_credit').on("change", isCreditBase)
+    function isCreditBase() {
+        if($('#id_is_credit').is(":checked")){
+            $("#id_min_credit").prop('disabled', false);
+            $("#id_max_credit").prop('disabled', false);
+        }else{
+            $("#id_min_credit").prop('disabled', true);
+            $("#id_max_credit").prop('disabled', true);
+        }
+    }
+    isCreditBase()
+
+    function getData(data){
+        const semesterOptions = $(`#${data.id}`)
+
+        $.ajax({
+            type: 'GET',
+            url: data.url,
+            data: data.params,
+            success: function (response) {
+                const jsonRes = JSON.parse(response)
+
+                semesterOptions.empty()
+                semesterOptions.prepend($('<option>',{
+                    value: '',
+                    text: "Select Semester",
+                    "selected": true,
+                }))
+                
+                $.map(jsonRes, function(data){
+                    semesterOptions.append($('<option>', {
+                        value: data.pk,
+                        text : `${data.fields.semester} ${data.fields.start_date} - ${data.fields.end_date}`
+                    }));
+                })
+            },
+            complete: function (){
+            },
+            error: function (xhr, msg, err) {
+            }
+        });
+    }
+</script>
+{% endblock %}

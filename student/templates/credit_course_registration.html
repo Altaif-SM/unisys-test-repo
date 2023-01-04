@@ -11,18 +11,12 @@
 {% block ScriptBlock %}
     <script>
         window.onload = function () {
-
-
             $(document).ready(function () {
-
                     $("#id_semester_based").removeClass("active");
                      $("#tab_1_1_1").removeClass("active");
-
                      $("#id_credit_based").addClass("active");
                      $("#tab_1_1_2").addClass("active");
-
                      $('#id_semester_based').css('pointer-events', 'none');
-
 
                 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
                     var target = $(e.target).attr("data-id")
@@ -32,17 +26,10 @@
 
                     } else if (parseInt(priorities) == 2) {
                         $(location).prop('href', "{% url 'student:credit_course_registration' %}")
-
                     }
-
-
                 });
-
-
                 $('#example').dataTable();
                 $('#example_2').dataTable();
-
-
                 $('.select_all').click(function () {
                     var checked_status = this.checked;
                     $(this).closest('table').find('input:checkbox').each(function () {
@@ -82,8 +69,6 @@
                         }
                     });
                 }
-
-
                 $('.credit_status_change').click(function () {
                     var min_credit = parseInt($('#min_credit').val());
                     var max_credit = parseInt($('#max_credit').val());
@@ -139,7 +124,6 @@
 
 {% endblock %}
 
-
 {% block content %}
     <div class="tabbable-custom nav-justified">
         <ul class="nav nav-tabs nav-justified">
@@ -151,16 +135,12 @@
                 <a data-id="2" href="#tab_1_1_2" data-toggle="tab">
                     COURSE REGISTRATION (Credit Based System) </a>
             </li>
-
         </ul>
-
         <div class="tab-content">
             <div class="tab-pane" id="tab_1_1_1">
             </div>
             <div class="tab-pane active" id="tab_1_1_2">
                 <br>
-
-
                 <br>
                 <div class="tabbable-custom nav-justified">
                     <ul class="nav nav-tabs nav-justified">
@@ -189,8 +169,6 @@
                     <input type="hidden" name="program_id" id="program_id" value="{{ program_id }}">
 
                     <div style="margin-left: 0px !important; margin-right: 0px !important;" class="row">
-
-
                         <div class="">
                             <label style="text-align:left" class="col-md-2 control-label">Select Year:</label>
                             <div class="col-md-3">
@@ -214,8 +192,6 @@
                                 </select>
                             </div>
                         </div>
-
-
                     </div>
                     <br>
                     <div style="margin-left: 0px !important; margin-right: 0px !important;" class="row">
@@ -256,13 +232,8 @@
                         </div>
 
                     </div>
-
-
                 </form>
-
-
                     <hr>
-
                         {% if credit_course_filter %}
 
 {#                            <form method="post" action="{% url 'student:submit_credit_course' %}"#}
@@ -270,10 +241,6 @@
 
                             <form method="post" action="{% url 'payments:credit_course_registration_checkout' credit_study_plan_obj.id %}"
                                   id="credit_form_submit">
-
-
-
-
                                 {% csrf_token %}
                                 <input type="hidden" value="{{ credit_study_plan_obj.min_credit|default_if_none:"" }}"
                                        name="min_credit" id="min_credit">
@@ -298,8 +265,6 @@
                                             {{ credit_study_plan_obj.max_credit|default_if_none:"" }}
                                         </div>
                                     </div>
-
-
                                 </div>
                                 <hr>
                                 <table name="data"
@@ -332,8 +297,7 @@
                                             </td>
 
                                             <td>
-                                                <input name="check" type="checkbox" class="checkboxes"
-                                                       value="{{ rec.id }}">
+                                                <input name="check" type="checkbox" class="checkboxes" value="{{ rec.id }}">
                                             </td>
                                             <td>
                                                 {{ rec.code|default_if_none:"" }}
@@ -358,25 +322,16 @@
 
                                                 {% endif %}
                                                 {% endif %}
-
-
-
-
                                             </td>
 
                                             <td width="5%">
                                                 <input class="form-control data unit" name="" type="text"
-                                                       id="unit_{{ forloop.counter }}"
-                                                       value="{{ rec.unit|default_if_none:"" }}"
-
-                                                       disabled>
-
+                                                    id="unit_{{ forloop.counter }}"
+                                                    value="{{ rec.unit|default_if_none:"" }}"
+                                                    disabled
+                                                >
                                             </td>
-
-
                                         </tr>
-
-
                                     {% endfor %}
 
 
@@ -398,13 +353,9 @@
                                 {% endif %}
 
                             </form>
-                        {% endif %}
+                                {% endif %}
 
-                             </div>
-
-
-
-
+                            </div>
 
                         <div class="tab-pane" id="tab_1_1_1_2">
                             <table name="data"
@@ -430,8 +381,6 @@
                                             <input id="application_id" class="application_id"
                                                    value="{{ rec.id }}">
                                         </td>
-
-
                                         <td>
                                             {{ rec.course.code|default_if_none:"" }}
                                         </td>
@@ -459,38 +408,20 @@
                                         </td>
                                         <td width="5%">
                                             <input class="form-control data unit" name="" type="text"
-                                                   id="unit_{{ forloop.counter }}"
-                                                   value="{{ rec.course.unit|default_if_none:"" }}"
-
-                                                   disabled>
-
+                                                id="unit_{{ forloop.counter }}"
+                                                value="{{ rec.course.unit|default_if_none:"" }}"
+                                                disabled
+                                            >
                                         </td>
-
-
                                     </tr>
-
-
                                 {% endfor %}
-
-
                                 </tbody>
                             </table>
                         </div>
-
-
                     </div>
                 </div>
-
-
             </div>
-
-
         </div>
     </div>
-
-
-
-
-
 
 {% endblock %}

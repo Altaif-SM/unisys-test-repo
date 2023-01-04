@@ -110,6 +110,9 @@ class UniversityTypeDetails(BaseModel):
         permissions = (
             ('can_view_university_type_details', 'Can View University Type Details'),
         )
+    
+    def __str__(self):
+        return self.university_type
 
 
 class TypeDetails(BaseModel):
@@ -393,10 +396,15 @@ class StudyLevelDetails(BaseModel):
     def __str__(self):
         return self.study_level
 
+
 class Semester(models.Model):
     semester = models.CharField(max_length=100, blank=True, null=True)
     start_date = models.DateField(null=True)
     end_date = models.DateField(null=True)
+
+    def __str__(self):
+        return "{} {}-{}".format(self.semester, self.start_date, self.end_date)
+
 
 class SemesterDetails(BaseModel):
     semester_name = models.CharField(max_length=150, blank=True, null=True)
@@ -419,7 +427,6 @@ class SemesterDetails(BaseModel):
 
     def __str__(self):
         return self.semester_name
-
 
 
 class DegreeDetails(BaseModel):
@@ -469,6 +476,9 @@ class StudyTypeDetails(BaseModel):
 
 class Department(models.Model):
     department = models.CharField(max_length=100, blank=True, null=True)
+
+    def __str__(self):
+        return self.department
 
 
 class FacultyDetails(BaseModel):
@@ -522,6 +532,10 @@ class CampusBranchesDetails(BaseModel):
 class ProgramCampusDetails(models.Model):
     campus = models.ForeignKey(CampusBranchesDetails, null=True, related_name='program_campus_rel',on_delete=models.SET_NULL)
 
+    def __str__(self):
+        return self.campus.campus_name
+    
+
 class ProgramStudyModeDetails(models.Model):
     study_mode = models.CharField(max_length=100, blank=True, null=True)
 
@@ -538,32 +552,34 @@ class ProgramFeeType(models.Model):
 
 
 class ProgramDetails(BaseModel):
-    program_name = models.CharField(max_length=100, blank=True, null=True)
-    credit_hrs = models.CharField(max_length=50, blank=True, null=True)
-    program_overview = models.TextField(blank=True, null=True)
-    program_objective = models.TextField(blank=True, null=True)
-    program_vision = models.TextField(blank=True, null=True)
-    program_mission = models.TextField(blank=True, null=True)
-    degree_type = models.ForeignKey(DegreeTypeDetails, null=True, related_name='program_degree_type_rel',
-                                    on_delete=models.SET_NULL)
+    university_type = models.ForeignKey(UniversityTypeDetails, null=True, related_name='program_university_type_rel',
+                                   on_delete=models.SET_NULL)
     university = models.ForeignKey(UniversityDetails, null=True, related_name='program_university_rel',
                                    on_delete=models.SET_NULL)
     faculty = models.ForeignKey(FacultyDetails, null=True, related_name='program_faculty_rel',
                                    on_delete=models.SET_NULL)
+    department = models.ForeignKey(Department, null=True, related_name='program_department_rel',
+                                    on_delete=models.SET_NULL)
+    program_name = models.CharField(max_length=100, blank=True, null=True)
     study_level = models.ForeignKey(StudyLevelDetails, null=True, related_name='program_study_level_rel',
                                    on_delete=models.SET_NULL)
     study_type = models.ForeignKey(StudyTypeDetails, null=True, related_name='program_study_type_rel',
                                    on_delete=models.SET_NULL)
-    status = models.BooleanField(default=True)
-    is_delete = models.BooleanField(default=False)
-    campus = models.ManyToManyField(ProgramCampusDetails, blank=True)
-    study_mode = models.ManyToManyField(ProgramStudyModeDetails, blank=True)
-    department = models.ForeignKey(Department, null=True, related_name='program_department_rel',
-                                    on_delete=models.SET_NULL)
-    university_type = models.ForeignKey(UniversityTypeDetails, null=True, related_name='program_university_type_rel',
-                                   on_delete=models.SET_NULL)
     acceptance_avg = models.CharField(max_length=150, blank=True, null=True)
     capacity_avg = models.CharField(max_length=150, blank=True, null=True)
+    program_overview = models.TextField(blank=True, null=True)
+    program_objective = models.TextField(blank=True, null=True)
+    program_vision = models.TextField(blank=True, null=True)
+    program_mission = models.TextField(blank=True, null=True)
+    status = models.BooleanField(default=True)
+    campus = models.ManyToManyField(ProgramCampusDetails, blank=True)
+    campus_details = models.ManyToManyField(CampusBranchesDetails, blank=True)
+
+    study_mode = models.ManyToManyField(ProgramStudyModeDetails, blank=True)
+    credit_hrs = models.CharField(max_length=50, blank=True, null=True)
+    degree_type = models.ForeignKey(DegreeTypeDetails, null=True, related_name='program_degree_type_rel',
+                                    on_delete=models.SET_NULL)
+    is_delete = models.BooleanField(default=False)
     course = models.ManyToManyField(CourseDetails, blank=True)
     is_semester_based = models.BooleanField(default=True)
 
@@ -587,14 +603,53 @@ class ProgramDetails(BaseModel):
 class StudyPlanDetails(BaseModel):
     program = models.ForeignKey(ProgramDetails, null=True, related_name='study_plan_program_rel',
                              on_delete=models.SET_NULL)
-    semester = models.CharField(max_length=180, blank=True, null=True)
     study_semester = models.ForeignKey(Semester, null=True, related_name='study_plan_semester_rel',
                                 on_delete=models.SET_NULL)
     course = models.ManyToManyField(CourseDetails, blank=True)
-    start_date = models.DateField(null=True)
-    end_date = models.DateField(null=True)
+    courses = models.ForeignKey("masters.SubjectsComponent", on_delete=models.PROTECT, blank=True, null=True)
     academic_year = models.ForeignKey(YearDetails, null=True, related_name='study_plan_academic_year_rel',
                              on_delete=models.SET_NULL)
+    is_credit = models.BooleanField(default=False)
+    min_credit = models.CharField(max_length=50, blank=True, null=True)
+    max_credit = models.CharField(max_length=50, blank=True, null=True)
+
+
+class PrerequisiteCourseDetails(BaseModel):
+    code = models.CharField(max_length=100, blank=True, null=True)
+    course = models.CharField(max_length=150, blank=True, null=True)
+
+    class Meta:
+        ordering = ('-id',)
+        permissions = (
+            ('can_view_prerequisite_course_details', 'Can View Prerequisite Course Details'),
+        )
+
+    def __str__(self):
+        return self.code
+
+
+class CreditCourseDetails(models.Model):
+    code = models.CharField(max_length=150, blank=True, null=True)
+    title = models.CharField(max_length=150, blank=True, null=True)
+    unit = models.CharField(max_length=150, blank=True, null=True)
+    type = models.CharField(max_length=150, blank=True, null=True)
+    is_prerequisite = models.BooleanField(default=False)
+    course = models.ForeignKey(PrerequisiteCourseDetails, null=True, related_name='study_plan_course_program_rel',
+                                on_delete=models.SET_NULL)
+
+
+class CreditStudyPlanDetails(BaseModel):
+    program = models.ForeignKey(ProgramDetails, null=True, related_name='study_plan_credit_program_rel',
+                             on_delete=models.SET_NULL)
+    min_credit = models.CharField(max_length=50, blank=True, null=True)
+    max_credit = models.CharField(max_length=50, blank=True, null=True)
+    credit_course = models.ManyToManyField(CreditCourseDetails, blank=True)
+    academic_year = models.ForeignKey(YearDetails, null=True, related_name='study_credit_academic_year_rel',
+                                      on_delete=models.SET_NULL)
+    semester = models.ForeignKey(Semester, null=True, related_name='study_credit_semester_rel',
+                                       on_delete=models.SET_NULL)
+    credit_fee = models.FloatField(null=True, blank=True, default=0.0)
+
 
 class ProgramFeeDetails(BaseModel):
     university = models.ForeignKey(UniversityDetails, null=True, related_name='program_fee_university_rel',
@@ -699,7 +754,6 @@ class UploadTermCondition(BaseModel):
     term_condition = models.FileField(upload_to='term_condition/pdf', blank=True, null=True)
 
 
-
 class LanguageDetails(BaseModel):
     short_code = models.CharField(max_length=10, blank=True, null=True)
     language_name = models.CharField(max_length=50, blank=True, null=True)
@@ -791,8 +845,6 @@ class UniversitPartnerDetails(BaseModel):
         return self.university_name
 
 
-
-
 class CalenderDetails(BaseModel):
     university = models.ForeignKey(UniversityDetails, null=True, related_name='calender_university_rel',on_delete=models.SET_NULL)
     year = models.ForeignKey(YearDetails, null=True, related_name='calender_year_rel',on_delete=models.SET_NULL)
@@ -810,7 +862,6 @@ class CalenderDetails(BaseModel):
         permissions = (
             ('can_view_calender_details', 'Can View Calender Details'),
         )
-
 
 
 class DepartmentDetails(BaseModel):
@@ -846,6 +897,7 @@ class CampusStaffMapping(BaseModel):
     class Meta:
         ordering = ('-id',)
 
+
 class FacultyStaffMapping(BaseModel):
     faculty = models.ForeignKey(FacultyDetails, null=True, related_name='faculty_staff_map', on_delete=models.SET_NULL)
     staff = models.ForeignKey(User, null=True, related_name='staff_faculty_mapp',
@@ -853,6 +905,7 @@ class FacultyStaffMapping(BaseModel):
 
     class Meta:
         ordering = ('-id',)
+
 
 class UniversityStaffMapping(BaseModel):
     university = models.ForeignKey(UniversityDetails, null=True, related_name='university_staff_map', on_delete=models.SET_NULL)
@@ -862,8 +915,10 @@ class UniversityStaffMapping(BaseModel):
     class Meta:
         ordering = ('-id',)
 
+
 class NotesDetails(models.Model):
     note = models.CharField(max_length=255, blank=True, null=True)
+
 
 class DocumentDetails(BaseModel):
     document_name = models.CharField(max_length=150, blank=True, null=True)
@@ -887,7 +942,6 @@ class GroupDetails(BaseModel):
 
     def __str__(self):
         return self.group_name
-
 
 
 class PaymentDetails(BaseModel):
@@ -932,7 +986,6 @@ class ProgramRegistrationFeeDetails(BaseModel):
         ordering = ('-id',)
 
 
-
 class SemesterFeeType(models.Model):
     fee_type = models.CharField(max_length=100, blank=True, null=True)
     amount = models.FloatField(null=True, blank=True, default=0.0)
@@ -955,40 +1008,6 @@ class CourseFeeDetails(BaseModel):
 
     class Meta:
         ordering = ('-id',)
-
-class PrerequisiteCourseDetails(BaseModel):
-    code = models.CharField(max_length=100, blank=True, null=True)
-    course = models.CharField(max_length=150, blank=True, null=True)
-
-    class Meta:
-        ordering = ('-id',)
-        permissions = (
-            ('can_view_prerequisite_course_details', 'Can View Prerequisite Course Details'),
-        )
-
-    def __str__(self):
-        return self.code
-
-class CreditCourseDetails(models.Model):
-    code = models.CharField(max_length=150, blank=True, null=True)
-    title = models.CharField(max_length=150, blank=True, null=True)
-    unit = models.CharField(max_length=150, blank=True, null=True)
-    type = models.CharField(max_length=150, blank=True, null=True)
-    is_prerequisite = models.BooleanField(default=False)
-    course = models.ForeignKey(PrerequisiteCourseDetails, null=True, related_name='study_plan_course_program_rel',
-                                on_delete=models.SET_NULL)
-
-class CreditStudyPlanDetails(BaseModel):
-    program = models.ForeignKey(ProgramDetails, null=True, related_name='study_plan_credit_program_rel',
-                             on_delete=models.SET_NULL)
-    min_credit = models.CharField(max_length=50, blank=True, null=True)
-    max_credit = models.CharField(max_length=50, blank=True, null=True)
-    credit_course = models.ManyToManyField(CreditCourseDetails, blank=True)
-    academic_year = models.ForeignKey(YearDetails, null=True, related_name='study_credit_academic_year_rel',
-                                      on_delete=models.SET_NULL)
-    semester = models.ForeignKey(Semester, null=True, related_name='study_credit_semester_rel',
-                                       on_delete=models.SET_NULL)
-    credit_fee = models.FloatField(null=True, blank=True, default=0.0)
 
 
 class StudentRegisteredCreditCourseDetails(BaseModel):

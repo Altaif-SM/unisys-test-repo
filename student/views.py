@@ -2566,7 +2566,6 @@ def applicant_intake_info(request):
     semester_recs = ''
     university_recs =''
 
-    program_recs = ProgramDetails.objects.filter(is_delete=False).order_by('-id')
     faculty_recs = FacultyDetails.objects.filter(status=True).order_by('-id')
     study_type_list = ['International', 'University Main']
     # study_mode_list = ['Online', 'On Campus']
@@ -2670,7 +2669,7 @@ def applicant_intake_info(request):
 
         program_recs = ProgramDetails.objects.filter(is_delete=False)
         if application_obj.program_mode:
-            program_recs = program_recs.filter(study_type_id=application_obj.program_mode.id,study_level_id=application_obj.study_level.id)
+            program_recs = program_recs.filter(study_type_id=application_obj.program_mode.id, study_level_id=application_obj.study_level.id)
         # if application_obj.study_mode:
             for rec in program_recs:
                 # for mode in rec.study_mode.filter(study_mode=application_obj.study_mode):
@@ -2678,7 +2677,7 @@ def applicant_intake_info(request):
 
         program_recs_2 = ProgramDetails.objects.filter(is_delete=False)
         if application_obj.program_mode_2:
-            program_recs_2 = program_recs_2.filter(study_type_id=application_obj.program_mode_2.id,study_level_id=application_obj.study_level.id)
+            program_recs_2 = program_recs_2.filter(study_type_id=application_obj.program_mode_2.id, study_level_id=application_obj.study_level.id)
         # if application_obj.study_mode_2:
             for rec in program_recs_2:
                 # for mode in rec.study_mode.filter(study_mode=application_obj.study_mode_2):
@@ -2686,7 +2685,7 @@ def applicant_intake_info(request):
 
         program_recs_3 = ProgramDetails.objects.filter(is_delete=False)
         if application_obj.program_mode_3:
-            program_recs_3 = program_recs_3.filter(study_type_id=application_obj.program_mode_3.id,study_level_id=application_obj.study_level.id)
+            program_recs_3 = program_recs_3.filter(study_type_id=application_obj.program_mode_3.id, study_level_id=application_obj.study_level.id)
         # if application_obj.study_mode_3:
             for rec in program_recs_3:
                 # for mode in rec.study_mode.filter(study_mode=application_obj.study_mode_3):
@@ -2840,35 +2839,51 @@ def applicant_intake_info(request):
                 raw_dict['id'] = rec.id
                 learning_centre_list.append(raw_dict)
         if application_obj.program:
-            campus_recs = application_obj.program.campus.all()
+            # campus_recs = application_obj.program.campus.all()
+            # campus_recs = application_obj.program.campus.all()
+            # for rec in campus_recs:
+            #     raw_dict = {}
+            #     raw_dict['campus_name'] = rec.campus.campus_name
+            #     raw_dict['id'] = rec.campus.id
+            #     campus_list.append(raw_dict)
+            campus_recs = application_obj.program.campus_details.all()
             for rec in campus_recs:
                 raw_dict = {}
-                raw_dict['campus_name'] = rec.campus.campus_name
-                raw_dict['id'] = rec.campus.id
+                raw_dict['campus_name'] = rec.campus_name
+                raw_dict['id'] = rec.id
                 campus_list.append(raw_dict)
 
     else:
         university_recs = UniversityDetails.objects.filter(is_delete=False, is_partner_university=False,is_tanseeq_university = False).order_by('-id')
 
 
-    return render(request, 'intake_details.html',{'country_recs': country_recs, 'religion_recs': religion_recs, 'application_obj': application_obj,'student_recs':student_recs,'agent_recs':agent_recs,'year_recs':year_recs,'semester_recs':semester_recs,
-                                                  'learning_centre_recs':learning_centre_recs,'university_recs':university_recs,'learning_centre_list':learning_centre_list,'program_recs':program_recs,'campus_list':campus_list,'study_type_list':study_type_list,'study_mode_list':study_mode_list,'study_level_list':study_level_list,'faculty_recs':faculty_recs,
-                                                  'department_recs':department_recs,'study_type_recs':study_type_recs,'study_level_recs':study_level_recs,'faculty_final_list':faculty_final_list,'program_final_list':program_final_list,
-                                                  'study_mode_list_2':study_mode_list_2,
-                                                  'study_level_recs_2':study_level_recs_2,
-                                                  'faculty_2_final_list':faculty_2_final_list,
-                                                  'department_2_recs':department_2_recs,
-                                                  'program_2_final_list':program_2_final_list,
-                                                  'study_mode_list_3':study_mode_list_3,
-                                                  'study_level_recs_3':study_level_recs_3,
-                                                  'faculty_3_final_list':faculty_3_final_list,
-                                                  'department_3_recs':department_3_recs,
-                                                  'program_3_final_list':program_3_final_list,
-                                                  'university_type_recs':university_type_recs,
-                                                  'type_recs':type_recs,
-                                                  'supervisor_list':supervisor_list,
-                                                  'research_details':research_details,
-                                                  'attachment_obj':attachment_obj,
+    return render(request, 'intake_details.html',{
+                                                'country_recs': country_recs, 'religion_recs': religion_recs,
+                                                'application_obj': application_obj,'student_recs':student_recs,
+                                                'agent_recs':agent_recs,'year_recs':year_recs,
+                                                'semester_recs':semester_recs, 'learning_centre_recs':learning_centre_recs,
+                                                'university_recs':university_recs,'learning_centre_list':learning_centre_list,
+                                                'program_recs':program_recs,'campus_list':campus_list,
+                                                'study_type_list':study_type_list,'study_mode_list':study_mode_list,
+                                                'study_level_list':study_level_list,'faculty_recs':faculty_recs,
+                                                'department_recs':department_recs,'study_type_recs':study_type_recs,
+                                                'study_level_recs':study_level_recs,'faculty_final_list':faculty_final_list,
+                                                'program_final_list':program_final_list,
+                                                'study_mode_list_2':study_mode_list_2,
+                                                'study_level_recs_2':study_level_recs_2,
+                                                'faculty_2_final_list':faculty_2_final_list,
+                                                'department_2_recs':department_2_recs,
+                                                'program_2_final_list':program_2_final_list,
+                                                'study_mode_list_3':study_mode_list_3,
+                                                'study_level_recs_3':study_level_recs_3,
+                                                'faculty_3_final_list':faculty_3_final_list,
+                                                'department_3_recs':department_3_recs,
+                                                'program_3_final_list':program_3_final_list,
+                                                'university_type_recs':university_type_recs,
+                                                'type_recs':type_recs,
+                                                'supervisor_list':supervisor_list,
+                                                'research_details':research_details,
+                                                'attachment_obj':attachment_obj,
                                                   })
 
 
@@ -3662,6 +3677,11 @@ def credit_course_registration(request):
                                                                   'program_id':program_id,
                                                                   'semester_list':semester_list,
                                                                   'credit_study_plan_obj':credit_study_plan_obj})
+
+def course_registration(request):
+    application_obj = request.user.get_application
+    context = {}
+    return render(request, "new_course_registration.html", context)
 
 def submit_credit_course(request):
     check_ids = json.loads(request.POST.get('check_ids'))
