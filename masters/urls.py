@@ -65,7 +65,6 @@ urlpatterns = [
     # ********------ program Master --------****************************
     path('template_program_master/', views.template_program_master, name='template_program_master'),
     path('save_program/', views.save_program, name='save_program'),
-    path('update_program/', views.update_program, name='update_program'),
     path('delete_programs/', views.delete_programs, name='delete_programs'),
 
     # ********------ module Master --------****************************
@@ -178,10 +177,7 @@ urlpatterns = [
     path('edit_program_fee/<int:program_id>/', views.edit_program_fee, name='edit_program_fee'),
 
     path('program_settings/', views.program_settings, name='program_settings'),
-    path('add_program/', views.add_program, name='add_program'),
-    path('edit_program/<int:program_id>/', views.edit_program, name='edit_program'),
     path('edit_study_plan/<int:program_id>/', views.edit_study_plan, name='edit_study_plan'),
-    path('delete_program/', views.delete_program, name='delete_program'),
 
     path('referral_fee/', views.referral_fee, name='referral_fee'),
     path('add_referral_fee/', views.add_referral_fee, name='add_referral_fee'),
@@ -345,4 +341,20 @@ urlpatterns = [
     path('subject_component/', user_login_required(views.SubjectComponentView.as_view()), name='add_subject_component'),
     path('subject_component/<int:pk>', user_login_required(views.SubjectComponentView.as_view()), name='update_subject_component'),
 
+    # path('add_program/', views.add_program, name='add_program'), # old
+    path('edit_program/<int:program_id>/', views.edit_program, name='old_edit_program'),
+    # path('delete_program/', views.delete_program, name='delete_program'), # old
+
+
+    path('program/', user_login_required(views.ProgramView.as_view()), name='add_program'),
+    path('program/<int:pk>', user_login_required(views.ProgramView.as_view()), name='edit_program'),
+
+    path('get_semesters/', user_login_required(views.get_semesters), name='get_semesters'),
+    
+    path('list_study_plan/', user_login_required(views.ListStudyPlans.as_view()), name='list_study_plan'),
+    path('study_plan/', user_login_required(views.CreateStudyPlan.as_view()), name='add_study_plan'),
+    path('study_plan/<int:pk>', user_login_required(views.CreateStudyPlan.as_view()), name='update_study_plan'),
+
+
+    
 ]

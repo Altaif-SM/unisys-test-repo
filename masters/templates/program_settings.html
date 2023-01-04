@@ -31,34 +31,7 @@
     <script>
         window.onload = function () {
             $(document).ready(function () {
-                $(document).on("click", ".update", function (e) {
 
-                    var parent_id = $(this).closest('tr').attr('id');
-                    var semester_id = $('#' + parent_id + ' #semester_id').val();
-                    var semester_name = $('#' + parent_id + ' .semester_name').val();
-                    var start_date = $('#' + parent_id + ' .start_date').val();
-                    var end_date = $('#' + parent_id + ' .end_date').val();
-
-                    if (semester_name == '') {
-                        $('#' + parent_id + ' .semester_name').focus();
-                        $('#' + parent_id + ' .semester_name').css('border-color', 'red');
-                        return false;
-                    }
-
-                    var url = '/masters/update_semester/';
-                    update_semester_info(url, semester_id, semester_name, start_date, end_date)
-                })
-
-                $(document).on("click", ".delete", function (e) {
-
-                    $('#id_delete_program_model').modal();
-                    var parent_id = $(this).closest('tr').attr('id');
-                    var program_id = $('#' + parent_id + ' #program_id').val();
-                    $("#program_delete_id").val(program_id)
-
-                    {#var url = '/masters/delete_semester/';#}
-                    {#delete_semester_info(url, language_id)#}
-                })
 
                 function delete_semester_info(url, semester_id) {
                     $.ajax({
@@ -96,26 +69,8 @@
                         }
                     });
                 }
-
-
-                $(document).on("click", ".edit", function (e) {
-                    var parent_id = $(this).closest('tr').attr('id');
-                    $('.semester_name').css('border-color', '');
-                    var id = $(this).attr('id');
-                    var i = id.split("edit")[1]
-
-                    $(".data").prop("disabled", true);
-                    $(".edit").show();
-                    $(".update").hide();
-
-                    $("#update" + i).show();
-                    $("#edit" + i).hide();
-                    $("#semester_name" + i).prop("disabled", false);
-                    $("#start_date" + i).prop("disabled", false);
-                    $("#end_date" + i).prop("disabled", false);
-                });
+             
             });
-
 
             $('#sample_1').dataTable().fnDestroy();
             $('#sample_1').dataTable({
@@ -124,8 +79,6 @@
                 ]
             });
         }
-
-
         window.setTimeout(function () {
             $(".alert").fadeTo(500, 0).slideUp(500, function () {
                 $(this).remove();
@@ -176,10 +129,7 @@
                 </button>
             </a>
         </div>
-
         <div class="portlet-body">
-
-
             <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
 
@@ -187,19 +137,13 @@
                     <thead>
                     <tr>
                         <th style="display: none">Id</th>
-                        {#                        <th>Program ID</th>#}
-{#                        <th> {% trans 'Type of Program' %}</th>#}
                         <th> {% trans 'Program Name' %}</th>
                         <th> {% trans 'University' %}</th>
                         <th> {% trans 'Type' %}</th>
-{#                        <th> {% trans 'Branch / Campus' %}</th>#}
                         <th> {% trans 'Faculty' %}</th>
                         <th> {% trans 'Department' %}</th>
                         <th> {% trans 'Study Level' %}</th>
-{#                        <th> {% trans 'Study Level' %}</th>#}
                         <th> {% trans 'Program Mode' %}</th>
-                        {#                        <th> Study Level</th>#}
-                        {#                        <th> Study Type</th>#}
                         <th> {% trans 'Status' %}</th>
                         <th width="10%">Action</th>
                     </tr>
@@ -207,34 +151,15 @@
 
                     <tbody id="tbody">
                     {% for rec in program_recs %}
-                        <tr id="item{{ forloop.counter }}" class="item">
+                        <tr id="item{{ rec.id }}" class="item">
                             <td style="display: none"><input id="program_id" value="{{ rec.id }}"></td>
-                            {#                            <td>{{ rec.program_id|default_if_none:"" }}</td>#}
-{#                            <td>{{ rec.program_type|default_if_none:"" }}</td>#}
-
                             <td>{{ rec.program_name|default_if_none:"" }}</td>
-
                             <td>{{ rec.university.university_name|default_if_none:"" }}</td>
                             <td>{{ rec.university_type.university_type|default_if_none:"" }}</td>
-{#                        {% if rec.university.is_partner_university == True %}#}
-{#                                <td>International</td>#}
-{#                            {% else %}#}
-{#                                <td>Main</td>#}
-{#                            {% endif %}#}
-{#                            <td width="20%"> {% for rec in rec.campus.all %}#}
-{#                                <span>{{ forloop.counter }}){{ rec.campus.campus_name }}</span><br>#}
-{#                            {% endfor %}#}
-{#                            </td>#}
                             <td>{{ rec.faculty.faculty_name|default_if_none:"" }}</td>
                             <td>{{ rec.department.department|default_if_none:"" }}</td>
                             <td>{{ rec.study_level.study_level|default_if_none:"" }}</td>
-{#                            <td>{% for rec in rec.study_mode.all %}#}
-{#                                <span>{{ forloop.counter }}){{ rec.study_mode }}</span><br>#}
-{#                            {% endfor %}#}
-{#                            </td>#}
-                        <td>{{ rec.study_type.study_type|default_if_none:"" }}</td>
-                            {#                             <td>{{ rec.study_level.study_level|default_if_none:"" }}</td>#}
-                            {#                        <td>{{ rec.study_type.study_type|default_if_none:"" }}</td>#}
+                            <td>{{ rec.study_type.study_type|default_if_none:"" }}</td>
                             <td>
                                 {% if rec.status == True %}
                                     <i class="fa fa-power-off" aria-hidden="true"
@@ -245,18 +170,17 @@
                                 {% endif %}
                             </td>
 
-
                             <td>
                                 <a href="{% url 'masters:edit_program' rec.id %}">
                                 <span type="button" name="edit" id="edit{{ forloop.counter }}"
                                       class=" edit_btn btn blue glyphicon glyphicon-pencil">
                                 </span>
                                 </a>
-                                <span type="button" name="delete" id="delete{{ forloop.counter }}"
-                                      class=" delete btn red glyphicon glyphicon-trash">
-                                </span>
+                                <button type="button" delete-url="{% url 'masters:edit_program' rec.id %}"
+                                    class="delete btn red glyphicon glyphicon-trash" name="delete"
+                                >
+                                </button>
                             </td>
-
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -265,34 +189,41 @@
         </div>
     </div>
 
-    <div id="id_delete_program_model" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form action="{% url 'masters:delete_program' %}"
-                      id="form_sample_1"
-                      class="form-horizontal"
-                      method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <input type="hidden" id="program_delete_id" name="program_delete_id">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                        <h4 class="modal-title" style="color: #2a015e; text-align: center"><b>Delete Confirmation</b>
-                        </h4>
-                    </div>
-                    <div class="modal-body">
-                        <p> {% trans 'Are you sure, you want to delete Program?' %} </p>
-                        <p> {% trans 'After delete you will not be able to modify the Program.' %} </p>
+    {% include 'delete_modal.html' %}
+{% endblock %}
 
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" id="cancel_model" data-dismiss="modal" class="btn dark btn-outline">
-                            Cancel
-                        </button>
-                        <button type="submit" id="delete_language" class="btn red">Confirm</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+{% block ajax %}
+<script>
+    $(".delete").on("click", (e) => {
+        $("#id_delete_model").modal()
+        $("#id_confirm_delete").attr("delete-url", $(e.target).attr("delete-url"))
+    });
+    $("#id_confirm_delete").on("click", (e) => {
+        $(e.target).attr('disabled', true)
+        deleteSubject($(e.target).attr("delete-url"))
+        $("#id_delete_model").modal('hide')
+    })
 
+    function deleteSubject(url) {
+        $.ajax({
+            type: 'DELETE',
+            url: url,
+            beforeSend: function (xhr, settings) {
+                xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+            },
+            success: function (data, textStatus, xhr) {
+                if (xhr.status == 200) {
+                    const table = $('#sample_1').DataTable();
+                    const id = url.split('/').pop()
+                    table.row($(`#item${id}`)).remove().draw();
+                }
+            },
+            complete: function () {
+                $("#id_confirm_delete").attr('disabled', false)
+            },
+            error: function (xhr, msg, err) {
+            }
+        });
+    }
+</script>
 {% endblock %}

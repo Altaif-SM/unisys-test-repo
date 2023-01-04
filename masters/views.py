@@ -16,6 +16,7 @@ from datetime import datetime
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import Permission
 from django.contrib.auth.decorators import user_passes_test, permission_required
+from django.core import serializers
 
 
 # *********------------ Year Master ----------***************
@@ -2648,7 +2649,7 @@ def edit_program(request, program_id=None,type = None):
     campus_recs = CampusBranchesDetails.objects.filter().order_by('-id')
     study_mode_list = ['Online', 'On Campus']
     selected_study_mode_list = program_obj.study_mode.values_list('study_mode',flat = True)
-    selected_campus_list = list(program_obj.campus.values_list('campus_id',flat = True))
+    selected_campus_list = list(program_obj.campus_details.values_list('id', flat = True))
     department_recs = program_obj.faculty.department.all()
     university_type_recs = UniversityTypeDetails.objects.filter(status=True)
     course_count = program_obj.course.all().count()
@@ -5357,7 +5358,10 @@ def list_permissions(request):
     return JsonResponse(list(permissions), safe=False)
 
 
-from masters.forms import SubjectForm, SubjectsComponentForm
+from masters.forms import (
+    SubjectForm, SubjectsComponentForm, ProgramDetailsForm,
+    StudyPlanDetailsForm
+)
 from django.views.generic import View, ListView
 
 
@@ -5505,3 +5509,138 @@ class SubjectComponentView(View):
         instance = get_object_or_404(self.model, pk=pk, created_by=request.user)
         instance.delete()
         return JsonResponse(data={}, status=200)
+
+
+class ProgramView(View):
+    model = ProgramDetails
+    template_name = "add_program.html"
+    form_class = ProgramDetailsForm
+    redirect_url = "masters:program_settings"
+    crumbs = [
+        {"title": "Home", "url": "/"},
+        {"title": " Manage Programs", "url": redirect_url},
+        {"title": "Add Program", "url": ""},
+    ]
+    def get_context_data(self, pk):
+        if pk:
+            subject_comp_obj = self.model.objects.filter(id=pk).first()
+            form = self.form_class(instance=subject_comp_obj)
+            self.crumbs[-1]["title"] = "Edit Program"
+        else:
+            form = self.form_class()
+        return {"form": form, "crumbs": self.crumbs}
+
+    def get(self, request, pk=None):
+        context = self.get_context_data(pk)
+        return render(request, self.template_name, context)
+    
+    def post(self, request, pk=None):
+        if pk:
+            subject_comp_obj = self.model.objects.filter(id=pk).first()
+            form = self.form_class(request.POST, instance=subject_comp_obj)
+        else:
+            form = self.form_class(request.POST)
+
+        if form.is_valid():
+            obj = form.save(commit=False)
+            if not pk:
+                obj.created_by = request.user
+            obj.updated_by = request.user
+            obj.save()
+            form.save_m2m()
+            messages.success(request, "Record saved.")
+            return redirect(self.redirect_url)
+        else:
+            context = {
+                "form": form,
+                "crumbs": self.crumbs,
+            }
+            return render(request, self.template_name, context)
+
+    def delete(self, request, pk):
+        instance = get_object_or_404(self.model, pk=pk)
+        instance.delete()
+        return JsonResponse(data={}, status=200)
+
+
+class ListStudyPlans(ListView):
+    model = StudyPlanDetails
+    template_name = 'list_study_plan.html'
+    crumbs = [
+        {"title": "Home", "url": "/"},
+        {"title": "Study Plans", "url": ""},
+    ]
+
+    def get_queryset(self):
+        program = self.request.GET.get("program")
+        filters = {}
+        if program:
+            filters["program_id"] = program
+        queryset = self.model.objects.filter(**filters)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["crumbs"] = self.crumbs
+        return context
+
+
+class CreateStudyPlan(View):
+    model = StudyPlanDetails
+    template_name = "study_plan.html"
+    form_class = StudyPlanDetailsForm
+    redirect_url = "masters:list_study_plan"
+    crumbs = [
+        {"title": "Home", "url": "/"},
+        {"title": "Manage Study Plan", "url": redirect_url},
+        {"title": "Add Study Plan", "url": ""},
+    ]
+    def get_context_data(self, pk):
+        if pk:
+            subject_comp_obj = self.model.objects.filter(id=pk).first()
+            form = self.form_class(instance=subject_comp_obj)
+            self.crumbs[-1]["title"] = "Update Study Plan"
+        else:
+            form = self.form_class()
+        return {"form": form, "crumbs": self.crumbs}
+
+    def get(self, request, pk=None):
+        context = self.get_context_data(pk)
+        return render(request, self.template_name, context)
+    
+    def post(self, request, pk=None):
+        if pk:
+            subject_comp_obj = self.model.objects.filter(id=pk).first()
+            form = self.form_class(request.POST, instance=subject_comp_obj)
+        else:
+            form = self.form_class(request.POST)
+
+        if form.is_valid():
+            obj = form.save(commit=False)
+            if not pk:
+                obj.created_by = request.user
+            obj.updated_by = request.user
+            obj.save()
+            messages.success(request, "Record saved.")
+            return redirect(self.redirect_url)
+        else:
+            context = {
+                "form": form,
+                "crumbs": self.crumbs,
+            }
+            return render(request, self.template_name, context)
+
+    def delete(self, request, pk):
+        instance = get_object_or_404(self.model, pk=pk)
+        instance.delete()
+        return JsonResponse(data={}, status=200)
+
+
+def get_semesters(request):
+    year_id = request.GET.get("year_id", None)
+    year = get_object_or_404(YearDetails, pk=year_id)
+    if not year:
+        return JsonResponse(data={"msg": "Year id is missing/invalid."}, status=400, safe=False)
+    semesters_data = Semester.objects.filter(start_date__gte=year.start_date, end_date__lte=year.end_date)
+    data = serializers.serialize("json", semesters_data)
+    return JsonResponse(data=data, status=200, safe=False)
