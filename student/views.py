@@ -2964,7 +2964,7 @@ def save_update_applicant_intake_info(request):
 
             study_type_obj = StudyTypeDetails.objects.get(id = request.POST.get('study_level',None))
             if study_type_obj.study_type == 'Research':
-                supervisor = request.POST.get('supervisor', None)
+                # supervisor = request.POST.get('supervisor', None)
                 research_title = request.POST.get('research_title', None)
                 project_outline = request.POST.get('project_outline', None)
                 data_collection = request.POST.get('data_collection', None)
@@ -2977,7 +2977,7 @@ def save_update_applicant_intake_info(request):
 
                 if ResearchDetails.objects.filter(application_id=request.user.get_application).exists():
                     research_details = ResearchDetails.objects.get(application_id=request.user.get_application)
-                    research_details.supervisor_id = supervisor
+                    # research_details.supervisor_id = supervisor
                     research_details.research_title = research_title
                     research_details.project_outline = project_outline
                     research_details.data_collection = data_collection
@@ -2989,7 +2989,7 @@ def save_update_applicant_intake_info(request):
                     research_details.university_id = university
                     research_details.save()
                 else:
-                    ResearchDetails.objects.create(application_id=request.user.get_application,supervisor_id = supervisor,
+                    ResearchDetails.objects.create(application_id=request.user.get_application,
                                                    research_title = research_title,
                                                    project_outline = project_outline,
                                                    data_collection = data_collection,
@@ -4254,7 +4254,7 @@ def online_progress_report(request):
             )
         except:
             messages.warning(request, "Record not saved.")
-        return redirect("student:online_progress_report")
+        return redirect("student:list_online_progress_report")
     else:
         registered_courses = StudentRegisteredCreditCourseDetails.objects.filter(
             application_id=request.user.get_application
@@ -4299,22 +4299,18 @@ def get_supervisor_from_filter(request):
 def add_supervisor(request, application_id):
     application_obj = ApplicationDetails.objects.get(id=application_id)
     if request.method == 'POST':
-        filter_type = request.POST.get('filter_type', None)
-        filter_detail = request.POST.get('filter_detail', None)
+        supervisor = request.POST.get('supervisor', None)
         try:
-            if not SupervisorDetails.objects.filter(application_id=request.user.get_application):
-                SupervisorDetails.objects.create(application_id=request.user.get_application,university_id = university, faculty_id = faculty, program_id = program, area_expertise = area_expertise, supervisor_id = supervisor)
+            if ResearchDetails.objects.filter(application_id=request.user.get_application).exists():
+                research_details = ResearchDetails.objects.get(application_id=request.user.get_application)
+                research_details.supervisor_id = supervisor
+                research_details.save()
             else:
-                supervisor_obj = SupervisorDetails.objects.get(application_id=request.user.get_application)
-                supervisor_obj.university_id = university
-                supervisor_obj.faculty_id = faculty
-                supervisor_obj.program_id = program
-                supervisor_obj.area_expertise = area_expertise
-                supervisor_obj.supervisor_id = supervisor
-                supervisor_obj.save()
+                ResearchDetails.objects.create(application_id=request.user.get_application, supervisor_id=supervisor,
+                                               )
         except Exception as e:
             pass
-        return redirect('/student/add_supervisor/'+str(application_id))
+        return redirect('/student/applicant_intake_info/')
     else:
         supervisor_list = []
         filter_list = []
@@ -4399,3 +4395,16 @@ def get_supervisor_details(request):
         raw_dict['supervisor'] = rec.first_name
         supervisor_list.append(raw_dict)
     return JsonResponse(supervisor_list, safe=False)
+
+def save_supervisor(request, supervisor_id):
+    try:
+        if ResearchDetails.objects.filter(application_id=request.user.get_application).exists():
+            research_details = ResearchDetails.objects.get(application_id=request.user.get_application)
+            research_details.supervisor_id = supervisor_id
+            research_details.save()
+        else:
+            ResearchDetails.objects.create(application_id=request.user.get_application, supervisor_id=supervisor_id,
+                                           )
+    except Exception as e:
+        pass
+    return redirect('/student/applicant_intake_info/')

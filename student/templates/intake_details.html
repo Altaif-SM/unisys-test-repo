@@ -2831,15 +2831,15 @@
 
 
                         </div>
-                        {% if application_obj.program_mode.study_type == 'Research' %}
-                            <div class="research_details">
-                                <br>
-                                <div class="row research_mode">
+                    <br>
+                    {% if research_details %}
+
+                    <div class="row research_mode">
                                     <div class="">
                                         <label class="col-md-2 control-label">{% trans 'Supervisor' %}:</label>
                                         <div class="col-md-4">
-                                            <select id='supervisor' title="Select Supervisor" name="supervisor"
-                                                    class="form-control">
+                                            <select id='id_supervisor_old' title="Select Supervisor" name="supervisor_old"
+                                                    class="form-control" disabled>
                                                 {% if research_details.supervisor %}
                                                     <option style="display:none" selected="selected"
                                                             value="{{ research_details.supervisor.id }}"
@@ -2859,6 +2859,29 @@
 
 
                                 </div>
+                    {% endif %}
+
+                        {% if application_obj.program_mode.study_type == 'Research' %}
+                            <div class="research_details">
+                            <br>
+
+                            <div class="row">
+
+                                    <div class="">
+                                        <label class="col-md-2 control-label"></label>
+                                        <div class="col-md-4">
+                                            <a target="_blank" href="{% url 'student:add_supervisor' application_obj.id %}" class="nav-link ">
+                                                <i class="fa fa-plus" aria-hidden="true"></i>
+                                                <span class="title">{% trans 'Add/Change Supervisor' %}</span>
+                                            </a>
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <br>
+
                                 <hr>
 
                                 <div class="portlet-title">
@@ -3008,7 +3031,7 @@
                                         <div class="col-md-4">
                                             <a target="_blank" href="{% url 'student:add_supervisor' application_obj.id %}" class="nav-link ">
                                                 <i class="fa fa-plus" aria-hidden="true"></i>
-                                                <span class="title">{% trans 'Add Supervisor' %}</span>
+                                                <span class="title">{% trans 'Add/Change Supervisor' %}</span>
                                             </a>
 
                                         </div>
@@ -3017,31 +3040,6 @@
 
                                 </div>
 
-                                {#                                <div class="row research_mode">#}
-                                {#                                    <div class="">#}
-                                {#                                        <label class="col-md-2 control-label">{% trans 'Supervisor' %}:</label>#}
-                                {#                                        <div class="col-md-4">#}
-                                {#                                            <select id='supervisor' title="Select Supervisor" name="supervisor"#}
-                                {#                                                    class="form-control">#}
-                                {#                                                {% if research_details.supervisor %}#}
-                                {#                                                    <option style="display:none" selected="selected"#}
-                                {#                                                            value="{{ research_details.supervisor.id }}"#}
-                                {#                                                    >{{ research_details.supervisor.email|default_if_none:"" }}</option>#}
-                                {#                                                {% else %}#}
-                                {#                                                    <option style="display:none" selected="selected" id=""#}
-                                {#                                                            value="">{% trans 'Please Select' %}#}
-                                {#                                                    </option>#}
-                                {#                                                {% endif %}#}
-                                {#                                                {% for rec in supervisor_list %}#}
-                                {#                                                    <option value='{{ rec.id }}'>{{ rec.email|default_if_none:"" }}</option>#}
-                                {#                                                {% endfor %}#}
-                                {##}
-                                {#                                            </select>#}
-                                {#                                        </div>#}
-                                {#                                    </div>#}
-                                {##}
-                                {##}
-                                {#                                </div>#}
                                 <br>
 
                                 <div class="portlet-title">

@@ -642,7 +642,7 @@
                         {% for rec in supervisor_list %}
                             <article>
                                 <div style="text-align: right">
-                                <button type="button" class="btn blue">Add <i class="fa fa-user-plus" aria-hidden="true"></i></button></div>
+                                <a href="{% url 'student:save_supervisor' rec.id %}" class="btn blue">Add <i class="fa fa-user-plus" aria-hidden="true"></i></a></div>
                                 <div class="text">
 
                                     <h5><b>{{ rec.first_name|default_if_none:"" }}</b></h5>

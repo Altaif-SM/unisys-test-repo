@@ -162,5 +162,6 @@ urlpatterns = [
                   path('list_progress_meetings/', views.ProgressMeetingsList.as_view(), name='list_progress_meetings'),
                   path('get_supervisor_details/', views.get_supervisor_details, name='get_supervisor_details'),
                   path('add_supervisor/<int:application_id>/', views.add_supervisor, name='add_supervisor'),
+                  path('save_supervisor/<int:supervisor_id>/', views.save_supervisor, name='save_supervisor'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
