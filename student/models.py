@@ -889,8 +889,8 @@ class OnlineProgressReportStatus(BaseModel):
         ("PASS", "Pass"),
         ("FAIL", "Fail"),
     )
-    progress = models.ForeignKey(OnlineProgressReport, related_name="status_online_report" , on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    progress = models.ForeignKey(OnlineProgressReport, related_name="status_online_report" , null=True, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, null=True, on_delete=models.PROTECT)
     status = models.CharField(max_length=50)
     remarks = models.TextField(blank=True, null=True)
 
