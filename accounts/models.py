@@ -20,6 +20,10 @@ class PersmissionDetails(models.Model):
     def __str__(self):
         return self.permission
 
+class AreaExperties(models.Model):
+    experties = models.CharField(max_length=150, blank=True, null=True)
+
+
 class User(AbstractUser):
     ID = 'id'
     USERNAME = 'username'
@@ -67,7 +71,7 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=256, blank=True, null=True)
     middle_name = models.CharField(max_length=256, blank=True, null=True)
     last_name = models.CharField(max_length=256, blank=True, null=True)
-    area_expertise = models.CharField(max_length=256, blank=True, null=True)
+    area_experties = models.ManyToManyField(AreaExperties, blank=True)
     contact = models.CharField(max_length=20, blank=True, null=True)
     role = models.ManyToManyField(UserRole, related_name='user_role', blank=True)
     registration_switch = models.BooleanField(default=False)

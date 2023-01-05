@@ -960,11 +960,11 @@ def add_supervisor_committee(request):
         first_name = request.POST.get('first_name')
         email = request.POST.get('email')
         role = request.POST.get('role')
-        area_expertise = request.POST.get('area_expertise')
         contact = request.POST.get('contact')
         password = request.POST.get('password')
         residential_address = request.POST.get('address')
         status = request.POST.get('status')
+        area_expertise_count = request.POST.get('area_expertise_count')
         if status == 'on':
             status = True
         else:
@@ -973,10 +973,21 @@ def add_supervisor_committee(request):
             if User.objects.filter(email=email).exists():
                 messages.warning(request, "Email already exists.")
                 return redirect('/accounts/supervisor_committee/')
-            supervisor_obj = User.objects.create(first_name = first_name,email=email, username=email, password=make_password(password),area_expertise = area_expertise,contact = contact,
+            supervisor_obj = User.objects.create(first_name = first_name,email=email, username=email, password=make_password(password),contact = contact,
                                             is_active=status, university_id=university, faculty_id=faculty,
                                             program_id=program)
             supervisor_obj.role.add(UserRole.objects.get(name=role))
+
+            supervisor_obj.area_experties.clear()
+            for x in range(int(area_expertise_count)):
+                try:
+                    x = x + 1
+                    area_expertise_obj = AreaExperties.objects.create(
+                        experties=request.POST.get('area_expertise_' + str(x)))
+                    supervisor_obj.area_experties.add(area_expertise_obj)
+                except:
+                    pass
+
             try:
                 address = AddressDetails.objects.create(residential_address=residential_address)
                 supervisor_obj.address = address
@@ -1004,8 +1015,7 @@ def edit_supervisor_committee(request, supervisor_id):
         university = request.POST.get('university')
         first_name = request.POST.get('first_name')
         email = request.POST.get('email')
-        role = request.POST.get('role')
-        area_expertise = request.POST.get('area_expertise')
+        area_expertise_count = request.POST.get('area_expertise_count')
         contact = request.POST.get('contact')
         password = request.POST.get('password')
         residential_address = request.POST.get('address')
@@ -1023,13 +1033,24 @@ def edit_supervisor_committee(request, supervisor_id):
             supervisor_obj.username = email
             if password:
                 supervisor_obj.set_password(password)
-            supervisor_obj.area_expertise = area_expertise
             supervisor_obj.contact = contact
             supervisor_obj.is_active = status
             supervisor_obj.university_id = university
             supervisor_obj.faculty_id = faculty
             supervisor_obj.program_id = program
             supervisor_obj.save()
+
+            supervisor_obj.area_experties.clear()
+            for x in range(int(area_expertise_count)):
+                try:
+                    x = x + 1
+                    area_expertise_obj = AreaExperties.objects.create(
+                        experties=request.POST.get('area_expertise_' + str(x)))
+                    supervisor_obj.area_experties.add(area_expertise_obj)
+                except:
+                    pass
+
+
             AddressDetails.objects.filter(id= supervisor_obj.address.id).update(residential_address = residential_address)
             messages.success(request, "Record saved.")
         except Exception as e:
@@ -1064,6 +1085,7 @@ def edit_supervisor_committee(request, supervisor_id):
         'supervisor_obj': supervisor_obj,
         'faculty_list': faculty_list,
         'program_list': program_list,
+        'area_experties_count' : supervisor_obj.area_experties.all().count()
     }
     return render(request, 'edit_supervisor_committee.html', context)
 @permission_required('accounts.can_view_users', raise_exception=True)
@@ -1866,6 +1888,13 @@ class UpdateQualifyingTestStatus(View):
             return render(request, self.template_name, context)
         return redirect(self.redirect_url, pk)
 
+class OnlineProgressReportList(ListView):
+    model = OnlineProgressReportStatus
+    template_name = "list_progress_report.html"
+
+    def get_queryset(self):
+        return self.model.objects.filter(user=self.request.user)
+
 class SupervisorProgressMeetingsList(ListView):
     model = ProgressMeetingStatus
     template_name = "list_supervisor_progress_meetings.html"
@@ -1891,3 +1920,23 @@ def update_progress_meetings(request, progress_id=None):
         'progress_meeting_obj':progress_meeting_obj,
     }
     return render(request, "update_progress_meeting_status.html",context)
+
+def update_online_progress(request, report_id=None):
+    online_progress_status_list = OnlineProgressReportStatus.objects.filter(id=report_id)
+    if request.method == 'POST':
+        status = request.POST.get('status')
+        remarks = request.POST.get('remarks')
+        try:
+            online_progress_obj = OnlineProgressReportStatus.objects.get(id=report_id)
+            online_progress_obj.status = status
+            online_progress_obj.remarks = remarks
+            online_progress_obj.save()
+        except:
+            messages.warning(request, "Record not saved.")
+        return redirect("accounts:list_online_progress_report")
+    else:
+        pass
+    context = {
+        'online_progress_status_list':online_progress_status_list,
+    }
+    return render(request, "update_online_progress_report_status.html",context)

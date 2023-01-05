@@ -1,0 +1,192 @@
+{% extends "template_university_base_page.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block styleBlock %}
+{% endblock %}
+
+{% block ScriptBlock %}
+
+
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="/">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> Online Progress Report </span>
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">{% trans 'Online Progress Report' %} </span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table">
+                    <thead>
+                    <tr>
+
+                        <th> {% trans 'Applicant Name' %}</th>
+                        <th> {% trans 'Abstract' %}</th>
+                        <th> {% trans 'Questionnaire Development' %}</th>
+                        <th> {% trans 'Data Collection and Input' %}</th>
+                        <th> {% trans 'Data Analysis' %}</th>
+                        <th> {% trans 'Experiential Design' %}</th>
+                        <th> {% trans 'Result Validation' %}</th>
+                        <th> {% trans 'Chapter' %}</th>
+                        <th> {% trans 'Grade' %}</th>
+                        <th> {% trans 'Process Date' %}</th>
+                    </tr>
+
+                    </tr>
+                    </thead>
+                    <tbody id="qualifying_test_status">
+                    {% for rec in online_progress_status_list %}
+                        <tr>
+                            <td>{{ rec.progress.student.first_name|default_if_none:"" }} {{ rec.progress.student.last_name|default_if_none:"" }}</td>
+                            <td align="center">{% if rec.progress.abstract %}
+                                <a target="_blank" href="{{ rec.progress.abstract.url }}"><i style="font-size: 20px;"
+                                                                                    class="fa fa-cloud-download"
+                                                                                    aria-hidden="true"></i></a> {% endif %}
+                            </td>
+                            <td align="center">{% if rec.progress.questionnaire_development %}
+                                <a target="_blank" href="{{ rec.progress.questionnaire_development.url }}"><i
+                                        style="font-size: 20px;" class="fa fa-cloud-download"
+                                        aria-hidden="true"></i></a> {% endif %}</td>
+                            <td align="center">{% if rec.progress.data_collection_input %}
+                                <a target="_blank" href="{{ rec.progress.data_collection_input.url }}"><i
+                                        style="font-size: 20px;" class="fa fa-cloud-download"
+                                        aria-hidden="true"></i></a> {% endif %}</td>
+                            <td align="center">{% if rec.progress.data_analysis %}
+                                <a target="_blank" href="{{ rec.progress.data_analysis.url }}"><i style="font-size: 20px;"
+                                                                                         class="fa fa-cloud-download"
+                                                                                         aria-hidden="true"></i></a> {% endif %}
+                            </td>
+                            <td align="center">{% if rec.progress.experiential_design %}
+                                <a target="_blank" href="{{ rec.progress.experiential_design.url }}"><i style="font-size: 20px;"
+                                                                                               class="fa fa-cloud-download"
+                                                                                               aria-hidden="true"></i></a> {% endif %}
+                            </td>
+                            <td align="center">{% if rec.progress.result_validation %}
+                                <a target="_blank" href="{{ rec.progress.result_validation.url }}"><i style="font-size: 20px;"
+                                                                                             class="fa fa-cloud-download"
+                                                                                             aria-hidden="true"></i></a> {% endif %}
+                            </td>
+                            <td>{% for obj in rec.progress.chapter.all %}{{ obj.chapter }}{% if forloop.last %}...{% else %},
+                            {% endif %}{% endfor %}</td>
+                            <td class="{% if rec.status == 'Pass'%} success {% elif  rec.status == 'Fail' %} danger {%else%}{%endif%}">{{rec.status|upper}}</td>
+                            <td>{{ rec.progress.created_on|default_if_none:"" }}</td>
+                        </tr>
+
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form action="{% url 'accounts:update_online_progress' online_progress_status_list.0.id %}"
+                      id="id_form"
+                      class="form-horizontal"
+                      method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-body">
+
+                        <div class="row item_experience" id="item_experience_1">
+
+
+                            <div class="row">
+
+                                <div class="">
+                                    <label class="col-md-2 control-label">Status:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-3">
+                                        <select id='id_status' title="Select Status"
+                                                name="status"
+                                                class="form-control" required>
+                                            {% if online_progress_status_list.0.status %}
+                                                <option style="display:none;" selected="selected"
+                                                        value="{{ online_progress_status_list.0.status|default_if_none:"" }}"> {{ online_progress_status_list.0.status|default_if_none:"" }}</option>
+                                            {% else %}
+                                                <option selected="selected" value=""> Please Select</option>
+                                            {% endif %}
+
+                                            <option value="Pass">Pass</option>
+                                            <option value="Fail">Fail</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="">
+                                    <label class="col-md-2 control-label">Remarks:<span
+                                            style="color: red">*</span></label>
+                                    <div class="col-md-8">
+                                        <textarea style="width: 100%" id="id_remarks"
+                                                  name="remarks">{{ online_progress_status_list.0.remarks|default_if_none:"" }}</textarea>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                        <br>
+
+                        <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                                        onclick="window.location='{% url "accounts:list_online_progress_report" %}'">
+                                    Back
+                                </button>
+
+                                <button type="submit" class="btn green" id="save_form" style="">Save
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

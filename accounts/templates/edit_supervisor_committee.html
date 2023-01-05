@@ -102,6 +102,31 @@
             $(document).ready(function () {
                 $("#status").Sswitch({});
 
+                {% if area_experties_count == 0 %}
+                    var area_expertise_count = 1;
+                {% else %}
+                    var area_expertise_count = "{{ area_experties_count }}"
+                {% endif %}
+                $(document).on("click", ".add_area_expertise", function (e) {
+                    area_expertise_count = parseInt(area_expertise_count) + 1;
+                    var row = '<br><div style="margin-right:-76px;" class="row area_expertise" id="area_expertise_' + area_expertise_count + '"><div class="row"><div class=""><label class="col-md-2 control-label">Area of Expertise:</label><div class="col-md-3"><input type="text" title="Enter Area Expertise" id="area_expertise_' + area_expertise_count + '" value="" name="area_expertise_' + area_expertise_count + '" class="form-control" required></div></div><div class="col-md-1"><a href="javascript:;" class="delete_area_expertise btn btn-icon-only purple" style=""><i class="fa fa-times"></i></a></div></div></div>'
+                    $(row).removeAttr().hide().insertAfter(".area_expertise:last").slideDown(300);
+                });
+
+
+                $("#supervisor_form").submit(function (e) {
+                    var rowCount = $(".area_expertise").length;
+                    $('#area_expertise_count').val(rowCount);
+                })
+
+
+
+                $(document).on("click", ".delete_area_expertise", function () {
+                    $(this).parents('.area_expertise').remove();
+                });
+
+
+
                 $(document).on("change", "#university_type", function (e) {
                     var university_type_id = $(this).val();
                     var url = '/student/get_university_from_type/';
@@ -460,12 +485,13 @@
         <div class="portlet-body">
             <div class="form-body">
                 <form action="{% url 'accounts:edit_supervisor_committee' supervisor_obj.id %}"
-                      id="staff_form"
+                      id="supervisor_form"
                       class="form-horizontal"
                       method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <input type="hidden" id="user_id" name="user_id" value="">
                     <input type="hidden" id="id_role" name="role" value="Supervisor">
+                <input type="hidden" id="area_expertise_count" name="area_expertise_count">
 
                     <div class="form-body">
 
@@ -605,18 +631,18 @@
 
                                     </div>
                                 </div>
-                                <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'Area of Expertise' %}:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <input type="text" title="Enter Area of Expertise" id="area_expertise"
-                                               value="{{ supervisor_obj.area_expertise|default_if_none:"" }}"
-                                               name="area_expertise"
-                                               class="form-control" required>
-
-
-                                    </div>
-                                </div>
+                                {#                                <div class="">#}
+                                {#                                    <label class="col-md-2 control-label">{% trans 'Area of Expertise' %}:<span#}
+                                {#                                            style="color: red">*</span></label>#}
+                                {#                                    <div class="col-md-3">#}
+                                {#                                        <input type="text" title="Enter Area of Expertise" id="area_expertise"#}
+                                {#                                               value="{{ supervisor_obj.area_expertise|default_if_none:"" }}"#}
+                                {#                                               name="area_expertise"#}
+                                {#                                               class="form-control" required>#}
+                                {##}
+                                {##}
+                                {#                                    </div>#}
+                                {#                                </div>#}
 
                             </div>
 
@@ -679,6 +705,69 @@
 
 
                         </div>
+
+                        <hr>
+
+
+                        <div class="" style="float: right;
+    margin-top: 0px;
+    padding-right: 50%;">
+                            <div class="">
+                                <a href="javascript:;" id="add" class="btn btn-icon-only green add_area_expertise"
+                                   style="">
+                                    <i class="fa fa-plus "></i>
+                                </a>
+                            </div>
+                        </div>
+
+                    {% if supervisor_obj.area_experties.all %}
+                        {% for rec in supervisor_obj.area_experties.all %}
+                        <div style="margin-right:-76px;" class="row area_expertise" id="area_expertise_{{ forloop.counter }}">
+
+                            <div class="row">
+                                <div class="">
+                                    <label class="col-md-2 control-label">Area of Expertise:
+
+                                    </label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter Area Expertise" id="area_expertise_{{ forloop.counter }}"
+                                               value="{{ rec.experties|default_if_none:"" }}" name="area_expertise_{{ forloop.counter }}"
+                                               class="form-control" required>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                            <br>
+                        {% endfor %}
+                        {% else %}
+                        <div style="margin-right:-76px;" class="row area_expertise" id="area_expertise_1">
+
+                            <div class="row">
+                                <div class="">
+                                    <label class="col-md-2 control-label">Area of Expertise:
+
+                                    </label>
+                                    <div class="col-md-3">
+                                        <input type="text" title="Enter Area Expertise" id="area_expertise_1"
+                                               value="" name="area_expertise_1"
+                                               class="form-control" required>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                    {% endif %}
+
+
 
                         <div class="row">
                             <div class="col-md-offset-5 col-md-7">

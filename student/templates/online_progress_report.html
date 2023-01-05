@@ -46,6 +46,9 @@
             <div class="col-md-12">
                 <p><b>Thesis title: </b>{{ research_details.research_title|default_if_none:"" }}</p>
             </div>
+             <div class="col-md-12">
+                <p><b>To view submitted online progress report, click </b><a target="_blank" href="/student/list_online_progress_report/">here</a></p>
+            </div>
         </div>
         <div class="row">
 
@@ -58,9 +61,9 @@
 
         </div>
         <hr>
-        <form method="POST" id="chapter_form">
+        <form method="POST" id="chapter_form" enctype="multipart/form-data">
             {% csrf_token %}
-            <input type="hidden" id="chapter_count" name="chapter_count">
+            <input type="hidden" id="chapter_count" name="chapter_count" >
 
             <div class="row">
                 <div class="">

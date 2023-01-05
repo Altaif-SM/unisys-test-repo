@@ -210,7 +210,8 @@
                             <td>{{ rec.university.university_name|default_if_none:"" }}</td>
                             <td>{{ rec.faculty.faculty_name|default_if_none:"" }}</td>
                             <td>{{ rec.program.program_name|default_if_none:"" }}</td>
-                            <td>{{ rec.area_expertise|default_if_none:"" }}</td>
+                            <td>{% for obj in rec.area_experties.all %}{{ obj.experties }}{% if forloop.last %}...{% else %},
+                            {% endif %}{% endfor %}</td>
                             <td>{{ rec.email|default_if_none:"" }}</td>
                             <td>{{ rec.contact|default_if_none:"" }}</td>
 

@@ -883,7 +883,19 @@ class OnlineProgressReport(BaseModel):
     class Meta:
         pass
 
+class OnlineProgressReportStatus(BaseModel):
+    SUPERVISOR_CHOICES = (
+        ("", "----"),
+        ("PASS", "Pass"),
+        ("FAIL", "Fail"),
+    )
+    progress = models.ForeignKey(OnlineProgressReport, related_name="status_online_report" , on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    status = models.CharField(max_length=50)
+    remarks = models.TextField(blank=True, null=True)
 
+    class Meta:
+        pass
 
 class ProgressMeetingStatus(BaseModel):
     SUPERVISOR_CHOICES = (

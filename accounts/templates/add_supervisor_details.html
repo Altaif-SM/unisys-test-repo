@@ -17,6 +17,31 @@
     <!-- END HEAD -->
     <style type="text/css">
 
+        body {
+            padding: 40px 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-gap: 20px;
+            align-items: stretch;
+        }
+
+        .grid > article {
+            border: 1px solid #ccc;
+            box-shadow: 2px 2px 6px 0px rgba(0, 0, 0, 0.3);
+        }
+
+        .grid > article img {
+            max-width: 100%;
+        }
+
+        .grid .text {
+            padding: 20px;
+        }
+
+
         div.dataTables_wrapper div.dataTables_filter label {
             font-weight: normal;
             white-space: nowrap;
@@ -101,6 +126,18 @@
         window.onload = function () {
             $(document).ready(function () {
                 $("#status").Sswitch({});
+
+                $("#id_filter_type").chosen();
+                $("#id_filter_detail").chosen();
+
+
+                $(document).on("change", "#id_filter_type", function (e) {
+                    var id_filter_type = $(this).val();
+                    var url = '/student/get_supervisor_from_filter/';
+                    get_supervisor_from_filter(url, id_filter_type)
+
+                });
+
 
                 $(document).on("change", "#university_type", function (e) {
                     var university_type_id = $(this).val();
@@ -228,6 +265,7 @@
 
                 })
 
+
                 function get_faculty_from_supervisor(url, account_type, university) {
                     $.ajax({
                         type: 'POST',
@@ -285,6 +323,32 @@
                 } else {
                     confirm_password.setCustomValidity('');
                 }
+            }
+
+            function get_supervisor_from_filter(url, id_filter_type) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        id_filter_type: id_filter_type,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data) {
+
+                        $('#id_filter_detail').empty();
+                        $('#id_filter_detail').append(
+                            '<option value="" >Please select</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#id_filter_detail').append(
+                                '<option value="' + data[i]['id'] + '">'
+                                + data[i]['name'] + '</option>')
+                        }
+                        $("#id_filter_detail").trigger("chosen:updated");
+                    },
+                    error: function (xhr, msg, err) {
+                        alert(xhr.responseJSON.error);
+                    }
+                });
             }
 
             function get_university_from_university_type(url, university_type_id) {
@@ -491,180 +555,119 @@
         <div class="portlet-body">
             <div class="form-body">
                 <form action="{% url 'student:add_supervisor' application_obj.id %}"
-                      id="staff_form"
+                      id="supervisor_form"
                       class="form-horizontal"
-                      method="POST" enctype="multipart/form-data">
+                      method="GET" enctype="multipart/form-data">
                     {% csrf_token %}
                     <input type="hidden" id="user_id" name="user_id" value="">
                     <input type="hidden" id="id_role" name="role" value="Supervisor">
 
                     <div class="form-body">
 
-                        <div class="row item_experience" id="item_experience_1">
-                            <div class="row">
-
-                                <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'University Type' %}:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <select id='university_type' title="Select University"
-                                                name="university_type"
-                                                class="form-control" required>
-                                            {% if supervisor_obj %}
-                                                <option selected="selected" style="display: none;"
-                                                        value="{{ supervisor_obj.university.university_type.id }}">{{ supervisor_obj.university.university_type.university_type|default_if_none:"" }}</option>
-                                            {% else %}
-                                                <option selected="selected" value=""> Please Select</option>
-                                            {% endif %}
-
-                                            {% for rec in university_type_recs %}
-                                                <option value="{{ rec.id }}">{{ rec.university_type|default_if_none:"" }}</option>
-                                            {% endfor %}
-
-                                        </select>
-                                    </div>
-                                </div>
+                        <div style="margin-left: 0px !important; margin-right: 0px !important;" class="row">
 
 
-                            </div>
-                            <br>
-                            <div class="row">
-                                <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'University' %}:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <select id='university' title="Select University"
-                                                name="university"
-                                                class="form-control" required>
-                                            {% if supervisor_obj %}
-                                                <option selected="selected" style="display: none;"
-                                                        value="{{ supervisor_obj.university.id }}">{{ supervisor_obj.university.university_name|default_if_none:"" }}</option>
-
-                                            {% else %}
-                                                <option selected="selected" value="" disabled> Please Select</option>
-                                            {% endif %}
-                                            {% for rec in university_recs %}
-                                                <option value="{{ rec.id }}">{{ rec.university_name|default_if_none:"" }}</option>
-                                            {% endfor %}
-
-                                        </select>
-                                    </div>
+                            <div class="">
+                                <label class="col-md-1 control-label">Type:</label>
+                                <div class="col-md-2">
+                                    <select id='id_filter_type' title="Select Type"
+                                            name="filter_type"
+                                            class="form-control chk">
+                                        {% if query_filter_type %}
+                                            <option style="display:none" selected="selected" id=""
+                                                    value="{{ query_filter_type }}">
+                                                {{ query_filter_type }}
+                                            </option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">
+                                                Please Select
+                                            </option>
+                                        {% endif %}
+                                        <option value="University">University</option>
+                                        <option value="Faculty">Faculty</option>
+                                        <option value="Program">Program</option>
+                                        <option value="Area of Expertise">Area of Expertise</option>
+                                    </select>
                                 </div>
                             </div>
-                            <br>
 
+                            <div class="">
+                                <div class="col-md-6">
+                                    <select id='id_filter_detail' title="Select Filter"
+                                            name="filter_detail"
+                                            class="form-control chk">
 
-                            <div class="row">
+                                        {% if filter_obj_dict %}
+                                            <option style="display:none" selected="selected" id=""
+                                                    value="{{ filter_obj_dict.id }}">
+                                                {{ filter_obj_dict.name }}
+                                            </option>
+                                        {% else %}
+                                            <option style="display:none" selected="selected" id="" value="">
+                                                Please Select
+                                            </option>
+                                        {% endif %}
 
+                                        {% for rec in filter_list %}
+                                            <option value='{{ rec.id }}'>{{ rec.name|default_if_none:"" }}</option>
+                                        {% endfor %}
 
-                                <div class="" id="facculty_div">
-                                    <label class="col-md-2 control-label">{% trans 'Faculty' %}:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <select name="faculty" class="form-control" id="faculty" required>
-                                            {% if supervisor_obj %}
-                                                <option selected="selected" style="display: none;"
-                                                        value="{{ supervisor_obj.faculty.id }}">{{ supervisor_obj.faculty.faculty_name|default_if_none:"" }}</option>
-
-                                            {% else %}
-                                                <option selected="selected" value="" disabled> Please Select</option>
-                                            {% endif %}
-                                            {% for rec in faculty_list %}
-                                                <option value="{{ rec.id }}">{{ rec.faculty|default_if_none:"" }}</option>
-                                            {% endfor %}
-
-
-                                        </select>
-                                    </div>
+                                    </select>
                                 </div>
-
-
                             </div>
-                            <br>
-                            <div class="row">
-                                <div class="" id="program_div">
-                                    <label class="col-md-2 control-label">{% trans 'Program' %}:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <select name="program" class="form-control" id="program" required>
-                                            {% if supervisor_obj %}
-                                                <option selected="selected" style="display: none;"
-                                                        value="{{ supervisor_obj.program.id }}">{{ supervisor_obj.program.program_name|default_if_none:"" }}</option>
 
-                                            {% else %}
-                                                <option selected="selected" value="" disabled> Please Select</option>
-                                            {% endif %}
-                                            {% for rec in program_list %}
-                                                <option value="{{ rec.id }}">{{ rec.program|default_if_none:"" }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
+
+                            <div class="">
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn green" id="save_form" style="">Filter
+                                    </button>
+
                                 </div>
-
-                            </div>
-                            <br>
-                            <div class="row">
-                                <div class="" id="program_div">
-                                    <label class="col-md-2 control-label">{% trans 'Area of Expertise' %}:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <select name="area_expertise" class="form-control" id="area_expertise" required>
-                                        {% if supervisor_obj %}
-                                                <option selected="selected" style="display: none;"
-                                                        value="{{ supervisor_obj.area_expertise }}">{{ supervisor_obj.area_expertise|default_if_none:"" }}</option>
-
-                                            {% else %}
-                                                <option selected="selected" value="" disabled> Please Select</option>
-                                            {% endif %}
-                                            {% for rec in area_expertise_list %}
-                                                <option value="{{ rec|default_if_none:"" }}">{{ rec|default_if_none:"" }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <br>
-                            <div class="row">
-                                <div class="" id="program_div">
-                                    <label class="col-md-2 control-label">{% trans 'Supervisor' %}:<span
-                                            style="color: red">*</span></label>
-                                    <div class="col-md-3">
-                                        <select name="supervisor" class="form-control" id="supervisor" required>
-                                            {% if supervisor_obj %}
-                                                <option selected="selected" style="display: none;"
-                                                        value="{{ supervisor_obj.area_expertise }}">{{ supervisor_obj.area_expertise|default_if_none:"" }}</option>
-
-                                            {% else %}
-                                                <option selected="selected" value="" disabled> Please Select</option>
-                                            {% endif %}
-                                            {% for rec in area_expertise_list %}
-                                                <option value="{{ rec|default_if_none:"" }}">{{ rec|default_if_none:"" }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                </div>
-
                             </div>
 
 
                         </div>
-                        <hr>
+                        <br>
 
-                        <div class="row">
-                            <div class="col-md-offset-5 col-md-7">
-                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"
-                                        onclick="window.location='{% url "accounts:supervisor_committee" %}'">
-                                    Back
-                                </button>
 
-                                <button type="submit" class="btn green" id="save_form" style="">Add Supervisor
-                                </button>
-                            </div>
-                        </div>
                     </div>
                 </form>
+
             </div>
+            {% if query_filter_type %}
+
+                <div class="container" style="width: unset !important;">
+
+                    <main class="grid">
+                        {% for rec in supervisor_list %}
+                            <article>
+                                <div style="text-align: right">
+                                <button type="button" class="btn blue">Add <i class="fa fa-user-plus" aria-hidden="true"></i></button></div>
+                                <div class="text">
+
+                                    <h5><b>{{ rec.first_name|default_if_none:"" }}</b></h5>
+                                    <p><i class="fa fa-building"></i> {{ rec.faculty.faculty_name|default_if_none:"" }}
+                                    </p>
+                                    <p><i class="fa fa-envelope"
+                                          aria-hidden="true"></i> {{ rec.email|default_if_none:"" }}</p>
+                                    <p><i class="fa fa-phone"
+                                          aria-hidden="true"></i> {{ rec.contact|default_if_none:"" }}</p>
+                                    <span><b>Area(s) of Expertise</b></span>
+                                    {% for area_exp in rec.area_experties.all %}
+                                        <br><span>{{ area_exp.experties|default_if_none:"" }}</span>
+                                    {% endfor %}
+
+
+                                </div>
+                            </article>
+                        {% endfor %}
+
+                    </main>
+
+                </div>
+
+            {% endif %}
+
         </div>
     </div>
 {% endblock %}

@@ -1,6 +1,7 @@
-{% extends "template_university_base_page.html" %}
+{% extends "template_base_page.html" %}
 {% load  i18n %}
 {% load staticfiles %}
+{% load custom_tags %}
 
 {% block styleBlock %}
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
@@ -71,7 +72,7 @@
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <span> {% trans 'List Progress Meetings' %} </span>
+                <span> {% trans 'List Online Progress Report' %} </span>
             </li>
         </ul>
     </div>
@@ -85,7 +86,7 @@
             <div class="caption">
                 <i class="icon-settings font-red"></i>
                 <span class="caption-subject font-red sbold uppercase">
-                {% trans 'List Progress Meetings' %}
+                {% trans 'List Online Progress Report' %}
             </span>
             </div>
         </div>
@@ -112,35 +113,32 @@
                 <tr>
                     <th style="display: none">Id</th>
                     <th> {% trans 'Applicant Name' %}</th>
-                    <th> {% trans 'Date' %}</th>
-                    <th> {% trans 'Time' %}</th>
-                    <th> {% trans 'Venue' %}</th>
-                    <th> {% trans 'Matters Discussed' %}</th>
-                    <th> {% trans 'Attendance' %}</th>
-                    <th width="10%"> {% trans 'Status' %}</th>
+                    <th> {% trans 'Abstract' %}</th>
+                    <th> {% trans 'Questionnaire Development' %}</th>
+                    <th> {% trans 'Data Collection and Input' %}</th>
+                    <th> {% trans 'Data Analysis' %}</th>
+                    <th> {% trans 'Experiential Design' %}</th>
+                    <th> {% trans 'Result Validation' %}</th>
+                    <th> {% trans 'Chapter' %}</th>
+                    <th> {% trans 'Supervisor Status' %}</th>
                     <th> {% trans 'Process Date' %}</th>
-                    <th> {% trans 'Action' %}</th>
                 </tr>
                 </thead>
                 <tbody id="tbody">
                 {% for rec in object_list %}
                     <tr>
                         <td style="display: none"><input id="university_id" value="{{ rec.id }}"></td>
-                        <td>{{ rec.meeting.student.first_name|default_if_none:"" }} {{ rec.meeting.student.last_name|default_if_none:"" }}</td>
-                        <td>{{ rec.meeting.progress_date|date:"d/m/Y" }}</td>
-                        <td>{{ rec.meeting.progress_time|time:"H:i" }}</td>
-                        <td>{{ rec.meeting.venue|default_if_none:"" }}</td>
-                        <td>{{ rec.meeting.progress_matters|default_if_none:"" }}</td>
-                        <td>{% for obj in rec.meeting.attendance.all %}{{ obj.attendance }}{% if forloop.last %}...{% else %},
+                        <td>{{ rec.student.first_name|default_if_none:"" }} {{ rec.student.last_name|default_if_none:"" }}</td>
+                        <td align="center">{% if rec.abstract %}<a target="_blank" href="{{ rec.abstract.url }}"><i style="font-size: 20px;" class="fa fa-cloud-download" aria-hidden="true"></i></a> {% endif %}</td>
+                        <td align="center">{% if rec.questionnaire_development %}<a target="_blank" href="{{ rec.questionnaire_development.url }}"><i style="font-size: 20px;" class="fa fa-cloud-download" aria-hidden="true"></i></a> {% endif %}</td>
+                        <td align="center">{% if rec.data_collection_input %}<a target="_blank" href="{{ rec.data_collection_input.url }}"><i style="font-size: 20px;" class="fa fa-cloud-download" aria-hidden="true"></i></a> {% endif %}</td>
+                        <td align="center">{% if rec.data_analysis %}<a target="_blank" href="{{ rec.data_analysis.url }}"><i style="font-size: 20px;" class="fa fa-cloud-download" aria-hidden="true"></i></a> {% endif %}</td>
+                        <td align="center">{% if rec.experiential_design %}<a target="_blank" href="{{ rec.experiential_design.url }}"><i style="font-size: 20px;" class="fa fa-cloud-download" aria-hidden="true"></i></a> {% endif %}</td>
+                        <td align="center">{% if rec.result_validation %}<a target="_blank" href="{{ rec.result_validation.url }}"><i style="font-size: 20px;" class="fa fa-cloud-download" aria-hidden="true"></i></a> {% endif %}</td>
+                        <td>{% for obj in rec.chapter.all %}{{ obj.chapter }}{% if forloop.last %}...{% else %},
                         {% endif %}{% endfor %}</td>
-                        <td class="{% if rec.status == 'Approved'%} success {% elif  rec.status == 'Rejected' %} danger {%else%}{%endif%}">{{rec.status|upper}}</td>
+                    <td class="{% if rec|get_online_progress_report_status == 'Pass'%} success {% elif  rec|get_online_progress_report_status == 'Fail' %} danger {%else%}{%endif%}">{{ rec|get_online_progress_report_status|upper }}</td>
                         <td>{{ rec.created_on|default_if_none:"" }}</td>
-                        <td>
-                        <a  href="{% url 'accounts:update_progress_meetings' rec.id %}"
-                        class="btn-primary btn">
-                            {% trans "Review" %}
-                        </a>
-                    </td>
                     </tr>
                 {% endfor %}
                 </tbody>

@@ -1,6 +1,7 @@
 {% extends "template_university_base_page.html" %}
 {% load  i18n %}
 {% load staticfiles %}
+{% load custom_tags %}
 
 {% block styleBlock %}
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
@@ -71,7 +72,7 @@
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <span> {% trans 'List Progress Meetings' %} </span>
+                <span> {% trans 'List Online Progress Report' %} </span>
             </li>
         </ul>
     </div>
@@ -85,7 +86,7 @@
             <div class="caption">
                 <i class="icon-settings font-red"></i>
                 <span class="caption-subject font-red sbold uppercase">
-                {% trans 'List Progress Meetings' %}
+                {% trans 'List Online Progress Report' %}
             </span>
             </div>
         </div>
@@ -112,12 +113,7 @@
                 <tr>
                     <th style="display: none">Id</th>
                     <th> {% trans 'Applicant Name' %}</th>
-                    <th> {% trans 'Date' %}</th>
-                    <th> {% trans 'Time' %}</th>
-                    <th> {% trans 'Venue' %}</th>
-                    <th> {% trans 'Matters Discussed' %}</th>
-                    <th> {% trans 'Attendance' %}</th>
-                    <th width="10%"> {% trans 'Status' %}</th>
+                    <th > {% trans 'Grade' %}</th>
                     <th> {% trans 'Process Date' %}</th>
                     <th> {% trans 'Action' %}</th>
                 </tr>
@@ -126,17 +122,12 @@
                 {% for rec in object_list %}
                     <tr>
                         <td style="display: none"><input id="university_id" value="{{ rec.id }}"></td>
-                        <td>{{ rec.meeting.student.first_name|default_if_none:"" }} {{ rec.meeting.student.last_name|default_if_none:"" }}</td>
-                        <td>{{ rec.meeting.progress_date|date:"d/m/Y" }}</td>
-                        <td>{{ rec.meeting.progress_time|time:"H:i" }}</td>
-                        <td>{{ rec.meeting.venue|default_if_none:"" }}</td>
-                        <td>{{ rec.meeting.progress_matters|default_if_none:"" }}</td>
-                        <td>{% for obj in rec.meeting.attendance.all %}{{ obj.attendance }}{% if forloop.last %}...{% else %},
-                        {% endif %}{% endfor %}</td>
-                        <td class="{% if rec.status == 'Approved'%} success {% elif  rec.status == 'Rejected' %} danger {%else%}{%endif%}">{{rec.status|upper}}</td>
+                        <td>{{ rec.progress.student.first_name|default_if_none:"" }} {{ rec.progress.student.last_name|default_if_none:"" }}</td>
+
+                        <td class="{% if rec.status == 'Pass'%} success {% elif  rec.status == 'Fail' %} danger {%else%}{%endif%}">{{rec.status|upper}}</td>
                         <td>{{ rec.created_on|default_if_none:"" }}</td>
                         <td>
-                        <a  href="{% url 'accounts:update_progress_meetings' rec.id %}"
+                        <a  href="{% url 'accounts:update_online_progress' rec.id %}"
                         class="btn-primary btn">
                             {% trans "Review" %}
                         </a>
