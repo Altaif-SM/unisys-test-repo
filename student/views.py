@@ -4355,8 +4355,11 @@ def add_supervisor(request, application_id):
                 filter_list.append(filter_dict)
         elif query_filter_type == 'Area of Expertise':
             if filter_detail:
-                supervisor_list = User.objects.filter(area_experties__experties=filter_detail, role__name='Supervisor')
                 filter_obj = AreaExperties.objects.get(id=filter_detail)
+                supervisor_recs = User.objects.filter(role__name='Supervisor')
+                for rec in supervisor_recs:
+                    for r in rec.area_experties.filter(experties = filter_obj.experties):
+                        supervisor_list.append(rec)
                 filter_obj_dict = {}
                 filter_obj_dict['id'] = filter_obj.id
                 filter_obj_dict['name'] = filter_obj.experties
