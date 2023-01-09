@@ -1039,21 +1039,20 @@ def upload_excel(request):
             # print("uni_count>>>>>>>>" + str(uni_count))
 
             # #3rdt script
-            file_recs = request.FILES['excel'].get_records()
-            uni_count = 0
-            for file_rec in file_recs:
-                university_obj = UniversityDetails.objects.get(university_code=file_rec['University Code'])
-                faculty_obj = TanseeqFaculty.objects.filter(name=file_rec['Faculty Name']).first()
-                if not TanseeqProgram.objects.filter(university_id=university_obj.id, faculty_id=faculty_obj.id,name=file_rec['Program Name']):
-                    TanseeqProgram.objects.create(university_id=university_obj.id,
-                                                     faculty_id=faculty_obj.id,
-                                                     name=file_rec['Program Name'],
-                                                     code=file_rec['Program Code'],
-                                                  )
-                    uni_count = uni_count + 1
-            print("uni_count>>>>>>>>" + str(uni_count))
+            # file_recs = request.FILES['excel'].get_records()
+            # uni_count = 0
+            # for file_rec in file_recs:
+            #     university_obj = UniversityDetails.objects.get(university_code=file_rec['University Code'])
+            #     faculty_obj = TanseeqFaculty.objects.filter(name=file_rec['Faculty Name']).first()
+            #     if not TanseeqProgram.objects.filter(university_id=university_obj.id, faculty_id=faculty_obj.id,name=file_rec['Program Name']):
+            #         TanseeqProgram.objects.create(university_id=university_obj.id,
+            #                                          faculty_id=faculty_obj.id,
+            #                                          name=file_rec['Program Name'],
+            #                                          code=file_rec['Program Code'],
+            #                                       )
+            #         uni_count = uni_count + 1
+            # print("uni_count>>>>>>>>" + str(uni_count))
             messages.success(request, "Record saved")
-
         except Exception as e:
             # print("Error>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
             messages.warning(request, "Form have some error" + str(e))
