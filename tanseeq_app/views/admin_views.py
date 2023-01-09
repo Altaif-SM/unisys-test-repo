@@ -1025,33 +1025,33 @@ def upload_excel(request):
             # print("uni_count>>>>>>>>"+str(uni_count))
 
             #2nd Script
-            file_recs = request.FILES['excel'].get_records()
-            uni_count = 0
-            for file_rec in file_recs:
-                if not TanseeqFaculty.objects.filter(code=file_rec['Facult Code'], name = file_rec['Faculty Name']):
-                    university_obj = UniversityDetails.objects.get(university_code=file_rec['University Code'])
-                    faculty_obj = TanseeqFaculty.objects.create(
-                        name=file_rec['Faculty Name'],code = file_rec['Facult Code']
-
-                        )
-                    faculty_obj.universities.add(university_obj)
-                    uni_count = uni_count + 1
-            print("uni_count>>>>>>>>" + str(uni_count))
-
-            # #3rdt script
             # file_recs = request.FILES['excel'].get_records()
             # uni_count = 0
             # for file_rec in file_recs:
-            #     university_obj = UniversityDetails.objects.get(university_code=file_rec['University Code'])
-            #     faculty_obj = TanseeqFaculty.objects.filter(name=file_rec['Faculty Name']).first()
-            #     if not TanseeqProgram.objects.filter(university_id=university_obj.id, faculty_id=faculty_obj.id,name=file_rec['Program Name']):
-            #         TanseeqProgram.objects.create(university_id=university_obj.id,
-            #                                          faculty_id=faculty_obj.id,
-            #                                          name=file_rec['Program Name'],
-            #                                          code=file_rec['Program Code'],
-            #                                       )
+            #     if not TanseeqFaculty.objects.filter(code=file_rec['Facult Code'], name = file_rec['Faculty Name']):
+            #         university_obj = UniversityDetails.objects.get(university_code=file_rec['University Code'])
+            #         faculty_obj = TanseeqFaculty.objects.create(
+            #             name=file_rec['Faculty Name'],code = file_rec['Facult Code']
+            #
+            #             )
+            #         faculty_obj.universities.add(university_obj)
             #         uni_count = uni_count + 1
             # print("uni_count>>>>>>>>" + str(uni_count))
+
+            # #3rdt script
+            file_recs = request.FILES['excel'].get_records()
+            uni_count = 0
+            for file_rec in file_recs:
+                university_obj = UniversityDetails.objects.get(university_code=file_rec['University Code'])
+                faculty_obj = TanseeqFaculty.objects.filter(name=file_rec['Faculty Name']).first()
+                if not TanseeqProgram.objects.filter(university_id=university_obj.id, faculty_id=faculty_obj.id,name=file_rec['Program Name']):
+                    TanseeqProgram.objects.create(university_id=university_obj.id,
+                                                     faculty_id=faculty_obj.id,
+                                                     name=file_rec['Program Name'],
+                                                     code=file_rec['Program Code'],
+                                                  )
+                    uni_count = uni_count + 1
+            print("uni_count>>>>>>>>" + str(uni_count))
             messages.success(request, "Record saved")
 
         except Exception as e:
