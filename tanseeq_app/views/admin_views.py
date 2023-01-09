@@ -1005,3 +1005,59 @@ def reviewer_reports_view(request):
     except Exception as e:
         return redirect('/tanseeq_app/reviewer_reports/')
 
+
+def upload_excel(request):
+    if request.method == 'POST':
+        try:
+            #1st script
+            file_recs = request.FILES['excel'].get_records()
+            uni_count = 0
+            for file_rec in file_recs:
+                if not UniversityDetails.objects.filter(university_code=file_rec['University Code']):
+
+                    UniversityDetails.objects.create(university_code=file_rec['University Code'],
+                                                     university_name=file_rec['University Name'],
+                                                     university_type_id=1,
+                                                     type_id=1,
+                                                     is_tanseeq_university=True)
+                    uni_count = uni_count + 1
+
+            print("uni_count>>>>>>>>"+str(uni_count))
+
+            #2nd Script
+            # file_recs = request.FILES['excel'].get_records()
+            # uni_count = 0
+            # for file_rec in file_recs:
+            #     # if file_rec['University Code'] == 1:
+            #     if not TanseeqFaculty.objects.filter(code=file_rec['Facult Code'], name = file_rec['Faculty Name']):
+            #         university_obj = UniversityDetails.objects.get(university_code=file_rec['University Code'])
+            #         faculty_obj = TanseeqFaculty.objects.create(
+            #             name=file_rec['Faculty Name'],code = file_rec['Facult Code']
+            #
+            #             )
+            #         faculty_obj.universities.add(university_obj)
+            #         uni_count = uni_count + 1
+            # print("uni_count>>>>>>>>" + str(uni_count))
+
+            # #3rdt script
+            # file_recs = request.FILES['excel'].get_records()
+            # uni_count = 0
+            # for file_rec in file_recs:
+            #     university_obj = UniversityDetails.objects.get(university_code=file_rec['University Code'])
+            #     faculty_obj = TanseeqFaculty.objects.filter(name=file_rec['Faculty Name']).first()
+            #     if not TanseeqProgram.objects.filter(university_id=university_obj.id, faculty_id=faculty_obj.id,name=file_rec['Program Name']):
+            #         TanseeqProgram.objects.create(university_id=university_obj.id,
+            #                                          faculty_id=faculty_obj.id,
+            #                                          name=file_rec['Program Name'],
+            #                                          code=file_rec['Program Code'],
+            #                                       )
+            #         uni_count = uni_count + 1
+            # print("uni_count>>>>>>>>" + str(uni_count))
+            messages.success(request, "Record saved")
+
+        except Exception as e:
+            # print("Error>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+            messages.warning(request, "Form have some error" + str(e))
+        return redirect('/tanseeq/upload_excel/')
+    else:
+        return render(request, 'tanseeq_admin/upload_university_template.html')
