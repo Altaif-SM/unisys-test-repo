@@ -1010,34 +1010,33 @@ def upload_excel(request):
     if request.method == 'POST':
         try:
             #1st script
-            file_recs = request.FILES['excel'].get_records()
-            uni_count = 0
-            for file_rec in file_recs:
-                if not UniversityDetails.objects.filter(university_code=file_rec['University Code']):
-
-                    UniversityDetails.objects.create(university_code=file_rec['University Code'],
-                                                     university_name=file_rec['University Name'],
-                                                     university_type_id=1,
-                                                     type_id=1,
-                                                     is_tanseeq_university=True)
-                    uni_count = uni_count + 1
-
-            print("uni_count>>>>>>>>"+str(uni_count))
-
-            #2nd Script
             # file_recs = request.FILES['excel'].get_records()
             # uni_count = 0
             # for file_rec in file_recs:
-            #     # if file_rec['University Code'] == 1:
-            #     if not TanseeqFaculty.objects.filter(code=file_rec['Facult Code'], name = file_rec['Faculty Name']):
-            #         university_obj = UniversityDetails.objects.get(university_code=file_rec['University Code'])
-            #         faculty_obj = TanseeqFaculty.objects.create(
-            #             name=file_rec['Faculty Name'],code = file_rec['Facult Code']
+            #     if not UniversityDetails.objects.filter(university_code=file_rec['University Code']):
             #
-            #             )
-            #         faculty_obj.universities.add(university_obj)
+            #         UniversityDetails.objects.create(university_code=file_rec['University Code'],
+            #                                          university_name=file_rec['University Name'],
+            #                                          university_type_id=1,
+            #                                          type_id=1,
+            #                                          is_tanseeq_university=True)
             #         uni_count = uni_count + 1
-            # print("uni_count>>>>>>>>" + str(uni_count))
+            #
+            # print("uni_count>>>>>>>>"+str(uni_count))
+
+            #2nd Script
+            file_recs = request.FILES['excel'].get_records()
+            uni_count = 0
+            for file_rec in file_recs:
+                if not TanseeqFaculty.objects.filter(code=file_rec['Facult Code'], name = file_rec['Faculty Name']):
+                    university_obj = UniversityDetails.objects.get(university_code=file_rec['University Code'])
+                    faculty_obj = TanseeqFaculty.objects.create(
+                        name=file_rec['Faculty Name'],code = file_rec['Facult Code']
+
+                        )
+                    faculty_obj.universities.add(university_obj)
+                    uni_count = uni_count + 1
+            print("uni_count>>>>>>>>" + str(uni_count))
 
             # #3rdt script
             # file_recs = request.FILES['excel'].get_records()
