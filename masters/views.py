@@ -179,8 +179,14 @@ def delete_scholarship(request):
 # *********------------ Country Master ----------***************
 # @permission_required('masters.can_view_country_details', raise_exception=True)
 def country_settings(request):
-    country_recs = CountryDetails.objects.all()
-    return render(request, 'template_country_master.html', {'country_recs': country_recs})
+    if request.user.is_tanseeq_admin():
+        country_recs = CountryDetails.objects.filter(is_tanseeq_country = True)
+    else:
+        country_recs = CountryDetails.objects.filter(is_tanseeq_country = False)
+    context = {
+        'country_recs':country_recs,
+    }
+    return render(request, 'template_country_master.html', context)
 
 
 # @permission_required('masters.add_countrydetails', raise_exception=True)

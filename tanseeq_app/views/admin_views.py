@@ -1054,28 +1054,28 @@ def upload_excel(request):
             # print("uni_count>>>>>>>>" + str(uni_count))
 
             #4th script country
-            file_recs = request.FILES['excel'].get_records()
-            uni_count = 0
-            for file_rec in file_recs:
-                CountryDetails.objects.create(
-                                              country_name=file_rec['country'],
-                                              country_code=file_rec['id'],
-                                                is_tanseeq_country = True
-                                              )
-                uni_count = uni_count + 1
-            print("uni_count>>>>>>>>" + str(uni_count))
-            messages.success(request, "Record saved")
-
-            # #5th script city
             # file_recs = request.FILES['excel'].get_records()
             # uni_count = 0
             # for file_rec in file_recs:
-            #     country_obj = CountryDetails.objects.get(country_code=file_rec['country'])
-            #     city_obj = CitiDetails.objects.create(city=file_rec['name'])
-            #     country_obj.city.add(city_obj)
+            #     CountryDetails.objects.create(
+            #                                   country_name=file_rec['country'],
+            #                                   country_code=file_rec['id'],
+            #                                     is_tanseeq_country = True
+            #                                   )
             #     uni_count = uni_count + 1
             # print("uni_count>>>>>>>>" + str(uni_count))
             # messages.success(request, "Record saved")
+
+            #5th script city
+            file_recs = request.FILES['excel'].get_records()
+            uni_count = 0
+            for file_rec in file_recs:
+                country_obj = CountryDetails.objects.get(country_code=file_rec['country'])
+                city_obj = CitiDetails.objects.create(city=file_rec['name'])
+                country_obj.city.add(city_obj)
+                uni_count = uni_count + 1
+            print("uni_count>>>>>>>>" + str(uni_count))
+            messages.success(request, "Record saved")
         except Exception as e:
             # print("Error>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
             messages.warning(request, "Form have some error" + str(e))
