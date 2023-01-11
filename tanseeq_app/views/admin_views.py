@@ -12,7 +12,6 @@ from tanseeq_app.models import (
     ConditionFilters,
     TanseeqFee,
     TanseeqCourses,
-    Course,
     ApplicationDetails,
     AppliedPrograms,
 )
@@ -28,7 +27,6 @@ from tanseeq_app.forms.admin_forms import (
     ConditionFiltersForm,
     TanseeqFeeForm,
     TanseeqCourseForm,
-    CourseForm,
     TanseeqUserForm,
 )
 from django.shortcuts import get_object_or_404
@@ -759,54 +757,7 @@ class TanseeqCourseUpdateView(UpdateView):
         return JsonResponse({"status": 200})
 
 
-@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
-class CourseListView(View):
-    model = Course
-    form_class = CourseForm
-    def get(self, request, pk=None):
-        courses_obj = TanseeqCourses.objects.get(id = pk).courses.all()
-        context = {
-            "courses_obj": courses_obj,
-            "form": self.form_class(),
-            "tanseeq_course_id": pk,
-        }
-        return render(request, "tanseeq_admin/list_courses.html", context)
 
-    def post(self, request, pk=None):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            tanseeq_course_obj = TanseeqCourses.objects.get(id=pk)
-            course_obj = Course.objects.create(course=form.data['course'], mark=form.data['mark'])
-            tanseeq_course_obj.courses.add(course_obj)
-            messages.success(request, "Record saved.")
-            return redirect('/tanseeq/course/' + str(pk))
-        else:
-            courses_obj = TanseeqCourses.objects.get(id=pk).courses.all()
-            context = {
-                "courses_obj": courses_obj,
-                "form": form,
-            }
-            return render(request, 'tanseeq_admin/list_courses.html', context)
-
-    def delete(self, request, pk):
-        instance = get_object_or_404(self.model, pk=pk)
-        instance.delete()
-        return JsonResponse({"status": 200})
-
-
-@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
-class CourseUpdateView(UpdateView):
-    model = Course
-    template_name = "tanseeq_admin/list_courses.html"
-    form_class = CourseForm
-
-    def post(self, request, *args, **kwargs):
-        course_id = request.POST.get("course_id")
-        instance = get_object_or_404(self.model, pk=course_id)
-        form = self.form_class(request.POST, instance=instance)
-        if form.is_valid():
-            form.save()
-        return JsonResponse({"status": 200})
 
 
 @method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')

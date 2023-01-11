@@ -183,21 +183,13 @@ urlpatterns = [
         login_required(TanseeqCourseUpdateView.as_view()),
         name='update_tanseeq_course'
     ),
-    path(
-        'course/<int:pk>',
-        login_required(CourseListView.as_view()),
-        name='list_course'
-    ),
+
     path(
         'tanseeq_courses/<int:pk>',
         login_required(TanseeqCourseListView.as_view()),
         name='tanseeq_courses'
     ),
-    path(
-        'update_course/',
-        login_required(CourseUpdateView.as_view()),
-        name='update_course'
-    ),
+
     path(
         'update_status/<int:pk>',
         login_required(ManageApplicationStatus.as_view()),

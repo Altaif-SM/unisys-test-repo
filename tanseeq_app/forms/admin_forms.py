@@ -10,7 +10,6 @@ from tanseeq_app.models import (
     ConditionFilters,
     TanseeqFee,
     TanseeqCourses,
-    Course,
 )
 from accounts.models import User
 from django.contrib.auth import password_validation
@@ -170,12 +169,6 @@ class TanseeqCourseForm(forms.ModelForm):
         model = TanseeqCourses
         fields = ('course_name',)
 
-
-class CourseForm(forms.ModelForm):
-
-    class Meta:
-        model = Course
-        fields = ('course','mark',)
 
 
 class CustomChoiceField(forms.ChoiceField):

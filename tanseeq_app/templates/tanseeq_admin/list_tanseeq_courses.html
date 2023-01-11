@@ -86,7 +86,7 @@
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <span> Courses </span>
+                <span>Subjects</span>
             </li>
         </ul>
     </div>
@@ -102,7 +102,7 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase">{% trans 'Manage Courses' %}</span>
+                <span class="caption-subject font-red sbold uppercase">{% trans 'Manage Subject' %}</span>
             </div>
         </div>
 
@@ -120,7 +120,7 @@
 
                         <div class="row">
                             <div class="">
-                                <label class="col-md-2 control-label">{% trans 'Course Name' %}:
+                                <label class="col-md-2 control-label">{% trans 'Subject Name' %}:
 
                                 </label>
                                 <div class="col-md-4">
@@ -152,8 +152,8 @@
                     <thead>
                     <tr>
                         <th style="display: none">Id</th>
-                        <th>{% trans 'Course Name' %}</th>
-                        <th width="5%">{% trans 'Courses' %}</th>
+                        <th>{% trans 'Subject Name' %}</th>
+                        <th width="10%">{% trans 'Material Weight' %}</th>
                         <th width="10%">Action</th>
                     </tr>
                     </thead>
@@ -171,14 +171,17 @@
                                        value="{{ rec.course_name|default_if_none:"" }}"
                                        required pattern='[A-Za-z+-]+'
                                        title='Please enter course name' disabled></td>
-
                             <td>
-                                <a href="{% url 'tanseeq_app:list_course' rec.id %}">
-                                <span type="button" name="city_{{ forloop.counter }}" id="id_city_{{ forloop.counter }}"
-                                      class=" city btn green glyphicon glyphicon-eye-open">
-                                </span>
-                                </a>
+                                <text hidden>{{ rec.course_name|default_if_none:"" }}</text>
+                                <input class="form-control data course_name"
+                                       name="course_name{{ forloop.counter }}"
+                                       type="text"
+                                       id="course_name{{ forloop.counter }}"
+                                       value="{{ rec.course_name|default_if_none:"" }}"
+                                       required pattern='[A-Za-z+-]+'
+                                       title='Please enter course name' disabled></td>
                             </td>
+
 
                             <td>
                                 <span type="button" name="updt" id="update{{ forloop.counter }}"
