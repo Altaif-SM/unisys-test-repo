@@ -167,7 +167,7 @@ class TanseeqCourseForm(forms.ModelForm):
 
     class Meta:
         model = TanseeqCourses
-        fields = ('course_name',)
+        fields = ('course_name','mark')
 
 
 
