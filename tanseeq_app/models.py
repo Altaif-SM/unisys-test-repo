@@ -121,6 +121,24 @@ class ConditionFilters(BaseModel):
     # def __str__(self):
     #     return self.name
 
+class TanseeqCourses(BaseModel):
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT)
+    course_name = models.CharField(max_length=100, blank=True, null=True)
+    mark = models.FloatField(max_length=50, null=True)
+
+class ExamDetails(BaseModel):
+    university = models.ForeignKey(UniversityDetails, on_delete=models.PROTECT, null=True)
+    faculty = models.ForeignKey(TanseeqFaculty, on_delete=models.PROTECT, null=True)
+    study_mode = models.ForeignKey(StudyModeDetails, on_delete=models.PROTECT, null=True)
+    program = models.ForeignKey(TanseeqProgram, on_delete=models.PROTECT)
+    type_of_secondary = models.ForeignKey(SecondarySchoolCetificate, on_delete=models.PROTECT, null=True)
+    subject = models.ForeignKey(TanseeqCourses, on_delete=models.PROTECT, null=True)
+    exam_date = models.DateField(blank=True, null=True)
+    exam_time = models.TimeField(blank=True, null=True)
+    period = models.CharField(max_length=150, blank=True, null=True)
+    exam_center = models.TextField(blank=True, null=True)
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True, )
+
 
 class TanseeqFee(BaseModel):
     universities = models.ManyToManyField(UniversityDetails, related_name="tanseeq_fee_university_details")
@@ -129,14 +147,6 @@ class TanseeqFee(BaseModel):
     fee = models.FloatField(max_length=50, null=True)
     is_active = models.BooleanField(default=True)
     created_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True, )
-
-
-
-
-class TanseeqCourses(BaseModel):
-    created_by = models.ForeignKey(User, on_delete=models.PROTECT)
-    course_name = models.CharField(max_length=100, blank=True, null=True)
-    mark = models.FloatField(max_length=50, null=True)
 
 
 class ApplicationDetails(BaseModel):
