@@ -1,0 +1,198 @@
+{% extends "template_base_page.html" %}
+{% load  i18n %}
+{% load staticfiles %}
+
+{% block content %}
+    <div class="page-bar" style="margin-bottom: 1px;">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{% url 'tanseeq_app:tanseeq_admin' %}">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span> {% trans 'Tanseeq Comparison Exam' %} </span>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>{% if instance %}
+                <span> {% trans 'Edit Comparison Exam' %} </span>
+            {% else %}
+                <span> {% trans 'Add Comparison Exam' %} </span>
+            {% endif %}
+
+            </li>
+        </ul>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" style="color: black;">{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+    {% endfor %}
+
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet light portlet-fit portlet-form ">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-red"></i>
+                <span class="caption-subject font-red sbold uppercase">{% if instance %}Edit Comparison Exam {% else %}
+                    Add Comparison Exam {% endif %} </span>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="form-body">
+                <form
+                        {% if instance %}
+                            action="{% url 'tanseeq_app:edit_comparison_exam' instance.pk %}"
+                        {% else %}
+                            action="{% url 'tanseeq_app:add_comparison_exam' %}"
+                        {% endif %}
+                            method="POST"
+                            enctype="multipart/form-data"
+                            id="id_form"
+                            class="form-horizontal"
+                >
+                    {% csrf_token %}
+                    {% if instance %}
+                        <input type="hidden" name="_method" value="PATCH">
+                    {% endif %}
+                    <div class="form-body">
+                        <div class="row item_experience" id="item_experience_1">
+                            <div class="row">
+
+
+                                <label class="col-md-2 control-label">{% trans 'University' %}:
+                                    <span style="color: red">*</span>
+                                </label>
+                                <div class="col-md-3">
+                                    <select id='id_university' title="Select University"
+                                            name="university"
+                                            class="form-control" required>
+                                        {% if instance.university %}
+                                            <option selected style="display: none"
+                                                    value="{{ instance.university.id }}">{{ instance.university.university_name|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option value="">Please Select</option>
+
+                                        {% endif %}
+
+                                        {% for rec in university_objs %}
+                                            <option value="{{ rec.id }}">{{ rec.university_name|default_if_none:"" }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+
+                                <label class="col-md-2 control-label">{% trans form.faculty.label %}:
+                                    <span style="color: red">*</span>
+                                </label>
+                                <div class="col-md-3">
+                                    {{ form.faculty }}
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <label class="col-md-2 control-label">{% trans form.study_mode.label %}:
+                                    <span style="color: red">*</span>
+                                </label>
+                                <div class="col-md-3">
+                                    {{ form.study_mode }}
+                                </div>
+                                <label class="col-md-2 control-label">{% trans form.program.label %}:
+                                    <span style="color: red">*</span></label>
+                                <div class="col-md-3">
+                                    {{ form.program }}
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <label class="col-md-2 control-label">{% trans form.type_of_secondary.label %}:
+                                    <span style="color: red">*</span>
+                                </label>
+                                <div class="col-md-3">
+                                    {{ form.type_of_secondary }}
+                                </div>
+                                <label class="col-md-2 control-label">{% trans form.subject.label %}:
+                                    <span style="color: red">*</span>
+                                </label>
+                                <div class="col-md-3">
+                                    {{ form.subject }}
+                                </div>
+
+                            </div>
+                            <br>
+                            <div class="row">
+                                <label class="col-md-2 control-label">{% trans form.exam_date.label %}:
+                                    <span style="color: red">*</span>
+                                </label>
+                                <div class="col-md-3">
+                                    {{ form.exam_date }}
+                                </div>
+                                <label class="col-md-2 control-label">{% trans form.exam_time.label %}:
+                                    <span style="color: red">*</span>
+                                </label>
+                                <div class="col-md-3">
+                                    {{ form.exam_time }}
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <label class="col-md-2 control-label">{% trans form.period.label %}:
+                                    <span style="color: red">*</span>
+                                </label>
+                                <div class="col-md-3">
+                                    {{ form.period }}
+                                </div>
+
+                            </div>
+                            <br>
+                            <div class="row">
+                                <label class="col-md-2 control-label">{% trans form.exam_center.label %}:
+                                    <span style="color: red">*</span>
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form.exam_center }}
+                                </div>
+                            </div>
+
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-offset-5 col-md-7">
+                                <button type="button" class="btn blue" id="back" style="margin-left: 70%"
+                                        onclick=window.location="{% url 'tanseeq_app:list_comparison_exam' %}"
+                                >
+                                    Back
+                                </button>
+                                <button type="submit" class="btn green" id="save_form">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block ajax %}
+    <script>
+        const getUniversitiesUrl = "{% url 'tanseeq_app:get_universities' %}"
+        const getStudyModeDataUrl = "{% url 'tanseeq_app:list_study_mode' %}"
+        const getFacultyDataUrl = "{% url 'tanseeq_app:list_tanseeq_faculty' %}"
+        const getProgramDataUrl = "{% url 'tanseeq_app:list_tanseeq_program' %}"
+
+        $(document).ready(function () {
+            //getUniversityData(getUniversitiesUrl)
+            $("#id_university").on("change", function () {
+                getFacultyData(getFacultyDataUrl)
+                getStudyModeData(getStudyModeDataUrl)
+            })
+            $("#id_faculty").on("change", function () {
+                getProgramData(getProgramDataUrl)
+            })
+        });
+    </script>
+    <script src="{% static 'tanseeq\admin\conditionFilters.js' %}" type="text/javascript"></script>
+{% endblock %}

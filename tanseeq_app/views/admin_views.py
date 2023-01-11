@@ -10,6 +10,7 @@ from tanseeq_app.models import (
     TanseeqFaculty,
     TanseeqProgram,
     ConditionFilters,
+    ExamDetails,
     TanseeqFee,
     TanseeqCourses,
     ApplicationDetails,
@@ -25,6 +26,7 @@ from tanseeq_app.forms.admin_forms import (
     TanseeqFacultyForm,
     TanseeqProgramForm,
     ConditionFiltersForm,
+    ComparisonExamForm,
     TanseeqFeeForm,
     TanseeqCourseForm,
     TanseeqUserForm,
@@ -557,6 +559,90 @@ class TanseeqProgramView(View):
 
 
 @method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
+class ComparisonExamList(ListView):
+    model = ExamDetails
+    template_name = "tanseeq_admin/list_comparsion_exam.html"
+
+    def get_queryset(self):
+        filters = {
+            "university_id": self.request.GET.get("university"),
+            "faculty_id": self.request.GET.get("faculty"),
+            "study_mode_id": self.request.GET.get("study_mode"),
+            "subject_id": self.request.GET.get("subject")
+        }
+        if (self.request.GET.get("university") is not None) or (self.request.GET.get("faculty") is not None) or (
+                self.request.GET.get("study_mode") is not None) or (
+                self.request.GET.get("subject") is not None):
+            query_set = self.model.objects.filter(**{k: v for k, v in filters.items() if v})
+            return query_set
+        else:
+            if self.request.user.is_tanseeq_university_admin():
+                return self.model.objects.filter(created_by=self.request.user)
+            else:
+                return self.model.objects.all()
+
+
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
+class ComparisonExamView(View):
+    model = ExamDetails
+    form_class = ComparisonExamForm
+    template_name = "tanseeq_admin/add_comparison_exam.html"
+    redirect_url = 'tanseeq_app:list_comparison_exam'
+
+    def get(self, request, pk=None):
+        if request.user.is_tanseeq_university_admin():
+            university_objs = UniversityDetails.objects.filter(id=request.user.university.id)
+        else:
+            university_objs = UniversityDetails.active_records()
+        context = {
+            "university_objs": university_objs,
+            "form": self.form_class(),
+        }
+        if pk:
+            instance = get_object_or_404(self.model, pk=pk)
+            context["instance"] = instance
+            context["form"] = self.form_class(instance=get_object_or_404(self.model, pk=pk))
+        return render(request, self.template_name, context)
+
+    def get_context_data(self, **kwargs):
+        print("running context")
+        context = super().get_context_data(**kwargs)
+        return context
+
+    def post(self, request, pk=None):
+        if pk:
+            instance = get_object_or_404(self.model, pk=pk)
+            form = self.form_class(request.POST, instance=instance)
+        else:
+            form = self.form_class(request.POST)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            if not obj.created_by:
+                obj.created_by = request.user
+            obj.save()
+            form.save_m2m()
+            if pk:
+                messages.success(request, "Record Updated.")
+            else:
+                messages.success(request, "Record saved.")
+        else:
+            if request.user.is_tanseeq_university_admin():
+                university_objs = UniversityDetails.objects.filter(id=request.user.university.id)
+            else:
+                university_objs = UniversityDetails.active_records()
+            context = {
+                "university_objs": university_objs,
+                "form": form,
+            }
+            return render(request, self.template_name, context)
+        return redirect(self.redirect_url)
+
+    def delete(self, request, pk):
+        instance = get_object_or_404(self.model, pk=pk)
+        instance.delete()
+        return JsonResponse({"status": 200})
+
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class ConditionFiltersList(ListView):
     model = ConditionFilters
     template_name = "tanseeq_admin/list_condition_filters.html"
@@ -643,6 +729,11 @@ def get_universities(request):
     else:
         university_objs = UniversityDetails.active_records()
     data = serializers.serialize("json", university_objs)
+    return JsonResponse(data,status=200, safe=False)
+
+def get_subjects(request):
+    subject_objs = TanseeqCourses.objects.all()
+    data = serializers.serialize("json", subject_objs)
     return JsonResponse(data,status=200, safe=False)
 
 

@@ -131,6 +131,21 @@ urlpatterns = [
         login_required(TanseeqProgramView.as_view()),
         name='delete_tanseeq_program'
     ),
+    path(
+        'tanseeq_comparison_exam/',
+        login_required(ComparisonExamList.as_view()),
+        name='list_comparison_exam'
+    ),
+    path(
+        'add/comparison_exam/',
+        login_required(ComparisonExamView.as_view()),
+        name='add_comparison_exam'
+    ),
+    path(
+        'edit/<int:pk>/comparison_exam/',
+        login_required(ComparisonExamView.as_view()),
+        name='edit_comparison_exam'
+    ),
     
     path(
         'tanseeq_filters/',
@@ -157,6 +172,12 @@ urlpatterns = [
         login_required(get_universities),
         name='get_universities'
     ),
+path(
+        'get_subjects/',
+        login_required(get_subjects),
+        name='get_subjects'
+    ),
+
     path(
         'tanseeq_fees/', login_required(TanseeqFeeList.as_view()), name='list_tanseeq_fees'
     ),

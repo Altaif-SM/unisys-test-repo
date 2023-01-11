@@ -22,7 +22,30 @@ function getUniversityData(getUniversitiesUrl){
         }
     });
 }
+function getSubjectData(getUniversitiesUrl){
+    $.ajax({
+        type: 'GET',
+        url: getUniversitiesUrl,
+        data: {
+            "type": "JSON",
+        },
+        success: function (response) {
+            const jsonRes = JSON.parse(response)
 
+            const subjectOptions = $("#id_subject")
+            $.map(jsonRes, function(data){
+                subjectOptions.append($('<option>', {
+                    value: data.pk,
+                    text : data.fields.course_name
+                }));
+            })
+        },
+        complete: function (){
+        },
+        error: function (xhr, msg, err) {
+        }
+    });
+}
 function getFacultyData(getFacultyDataUrl){
     const facultyOptions = $("#id_faculty")
 

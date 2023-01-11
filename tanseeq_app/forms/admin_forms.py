@@ -8,6 +8,7 @@ from tanseeq_app.models import (
     TanseeqFaculty,
     TanseeqProgram,
     ConditionFilters,
+    ExamDetails,
     TanseeqFee,
     TanseeqCourses,
 )
@@ -108,6 +109,31 @@ class TanseeqProgramForm(forms.ModelForm):
                     "class": "form-control",
                     "required": "true",
                 })
+
+class ComparisonExamForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(ComparisonExamForm, self).__init__(*args, **kwargs)
+        self.fields['university'].queryset = UniversityDetails.objects.filter(is_tanseeq_university=True,
+                                                                                is_active=True, is_delete=False)
+        for field in self.fields:
+            if field not in ["created_by"]:
+                self.fields[field].widget.attrs.update({
+                    "class": "form-control",
+                    "required": "true",
+                })
+
+    class Meta:
+        model = ExamDetails
+        fields = ("study_mode", "faculty", "program", "type_of_secondary",
+            "subject", "exam_date", "exam_time", "period", "exam_center", "university",
+        )
+
+        widgets = {
+            'exam_date': forms.DateInput(attrs={'placeholder':'Select a date', 'type':'date'}),
+            'exam_time': forms.TimeInput(attrs={'placeholder':'Select a time', 'type':'time'}),
+            'exam_center': forms.Textarea(attrs={'rows': 2, 'cols': 10}),
+        }
 
 
 class ConditionFiltersForm(forms.ModelForm):

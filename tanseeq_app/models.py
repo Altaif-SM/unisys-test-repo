@@ -126,6 +126,9 @@ class TanseeqCourses(BaseModel):
     course_name = models.CharField(max_length=100, blank=True, null=True)
     mark = models.FloatField(max_length=50, null=True)
 
+    def __str__(self):
+        return self.course_name
+
 class ExamDetails(BaseModel):
     university = models.ForeignKey(UniversityDetails, on_delete=models.PROTECT, null=True)
     faculty = models.ForeignKey(TanseeqFaculty, on_delete=models.PROTECT, null=True)
