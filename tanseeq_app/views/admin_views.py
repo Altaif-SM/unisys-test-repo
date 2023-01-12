@@ -401,13 +401,12 @@ class TanseeqFacultyList(ListView):
 
     def get_queryset(self):
         university_id = self.request.GET.get("university")
+        filters = {}
         if university_id:
-            return self.model.objects.filter(universities__id=university_id)
-        else:
-            if self.request.user.is_tanseeq_university_admin():
-                return self.model.objects.filter(created_by=self.request.user)
-            else:
-                return self.model.objects.all()
+            filters["universities__id"] = university_id
+        if self.request.GET.get("university[]"):
+            filters["universities__id__in"] = self.request.GET.getlist("university[]")
+        return self.model.objects.filter(**filters)
 
 
 
@@ -766,6 +765,7 @@ class TansseqFeeView(View):
             instance = get_object_or_404(self.model, pk=pk)
             context["instance"] = instance
             context["selected_universities"] = list(instance.universities.values_list('id', flat=True))
+            context["selected_faculties"] = TanseeqFaculty.objects.filter(universities__id__in = context["selected_universities"])
             context["form"] = self.form_class(instance=get_object_or_404(self.model, pk=pk))
 
         return render(request, self.template_name, context)

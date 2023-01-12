@@ -123,9 +123,9 @@
             </li>
             <li>{% if instance %}
                 <span> {% trans 'Edit Tanseeq Fee' %} </span>
-                {% else %}
+            {% else %}
                 <span> {% trans 'Add Tanseeq Fee' %} </span>
-                {% endif %}
+            {% endif %}
 
             </li>
         </ul>
@@ -142,22 +142,23 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase">{% if instance %}Edit Tanseeq Fee {% else %} Add Tanseeq Fee {% endif %} </span>
+                <span class="caption-subject font-red sbold uppercase">{% if instance %}Edit Tanseeq Fee {% else %} Add
+                    Tanseeq Fee {% endif %} </span>
             </div>
         </div>
 
         <div class="portlet-body">
             <div class="form-body">
                 <form
-                    {% if instance %}
-                        action="{% url 'tanseeq_app:update_tanseeq_fee' instance.pk%}"
-                    {%else%}
-                        action="{% url 'tanseeq_app:add_tanseeq_fees' %}"
-                    {% endif %}
-                    method="POST"
-                    enctype="multipart/form-data"
-                    id="id_form"
-                    class="form-horizontal"
+                        {% if instance %}
+                            action="{% url 'tanseeq_app:update_tanseeq_fee' instance.pk %}"
+                        {% else %}
+                            action="{% url 'tanseeq_app:add_tanseeq_fees' %}"
+                        {% endif %}
+                            method="POST"
+                            enctype="multipart/form-data"
+                            id="id_form"
+                            class="form-horizontal"
                 >
                     {% csrf_token %}
                     {% if instance %}
@@ -170,7 +171,7 @@
                                     <span style="color: red">*</span>
                                 </label>
                                 <div class="col-md-3">
-                                    <select id='universities' title="Select University" multiple
+                                    <select id='id_universities' title="Select University" multiple
                                             name="universities"
                                             class="form-control" required>
                                         <option hidden value="">Please Select</option>
@@ -184,8 +185,24 @@
                                     <span style="color: red">*</span>
                                 </label>
                                 <div class="col-md-3">
-<!--                                    <input type="text" name="attachment_name" id="attachment_name">-->
-                                    {{form.faculty}}
+                                    <!--                                    <input type="text" name="attachment_name" id="attachment_name">-->
+
+                                    {% if instance %}
+
+                                        <select id='id_faculty' title="Select Faculty"
+                                                name="faculty"
+                                                class="form-control" required>
+
+                                            <option style="display: none" selected value="{{ instance.faculty.id }}">{{ instance.faculty.name|default_if_none:"" }}</option>
+                                            {% for rec in selected_faculties %}
+                                                <option value="{{ rec.id }}">{{ rec.name|default_if_none:"" }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    {% else %}
+                                        {{ form.faculty }}
+
+                                    {% endif %}
                                 </div>
                             </div>
                             <br>
@@ -194,7 +211,7 @@
                                     <label class="col-md-2 control-label">{% trans form.fee.label %}:
                                         <span style="color: red">*</span></label>
                                     <div class="col-md-3">
-                                        {{form.fee}}
+                                        {{ form.fee }}
                                     </div>
                                 </div>
                                 <div class="">
@@ -202,7 +219,7 @@
                                         <span style="color: red">*</span>
                                     </label>
                                     <div class="col-md-3">
-                                        {{form.is_active}}
+                                        {{ form.is_active }}
                                     </div>
                                 </div>
                             </div>
@@ -224,21 +241,32 @@
         </div>
     </div>
 {% endblock %}
+
 {% block ajax %}
     <script>
-        const selectValues = "{{ selected_universities }}";
-        /* Iterate options of select element */
-        for (const option of document.querySelectorAll('#universities option')) {
-            /* Parse value to integer */
-            const value = Number.parseInt(option.value);
-            /* If option value contained in values, set selected attribute */
-            if (selectValues.indexOf(value) !== -1) {
-                option.setAttribute('selected', 'selected');
+        const getFacultyDataUrl = "{% url 'tanseeq_app:list_tanseeq_faculty' %}"
+        $(document).ready(function () {
+
+
+            $("#id_universities").on("change", function () {
+                getFacultyTanseeqFeeData(getFacultyDataUrl)
+            })
+
+            const selectValues = "{{ selected_universities }}";
+            /* Iterate options of select element */
+            for (const option of document.querySelectorAll('#id_universities option')) {
+                /* Parse value to integer */
+                const value = Number.parseInt(option.value);
+                /* If option value contained in values, set selected attribute */
+                if (selectValues.indexOf(value) !== -1) {
+                    option.setAttribute('selected', 'selected');
+                }
+                /* Otherwise ensure no selected attribute on option */
+                else {
+                    option.removeAttribute('selected');
+                }
             }
-            /* Otherwise ensure no selected attribute on option */
-            else {
-                option.removeAttribute('selected');
-            }
-        }
+        });
     </script>
+    <script src="{% static 'tanseeq\admin\conditionFilters.js' %}" type="text/javascript"></script>
 {% endblock %}
