@@ -82,6 +82,7 @@
                 </div>
                 <div class="col-md-3">
                     <select class="form-control" name="study_mode" id="id_study_mode">
+                        <option selected value="">Select Study Mode</option>
                     </select>
                 </div>
                 <div class="col-md-3">
@@ -192,7 +193,6 @@
         $(document).ready(function () {
             getUniversityData(getUniversitiesUrl)
             getSubjectData(getSubjectUrl)
-            getStudyModeData(getStudyModeDataUrl)
             getFacultyData(getFacultyDataUrl)
             $("#id_university").on("change", function () {
                 getFacultyData(getFacultyDataUrl)

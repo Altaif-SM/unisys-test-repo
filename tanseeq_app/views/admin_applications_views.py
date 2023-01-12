@@ -233,7 +233,7 @@ class ApplicantAttachmentsDetailsView(View):
     model = ApplicantAttachment
     form_class = ApplicantAttachementsForm
     template_name = "tanseeq_admin_applications/applicant_attachment_view.html"
-    redirect_url = 'tanseeq_app:study_mode_details'
+    redirect_url = 'tanseeq_app:student_programs_details'
 
     def get(self, request, pk=None):
         application_email = None
@@ -376,7 +376,8 @@ class ApplyProgramDetailsView(View):
             id=condition_filter_id,
             type_of_secondary=cert_obj.secondary_certificate,
             average__lte=cert_obj.average,
-            academic_year__end_date__lte=cert_obj.academic_year.end_date,
+            academic_year__end_date__gte=cert_obj.academic_year.end_date,
+            # academic_year__end_date__lte=cert_obj.academic_year.end_date,
         )
         if get_obj:
             return is_conditions_pass.first()

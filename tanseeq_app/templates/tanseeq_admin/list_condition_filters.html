@@ -101,6 +101,7 @@
             </div>
             <div class="col-md-3">
                 <select class="form-control" name="study_mode" id="id_study_mode">
+                    <option selected value="">Select Study Mode</option>
                 </select>
             </div>
             <div class="col-md-2">
@@ -208,7 +209,6 @@
     const getStudyModeDataUrl = "{% url 'tanseeq_app:list_study_mode' %}"
     $(document).ready(function() {
         getUniversityData(getUniversitiesUrl)
-        getStudyModeData(getStudyModeDataUrl)
         getFacultyData(getFacultyDataUrl)
         $("#id_university").on("change", function(){
             getFacultyData(getFacultyDataUrl)

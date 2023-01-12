@@ -198,7 +198,8 @@ class ListStudentPrograms(ListView):
         if study_mode_id:
             extra_filters["study_mode_id"] = study_mode_id
         else:
-            extra_filters["study_mode_id"] = cert_obj.study_mode.id
+            if cert_obj.study_mode:
+                extra_filters["study_mode_id"] = cert_obj.study_mode.id
 
         if ConditionFilters.objects.filter(academic_year__end_date = cert_obj.academic_year.end_date).exists():
             queryset = ConditionFilters.objects.filter(
@@ -257,7 +258,8 @@ class ApplyProgramView(View):
             id=condition_filter_id,
             type_of_secondary=cert_obj.secondary_certificate,
             average__lte=cert_obj.average,
-            academic_year__end_date__lte=cert_obj.academic_year.end_date,
+            academic_year__end_date__gte=cert_obj.academic_year.end_date,
+            # academic_year__end_date__lte=cert_obj.academic_year.end_date,
         )
         if get_obj:
             return is_conditions_pass.first()
@@ -310,7 +312,7 @@ class ApplicantAttachmentsView(View):
     model = ApplicantAttachment
     form_class = ApplicantAttachementsForm
     template_name = "tanseeq_student/applicant_attachment_view.html"
-    redirect_url = 'tanseeq_app:student_study_mode'
+    redirect_url = 'tanseeq_app:list_student_programs'
 
     def get(self, request, pk=None):
         tanseeq_application = get_tanseeq_application(request.user)

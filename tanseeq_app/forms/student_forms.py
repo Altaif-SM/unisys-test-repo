@@ -5,12 +5,14 @@ from tanseeq_app.models import (
     AppliedPrograms,
     ApplicantAttachment,
 )
+from masters.models import CountryDetails
 
 
 class ApplicationInfoForm(forms.ModelForm):
-    
     def __init__(self, *args, **kwargs):
         super(ApplicationInfoForm, self).__init__(*args, **kwargs)
+        self.fields['nationality'].queryset = CountryDetails.objects.filter(is_tanseeq_country = True)
+        self.fields['country'].queryset = CountryDetails.objects.filter(is_tanseeq_country = True)
         for field in self.fields:
             if field != "is_active":
                 self.fields[field].widget.attrs.update({
@@ -34,6 +36,7 @@ class SecondaryCertificationForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super(SecondaryCertificationForm, self).__init__(*args, **kwargs)
+        self.fields['country'].queryset = CountryDetails.objects.filter(is_tanseeq_country=True)
         for field in self.fields:
             if field != "is_active":
                 self.fields[field].widget.attrs.update({

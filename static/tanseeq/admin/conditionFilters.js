@@ -145,3 +145,36 @@ function getProgramData(getProgramDataUrl){
         }
     });
 }
+
+function getFacultyTanseeqFeeData(getFacultyDataUrl){
+    const facultyOptions = $("#id_faculty")
+
+    $.ajax({
+        type: 'GET',
+        url: getFacultyDataUrl,
+        data: {
+            "type": "JSON",
+            "university": $("#id_universities").val(),
+        },
+        success: function (response) {
+            const jsonRes = JSON.parse(response)
+
+            facultyOptions.empty()
+            facultyOptions.prepend($('<option>',{
+                value: '',
+                text: "Select Faculty",
+                "selected": true,
+            }))
+            $.map(jsonRes, function(data){
+                facultyOptions.append($('<option>', {
+                    value: data.pk,
+                    text : data.fields.name
+                }));
+            })
+        },
+        complete: function (){
+        },
+        error: function (xhr, msg, err) {
+        }
+    });
+}
