@@ -131,6 +131,16 @@ urlpatterns = [
         login_required(TanseeqProgramView.as_view()),
         name='delete_tanseeq_program'
     ),
+path(
+        'tanseeq_exam_result/',
+        login_required(ExamResultList.as_view()),
+        name='list_exam_result'
+    ),
+    path(
+        'add_exam_marks/',
+        login_required(add_exam_marks),
+        name='add_exam_marks'
+    ),
     path(
         'tanseeq_comparison_exam/',
         login_required(ComparisonExamList.as_view()),
@@ -411,5 +421,6 @@ path(
         login_required(upload_excel),
         name='upload_excel_details'
     ),
+
 
 ]

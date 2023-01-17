@@ -28,7 +28,6 @@
                 "aoColumnDefs": [
                     {'bSortable': false}
                 ],
-                "scrollX": false,
             });
         }
         window.setTimeout(function () {
@@ -48,7 +47,7 @@
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <span> {% trans 'Dates of Comparison Exams' %} </span>
+                <span> {% trans 'Exam Result' %} </span>
             </li>
         </ul>
     </div>
@@ -61,15 +60,11 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class="icon-settings font-red"></i>
-                <span class="caption-subject font-red sbold uppercase"> {% trans 'Manage Dates of Comparison Exams' %}</span>
+                <span class="caption-subject font-red sbold uppercase"> {% trans 'Manage Exam Result' %}</span>
             </div>
-            <a href="{% url 'tanseeq_app:add_comparison_exam' %}">
-                <button type="submit" class="btn green" id="save" style="margin-left:65%;background-color: #3598dc">Add
-                </button>
-            </a>
         </div>
-    <form method="GET">
-        <div class="row" style="padding-left: 30px;">
+        <form method="GET">
+            <div class="row" style="padding-left: 30px;">
 
                 <div class="col-md-3">
                     <select class="form-control" name="university" id="id_university">
@@ -92,55 +87,79 @@
                 </div>
 
 
+            </div>
+            <br>
+            <div style="margin-left:46%" class="col-md-2">
+                <button type="submit" class="btn">Search</button>
+            </div>
+        </form>
+        <form method="post" action="{% url 'tanseeq_app:add_exam_marks' %}" id="form_submit">
+            {% csrf_token %}
+            <input type="text" hidden id="exam_data" name="exam_data">
+            <input type="text" hidden id="action_type" name="action_type">
+            <div class="actions" style="text-align: right;margin-right:30px;">
+                <div class="btn-group">
+                    <a class="btn green-haze btn-outline btn-circle btn-sm" data-toggle="dropdown"
+                       data-hover="dropdown" data-close-others="true"> Actions
+                        <i class="fa fa-angle-down"></i>
+                    </a>
+                    <ul class="dropdown-menu pull-right" id="action">
 
-        </div>
+                        <li><a class="status_change" id="Submitted">{% trans 'Submitted' %}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </form>
         <br>
-        <div style="margin-left:46%" class="col-md-2">
-            <button type="submit" class="btn">Search</button>
-        </div>
-    </form>
-        <br><br>
+
         <div class="portlet-body">
             <form id="form_sample_1" class="form-horizontal" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                <table class="table table-striped table-hover table-bordered" id="sample_1">
+                <table class="table table-striped table-hover table-bordered" id="example">
                     <thead>
                     <tr>
                         <th style="display: none">Id</th>
+                        <th>
+                            <input name="select_all" id="select_all" class="select_all" value="1"
+                                   type="checkbox">
+
+                        </th>
+                        <th> {% trans 'Coordination No	' %}</th>
+                        <th> {% trans 'Applicant Name' %}</th>
                         <th> {% trans 'University' %}</th>
                         <th> {% trans 'Faculty' %}</th>
-                        <th> {% trans 'Study Mode' %}</th>
                         <th> {% trans 'Program' %}</th>
-                        <th> {% trans 'Type of Secondary' %}</th>
-                        <th> {% trans 'Subject' %}</th>
-                        <th> {% trans 'Exam Date' %}</th>
-                        <th> {% trans 'Exam Time' %}</th>
-                        <th> {% trans 'Period' %}</th>
-                        <th width="10%">{% trans 'Actions' %}</th>
+                        <th> {% trans 'Study Mode' %}</th>
+                        <th> {% trans 'Status' %}</th>
+                        <th width="8%"> {% trans 'Mark' %}</th>
+
                     </tr>
                     </thead>
                     <tbody id="tbody">
                     {% for rec in object_list %}
-                        <tr id="item{{ rec.id }}" class="item">
+                        <tr id="item{{ rec.mark }}"
+                            class="item"
+                                {% if rec.mark %}
+                            style="background-color:lightgreen"
+                                {% endif %}>
                             <td style="display: none"><input id="university_id" value="{{ rec.id }}"></td>
-                            <td>{{ rec.university.university_name|default_if_none:"" }}</td>
-                            <td>{{ rec.faculty.name|default_if_none:"" }}</td>
-                            <td>{{ rec.study_mode }}</td>
-                            <td>{{ rec.program.name|default_if_none:"" }}</td>
-                            <td>{{ rec.type_of_secondary.school_certificate|default_if_none:"" }}</td>
-                            <td>{{ rec.subject.course_name|default_if_none:"" }}</td>
-                            <td>{{ rec.exam_date|date:"Y-m-d" }}</td>
-                            <td>{{ rec.exam_time|date:"G:i" }}</td>
-                            <td>{{ rec.period|default_if_none:"" }}</td>
+                            <td><input name="check" type="checkbox" class="checkBoxClass" value="{{ rec.id }}"></td>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ rec.user.first_name|default_if_none:"" }} {{ rec.user.last_name|default_if_none:"" }}</td>
+                            <td>{{ rec.program_details.university.university_name|default_if_none:"" }}</td>
+                            <td>{{ rec.program_details.faculty.name|default_if_none:"" }}</td>
+                            <td>{{ rec.program_details.program.name|default_if_none:"" }}</td>
+                            <td>{{ rec.program_details.study_mode.study_mode|default_if_none:"" }}</td>
                             <td>
-                                <a href="{% url 'tanseeq_app:edit_comparison_exam' rec.id %}">
-                                <span type="button" name="edit" id="edit{{ forloop.counter }}"
-                                      class=" edit_btn btn blue glyphicon glyphicon-pencil">
-                            </span>
-                                </a>
-                                <button type="button" delete-url="{% url 'tanseeq_app:delete_tanseeq_filter' rec.id %}"
-                                        class="delete btn red glyphicon glyphicon-trash" name="delete">
-                                </button>
+                                {% if rec.review_status == 1 %}
+                                    {% trans 'Accepted' %}
+                                {% else %}
+                                    {% trans 'Not Acceptable' %}
+                                {% endif %}
+                            </td>
+                            <td>
+                                <input type="number" name="exam_mark" value="{{ rec.mark|floatformat:"2" }}"
+                                       class="form-control">
                             </td>
                         </tr>
                     {% endfor %}
@@ -154,6 +173,40 @@
 
 {% block ajax %}
     <script>
+        $('.select_all').click(function () {
+            var checked_status = this.checked;
+            $(this).closest('table').find('input:checkbox').each(function () {
+                this.checked = checked_status;
+            });
+        })
+
+        $('.status_change').click(function () {
+            var checked = $('#example').find('input[name="check"]:checked').length;
+            var array = [];
+
+            var t = $('#example').DataTable();
+            if (!checked) {
+                alert('Please select at least one record to proceed..!');
+                return false;
+            } else {
+                $("table > tbody > tr").each(function () {
+                    var $tr = $(this);
+                    if ($tr.find(".checkBoxClass").is(":checked")) {
+                        var dictionary = {};
+                        var $td = $tr.find("td");
+                        dictionary['exam_id'] = $td.eq(1).find('.checkBoxClass').val();
+                        dictionary['exam_mark'] = $td.eq(9).find('input').val();
+                        array.push(dictionary)
+                    }
+                });
+                $("#exam_data").val(JSON.stringify(array));
+                $("#action_type").val('Submitted');
+                $('#form_submit').submit()
+            }
+
+        })
+
+
         $(".delete").on("click", (e) => {
             $("#id_delete_model").modal()
             $("#id_confirm_delete").attr("delete-url", $(e.target).attr("delete-url"))

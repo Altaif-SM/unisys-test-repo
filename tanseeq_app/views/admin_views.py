@@ -36,6 +36,7 @@ from django.contrib import messages
 from django.http.request import QueryDict
 from django.utils.decorators import method_decorator
 from common.decorators import check_permissions
+import json
 # Create your views here.
 
 
@@ -556,6 +557,22 @@ class TanseeqProgramView(View):
         instance.delete()
         return JsonResponse({"status": 200})
 
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
+class ExamResultList(ListView):
+    model = AppliedPrograms
+    template_name = "tanseeq_admin/list_exam_result.html"
+
+    def get_queryset(self):
+        university = self.request.GET.get("university")
+        filter_by_status = self.request.GET.get("filter_by_status")
+        filters = {}
+        if university:
+            filters["program_details__university_id"] = university
+        if filter_by_status:
+            filters["review_status"] = filter_by_status if filter_by_status in ["0", "1"] else None
+
+        query_set = self.model.objects.filter(review_status = 1, **filters)
+        return query_set
 
 @method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class ComparisonExamList(ListView):
@@ -580,6 +597,19 @@ class ComparisonExamList(ListView):
             else:
                 return self.model.objects.all()
 
+def add_exam_marks(request):
+    try:
+        exam_data = json.loads(request.POST.get('exam_data'))
+        action_type = request.POST.get('action_type')
+        for rec in exam_data:
+            exam_obj = AppliedPrograms.objects.get(id=rec['exam_id'])
+            if action_type == 'Submitted':
+                exam_obj.mark = rec['exam_mark'] if rec['exam_mark'] else None
+                exam_obj.save()
+        messages.success(request, "Record Updated.")
+    except Exception as e:
+        messages.warning(request, "Form have some error" + str(e))
+    return redirect('tanseeq_app:list_exam_result')
 
 @method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class ComparisonExamView(View):

@@ -97,7 +97,7 @@ class TanseeqProgramForm(forms.ModelForm):
 
     class Meta:
         model = TanseeqProgram
-        fields = ("university","faculty", "name", "code", "is_active",)
+        fields = ("university","faculty", "name", "code", "equivalention_type","mark","is_active",)
 
     def __init__(self, *args, **kwargs):
         super(TanseeqProgramForm, self).__init__(*args, **kwargs)
