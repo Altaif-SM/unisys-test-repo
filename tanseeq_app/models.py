@@ -68,6 +68,12 @@ class TanseeqFaculty(BaseModel):
 
 
 class TanseeqProgram(BaseModel):
+    EQUIVALENTION_TYPE = (
+        ("exam", "Exam"),
+        ("secondary_average", "Secondary Average"),
+    )
+    equivalention_type = models.CharField(choices=EQUIVALENTION_TYPE, max_length=50)
+    mark = models.FloatField(max_length=50, null=True)
     university = models.ForeignKey(UniversityDetails, related_name="tanseeq_program_tanseeq_program", null=True, on_delete=models.PROTECT)
     faculty = models.ForeignKey(TanseeqFaculty, related_name="tanseeq_program_tanseeq_faculty", on_delete=models.PROTECT)
     name = models.CharField(max_length=100)
