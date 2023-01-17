@@ -251,6 +251,7 @@ class AppliedPrograms(BaseModel):
     is_denied = models.BooleanField(default=False)
     review_status = models.IntegerField(choices=STATUS, blank=True, null=True)
     review_note = models.TextField(blank=True, null=True)
+    mark = models.FloatField(max_length=50, null=True)
     created_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True, related_name='accountant_created_by')
 
     class Meta:
