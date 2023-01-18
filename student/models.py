@@ -240,6 +240,7 @@ class ApplicationDetails(BaseModel):
     agent = models.ForeignKey(User, blank=True, null=True,
                               related_name='application_student_rel',
                               on_delete=models.SET_NULL)
+    condition_clarification = models.TextField(blank=True, null=True)
 
     class Meta:
         ordering = ('-created_on',)
