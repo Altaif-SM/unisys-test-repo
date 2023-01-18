@@ -258,6 +258,7 @@
                         var checked = $('#example_3').find('input[name="check"]:checked').length;
                     }
 
+
                     if (!checked)
                         alert('Please select at least one record to proceed..!');
                     else {
@@ -304,6 +305,8 @@
                         {#alert(JSON.stringify(conditional_offer));#}
                         $("#check_ids").val(JSON.stringify(favorite));
                         $("#conditional_documents").val(JSON.stringify(conditional_offer));
+                        var clarification = $("#id_clarification").val();
+                        $("#id_condition_clarification").val(clarification);
 
                         $("#interview_type").val('First Interview');
 
@@ -433,6 +436,7 @@
                                 <div class="">
                                     <input type="text" hidden id="check_ids" name="check_ids">
                                     <input type="text" hidden id="conditional_documents" name="conditional_documents">
+                                    <input type="text" hidden id="id_condition_clarification" name="condition_clarification">
                                     <input type="text" hidden id="interview_type" name="interview_type">
                                     <input type="text" hidden id="description" name="description">
                                     <input type="text" hidden id="priorities" value="1" name="priorities">
@@ -826,6 +830,16 @@
                             {% endfor %}
 
                         </div>
+                    <br><div class="row">
+                                <div class="">
+                                    <label class="col-md-2 control-label">Clarification:</label>
+                                    <div class="col-md-10">
+                                        <textarea id="id_clarification" name="clarification" class="form-control"></textarea>
+                                    </div>
+                                </div>
+
+                        </div>
+
 
 
                     </div>

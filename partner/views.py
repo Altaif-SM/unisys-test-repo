@@ -711,6 +711,7 @@ def change_application_status(request):
         check_ids = json.loads(request.POST.get('check_ids'))
         conditional_documents = json.loads(request.POST.get('conditional_documents'))
         interview_type = request.POST.get('interview_type')
+        condition_clarification = request.POST.get('condition_clarification',None)
         priorities = request.POST.get('priorities',None)
         for application in check_ids:
             application_obj = ApplicationDetails.objects.get(id=application)
@@ -754,6 +755,7 @@ def change_application_status(request):
                     application_obj.choice_2 = True
                 if priorities == '3':
                     application_obj.choice_3 = True
+                application_obj.condition_clarification = condition_clarification
                 application_obj.save()
                 if conditional_documents:
                     ConditionalVerificationDocumentsDetails.objects.filter(application_id=application_obj).delete()
