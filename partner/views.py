@@ -2402,7 +2402,7 @@ def approved_application(request):
         else:
             accepted_applicants = ApplicationDetails.objects.filter(is_submitted=True,
                                                                  year=get_current_year(request), is_accepted=True,
-                                                                 ).exclude(is_offer_accepted = True)
+                                                                 )
             context['my_template'] = 'template_base_page.html'
 
     except Exception as e:
