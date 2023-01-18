@@ -2399,6 +2399,12 @@ def approved_application(request):
                                                                     year=get_current_year(request),
                                                                     )
             context['my_template'] = 'template_agent_base.html'
+        elif request.user.is_administrator():
+            accepted_applicants = ApplicationDetails.objects.filter(university=request.user.university,
+                                                                    year=get_current_year(request),is_accepted=True,
+                                                                    )
+            context['my_template'] = 'template_university_base_page.html'
+
         else:
             accepted_applicants = ApplicationDetails.objects.filter(is_submitted=True,
                                                                  year=get_current_year(request), is_accepted=True,
