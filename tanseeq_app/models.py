@@ -34,6 +34,13 @@ class SecondarySchoolCetificate(BaseModel):
     def __str__(self):
         return self.school_certificate
 
+class TanseeqStudyMode(BaseModel):
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT,null=True)
+    study_mode = models.CharField(max_length=150, blank=True, null=True)
+
+    def __str__(self):
+        return self.school_certificate
+
 
 class UniversityAttachment(BaseModel):
 
