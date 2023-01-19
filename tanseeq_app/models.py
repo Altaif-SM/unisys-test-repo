@@ -32,7 +32,7 @@ class SecondarySchoolCetificate(BaseModel):
     school_certificate = models.CharField(max_length=150, blank=True, null=True)
 
     def __str__(self):
-        return self.school_certificate
+        return self.school_certificate if self.school_certificate else ''
 
 class TanseeqStudyMode(BaseModel):
     created_by = models.ForeignKey(User, on_delete=models.PROTECT,null=True)
@@ -129,10 +129,6 @@ class ConditionFilters(BaseModel):
     class Meta:
         verbose_name = "Condition Filters"
         verbose_name_plural = "Condition Filters"
-
-
-    # def __str__(self):
-    #     return self.name
 
 class TanseeqCourses(BaseModel):
     created_by = models.ForeignKey(User, on_delete=models.PROTECT)
