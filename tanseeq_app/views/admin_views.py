@@ -15,6 +15,7 @@ from tanseeq_app.models import (
     TanseeqCourses,
     ApplicationDetails,
     AppliedPrograms,
+    TanseeqStudyMode,
 )
 from masters.models import UniversityDetails, YearDetails, StudyModeDetails, CountryDetails, CitiDetails
 from tanseeq_app.forms.admin_forms import (
@@ -30,6 +31,7 @@ from tanseeq_app.forms.admin_forms import (
     TanseeqFeeForm,
     TanseeqCourseForm,
     TanseeqUserForm,
+    TanseeqStudyModeForm,
 )
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
@@ -171,6 +173,49 @@ class SecondarySchoolCertificateListView(ListView):
     def delete(self, request, pk):
         instance = get_object_or_404(self.model, pk=pk, created_by=request.user)
         instance.delete()
+        return JsonResponse({"status": 200})
+
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
+class TanseeqStudyModeListView(ListView):
+    model = TanseeqStudyMode
+    template_name = 'tanseeq_admin/list_tanseeq_study_mode.html'
+
+    def get_queryset(self):
+        if self.request.user.is_tanseeq_university_admin():
+            return self.model.objects.filter(created_by=self.request.user)
+        else:
+            return self.model.objects.all()
+
+    def post(self, request, pk=None):
+        form = TanseeqStudyModeForm(request.POST)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.created_by = request.user
+            obj.save()
+            messages.success(request, "Record saved.")
+            return redirect('tanseeq_app:list_tanseeq_study_mode')
+        else:
+            messages.warning(request, "Record not saved.")
+            return redirect('tanseeq_app:list_tanseeq_study_mode')
+
+    def delete(self, request, pk):
+        instance = get_object_or_404(self.model, pk=pk, created_by=request.user)
+        instance.delete()
+        return JsonResponse({"status": 200})
+
+
+@method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
+class TanseeqStudyModeUpdateView(UpdateView):
+    model = TanseeqStudyMode
+    template_name = "tanseeq_admin/secondary_certificate_view.html"
+    form_class = TanseeqStudyModeForm
+
+    def post(self, request, *args, **kwargs):
+        study_mode_id = request.POST.get("study_mode_id")
+        instance = get_object_or_404(self.model, pk=study_mode_id)
+        form = self.form_class(request.POST, instance=instance)
+        if form.is_valid():
+            form.save()
         return JsonResponse({"status": 200})
 
 

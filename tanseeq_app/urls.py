@@ -38,6 +38,21 @@ urlpatterns = [
         name='delete_university_guide'
     ),
     path(
+        'tanseeq_study_mode/',
+        login_required(TanseeqStudyModeListView.as_view()),
+        name='list_tanseeq_study_mode'
+    ),
+    path(
+        'tanseeq_study_mode/<int:pk>',
+        login_required(TanseeqStudyModeListView.as_view()),
+        name='tanseeq_study_mode'
+    ),
+    path(
+        'update_tanseeq_study_mode/',
+        login_required(TanseeqStudyModeUpdateView.as_view()),
+        name='update_tanseeq_study_mode'
+    ),
+    path(
         'secondary_certificate/',
         login_required(SecondarySchoolCertificateListView.as_view()),
         name='list_secondary_certificate'

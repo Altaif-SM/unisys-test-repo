@@ -11,6 +11,7 @@ from tanseeq_app.models import (
     ExamDetails,
     TanseeqFee,
     TanseeqCourses,
+    TanseeqStudyMode,
 )
 from accounts.models import User
 from django.contrib.auth import password_validation
@@ -45,6 +46,11 @@ class SecondarySchoolCertificateForm(forms.ModelForm):
         model = SecondarySchoolCetificate
         fields = ('school_certificate',)
 
+class TanseeqStudyModeForm(forms.ModelForm):
+
+    class Meta:
+        model = TanseeqStudyMode
+        fields = ('study_mode',)
 
 class UniversityAttachmentForm(forms.ModelForm):
 
