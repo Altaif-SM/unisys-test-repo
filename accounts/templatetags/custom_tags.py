@@ -2,7 +2,7 @@ from django import template
 from masters.views import RegisteredPrerequisiteCourses,ProgramFeeDetails,ReferralFeeDetails
 from payments.models import ProgramRegistrationFeeDetails
 from tanseeq_app.models import ApplicationDetails, SecondaryCertificateInfo
-from student.models import ProgressMeetingStatus,OnlineProgressReportStatus
+from student.models import ProgressMeetingStatus
 register = template.Library()
 
 
@@ -164,10 +164,10 @@ def get_progress_meeting_status(progress_obj):
     except:
         return 'Pending'
 
-@register.filter
-def get_online_progress_report_status(report_obj):
-    try:
-        progress_report_status = OnlineProgressReportStatus.objects.get(progress = report_obj)
-        return str(progress_report_status.status)
-    except:
-        return 'Pending'
+# @register.filter
+# def get_online_progress_report_status(report_obj):
+#     try:
+#         progress_report_status = OnlineProgressReportStatus.objects.get(progress = report_obj)
+#         return str(progress_report_status.status)
+#     except:
+#         return 'Pending'
