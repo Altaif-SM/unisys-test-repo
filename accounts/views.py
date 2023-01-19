@@ -1888,12 +1888,12 @@ class UpdateQualifyingTestStatus(View):
             return render(request, self.template_name, context)
         return redirect(self.redirect_url, pk)
 
-# class OnlineProgressReportList(ListView):
-#     model = OnlineProgressReportStatus
-#     template_name = "list_progress_report.html"
-#
-#     def get_queryset(self):
-#         return self.model.objects.filter(user=self.request.user)
+class OnlineProgressReportList(ListView):
+    model = ProgressReportStatus
+    template_name = "list_progress_report.html"
+
+    def get_queryset(self):
+        return self.model.objects.filter(user=self.request.user)
 
 class SupervisorProgressMeetingsList(ListView):
     model = ProgressMeetingStatus
@@ -1922,12 +1922,12 @@ def update_progress_meetings(request, progress_id=None):
     return render(request, "update_progress_meeting_status.html",context)
 
 def update_online_progress(request, report_id=None):
-    online_progress_status_list = OnlineProgressReportStatus.objects.filter(id=report_id)
+    online_progress_status_list = ProgressReportStatus.objects.filter(id=report_id)
     if request.method == 'POST':
         status = request.POST.get('status')
         remarks = request.POST.get('remarks')
         try:
-            online_progress_obj = OnlineProgressReportStatus.objects.get(id=report_id)
+            online_progress_obj = ProgressReportStatus.objects.get(id=report_id)
             online_progress_obj.status = status
             online_progress_obj.remarks = remarks
             online_progress_obj.save()

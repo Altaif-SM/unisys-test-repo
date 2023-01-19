@@ -16,7 +16,7 @@ from io import BytesIO
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 from student.serializers import QualifyingTestSerializer
-from student.models import QualifyingTest, QualifyingTestStatus, ResearchDetails, ProgressMeetings, Attendance, ProgressMeetingStatus
+from student.models import QualifyingTest, QualifyingTestStatus, ResearchDetails, ProgressMeetings, Attendance, ProgressMeetingStatus, ProgressReportStatus
 
 cgi.escape = html.escape
 
@@ -4205,12 +4205,12 @@ class ProgressMeetingsList(ListView):
     def get_queryset(self):
         return self.model.objects.filter(student=self.request.user)
 
-# class OnlineProgressReportList(ListView):
-#     model = OnlineProgressReport
-#     template_name = "list_online_progress_report.html"
-#
-#     def get_queryset(self):
-#         return self.model.objects.filter(student=self.request.user)
+class OnlineProgressReportList(ListView):
+    model = ProgressReport
+    template_name = "list_online_progress_report.html"
+
+    def get_queryset(self):
+        return self.model.objects.filter(student=self.request.user)
 
 def online_progress_report(request):
     research_details = ResearchDetails.objects.get(application_id=request.user.get_application)
@@ -4223,7 +4223,7 @@ def online_progress_report(request):
         result_validation = request.FILES.get('result_validation')
         chapter_count = request.POST.get('chapter_count')
         try:
-            online_progress_obj = OnlineProgressReport.objects.create(student = request.user)
+            online_progress_obj = ProgressReport.objects.create(student = request.user)
             if abstract:
                 online_progress_obj.abstract = abstract
             if questionnaire_development:
@@ -4243,12 +4243,12 @@ def online_progress_report(request):
             for x in range(int(chapter_count)):
                 try:
                     x = x + 1
-                    chapter_obj = ChapterDetails.objects.create(
+                    chapter_obj = ProgressChapter.objects.create(
                         chapter=request.POST.get('chapter_' + str(x)))
                     online_progress_obj.chapter.add(chapter_obj)
                 except:
                     pass
-            OnlineProgressReportStatus.objects.get_or_create(
+            ProgressReportStatus.objects.get_or_create(
                 progress=online_progress_obj,
                 user=research_details.supervisor
             )

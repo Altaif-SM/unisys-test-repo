@@ -879,6 +879,7 @@ class ProgressReport(BaseModel):
     data_analysis = models.FileField(upload_to='document/', null=True, blank=True)
     experiential_design = models.FileField(upload_to='document/', null=True, blank=True)
     result_validation = models.FileField(upload_to='document/', null=True, blank=True)
+    chapter = models.ManyToManyField(ProgressChapter, blank=True)
 
     class Meta:
         pass
