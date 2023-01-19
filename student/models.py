@@ -865,11 +865,11 @@ class ProgressMeetings(BaseModel):
     class Meta:
         pass
 
-class ChapterDetails(models.Model):
+class Chapter(models.Model):
     chapter = models.CharField(max_length=180, blank=True, null=True)
 
 
-class OnlineProgressReport(BaseModel):
+class ProgressReport(BaseModel):
     student = models.ForeignKey(
         User, null=True, related_name='online_progress_student', on_delete=models.SET_NULL
     )
@@ -879,20 +879,19 @@ class OnlineProgressReport(BaseModel):
     data_analysis = models.FileField(upload_to='document/', null=True, blank=True)
     experiential_design = models.FileField(upload_to='document/', null=True, blank=True)
     result_validation = models.FileField(upload_to='document/', null=True, blank=True)
-    chapter = models.ManyToManyField(ChapterDetails, blank=True)
 
     class Meta:
         pass
 
-class OnlineProgressReportStatus(BaseModel):
+class ProgressReportStatus(BaseModel):
     SUPERVISOR_CHOICES = (
         ("", "----"),
         ("PASS", "Pass"),
         ("FAIL", "Fail"),
     )
-    progress = models.ForeignKey(OnlineProgressReport, related_name="status_online_report" , null=True, on_delete=models.CASCADE)
+    progress = models.ForeignKey(ProgressReport, related_name="status_online_report" , null=True, on_delete=models.CASCADE)
     user = models.ForeignKey(User, null=True, on_delete=models.PROTECT)
-    status = models.CharField(max_length=50)
+    status = models.CharField(max_length=100)
     remarks = models.TextField(blank=True, null=True)
 
     class Meta:

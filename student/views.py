@@ -16,7 +16,7 @@ from io import BytesIO
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 from student.serializers import QualifyingTestSerializer
-from student.models import QualifyingTest, QualifyingTestStatus, ResearchDetails, ProgressMeetings, Attendance, ProgressMeetingStatus, OnlineProgressReportStatus
+from student.models import QualifyingTest, QualifyingTestStatus, ResearchDetails, ProgressMeetings, Attendance, ProgressMeetingStatus
 
 cgi.escape = html.escape
 
@@ -4205,12 +4205,12 @@ class ProgressMeetingsList(ListView):
     def get_queryset(self):
         return self.model.objects.filter(student=self.request.user)
 
-class OnlineProgressReportList(ListView):
-    model = OnlineProgressReport
-    template_name = "list_online_progress_report.html"
-
-    def get_queryset(self):
-        return self.model.objects.filter(student=self.request.user)
+# class OnlineProgressReportList(ListView):
+#     model = OnlineProgressReport
+#     template_name = "list_online_progress_report.html"
+#
+#     def get_queryset(self):
+#         return self.model.objects.filter(student=self.request.user)
 
 def online_progress_report(request):
     research_details = ResearchDetails.objects.get(application_id=request.user.get_application)

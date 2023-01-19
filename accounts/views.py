@@ -1888,12 +1888,12 @@ class UpdateQualifyingTestStatus(View):
             return render(request, self.template_name, context)
         return redirect(self.redirect_url, pk)
 
-class OnlineProgressReportList(ListView):
-    model = OnlineProgressReportStatus
-    template_name = "list_progress_report.html"
-
-    def get_queryset(self):
-        return self.model.objects.filter(user=self.request.user)
+# class OnlineProgressReportList(ListView):
+#     model = OnlineProgressReportStatus
+#     template_name = "list_progress_report.html"
+#
+#     def get_queryset(self):
+#         return self.model.objects.filter(user=self.request.user)
 
 class SupervisorProgressMeetingsList(ListView):
     model = ProgressMeetingStatus
