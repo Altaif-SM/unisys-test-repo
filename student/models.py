@@ -865,7 +865,7 @@ class ProgressMeetings(BaseModel):
     class Meta:
         pass
 
-class Chapter(models.Model):
+class ProgressChapter(models.Model):
     chapter = models.CharField(max_length=180, blank=True, null=True)
 
 
