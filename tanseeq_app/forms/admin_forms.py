@@ -78,7 +78,7 @@ class StudyModeForm(forms.ModelForm):
 
     class Meta:
         model = StudyModeDetails
-        fields = ("universities", "study_mode", "code", "is_active",)
+        fields = ("universities", "code", "is_active",)
 
 
 
