@@ -1,4 +1,4 @@
-function getUniversityData(getUniversitiesUrl){
+function getUniversityData(getUniversitiesUrl) {
     $.ajax({
         type: 'GET',
         url: getUniversitiesUrl,
@@ -9,20 +9,21 @@ function getUniversityData(getUniversitiesUrl){
             const jsonRes = JSON.parse(response)
 
             const universityOptions = $("#id_university")
-            $.map(jsonRes, function(data){
-                universityOptions.append($('<option>', { 
+            $.map(jsonRes, function (data) {
+                universityOptions.append($('<option>', {
                     value: data.pk,
-                    text : data.fields.university_name
+                    text: data.fields.university_name
                 }));
             })
         },
-        complete: function (){
+        complete: function () {
         },
         error: function (xhr, msg, err) {
         }
     });
 }
-function getSubjectData(getUniversitiesUrl){
+
+function getSubjectData(getUniversitiesUrl) {
     $.ajax({
         type: 'GET',
         url: getUniversitiesUrl,
@@ -33,20 +34,21 @@ function getSubjectData(getUniversitiesUrl){
             const jsonRes = JSON.parse(response)
 
             const subjectOptions = $("#id_subject")
-            $.map(jsonRes, function(data){
+            $.map(jsonRes, function (data) {
                 subjectOptions.append($('<option>', {
                     value: data.pk,
-                    text : data.fields.course_name
+                    text: data.fields.course_name
                 }));
             })
         },
-        complete: function (){
+        complete: function () {
         },
         error: function (xhr, msg, err) {
         }
     });
 }
-function getFacultyData(getFacultyDataUrl){
+
+function getFacultyData(getFacultyDataUrl) {
     const facultyOptions = $("#id_faculty")
 
     $.ajax({
@@ -60,28 +62,26 @@ function getFacultyData(getFacultyDataUrl){
             const jsonRes = JSON.parse(response)
 
             facultyOptions.empty()
-            facultyOptions.prepend($('<option>',{
+            facultyOptions.prepend($('<option>', {
                 value: '',
                 text: "Select Faculty",
                 "selected": true,
             }))
-            $.map(jsonRes, function(data){
-                facultyOptions.append($('<option>', { 
+            $.map(jsonRes, function (data) {
+                facultyOptions.append($('<option>', {
                     value: data.pk,
-                    text : data.fields.name 
+                    text: data.fields.name
                 }));
             })
         },
-        complete: function (){
+        complete: function () {
         },
         error: function (xhr, msg, err) {
         }
     });
 }
 
-function getStudyModeData(getStudyModeDataUrl){
-    const studyModeOptions = $("#id_study_mode")
-
+function getStudyModeData(getStudyModeDataUrl) {
     $.ajax({
         type: 'GET',
         url: getStudyModeDataUrl,
@@ -89,30 +89,24 @@ function getStudyModeData(getStudyModeDataUrl){
             "type": "JSON",
             "university": $("#id_university").val(),
         },
-        success: function (response) {
-            const jsonRes = JSON.parse(response)
-
-            studyModeOptions.empty()
-            studyModeOptions.prepend($('<option>',{
-                value: '',
-                text: "Select Study Mode",
-                "selected": true,
-            }))
-            $.map(jsonRes, function(data, index){
-                studyModeOptions.append($('<option>', { 
-                    value: data.pk,
-                    text : data.fields.study_mode 
-                }));
-            })
+        success: function (data) {
+            $('#id_study_mode').empty();
+            $('#id_study_mode').append(
+                '<option value="" >Please select</option>');
+            for (var i = 0; i < data.length; i++) {
+                $('#id_study_mode').append(
+                    '<option value="' + data[i]['id'] + '">'
+                    + data[i]['study_mode'] + '</option>')
+            }
         },
-        complete: function (){
+        complete: function () {
         },
         error: function (xhr, msg, err) {
         }
     });
 }
 
-function getProgramData(getProgramDataUrl){
+function getProgramData(getProgramDataUrl) {
     const programOptions = $("#id_program")
 
     $.ajax({
@@ -127,26 +121,26 @@ function getProgramData(getProgramDataUrl){
             const jsonRes = JSON.parse(response)
 
             programOptions.empty()
-            programOptions.prepend($('<option>',{
+            programOptions.prepend($('<option>', {
                 value: '',
                 text: "Select Program",
                 "selected": true,
             }))
-            $.map(jsonRes, function(data){
-                programOptions.append($('<option>', { 
+            $.map(jsonRes, function (data) {
+                programOptions.append($('<option>', {
                     value: data.pk,
-                    text : data.fields.name
+                    text: data.fields.name
                 }));
             })
         },
-        complete: function (){
+        complete: function () {
         },
         error: function (xhr, msg, err) {
         }
     });
 }
 
-function getFacultyTanseeqFeeData(getFacultyDataUrl){
+function getFacultyTanseeqFeeData(getFacultyDataUrl) {
     const facultyOptions = $("#id_faculty")
 
     $.ajax({
@@ -160,19 +154,19 @@ function getFacultyTanseeqFeeData(getFacultyDataUrl){
             const jsonRes = JSON.parse(response)
 
             facultyOptions.empty()
-            facultyOptions.prepend($('<option>',{
+            facultyOptions.prepend($('<option>', {
                 value: '',
                 text: "Select Faculty",
                 "selected": true,
             }))
-            $.map(jsonRes, function(data){
+            $.map(jsonRes, function (data) {
                 facultyOptions.append($('<option>', {
                     value: data.pk,
-                    text : data.fields.name
+                    text: data.fields.name
                 }));
             })
         },
-        complete: function (){
+        complete: function () {
         },
         error: function (xhr, msg, err) {
         }

@@ -90,22 +90,50 @@
                             </div>
                             <br>
                             <div class="row">
-                               <label class="col-md-2 control-label">{% trans 'Study Mode' %}:
+{#                               <label class="col-md-2 control-label">{% trans 'Study Mode' %}:#}
+{#                                    <span style="color: red">*</span>#}
+{#                                </label>#}
+{#                                <div class="col-md-3">#}
+{##}
+{##}
+{##}
+{#                                    <input type="text" value="{{instance.study_mode|default_if_none:""}}" required  name="study_mode" id="id_study_mode" class="form-control">#}
+{##}
+{#                                </div>#}
+
+
+
+
+                                <label class="col-md-2 control-label">{% trans 'Study Mode' %}:
                                     <span style="color: red">*</span>
                                 </label>
                                 <div class="col-md-3">
+                                    <select id='id_study_mode' title="Select Study Mode"
+                                            name="study_mode"
+                                            class="form-control" required>
+                                        <option hidden value="">Please Select</option>
+                                     {% if instance.study_mode %}
+                                            <option selected style="display: none"
+                                                    value="{{ instance.study_mode.id }}">{{ instance.study_mode.study_mode|default_if_none:"" }}</option>
+                                        {% else %}
+                                            <option value="">Please Select</option>
 
+                                        {% endif %}
 
-
-                                    <input type="text" value="{{instance.study_mode|default_if_none:""}}" required  name="study_mode" id="id_study_mode" class="form-control">
-
+                                        {% for rec in tanseeq_study_modes %}
+                                            <option value="{{ rec.id }}">{{ rec.study_mode|default_if_none:"" }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
-                                    <label class="col-md-2 control-label">{% trans form.is_active.label %}:
+
+                            <label class="col-md-2 control-label">{% trans form.is_active.label %}:
                                         <span style="color: red">*</span>
                                     </label>
                                     <div class="col-md-3">
                                         {{form.is_active}}
                                     </div>
+
                             </div>
                             <br>
                         </div>

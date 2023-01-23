@@ -308,16 +308,24 @@ class StudyModeList(ListView):
 
     def get(self, request, *args, **kwargs):
         if request.GET.get("type") == "JSON":
+            finalDict = []
             queryset = self.get_queryset()
             data = serializers.serialize("json", queryset)
-            return JsonResponse(data, status=200, safe=False)
+            # return JsonResponse(data, status=200, safe=False)
+            for rec in queryset:
+                raw_dict = {}
+                if rec.study_mode:
+                    raw_dict['study_mode'] = rec.study_mode.study_mode
+                    raw_dict['id'] = rec.id
+                    finalDict.append(raw_dict)
+            return JsonResponse(finalDict, status=200, safe=False)
+
         return super().get(args, kwargs)
 
     def get_queryset(self):
         university_id = self.request.GET.get("university")
         if university_id:
             return self.model.objects.filter(universities=university_id)
-            return super().get_queryset()
         else:
             if self.request.user.is_tanseeq_university_admin():
                 return self.model.objects.filter(created_by=self.request.user)
@@ -330,12 +338,14 @@ class StudyModeView(View):
     form_class = StudyModeForm
 
     def get(self, request, pk=None):
+        tanseeq_study_modes = TanseeqStudyMode.objects.all()
         if request.user.is_tanseeq_university_admin():
             university_objs = UniversityDetails.objects.filter(id=request.user.university.id)
         else:
             university_objs = UniversityDetails.active_records()
         context = {
             "university_objs": university_objs,
+            "tanseeq_study_modes": tanseeq_study_modes,
             "form": self.form_class(),
         }
         if pk:
@@ -360,12 +370,14 @@ class StudyModeView(View):
             else:
                 messages.success(request, "Record saved.")
         else:
+            tanseeq_study_modes = TanseeqStudyMode.objects.all()
             if request.user.is_tanseeq_university_admin():
                 university_objs = UniversityDetails.objects.filter(id=request.user.university.id)
             else:
                 university_objs = UniversityDetails.active_records()
             context = {
                 "university_objs": university_objs,
+                "tanseeq_study_modes": tanseeq_study_modes,
                 "form": form,
             }
             return render(request, 'tanseeq_admin/add_study_mode.html', context)
@@ -384,12 +396,14 @@ class StudyModeView(View):
     form_class = StudyModeForm
 
     def get(self, request, pk=None):
+        tanseeq_study_modes = TanseeqStudyMode.objects.all()
         if request.user.is_tanseeq_university_admin():
             university_objs = UniversityDetails.objects.filter(id=request.user.university.id)
         else:
             university_objs = UniversityDetails.active_records()
         context = {
             "university_objs": university_objs,
+            "tanseeq_study_modes": tanseeq_study_modes,
             "form": self.form_class(),
         }
         if pk:
@@ -417,12 +431,14 @@ class StudyModeView(View):
             else:
                 messages.success(request, "Record saved.")
         else:
+            tanseeq_study_modes = TanseeqStudyMode.objects.all()
             if request.user.is_tanseeq_university_admin():
                 university_objs = UniversityDetails.objects.filter(id=request.user.university.id)
             else:
                 university_objs = UniversityDetails.active_records()
             context = {
                 "university_objs": university_objs,
+                "tanseeq_study_modes": tanseeq_study_modes,
                 "form": form,
             }
             return render(request, 'tanseeq_admin/add_study_mode.html', context)

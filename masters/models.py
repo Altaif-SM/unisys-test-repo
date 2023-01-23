@@ -455,11 +455,13 @@ class DegreeDetails(BaseModel):
 class StudyModeDetails(BaseModel):
     universities = models.ManyToManyField(UniversityDetails, related_name="study_mode_details_university_details")
     code = models.CharField(max_length=50, blank=True, null=True)
+    study_mode = models.ForeignKey('tanseeq_app.TanseeqStudyMode', null=True, related_name='tanseeq_stud_mode',
+                                   on_delete=models.SET_NULL)
     is_active = models.BooleanField(default=True)
     created_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True, )
 
     def __str__(self):
-        return self.study_mode
+        return self.study_mode.study_mode if self.study_mode else ''
 
 class StudyTypeDetails(BaseModel):
     study_type = models.CharField(max_length=50, blank=True, null=True)

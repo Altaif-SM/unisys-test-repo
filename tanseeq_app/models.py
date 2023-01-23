@@ -39,7 +39,7 @@ class TanseeqStudyMode(BaseModel):
     study_mode = models.CharField(max_length=150, blank=True, null=True)
 
     def __str__(self):
-        return self.school_certificate
+        return self.study_mode if self.study_mode else ''
 
 
 class UniversityAttachment(BaseModel):
