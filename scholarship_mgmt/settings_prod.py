@@ -126,7 +126,7 @@ MESSAGE_TAGS = {message_constants.DEBUG: 'debug',
 DATABASES = {
      'default': {
           'ENGINE': 'django.db.backends.mysql',
-          'NAME': 'uni_sys_production',
+          'NAME': 'tanseeq_prod_db',
           'USER':'root',
           'PASSWORD':'altaifSGn@edx*21',
           'HOST': '127.0.0.1',
