@@ -109,8 +109,13 @@ License: You must have a valid license purchased only from themeforest(the above
             {#            <img src="{% static 'images/logo.png' %}" alt="logo"#}
             {#                 style="width: 100px;height: 70px;margin-top: 0px; margin-left: 30px" class="logo-default"/>#}
 
-            <img src="{% static 'images/university_logo.png' %}" alt="logo"
+            {% if request.user.is_tanseeq_admin %}
+                <img src="{% static 'images/ye-300x70.webp' %}" alt="logo"
                  style="width: 145px;height: 45px;margin-top: 10px; margin-left: -15px" class="logo-default"/>
+            {% else %}
+                 <img src="{% static 'images/university_logo.png' %}" alt="logo"
+                 style="width: 145px;height: 45px;margin-top: 10px; margin-left: -15px" class="logo-default"/>
+            {% endif %}
 
             {#            <div class="menu-toggler sidebar-toggler">#}
             <div class="menu-toggler sidebar-toggler" id="id_toggle">
