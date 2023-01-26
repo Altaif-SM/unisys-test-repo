@@ -104,7 +104,7 @@
     </div>
     <!-- END LOGO -->
     <!-- BEGIN LOGIN -->
-    <div class="content" style="border: solid #262668;">
+    <div class="content" style="border: solid {% if is_tanseeq_student %}#9E7205;{% else %}#262668;{% endif %}">
         <!-- BEGIN LOGIN FORM -->
         <form class="login-form" method="post" action="{% url 'accounts:user_signin' %}">
             {% csrf_token %}
@@ -145,7 +145,7 @@
                 <label class="control-label visible-ie8 visible-ie9">Password</label>
                 {{ form.password }}</div>
             <div class="form-actions" id="log">
-                <button type="submit" style="background-color: #262668;color: aliceblue"
+                <button type="submit" style="background-color: {% if is_tanseeq_student %}#9E7205;{% else %}#262668;{% endif %};color: aliceblue"
                         class="btn uppercase">{% trans 'Login' %}</button>
                 <label class="rememberme check mt-checkbox mt-checkbox-outline">
                     <input type="checkbox" name="remember" value="1"/>{% trans 'Remember' %}
@@ -154,7 +154,7 @@
                 {#                <a href="/password_reset/recover/" id="forget-password" class="forget-password">{% trans 'Forgot Password?' %}</a>#}
             </div>
             {% if not is_agent %}
-                <div class="create-account" style="background-color: #262668;">
+                <div class="create-account" style="background-color: {% if is_tanseeq_student %}#9E7205;{% else %}#262668;{% endif %}">
 
                     <p>
                         <a href="javascript:;" id="register-btn" class="uppercase">{% trans 'Create an account' %}</a>
@@ -232,7 +232,7 @@
             {#                </div>#}
             <div class="form-actions">
                 <button type="button" id="register-back-btn" class="btn btn-outline">{% trans 'Back' %}</button>
-                <button type="submit" id="register-submit-btn" style="background-color: #262668; color: aliceblue;"
+                <button type="submit" id="register-submit-btn" style="background-color: {% if is_tanseeq_student %}#9E7205;{% else %}#262668;{% endif %} color: aliceblue;"
                         class="btn uppercase pull-right">{% trans 'Submit' %}
                 </button>
             </div>
