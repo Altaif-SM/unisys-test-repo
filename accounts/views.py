@@ -23,6 +23,7 @@ from datetime import date
 from masters.models import UniversityDetails
 from django.http import JsonResponse
 from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.hashers import make_password
 # Create your views here.
 
 def index(request):
@@ -560,6 +561,8 @@ def user_signup(request):
                 messages.success(request, str(e))
             if request.POST['role'] == 'Agent':
                 return redirect('/agent/')
+            if request.POST['role'] == 'Tanseeq Student':
+                return redirect('/tanseeq/')
             else:
                 return redirect('/')
         else:
@@ -1477,13 +1480,13 @@ def get_email_exists(request):
     email = request.POST.get('email', None)
     email_exists = False
     if user_id:
-        if User.objects.filter(email=email.strip()).exclude(id = user_id).exists():
+        if User.objects.filter(username=email.strip()).exclude(id = user_id).exists():
             email_exists = True
         else:
             email_exists = False
         return JsonResponse(email_exists, safe=False)
     else:
-        if User.objects.filter(email=email.strip()).exists():
+        if User.objects.filter(username=email.strip()).exists():
             email_exists = True
         else:
             email_exists = False
