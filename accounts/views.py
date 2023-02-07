@@ -623,7 +623,7 @@ def user_signin(request):
 
 @user_login_required
 def user_signout(request):
-    tanseeq_role = ['Tanseeq Student', 'Tanseeq Admin', 'Tanseeq Finance', 'Tanseeq Reviewer']
+    tanseeq_role = ['Tanseeq Student', 'Tanseeq Admin', 'Tanseeq Finance', 'Tanseeq Reviewer','Tanseeq University Admin', 'Tanseeq Application Entry','Tanseeq Examiner']
     agent_role = ['Agent']
     if request.user.role.all():
         if request.user.role.filter(name__in = agent_role):
