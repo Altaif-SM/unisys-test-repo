@@ -479,13 +479,14 @@ def print_voucher_details(request, pk):
         if request.session.get('form_data'):
             form_data = request.session.get('form_data')
             application_email = form_data.get('email')
-
+        photo = None
         redirect_url = "tanseeq_app:applied_programs_details"
         template = get_template("tanseeq_student/print_voucher.html")
         applied_program_obj = get_object_or_404(AppliedPrograms, pk=pk)
-        attachments = get_object_or_404(ApplicantAttachment, application__user__username = application_email,),
-        secondary_cert_obj = get_object_or_404(SecondaryCertificateInfo, application__user__username = application_email)
-        photo = attachments[0].photo.path
+        secondary_cert_obj = SecondaryCertificateInfo.objects.filter(application__user__username = application_email).first()
+        attachments = ApplicantAttachment.objects.filter(application__user__username = application_email).first()
+        if attachments:
+            photo = attachments.photo.path
         context = {
             "applied_program_obj": applied_program_obj,
             "secondary_cert_obj": secondary_cert_obj,
