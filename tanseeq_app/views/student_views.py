@@ -381,12 +381,14 @@ class DeclarationSubmissionView(View):
 
 def print_voucher(request, pk):
     try:
+        photo = None
         redirect_url = "tanseeq_app:list_applied_programs"
         template = get_template("tanseeq_student/print_voucher.html")
         applied_program_obj = get_object_or_404(AppliedPrograms, pk=pk)
-        attachments = get_object_or_404(ApplicantAttachment, created_by_id=applied_program_obj.user_id),
-        secondary_cert_obj = get_object_or_404(SecondaryCertificateInfo, created_by_id=applied_program_obj.user_id)
-        photo = attachments[0].photo.path
+        secondary_cert_obj = SecondaryCertificateInfo.objects.filter(created_by_id=applied_program_obj.user_id).first()
+        attachments = ApplicantAttachment.objects.filter(created_by_id=applied_program_obj.user_id).first()
+        if attachments:
+            photo = attachments.photo.path
         context = {
             "applied_program_obj": applied_program_obj,
             "secondary_cert_obj": secondary_cert_obj,

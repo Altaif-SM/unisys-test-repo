@@ -1,3 +1,7 @@
+{% load static %}
+<html>
+ <meta http-equiv="content-type" content="text/html; charset=utf-8">
+ <head>
 <style>
     @page {
         size: 30cm 16cm;
@@ -7,8 +11,11 @@
         margin: 30px 30px 40px;
         padding: 20px 12px 0px;
     }
+    @font-face {font-family: DejaVu; src: url('{% static 'fonts/DejaVuSansCondensed.ttf' %}')}
+
 
 </style>
+ </head>
 {% block content %}
     <body>
     <table width="650" style="font-size:18px;">
@@ -340,4 +347,5 @@
         </tbody>
     </table>
     </body>
+    </html>
 {% endblock %}
