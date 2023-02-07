@@ -312,7 +312,7 @@ class ListStudentProgramsDetails(ListView):
                 extra_filters["study_mode_id"] = cert_obj.study_mode.id
 
 
-        if ConditionFilters.objects.filter(academic_year__end_date = cert_obj.academic_year.end_date).exists():
+        if ConditionFilters.objects.filter(academic_year__end_date__gte = cert_obj.academic_year.end_date).exists():
             queryset = ConditionFilters.objects.filter(
                 type_of_secondary_id=cert_obj.secondary_certificate.id,
                 average__lte=cert_obj.average,
