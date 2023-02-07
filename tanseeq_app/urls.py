@@ -436,6 +436,6 @@ path(
         login_required(upload_excel),
         name='upload_excel_details'
     ),
-
+    path('applicant_filter/', ApplicantFilterList.as_view(), name='list_applicant_filter'),
 
 ]

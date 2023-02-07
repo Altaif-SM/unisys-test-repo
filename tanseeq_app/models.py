@@ -83,7 +83,7 @@ class TanseeqProgram(BaseModel):
     mark = models.FloatField(max_length=50, null=True)
     university = models.ForeignKey(UniversityDetails, related_name="tanseeq_program_tanseeq_program", null=True, on_delete=models.PROTECT)
     faculty = models.ForeignKey(TanseeqFaculty, related_name="tanseeq_program_tanseeq_faculty", on_delete=models.PROTECT)
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=255)
     code = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
     created_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True, )
@@ -184,6 +184,7 @@ class ApplicationDetails(BaseModel):
     address = models.TextField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     tanseeq_id = models.CharField(max_length=50, blank=True, null=True)
+    applicant_id = models.CharField(max_length=50, blank=True, null=True)
     created_by = models.ForeignKey(User, on_delete=models.PROTECT,null=True,)
 
     def save(self, *args, **kwargs):
@@ -215,6 +216,7 @@ class SecondaryCertificateInfo(BaseModel):
     is_active = models.BooleanField(default=True)
     created_by = models.ForeignKey(User, on_delete=models.PROTECT,null=True,)
     study_mode = models.ForeignKey(StudyModeDetails, on_delete=models.PROTECT, blank=True, null=True,)
+    district = models.CharField(max_length=150, blank=True, null=True)
 
 
 class ApplicantAttachment(BaseModel):

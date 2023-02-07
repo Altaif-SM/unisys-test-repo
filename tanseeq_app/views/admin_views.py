@@ -16,6 +16,7 @@ from tanseeq_app.models import (
     ApplicationDetails,
     AppliedPrograms,
     TanseeqStudyMode,
+    SecondaryCertificateInfo,
 )
 from masters.models import UniversityDetails, YearDetails, StudyModeDetails, CountryDetails, CitiDetails
 from tanseeq_app.forms.admin_forms import (
@@ -39,6 +40,12 @@ from django.http.request import QueryDict
 from django.utils.decorators import method_decorator
 from common.decorators import check_permissions
 import json
+from django.contrib.auth.hashers import make_password
+from django_datatables_view.base_datatable_view import BaseDatatableView
+from django.db.models import Value as V, Q
+from django.core.paginator import Paginator
+from django.utils.html import escape
+from datetime import datetime
 # Create your views here.
 
 
@@ -951,7 +958,11 @@ class ListAppliedApplicants(ListView):
         if self.request.user.is_tanseeq_university_admin():
             return self.model.objects.filter(created_by=self.request.user)
         else:
-            return self.model.objects.all()
+            applicant_recs = self.model.objects.all()
+            paginator = Paginator(applicant_recs, 10)
+            page = self.request.GET.get('page')
+            return paginator.get_page(page)
+            # return self.model.objects.all()[:10]
 
 @method_decorator(check_permissions(User.TANSEEQ_ADMIN), name='dispatch')
 class ListUsers(ListView):
@@ -1147,46 +1158,14 @@ def upload_excel(request):
             # uni_count = 0
             # for file_rec in file_recs:
             #     if not UniversityDetails.objects.filter(university_code=file_rec['University Code']):
-            #
             #         UniversityDetails.objects.create(university_code=file_rec['University Code'],
             #                                          university_name=file_rec['University Name'],
-            #                                          university_type_id=1,
-            #                                          type_id=1,
             #                                          is_tanseeq_university=True)
             #         uni_count = uni_count + 1
             #
             # print("uni_count>>>>>>>>"+str(uni_count))
 
-            #2nd Script
-            # file_recs = request.FILES['excel'].get_records()
-            # uni_count = 0
-            # for file_rec in file_recs:
-            #     if not TanseeqFaculty.objects.filter(code=file_rec['Facult Code'], name = file_rec['Faculty Name']):
-            #         university_obj = UniversityDetails.objects.get(university_code=file_rec['University Code'])
-            #         faculty_obj = TanseeqFaculty.objects.create(
-            #             name=file_rec['Faculty Name'],code = file_rec['Facult Code']
-            #
-            #             )
-            #         faculty_obj.universities.add(university_obj)
-            #         uni_count = uni_count + 1
-            # print("uni_count>>>>>>>>" + str(uni_count))
-
-            # #3rdt script
-            # file_recs = request.FILES['excel'].get_records()
-            # uni_count = 0
-            # for file_rec in file_recs:
-            #     university_obj = UniversityDetails.objects.get(university_code=file_rec['University Code'])
-            #     faculty_obj = TanseeqFaculty.objects.filter(name=file_rec['Faculty Name']).first()
-            #     if not TanseeqProgram.objects.filter(university_id=university_obj.id, faculty_id=faculty_obj.id,name=file_rec['Program Name']):
-            #         TanseeqProgram.objects.create(university_id=university_obj.id,
-            #                                          faculty_id=faculty_obj.id,
-            #                                          name=file_rec['Program Name'],
-            #                                          code=file_rec['Program Code'],
-            #                                       )
-            #         uni_count = uni_count + 1
-            # print("uni_count>>>>>>>>" + str(uni_count))
-
-            #4th script country
+            # 4th script country
             # file_recs = request.FILES['excel'].get_records()
             # uni_count = 0
             # for file_rec in file_recs:
@@ -1199,19 +1178,279 @@ def upload_excel(request):
             # print("uni_count>>>>>>>>" + str(uni_count))
             # messages.success(request, "Record saved")
 
-            #5th script city
-            file_recs = request.FILES['excel'].get_records()
-            uni_count = 0
-            for file_rec in file_recs:
-                country_obj = CountryDetails.objects.get(country_code=file_rec['country'])
-                city_obj = CitiDetails.objects.create(city=file_rec['name'])
-                country_obj.city.add(city_obj)
-                uni_count = uni_count + 1
-            print("uni_count>>>>>>>>" + str(uni_count))
-            messages.success(request, "Record saved")
+            # 5th script city
+            # file_recs = request.FILES['excel'].get_records()
+            # uni_count = 0
+            # for file_rec in file_recs:
+            #     country_obj = CountryDetails.objects.get(country_code=file_rec['country'])
+            #     city_obj = CitiDetails.objects.create(city=file_rec['name'])
+            #     country_obj.city.add(city_obj)
+            #     uni_count = uni_count + 1
+            # print("uni_count>>>>>>>>" + str(uni_count))
+
+            # 6th Secondary Certificate script
+            # file_recs = request.FILES['excel'].get_records()
+            # certificate_count = 0
+            # for file_rec in file_recs:
+            #     if not SecondarySchoolCetificate.objects.filter(school_certificate=file_rec['secondary certificate']):
+            #         SecondarySchoolCetificate.objects.create(school_certificate=file_rec['secondary certificate'],created_by=request.user)
+            #         certificate_count = certificate_count + 1
+            # print("certificate_count>>>>>>>>" + str(certificate_count))
+
+            # # 5th Study mode script
+            # file_recs = request.FILES['excel'].get_records()
+            # uni_count = 0
+            # for file_rec in file_recs:
+            #     if not TanseeqStudyMode.objects.filter(study_mode=file_rec['study mode']):
+            #         tanseeq_study_mode_obj = TanseeqStudyMode.objects.create(study_mode=file_rec['study mode'], created_by=request.user)
+            #         study_mode_obj = StudyModeDetails.objects.create(study_mode_id=tanseeq_study_mode_obj.id,)
+            #         university_obj = UniversityDetails.objects.get(university_name= 'جامعة تعز')
+            #         study_mode_obj.universities.add(university_obj)
+            #         uni_count = uni_count + 1
+            # print("study_mode_count>>>>>>>>" + str(uni_count))
+
+
+            #2nd Script
+            # file_recs = request.FILES['excel'].get_records()
+            # uni_count = 0
+            # for file_rec in file_recs:
+            #     university_obj = UniversityDetails.objects.get(university_name='جامعة تعز')
+            #     if not TanseeqFaculty.objects.filter(name = file_rec['faculty name'],universities__id = university_obj.id):
+            #         faculty_obj = TanseeqFaculty.objects.create(
+            #             name=file_rec['faculty name']
+            #
+            #             )
+            #         faculty_obj.universities.add(university_obj)
+            #         uni_count = uni_count + 1
+            # print("uni_count>>>>>>>>" + str(uni_count))
+
+            # #3rdt script
+            # file_recs = request.FILES['excel'].get_records()
+            # uni_count = 0
+            # program_list = []
+            # for file_rec in file_recs:
+            #     university_obj = UniversityDetails.objects.get(university_name='جامعة تعز')
+            #     faculty_obj = TanseeqFaculty.objects.filter(name=file_rec['faculty name']).first()
+            #     if not TanseeqProgram.objects.filter(university_id=university_obj.id, faculty_id=faculty_obj.id,name=file_rec['name']):
+            #         TanseeqProgram.objects.create(university_id=university_obj.id,
+            #                                          faculty_id=faculty_obj.id,
+            #                                          name=file_rec['name'],
+            #                                       )
+            #         uni_count = uni_count + 1
+            #     else:
+            #         program_list.append(file_rec['name'])
+            # print("uni_count>>>>>>>>" + str(uni_count))
+            # print("program_list>>>>>>>>" + str(program_list))
+
+
+
+
+
+            # 7th Condition Script
+            # file_recs = request.FILES['excel'].get_records()
+            # faculty_name_list = []
+            # certificate_count = 0
+            # for file_rec in file_recs:
+            #     university_obj = UniversityDetails.objects.get(university_name='جامعة تعز')
+            #     # if TanseeqFaculty.objects.filter(name = file_rec['faculty name'],universities__id = university_obj.id).exists():
+            #     #     pass
+            #     # else:
+            #     #     faculty_name_list.append(file_rec['faculty name'])
+            #     # certificate_count = certificate_count + 1
+            #     faculty_obj = TanseeqFaculty.objects.get(name = file_rec['faculty name'],universities__id = university_obj.id)
+            #     if TanseeqProgram.objects.filter(university_id = university_obj.id,faculty_id = faculty_obj.id, name = file_rec['name']).exists():
+            #         certificate_count = certificate_count + 1
+            #     else:
+            #         faculty_name_list.append(file_rec['name'])
+            # print("faculty name>>>>>>>>" + str(certificate_count))
+            # print("faculty_name_list>>>>>>>>" + str(faculty_name_list))
+
+            # #7th Condition Script
+            # certificate_count = 0
+            # start_year = 1984
+            # for rec in range(1, 41):
+            #     start_date = str(start_year) + '-' + '01' '-' + '01'
+            #     end_date = str(start_year) + '-' + '12' '-' + '31'
+            #     year_obj = YearDetails.objects.create(year_name=str(start_year), start_date=start_date, end_date=end_date,
+            #                                           is_tanseeq_year=True)
+            #     start_year = int(start_year) + 1
+            #     year_obj.created_by = request.user
+            #     year_obj.save()
+            # print("Success")
+
+            # 7th Condition Script
+            # file_recs = request.FILES['excel'].get_records()
+            # certificate_count = 0
+            # university_obj = UniversityDetails.objects.get(university_name='جامعة تعز')
+            # for file_rec in file_recs:
+            #     is_exam = False
+            #     isAdmissionExam = int(file_rec['isAdmissionExam'])
+            #     if isAdmissionExam == 1:
+            #         is_exam = True
+            #     academic_year = YearDetails.objects.get(year_name=file_rec['lastSecondaryYear'])
+            #     school_certificate_obj = SecondarySchoolCetificate.objects.filter(school_certificate = file_rec['secondary certificate']).first()
+            #     mode_obj = TanseeqStudyMode.objects.filter(study_mode = file_rec['study mode']).first()
+            #     study_mode_obj = StudyModeDetails.objects.filter(study_mode_id = mode_obj.id, universities__id = university_obj.id).first()
+            #     faculty_obj = TanseeqFaculty.objects.filter(name = file_rec['faculty name'], universities__id = university_obj.id).first()
+            #     program_obj = TanseeqProgram.objects.filter(faculty_id = faculty_obj.id, university_id = university_obj.id, name = file_rec['name']).first()
+            #     condition_obj = ConditionFilters.objects.create(university_id = university_obj.id, study_mode_id = study_mode_obj.id,faculty_id = faculty_obj.id,program_id = program_obj.id,type_of_secondary_id = school_certificate_obj.id,average = float(file_rec['precentage']),capacity = int(file_rec['capacity']),is_exam = is_exam,academic_year = academic_year,start_date = str(file_rec['openDate']), end_date = str(file_rec['closeDate']),fee = float(0))
+            #     condition_obj.created_by = request.user
+            #     condition_obj.save()
+            #     certificate_count = certificate_count + 1
+            # print("Success>>>>>>>>")
+
+            # Applicant details Script
+            # redirect_flag = False
+            # try:
+            #     applicant_count = 0
+            #     seat_no_count = 0
+            #     seat_no_exist_list = []
+            #     file_recs = request.FILES['excel'].get_records()
+            #     for file_rec in file_recs:
+            #         if not User.objects.filter(username__iexact=file_rec['Seat No']).exists():
+            #             try:
+            #                 nationality_obj = CountryDetails.objects.get(id=file_rec['Nationality'])
+            #             except Exception as e:
+            #                 messages.warning(request,"Nationality Not Found" + "for applicant" + str(file_rec['Seat No']))
+            #                 continue
+            #             try:
+            #                 country_obj = CountryDetails.objects.get(id=file_rec['Country'])
+            #             except Exception as e:
+            #                 messages.warning(request, "Country Not Found" + "for applicant" + str(file_rec['Seat No']))
+            #                 continue
+            #             try:
+            #                 city_obj = CitiDetails.objects.get(id=file_rec['City'])
+            #             except Exception as e:
+            #                 messages.warning(request, "City Not Found" + "for applicant" + str(file_rec['Seat No']))
+            #                 continue
+            #             try:
+            #                 certificate_obj = SecondarySchoolCetificate.objects.get(school_certificate=file_rec['Secondary Certificate'])
+            #             except Exception as e:
+            #                 messages.warning(request, "City Not Found" + "for applicant" + str(file_rec['Seat No']))
+            #                 continue
+            #             try:
+            #                 academicyear_obj = YearDetails.objects.get(year_name=file_rec['Graduatation Year'])
+            #             except Exception as e:
+            #                 messages.warning(request,"Year Details Not Found" + "for applicant" + str(file_rec['Seat No']))
+            #                 continue
+            #             try:
+            #                 school_country_obj = CountryDetails.objects.get(id=file_rec['School country'])
+            #             except Exception as e:
+            #                 messages.warning(request, "School Country Not Found" + "for applicant" + str(file_rec['Seat No']))
+            #                 continue
+            #             try:
+            #                 school_city_obj = CitiDetails.objects.get(id=file_rec['School City'])
+            #             except Exception as e:
+            #                 messages.warning(request, "School City Not Found" + "for applicant" + str(file_rec['Seat No']))
+            #                 continue
+            #             try:
+            #                 university_obj = UniversityDetails.objects.get(university_name='جامعة تعز')
+            #                 mode_obj = TanseeqStudyMode.objects.filter(study_mode=file_rec['Study mode']).first()
+            #                 study_mode_obj = StudyModeDetails.objects.filter(study_mode_id = mode_obj.id, universities__id = university_obj.id).first()
+            #             except Exception as e:
+            #                 messages.warning(request, "Study mode Not Found" + "for applicant" + str(file_rec['Seat No']))
+            #                 continue
+            #
+            #             user = User.objects.create(first_name=file_rec['First Name'],
+            #                                        username=file_rec['Seat No'], email=file_rec['Email'],
+            #                                        password=make_password(file_rec['Seat No']), is_active=True,
+            #                                        )
+            #             user.role.add(UserRole.objects.get(name='Tanseeq Student'))
+            #             role_obj = UserRole.objects.get(name= 'Tanseeq Student')
+            #             user.tanseeq_role_id = role_obj.id
+            #             user.save()
+            #             application_obj = ApplicationDetails.objects.create(first_name=file_rec['First Name'],
+            #                                                                 tanseeq_id = file_rec['regNo'],
+            #                                                                 applicant_id = str(file_rec['applicantId']),
+            #                                                                 gender_type = file_rec['Gender Type'],
+            #                                                                 nationality_id = nationality_obj.id,
+            #                                                                 birth_date = str(file_rec['Birth Date']),
+            #                                                                 country_id = country_obj.id,
+            #                                                                 city_id = city_obj.id,
+            #                                                                 district = file_rec['District'],
+            #                                                                 address = file_rec['Address'],
+            #                                                                 user = user,
+            #                                                                 created_by = user,
+            #                                                                 contact_number = str(file_rec['Contact Number']),
+            #                                                                 )
+            #             SecondaryCertificateInfo.objects.create(secondary_certificate_id=certificate_obj.id,
+            #                                                     school_name = file_rec['School Name'],
+            #                                                     academic_year_id = academicyear_obj.id,
+            #                                                     seat_number = str(file_rec['Seat No']),
+            #                                                     average = float(file_rec['Average']),
+            #                                                     country_id = school_country_obj.id,
+            #                                                     city_id = school_city_obj.id,
+            #                                                     application = application_obj,
+            #                                                     created_by = user,
+            #                                                     district = str(file_rec['School District']) if str(file_rec['School District']) else ''
+            #                                                     )
+            #             application_obj.application_status = 'Submitted'
+            #             application_obj.save()
+            #             applicant_count = applicant_count + 1
+            #             print("applicant_count>>>>>>>"+str(applicant_count))
+            #             redirect_flag = True
+            #         else:
+            #             seat_no_count = seat_no_count + 1
+            #             seat_no_exist_list.append(str(file_rec['Seat No']))
+            #             messages.warning(request, "Seat No already exists" + str(file_rec['Seat No']))
+            #             continue
+            #     print("seat_no_count>>>>>>>"+str(seat_no_count))
+            #     print("seat_no_exist_list>>>>>>>"+str(seat_no_exist_list))
+            #     if redirect_flag:
+            #         messages.success(request, "Record saved>>>>>>>>")
+            #         return redirect('tanseeq_app:list_tanseeq_study_mode')
+            # except Exception as e:
+            #     messages.warning(request, "Form have some error" + str(e))
+            # return redirect('/tanseeq/upload_excel/')
+            pass
         except Exception as e:
-            # print("Error>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+            print("Error>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
             messages.warning(request, "Form have some error" + str(e))
         return redirect('/tanseeq/upload_excel/')
     else:
         return render(request, 'tanseeq_admin/upload_university_template.html')
+
+class ApplicantFilterList(BaseDatatableView):
+    model = ApplicationDetails
+    columns = ['id','created_on','tanseeq_id', 'first_name','created_by','application_status','is_active']
+    order_columns = []
+    max_display_length = 100
+
+    def get_initial_queryset(self):
+        if self.request.user.is_tanseeq_university_admin():
+            return self.model.objects.filter(created_by=self.request.user)
+        else:
+            return ApplicationDetails.objects.all()
+
+    def render_column(self, row, column):
+        return super(ApplicantFilterList, self).render_column(row, column)
+
+    def render_column(self, row, column):
+        if column == 'first_name':
+            first_name = row.first_name if row.first_name else ""
+            last_name = row.last_name if row.last_name else ""
+            return escape('{0} {1}'.format(first_name, last_name))
+        elif column == 'created_on':
+            try:
+                return escape('{0}'.format(str(row.created_on.date())))
+            except:
+                return ""
+        elif column == 'created_by':
+            try:
+                if row.created_by.tanseeq_role.name == 'Tanseeq Admin':
+                    return escape('{0}'.format(str('Tanseeq Admin')))
+                else:
+                    first_name = row.created_by.first_name if row.created_by else ""
+                    last_name = row.created_by.last_name if row.created_by.last_name else ""
+                    return escape('{0} {1}'.format(first_name, last_name))
+            except:
+                return ""
+        else:
+            return super(ApplicantFilterList, self).render_column(row, column)
+
+    def filter_queryset(self, qs):
+        search = self.request.GET.get('search[value]', None)
+        if search:
+            q = Q(tanseeq_id__istartswith=search)
+            qs = qs.filter(q)
+        return qs

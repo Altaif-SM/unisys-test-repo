@@ -26,34 +26,106 @@
     <script>
         window.onload = function () {
             $('#sample_1').dataTable().fnDestroy();
+            /*
+            $('#sample_1').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "ajax": "
 
-            $('#sample_1').dataTable({
-                "aoColumnDefs": [
-                    {'bSortable': false}
-                ],
-                "scrollX": false,
-                dom: 'Bfrtip',
-                buttons: [
+            {% url 'tanseeq_app:list_applicant_filter' %}",
+            lengthMenu: [[10, 50, 100, -1], [10, 50, 100, "All"]],
+            pageLength: 10,
+            dom: 'Blfrtip',
+            buttons: [
+                {
+                    extend: 'excel',
+                    exportOptions: {
+                        columns: [0,1]
+                    },
+
+                },
+                {
+                    extend: 'csv',
+                    exportOptions: {
+                        columns: [0,1]
+                    }
+                },
+            ],
+            columnDefs: [
+                {width: 50, targets: 0},
+                {width: 100, targets: 1},
+
+            ],
+            fixedColumns: false,
+            "order": [[0, "desc"]],
+            "pagingType": "full_numbers",
+            "oLanguage": {
+                "oPaginate": {
+                    "sFirst": "<<", // This is the link to the first page
+                    "sPrevious": "<", // This is the link to the previous page
+                    "sNext": ">", // This is the link to the next page
+                    "sLast": ">>" // This is the link to the last page
+                }
+            }
+        });*/
+
+
+            $('#sample_1').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": "{% url 'tanseeq_app:list_applicant_filter' %}",
+                columnDefs: [
                     {
-                        extend: 'excelHtml5',
-                        title: 'APPLICANTS LIST DETAILS',
-                        exportOptions: {
-                            //columns: ':visible'
-                            columns: [1, 2, 3, 4, 5, 6,]
-                        }
+                        data: "first_name", render: getFirstName,
+                        orderable: true,
+                        defaultContent: "",
+                        targets: 3,
+                        visible: true
                     },
                     {
-                        extend: 'pdfHtml5',
-                        title: 'APPLICANTS LIST DETAILS',
-                        orientation: 'landscape',
-                        exportOptions: {
-                            columns: [1, 2, 3, 4, 5, 6,]
-                            //columns: ':visible'
-                        }
+                        data: "tanseeq_id", render: getTanseeqID,
+                        orderable: true,
+                        defaultContent: "",
+                        targets: 2,
+                        visible: true
                     },
+                    {
+                        data: "is_active", render: getStatusChange,
+                        orderable: true,
+                        defaultContent: "",
+                        targets: 6,
+                        visible: true
+                    },
+
+                    {orderable: false, targets: []}
                 ],
+                "order": [[0, "asc"]],
+                "pagingType": "full_numbers",
+                "oLanguage": {
+                    "oPaginate": {
+                        "sFirst": "<<", // This is the link to the first page
+                        "sPrevious": "<", // This is the link to the previous page
+                        "sNext": ">", // This is the link to the next page
+                        "sLast": ">>" // This is the link to the last page
+                    }
+                }
             });
+
+
         }
+
+        function getFirstName(data, type, full, meta) {
+            return '<p>' + full[3] + '</p>'
+        }
+
+        function getTanseeqID(data, type, full, meta) {
+            return '<a href="/tanseeq/personal_info_details/' + full[0] + '">' + full[2] + '</a>'
+        }
+
+        function getStatusChange(data, type, full, meta) {
+            return '<button class="change_status btn-primary btn-xs type="button" status-url="/tanseeq/update_status/' + full[0] + '">Change Status</button>'
+        }
+
         window.setTimeout(function () {
             $(".alert").fadeTo(500, 0).slideUp(500, function () {
                 $(this).remove();
@@ -97,110 +169,30 @@
                 </button>
             </a>
 
-
         </div>
         <div class="portlet-body">
             <table class="table table-striped table-hover table-bordered" id="sample_1">
                 <thead>
                 <tr>
-                    <th style="display: none">Id</th>
-                    <th> {% trans 'Date' %}</th>
-                    <th> {% trans 'Tanseeq ID' %}</th>
+                    <th width="10%"> {% trans '# ID' %}</th>
+                    <th width="10%"> {% trans 'Date' %}</th>
+                    <th width="10%"> {% trans 'Tanseeq ID' %}</th>
                     <th> {% trans 'Applicant Name' %}</th>
-                    {#                    <th> {% trans 'University' %}</th>#}
-                    {#                    <th> {% trans 'Faculty' %}</th>#}
-                    <th> {% trans 'Study mode' %}</th>
                     <th> {% trans 'Created by' %}</th>
                     <th> {% trans 'Status' %}</th>
                     <th> {% trans 'Action' %}</th>
-                    <th> {% trans 'Attachements' %}</th>
-
-
                 </tr>
                 </thead>
                 <tbody id="tbody">
                 {% for rec in object_list %}
                     <tr id="item{{ forloop.counter }}" class="item">
-                        <td style="display: none"><input id="university_id" value="{{ rec.id }}"></td>
-                        <td>
-                            {{ rec.created_on|date:"d/m/Y" }}
-                        </td>
-
-                        <td>
-                            <text><a href="{% url 'tanseeq_app:edit_personal_info_details' rec.id %}" >{{ rec.tanseeq_id|default_if_none:"" }}</a>
-                            </text>
-                        </td>
-
-                        <td>
-                            {{ rec.first_name|default_if_none:"" }} {{ rec.last_name|default_if_none:"" }}
-                        </td>
-                        {#                        <td>#}
-                        {##}
-                        {#                        </td>#}
-                        {#                        <td>#}
-                        {#                        </td>#}
-                        <td>
-                            {% if rec.student_secondary_application_details.all %}
-                                {% if rec.student_secondary_application_details.all.0.study_mode %}
-                                    {{ rec.student_secondary_application_details.all.0.study_mode.study_mode }}
-                                {% endif %}
-                            {% endif %}
-
-                        </td>
-
-                        <td>
-                            {% if rec.created_by.tanseeq_role.name == 'Tanseeq Admin' %}
-                                Tanseeq Admin
-                            {% else %}
-                                {{ rec.created_by.first_name|default_if_none:"" }}
-                                {{ rec.created_by.last_name|default_if_none:"" }}
-                            {% endif %}
-
-                        </td>
-                        <td class="application_status">
-                            {{ rec.application_status|default_if_none:"" }}
-
-
-                        </td>
-                        <td>
-                            <button type="button" status-url="{% url 'tanseeq_app:application_update_status' rec.id %}"
-                                    class="change_status btn-primary btn-xs">
-                                Change Status
-                            </button>
-                        </td>
-
-
-                        <td>
-
-                            {% if rec.student_attachement_application.all %}
-                                {% if rec.student_attachement_application.all.0.photo %}
-
-                                    <a href="{{ rec.student_attachement_application.all.0.photo.url }}" target="_blank"
-                                       class="ink-file-upload zoom-image"><img
-                                            src="{{ rec.student_attachement_application.all.0.photo.url }}"
-                                            class="rounded-circle" width="50"
-                                            height="50"></a>
-
-                                {% endif %}
-                            {% endif %}
-
-                            {% if rec.student_attachement_application.all %}
-                                {% if rec.student_attachement_application.all.0.school_certificate %}
-
-                                    <a href="{{ rec.student_attachement_application.all.0.school_certificate.url }}"
-                                       target="_blank"
-                                       class="ink-file-upload zoom-image"><img
-                                            src="{{ rec.student_attachement_application.all.0.school_certificate.url }}"
-                                            class="rounded-circle" width="50"
-                                            height="50"></a>
-
-                                {% endif %}
-                            {% endif %}
-
-
-                        </td>
-
-
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -247,7 +239,6 @@
             </div>
         </div>
     </div>
-    {% include 'delete_modal.html' %}
 {% endblock %}
 
 {% block ajax %}
@@ -281,38 +272,6 @@
             $("#id_status_model").modal('hide')
         })
 
-
-        $(".delete").on("click", (e) => {
-            $("#id_delete_model").modal()
-            $("#id_confirm_delete").attr("delete-url", $(e.target).attr("delete-url"))
-        });
-        $("#id_confirm_delete").on("click", (e) => {
-            $(e.target).attr('disabled', true)
-            removeProgram($(e.target).attr("delete-url"))
-            $("#id_delete_model").modal('hide')
-        })
-
-        function removeProgram(url) {
-            $.ajax({
-                type: 'DELETE',
-                url: url,
-                beforeSend: function (xhr, settings) {
-                    xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
-                },
-                success: function (data, textStatus, xhr) {
-                    console.log(data, textStatus, xhr)
-                    if (xhr.status == 202) {
-                        console.log("running")
-                        location.reload()
-                    }
-                },
-                complete: function () {
-                    $("#id_confirm_delete").attr('disabled', false)
-                },
-                error: function (xhr, msg, err) {
-                }
-            });
-        }
 
         function updateStaus(url) {
             const formData = new FormData($("#id_update_fee_form")[0])

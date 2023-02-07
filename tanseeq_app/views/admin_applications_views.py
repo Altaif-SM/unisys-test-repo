@@ -39,7 +39,7 @@ class PersonalInfoDetailsView(View):
 
     def get(self, request, pk=None):
         if pk:
-            application_email = ApplicationDetails.objects.get(id = pk).user.email
+            application_email = ApplicationDetails.objects.get(id = pk).user.username
             request.session['form_data'] = {'email': application_email}
         else:
             application_email = None
@@ -53,12 +53,12 @@ class PersonalInfoDetailsView(View):
             "form": self.form_class(),
             "tanseeq_application":tanseeq_application,
         }
-        if ApplicationDetails.objects.filter(user__email = application_email).exists():
-            instance = get_object_or_404(self.model, user__email = application_email)
+        if ApplicationDetails.objects.filter(user__username = application_email).exists():
+            instance = get_object_or_404(self.model, user__username = application_email)
             context["instance"] = instance
             context["cities"] = CountryDetails.objects.get(id = instance.country.id).city.all()
             context["form"] = self.form_class(
-                instance=get_object_or_404(self.model, user__email = application_email))
+                instance=get_object_or_404(self.model, user__username = application_email))
         return render(request, self.template_name, context)
 
     def get_context_data(self, **kwargs):
@@ -70,8 +70,8 @@ class PersonalInfoDetailsView(View):
         if request.session.get('form_data'):
             form_data = request.session.get('form_data')
             application_email = form_data.get('email')
-        if ApplicationDetails.objects.filter(user__email = application_email).exists():
-            instance = get_object_or_404(self.model, user__email = application_email)
+        if ApplicationDetails.objects.filter(user__username = application_email).exists():
+            instance = get_object_or_404(self.model, user__username = application_email)
             form = self.form_class(request.POST, instance=instance)
         else:
             form = self.form_class(request.POST)
@@ -122,7 +122,7 @@ class SecondaryCertificateInfoDetailsView(View):
         if application_email:
             tanseeq_application = get_tanseeq_application_by_email(application_email)
 
-        cert_obj = ApplicationDetails.objects.filter(user__email = application_email).exists()
+        cert_obj = ApplicationDetails.objects.filter(user__username = application_email).exists()
         if not cert_obj:
             messages.info(
                 self.request, "Please add personal info first.")
@@ -133,12 +133,12 @@ class SecondaryCertificateInfoDetailsView(View):
             "tanseeq_application": tanseeq_application,
             "academic_year_objs": academic_year_objs,
         }
-        if SecondaryCertificateInfo.objects.filter(application__user__email = application_email).exists():
-            instance = get_object_or_404(self.model, application__user__email = application_email)
+        if SecondaryCertificateInfo.objects.filter(application__user__username = application_email).exists():
+            instance = get_object_or_404(self.model, application__user__username = application_email)
             context["instance"] = instance
             context["cities"] = CountryDetails.objects.get(id=instance.country.id).city.all()
             context["form"] = self.form_class(
-                instance=get_object_or_404(self.model, application__user__email = application_email))
+                instance=get_object_or_404(self.model, application__user__username = application_email))
         return render(request, self.template_name, context)
 
     def get_context_data(self, **kwargs):
@@ -151,15 +151,15 @@ class SecondaryCertificateInfoDetailsView(View):
             form_data = request.session.get('form_data')
             application_email = form_data.get('email')
 
-        if SecondaryCertificateInfo.objects.filter(application__user__email = application_email).exists():
-            instance = get_object_or_404(self.model, application__user__email = application_email)
+        if SecondaryCertificateInfo.objects.filter(application__user__username = application_email).exists():
+            instance = get_object_or_404(self.model, application__user__username = application_email)
             form = self.form_class(request.POST, instance=instance)
         else:
             form = self.form_class(request.POST)
         if form.is_valid():
             obj = form.save(commit=False)
-            application_obj = ApplicationDetails.objects.filter(user__email = application_email).first()
-            if not SecondaryCertificateInfo.objects.filter(application__user__email = application_email).exists():
+            application_obj = ApplicationDetails.objects.filter(user__username = application_email).first()
+            if not SecondaryCertificateInfo.objects.filter(application__user__username = application_email).exists():
                 obj.created_by = request.user
                 obj.application = application_obj
             obj.save()
@@ -190,7 +190,7 @@ class StudentStudyModeDetailsView(View):
         if application_email:
             tanseeq_application = get_tanseeq_application_by_email(application_email)
 
-        instance = self.model.objects.filter(application__user__email = application_email).first()
+        instance = self.model.objects.filter(application__user__username = application_email).first()
         context = {
             "form": self.form_class(instance=instance) if instance else self.form_class(),
             "tanseeq_application": tanseeq_application
@@ -202,7 +202,7 @@ class StudentStudyModeDetailsView(View):
         if self.request.session.get('form_data'):
             form_data = self.request.session.get('form_data')
             application_email = form_data.get('email')
-        cert_obj = ApplicationDetails.objects.filter(user__email=application_email).exists()
+        cert_obj = ApplicationDetails.objects.filter(user__username=application_email).exists()
         if not cert_obj:
             messages.info(self.request, "Please add personal info first.")
             return redirect("tanseeq_app:personal_info_details")
@@ -213,7 +213,7 @@ class StudentStudyModeDetailsView(View):
         if request.session.get('form_data'):
             form_data = request.session.get('form_data')
             application_email = form_data.get('email')
-        instance = self.model.objects.filter(application__user__email = application_email).first()
+        instance = self.model.objects.filter(application__user__username = application_email).first()
         if instance:
             form = self.form_class(request.POST, instance=instance)
         else:
@@ -244,7 +244,7 @@ class ApplicantAttachmentsDetailsView(View):
         if application_email:
             tanseeq_application = get_tanseeq_application_by_email(application_email)
 
-        cert_obj = ApplicationDetails.objects.filter(user__email=application_email).exists()
+        cert_obj = ApplicationDetails.objects.filter(user__username=application_email).exists()
         if not cert_obj:
             messages.info(
                 self.request, "Please add personal info first.")
@@ -253,8 +253,8 @@ class ApplicantAttachmentsDetailsView(View):
         context = {
             "tanseeq_application":tanseeq_application,
         }
-        if ApplicantAttachment.objects.filter(application__user__email = application_email).exists():
-            instance = get_object_or_404(self.model, application__user__email = application_email)
+        if ApplicantAttachment.objects.filter(application__user__username = application_email).exists():
+            instance = get_object_or_404(self.model, application__user__username = application_email)
             context["instance"] = instance
         return render(request, self.template_name, context)
 
@@ -268,8 +268,8 @@ class ApplicantAttachmentsDetailsView(View):
             form_data = request.session.get('form_data')
             application_email = form_data.get('email')
 
-        application_obj = ApplicationDetails.objects.filter(user__email=application_email).first()
-        instance, created = ApplicantAttachment.objects.get_or_create(application__user__email = application_email, application = application_obj)
+        application_obj = ApplicationDetails.objects.filter(user__username=application_email).first()
+        instance, created = ApplicantAttachment.objects.get_or_create(application__user__username = application_email, application = application_obj)
         form = self.form_class(request.POST, request.FILES, instance=instance)
         if form.is_valid():
             form.save()
@@ -296,9 +296,9 @@ class ListStudentProgramsDetails(ListView):
             form_data = self.request.session.get('form_data')
             application_email = form_data.get('email')
 
-        user = User.objects.get(email = application_email)
+        user = User.objects.get(username = application_email)
 
-        cert_obj = SecondaryCertificateInfo.objects.filter(application__user__email = application_email).first()
+        cert_obj = SecondaryCertificateInfo.objects.filter(application__user__username = application_email).first()
         extra_filters = {}
         if faculty_id:
             extra_filters["faculty_id"] = faculty_id
@@ -333,13 +333,13 @@ class ListStudentProgramsDetails(ListView):
         if self.request.session.get('form_data'):
             form_data = self.request.session.get('form_data')
             application_email = form_data.get('email')
-        cert_obj = ApplicationDetails.objects.filter(user__email = application_email).exists()
+        cert_obj = ApplicationDetails.objects.filter(user__username = application_email).exists()
         if not cert_obj:
             messages.info(
                 self.request, "Please add personal info first.")
             return redirect("tanseeq_app:personal_info_details")
 
-        cert_obj = SecondaryCertificateInfo.objects.filter(application__user__email = application_email).exists()
+        cert_obj = SecondaryCertificateInfo.objects.filter(application__user__username = application_email).exists()
         if not cert_obj:
             messages.info(
                 self.request, "Please add secondary certificate first.")
@@ -357,7 +357,7 @@ class ListAppliedProgramsDetails(ListView):
         if self.request.session.get('form_data'):
             form_data = self.request.session.get('form_data')
             application_email = form_data.get('email')
-        return self.model.objects.filter(user__email=application_email).select_related("program_details")
+        return self.model.objects.filter(user__username=application_email).select_related("program_details")
 
 
 class ApplyProgramDetailsView(View):
@@ -371,7 +371,7 @@ class ApplyProgramDetailsView(View):
             form_data = self.request.session.get('form_data')
             application_email = form_data.get('email')
         cert_obj = SecondaryCertificateInfo.objects.filter(
-            application__user__email = application_email).first()
+            application__user__username = application_email).first()
         is_conditions_pass = ConditionFilters.objects.filter(
             id=condition_filter_id,
             type_of_secondary=cert_obj.secondary_certificate,
@@ -390,7 +390,7 @@ class ApplyProgramDetailsView(View):
             form_data = self.request.session.get('form_data')
             application_email = form_data.get('email')
         is_obj = self.model.objects.filter(
-            user__email=application_email, program_details_id=condition_filter_id).exists()
+            user__username=application_email, program_details_id=condition_filter_id).exists()
         return is_obj
 
     def post(self, request):
@@ -427,7 +427,7 @@ class ApplyProgramDetailsView(View):
         if self.request.session.get('form_data'):
             form_data = self.request.session.get('form_data')
             application_email = form_data.get('email')
-        obj = get_object_or_404(self.model, pk=pk, user__email = application_email)
+        obj = get_object_or_404(self.model, pk=pk, user__username = application_email)
         data = {"msg": "Program Removed"}
         is_eligible = self.is_eligible(obj.program_details.id)
         if is_eligible:
@@ -449,7 +449,7 @@ class DeclarationSubmissionDetailsView(View):
         if self.request.session.get('form_data'):
             form_data = self.request.session.get('form_data')
             application_email = form_data.get('email')
-        instance = self.model.objects.filter(user__email = application_email).first()
+        instance = self.model.objects.filter(user__username = application_email).first()
         context = {
             "instance":instance,
         }
@@ -464,7 +464,7 @@ class DeclarationSubmissionDetailsView(View):
         if self.request.session.get('form_data'):
             form_data = self.request.session.get('form_data')
             application_email = form_data.get('email')
-        obj = self.model.objects.filter(user__email = application_email).first()
+        obj = self.model.objects.filter(user__username = application_email).first()
         obj.application_status = 'Submitted'
         obj.save()
         data = {"msg": "Application Submitted"}
@@ -482,8 +482,8 @@ def print_voucher_details(request, pk):
         redirect_url = "tanseeq_app:applied_programs_details"
         template = get_template("tanseeq_student/print_voucher.html")
         applied_program_obj = get_object_or_404(AppliedPrograms, pk=pk)
-        attachments = get_object_or_404(ApplicantAttachment, application__user__email = application_email,),
-        secondary_cert_obj = get_object_or_404(SecondaryCertificateInfo, application__user__email = application_email)
+        attachments = get_object_or_404(ApplicantAttachment, application__user__username = application_email,),
+        secondary_cert_obj = get_object_or_404(SecondaryCertificateInfo, application__user__username = application_email)
         photo = attachments[0].photo.path
         context = {
             "applied_program_obj": applied_program_obj,

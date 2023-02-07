@@ -64,11 +64,11 @@
                             <br>
                             <div class="row">
                                 <div class="">
-                                    <label class="col-md-2 control-label">{% trans 'Email' %}:<span
+                                    <label class="col-md-2 control-label">{% trans 'Username' %}:<span
                                             style="color: red">*</span></label>
                                     <div class="col-md-3">
                                         <input type="text" title="Enter Type" id="id_email"
-                                               value="{{ request.user.email|default_if_none:"" }}"
+                                               value="{{ request.user.username|default_if_none:"" }}"
                                                name="email"
                                                class="form-control" disabled>
 
