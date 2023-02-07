@@ -26,7 +26,7 @@ from django.utils.decorators import method_decorator
 from accounts.models import User
 from common.decorators import check_permissions
 from tanseeq_app.helpers import get_tanseeq_application
-
+import datetime
 
 # Create your views here.
 
@@ -206,6 +206,7 @@ class ListStudentPrograms(ListView):
                 type_of_secondary_id=cert_obj.secondary_certificate.id,
                 average__lte=cert_obj.average,
                 academic_year__end_date__gte=cert_obj.academic_year.end_date,
+                end_date__gte = datetime.datetime.today().date(),
                 **extra_filters
             ).select_related("university", "faculty", "program").extra(
                 select={

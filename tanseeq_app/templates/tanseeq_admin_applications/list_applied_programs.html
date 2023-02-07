@@ -115,6 +115,17 @@
             {% endfor %}
             </tbody>
         </table>
+    <div class="col-md-offset-3 col-md-9">
+                <button type="button" class="btn blue" id="back" style="margin-left: 75%"
+                        onclick="window.location='{% url "tanseeq_app:student_programs_details" %}'"
+                >
+                    Select Another Wish
+                </button>
+                <button type="button"
+                        onClick="location.href='{% url 'tanseeq_app:applicant_submission' %}'"
+                        class="btn green" id="next">Next
+                </button>
+            </div>
     </div>
 </div>
 {% include 'delete_modal.html' %}

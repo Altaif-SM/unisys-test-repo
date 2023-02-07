@@ -87,6 +87,13 @@
             <div class="col-md-2">
                 <button type="submit" class="btn">View specialties</button>
             </div>
+            <div class="col-md-1">
+                <button type="button" class="btn" id="back" style="margin-left: -4pc"
+                        onclick="window.location='{% url "tanseeq_app:student_programs_details" %}'"
+                >
+                    Reset
+                </button>
+                </div>
         </form>
     </div>
     <br>
@@ -105,7 +112,7 @@
                 <th> {% trans 'End Date' %}</th>
                 <th> {% trans 'Average' %}</th>
                 <th> {% trans 'Year' %}</th>
-                <th></th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody id="tbody">
