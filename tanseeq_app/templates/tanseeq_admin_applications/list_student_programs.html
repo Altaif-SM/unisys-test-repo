@@ -101,6 +101,8 @@
                 <th> {% trans 'Program' %}</th>
                 <th> {% trans 'Type of Secondary' %}</th>
                 <th> {% trans 'Code' %}</th>
+                <th> {% trans 'Start Date' %}</th>
+                <th> {% trans 'End Date' %}</th>
                 <th> {% trans 'Average' %}</th>
                 <th> {% trans 'Year' %}</th>
                 <th></th>
@@ -122,6 +124,8 @@
                     <td>{{ rec.program.name|default_if_none:"" }}</td>
                     <td>{{ rec.type_of_secondary.school_certificate|default_if_none:"" }}</td>
                     <td>{{ rec.program.code|default_if_none:"" }}</td>
+                <td>{{ rec.start_date|date:"d-m-Y" }}</td>
+                    <td>{{ rec.end_date|date:"d-m-Y" }}</td>
                     <td>{{ rec.average|default_if_none:"" }}</td>
                     <td>{{ rec.academic_year.year_name|default_if_none:"" }}</td>
                     <td>

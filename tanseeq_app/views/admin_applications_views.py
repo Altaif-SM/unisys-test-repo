@@ -79,7 +79,7 @@ class PersonalInfoDetailsView(View):
             if User.objects.filter(email=application_email).exists():
                 user = User.objects.get(email=application_email)
             else:
-                user = User.objects.create(first_name=request.POST['first_name'], last_name=request.POST['last_name'],
+                user = User.objects.create(first_name=request.POST['first_name'],
                                            username=request.POST['email'], email=request.POST['email'],
                                            password=make_password('123456'))
                 user.role.add(UserRole.objects.get(name='Tanseeq Student'))
